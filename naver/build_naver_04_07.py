@@ -6,7 +6,7 @@ OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "img")
 def H(t): return f'<p>&nbsp;</p><p><span style="font-size:22px"><b>{t}</b></span></p>'
 def P(*lines): return "<p>" + "<br>".join(lines) + "</p>"
 def IMG(f): return f"<p>[이미지: {f}]</p>"
-END = P("👉 <b>내 태어난 날 기운 무료 풀이: zaoseon.com</b>")
+END = IMG("naver_cta_1초무료풀이.jpg") + P("👉 <b>1초 만에 내 기운 보기: https://zaoseon.com/?utm_source=naver&amp;utm_medium=cta#free</b>")
 POSTS = []
 
 # ---------- 4편 양띠 ----------
@@ -58,7 +58,7 @@ body = (P("<b>2027년 양띠 운세</b>가 궁금하신가요? 안녕하세요, 
  P("이 글은 재미로, 그리고 나를 돌아보는 계기로 읽어 주세요."))
 POSTS.append(dict(no=4, when="10/7(수) 밤 9시 예약", title="2027년 양띠 운세, 내 띠가 돌아오는 본명년 월별 총정리",
   tags="2027년양띠운세, 양띠운세, 2027양띠, 양띠본명년, 정미년양띠, 2027년운세, 양띠신년운세, 79년생운세, 91년생운세, 2027신년운세, 띠별운세, 자오선",
-  imgs=["naver_y01_2027양띠운세.jpg","naver_y02_양띠월별.jpg","naver_y03_양띠할일.jpg"], body=body))
+  imgs=["naver_y01_2027양띠운세.jpg","naver_y02_양띠월별.jpg","naver_y03_양띠할일.jpg","naver_cta_1초무료풀이.jpg"], body=body))
 
 # ---------- 5편 돈 TOP3 ----------
 N.title(f"{OUT}/naver_m01_돈들어오는띠.jpg", "2027 정미년 · 재물운", ["2027년", "돈 들어오는 띠 TOP3"], "1위 돼지띠 · 2위 쥐띠 · 3위 말띠", "財")
@@ -98,7 +98,7 @@ body = (P("<b>2027년 돈 들어오는 띠</b>가 궁금하신가요? 안녕하�
  P("이 글은 재미로, 그리고 나를 돌아보는 계기로 읽어 주세요."))
 POSTS.append(dict(no=5, when="10/10(토) 밤 9시 예약", title="2027년 돈 들어오는 띠 TOP3, 재물운 좋은 띠와 조심할 띠",
   tags="2027년재물운, 돈들어오는띠, 2027재물운좋은띠, 재물운좋은띠, 2027년운세, 띠별재물운, 돼지띠재물운, 쥐띠재물운, 말띠재물운, 정미년재물운, 금전운, 자오선",
-  imgs=["naver_m01_돈들어오는띠.jpg","naver_m02_TOP3.jpg","naver_m03_돈조심띠.jpg"], body=body))
+  imgs=["naver_m01_돈들어오는띠.jpg","naver_m02_TOP3.jpg","naver_m03_돈조심띠.jpg","naver_cta_1초무료풀이.jpg"], body=body))
 
 # ---------- 6편 소띠 ----------
 N.title(f"{OUT}/naver_o01_2027소띠운세.jpg", "2027 정미년 · 소띠", ["2027년 소띠 운세", "움직임이 큰 해"], "1973 · 1985 · 1997 · 2009년생", "丑")
@@ -145,7 +145,7 @@ body = (P("<b>2027년 소띠 운세</b>가 궁금하신가요? 안녕하세요, 
  P("이 글은 재미로, 그리고 나를 돌아보는 계기로 읽어 주세요."))
 POSTS.append(dict(no=6, when="10/14(수) 밤 9시 예약", title="2027년 소띠 운세, 양띠와 충 드는 해 이사·이직 월별 총정리",
   tags="2027년소띠운세, 소띠운세, 2027소띠, 소띠충, 정미년소띠, 2027년운세, 소띠이사운, 소띠이직운, 85년생운세, 97년생운세, 띠별운세, 자오선",
-  imgs=["naver_o01_2027소띠운세.jpg","naver_o02_소띠월별.jpg","naver_o03_소띠할일.jpg"], body=body))
+  imgs=["naver_o01_2027소띠운세.jpg","naver_o02_소띠월별.jpg","naver_o03_소띠할일.jpg","naver_cta_1초무료풀이.jpg"], body=body))
 
 # ---------- 7편 연애 스타일 ----------
 N.title(f"{OUT}/naver_l01_연애스타일.jpg", "태어난 날 × 별자리", ["태어난 날로 보는", "연애 스타일 10가지"], "갑목부터 계수까지, 별자리로 한 번 더 확인", "戀")
@@ -192,7 +192,7 @@ body = (P("<b>연애 스타일</b>, 태어난 날로 볼 수 있다는 거 알�
  P("이 글은 재미로, 그리고 나를 돌아보는 계기로 읽어 주세요."))
 POSTS.append(dict(no=7, when="10/17(토) 밤 9시 예약", title="태어난 날로 보는 연애 스타일 10가지, 일간별 연애 성향과 별자리 궁합",
   tags="연애스타일, 일간별성격, 일간연애, 사주연애, 태어난날성격, 갑목연애, 병화연애, 별자리연애, 연애궁합, 사주궁합, 일주론, 자오선",
-  imgs=["naver_l01_연애스타일.jpg","naver_l02_일간10가지.jpg","naver_l03_원소교차.jpg"], body=body))
+  imgs=["naver_l01_연애스타일.jpg","naver_l02_일간10가지.jpg","naver_l03_원소교차.jpg","naver_cta_1초무료풀이.jpg"], body=body))
 for p in POSTS:
     import re
     p["chars"] = len(re.sub(r"<[^>]+>|&nbsp;", "", p["body"]))
