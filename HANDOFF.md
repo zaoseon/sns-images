@@ -114,6 +114,11 @@ README "2주마다 하는 일" 그대로. 요점만:
 - 키트 https://claude.ai/artifact/2tDGQEP9WYMFLp5Tbfdsax 에 추가. 원고 `naver/build_naver_04_07.py`, 이미지 `naver/img/` (960x640, 3:2, 파일 이름에 검색어)
 - 10/7 양띠, 10/10 돈 들어오는 띠 TOP3, 10/14 소띠, 10/17 연애 스타일 10가지(일간 × 별자리 교차)
 
+### 검색 키워드 자동화 (9/29 요청 → ③ 구현)
+- 명세 zaoseon-site `tools/seo/SPEC.md`. 매일 키워드 30개 `data/keywords/`, 초안 `blog/_drafts/`
+- ①의 일: 초안 검토·사실 확인 → 날짜 정해 `blog/`로 옮김, 네이버용 키트 제작. 공개는 검토 후에만
+- CTA: 사이트는 `blog/_cta.html`(utm_campaign=slug), 네이버는 `naver/img/naver_cta_1초무료풀이.jpg` + 링크 https://zaoseon.com/?utm_source=naver&utm_medium=cta#free
+
 ### 댓글 알림 규칙 (9/29 대표 요청)
 - 구글 캘린더 알림은 **무료 사주 글에만** 만든다. 일반 게시물마다 알림을 만들지 않는다
 - 게시 10분 뒤 시작, 30분 길이, 팝업 알림(0분). 제목 "[자오선] 무료 한 줄 사주 N번째 댓글 답하기 (플랫폼)", 색 5(노랑), 설명에 답글 생성기·스레드 주소
