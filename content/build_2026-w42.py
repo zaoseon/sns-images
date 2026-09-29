@@ -87,6 +87,9 @@ T = [  # 2027 띠별 (네이버 1편과 같은 내용, 문장은 SNS용으로 �
   work="함께하는 일이 잘 풀려요. 네트워크를 넓히는 데 시간을 쓰세요.",people="도와주는 사람이 늘어요. 받은 도움은 작게라도 갚으세요.",
   do="도움 줄 사람 한 명과 연락하기",dont="좋은 말만 믿고 서두르기"),
 ]
+def ye(w):
+    c = w.rstrip(")'")[-1]
+    return "이에요" if 0xAC00 <= ord(c) <= 0xD7A3 and (ord(c)-0xAC00) % 28 else "예요"
 def mname(m): return "이듬해 1월" if m == 13 else f"{m}월"
 def tti_post(date, t):
     img = dict(type="tti", name=t["name"], mark=t["mark"], years=t["y"]+"년생", one=t["one"], hook=t["hook"], rel=t["rel"],
@@ -96,10 +99,10 @@ def tti_post(date, t):
     g = " · ".join(mname(m) for m in t["good"]); s = " · ".join(mname(m) for m in t["save"])
     th = (f"{t['hook']}\n{t['name']}({ys}년생)의 2027년 이야기예요.\n\n"
           f"2027년은 정미년이에요. 앞 글자 정(丁)은 등불, 뒷 글자 미(未)는 양띠의 땅이에요. "
-          f"{t['name']}와 2027년은 '{t['rel']}'예요. {t['why']}\n\n"
+          f"{t['name']}와 2027년은 '{t['rel']}'{ye(t['rel'])}. {t['why']}\n\n"
           f"힘을 쓸 달: {g}\n아낄 달: {s}\n행운의 색: {' · '.join(t['color'])} / 숫자 {t['num']} / 방향 {t['dir']}\n\n"
           f"올해 해 볼 것: {t['do']}\n\n같은 띠라도 태어난 날에 따라 흐름이 달라요. 내 태어난 날의 기운은 프로필 링크에서 볼 수 있어요.\n\n#띠별운세")
-    ig = (f"{t['hook']}\n{t['name']}({ys}년생)의 2027년, 한 줄로는 '{t['one']}'예요.\n\n"
+    ig = (f"{t['hook']}\n{t['name']}({ys}년생)의 2027년, 한 줄로는 '{t['one']}'{ye(t['one'])}.\n\n"
           f"옆으로 넘기면 힘을 쓸 달과 아낄 달, 행운의 색·숫자·방향, 돈·일·사람 이야기가 있어요.\n"
           f"저장해 두고 1년 동안 꺼내 보세요. 주변에 {t['name']}가 있다면 공유해 주세요.\n\n"
           f"※ 1월~2월 초에 태어났다면 앞 해 띠일 수 있어요. 사주에서 띠는 입춘(2월 4일 무렵)에 바뀌어요.\n"
@@ -126,7 +129,7 @@ def week_post(date, rows):
 
 def ask(date, tag, title, opts, hook, body, ig_extra, iht):
     lines = [f"{i+1}. {o}" for i, o in enumerate(opts)]
-    th = f"{hook}\n\n{body}\n\n" + "\n".join(lines) + f"\n\n번호로 남겨 주세요. 저도 제 번호를 댓글에 적어 둘게요.\n\n#{tag}"
+    th = f"{hook}\n\n{body}\n\n" + "\n".join(lines) + f"\n\n댓글에 번호로 남겨 주세요.\n\n#{tag}"
     ig = f"{hook}\n\n{body}\n\n" + "\n".join(lines) + f"\n\n{ig_extra}\n댓글에 번호를 남겨 주세요.\n\n{HT} {iht}"
     img = dict(type="card", title=title, lines=[""] + lines + ["", "→ 댓글에 번호로 남겨 주세요"], foot="나는 몇 번일까")
     return dict(date=date, slot="pm", tag=tag, threads=[th], instagram=ig, image=img, threads_image=False)
