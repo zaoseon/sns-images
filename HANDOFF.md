@@ -101,6 +101,19 @@ README "2주마다 하는 일" 그대로. 요점만:
 - 10/25 12:30 스레드에서 "다음 주 띠별 궁합 편"을 약속했다 → w44에 띠별 궁합 넣기 (댓글 많은 띠부터)
 - 10/12~10/25 예약 합계: 인스타·스레드 56 + 테스트 릴스 12 + 스레드 점심 14 = 82건
 
+### 콘텐츠 상황판 (9/29)
+- 주소: https://claude.ai/artifact/FRSBs2mojChdkoCMEDn9YY (원본 `pipeline/dashboard.html`)
+- 인스타·스레드·릴스: 페이지가 Metricool getScheduledPosts를 대표 권한으로 직접 읽음(5분마다 갱신). 따로 입력할 것 없음
+- 블로그: 상황판 db `blog` 모음. 문서 id `naver-NN`, `site-<slug>`. 필드 channel(naver|site), date, time, title, status(planned|scheduled|published), url, no. 네이버 views/likes/comments는 대표가 상황판에서 숫자만 입력(선택)
+- 반응 기록: db `reports` 모음. 2주마다 문서 하나 추가: period("10/12~10/25"), followers{instagram,threads}, best[], worst[], next[], note
+- **2주 제작 때마다:** 새 네이버·사이트 글을 `blog`에 write_db로 추가, 발행된 글은 status를 published로, 지난 2주 반응을 `reports`에 기록
+- 인스타 반응 수치 자동 읽기(getAnalyticsDataByMetrics)는 9/29 도구 승인을 못 받아 아직 없음. 승인되면 상황판에 추가
+- 네이버 1편 날짜(9/29), 2편 예약일(10/1)은 추정값. 실제와 다르면 고친다
+
+### 네이버 4~7편 (9/29)
+- 키트 https://claude.ai/artifact/2tDGQEP9WYMFLp5Tbfdsax 에 추가. 원고 `naver/build_naver_04_07.py`, 이미지 `naver/img/` (960x640, 3:2, 파일 이름에 검색어)
+- 10/7 양띠, 10/10 돈 들어오는 띠 TOP3, 10/14 소띠, 10/17 연애 스타일 10가지(일간 × 별자리 교차)
+
 ### 댓글 알림 규칙 (9/29 대표 요청)
 - 구글 캘린더 알림은 **무료 사주 글에만** 만든다. 일반 게시물마다 알림을 만들지 않는다
 - 게시 10분 뒤 시작, 30분 길이, 팝업 알림(0분). 제목 "[자오선] 무료 한 줄 사주 N번째 댓글 답하기 (플랫폼)", 색 5(노랑), 설명에 답글 생성기·스레드 주소
