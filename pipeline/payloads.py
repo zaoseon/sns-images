@@ -13,7 +13,7 @@ def build(src):
         th, ig = p.get("threads"), p.get("instagram")
         if p["image"]["type"] == "week":
             th, ig = render.week_texts(p["image"]); th[0] += "\n\n#운세"
-            ig += "\n\n#사주 #운세 #사주풀이 #자오선 #주간운세 #일진 #오늘의운세"
+            ig += "\n\n#사주 #운세 #주간운세 #일진 #오늘의운세"
         common = {"autoPublish": True, "draft": False, "firstCommentText": "", "hasNotReadNotes": False, "shortener": False,
                   "smartLinkData": {"ids": []}, "publicationDate": {"dateTime": dt, "timezone": "Asia/Seoul"}}
         out.append((f"{i+1:02d} ig {dt}", dict(common, text=ig, media=m, providers=[{"network": "instagram"}],
