@@ -60,7 +60,9 @@ claude.ai 연결(커넥터): Metricool, Google Calendar, Google Drive. 새 대�
 - 원고 `content/2026-w42.json`(생성 스크립트 `content/build_2026-w42.py`), 이미지 `2026-w42/` 92장 push 완료, 공개 주소 200 확인
 - 아침: 10/12·10/19 주간 기운, 나머지 12일은 2027 띠별 운세(쥐→돼지, 인스타 5장 캐러셀, 스레드는 표지 1장)
 - 밤: 선택형 질문(스레드는 이미지 없음, 인스타는 질문 카드), 참여 글 10/17·10/24, 상강 10/23
-- **Metricool 예약은 아직 0건.** 첫 예약 호출에서 도구 승인을 받지 못했다. `python3 pipeline/payloads.py content/2026-w42.json` → /tmp/payloads.json(56건)을 순서대로 createScheduledPost
+- STRATEGY.md 반영: 스레드 글 끝 질문, 10/15 밤 돈 들어오는 띠 TOP3, 10/17·10/24 밤 무료 한 줄 사주 1·2번째, 인스타 해시태그 5개
+- **Metricool 예약 28/56건 완료 (10/12~10/18, 9/29).** 남은 것: 10/19~10/25 28건. `python3 pipeline/payloads.py content/2026-w42.json` → /tmp/payloads.json 의 29번째("15 ig")부터 순서대로 createScheduledPost
+- 다음 후보: 띠별 캐러셀 12개를 슬라이드 영상으로 만들어 TRIAL_REEL 예약 (ffmpeg 사용 가능)
 
 ## 3. 새 대화 첫 작업
 
