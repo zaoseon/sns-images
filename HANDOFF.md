@@ -125,6 +125,13 @@ README "2주마다 하는 일" 그대로. 요점만:
 - ①의 일: 초안 검토·사실 확인 → 날짜 정해 `blog/`로 옮김, 네이버용 키트 제작. 공개는 검토 후에만
 - CTA: 사이트는 `blog/_cta.html`(utm_campaign=slug), 네이버는 `naver/img/naver_cta_1초무료풀이.jpg` + 링크 https://zaoseon.com/?utm_source=naver&utm_medium=cta#free
 
+### 사이트 블로그 초안 검토 (매일 06:00 초안 생성)
+- 초안: zaoseon-site `blog/_drafts/YYYY-MM-DD-slug.md` (date 2099-01-01, 맨 위 주석에 "확인할 사실"). 키워드 표 `data/keywords/날짜.md`
+- ①의 일: 확인할 사실을 웹 검색·engine으로 확인 → 고침 → 주석 두 개 지움 → date를 공개일로 → `blog/YYYY-MM-DD-slug.md`로 옮김(_drafts에서 삭제) → 썸네일 1200x630(가운데 배치, 한자 배경) `public/img/blog/slug.jpg` → `BLOG_ALL=1 python3 tools/build_blog.py`로 확인 후 public/blog 변경은 되돌림 → 커밋 → 상황판 db `blog`에 `site-slug` 추가
+- 9/29: internet-saju → 10/1 공개. 고친 것: 주민등록 생일 음력 가능성, 절입 시각 1~2분 차이 안내, 무료 풀이 설명(밤 11시~자정 체크 칸)
+- 공개일: 기존 짝수일 글 사이의 홀수일부터 채운다(10/1, 10/3, …)
+- 키워드 표 2위 "10월손없는날"(검색 1.1만, 단가 높음)은 10월 초가 지나면 가치가 사라진다. 이런 시기 키워드는 초안을 기다리지 말고 바로 쓴다
+
 ### 댓글 알림 규칙 (9/29 대표 요청)
 - 구글 캘린더 알림은 **무료 사주 글에만** 만든다. 일반 게시물마다 알림을 만들지 않는다
 - 게시 10분 뒤 시작, 30분 길이, 팝업 알림(0분). 제목 "[자오선] 무료 한 줄 사주 N번째 댓글 답하기 (플랫폼)", 색 5(노랑), 설명에 답글 생성기·스레드 주소
