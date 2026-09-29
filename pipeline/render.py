@@ -260,6 +260,27 @@ def tti(s, outdir, prefix):
     foot(d, L, "재미로, 나를 돌아보는 계기로"); save(img, 5)
     return files
 
+def cross(s, path):
+    """세 지도 교차 카드. {"type":"cross","kicker":"..","title":"..","rows":[["사주","동양","값","풀이"],...],"note":"..","foot":".."}"""
+    img, d, L, R = base(None, None); mw = R - L
+    d.text((L, 235), s.get("kicker", "세 가지 지도로 보면"), font=F(MED, 32), fill=GOLD)
+    tf = F(SER, 64); tl = wrap(d, s["title"], tf, mw); y = 295
+    for l in tl: d.text((L, y), l, font=HF(l, tf), fill=PAPER); y += 84
+    y += 26
+    bh = 178; gap = 22
+    for lab, sub, val, desc in s["rows"]:
+        d.rounded_rectangle([L, y, R, y+bh], radius=16, outline=LINE, width=2)
+        d.text((L+30, y+36), lab, font=F(SER, 40), fill=GOLD, anchor="lm")
+        d.text((L+30, y+80), sub, font=F(MED, 24), fill=DIM, anchor="lm")
+        vf = F(SEMI, 40); d.text((L+210, y+30), val, font=HF(val, vf), fill=PAPER)
+        df = F(MED, 29); yy = y+88
+        for l in wrap(d, desc, df, R-L-240)[:2]: d.text((L+210, yy), l, font=HF(l, df), fill=DIM); yy += 42
+        y += bh + gap
+    y += 6
+    nf = F(MED, 34)
+    for l in wrap(d, s["note"], nf, mw): d.text((L, y), l, font=nf, fill=GOLD); y += 50
+    foot(d, L, s.get("foot", "세 지도가 겹치는 곳에 내가 있어요")); img.save(path, quality=90)
+
 if __name__ == "__main__":
     src = sys.argv[1]; C = json.load(open(src)); name = os.path.splitext(os.path.basename(src))[0]
     out = os.path.join(os.path.dirname(os.path.abspath(src)), "..", name); os.makedirs(out, exist_ok=True)
@@ -267,6 +288,7 @@ if __name__ == "__main__":
         pre = f"{i+1:02d}"
         if p["image"]["type"] == "week": week(p["image"], out, pre)
         elif p["image"]["type"] == "tti": tti(p["image"], out, pre)
+        elif p["image"]["type"] == "cross": cross(p["image"], f"{out}/{pre}.jpg")
         elif p["image"]["type"] == "trait": trait(p["image"], f"{out}/{pre}.jpg")
         else: card(p["image"], f"{out}/{pre}.jpg")
     print("rendered", len(C["posts"]), "->", out)
