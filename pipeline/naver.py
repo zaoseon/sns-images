@@ -70,3 +70,20 @@ def grid(path, head, cells, note=""):
         d.text((x+cw//2, y+143), kw, font=R.F(R.MED, 25), fill=R.DIM, anchor="mm")
     if note: d.text((48, H-88), note, font=R.F(R.MED, 24), fill=R.GOLD)
     img.save(path, quality=88)
+
+def table(path, head, cols, rows, widths):
+    """rows: 문자열 목록의 목록. widths: 열 너비(px)"""
+    img, d = base()
+    d.text((48, 96), head, font=R.F(R.SER, 40), fill=R.PAPER)
+    x0, y = 48, 168; rh = (H - 70 - y) // (len(rows) + 1)
+    x = x0
+    for c, w in zip(cols, widths):
+        d.text((x + 10, y + rh//2), c, font=R.F(R.SEMI, 26), fill=R.GOLD, anchor="lm"); x += w
+    d.line([(x0, y + rh), (W - 48, y + rh)], fill=R.GOLD, width=2)
+    for r in rows:
+        y += rh; x = x0
+        for i, (c, w) in enumerate(zip(r, widths)):
+            f = R.F(R.SER if i == 0 else R.MED, 30 if i == 0 else 27)
+            d.text((x + 10, y + rh//2), c, font=R.HF(c, f), fill=R.PAPER if i == 0 else R.PAPER, anchor="lm"); x += w
+        d.line([(x0, y + rh), (W - 48, y + rh)], fill=R.LINE, width=1)
+    img.save(path, quality=88)
