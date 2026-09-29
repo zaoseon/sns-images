@@ -88,7 +88,7 @@ T = [  # 2027 띠별 (네이버 1편과 같은 내용, 문장은 SNS용으로 �
   do="도움 줄 사람 한 명과 연락하기",dont="좋은 말만 믿고 서두르기"),
 ]
 def ye(w):
-    c = w.rstrip(")'")[-1]
+    import re; c = re.sub(r"\([^)]*\)", "", w).rstrip("'")[-1]
     return "이에요" if 0xAC00 <= ord(c) <= 0xD7A3 and (ord(c)-0xAC00) % 28 else "예요"
 def mname(m): return "이듬해 1월" if m == 13 else f"{m}월"
 def tti_post(date, t):
