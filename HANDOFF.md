@@ -118,7 +118,7 @@ README "2주마다 하는 일" 그대로. 요점만:
 - **구글 드라이브 폴더 "자오선 네이버 블로그 원고"** (id 1jmB6y3EFQ_mxEFuxhbZZIozgHpvvwVud, brainbridge.com@gmail.com 드라이브)에 글마다 구글 문서 1개
 - 문서 이름: "[10/7 수 21:00 예약] 4편 제목". 맨 위에 예약 일시·제목·태그·CTA 링크, 그 아래 구분선부터 이미지가 배치된 본문. 대표는 본문을 통째로 복사해 붙이고, 태그만 따로 붙이고, 적힌 시간으로 예약 발행
 - 만드는 법: Drive create_file(contentMimeType text/html, parentId 폴더). 이미지는 sns-images 공개 주소(raw.githubusercontent.com/.../naver/img/파일명 URL 인코딩)를 `<img width=600>`으로 넣으면 문서에 들어감(9/29 확인)
-- 4~7편 완료. 3편(궁합표)은 이미지가 저장소에 없어 기존 키트에만 있음
+- 3~7편 완료 (3편 이미지는 9/29 새로 만듦: naver_g01~g04)
 
 ### 검색 키워드 자동화 (9/29 요청 → ③ 구현)
 - 명세 zaoseon-site `tools/seo/SPEC.md`. 매일 키워드 30개 `data/keywords/`, 초안 `blog/_drafts/`
