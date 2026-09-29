@@ -45,6 +45,10 @@ Metricool(브랜드 id 7114921, zaoseon@gmail.com)이 이 저장소의 공개 �
 ]}
 ```
 
+`tti` 형식(2027 띠별 캐러셀 5장): name, mark, years, one, hook, rel, why, good/save(달 번호, 13=이듬해 1월), color, num, dir, money, work, people, do, dont. 필드 예시는 `content/build_2026-w42.py`.
+게시물에 `"threads_image": false` 를 넣으면 스레드는 이미지 없이 글만 예약한다.
+`pipeline/payloads.py` 는 JSON을 Metricool 예약 입력(인스타·스레드 따로)으로 바꿔 /tmp/payloads.json 에 쓴다.
+
 `week` 형식은 `render.week_texts()` 가 스레드 3개 글과 인스타 캡션을 자동으로 만든다.
 
 ## 기록
