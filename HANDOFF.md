@@ -130,7 +130,7 @@ README "2주마다 하는 일" 그대로. 요점만:
 ### 검색 키워드 자동화 (9/29 요청 → ③ 구현)
 - 명세 zaoseon-site `tools/seo/SPEC.md`. 매일 키워드 30개 `data/keywords/`, 초안 `blog/_drafts/`
 - ①의 일: 초안 검토·사실 확인 → 날짜 정해 `blog/`로 옮김, 네이버용 키트 제작. 공개는 검토 후에만
-- CTA: 사이트는 `blog/_cta.html`(utm_campaign=slug), 네이버는 `naver/img/naver_cta_1초무료풀이.jpg` + 링크 https://zaoseon.com/?utm_source=naver&utm_medium=cta#free
+- CTA: 사이트는 `blog/_cta.html`(utm_campaign=slug), 네이버는 `naver/img/naver_cta2_1초무료풀이.jpg` + 링크 https://zaoseon.com/?utm_source=naver&utm_medium=cta#free
 
 ### 사이트 블로그 초안 검토 (매일 06:00 초안 생성)
 - 초안: zaoseon-site `blog/_drafts/YYYY-MM-DD-slug.md` (date 2099-01-01, 맨 위 주석에 "확인할 사실"). 키워드 표 `data/keywords/날짜.md`
