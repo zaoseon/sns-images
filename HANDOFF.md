@@ -219,7 +219,7 @@ README "2주마다 하는 일" 그대로. 요점만:
   발달 특성 가족을 다루므로 콘텐츠 원칙을 따로 세운다.
 - 규모가 커지면 Claude API + GitHub Actions + Metricool 유료 API로 완전 자동화 검토.
 
-## 9. 네이버 블로그 (zaoseon 네이버 아이디, 반자동)
+## 9. 네이버 블로그 (https://blog.naver.com/zaoseon, 반자동)
 - 네이버는 자동 발행 불가 → Claude가 키트(제목·태그·본문 서식 복사 버튼)와 이미지를 만들고 대표가 붙여 넣어 발행
 - 키트: https://claude.ai/artifact/2tDGQEP9WYMFLp5Tbfdsax
 - 발행·예약 완료: 1편 2027 띠별 운세 총정리, 2편 2027 삼재띠(날삼재). 3편 띠별 궁합표는 키트에 준비됨(주말 밤 9시 예약 권장)
