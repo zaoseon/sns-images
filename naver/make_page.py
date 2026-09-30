@@ -80,3 +80,12 @@ def write_index():
     rows = "".join(f'<div class="box"><p class="lab">{when_text(D.datetime.fromisoformat(dt))}</p><p class="val"><a href="/naver/{k}.html">{html.escape(t)}</a></p></div>' for dt, k, t in items) \
         or '<div class="box"><p class="val">지금 올릴 원고가 없어요. 예약을 마친 글은 목록에서 빠져요.</p></div>'
     open(f"{SITE}/public/naver/index.html", "w").write(f'<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>네이버 원고 목록</title><style>{CSS}</style></head><body><div class="wrap"><h1>네이버 블로그 원고</h1><p class="hint">예약 발행일 순서예요.</p>{rows}</div></body></html>')
+
+def alert_text(pids):
+    """원고를 목록에 올린 뒤 캘린더 알림 설명문. ①이 Google Calendar create_event로 만든다(9/30 대표 요청)."""
+    reg = load(); rows = []
+    for k in sorted(pids, key=lambda k: reg[k]["dt"]):
+        rows.append(f'- {when_text(D.datetime.fromisoformat(reg[k]["dt"]))} · {reg[k]["title"]}\n  https://zaoseon.com/naver/{k}.html')
+    return ("새 네이버 원고가 목록에 올라왔어요. 각 페이지의 예약 발행일로 예약해 주세요.\n"
+            "끝나면 대화창에 \"예약 완료\"라고만 말해 주세요. 목록과 상황판을 정리해요.\n\n"
+            "원고 목록: https://zaoseon.com/naver/\n\n" + "\n".join(rows))
