@@ -5,6 +5,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import render as R, brand2 as B
 from PIL import Image, ImageDraw, ImageFilter
 W, H = 1080, 1920; YEL = (255, 214, 64); DARK = (16, 14, 13)
+# 9/30: 릴스·네이버클립 UI 안전 영역 (위: 계정명 · 아래: 캡션/음악/네비 · 오른쪽: 좋아요·댓글·공유 버튼 줄)
+SAFE_TOP, SAFE_BOTTOM, SAFE_RIGHT, SAFE_LEFT = 230, 340, 160, 40
 def face_bg(h=1150):
     im = Image.open(B.JW).convert("RGB"); r = W/im.width; im = im.resize((W, int(im.height*r)))
     im = im.crop((0, 0, W, min(h, im.height)))
