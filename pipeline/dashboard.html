@@ -81,18 +81,35 @@ function render(){
    if(i.url){var a=el("a",null,i.text);a.href=i.url;a.target="_blank";a.rel="noopener";tx.appendChild(a)}else tx.appendChild(document.createTextNode(i.text));
    if(i.free)tx.appendChild(el("span","reply","댓글 답하기"));r.appendChild(tx);var b=badge(i.status);r.appendChild(el("span","bd "+b[1],b[0]));card.appendChild(r)});box.appendChild(card)});
 }
-function snsNote(){var n=document.getElementById("snsState");n.textContent="";if(!snsErr)return;var c=el("div","note err");var m={needs_reauth:"Metricool 연결이 끊겼어요. Claude 설정의 커넥터에서 Metricool을 다시 연결해 주세요.",server_not_connected:"이 계정에 Metricool 커넥터가 없어요. 인스타·스레드 일정은 표시되지 않아요.",not_granted:"Metricool 읽기를 허용하지 않았어요. 페이지를 다시 열면 다시 물어봐요.",blocked_by_policy:"조직 설정 때문에 Metricool을 읽을 수 없어요."}[snsErr.code]||("Metricool에서 일정을 읽지 못했어요 ("+snsErr.code+"). 잠시 뒤 다시 열어 주세요.");
- c.appendChild(el("h4",null,"인스타·스레드 일정"));c.appendChild(el("p",null,m));n.appendChild(c)}
+function snsNote(){var n=document.getElementById("snsState");n.textContent="";if(!snsErr)return;var c=el("div","note err");var m={needs_reauth:"Metricool 연결이 끊겼어요. Claude 설정의 커넥터에서 Metricool을 다시 연결해 주세요.",server_not_connected:"이 계정에 Metricool 커넥터가 없어요. 인스타·스레드 일정은 표시되지 않아요.",not_granted:"Metricool 읽기가 허용되지 않았어요. 아래 버튼을 눌러 허용해 주세요. 버튼으로도 안 되면 이 화면 오른쪽 위 메뉴의 권한(Permissions)에서 Metricool을 허용해 주세요.",no_mcp:"이 화면에서는 커넥터를 쓸 수 없어요. claude.ai에 로그인한 브라우저에서 열어 주세요.",upstream_error:"Metricool 읽기 허락을 아직 받지 못했어요. 아래 버튼을 눌러 허용해 주세요.",blocked_by_policy:"조직 설정 때문에 Metricool을 읽을 수 없어요."}[snsErr.code]||("Metricool에서 일정을 읽지 못했어요 ("+snsErr.code+"). 잠시 뒤 다시 열어 주세요.");
+ c.appendChild(el("h4",null,"인스타·스레드 일정이 안 보여요"));c.appendChild(el("p",null,m));
+ if(/not_granted|prompt|upstream_error/.test(snsErr.code)){var b=el("button",null,"Metricool 읽기 허용하기");b.style.cssText="margin-top:6px;background:var(--gold);color:#1b1917;border:0;border-radius:8px;padding:8px 14px;font:inherit;font-weight:700;cursor:pointer";b.onclick=askAgain;c.appendChild(b)}
+ c.appendChild(el("p","muted","오류 코드: "+snsErr.code+(snsErr.message?" · "+snsErr.message:"")));n.appendChild(c)}
 function fresh(){var f=document.getElementById("fresh");var t=storedAt?new Date(storedAt):null;f.textContent="인스타·스레드는 Metricool 예약에서 자동으로 읽어요"+(t?" (마지막 갱신 "+(t.getMonth()+1)+"/"+t.getDate()+" "+String(t.getHours()).padStart(2,"0")+":"+String(t.getMinutes()).padStart(2,"0")+")":"")+". 블로그와 반응 기록은 콘텐츠 세션이 채워요."}
 render();
-claude.use("mcp").then(function(mcp){
- if(!mcp){snsErr={code:"server_not_connected"};snsNote();return}
+var mcpRef=null, retried=false;
+function startWatch(mcp){
  var from=ymd(addDays(monday(now),-14))+"T00:00:00+09:00", to=ymd(addDays(monday(now),21))+"T23:59:00+09:00";
  mcp.watchTool(SERVER,"getScheduledPosts",{brandId:BRAND,fromDate:from,toDate:to,timezone:TZ},function(ev){
-  if(ev.type==="data"){var p=ev.result.payload;if(typeof p==="string"){try{p=JSON.parse(p)}catch(e){}}sns=normSns(p&&p.data);snsErr=null;storedAt=(ev.result.cache&&ev.result.cache.storedAt)||Date.now();fresh();snsNote();render()}
-  else{var c=ev.error&&ev.error.code;if(/needs_reauth|server_not_connected|blocked_by_policy|approval_required|not_granted/.test(c))sns=[];snsErr=ev.error||{code:"upstream_error"};snsNote();render()}
+  if(ev.type==="data"){var p=ev.result.payload;if(typeof p==="string"){try{p=JSON.parse(p)}catch(e){}}
+   var list=(p&&p.data)||(Array.isArray(p)?p:[]);sns=normSns(list);snsErr=null;storedAt=(ev.result.cache&&ev.result.cache.storedAt)||Date.now();fresh();snsNote();render()}
+  else{var er=ev.error||{code:"upstream_error"};snsErr=er;snsNote();render();
+   if(er.retryable&&!retried){retried=true;setTimeout(function(){mcp.invalidate&&mcp.invalidate(SERVER,"getScheduledPosts")},1500+Math.random()*1500)}}
  },{refetchInterval:300000});
+}
+claude.use("mcp").then(function(mcp){
+ mcpRef=mcp;
+ if(!mcp){snsErr={code:"no_mcp"};snsNote();return}
+ claude.use("permissions").then(function(perm){
+  var st=perm?perm.state("mcp:"+SERVER).catch(function(){return "unavailable"}):Promise.resolve("prompt");
+  st.then(function(state){
+   if(state==="denied"){snsErr={code:"not_granted"};snsNote();return}
+   startWatch(mcp);
+  });
+ });
 });
+function askAgain(){claude.use("permissions").then(function(perm){if(!perm){location.reload();return}
+ perm.request(["mcp:"+SERVER]).then(function(r){if(r["mcp:"+SERVER]==="granted"||r["mcp:"+SERVER]==="prompt"){snsErr=null;snsNote();startWatch(mcpRef)}else{snsErr={code:"not_granted"};snsNote()}})})}
 claude.use("db").then(function(db){
  var rb=document.getElementById("blogs"),rr=document.getElementById("reports");
  if(!db){rb.textContent="";rb.appendChild(el("p","muted","블로그 기록을 불러올 수 없는 화면이에요."));rr.textContent="";rr.appendChild(el("p","muted","반응 기록을 불러올 수 없는 화면이에요."));return}
