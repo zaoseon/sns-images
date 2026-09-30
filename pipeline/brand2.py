@@ -39,7 +39,9 @@ def test_card(path, el, title, rows, note):
     img = Image.new("RGB", (W, H), (250, 247, 241)); d = ImageDraw.Draw(img)
     d.rectangle([0, 0, W, 16], fill=dk); logo(d, 64, 56, dk)
     d.text((64, 140), "세 가지 지도로 보면", font=R.F(R.MED, 32), fill=GRAY)
-    d.text((64, 190), title, font=R.F(R.SER, 70), fill=INKD)
+    ts = 70
+    while ts > 44 and d.textlength(title, font=R.F(R.SER, ts)) > W-128: ts -= 2
+    d.text((64, 190), title, font=R.HF(title, R.F(R.SER, ts)), fill=INKD)
     y = 330
     for badge, lab, val, desc, c in rows:
         d.rounded_rectangle([64, y, W-64, y+220], 28, fill=(255, 255, 255), outline=(232, 226, 216), width=2)
@@ -48,8 +50,9 @@ def test_card(path, el, title, rows, note):
         d.text((250, y+92), val, font=R.HF(val, R.F(R.SEMI, 44)), fill=INKD)
         d.text((250, y+154), desc, font=R.HF(desc, R.F(R.MED, 28)), fill=GRAY)
         y += 250
-    d.rounded_rectangle([64, y+10, W-64, y+130], 28, fill=bg)
-    d.text((W//2, y+70), note, font=R.F(R.SEMI, 34), fill=dk, anchor="mm")
+    nl = R.wrap(d, note, R.F(R.SEMI, 32), W-200)[:2]; nh = 60 + 46*len(nl)
+    d.rounded_rectangle([64, y+10, W-64, y+10+nh], 28, fill=bg); yy = y+10+nh//2-23*(len(nl)-1)
+    for l in nl: d.text((W//2, yy), l, font=R.F(R.SEMI, 32), fill=dk, anchor="mm"); yy += 46
     d.text((64, H-60), "나는 몇 개 겹쳐? 댓글로 · 내일 밤 9시 다음 편", font=R.F(R.MED, 28), fill=GRAY)
     img.save(path, quality=92)
 def reel_first(path, el, series, hook_lines, sub):
