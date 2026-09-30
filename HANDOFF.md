@@ -109,7 +109,7 @@ README "2주마다 하는 일" 그대로. 요점만:
 - 반응 기록: db `reports` 모음. 2주마다 문서 하나 추가: period("10/12~10/25"), followers{instagram,threads}, best[], worst[], next[], note
 - **2주 제작 때마다:** 새 네이버·사이트 글을 `blog`에 write_db로 추가, 발행된 글은 status를 published로, 지난 2주 반응을 `reports`에 기록
 - 인스타 반응 수치 자동 읽기(getAnalyticsDataByMetrics)는 9/29 도구 승인을 못 받아 아직 없음. 승인되면 상황판에 추가
-- 네이버 1편 날짜(9/29), 2편 예약일(10/1)은 추정값. 실제와 다르면 고친다
+- 네이버 발행: 1편 띠별 운세(발행, blog.naver.com/zaoseon/224425927427), 10월 손없는날(발행, …/224426864022), 2편 삼재 10/1 21:00 예약(대표 확인), 3편 궁합 10/3 21:00 예약. 발행되면 `naver/published.json`에 주소를 채운다
 
 ### 네이버 4~7편 (9/29)
 - 키트 https://claude.ai/artifact/2tDGQEP9WYMFLp5Tbfdsax 에 추가. 원고 `naver/build_naver_04_07.py`, 이미지 `naver/img/` (**960x480, 2:1** — 9/30 대표: 3:2도 너무 큼. 파일 이름에 검색어. 표·칸은 4개면 2x2)
