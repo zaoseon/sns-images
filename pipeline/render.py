@@ -295,3 +295,16 @@ if __name__ == "__main__":
         elif p["image"]["type"] == "trait": trait(p["image"], f"{out}/{pre}.jpg")
         else: card(p["image"], f"{out}/{pre}.jpg")
     print("rendered", len(C["posts"]), "->", out)
+
+
+def fit_size(d, text, font_path, target_w, lo=60, hi=220):
+    """9/30 실측 교훈: 줄을 화면 폭의 target_w(px)에 맞춰 글자 크기를 역산한다.
+    (경쟁 계정은 고정 pt가 아니라 폭을 꽉 채우도록 자동 맞춤을 쓴다: 사주나루 97%, fortune88 77%)"""
+    best = lo
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        f = F(BLACKF, mid)
+        w = d.textlength(text, font=f)
+        if w <= target_w: best = mid; lo = mid + 1
+        else: hi = mid - 1
+    return best
