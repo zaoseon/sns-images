@@ -112,7 +112,7 @@ README "2주마다 하는 일" 그대로. 요점만:
 - 네이버 1편 날짜(9/29), 2편 예약일(10/1)은 추정값. 실제와 다르면 고친다
 
 ### 네이버 4~7편 (9/29)
-- 키트 https://claude.ai/artifact/2tDGQEP9WYMFLp5Tbfdsax 에 추가. 원고 `naver/build_naver_04_07.py`, 이미지 `naver/img/` (960x640, 3:2, 파일 이름에 검색어)
+- 키트 https://claude.ai/artifact/2tDGQEP9WYMFLp5Tbfdsax 에 추가. 원고 `naver/build_naver_04_07.py`, 이미지 `naver/img/` (**960x480, 2:1** — 9/30 대표: 3:2도 너무 큼. 파일 이름에 검색어. 표·칸은 4개면 2x2)
 - 10/7 양띠, 10/10 돈 들어오는 띠 TOP3, 10/14 소띠, 10/17 연애 스타일 10가지(일간 × 별자리 교차)
 
 ### 네이버 원고 전달 방식 (9/30 바뀜)
