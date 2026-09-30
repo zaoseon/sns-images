@@ -115,7 +115,12 @@ README "2주마다 하는 일" 그대로. 요점만:
 - 키트 https://claude.ai/artifact/2tDGQEP9WYMFLp5Tbfdsax 에 추가. 원고 `naver/build_naver_04_07.py`, 이미지 `naver/img/` (960x640, 3:2, 파일 이름에 검색어)
 - 10/7 양띠, 10/10 돈 들어오는 띠 TOP3, 10/14 소띠, 10/17 연애 스타일 10가지(일간 × 별자리 교차)
 
-### 네이버 원고 전달 방식 (9/29 대표 결정)
+### 네이버 원고 전달 방식 (9/30 바뀜)
+- **구글 문서는 이미지가 네이버로 복사되지 않는다(9/30 대표 확인).** 그래서 원고는 사이트의 숨긴 페이지 **https://zaoseon.com/naver/** 로 전달한다(noindex, robots Disallow). 글마다 `public/naver/<id>.html`: 예약 일시, 제목·태그·CTA 링크 복사 버튼, "본문 전체 복사(이미지 포함)" 버튼, 본문. 이미지는 raw.githubusercontent.com 공개 주소(네이버가 붙여 넣을 때 가져감). 목록 `public/naver/index.html`은 발행일 순
+- 새 글을 만들면 페이지와 목록을 같이 갱신해 zaoseon-site에 푸시한다. 구글 문서는 참고용으로만 계속 둘지 대표에게 묻지 않고 생략해도 된다
+- 이미지가 네이버에서 안 붙으면: 본문 안 이미지마다 "사진 N" 자리 표시로 바꾸고 파일을 따로 주는 방식으로 되돌린다
+
+### (이전) 구글 문서 방식 (9/29)
 - **구글 드라이브 폴더 "자오선 네이버 블로그 원고"** (id 1jmB6y3EFQ_mxEFuxhbZZIozgHpvvwVud, brainbridge.com@gmail.com 드라이브)에 글마다 구글 문서 1개
 - 문서 이름: "[2026-10-07 수 21:00 예약] 4편 제목" (날짜를 0 채워 써야 이름순 = 발행순). 맨 위에 예약 일시·제목·태그·CTA 링크, 그 아래 구분선부터 이미지가 배치된 본문. 대표는 본문을 통째로 복사해 붙이고, 태그만 따로 붙이고, 적힌 시간으로 예약 발행
 - 만드는 법: Drive create_file(contentMimeType text/html, parentId 폴더). 이미지는 sns-images 공개 주소(raw.githubusercontent.com/.../naver/img/파일명 URL 인코딩)를 `<img width=600>`으로 넣으면 문서에 들어감(9/29 확인)
