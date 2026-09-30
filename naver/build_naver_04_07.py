@@ -6,7 +6,7 @@ OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "img")
 def H(t): return f'<p>&nbsp;</p><p><span style="font-size:22px"><b>{t}</b></span></p>'
 def P(*lines): return "<p>" + "<br>".join(lines) + "</p>"
 def IMG(f): return f"<p>[이미지: {f}]</p>"
-END = IMG("naver_cta_1초무료풀이.jpg") + P("👉 <b>1초 만에 내 기운 보기: https://zaoseon.com/?utm_source=naver&amp;utm_medium=cta#free</b>")
+END = IMG("naver_cta_1초무료풀이.jpg")  # 링크는 배너 이미지에 건다(글자 링크 없음)
 POSTS = []
 
 # ---------- 4편 양띠 ----------
