@@ -54,14 +54,17 @@ function cpt(b){navigator.clipboard.writeText(b.dataset.t).then(function(){b.cla
 function cpb(b){var el=document.getElementById("body");var h=el.innerHTML,t=el.innerText;function done(){b.textContent="본문 복사됨 · 네이버 본문에 붙여 넣으세요";b.className="big ok"}
  function sel(){var r=document.createRange();r.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(r);document.execCommand("copy");done()}
  if(window.ClipboardItem){navigator.clipboard.write([new ClipboardItem({"text/html":new Blob([h],{type:"text/html"}),"text/plain":new Blob([t],{type:"text/plain"})})]).then(done,sel)}else sel()}'''
-def write_page(pid, dt, title, tags, body, nxt=None):
+def write_page(pid, dt, title, tags, body, nxt=None, cover=None):
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
     chips = "".join(f'<button class="tag" data-t="{html.escape(t)}" onclick="cpt(this)">{html.escape(t)}</button>' for t in tags)
     nav = f'<a href="/naver/{nxt}.html"><button class="big">다음 원고 →</button></a>' if nxt else '<a href="/naver/"><button class="big">목록으로 (마지막 원고)</button></a>'
+    cover_box = (f'<div class="box"><p class="lab">2-1. 대표 이미지: 저장 → 네이버 본문 맨 위에 커서 → 사진 → 내 PC로 올리기 (처음 올린 사진이 대표가 돼요)</p>'
+                 f'<img src="/naver/img/{cover}" style="width:100%;border-radius:8px" alt=""><a href="/naver/img/{cover}" download="{cover}"><button>대표 이미지 저장</button></a></div>') if cover else ""
     page = f'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>네이버 원고 · {html.escape(title)}</title><style>{CSS}</style></head><body><div class="wrap">
 <p class="hint"><a href="/naver/">← 네이버 원고 목록</a></p>
 <div class="box"><p class="lab">1. 제목</p><p class="val" id="t">{html.escape(title)}</p><button onclick="cp('t',this)">제목 복사</button></div>
 <div class="box"><p class="lab">2. 본문 (이미지 포함)</p><button class="big" onclick="cpb(this)">본문 전체 복사</button><p class="hint">버튼이 안 되면 아래 점선 상자 안을 처음부터 끝까지 드래그해서 복사하세요.</p><div id="body">{body}</div></div>
+{cover_box}
 <div class="box"><p class="lab">3. CTA 배너 링크: 맨 아래 배너 이미지를 누르고 링크 버튼으로 걸기</p><p class="val" id="c">{html.escape(CTA_LINK)}</p><button onclick="cp('c',this)">링크 복사</button></div>
 <div class="box"><p class="lab">4. 태그 {len(tags)}개 · 하나씩 눌러 복사 → 태그 칸에 붙여 넣고 엔터</p><div class="tags">{chips}</div></div>
 <div class="box"><p class="lab">5. 예약 발행일</p><p class="val" style="font-size:20px;font-weight:700">{when_text(dt)}</p></div>
@@ -69,16 +72,25 @@ def write_page(pid, dt, title, tags, body, nxt=None):
     open(f"{SITE}/public/naver/{pid}.html", "w").write(page)
 REG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pages.json")
 def load(): return json.load(open(REG)) if os.path.exists(REG) else {}
+IMG_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "img")
 def add(pid, dt, title, tags, body_blocks):
-    reg = load()
-    reg[pid] = {"dt": dt.isoformat(), "title": title, "tags": tags[:10], "body": body_html(body_blocks), "done": False}
+    """첫 이미지(대표 이미지)는 본문 복사에서 빼고 따로 내려받게 한다(9/30: 붙여 넣은 이미지는 대표로 못 고름)"""
+    reg = load(); cover = None
+    for i, (k, v) in enumerate(body_blocks):
+        if k == "img" and "naver_cta" not in v:
+            m = re.search(r'alt="([^"]+)"', v) or re.search(r'/([^/"?]+\.jpg)', v)
+            cover = html.unescape(m.group(1)); body_blocks = body_blocks[:i] + body_blocks[i+1:]; break
+    if cover:
+        import shutil; os.makedirs(f"{SITE}/public/naver/img", exist_ok=True)
+        shutil.copy(os.path.join(IMG_DIR, cover), f"{SITE}/public/naver/img/{cover}")
+    reg[pid] = {"dt": dt.isoformat(), "title": title, "tags": tags[:10], "body": body_html(body_blocks), "cover": cover, "done": False}
     json.dump(reg, open(REG, "w"), ensure_ascii=False, indent=1); render_all()
 def render_all():
     """목록에 남은 글을 발행일 순으로 다시 그린다(다음 원고 버튼 연결)"""
     reg = load(); live = sorted((v["dt"], k) for k, v in reg.items() if not v.get("done") and "body" in v)
     for i, (dt, k) in enumerate(live):
         v = reg[k]; nxt = live[i+1][1] if i+1 < len(live) else None
-        write_page(k, D.datetime.fromisoformat(dt), v["title"], v["tags"], v["body"], nxt)
+        write_page(k, D.datetime.fromisoformat(dt), v["title"], v["tags"], v["body"], nxt, v.get("cover"))
     write_index()
 def done(pid):
     """대표가 예약을 마친 글: 목록과 파일에서 뺀다"""
