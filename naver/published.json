@@ -27,27 +27,31 @@
  },
  "n04": {
   "title": "2027년 양띠 운세",
-  "date": "2026-10-04",
+  "date": "2026-10-07",
   "url": "",
-  "status": "scheduled"
+  "status": "scheduled",
+  "time": "21:00"
  },
  "n05": {
   "title": "2027년 돈 들어오는 띠 TOP3",
-  "date": "2026-10-05",
+  "date": "2026-10-10",
   "url": "",
-  "status": "scheduled"
+  "status": "scheduled",
+  "time": "21:00"
  },
  "n06": {
   "title": "2027년 소띠 운세",
-  "date": "2026-10-06",
+  "date": "2026-10-14",
   "url": "",
-  "status": "scheduled"
+  "status": "scheduled",
+  "time": "21:00"
  },
  "n07": {
   "title": "태어난 날로 보는 연애 스타일 10가지",
-  "date": "2026-10-07",
+  "date": "2026-10-17",
   "url": "",
-  "status": "scheduled"
+  "status": "scheduled",
+  "time": "21:00"
  },
  "n08": {
   "title": "2027년 토끼띠 운세, 사람이 모이는 해 월별·재물·연애운 총정리",
@@ -153,5 +157,26 @@
   "url": "",
   "status": "planned",
   "time": "12:00"
+ },
+ "n23": {
+  "title": "서운한 걸 참다가 한 번에 터지는 사람의 공통점, 사주·별자리·숫자로 보는 감정 쌓임",
+  "date": "2026-10-04",
+  "url": "",
+  "status": "planned",
+  "time": "21:00"
+ },
+ "n24": {
+  "title": "압박이 오면 오히려 강해지는 사람의 공통점, 사주·별자리·숫자로 보는 위기 대처",
+  "date": "2026-10-05",
+  "url": "",
+  "status": "planned",
+  "time": "21:00"
+ },
+ "n25": {
+  "title": "배우는 게 취미인 사람의 공통점, 사주·별자리·숫자로 보는 호기심 많은 사람",
+  "date": "2026-10-06",
+  "url": "",
+  "status": "planned",
+  "time": "21:00"
  }
 }
