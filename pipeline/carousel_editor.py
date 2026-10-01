@@ -13,7 +13,7 @@ from playwright.sync_api import sync_playwright
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, "..")
 sys.path.insert(0, os.path.join(ROOT, "content"))
 EDITOR = os.environ.get("EDITOR_HTML", "/mnt/user-data/outputs/artifacts/4c728a9e-f8e6-479f-b4cb-53a0b2b79d6f/index.html")
-SAMPLES = os.environ.get("SAMPLE_DIR", "/mnt/user-data/uploads")
+SAMPLES = os.environ.get("SAMPLE_DIR", os.path.join(ROOT, "samples", "carousel_2026-10-01"))
 CUT = os.path.join(ROOT, "characters", "cut") + "/"
 PLATE = os.path.join(HERE, "assets", "chart_plate.png")
 FONT = '"Noto Sans CJK KR", sans-serif'
