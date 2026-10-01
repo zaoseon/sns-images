@@ -58,20 +58,20 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None):
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
     chips = "".join(f'<button class="tag" data-t="{html.escape(t)}" onclick="cpt(this)">{html.escape(t)}</button>' for t in tags)
     nav = f'<a href="/naver/{nxt}.html"><button class="big">다음 원고 →</button></a>' if nxt else '<a href="/naver/"><button class="big">목록으로 (마지막 원고)</button></a>'
-    cover_box = (f'<div class="box"><p class="lab">2-1. 대표 이미지: 저장 → 네이버 본문 맨 위에 커서 → 사진 → 내 PC로 올리기 (처음 올린 사진이 대표가 돼요)</p>'
+    cover_box = (f'<div class="box"><p class="lab">2. 대표 이미지: 먼저 저장 → 네이버 글쓰기 맨 위에 사진으로 올리기(처음 올린 사진이 대표가 돼요) → 그다음 아래 본문 복사</p>'
                  f'<img src="/naver/img/{cover}" style="width:100%;border-radius:8px" alt=""><a href="/naver/img/{cover}" download="{cover}"><button>대표 이미지 저장</button></a></div>') if cover else ""
-    rel_box = (f'<div class="box"><p class="lab">2-2. 함께 볼 글: 본문 맨 아래(배너 위) 유도 문구 다음 줄에 이 주소를 붙여 넣고 엔터 → 링크 카드</p>'
+    rel_box = (f'<div class="box"><p class="lab">4. 함께 볼 글: 본문 맨 아래(배너 위) 유도 문구 다음 줄에 이 주소를 붙여 넣고 엔터 → 링크 카드</p>'
                f'<p class="val" id="rl">{html.escape(related["url"])}</p><button onclick="cp(\'rl\',this)">글 주소 복사</button>'
                f'<p class="hint">유도 문구(본문에 이미 들어 있음): {html.escape(related["phrase"])}</p></div>') if related and related.get("url") else ""
     page = f'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>네이버 원고 · {html.escape(title)}</title><style>{CSS}</style></head><body><div class="wrap">
 <p class="hint"><a href="/naver/">← 네이버 원고 목록</a></p>
 <div class="box"><p class="lab">1. 제목</p><p class="val" id="t">{html.escape(title)}</p><button onclick="cp('t',this)">제목 복사</button></div>
-<div class="box"><p class="lab">2. 본문 (이미지 포함)</p><button class="big" onclick="cpb(this)">본문 전체 복사</button><p class="hint">버튼이 안 되면 아래 점선 상자 안을 처음부터 끝까지 드래그해서 복사하세요.</p><div id="body">{body}</div></div>
 {cover_box}
+<div class="box"><p class="lab">3. 본문 (이미지 포함) - 대표 이미지를 먼저 올린 뒤 그 아래에 붙여 넣으세요</p><button class="big" onclick="cpb(this)">본문 전체 복사</button><p class="hint">버튼이 안 되면 아래 점선 상자 안을 처음부터 끝까지 드래그해서 복사하세요.</p><div id="body">{body}</div></div>
 {rel_box}
-<div class="box"><p class="lab">3. CTA 배너 링크: 맨 아래 배너 이미지를 누르고 링크 버튼으로 걸기</p><p class="val" id="c">{html.escape(CTA_LINK)}</p><button onclick="cp('c',this)">링크 복사</button></div>
-<div class="box"><p class="lab">4. 태그 {len(tags)}개 · 하나씩 눌러 복사 → 태그 칸에 붙여 넣고 엔터</p><div class="tags">{chips}</div></div>
-<div class="box"><p class="lab">5. 예약 발행일</p><p class="val" style="font-size:20px;font-weight:700">{when_text(dt)}</p></div>
+<div class="box"><p class="lab">5. CTA 배너 링크: 맨 아래 배너 이미지를 누르고 링크 버튼으로 걸기</p><p class="val" id="c">{html.escape(CTA_LINK)}</p><button onclick="cp('c',this)">링크 복사</button></div>
+<div class="box"><p class="lab">6. 태그 {len(tags)}개 · 하나씩 눌러 복사 → 태그 칸에 붙여 넣고 엔터</p><div class="tags">{chips}</div></div>
+<div class="box"><p class="lab">7. 예약 발행일</p><p class="val" style="font-size:20px;font-weight:700">{when_text(dt)}</p></div>
 {nav}</div><script>{JS}</script></body></html>'''
     open(f"{SITE}/public/naver/{pid}.html", "w").write(page)
 REG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pages.json")
