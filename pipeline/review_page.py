@@ -56,6 +56,9 @@ def build():
     today = ('<details open><summary>내일(10/2) 저녁 예약 2건 - 먼저 확인해 주세요</summary>'
              '<h3>18:30 2027 신년 감정서 얼리버드 (샘플 방식으로 새로 만든 5장)</h3><div class="scroller">' + ny + '</div>' + fb("promo-ny", "10/2 18:30 감정서 홍보") +
              '<h3>19:00 병(丙) 캐러셀 재게시 (대표님 샘플 7장 그대로)</h3><div class="scroller">' + by + '</div>' + fb("byeong-repost", "10/2 19:00 병 재게시") + '</details>')
+    v2 = ('<details open><summary>새 릴스 시안 (10/2 정 · 소리 켜고 보세요)</summary>'
+          '<p>대표님이 주신 7가지 기준에 맞춘 시안이에요. 컷을 박자에 맞춰 바로 넘기고, 조언(반전) 장면을 뒤쪽에 두고, 마지막에 다음 편 예고를 넣었어요. 음악은 제가 직접 만든 곡이라 저작권 문제가 없어요(13초).</p>'
+          '<video controls playsinline preload="metadata" src="' + vb64("/tmp/gal/v2-1002.mp4") + '"></video>' + fb("reel-v2", "새 릴스 시안(음악 포함)") + '</details>')
     overall = '<details><summary>전체 의견 · 만들고 싶은 형식 메모</summary>' + fb("overall", "전체 의견") + "</details>"
     css = """:root{--bg:#f6f3ee;--fg:#1c1a18;--card:#fff;--line:#ddd5c8;--acc:#c4501f;--mut:#8a8176;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171513;--fg:#eee8df;--card:#211e1b;--line:#38332d;--acc:#f0825a}}
@@ -101,7 +104,7 @@ body.nodb .fb{display:none}.nodbmsg{display:none}body.nodb .nodbmsg{display:bloc
 <h1>자오선 콘텐츠 확인</h1><p class="sub">10/2~10/11 · 인스타 캐러셀(아침 8시)과 릴스(낮 12시)</p>
 <p class="note">넘겨 보고, 재생해 보고, 항목마다 <b>👍 / ✏️ / ❌</b>를 누른 뒤 의견을 적어 주세요. 제가 이 페이지에서 바로 읽고 고칠게요. 릴스는 확인용으로 화질을 낮췄고 소리는 없어요.</p>
 <p class="note nodbmsg">지금 화면에서는 의견을 저장할 수 없어요. 이 대화에 적어 주세요.</p>
-{today}{mix}{overall}
+{v2}{today}{mix}{overall}
 <details><summary>샘플과 비교 (정 세트: 왼쪽 대표님 샘플, 오른쪽 제가 만든 것)</summary><div class="cmp">{"".join(cmp)}</div></details>
 {"".join(days)}
 </main><script>{js}</script></body></html>'''
