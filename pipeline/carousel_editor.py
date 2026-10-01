@@ -156,7 +156,84 @@ def compare():
         dd = Image.fromarray(np.clip(d * 4, 0, 255).astype(np.uint8)).convert("RGB").resize((540, 675)); sheet.paste(dd, (1080, 0)); sheet.save(f"/tmp/cmp_{i}.jpg", quality=88)
         print(f"정-{i}: mean abs diff {d.mean():.2f}  (>40px diff pixels {(d>40).mean()*100:.1f}%)")
 
+
+
+# ================= 릴스 (캐러셀 샘플 규칙 그대로) =================
+OVERRIDE_JS = """
+(o) => {
+  if (o.badges) { slides[1].badge = o.badges[0]; slides[2].badge = o.badges[1]; slides[3].badge = o.badges[2]; }
+  if (o.nextBadge) slides[6].nextBadge = o.nextBadge;
+  if (o.nextTitle) slides[6].nextTitle = o.nextTitle;
+  return 1;
+}
+"""
+REEL_W, REEL_H, REEL_TOP = 1080, 1920, 230    # 슬라이드(1080x1350)를 인스타 UI 안전 영역(위 230, 아래 340)에 정확히 맞춘다
+REEL_DUR = [2.6, 2.0, 2.0, 2.0, 2.6]; REEL_FADE = 0.3
+
+def reel_defs():
+    from carousel_sets import SETS
+    from reel_sets import REELS
+    fix = json.load(open(os.path.join(ROOT, "content", "2026-w40fix.json"), encoding="utf-8"))["posts"]
+    tri_idx = {"2026-10-03": 1, "2026-10-05": 3, "2026-10-10": 4, "2026-10-11": 5}
+    defs = {}
+    for date, R in REELS.items():
+        nxt = R["next"]
+        nb, nt = ("내일 낮 12시", nxt.split(": ", 1)[1]) if nxt.startswith("내일 낮 12시: ") else ("월요일 아침 8시", "이번 주 기운 편")
+        if date in tri_idx:
+            im = fix[tri_idx[date] - 1]["image"]; rows = im["rows"]
+            d = dict(dayChar="", hanja="", accent=R["accent"], face=R["face"], kicker=R["kicker"], coverTitle=R["hook"], coverSub=R["sub"],
+                     personality=[rows[0][2], rows[0][3]], love=[rows[1][2], rows[1][3]], money=[rows[2][2], rows[2][3]], advice=["", ""], chartNote="", values=[.3, .3, .3, .3, .3], highlight=0,
+                     ctaQ=R["q"], nextTitle=nt)
+            ov = dict(badges=["사주(동양)", "별자리(서양)", "수비학(숫자)"], nextBadge=nb, nextTitle=nt)
+        else:
+            S = SETS[date]
+            d = dict(dayChar=S["dayChar"], hanja=S["hanja"], accent=S["accent"], face=S["face"], kicker=S["kicker"], coverTitle=S["coverTitle"], coverSub=S["coverSub"],
+                     personality=S["personality"], love=S["love"], money=S["money"], advice=S["advice"], chartNote=S["chartNote"], values=S["values"], highlight=S["highlight"],
+                     ctaQ=S["ctaQ"], nextTitle=nt)
+            ov = dict(nextBadge=nb, nextTitle=nt)
+        d["face"] = "v5_halfup_v2" if d["face"] == "v5_halfup" else d["face"]
+        defs[date] = (d, ov)
+    return defs
+
+def render_reels():
+    import subprocess
+    build_html()
+    if not os.path.exists(PLATE): make_plate()
+    defs = reel_defs(); out_dir = os.path.join(ROOT, "2026-w40car3-reel"); os.makedirs(out_dir, exist_ok=True)
+    with sync_playwright() as p:
+        b = p.chromium.launch(); pg = b.new_page(viewport={"width": 1300, "height": 900})
+        pg.goto("file:///tmp/editor_noto.html"); pg.wait_for_timeout(1500)
+        pg.evaluate("Promise.all([400,500,600,700,900].map(w=>document.fonts.load(w+' 40px \"Noto Sans CJK KR\"','가한丁')))")
+        add = {"chart_plate": "data:image/png;base64," + base64.b64encode(open(PLATE, "rb").read()).decode()}
+        for d, _ in defs.values():
+            k, u = face_dataurl(d["face"])
+            if k not in ("v1_lowbun", "v2_straight", "v3_ponytail", "v4_glasses", "v5_halfup_v2"): add[k] = u
+        for k, u in add.items():
+            pg.evaluate("async ([k,u])=>{FACES[k]=u; const im=new Image(); im.src=u; await im.decode(); imgCache[k]=im;}", [k, u])
+        for date, (d, ov) in defs.items():
+            pg.evaluate(LAYOUT_JS, [d, None]); pg.evaluate(OVERRIDE_JS, ov); pg.wait_for_timeout(120)
+            frames = []
+            for i in (0, 1, 2, 3, 6):
+                url = pg.evaluate(f"(()=>{{active={i}; draw(false); return cv.toDataURL('image/png');}})()")
+                im = Image.open(io.BytesIO(base64.b64decode(url.split(",")[1]))).convert("RGB")
+                canvas = Image.new("RGB", (REEL_W, REEL_H), im.getpixel((5, 5))); canvas.paste(im, (0, REEL_TOP))
+                fp = f"/tmp/reelframe_{date[5:]}_{i}.png"; canvas.save(fp); frames.append(fp)
+            mp4 = os.path.join(out_dir, f"{date}.mp4")
+            cmd = ["ffmpeg", "-y", "-loglevel", "error"]
+            for f, t in zip(frames, REEL_DUR): cmd += ["-loop", "1", "-t", str(t), "-i", f]
+            total = sum(REEL_DUR) - REEL_FADE * (len(frames) - 1)
+            cmd += ["-f", "lavfi", "-t", f"{total:.2f}", "-i", "anullsrc=r=44100:cl=stereo"]
+            fl = ""; prev = "[0:v]"; acc = REEL_DUR[0]
+            for k in range(1, len(frames)):
+                off = acc - REEL_FADE * k; lab = f"[x{k}]"
+                fl += f"{prev}[{k}:v]xfade=transition=fade:duration={REEL_FADE}:offset={off:.2f}{lab};"; prev = lab; acc += REEL_DUR[k]
+            fl += f"{prev}format=yuv420p,fps=30[vout]"
+            cmd += ["-filter_complex", fl, "-map", "[vout]", "-map", f"{len(frames)}:a", "-c:v", "libx264", "-crf", "20", "-c:a", "aac", "-b:a", "96k", "-shortest", "-movflags", "+faststart", mp4]
+            subprocess.run(cmd, check=True); print(date, "->", mp4, f"{total:.1f}s")
+        b.close()
+
 def main():
+    if "--reels" in sys.argv: render_reels(); return
     if "--compare" in sys.argv: compare(); return
     from carousel_sets import SETS
     only = [a for a in sys.argv[1:] if not a.startswith("--")]
