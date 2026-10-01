@@ -10,9 +10,9 @@ def jb64(path, size, q=78):
     return "data:image/jpeg;base64," + base64.b64encode(b.getvalue()).decode()
 def vb64(p): return "data:video/mp4;base64," + base64.b64encode(open(p, "rb").read()).decode()
 def reel_small(d):
-    out = f"{TMP}/{d}.mp4"
+    out = f"{TMP}/v2-{d}.mp4"
     if not os.path.exists(out):
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", f"{R}/2026-w40car3-reel/{d}.mp4", "-vf", "scale=540:960", "-c:v", "libx264", "-crf", "29", "-preset", "veryfast", "-an", "-movflags", "+faststart", out], check=True)
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", f"{R}/2026-w40car3-reel/v2/{d}.mp4", "-vf", "scale=540:960", "-c:v", "libx264", "-crf", "30", "-preset", "veryfast", "-c:a", "aac", "-b:a", "64k", "-movflags", "+faststart", out], check=True)
     return out
 W = "월화수목금토일"
 CAR = {"1002": "정(丁)", "1003": "무(戊)", "1004": "기(己)", "1006": "경(庚)", "1007": "신(辛)", "1008": "임(壬)", "1009": "계(癸)"}
@@ -102,7 +102,7 @@ body.nodb .fb{display:none}.nodbmsg{display:none}body.nodb .nodbmsg{display:bloc
 })();"""
     return f'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>자오선 콘텐츠 확인 (10/2~10/11)</title><style>{css}</style></head><body><main>
 <h1>자오선 콘텐츠 확인</h1><p class="sub">10/2~10/11 · 인스타 캐러셀(아침 8시)과 릴스(낮 12시)</p>
-<p class="note">넘겨 보고, 재생해 보고, 항목마다 <b>👍 / ✏️ / ❌</b>를 누른 뒤 의견을 적어 주세요. 제가 이 페이지에서 바로 읽고 고칠게요. 릴스는 확인용으로 화질을 낮췄고 소리는 없어요.</p>
+<p class="note">넘겨 보고, 재생해 보고, 항목마다 <b>👍 / ✏️ / ❌</b>를 누른 뒤 의견을 적어 주세요. 제가 이 페이지에서 바로 읽고 고칠게요. 릴스는 확인용으로 화질을 낮췄어요. 음악이 들어 있으니 소리를 켜고 보세요.</p>
 <p class="note nodbmsg">지금 화면에서는 의견을 저장할 수 없어요. 이 대화에 적어 주세요.</p>
 {v2}{today}{mix}{overall}
 <details><summary>샘플과 비교 (정 세트: 왼쪽 대표님 샘플, 오른쪽 제가 만든 것)</summary><div class="cmp">{"".join(cmp)}</div></details>
