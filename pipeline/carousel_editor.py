@@ -184,7 +184,7 @@ def reel_defs():
         if date in tri_idx:
             im = fix[tri_idx[date] - 1]["image"]; rows = im["rows"]
             d = dict(dayChar="", hanja="", accent=R["accent"], face=R["face"], kicker=R["kicker"], coverTitle=R["hook"], coverSub=R["sub"],
-                     personality=[rows[0][2], rows[0][3]], love=[rows[1][2], rows[1][3]], money=[rows[2][2], rows[2][3]], advice=["", ""], chartNote="", values=[.3, .3, .3, .3, .3], highlight=0,
+                     personality=[rows[0][2], rows[0][3]], love=[rows[1][2], rows[1][3]], money=[rows[2][2], rows[2][3]], advice=["셋 중 두 개 이상\n겹쳤다면", im.get("note", "")], chartNote="", values=[.3, .3, .3, .3, .3], highlight=0,
                      ctaQ=R["q"], nextTitle=nt)
             ov = dict(badges=["사주(동양)", "별자리(서양)", "수비학(숫자)"], nextBadge=nb, nextTitle=nt)
         else:
