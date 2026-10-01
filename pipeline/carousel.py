@@ -72,6 +72,7 @@ def bg_space(accent=None):
     im = im.crop((x, y, x+W, y+H))
     ov = Image.new("RGB", (W, H), BG); return Image.blend(im, ov, 0.72)
 def face_img(name, h):
+    if name == "v5_halfup": name = "v5_halfup_v2"   # 원본은 목선이 깊어 사용 금지(9/30 대표 수정본으로 치환)
     im = Image.open(CUT + name + ".png").convert("RGBA"); r = h/im.height
     return im.resize((int(im.width*r), h), Image.LANCZOS)
 def new(bg=BG): img = Image.new("RGB", (W, H), bg); return img, ImageDraw.Draw(img)

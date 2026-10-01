@@ -111,6 +111,7 @@ def hero(path, el, kicker, lines, sub, mark, face):
     img = Image.new("RGB", (W, H), bg); d = ImageDraw.Draw(img)
     tint = tuple(int(bg[i]*0.90 + md[i]*0.10) for i in range(3))
     d.text((300, H//2+30), mark, font=R.F(R.SER, 300), fill=tint, anchor="mm")
+    if face == "v5_halfup": face = "v5_halfup_v2"   # 원본 목선 깊음 -> 수정본
     ch = Image.open(CH + face + ".png").convert("RGBA")
     h = H - 24; r = h/ch.height; cw = int(ch.width*r); ch = ch.resize((cw, h), Image.LANCZOS)
     cx = W - cw//2 - 56
