@@ -51,6 +51,11 @@ def build():
 <li><b>CTA</b> - 병·정 모두 우주 배경 밴드. 버튼 문구와 위치가 조금 달라요</li>
 </ul>
 <p>내일 대표님이 만들어 주실 샘플이 오면 표지·본문·CTA마다 <b>변형 A/B/C</b>로 저장해 두고, 세트마다 섞어서 배정할게요. 요일별 콘텐츠 형식을 섞자는 뜻이 아니었던 점, 제가 잘못 이해했어요.</p>""" + fb("mix", "섞기 계획") + "</details>"
+    ny = "".join(f'<img loading="lazy" src="{jb64(f"{R}/2026-w40car3/ny_{i}.jpg", (540, 675), 80)}" alt="홍보 {i}">' for i in range(1, 6))
+    by = "".join(f'<img loading="lazy" src="{jb64(f"{R}/2026-w40car3/byeong_{i}.jpg", (540, 675), 80)}" alt="병 {i}">' for i in range(1, 8))
+    today = ('<details open><summary>내일(10/2) 저녁 예약 2건 - 먼저 확인해 주세요</summary>'
+             '<h3>18:30 2027 신년 감정서 얼리버드 (샘플 방식으로 새로 만든 5장)</h3><div class="scroller">' + ny + '</div>' + fb("promo-ny", "10/2 18:30 감정서 홍보") +
+             '<h3>19:00 병(丙) 캐러셀 재게시 (대표님 샘플 7장 그대로)</h3><div class="scroller">' + by + '</div>' + fb("byeong-repost", "10/2 19:00 병 재게시") + '</details>')
     overall = '<details><summary>전체 의견 · 만들고 싶은 형식 메모</summary>' + fb("overall", "전체 의견") + "</details>"
     css = """:root{--bg:#f6f3ee;--fg:#1c1a18;--card:#fff;--line:#ddd5c8;--acc:#c4501f;--mut:#8a8176;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171513;--fg:#eee8df;--card:#211e1b;--line:#38332d;--acc:#f0825a}}
@@ -96,7 +101,7 @@ body.nodb .fb{display:none}.nodbmsg{display:none}body.nodb .nodbmsg{display:bloc
 <h1>자오선 콘텐츠 확인</h1><p class="sub">10/2~10/11 · 인스타 캐러셀(아침 8시)과 릴스(낮 12시)</p>
 <p class="note">넘겨 보고, 재생해 보고, 항목마다 <b>👍 / ✏️ / ❌</b>를 누른 뒤 의견을 적어 주세요. 제가 이 페이지에서 바로 읽고 고칠게요. 릴스는 확인용으로 화질을 낮췄고 소리는 없어요.</p>
 <p class="note nodbmsg">지금 화면에서는 의견을 저장할 수 없어요. 이 대화에 적어 주세요.</p>
-{mix}{overall}
+{today}{mix}{overall}
 <details><summary>샘플과 비교 (정 세트: 왼쪽 대표님 샘플, 오른쪽 제가 만든 것)</summary><div class="cmp">{"".join(cmp)}</div></details>
 {"".join(days)}
 </main><script>{js}</script></body></html>'''
