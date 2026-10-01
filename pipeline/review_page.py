@@ -41,18 +41,16 @@ def build():
             b += "<h3>08:00 인스타 · 기존 글(캐러셀 아님)</h3>"
         b += f'<h3>12:00 인스타 릴스 · {REEL[f"{dn:02d}"]}</h3><video controls playsinline preload="metadata" src="{vb64(reel_small(d))}"></video>' + fb(f"reel-{key}", f"10/{dn} 릴스 {REEL[f'{dn:02d}']}") + "</section>"
         days.append(b)
-    mix = """<details open><summary>콘텐츠 섞기 제안 (한 가지 형식만 반복하지 않기)</summary>
-<p>지금은 아침마다 일간 캐러셀만 나가고 있어요. 형식을 섞는 쪽으로 이렇게 제안해요. 대표님 샘플이 나오면 형식별로 같은 방식으로 맞출게요.</p>
+    mix = """<details open><summary>섞기 계획 (표지·본문·CTA 구성을 세트마다 다르게)</summary>
+<p>지금 7세트는 구성이 모두 같아요(표지·본문·차트·조언·CTA가 전부 정 샘플 한 가지). 대표님 샘플 두 가지(병, 정)를 보면 이미 구성이 달라요.</p>
 <ul>
-<li><b>월</b> 이번 주 기운(주간 9장)</li>
-<li><b>화</b> 일간 캐러셀(지금 형식)</li>
-<li><b>수</b> 세 지도 테스트 캐러셀(사주·별자리·숫자, 질문형)</li>
-<li><b>목</b> 정보 카드 1~3장(절기·손없는날·띠 궁합 표)</li>
-<li><b>금</b> 질문 한 장 카드(댓글·투표 유도) 또는 띠별 운세 캐러셀</li>
-<li><b>토</b> 정월에게 묻다(육효) 짧은 카드 또는 정월 한마디 릴스</li>
-<li><b>일</b> 감정서·후기 카드(판매 글은 전체의 5분의 1 이하)</li>
+<li><b>표지</b> - 정: 부제가 제목 위, 얼굴 오른쪽 아래, 패널 없음, AI 문구 포함 / 병: 제목이 아래 패널 안, 부제는 제목 아래, 얼굴 위쪽 크게</li>
+<li><b>본문(성격·연애·돈)</b> - 정: 배지가 제목 위 y=327~350, 우주 배경 밴드 216~1132 / 병: 배지 y=278, 제목·본문이 더 위에서 시작, 밴드가 더 위(155~1095)</li>
+<li><b>오행 차트</b> - 정: 음양 이미지 배경 / 병: 배경 없음(검정)</li>
+<li><b>조언</b> - 정: 얼굴 위쪽 + 어두운 패널 / 병: 우주 배경(얼굴 없음)</li>
+<li><b>CTA</b> - 병·정 모두 우주 배경 밴드. 버튼 문구와 위치가 조금 달라요</li>
 </ul>
-<p>릴스도 섞어요: 일간 릴스 / 세 지도 릴스 / "AI로 사주 봤는데 틀린 이유" 같은 설명형 / 정월 한마디 짧은 릴스.</p>""" + fb("mix", "섞기 제안") + "</details>"
+<p>내일 대표님이 만들어 주실 샘플이 오면 표지·본문·CTA마다 <b>변형 A/B/C</b>로 저장해 두고, 세트마다 섞어서 배정할게요. 요일별 콘텐츠 형식을 섞자는 뜻이 아니었던 점, 제가 잘못 이해했어요.</p>""" + fb("mix", "섞기 계획") + "</details>"
     overall = '<details><summary>전체 의견 · 만들고 싶은 형식 메모</summary>' + fb("overall", "전체 의견") + "</details>"
     css = """:root{--bg:#f6f3ee;--fg:#1c1a18;--card:#fff;--line:#ddd5c8;--acc:#c4501f;--mut:#8a8176;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171513;--fg:#eee8df;--card:#211e1b;--line:#38332d;--acc:#f0825a}}
