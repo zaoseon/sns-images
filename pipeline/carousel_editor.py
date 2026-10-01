@@ -1,95 +1,166 @@
-"""캐러셀을 대표가 만든 편집기(자오선 캐러셀 편집기 아티팩트) 자체로 그린다. 배지 크기·위치, 핸들 점, 막대 크기 등 샘플과 같은 값이 나온다.
-바꾼 것은 둘뿐이다: (1) 글꼴 sans-serif -> Pretendard(+한자는 시스템 고딕) (2) 글이 겹치지 않게 본문·질문 위치를 줄 수에 맞춰 내림.
-사용: python3 pipeline/carousel_editor.py  -> 2026-w40car/MMDD_1~7.jpg
-편집기 원본: https://claude.ai/artifact/ASXLsYV9nmh6EKicKs2ZrE (Artifact read 로 받아 EDITOR 경로에 둔다)"""
+"""캐러셀 렌더러 v2 (10/1 밤): 대표가 올린 샘플(정 세트 7장)을 픽셀로 재서 편집기 파라미터로 옮겼다.
+- 편집기(캐러셀 편집기 아티팩트)를 헤드리스 크롬으로 열어 편집기 그리기 코드 그대로 렌더 (글꼴: 샘플과 같은 Noto Sans CJK KR)
+- 샘플에서 잰 값: 배지 55 / 제목 100(본문) 113(표지) / 본문 54 / 핸들 38+점 18 / 얼굴 배율·오프셋(템플릿 매칭, 일치도 0.997) / 배경 배율·패널 흐림·어둡기 / 오행 차트 막대·라벨
+- 줄 수에 따른 세로 위치(본문 2줄·3줄)는 샘플 정-3/정-2 값을 그대로 쓴다
+사용:
+  python3 pipeline/carousel_editor.py            -> 2026-w40car3/MMDD_1~7.jpg 전체
+  python3 pipeline/carousel_editor.py --compare  -> 정 샘플과 픽셀 비교(/tmp/cmp_N.jpg)
+편집기 HTML: Artifact read 로 받은 파일(EDITOR_HTML). 샘플: /mnt/user-data/uploads/정-N.png"""
 import base64, io, json, os, sys
+import numpy as np
 from PIL import Image
 from playwright.sync_api import sync_playwright
-HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.join(HERE, "..")
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, "..")
 sys.path.insert(0, os.path.join(ROOT, "content"))
 EDITOR = os.environ.get("EDITOR_HTML", "/mnt/user-data/outputs/artifacts/4c728a9e-f8e6-479f-b4cb-53a0b2b79d6f/index.html")
-FD = os.path.join(HERE, "fonts") + "/"
+SAMPLES = os.environ.get("SAMPLE_DIR", "/mnt/user-data/uploads")
 CUT = os.path.join(ROOT, "characters", "cut") + "/"
-def b64(p): return base64.b64encode(open(p, "rb").read()).decode()
+PLATE = os.path.join(HERE, "assets", "chart_plate.png")
+FONT = '"Noto Sans CJK KR", sans-serif'
+SAMPLE_ACCENT = "#f36435"
+
 def build_html():
     s = open(EDITOR, encoding="utf-8", errors="replace").read()
-    s = s.replace("px sans-serif", "px PretendardX, sans-serif")
-    ff = "".join(f"@font-face{{font-family:'PretendardX';font-weight:{w};src:url(data:font/otf;base64,{b64(FD+f)}) format('opentype')}}" for w, f in
-                 [(400, "PRETENDARD-REGULAR.OTF"), (500, "PRETENDARD-MEDIUM.OTF"), (600, "PRETENDARD-SEMIBOLD.OTF"), (700, "PRETENDARD-SEMIBOLD.OTF"), (900, "PRETENDARD-BLACK.OTF")])
-    s = s.replace("</style>", ff + "</style>", 1)
-    open("/tmp/editor_mod.html", "w", encoding="utf-8").write(s)
-def face_dataurl(key):
-    """편집기에 내장되지 않은 얼굴은 저장소 누끼를 편집기와 같은 675x900으로 줄여 쓴다. v5 원본은 금지(수정본으로 치환)."""
-    if key == "v5_halfup": key = "v5_halfup_v2"
+    s = s.replace("px sans-serif", "px " + FONT)
+    # 본문 글자: 샘플은 세미볼드(600)인데 이 환경의 Noto는 Medium/Bold뿐이라 Bold(700)로 맞추고, 의도치 않은 자동 줄바꿈이 없게 폭 여유를 둔다
+    s = s.replace("`600 ${s.bodySize}px", "`700 ${s.bodySize}px").replace("wrapRich(s.body, W-140, bodyFont)", "wrapRich(s.body, W-60, bodyFont)")
+    open("/tmp/editor_noto.html", "w", encoding="utf-8").write(s)
+
+def make_plate():
+    """오행 차트 배경(음양 이미지)은 편집기에 내장돼 있지 않아 샘플 정-5에서 막대·글자를 지우고(인페인팅)
+    편집기의 72% 어두운 오버레이를 거꾸로 풀어 원본 판을 만든다. 편집기가 같은 오버레이를 다시 씌우면 샘플과 같아진다."""
+    import cv2
+    a = np.array(Image.open(os.path.join(SAMPLES, "정-5.png")).convert("RGB"))
+    m = np.zeros(a.shape[:2], np.uint8)
+    vals = [0.3, 0.9, 0.4, 0.3, 0.45]
+    for i, v in enumerate(vals):
+        x = 108 + i * 181; top = 949 - int(562 * v) - 4; m[top:955, x - 3:x + 143] = 255
+    m[190:290, 215:860] = 255; m[955:1030, 85:1000] = 255; m[1022:1135, 52:1030] = 255; m[1245:1310, 30:420] = 255
+    m = cv2.dilate(m, np.ones((9, 9), np.uint8))
+    bgr = cv2.cvtColor(a, cv2.COLOR_RGB2BGR)
+    ink = cv2.inpaint(bgr, m, 9, cv2.INPAINT_TELEA)
+    ink = cv2.cvtColor(ink, cv2.COLOR_BGR2RGB).astype(np.float32)
+    ov = np.array([10, 9, 8], np.float32) * 0.72
+    orig = np.clip((ink - ov) / 0.28, 0, 255).astype(np.uint8)
+    os.makedirs(os.path.dirname(PLATE), exist_ok=True); Image.fromarray(orig).save(PLATE)
+
+def face_dataurl(path_or_key):
+    key = "v5_halfup_v2" if path_or_key == "v5_halfup" else path_or_key
     im = Image.open(CUT + key + ".png").convert("RGBA").resize((675, 900), Image.LANCZOS)
     buf = io.BytesIO(); im.save(buf, "PNG"); return key, "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
 
-FIT = r"""
-(def) => {
-  const F=(w,px)=>`${w} ${px}px PretendardX, sans-serif`;
+LAYOUT_JS = r"""
+(args) => {
+  const [def, ref] = args;
+  const FONT='"Noto Sans CJK KR", sans-serif';
+  const F=(w,px)=>`${w} ${px}px ${FONT}`;
   const sl = buildSet(def); slides.length = 0; sl.forEach(s => slides.push(s));
-  globalCfg.accent = def.accent; globalCfg.handle.text = 'zaoseon.com';
-  const fitLines = (txt, maxW, w, start, lo, maxLines, step=2) => { let s=start; while (s>lo && wrapRich(txt,maxW,F(w,s)).length>maxLines) s-=step; return s; };
-  // 1 표지: 부제가 제목 위(대표 샘플 순서). 얼굴은 위쪽, 글자는 패널 영역
+  const tw=(t,w,px)=>{ ctx.font=F(w,px); return ctx.measureText(t).width; };
+  const balance=(txt,w,px,maxW)=>{ if (txt.includes('\n')) return txt.split('\n').map(l=>balance(l,w,px,maxW)).join('\n');
+    if (tw(txt,w,px) <= maxW) return txt; let best=null;
+    for (let i=1;i<txt.length-1;i++){ if (txt[i]!==' ') continue; const a=txt.slice(0,i), b=txt.slice(i+1); const wa=tw(a,w,px), wb=tw(b,w,px);
+      if (wa<=maxW && wb<=maxW){ const sc=Math.abs(wa-wb)-((/[,.]$/.test(a))?120:0); if(!best||sc<best.sc) best={sc,s:a+'\n'+b}; } }
+    return best?best.s:txt; };
+  const report=[];
+  [1,2,3,5].forEach(i=>{ const s=slides[i]; s.title=balance(s.title,900,100,930); s.body=balance(s.body,700,54.5,946); });
+  globalCfg.accent = def.accent; globalCfg.applyAll = false;
+  globalCfg.handle = {text:'zaoseon.com', x:104, y:1278, size:38, dot:18}; globalCfg.applyAllHandle = true;
+  const panel = (x,y,w,h,blur,dark)=>({x,y,w,h,blur,dark,round:0,enabled:true});
+  const nolines = (txt,maxW,font)=>wrapRich(txt,maxW,font).length;
+  const bgOff = (scale, top)=> top - (H - 720*scale);
+  slides.forEach(s => { s.pageBadgeEnabled = false; });
+
+  // ---- 1 표지 ----
   const c = slides[0];
-  c.titleSize = fitLines(c.title, W-120, 900, 84, 56, c.title.split('\n').length);
-  c.subSize = fitLines(c.sub, W-120, 900, 52, 36, 1);
-  c.subY = 705; c.titleY = 705 + Math.round(c.subSize*0.35) + Math.round(c.titleSize*0.8) + 22;
+  c.bgColor = '#100a05'; c.imgScale = 1.2; c.imgOffX = 230; c.imgOffY = 800; c.panelOverride = panel(0,0,0,0,0,0); c.panelOverride.enabled = false;
+  c.kickerX = 75; c.kickerY = 79; c.kickerSize = 51;
+  c.subSize = 66; while (c.subSize > 40 && wrapRich(c.sub, W-120, F(900,c.subSize)).length > 1) c.subSize -= 1;
+  c.subX = 88; c.subY = 270;
+  const tl = def.coverTitle.split('\n').length;
+  c.titleSize = 113; while (c.titleSize > 70 && nolines(c.title, W-120, F(900,c.titleSize)) > tl) c.titleSize -= 1;
+  c.titleX = 88; c.titleY = 416;
   ctx.font = F(600,22);
   const ai = ['※ 자오선의 상담가 정월은', 'AI로 생성한 가상 캐릭터입니다'];
-  c.extraTexts = ai.map((t,i)=>({text:t, x: W-60-ctx.measureText(t).width, y: 1262+i*28, size:22, color:'#8d8782', bold:false, align:'left', stroke:false}));
-  // 2~4 본문, 6 조언: 배지 690 / 제목 800은 샘플 그대로, 본문만 제목 줄 수에 맞춰 내림
-  [1,2,3,5].forEach(i => {
-    const s = slides[i];
-    if (i < 4) { s.face = 'bg_sunmoon'; s.imgScale = 1.875; }
-    s.titleSize = fitLines(s.title, W-100, 900, 100, 66, 2, 4);
-    const n = wrapRich(s.title, W-100, F(900,s.titleSize)).length;
-    let bs = 50; const nl = s.body.split('\n').length;
-    while (bs > 34 && wrapRich(s.body, W-140, F(600,bs)).length > nl) bs -= 2;
-    s.bodySize = bs;
-    const last = s.titleY + (n-1)*s.titleSize*1.22;
-    s.bodyY = Math.round(last + 0.3*s.titleSize + 0.95*bs + 20);
+  c.extraTexts = ai.map((t,i)=>({text:t, x: 1052-ctx.measureText(t).width, y: 1280+i*24, size:22, color:'#8d8782', bold:false, align:'left', stroke:false}));
+
+  // ---- 2~4 본문 / 6 조언 ----
+  [1,2,3].forEach(i => {
+    const s = slides[i]; s.bgColor = '#1a1816'; s.face = 'bg_sunmoon'; s.imgScale = 1.265; s.imgOffX = -40; s.imgOffY = bgOff(1.265, 216);
+    s.panelOverride = panel(0,216,1080,916,6,102);
+    s.badgeX = 540; s.badgeSize = 55; s.titleSize = 100; s.bodySize = 54.5;
+    const nb = wrapRich(s.body, W-60, F(700,54.5)).length, nt = wrapRich(s.title, W-100, F(900,100)).length; report.push(['body',i+1,nt,nb,Math.round(Math.max(...s.title.split('\n').map(l=>tw(l,900,100)))),Math.round(Math.max(...s.body.split('\n').map(l=>tw(l,700,54.5))))]);
+    if (nb >= 3) { s.badgeY = 327; s.titleY = 541; s.bodyY = 841; } else { s.badgeY = 350; s.titleY = 597; s.bodyY = 902; }
+    if (nt === 1) { s.titleY += 61; }
   });
-  // 5 오행 차트: 우주 배경 72% 오버레이(샘플의 useChartBg)
-  const ch = slides[4]; ch.face='bg_sunmoon'; ch.imgScale=1.875; ch.useChartBg = true;
-  // 7 CTA: 질문이 얼굴(머리·턱)을 가리지 않도록 패널 영역으로
-  const t = slides[6];
-  t.qSize = fitLines(t.q, W-100, 900, 84, 52, 2, 4);
-  const qn = wrapRich(t.q, W-100, F(900,t.qSize)).length;
-  t.qY = 705; const qLast = t.qY + (qn-1)*t.qSize*1.24;
-  t.btnY = Math.round(qLast + 0.3*t.qSize + 26);
-  t.nextY = t.btnY + 117 + 34;
-  t.nextTitleSize = fitLines(t.nextTitle, W-100, 900, 60, 40, 1, 2);
-  slides.forEach(s => { s.pageBadgeEnabled = false; });
+  const a = slides[5]; a.bgColor = '#1a1816'; a.imgScale = 0.8; a.imgOffX = 0; a.imgOffY = -205; a.panelOverride = panel(0,625,1080,620,14,212);
+  a.badgeX = 540; a.badgeSize = 55; a.titleSize = 100; a.bodySize = 54.5;
+  { const nb = wrapRich(a.body, W-60, F(700,54.5)).length, nt = wrapRich(a.title, W-100, F(900,100)).length; report.push(['advice',6,nt,nb,Math.round(Math.max(...a.title.split('\n').map(l=>tw(l,900,100)))),Math.round(Math.max(...a.body.split('\n').map(l=>tw(l,700,54.5))))]); const up = Math.max(0, nb-2)*40;
+    a.badgeY = 695-up; a.titleY = 874-up + (nt===1?61:0); a.bodyY = 1098-up; }
+
+  // ---- 5 오행 차트 ----
+  const ch = slides[4]; ch.bgColor = '#0d0b0a'; ch.face = 'chart_plate'; ch.imgScale = 1; ch.imgOffX = 0; ch.imgOffY = 0; ch.useChartBg = true;
+  ch.titleSize = 62; ctx.font = F(900,62); const cw = ctx.measureText(ch.title).width; ch.titleX = 533.5 - cw/2; ch.titleY = 262;
+  ch.barWidth = 140; ch.barGap = 41; ch.barLabelSize = 52; ch.barMaxH = 949 - 50 - (262 + 1.2*62);
+  ch.noteSize = 41;
+
+  // ---- 7 CTA ----
+  const t = slides[6]; t.bgColor = '#1a1816'; t.face = 'bg_sunmoon'; t.imgScale = 1.379; t.imgOffX = -90; t.imgOffY = bgOff(1.379, 167);
+  t.panelOverride = panel(0,167,1080,993,14,128);
+  t.qSize = 89; t.qY = 378.5; t.btn = '팔로우하고 같이 얘기 나눠요'; t.btnSize = 50; t.btnY = 558;
+  t.nextBadgeSize = 39; t.nextY = 785; t.nextTitleSize = 67; t.hint = '프로필 링크에서 내 기운 1초만에 확인'; t.hintSize = 38;
+  globalThis.__report = report;
   return slides.length;
 }
 """
 
-def main():
-    from carousel_sets import SETS
+def render(sets, out_dir, ref_accent=None, prefix=lambda d: d[5:].replace("-", "")):
     build_html()
-    out_dir = os.path.join(ROOT, "2026-w40car2"); os.makedirs(out_dir, exist_ok=True)
-    only = sys.argv[1:]  # 예: 2026-10-02
+    if not os.path.exists(PLATE): make_plate()
+    os.makedirs(out_dir, exist_ok=True); results = {}
     with sync_playwright() as p:
         b = p.chromium.launch(); pg = b.new_page(viewport={"width": 1300, "height": 900})
-        pg.goto("file:///tmp/editor_mod.html"); pg.wait_for_timeout(1500)
-        pg.evaluate("Promise.all([400,500,600,700,900].map(w=>document.fonts.load(w+' 40px PretendardX','가한丁')))")
-        need = {S["face"] for S in SETS.values()} - {"v1_lowbun", "v2_straight", "v3_ponytail", "v4_glasses", "v5_halfup_v2"}
-        for key in need:
-            k, url = face_dataurl(key)
-            pg.evaluate("async ([k,u])=>{FACES[k]=u; const im=new Image(); im.src=u; await im.decode(); imgCache[k]=im;}", [k, url])
-        for date, S in SETS.items():
-            if only and date not in only: continue
+        pg.goto("file:///tmp/editor_noto.html"); pg.wait_for_timeout(1500)
+        pg.evaluate("Promise.all([400,500,600,700,900].map(w=>document.fonts.load(w+' 40px \"Noto Sans CJK KR\"','가한丁')))")
+        add = {"chart_plate": "data:image/png;base64," + base64.b64encode(open(PLATE, "rb").read()).decode()}
+        for S in sets.values():
+            k, u = face_dataurl(S["face"])
+            if k not in ("v1_lowbun", "v2_straight", "v3_ponytail", "v4_glasses", "v5_halfup_v2"): add[k] = u
+        for k, u in add.items():
+            pg.evaluate("async ([k,u])=>{FACES[k]=u; const im=new Image(); im.src=u; await im.decode(); imgCache[k]=im;}", [k, u])
+        for date, S in sets.items():
             face = "v5_halfup_v2" if S["face"] == "v5_halfup" else S["face"]
-            d = dict(dayChar=S["dayChar"], hanja=S["hanja"], accent=S["accent"], face=face, kicker=S["kicker"], coverTitle=S["coverTitle"], coverSub=S["coverSub"],
+            d = dict(dayChar=S["dayChar"], hanja=S["hanja"], accent=ref_accent or S["accent"], face=face, kicker=S["kicker"], coverTitle=S["coverTitle"], coverSub=S["coverSub"],
                      personality=S["personality"], love=S["love"], money=S["money"], advice=S["advice"], chartNote=S["chartNote"], values=S["values"], highlight=S["highlight"],
                      ctaQ=S["ctaQ"], nextTitle=S["nextTitle"])
-            n = pg.evaluate(FIT, d); pg.wait_for_timeout(200)
+            n = pg.evaluate(LAYOUT_JS, [d, None]); pg.wait_for_timeout(150)
+            for rep in pg.evaluate('globalThis.__report'): print('   ', rep, '(슬라이드, 제목줄수, 본문줄수, 제목최대폭(<=980), 본문최대폭(<=940))')
+            imgs = []
             for i in range(n):
                 url = pg.evaluate(f"(()=>{{active={i}; draw(false); return cv.toDataURL('image/png');}})()")
-                im = Image.open(io.BytesIO(base64.b64decode(url.split(",")[1]))).convert("RGB")
-                im.save(os.path.join(out_dir, f"{date[5:].replace('-', '')}_{i+1}.jpg"), quality=93)
-            print(date, S["dayChar"], n)
+                im = Image.open(io.BytesIO(base64.b64decode(url.split(",")[1]))).convert("RGB"); imgs.append(im)
+                im.save(os.path.join(out_dir, f"{prefix(date)}_{i+1}.jpg"), quality=93)
+            results[date] = imgs; print(date, S["dayChar"], n)
         b.close()
+    return results
+
+def compare():
+    """정 샘플 대비 렌더 비교: 슬라이드별 평균 절대 차이와 나란히 보기 이미지"""
+    from carousel_sets import SETS
+    sets = {"2026-10-02": SETS["2026-10-02"]}
+    res = render(sets, "/tmp/cmp_out", ref_accent=SAMPLE_ACCENT, prefix=lambda d: "jeong")
+    imgs = res["2026-10-02"]
+    for i, im in enumerate(imgs, 1):
+        sm = Image.open(os.path.join(SAMPLES, f"정-{i}.png")).convert("RGB")
+        d = np.abs(np.array(im).astype(int) - np.array(sm).astype(int)).mean(axis=2)
+        sheet = Image.new("RGB", (1620, 675)); sheet.paste(sm.resize((540, 675)), (0, 0)); sheet.paste(im.resize((540, 675)), (540, 0))
+        dd = Image.fromarray(np.clip(d * 4, 0, 255).astype(np.uint8)).convert("RGB").resize((540, 675)); sheet.paste(dd, (1080, 0)); sheet.save(f"/tmp/cmp_{i}.jpg", quality=88)
+        print(f"정-{i}: mean abs diff {d.mean():.2f}  (>40px diff pixels {(d>40).mean()*100:.1f}%)")
+
+def main():
+    if "--compare" in sys.argv: compare(); return
+    from carousel_sets import SETS
+    only = [a for a in sys.argv[1:] if not a.startswith("--")]
+    sets = {k: v for k, v in SETS.items() if not only or k in only}
+    render(sets, os.path.join(ROOT, "2026-w40car3"))
+
 if __name__ == "__main__": main()
