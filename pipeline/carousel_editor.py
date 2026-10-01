@@ -164,6 +164,8 @@ OVERRIDE_JS = """
   if (o.badges) { slides[1].badge = o.badges[0]; slides[2].badge = o.badges[1]; slides[3].badge = o.badges[2]; }
   if (o.nextBadge) slides[6].nextBadge = o.nextBadge;
   if (o.nextTitle) slides[6].nextTitle = o.nextTitle;
+  if (o.btn) slides[6].btn = o.btn;
+  if (o.hint) slides[6].hint = o.hint;
   return 1;
 }
 """
