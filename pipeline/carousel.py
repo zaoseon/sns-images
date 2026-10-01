@@ -10,10 +10,15 @@ W, H = 1080, 1350
 BG = (26, 24, 23)
 WHITE, DIMW, GRAY = (255, 255, 255), (205, 200, 195), (150, 146, 142)
 BLACK_F, SEMI_F, MED_F, SER_F = FD + "PRETENDARD-BLACK.OTF", FD + "PRETENDARD-SEMIBOLD.OTF", FD + "PRETENDARD-MEDIUM.OTF", FD + "serif.otf"
+# 한자: Pretendard에 한자가 없어 고딕 한자 글꼴로 채운다(샘플 이미지에서도 시스템 고딕이 한자를 채움). 없으면 명조
+HZ = "/usr/share/fonts/opentype/noto/NotoSansCJK-Black.ttc"
+if not os.path.exists(HZ): HZ = SER_F
 _fc = {}
 def F(p, s):
     k = (p, s)
-    if k not in _fc: _fc[k] = __import__("PIL.ImageFont", fromlist=["x"]).truetype(p, s)
+    if k not in _fc:
+        IF = __import__("PIL.ImageFont", fromlist=["x"])
+        _fc[k] = IF.truetype(p, s, index=1) if p.endswith(".ttc") else IF.truetype(p, s)
     return _fc[k]
 def hz(c): return "\u4e00" <= c <= "\u9fff"
 def hexrgb(h): h = h.lstrip("#"); return tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
@@ -26,7 +31,7 @@ def runs(t):
         elif part: out.append((part, hi))
     return out
 def width(d, t, path, size):
-    return sum(d.textlength(c, font=F(SER_F if hz(c) else path, size)) for c in t.replace("*", ""))
+    return sum(d.textlength(c, font=F(HZ if hz(c) else path, size)) for c in t.replace("*", ""))
 def fit(d, t, path, start, lo, maxw):
     s = start
     while s > lo and max(width(d, l, path, s) for l in t.split("\n")) > maxw: s -= 2
@@ -36,7 +41,7 @@ def draw_line(d, x, y, t, path, size, col, acc, align="l"):
     cx = x - w/2 if align == "c" else (x - w if align == "r" else x)
     for txt, hi in runs(t):
         for c in txt:
-            f = F(SER_F if hz(c) else path, size)
+            f = F(HZ if hz(c) else path, size)
             d.text((cx, y), c, font=f, fill=acc if hi else col, anchor="ls"); cx += d.textlength(c, font=f)
 def draw_block(d, cx, top, text, path, size, col, acc, gap=1.3, align="c", x=None):
     y = top + size
@@ -76,22 +81,22 @@ def cover(S, n, m):
     img, d = new(); acc = hexrgb(S["accent"])
     f = face_img(S["face"], 900); img.paste(f, (W - f.width + 60, H - 900), f)  # 얼굴 우측 하단, 얼굴 위 글자 없음
     d = ImageDraw.Draw(img)
-    pill(d, 56, 56, S["kicker"], acc, (20, 18, 16), 30)
+    pill(d, 56, 56, S["kicker"], acc, (20, 18, 16), 32)
     y = 150
-    ss = fit(d, S["coverSub"], SEMI_F, 38, 28, W-120)
+    ss = fit(d, S["coverSub"], SEMI_F, 52, 30, W-120)
     draw_line(d, 56, y+ss, S["coverSub"], SEMI_F, ss, acc, acc); y += int(ss*1.25) + 14
-    ts = fit(d, S["coverTitle"], BLACK_F, 104, 60, W-120)
+    ts = fit(d, S["coverTitle"], BLACK_F, 100, 60, W-120)
     draw_block(d, 0, y, S["coverTitle"], BLACK_F, ts, WHITE, acc, 1.22, "l", x=56)
     handle(d, acc); ai_notice(d); page_badge(d, n, m); return img
 def body(S, key, badge, n, m):
     img = bg_space(); d = ImageDraw.Draw(img); acc = hexrgb(S["accent"])
     title, text = S[key]
-    ts = fit(d, title, BLACK_F, 84, 52, W-140)
-    bs = fit(d, text, MED_F, 44, 32, W-150)
+    ts = fit(d, title, BLACK_F, 100, 56, W-120)
+    bs = fit(d, text, MED_F, 50, 34, W-130)
     tl = title.count("\n")+1; bl = text.count("\n")+1
     total = 54+40 + int(ts*1.3)*tl + 40 + int(bs*1.5)*bl
-    top = (H - total)//2 - 20
-    pill(d, W//2, top, badge, acc, (20, 18, 16), 30, "c")
+    top = (H - total)//2 + 20
+    pill(d, W//2, top, badge, acc, (20, 18, 16), 32, "c")
     y = top + 54 + 44
     y = draw_block(d, W//2, y, title, BLACK_F, ts, WHITE, acc, 1.3) + 36
     draw_block(d, W//2, y, text, MED_F, bs, DIMW, acc, 1.5)
@@ -99,14 +104,14 @@ def body(S, key, badge, n, m):
 def chart(S, n, m):
     img = bg_space(); d = ImageDraw.Draw(img); acc = hexrgb(S["accent"])
     head = f"{S['dayChar']}({S['hanja']})일생의 오행 균형"
-    draw_line(d, W//2, 220, head, BLACK_F, 52, WHITE, WHITE, "c")
+    draw_line(d, W//2, 200, head, BLACK_F, 60, WHITE, WHITE, "c")
     names = ["木", "火", "土", "金", "水"]; kor = ["나무", "불", "흙", "쇠", "물"]
-    bw, gap = 120, 36; total = 5*bw + 4*gap; x0 = (W-total)//2; base = 900; maxh = 460
+    bw, gap = 140, 44; total = 5*bw + 4*gap; x0 = (W-total)//2; base = 900; maxh = 520
     for i, v in enumerate(S["values"]):
         h = int(maxh*v); x = x0 + i*(bw+gap)
         col = acc if i == S["highlight"] else (92, 89, 86)
         d.rounded_rectangle([x, base-h, x+bw, base], 16, fill=col)
-        draw_line(d, x+bw//2, base+58, names[i], SER_F, 46, WHITE if i == S["highlight"] else DIMW, WHITE, "c")
+        draw_line(d, x+bw//2, base+58, names[i], HZ, 44, WHITE if i == S["highlight"] else DIMW, WHITE, "c")
         draw_line(d, x+bw//2, base+98, kor[i], MED_F, 26, GRAY, GRAY, "c")
     d.rounded_rectangle([60, 1090, W-60, 1200], 24, fill=(46, 43, 41))
     ns = fit(d, S["chartNote"], SEMI_F, 32, 24, W-170)
@@ -119,7 +124,7 @@ def advice(S, n, m):
     d = ImageDraw.Draw(img)
     d.rectangle([0, 640, W, H], fill=(34, 31, 30))
     title, text = S["advice"]
-    ts = fit(d, title, BLACK_F, 66, 44, W-120); bs = fit(d, text, MED_F, 38, 28, W-140)
+    ts = fit(d, title, BLACK_F, 70, 46, W-120); bs = fit(d, text, MED_F, 40, 30, W-140)
     pill(d, W//2, 690, "조언", acc, (20, 18, 16), 28, "c")
     y = 690 + 52 + 30
     y = draw_block(d, W//2, y, title, BLACK_F, ts, WHITE, acc, 1.3) + 26
@@ -129,15 +134,15 @@ def cta(S, n, m):
     img, d = new(); acc = hexrgb(S["accent"])
     f = face_img(S["face"], 820); img.paste(f, ((W-f.width)//2, 0), f)
     d = ImageDraw.Draw(img); d.rectangle([0, 700, W, H], fill=(30, 28, 27))
-    qs = fit(d, S["ctaQ"], BLACK_F, 64, 44, W-120)
+    qs = fit(d, S["ctaQ"], BLACK_F, 84, 48, W-100)
     y = draw_block(d, W//2, 730, S["ctaQ"], BLACK_F, qs, WHITE, acc, 1.25) + 22
-    bt = "+ 태그하고 팔로우까지"; bw = int(width(d, bt, BLACK_F, 38)) + 90
-    d.rounded_rectangle([(W-bw)//2, y, (W+bw)//2, y+92], 46, fill=acc)
-    draw_line(d, W//2, y+62, bt, BLACK_F, 38, (20, 18, 16), (20, 18, 16), "c"); y += 92 + 34
+    bt = "+ 태그하고 팔로우까지"; bw = int(width(d, bt, BLACK_F, 46)) + 90
+    d.rounded_rectangle([(W-bw)//2, y, (W+bw)//2, y+96], 48, fill=acc)
+    draw_line(d, W//2, y+64, bt, BLACK_F, 46, (20, 18, 16), (20, 18, 16), "c"); y += 96 + 34
     pill(d, W//2, y, "내일 밤 9시", (70, 66, 63), WHITE, 30, "c"); y += 78 + 18
-    ns = fit(d, S["nextTitle"], BLACK_F, 52, 38, W-120)
+    ns = fit(d, S["nextTitle"], BLACK_F, 60, 40, W-120)
     y = draw_block(d, W//2, y, S["nextTitle"], BLACK_F, ns, WHITE, acc, 1.2) + 14
-    draw_line(d, W//2, y+26, "프로필 링크에서 내 첫 글자 1초 확인", MED_F, 26, GRAY, GRAY, "c")
+    draw_line(d, W//2, y+26, "프로필 링크에서 내 첫 글자 1초 확인", MED_F, 30, GRAY, GRAY, "c")
     handle(d, acc); page_badge(d, n, m); return img
 
 def build(S, outdir, prefix):
