@@ -75,6 +75,11 @@ def main():
     h = h.replace('<img src="assets/chart.svg" alt="', '<picture><source media="(max-width:650px)" srcset="assets/chart-m.svg"><img src="assets/chart.svg" alt="').replace('큰 원형 차트"', '큰 원형 차트"')
     h = re.sub(r'(<picture><source[^>]*><img src="assets/chart.svg" alt="[^"]*">)', r"\1</picture>", h)
     open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(h)
+    # 영상용 세로 배치(reel.html): 같은 글꼴·이미지, 버튼 없음, 앱 화면 안전 영역 안쪽 배치
+    r = open(os.path.join(SRC, "reel.html"), encoding="utf-8").read()
+    r = re.sub(r"@font-face\{font-family:\"Pretendard Variable\".*?\}\n@font-face.*?(?=\n\*\{)", '@font-face{font-family:"Pretendard Variable";font-weight:400 700;src:url("assets/fonts/pretendard-variable-subset.woff2") format("woff2");font-display:block}\n@font-face{font-family:"Noto Serif KR";font-style:normal;font-weight:900;src:url("assets/fonts/noto-serif-kr-900.woff2") format("woff2");font-display:block}', r, flags=re.S)
+    r = r.replace('src="assets/sky.png"', 'src="assets/sky.webp"').replace('src="assets/character.png"', 'src="assets/character.webp"')
+    open(os.path.join(OUT, "reel.html"), "w", encoding="utf-8").write(r)
     # 단독 파일(모두 내장)
     def b64(p, mime): return f"data:{mime};base64," + base64.b64encode(open(os.path.join(OUT, p), "rb").read()).decode()
     s = h
