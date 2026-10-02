@@ -35,13 +35,19 @@ input.n{width:64px;background:transparent;border:1px solid var(--line);color:var
 .upc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin:0 0 10px}.upc .top{display:flex;gap:12px}.upc img{width:72px;height:128px;object-fit:cover;border-radius:8px;border:1px solid var(--line);flex:0 0 auto}
 .upc h5{margin:0 0 2px;font-size:15px}.upc .when{color:var(--gold);font-size:13px}.upc .desc{white-space:pre-wrap;word-break:break-word;background:rgba(127,127,127,.09);border-radius:8px;padding:8px 10px;font-size:13.5px;margin-top:8px;max-height:150px;overflow:auto}
 .btn{display:inline-block;border:1px solid var(--gold);color:var(--gold);background:none;border-radius:999px;padding:6px 13px;font:inherit;font-size:13.5px;font-weight:700;text-decoration:none;cursor:pointer;margin:6px 8px 0 0}.btn.p{background:var(--gold);color:#1b1917}
-.cb{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:15px;font-weight:700;cursor:pointer}.cb input{width:24px;height:24px;accent-color:var(--gold)}
-.ok2{color:var(--ok);font-size:13px;font-weight:700;margin-left:6px}details.dn{margin:6px 0 14px}details.dn summary{cursor:pointer;color:var(--dim);font-size:14px}.upc.done{opacity:.6}.upc input.u{width:100%;background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 8px;font:inherit;font-size:13px;margin-top:8px}
+.cb{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:15px;font-weight:700;cursor:pointer}.cb input{width:32px;height:32px;accent-color:var(--gold)}.cb{font-size:18px}
+.ok2{color:var(--ok);font-size:13px;font-weight:700;margin-left:6px}details.dn{margin:6px 0 14px}details.dn summary{cursor:pointer;color:var(--dim);font-size:14px}#toast{position:fixed;left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:50;background:var(--card);color:var(--ink);border:2px solid var(--red);border-radius:12px;padding:14px 16px;font-size:18px;line-height:1.6;font-weight:700;display:none}.upc.done{opacity:.6}.upc input.u{width:100%;background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 8px;font:inherit;font-size:13px;margin-top:8px}
+
+.pfsum{background:var(--card);border:1px solid var(--gold);border-radius:12px;padding:14px 16px;margin:0 0 14px;font-size:18px;line-height:1.7}.pfsum h4{margin:0 0 6px;font-size:20px}.pfsum table{font-size:18px}.pfsum th,.pfsum td{padding:8px 8px}
+.pf{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin:0 0 12px}.pf h5{margin:0 0 6px;font-size:19px;line-height:1.4}.pf .chips{margin:0 0 10px}.pf .chip{display:inline-block;border:1px solid var(--gold);color:var(--gold);border-radius:999px;padding:2px 12px;font-size:16px;font-weight:700;margin:0 6px 4px 0}
+.pf .g{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.pf label{display:block;font-size:17px;color:var(--dim)}.pf input{width:100%;background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:8px 10px;font:inherit;font-size:22px;font-weight:700;margin-top:4px}
+.pf .calc{margin-top:10px;font-size:18px;font-weight:700;color:var(--gold)}.pf .gen{color:var(--dim);font-weight:400;font-size:16px;margin-top:2px}.pfhint{font-size:17px;color:var(--dim);margin:0 0 12px}
+@media (max-width:560px){.pf .g{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.it{grid-template-columns:44px 56px 1fr;}.it .bd{grid-column:3}}
 </style></head><body><main>
 <h1>자오선 콘텐츠 상황판</h1>
 <p class="sub" id="fresh">인스타·스레드는 Metricool 예약에서 자동으로 읽어요. 블로그와 반응 기록은 콘텐츠 세션이 채워요.</p>
-<div class="tabs" role="tablist"><button data-tab="cal" aria-pressed="true">캘린더</button><button data-tab="rep" aria-pressed="false">반응 기록</button><button data-tab="up" aria-pressed="false">네이버 업로드 <span id="upn" class="reply" style="margin-left:4px"></span></button><button data-tab="blog" aria-pressed="false">블로그 반응</button></div>
+<div class="tabs" role="tablist"><button data-tab="cal" aria-pressed="true">캘린더</button><button data-tab="rep" aria-pressed="false">반응 기록</button><button data-tab="up" aria-pressed="false">네이버 업로드 <span id="upn" class="reply" style="margin-left:4px"></span></button><button data-tab="perf" aria-pressed="false">클립 성과</button><button data-tab="blog" aria-pressed="false">블로그 반응</button></div>
 
 <section id="cal">
  <div class="seg" id="range"><button data-r="week" aria-pressed="true">이번 주</button><button data-r="next" aria-pressed="false">다음 2주</button><button data-r="past" aria-pressed="false">지난 2주</button></div>
@@ -51,6 +57,7 @@ input.n{width:64px;background:transparent;border:1px solid var(--line);color:var
 </section>
 <section id="rep" class="hide"><div id="reports"><p class="muted">불러오는 중이에요.</p></div></section>
 <section id="up" class="hide"><div id="uplist"><p class="muted">불러오는 중이에요.</p></div></section>
+<section id="perf" class="hide"><div id="perflist"><p class="muted">불러오는 중이에요.</p></div></section>
 <section id="blog" class="hide"><div id="blogs"><p class="muted">불러오는 중이에요.</p></div></section>
 </main>
 <script>
@@ -65,7 +72,7 @@ var now=new Date(), today=ymd(now);
 function monday(d){var k=kst(d),w=(k.getUTCDay()+6)%7;return addDays(d,-w)}
 function win(){var m=monday(now);if(range==="week")return[ymd(m),ymd(addDays(m,6))];if(range==="next")return[ymd(addDays(m,7)),ymd(addDays(m,20))];return[ymd(addDays(m,-14)),ymd(addDays(m,-1))]}
 function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
-document.querySelectorAll(".tabs button").forEach(function(b){b.onclick=function(){document.querySelectorAll(".tabs button").forEach(function(x){x.setAttribute("aria-pressed",x===b)});["cal","rep","up","blog"].forEach(function(id){document.getElementById(id).classList.toggle("hide",id!==b.dataset.tab)})}});
+document.querySelectorAll(".tabs button").forEach(function(b){b.onclick=function(){document.querySelectorAll(".tabs button").forEach(function(x){x.setAttribute("aria-pressed",x===b)});["cal","rep","up","perf","blog"].forEach(function(id){document.getElementById(id).classList.toggle("hide",id!==b.dataset.tab)})}});
 document.querySelectorAll("#range button").forEach(function(b){b.onclick=function(){range=b.dataset.r;if(mcpRef&&!(snsErr&&/not_granted|no_mcp/.test(snsErr.code)))startWatch(mcpRef);document.querySelectorAll("#range button").forEach(function(x){x.setAttribute("aria-pressed",x===b)});render()}});
 function isFree(t){return /무료 한 줄 사주|생년월일을 (댓글로 )?남겨/.test(t||"")}
 function normSns(list){var out=[];(list||[]).forEach(function(p){var pr=(p.providers||[])[0]||{};var net=pr.network||"";var dt=(p.publicationDate&&p.publicationDate.dateTime)||"";
@@ -122,7 +129,7 @@ function askAgain(){claude.use("permissions").then(function(perm){if(!perm){loca
 claude.use("db").then(function(db){
  var rb=document.getElementById("blogs"),rr=document.getElementById("reports");
  if(!db){rb.textContent="";rb.appendChild(el("p","muted","블로그 기록을 불러올 수 없는 화면이에요."));rr.textContent="";rr.appendChild(el("p","muted","반응 기록을 불러올 수 없는 화면이에요."));return}
- db.collection("blog").orderBy("date").onSnapshot(function(s){blogs=s.docs.map(function(d){var x=d.data();x._id=d.id;return x});render();drawBlogs(db);drawUp(db)},function(e){rb.textContent="";rb.appendChild(el("p","muted","블로그 기록을 읽지 못했어요 ("+e.code+")."))});
+ db.collection("blog").orderBy("date").onSnapshot(function(s){blogs=s.docs.map(function(d){var x=Object.assign({},d.data());x._id=d.id;return x});render();drawBlogs(db);drawUp(db);drawPerf(db)},function(e){rb.textContent="";rb.appendChild(el("p","muted","블로그 기록을 읽지 못했어요 ("+e.code+")."))});
  db.collection("reports").orderBy("period","desc").onSnapshot(function(s){rr.textContent="";if(s.empty){rr.appendChild(el("div","note","아직 반응 기록이 없어요. 2주마다 콘텐츠 세션이 잘된 글과 안된 글, 팔로워 변화를 여기에 적어요."));return}
   s.docs.forEach(function(d){var x=d.data();var c=el("div","note");c.appendChild(el("h4",null,x.period||d.id));if(x.followers)c.appendChild(el("p",null,"팔로워 · 인스타 "+(x.followers.instagram??"-")+" / 스레드 "+(x.followers.threads??"-")));
    ["best","worst","next"].forEach(function(k){if(x[k]&&x[k].length){c.appendChild(el("p",null,{best:"잘된 글",worst:"안된 글",next:"다음 2주에 바꿀 것"}[k]));var ul=el("ul");x[k].forEach(function(t){ul.appendChild(el("li",null,t))});c.appendChild(ul)}});
@@ -132,6 +139,20 @@ claude.use("db").then(function(db){
 function cp(txt,btn){function ok(){var o=btn.parentNode.querySelector(".ok2");if(!o){o=el("span","ok2","복사했어요");btn.parentNode.appendChild(o)}o.hidden=false;setTimeout(function(){o.hidden=true},1500)}
  function fb(){var t=document.createElement("textarea");t.value=txt;t.style.position="fixed";t.style.opacity="0";document.body.appendChild(t);t.focus();t.select();try{document.execCommand("copy");ok()}catch(e){}document.body.removeChild(t)}
  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(txt).then(ok,fb)}else fb()}
+
+var permP=null,toastT=null;
+function toast(msg){var t=document.getElementById("toast");if(!t){t=document.createElement("div");t.id="toast";t.setAttribute("role","alert");t.onclick=function(){t.style.display="none"};document.body.appendChild(t)}t.textContent=msg;t.style.display="block";clearTimeout(toastT);toastT=setTimeout(function(){t.style.display="none"},20000)}
+function ensurePerm(){if(permP)return permP;permP=claude.use("permissions").then(function(p){if(!p||!p.state)return;return Promise.resolve(p.state("db")).then(function(s){if(s&&s!=="granted"&&p.request)return p.request(["db"])})}).catch(function(){});return permP}
+function redrawAll(db){render();drawBlogs(db);drawUp(db);drawPerf(db)}
+function upd(db,id,patch,redraw){
+ var b=blogs.filter(function(x){return x._id===id})[0],old={};
+ if(b){Object.keys(patch).forEach(function(k){old[k]=b[k];b[k]=patch[k]});if(redraw)redrawAll(db)}
+ return ensurePerm().then(function(){return db.collection("blog").doc(id).update(patch)}).catch(function(e){
+  if(b){Object.keys(old).forEach(function(k){b[k]=old[k]});if(redraw)redrawAll(db)}
+  var code=(e&&(e.code||e.message))||"알 수 없음";
+  toast("저장하지 못했어요 (오류: "+code+"). 이 화면에 저장 권한이 없을 수 있어요. Claude 앱에서 본인 계정으로 로그인한 채 이 상황판을 다시 열어 주세요. 계속 안 되면 이 문구를 캡처해서 알려 주세요.");
+  throw e})}
+claude.use("user").then(function(u){if(!u||!u.can)return;Promise.resolve(u.can("data.write")).then(function(ok){if(ok===false){var n=document.createElement("div");n.className="note err";n.style.cssText="font-size:18px;font-weight:700";n.textContent="이 화면에서는 기록을 저장할 수 없어요 (보기 전용 권한). Claude 앱에서 본인 계정으로 열어 주세요.";var m=document.querySelector("main");m.insertBefore(n,m.children[1])}}).catch(function(){})}).catch(function(){});
 function msTime(b){return new Date((b.date||"")+"T"+(b.time||"12:00")+":00+09:00")}
 function drawUp(db){var box=document.getElementById("uplist");box.textContent="";
  var by=function(a,b){return((a.date||"")+(a.time||"")).localeCompare((b.date||"")+(b.time||""))};
@@ -148,21 +169,38 @@ function drawUp(db){var box=document.getElementById("uplist");box.textContent=""
   top.appendChild(tx);c.appendChild(top);
   if(kind==="clip"){var d=el("div","desc",b.desc||"");c.appendChild(d);var row=el("div");var cb=el("button","btn","설명 복사 · "+(b.desc||"").length+"자 (300자 이내, 해시태그 5개 포함)");cb.type="button";cb.onclick=function(){cp(b.desc||"",cb)};row.appendChild(cb);c.appendChild(row)}
   if(kind==="ms"&&!done){c.appendChild(el("p","muted","원고 페이지에서 제목·대표 이미지·본문·태그를 복사해 네이버에 올려요. 예약 발행도 올린 것으로 체크해요."))}
-  if(kind==="ms"){var ui=el("input","u");ui.placeholder="발행 주소(선택, 올린 뒤 붙여넣기)";ui.value=b.url||"";ui.onchange=function(){db.collection("blog").doc(b._id).update({url:ui.value.trim()||null}).catch(function(){ui.style.borderColor="var(--red)"})};c.appendChild(ui)}
+  if(kind==="ms"){var ui=el("input","u");ui.placeholder="발행 주소(선택, 올린 뒤 붙여넣기)";ui.value=b.url||"";ui.onchange=function(){upd(db,b._id,{url:ui.value.trim()||null}).catch(function(){ui.style.borderColor="var(--red)"})};c.appendChild(ui)}
   var lab=el("label","cb");var ck=el("input");ck.type="checkbox";ck.checked=!!done;
   ck.onchange=function(){var next;if(kind==="clip")next=ck.checked?"published":"planned";else next=ck.checked?(msTime(b)>new Date()?"scheduled":"published"):"planned";
-   db.collection("blog").doc(b._id).update({status:next,uploadedAt:ck.checked?new Date().toISOString():null}).catch(function(){ck.checked=!ck.checked;lab.style.color="var(--red)"})};
+   upd(db,b._id,{status:next,uploadedAt:ck.checked?new Date().toISOString():null},true).catch(function(){ck.checked=!ck.checked;lab.style.color="var(--red)"})};
   lab.appendChild(ck);lab.appendChild(document.createTextNode(done?"올렸어요 (체크를 풀면 다시 할 일로 돌아가요)":(kind==="clip"?"클립 업로드 완료":"네이버에 올렸어요(예약 포함)")));c.appendChild(lab);return c}
  var h1=el("div","note");h1.appendChild(el("h4",null,"네이버 클립 · 올릴 것 "+pc.length+"건"));h1.appendChild(el("p","muted","영상에는 음악이 없어요. 클립 앱에서 음악을 고르고, 아래 설명을 붙여넣어요(제목 없음, 300자 이내, 해시태그 5개). 올린 뒤 체크하면 이 목록에서 사라지고 달력에 발행으로 표시돼요."));box.appendChild(h1);
  if(!pc.length)box.appendChild(el("p","muted","올릴 클립이 없어요."));pc.forEach(function(b){box.appendChild(card(b,"clip",false))});
  var h2=el("div","note");h2.appendChild(el("h4",null,"네이버 블로그 원고 · 올릴 것 "+pm.length+"건"));h2.appendChild(el("p","muted","체크하면 이 목록에서 사라지고, 발행 시각이 아직이면 예약, 지났으면 발행으로 달력에 표시돼요."));box.appendChild(h2);
  if(!pm.length)box.appendChild(el("p","muted","올릴 원고가 없어요."));pm.forEach(function(b){box.appendChild(card(b,"ms",false))});
  if(dc.length||dm.length){var dt=el("details","dn");dt.appendChild(el("summary",null,"올린 것 "+(dc.length+dm.length)+"건 보기"));dc.forEach(function(b){dt.appendChild(card(b,"clip",true))});dm.forEach(function(b){dt.appendChild(card(b,"ms",true))});box.appendChild(dt)}}
+
+function drawPerf(db){var box=document.getElementById("perflist");if(!box)return;if(box.contains(document.activeElement)&&document.activeElement.tagName==="INPUT")return;box.textContent="";
+ var clips=blogs.filter(function(b){return b.channel==="clip"&&b.status==="published"}).sort(function(a,b){return((b.uploadedAt||b.date||"")).localeCompare(a.uploadedAt||a.date||"")});
+ var hd=el("div","note");hd.appendChild(el("h4",null,"클립 성과 · 올린 클립 "+clips.length+"건"));hd.appendChild(el("p","pfhint","주 1회(월요일) 네이버 클립 통계에서 숫자만 넣어요. 비워 둬도 괜찮고, 적는 즉시 저장돼요. 클립을 올리고 \"클립 업로드 완료\"를 체크하면 이 목록에 생겨요."));box.appendChild(hd);
+ if(!clips.length){box.appendChild(el("p","muted","아직 올린 클립이 없어요."));return}
+ function num(v){return v!=null&&v!==""&&!isNaN(+v)?+v:null}
+ function groups(keyf){var g={};clips.forEach(function(b){var v=num(b.views);if(v===null||v<=0)return;var k=keyf(b);if(!k)return;var o=g[k]||(g[k]={n:0,views:0,cw:0,cn:0,clicks:0,ck:0});o.n++;o.views+=v;var c=num(b.compl);if(c!==null){o.cw+=c*v;o.cn+=v}var ck=num(b.clicks);if(ck!==null){o.clicks+=ck;o.ck+=v}});return g}
+ function sumTable(title,g){var ks=Object.keys(g);if(!ks.length)return null;var w=el("div","tw"),t=el("table"),hr=el("tr");["구분","클립 수","조회 합계","시청 완료율","링크 클릭률"].forEach(function(x){hr.appendChild(el("th",null,x))});t.appendChild(hr);
+  ks.sort().forEach(function(k){var o=g[k],r=el("tr");r.appendChild(el("td",null,k));r.appendChild(el("td",null,o.n+"편"));r.appendChild(el("td",null,o.views.toLocaleString("ko-KR")));r.appendChild(el("td",null,o.cn?(o.cw/o.cn).toFixed(1)+"%":"-"));r.appendChild(el("td",null,o.ck?(o.clicks/o.ck*100).toFixed(1)+"%":"-"));t.appendChild(r)});w.appendChild(t);var d=el("div");d.appendChild(el("h4",null,title));d.appendChild(w);return d}
+ var s1=sumTable("유형별 (조회수로 가중 평균)",groups(function(b){return b.ctype||"기타"})),s2=sumTable("길이별 (12초판 대 30초판)",groups(function(b){return b.len?b.len+"초":null}));
+ var sm=el("div","pfsum");if(s1||s2){sm.appendChild(el("h4",null,"무엇이 먹히나"));if(s1)sm.appendChild(s1);if(s2){var sp=el("div");sp.style.height="10px";sm.appendChild(sp);sm.appendChild(s2)}sm.appendChild(el("p","gen","조회가 적을 때는 차이가 우연일 수 있어요. 클립이 5편 이상 쌓인 뒤에 비교해서 보세요."))}else sm.appendChild(el("p","muted","조회수를 한 편이라도 넣으면 여기에 유형별·길이별 비교가 나와요."));box.appendChild(sm);
+ clips.forEach(function(b){var c=el("div","pf");c.appendChild(el("h5",null,b.title||""));var ch=el("div","chips");[b.ctype||"일간 카드",b.len?b.len+"초판":null,(b.date||"").slice(5).replace("-","/")+" 올림"].forEach(function(x){if(x)ch.appendChild(el("span","chip",x))});c.appendChild(ch);
+  var g=el("div","g"),calc=el("div","calc"),vals={};
+  function recalc(){var v=num(vals.views.value),k=num(vals.clicks.value);calc.textContent=(v&&k!==null)?"링크 클릭률 "+(k/v*100).toFixed(1)+"% (클릭 "+k+" ÷ 조회 "+v+")":"조회와 링크 클릭을 넣으면 클릭률이 계산돼요"}
+  [["views","조회수",""],["compl","시청 완료율 (%)","0~100"],["prof","프로필 이동",""],["clicks","링크 클릭",""]].forEach(function(f){var lb=el("label",null,f[1]);var i=el("input");i.type="number";i.inputMode="decimal";i.min="0";if(f[0]==="compl")i.max="100";if(f[2])i.placeholder=f[2];i.value=b[f[0]]!=null?b[f[0]]:"";vals[f[0]]=i;
+   i.oninput=recalc;i.onchange=function(){var v=i.value===""?null:+i.value;if(v!==null&&(isNaN(v)||v<0||(f[0]==="compl"&&v>100))){i.style.borderColor="var(--red)";return}var u={};u[f[0]]=v;u.perfAt=new Date().toISOString();upd(db,b._id,u).then(function(){i.style.borderColor="var(--ok)"}).catch(function(){i.style.borderColor="var(--red)"})};lb.appendChild(i);g.appendChild(lb)});
+  c.appendChild(g);recalc();c.appendChild(calc);if(b.thumbPhrases)c.appendChild(el("div","gen","썸네일 문구: "+b.thumbPhrases));box.appendChild(c)})}
 function drawBlogs(db){var rb=document.getElementById("blogs");rb.textContent="";
  var c=el("div","note");c.appendChild(el("h4",null,"네이버·사이트 블로그 · 네이버 클립"));c.appendChild(el("p","muted","네이버 조회수·공감·댓글은 네이버 앱 통계에서 보고 숫자만 넣으면 저장돼요. 비워 둬도 괜찮아요. 클립은 올린 뒤 \"올렸어요\"를 누르면 발행으로 바뀌어요."));rb.appendChild(c);
  var tw=el("div","tw"),t=el("table"),hr=el("tr");["날짜","채널","제목","상태","조회","공감","댓글"].forEach(function(h){hr.appendChild(el("th",null,h))});t.appendChild(hr);
- blogs.forEach(function(b){var r=el("tr");r.appendChild(el("td",null,(b.date||"").slice(5)));r.appendChild(el("td",null,label(b.channel)));var td=el("td");if(b.url){var a=el("a",null,b.title);a.href=b.url;a.target="_blank";a.rel="noopener";a.style.color="inherit";td.appendChild(a)}else td.textContent=b.title;r.appendChild(td);var sc=el("td");if(b.channel==="clip"){var pub=b.status==="published";var sb=el("button",null,pub?"발행 ✔":"올렸어요");sb.style.cssText="background:"+(pub?"transparent":"var(--gold)")+";color:"+(pub?"var(--ok)":"#1b1917")+";border:1px solid "+(pub?"var(--ok)":"var(--gold)")+";border-radius:999px;padding:3px 10px;font:inherit;font-size:13px;font-weight:700;cursor:pointer";sb.onclick=function(){db.collection("blog").doc(b._id).update({status:pub?"planned":"published"}).catch(function(){sb.style.borderColor="var(--red)"})};sc.appendChild(sb)}else sc.textContent=badge(b.status||"planned")[0];r.appendChild(sc);
-  ["views","likes","comments"].forEach(function(k){var cell=el("td");if(b.channel==="naver"||b.channel==="clip"){var i=el("input","n");i.type="number";i.min="0";i.value=b[k]!=null?b[k]:"";i.onchange=function(){var v=i.value===""?null:+i.value;var u={};u[k]=v;db.collection("blog").doc(b._id).update(u).catch(function(){i.style.borderColor="var(--red)"})};cell.appendChild(i)}else cell.textContent=b[k]!=null?b[k]:"-";r.appendChild(cell)});t.appendChild(r)});
+ blogs.forEach(function(b){var r=el("tr");r.appendChild(el("td",null,(b.date||"").slice(5)));r.appendChild(el("td",null,label(b.channel)));var td=el("td");if(b.url){var a=el("a",null,b.title);a.href=b.url;a.target="_blank";a.rel="noopener";a.style.color="inherit";td.appendChild(a)}else td.textContent=b.title;r.appendChild(td);var sc=el("td");if(b.channel==="clip"){var pub=b.status==="published";var sb=el("button",null,pub?"발행 ✔":"올렸어요");sb.style.cssText="background:"+(pub?"transparent":"var(--gold)")+";color:"+(pub?"var(--ok)":"#1b1917")+";border:1px solid "+(pub?"var(--ok)":"var(--gold)")+";border-radius:999px;padding:3px 10px;font:inherit;font-size:13px;font-weight:700;cursor:pointer";sb.onclick=function(){upd(db,b._id,{status:pub?"planned":"published"},true).catch(function(){sb.style.borderColor="var(--red)"})};sc.appendChild(sb)}else sc.textContent=badge(b.status||"planned")[0];r.appendChild(sc);
+  ["views","likes","comments"].forEach(function(k){var cell=el("td");if(b.channel==="naver"||b.channel==="clip"){var i=el("input","n");i.type="number";i.min="0";i.value=b[k]!=null?b[k]:"";i.onchange=function(){var v=i.value===""?null:+i.value;var u={};u[k]=v;upd(db,b._id,u).catch(function(){i.style.borderColor="var(--red)"})};cell.appendChild(i)}else cell.textContent=b[k]!=null?b[k]:"-";r.appendChild(cell)});t.appendChild(r)});
  tw.appendChild(t);rb.appendChild(tw)}
 })();
 </script></body></html>
