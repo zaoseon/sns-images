@@ -8,3 +8,10 @@
 @keyframes pas{from{transform:rotate(-38deg)}to{transform:rotate(0)}}
 @keyframes pac{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.pa-wheel,.pa-char,.pa-wheel img{animation:none;opacity:1;transform:none}.pa-wheel{transform:translate(-50%,-50%)}}
+
+/* 배경(태양과 달의 천상 궤도): 캐릭터 영역 뒤에 은은하게. 해는 왼쪽·달은 오른쪽 가장자리에 걸치고, 위·아래·옆은 서서히 사라져 상자 모서리가 보이지 않는다. 텍스트 칸을 덮지 않도록 영역 안에서 잘린다. */
+.pa-bgw{position:absolute;inset:0 -4%;overflow:hidden;pointer-events:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 13%,#000 87%,transparent);mask-image:linear-gradient(90deg,transparent,#000 13%,#000 87%,transparent)}
+.pa-bg{position:absolute;left:-26%;bottom:0;width:156%;aspect-ratio:1536/1024;opacity:0;animation:pab 1.2s 0s ease-out both;-webkit-mask-image:linear-gradient(transparent 0,#000 30%,#000 78%,transparent 100%);mask-image:linear-gradient(transparent 0,#000 30%,#000 78%,transparent 100%)}
+.pa-bg img{display:block;width:100%;height:100%}
+@keyframes pab{to{opacity:.5}}
+@media (prefers-reduced-motion:reduce){.pa-bg{animation:none;opacity:.5}}
