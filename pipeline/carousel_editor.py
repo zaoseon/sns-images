@@ -146,7 +146,7 @@ LAYOUT_JS = r"""
     const f = adjFace('v3_ponytail', {scale:0.62, offX:304, offY:74}, def.face);
     Object.assign(t, f, {bgColor:'#1a1816', face:def.face, qX:422, qY:210, qSize:89, btnX:434, btnY:391, btnSize:45, nextX:269, nextY:866, nextBadgeSize:39, nextTitleSize:67, hint:''});
     t.panelOverride = panel(0,0,0,0,0,0); t.panelOverride.enabled = false;
-    t.extraTexts = [{text:'프로필 링크에서\n내 기운 1초만에 확인', x:71, y:1122, size:36, color:'#a8a39e', bold:false, align:'left', stroke:false}];
+    t.extraTexts = [{text:(def.hintText || '프로필 링크에서\n내 기운 1초만에 확인'), x:71, y:1122, size:36, color:'#a8a39e', bold:false, align:'left', stroke:false}];
   }
   globalThis.__report = report;
   return slides.length;
