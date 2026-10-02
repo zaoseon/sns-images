@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>자오선 콘텐츠 상황판</title>
+<style>
+:root{--bg:#121110;--card:#1b1917;--ink:#ece3d0;--dim:#9a917f;--gold:#c4a062;--line:#3a342c;--red:#d06a5c;--ok:#7fb07a;--ig:#d0829b;--th:#bdbdbd;--nv:#5fbf73;--site:#c4a062;--reel:#b48ce0;
+ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--bg:#f7f3ea;--card:#fff;--ink:#27221b;--dim:#7a705f;--line:#e2d9c8;--gold:#9c7a3c}}
+:root[data-theme="light"]{--bg:#f7f3ea;--card:#fff;--ink:#27221b;--dim:#7a705f;--line:#e2d9c8;--gold:#9c7a3c}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+main{max-width:980px;margin:0 auto;padding:18px 16px 60px}
+h1{font-size:22px;margin:6px 0 2px}.sub{color:var(--dim);font-size:13px;margin:0 0 14px}
+.tabs{display:flex;gap:6px;margin:10px 0 14px;flex-wrap:wrap}.tabs button,.seg button{background:none;border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;font:inherit;font-size:14px;cursor:pointer}
+.tabs button[aria-pressed=true],.seg button[aria-pressed=true]{border-color:var(--gold);color:var(--gold)}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:0 0 14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}.stat b{display:block;font-size:22px}.stat span{color:var(--dim);font-size:12px}
+.day{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:0 0 10px;overflow:hidden}
+.day h3{margin:0;padding:9px 12px;font-size:14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.day.today h3{color:var(--gold)}
+.it{display:grid;grid-template-columns:52px 64px 1fr auto;gap:8px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);font-size:14px}
+.it:last-child{border-bottom:0}.t{color:var(--dim);font-variant-numeric:tabular-nums}
+.ch{font-size:12px;border-radius:6px;padding:2px 6px;text-align:center;border:1px solid currentColor;white-space:nowrap}
+.ch.instagram{color:var(--ig)}.ch.threads{color:var(--th)}.ch.reel{color:var(--reel)}.ch.naver{color:var(--nv)}.ch.clip{color:var(--nv);border-style:dashed}.ch.site{color:var(--site)}
+.tx{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.tx a{color:inherit}
+.bd{font-size:12px;white-space:nowrap}.bd.ok{color:var(--ok)}.bd.wait{color:var(--dim)}.bd.err{color:var(--red)}
+.reply{display:inline-block;margin-left:6px;font-size:11px;color:#1b1917;background:var(--gold);border-radius:5px;padding:1px 6px}
+.note{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:14px}
+.note.err{border-color:var(--red)}.note h4{margin:0 0 6px}
+table{width:100%;border-collapse:collapse;font-size:14px}.tw{overflow-x:auto}
+th,td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}th{color:var(--gold);font-weight:600;white-space:nowrap}
+input.n{width:64px;background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:3px 5px;font:inherit}
+.muted{color:var(--dim)}.hide{display:none}
+@media (max-width:560px){.it{grid-template-columns:44px 56px 1fr;}.it .bd{grid-column:3}}
+</style></head><body><main>
+<h1>자오선 콘텐츠 상황판</h1>
+<p class="sub" id="fresh">인스타·스레드는 Metricool 예약에서 자동으로 읽어요. 블로그와 반응 기록은 콘텐츠 세션이 채워요.</p>
+<div class="tabs" role="tablist"><button data-tab="cal" aria-pressed="true">캘린더</button><button data-tab="rep" aria-pressed="false">반응 기록</button><button data-tab="blog" aria-pressed="false">블로그 반응</button></div>
+
+<section id="cal">
+ <div class="seg" id="range"><button data-r="week" aria-pressed="true">이번 주</button><button data-r="next" aria-pressed="false">다음 2주</button><button data-r="past" aria-pressed="false">지난 2주</button></div>
+ <div class="stats" id="stats"></div>
+ <div id="snsState"></div>
+ <div id="days"><p class="muted">불러오는 중이에요.</p></div>
+</section>
+<section id="rep" class="hide"><div id="reports"><p class="muted">불러오는 중이에요.</p></div></section>
+<section id="blog" class="hide"><div id="blogs"><p class="muted">불러오는 중이에요.</p></div></section>
+</main>
+<script>
+(function(){
+var SERVER="Metricool Social Media Management", BRAND="7114921", TZ="Asia/Seoul";
+var W="일월화수목금토";
+var sns=[], blogs=[], range="week", snsErr=null, storedAt=null;
+function kst(d){return new Date(d.getTime()+9*3600e3)}
+function ymd(d){var k=kst(d);return k.toISOString().slice(0,10)}
+function addDays(d,n){return new Date(d.getTime()+n*864e5)}
+var now=new Date(), today=ymd(now);
+function monday(d){var k=kst(d),w=(k.getUTCDay()+6)%7;return addDays(d,-w)}
+function win(){var m=monday(now);if(range==="week")return[ymd(m),ymd(addDays(m,6))];if(range==="next")return[ymd(addDays(m,7)),ymd(addDays(m,20))];return[ymd(addDays(m,-14)),ymd(addDays(m,-1))]}
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+document.querySelectorAll(".tabs button").forEach(function(b){b.onclick=function(){document.querySelectorAll(".tabs button").forEach(function(x){x.setAttribute("aria-pressed",x===b)});["cal","rep","blog"].forEach(function(id){document.getElementById(id).classList.toggle("hide",id!==b.dataset.tab)})}});
+document.querySelectorAll("#range button").forEach(function(b){b.onclick=function(){range=b.dataset.r;if(mcpRef&&!(snsErr&&/not_granted|no_mcp/.test(snsErr.code)))startWatch(mcpRef);document.querySelectorAll("#range button").forEach(function(x){x.setAttribute("aria-pressed",x===b)});render()}});
+function isFree(t){return /무료 한 줄 사주|생년월일을 (댓글로 )?남겨/.test(t||"")}
+function normSns(list){var out=[];(list||[]).forEach(function(p){var pr=(p.providers||[])[0]||{};var net=pr.network||"";var dt=(p.publicationDate&&p.publicationDate.dateTime)||"";
+ var kind=net==="instagram"&&p.instagramData&&/REEL/.test(p.instagramData.type||"")?"reel":net;
+ var st=pr.status||"";out.push({date:dt.slice(0,10),time:dt.slice(11,16),kind:kind,text:(p.text||"").split("\n")[0],full:p.text||"",status:st,url:pr.publicUrl||"",free:isFree(p.text)})});return out}
+function label(k){return{instagram:"인스타",threads:"스레드",reel:"릴스",naver:"네이버",clip:"네이버 클립",site:"사이트"}[k]||k}
+function badge(s){if(/PUBLISHED/i.test(s))return["발행","ok"];if(/ERROR|FAIL/i.test(s))return["오류","err"];if(/PENDING|SCHEDULED/i.test(s)||!s)return["예약","wait"];if(/planned/.test(s))return["예정","wait"];if(/done|published/.test(s))return["발행","ok"];return[s,"wait"]}
+function render(){
+ var w=win(),items=sns.concat(blogs.map(function(b){return{date:b.date,time:b.time||"21:00",kind:b.channel,text:b.title,status:b.status||"planned",url:b.url||"",free:false}}));
+ var inr=items.filter(function(i){return i.date>=w[0]&&i.date<=w[1]});
+ var st=document.getElementById("stats");st.textContent="";
+ [["instagram","인스타"],["reel","릴스"],["threads","스레드"],["naver","네이버"],["clip","네이버 클립"],["site","사이트"]].forEach(function(c){var n=inr.filter(function(i){return i.kind===c[0]}).length;var s=el("div","stat");s.appendChild(el("b",null,n));s.appendChild(el("span",null,c[1]+" 게시물"));st.appendChild(s)});
+ var fr=inr.filter(function(i){return i.free}).length;var s2=el("div","stat");s2.appendChild(el("b",null,fr));s2.appendChild(el("span",null,"댓글 답할 무료 사주 글"));st.appendChild(s2);
+ var byd={};inr.forEach(function(i){(byd[i.date]=byd[i.date]||[]).push(i)});
+ var box=document.getElementById("days");box.textContent="";
+ var ds=Object.keys(byd).sort();if(!ds.length){box.appendChild(el("p","muted","이 기간에는 게시물이 없어요."));return}
+ ds.forEach(function(d){var dd=new Date(d+"T00:00:00Z");var card=el("div","day"+(d===today?" today":""));var h=el("h3");h.appendChild(el("span",null,(+d.slice(5,7))+"/"+(+d.slice(8,10))+" ("+W[dd.getUTCDay()]+")"+(d===today?" · 오늘":"")));h.appendChild(el("span","muted",byd[d].length+"건"));card.appendChild(h);
+  byd[d].sort(function(a,b){return(a.time+a.kind).localeCompare(b.time+b.kind)}).forEach(function(i){var r=el("div","it");r.appendChild(el("span","t",i.time));r.appendChild(el("span","ch "+i.kind,label(i.kind)));var tx=el("span","tx");tx.title=i.full||i.text;
+   if(i.url){var a=el("a",null,i.text);a.href=i.url;a.target="_blank";a.rel="noopener";tx.appendChild(a)}else tx.appendChild(document.createTextNode(i.text));
+   if(i.free)tx.appendChild(el("span","reply","댓글 답하기"));r.appendChild(tx);var b=badge(i.status);r.appendChild(el("span","bd "+b[1],b[0]));card.appendChild(r)});box.appendChild(card)});
+}
+function snsNote(){var n=document.getElementById("snsState");n.textContent="";if(!snsErr)return;var c=el("div","note err");var m={needs_reauth:"Metricool 연결이 끊겼어요. Claude 설정의 커넥터에서 Metricool을 다시 연결해 주세요.",server_not_connected:"이 계정에 Metricool 커넥터가 없어요. 인스타·스레드 일정은 표시되지 않아요.",not_granted:"Metricool 읽기가 허용되지 않았어요. 아래 버튼을 눌러 허용해 주세요. 버튼으로도 안 되면 이 화면 오른쪽 위 메뉴의 권한(Permissions)에서 Metricool을 허용해 주세요.",no_mcp:"이 화면에서는 커넥터를 쓸 수 없어요. claude.ai에 로그인한 브라우저에서 열어 주세요.",upstream_error:"Metricool 읽기 허락을 아직 받지 못했어요. 아래 버튼을 눌러 허용해 주세요.",blocked_by_policy:"조직 설정 때문에 Metricool을 읽을 수 없어요."}[snsErr.code]||("Metricool에서 일정을 읽지 못했어요 ("+snsErr.code+"). 잠시 뒤 다시 열어 주세요.");
+ c.appendChild(el("h4",null,"인스타·스레드 일정이 안 보여요"));c.appendChild(el("p",null,m));
+ if(/not_granted|prompt|upstream_error/.test(snsErr.code)){var b=el("button",null,"Metricool 읽기 허용하기");b.style.cssText="margin-top:6px;background:var(--gold);color:#1b1917;border:0;border-radius:8px;padding:8px 14px;font:inherit;font-weight:700;cursor:pointer";b.onclick=askAgain;c.appendChild(b)}
+ c.appendChild(el("p","muted","오류 코드: "+snsErr.code+(snsErr.message?" · "+snsErr.message:"")));n.appendChild(c)}
+function fresh(){var f=document.getElementById("fresh");var t=storedAt?new Date(storedAt):null;f.textContent="인스타·스레드는 Metricool 예약에서 자동으로 읽어요"+(t?" (마지막 갱신 "+(t.getMonth()+1)+"/"+t.getDate()+" "+String(t.getHours()).padStart(2,"0")+":"+String(t.getMinutes()).padStart(2,"0")+")":"")+". 블로그와 반응 기록은 콘텐츠 세션이 채워요."}
+render();
+var mcpRef=null, retried=false;
+var weekData={}, watching={};
+function weeksFor(r){var m=monday(now);var st=r==="week"?[0]:r==="next"?[7,14]:[-14,-7];return st.map(function(o){return addDays(m,o)})}
+function rebuild(){sns=[];Object.keys(weekData).forEach(function(k){sns=sns.concat(weekData[k])})}
+function watchWeek(mcp,start){var key=ymd(start);if(watching[key])return;watching[key]=true;var tries=0;
+ var from=key+"T00:00:00+09:00", to=ymd(addDays(start,6))+"T23:59:00+09:00";
+ mcp.watchTool(SERVER,"getScheduledPosts",{brandId:BRAND,fromDate:from,toDate:to,timezone:TZ},function(ev){
+  if(ev.type==="data"){var p=ev.result.payload;if(typeof p==="string"){try{p=JSON.parse(p)}catch(e){}}
+   weekData[key]=normSns((p&&p.data)||(Array.isArray(p)?p:[]));rebuild();snsErr=null;storedAt=(ev.result.cache&&ev.result.cache.storedAt)||Date.now();fresh();snsNote();render()}
+  else{var er=ev.error||{code:"upstream_error"};snsErr=er;snsNote();render();
+   if(er.retryable&&tries<1){tries++;setTimeout(function(){mcp.invalidate&&mcp.invalidate(SERVER,"getScheduledPosts")},1500+Math.random()*1500)}}
+ },{refetchInterval:300000});}
+function startWatch(mcp){weeksFor(range).forEach(function(w){watchWeek(mcp,w)})}
+claude.use("mcp").then(function(mcp){
+ mcpRef=mcp;
+ if(!mcp){snsErr={code:"no_mcp"};snsNote();return}
+ claude.use("permissions").then(function(perm){
+  var st=perm?perm.state("mcp:"+SERVER).catch(function(){return "unavailable"}):Promise.resolve("prompt");
+  st.then(function(state){
+   if(state==="denied"){snsErr={code:"not_granted"};snsNote();return}
+   startWatch(mcp);
+  });
+ });
+});
+function askAgain(){claude.use("permissions").then(function(perm){if(!perm){location.reload();return}
+ perm.request(["mcp:"+SERVER]).then(function(r){if(r["mcp:"+SERVER]==="granted"||r["mcp:"+SERVER]==="prompt"){snsErr=null;snsNote();startWatch(mcpRef)}else{snsErr={code:"not_granted"};snsNote()}})})}
+claude.use("db").then(function(db){
+ var rb=document.getElementById("blogs"),rr=document.getElementById("reports");
+ if(!db){rb.textContent="";rb.appendChild(el("p","muted","블로그 기록을 불러올 수 없는 화면이에요."));rr.textContent="";rr.appendChild(el("p","muted","반응 기록을 불러올 수 없는 화면이에요."));return}
+ db.collection("blog").orderBy("date").onSnapshot(function(s){blogs=s.docs.map(function(d){var x=d.data();x._id=d.id;return x});render();drawBlogs(db)},function(e){rb.textContent="";rb.appendChild(el("p","muted","블로그 기록을 읽지 못했어요 ("+e.code+")."))});
+ db.collection("reports").orderBy("period","desc").onSnapshot(function(s){rr.textContent="";if(s.empty){rr.appendChild(el("div","note","아직 반응 기록이 없어요. 2주마다 콘텐츠 세션이 잘된 글과 안된 글, 팔로워 변화를 여기에 적어요."));return}
+  s.docs.forEach(function(d){var x=d.data();var c=el("div","note");c.appendChild(el("h4",null,x.period||d.id));if(x.followers)c.appendChild(el("p",null,"팔로워 · 인스타 "+(x.followers.instagram??"-")+" / 스레드 "+(x.followers.threads??"-")));
+   ["best","worst","next"].forEach(function(k){if(x[k]&&x[k].length){c.appendChild(el("p",null,{best:"잘된 글",worst:"안된 글",next:"다음 2주에 바꿀 것"}[k]));var ul=el("ul");x[k].forEach(function(t){ul.appendChild(el("li",null,t))});c.appendChild(ul)}});
+   if(x.note)c.appendChild(el("p","muted",x.note));rr.appendChild(c)})},function(e){rr.textContent="";rr.appendChild(el("p","muted","반응 기록을 읽지 못했어요 ("+e.code+")."))});
+});
+function drawBlogs(db){var rb=document.getElementById("blogs");rb.textContent="";
+ var c=el("div","note");c.appendChild(el("h4",null,"네이버·사이트 블로그 · 네이버 클립"));c.appendChild(el("p","muted","네이버 조회수·공감·댓글은 네이버 앱 통계에서 보고 숫자만 넣으면 저장돼요. 비워 둬도 괜찮아요. 클립은 올린 뒤 \"올렸어요\"를 누르면 발행으로 바뀌어요."));rb.appendChild(c);
+ var tw=el("div","tw"),t=el("table"),hr=el("tr");["날짜","채널","제목","상태","조회","공감","댓글"].forEach(function(h){hr.appendChild(el("th",null,h))});t.appendChild(hr);
+ blogs.forEach(function(b){var r=el("tr");r.appendChild(el("td",null,(b.date||"").slice(5)));r.appendChild(el("td",null,label(b.channel)));var td=el("td");if(b.url){var a=el("a",null,b.title);a.href=b.url;a.target="_blank";a.rel="noopener";a.style.color="inherit";td.appendChild(a)}else td.textContent=b.title;r.appendChild(td);var sc=el("td");if(b.channel==="clip"){var pub=b.status==="published";var sb=el("button",null,pub?"발행 ✔":"올렸어요");sb.style.cssText="background:"+(pub?"transparent":"var(--gold)")+";color:"+(pub?"var(--ok)":"#1b1917")+";border:1px solid "+(pub?"var(--ok)":"var(--gold)")+";border-radius:999px;padding:3px 10px;font:inherit;font-size:13px;font-weight:700;cursor:pointer";sb.onclick=function(){db.collection("blog").doc(b._id).update({status:pub?"planned":"published"}).catch(function(){sb.style.borderColor="var(--red)"})};sc.appendChild(sb)}else sc.textContent=badge(b.status||"planned")[0];r.appendChild(sc);
+  ["views","likes","comments"].forEach(function(k){var cell=el("td");if(b.channel==="naver"||b.channel==="clip"){var i=el("input","n");i.type="number";i.min="0";i.value=b[k]!=null?b[k]:"";i.onchange=function(){var v=i.value===""?null:+i.value;var u={};u[k]=v;db.collection("blog").doc(b._id).update(u).catch(function(){i.style.borderColor="var(--red)"})};cell.appendChild(i)}else cell.textContent=b[k]!=null?b[k]:"-";r.appendChild(cell)});t.appendChild(r)});
+ tw.appendChild(t);rb.appendChild(tw)}
+})();
+</script></body></html>
