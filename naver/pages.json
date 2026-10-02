@@ -489,7 +489,13 @@
    "url": "https://blog.naver.com/zaoseon/224425927427"
   },
   "category": "태어난 날(일주) 이야기",
-  "done": false
+  "done": false,
+  "thumbs": [
+   "티 안 내는 게 아니라 못 내는 거예요",
+   "좋아하는데 왜 아무도 모를까",
+   "속으로만 품는 사랑의 공통점"
+  ],
+  "cid": "naver-n26"
  },
  "n27": {
   "dt": "2026-10-12T12:00:00",
@@ -513,7 +519,13 @@
    "url": "https://blog.naver.com/zaoseon/224425927427"
   },
   "category": "태어난 날(일주) 이야기",
-  "done": false
+  "done": false,
+  "thumbs": [
+   "말 한마디에 사람이 움직이는 이유",
+   "설득력에도 타고난 결이 있어요",
+   "말로 움직이는 사람, 세 지도로 보면"
+  ],
+  "cid": "naver-n27"
  },
  "n28": {
   "dt": "2026-10-12T21:00:00",
@@ -537,7 +549,13 @@
    "url": "https://blog.naver.com/zaoseon/224425927427"
   },
   "category": "태어난 날(일주) 이야기",
-  "done": false
+  "done": false,
+  "thumbs": [
+   "궁합, 몇 개나 맞나요?",
+   "사주만 보면 한쪽 이야기예요",
+   "세 지도가 모두 '잘 맞는다'면"
+  ],
+  "cid": "naver-n28"
  },
  "n29": {
   "dt": "2026-10-13T12:00:00",
@@ -561,7 +579,13 @@
    "url": "https://blog.naver.com/zaoseon/224425927427"
   },
   "category": "태어난 날(일주) 이야기",
-  "done": false
+  "done": false,
+  "thumbs": [
+   "혼자 할 때 몰입이 터지는 사람",
+   "나는 왜 혼자일 때 일이 잘될까",
+   "몰입형 일 스타일, 세 지도로 보면"
+  ],
+  "cid": "naver-n29"
  },
  "n30": {
   "dt": "2026-10-14T12:00:00",
@@ -585,7 +609,13 @@
    "url": "https://blog.naver.com/zaoseon/224425927427"
   },
   "category": "태어난 날(일주) 이야기",
-  "done": false
+  "done": false,
+  "thumbs": [
+   "열정의 속도가 남들과 달라요",
+   "불이 많은 사주의 연애 속도",
+   "빨리 식는 마음, 이유가 있어요"
+  ],
+  "cid": "naver-n30"
  },
  "n31": {
   "dt": "2026-10-15T12:00:00",
@@ -609,7 +639,13 @@
    "url": "https://blog.naver.com/zaoseon/224425927427"
   },
   "category": "태어난 날(일주) 이야기",
-  "done": false
+  "done": false,
+  "thumbs": [
+   "일단 하자 vs 한 번 더 생각하자",
+   "결정 속도가 다르면 부딪혀요",
+   "속도 차이, 세 지도로 읽어 보면"
+  ],
+  "cid": "naver-n31"
  },
  "n32": {
   "dt": "2026-10-16T21:00:00",
@@ -633,7 +669,13 @@
    "url": "https://blog.naver.com/zaoseon/224425927427"
   },
   "category": "태어난 날(일주) 이야기",
-  "done": false
+  "done": false,
+  "thumbs": [
+   "앞에 서면 이상하게 힘이 나요",
+   "리더형 성향, 세 지도가 말하는 것",
+   "빛나는 자리가 따로 있나 봐요"
+  ],
+  "cid": "naver-n32"
  },
  "n33": {
   "dt": "2026-10-17T12:00:00",
@@ -657,6 +699,12 @@
    "url": "https://blog.naver.com/zaoseon/224425927427"
   },
   "category": "태어난 날(일주) 이야기",
-  "done": false
+  "done": false,
+  "thumbs": [
+   "약속 취소에 속으로 환호했다면",
+   "사람이 싫은 게 아니에요",
+   "충전 방식이 다른 사람이에요"
+  ],
+  "cid": "naver-n33"
  }
 }
