@@ -632,3 +632,10 @@ README "2주마다 하는 일" 그대로. 요점만:
 - 확인 페이지 https://claude.ai/artifact/QWSnE1QvM8B4MSHJyTAcWw (미리보기+원본 열기 버튼, 버튼 필요 여부 표). 원본 주소 `https://raw.githubusercontent.com/zaoseon/sns-images/main/meridian_intro/out/video/<파일>.mp4`
 - 쓰는 법: 인스타는 음악을 입혀 예약 도구로, 네이버 클립은 앱에서 음악 선택. 일주 릴스 앞에 붙이면 "첫 1초 정지 없음" 기준 확인 필요(6초 길이)
 - 미확인: 인스타 릴스 실제 화면에서의 가림(네이버 캡처 기준으로 맞춤), 6초 인트로가 단독 릴스로 반응이 나는지
+
+### 10/2 밤: 사이트 홈 히어로 수정 + 캐릭터 영역 연출 (대표: "전체 인트로 말고 캐릭터 영역만 동적으로 / AI 안내는 이미지 하단 코너에 연한 글씨 / 신년 감정서 정가 취소선+14,900원부터 / 얼리버드 문구는 감정서 버튼 아래로")
+- **올린 것(사이트 `zaoseon-site` main 커밋 1c66ebc8, `tools/build_home.py` + `public/index.html`)**: ①신년 감정서 버튼 = "신년 감정서 ~~19,000원~~ **14,900원부터**"(정가는 `PRODUCTS["NY"]["pk"][0][2]`, 얼리버드가는 `EARLY["NY"]["S"]`에서 가져옴). 얼리버드 종료(`/api/seats` active=false) 후에는 `.rg`로 "신년 감정서 19,000원부터"로 바뀜(시험 확인) ②"10월 얼리버드 · 선착순 50명 · 10월 31일까지" 문구를 신년 감정서 버튼 바로 아래 가운데로(원래는 두 버튼 아래 왼쪽 정렬이라 무료 버튼 밑처럼 보였음) ③휴대폰(≤520px)에서는 버튼을 한 줄에 하나씩, 문구 한 줄 ④AI 안내: 이미지 맨 아래 오른쪽 모서리, 배경 없이 연한 글씨(rgba 201,204,211 / .5, 10.5px). 로컬에서 320·390·768·1280·1920px 시험(가로 넘침·오류 없음, 버튼·문구 위치 확인). 공유 CSS의 `.btns a{flex:1 1 140px}`가 새 구조에서 세로로 늘어나는 문제를 `.hero .rep .btn{flex:none}`로 고침
+- **실제 사이트 반영은 확인 못 함**: 이 환경에서 zaoseon.com 접속이 `403 host_not_allowed`(네트워크 허용 목록 밖), GitHub 배포 상태 API도 토큰 권한 없음. 푸시는 성공(원격 main = 1c66ebc8). 대표가 사이트를 열어 확인 필요
+- **캐릭터 영역 연출(아직 사이트에 안 올림, 대표 확인 대기)**: 히어로 `.portrait` 자리만 바꾸는 방식. 캐릭터가 0.8초 페이드인(첫 화면 지연 없음) → 뒤쪽 차트가 켜지며 -38°에서 0°로 돌아 제자리(3.2초) → 4초 안에 끝, 계속 움직이지 않음(정지 버튼 불필요, `prefers-reduced-motion`이면 완성 모습만). 차트가 캐릭터 뒤에만 있어 얼굴에 선이 안 비침(처음에 차트를 앞서 나오게 했더니 페이드 중 얼굴에 비쳐서 순서를 바꿈). 파일: `meridian_intro/hero/{character.webp 186KB, chart.svg 41KB, hero_anim.css}`(현재 히어로 jeongwol.jpg 148KB → +약 80KB). 실제 홈에 끼운 모습(휴대폰·PC)과 다시 재생 데모: https://claude.ai/artifact/De13ZBSJVkefuS5k6Vdsa5
+- 대표가 "올려" 하면: `public/img/hero/`에 두 파일 복사, `build_home.py`의 `<figure class="portrait">`를 `.pa` 구조로 교체(`<div class="pa-wheel"><img src="/img/hero/chart.svg"></div><img class="pa-char" src="/img/hero/character.webp" fetchpriority="high">` + AI 안내), 연출 CSS를 홈 CSS에 추가. 이때 AI 안내 스타일은 `.pa .tagai`로 이미 정의됨
+- 메리디안 인트로 MP4(릴스·클립용)와 사이트 연출은 별개: 영상은 `meridian_intro/out/video/`

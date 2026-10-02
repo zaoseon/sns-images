@@ -1,0 +1,10 @@
+/* 히어로 캐릭터 영역만 한 번 움직이는 연출(전체 화면 인트로 아님): 캐릭터가 먼저 서서히 나타나고(0.8초, 화면 첫 표시 지연 없음), 그 뒤 뒤쪽 차트가 켜지며 살짝 돌아 제자리에 선다. 4초 안에 끝나고 계속 움직이지 않는다. 차트는 캐릭터 뒤에만 있어 얼굴에 선이 비치지 않는다. */
+.pa{position:relative;justify-self:center;width:min(100%,460px);aspect-ratio:920/1108;margin:0}
+.pa-wheel{position:absolute;left:50%;top:39%;width:94%;aspect-ratio:1;transform:translate(-50%,-50%);opacity:0;animation:paw 1.4s .7s ease-out both}
+.pa-wheel img{display:block;width:100%;height:100%;animation:pas 3.2s .7s cubic-bezier(.16,.7,.2,1) both}
+.pa-char{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;-webkit-mask-image:linear-gradient(#000 82%,transparent);mask-image:linear-gradient(#000 82%,transparent);opacity:0;animation:pac .8s 0s ease-out both}
+.pa .tagai{position:absolute;right:8px;bottom:5px;background:none;color:rgba(201,204,211,.5);font-size:10.5px;padding:0;border-radius:0;letter-spacing:.01em}
+@keyframes paw{to{opacity:.95}}
+@keyframes pas{from{transform:rotate(-38deg)}to{transform:rotate(0)}}
+@keyframes pac{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.pa-wheel,.pa-char,.pa-wheel img{animation:none;opacity:1;transform:none}.pa-wheel{transform:translate(-50%,-50%)}}
