@@ -29,7 +29,10 @@ def bg_static():
     sm = sm.resize((int(H * sm.width / sm.height), H)); sm = sm.crop(((sm.width - W) // 2, 0, (sm.width - W) // 2 + W, H)).filter(ImageFilter.GaussianBlur(6))
     im = Image.blend(im, sm, .16)
     vg = Image.new("L", (W, H), 0); ImageDraw.Draw(vg).ellipse((-260, -200, W + 260, H + 200), fill=255); vg = vg.filter(ImageFilter.GaussianBlur(160))
-    return Image.composite(im, Image.new("RGB", (W, H), (8, 10, 18)), vg)
+    im = Image.composite(im, Image.new("RGB", (W, H), (8, 10, 18)), vg)
+    import numpy as np
+    a = np.asarray(im).astype("int16"); rng = np.random.default_rng(5); n = rng.normal(0, 1.7, (H, W, 1)); a = np.clip(a + n, 0, 255).astype("uint8")
+    return Image.fromarray(a)
 @functools.lru_cache(maxsize=1)
 def stars():
     r = random.Random(11); return [(r.randint(20, W - 20), r.randint(160, 1460), r.choice([1, 2, 2, 3]), r.random() * 6.28, .6 + r.random() * 1.4) for _ in range(95)]
@@ -237,7 +240,7 @@ def cta(c, lines, t0=0.2, pill="zaoseon.com 무료 풀이 · 1초", face="v8_ges
 def render(name, scenes, outdir, kicker=None):
     """scenes: [(길이(초), 함수(c))]. 프레임을 ffmpeg로 바로 흘려 보낸다."""
     total = sum(d for d, _ in scenes); os.makedirs(outdir, exist_ok=True); out = os.path.join(outdir, name + ".mp4")
-    pr = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-crf", "18", "-preset", "medium", "-pix_fmt", "yuv420p", "-an", "-movflags", "+faststart", out], stdin=subprocess.PIPE)
+    pr = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-", "-vf", "scale=in_range=full:out_range=tv:out_color_matrix=bt709,format=yuv420p", "-c:v", "libx264", "-profile:v", "high", "-crf", "14", "-preset", "medium", "-x264-params", "aq-mode=3:aq-strength=0.9", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-color_range", "tv", "-an", "-movflags", "+faststart", out], stdin=subprocess.PIPE)
     t_acc = 0.0; n = 0; fr = Image.new("RGB", (W, H))
     for dur, fn in scenes:
         for i in range(int(round(dur * FPS))):
