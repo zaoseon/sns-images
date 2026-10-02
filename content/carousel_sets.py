@@ -71,11 +71,18 @@ SPARE = {
 # 비어 있으면 C1/A1/T1. 정(10/2)은 C1/A1/T1, 병(10/2 저녁)은 C2/A2/T1, 무(10/3)는 C3/A2/T2 로 대표 샘플이 그대로 게시된다.
 VARIANTS = {
     "2026-10-03": {"cover": "C3", "advice": "A2", "cta": "T2"},
-    "2026-10-04": {"cover": "C2", "advice": "A1", "cta": "T2"},
+    "2026-10-04": {"cover": "C2", "advice": "A1", "cta": "T1"},
     "2026-10-06": {"cover": "C3", "advice": "A2", "cta": "T1"},
-    "2026-10-07": {"cover": "C1", "advice": "A1", "cta": "T2"},
+    "2026-10-07": {"cover": "C1", "advice": "A2", "cta": "T2"},
     "2026-10-08": {"cover": "C2", "advice": "A2", "cta": "T1"},
-    "2026-10-09": {"cover": "C3", "advice": "A1", "cta": "T2"},
+    "2026-10-09": {"cover": "C3", "advice": "A1", "cta": "T1"},
 }
 for _k, _v in VARIANTS.items():
     if _k in SETS: SETS[_k]["variant"] = _v
+
+
+# 규칙(대표 지시 10/2): 같은 캐릭터 얼굴이 연속 슬라이드에 나오지 않게 한다 → 조언(A1=얼굴)과 CTA(T2=얼굴)를 같이 쓰지 않는다
+def check_variants():
+    for d, v in VARIANTS.items():
+        assert not (v.get("advice") == "A1" and v.get("cta") == "T2"), f"{d}: 조언 A1과 CTA T2는 얼굴이 연속으로 나옴"
+check_variants()
