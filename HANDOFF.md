@@ -639,3 +639,11 @@ README "2주마다 하는 일" 그대로. 요점만:
 - **캐릭터 영역 연출(아직 사이트에 안 올림, 대표 확인 대기)**: 히어로 `.portrait` 자리만 바꾸는 방식. 캐릭터가 0.8초 페이드인(첫 화면 지연 없음) → 뒤쪽 차트가 켜지며 -38°에서 0°로 돌아 제자리(3.2초) → 4초 안에 끝, 계속 움직이지 않음(정지 버튼 불필요, `prefers-reduced-motion`이면 완성 모습만). 차트가 캐릭터 뒤에만 있어 얼굴에 선이 안 비침(처음에 차트를 앞서 나오게 했더니 페이드 중 얼굴에 비쳐서 순서를 바꿈). 파일: `meridian_intro/hero/{character.webp 186KB, chart.svg 41KB, hero_anim.css}`(현재 히어로 jeongwol.jpg 148KB → +약 80KB). 실제 홈에 끼운 모습(휴대폰·PC)과 다시 재생 데모: https://claude.ai/artifact/De13ZBSJVkefuS5k6Vdsa5
 - 대표가 "올려" 하면: `public/img/hero/`에 두 파일 복사, `build_home.py`의 `<figure class="portrait">`를 `.pa` 구조로 교체(`<div class="pa-wheel"><img src="/img/hero/chart.svg"></div><img class="pa-char" src="/img/hero/character.webp" fetchpriority="high">` + AI 안내), 연출 CSS를 홈 CSS에 추가. 이때 AI 안내 스타일은 `.pa .tagai`로 이미 정의됨
 - 메리디안 인트로 MP4(릴스·클립용)와 사이트 연출은 별개: 영상은 `meridian_intro/out/video/`
+
+### 10/2 밤: 홈 캐릭터 연출에 배경 추가 (대표: "배경은 기존처럼 이걸 은은하게라도 깔아줘야 허전하지 않을 거 같다", 업로드 `태양과_달의_천상_궤도.png`)
+- 원본 보관: `samples/hero_bg_2026-10-02/sun_moon_sky_original.png`(1536x1024, 3.0MB). 사이트용 `meridian_intro/hero/sun_moon_bg.webp`(1000px, q60, 114KB)
+- 배경 층 `.pa-bgw`/`.pa-bg`(CSS는 `meridian_intro/hero/hero_anim.css`에 통합): 배경 폭 = 캐릭터 상자의 156%, 해가 왼쪽 가장자리·달이 오른쪽 가장자리에 걸치고 구름이 아래에 오도록 정렬(기존 히어로 이미지 구도 재현), 불투명도 .5, 옆은 13% 구간 페이드·위/아래는 세로 페이드로 사각형 모서리가 안 보임, 상자 안에서만 잘려 PC에서 왼쪽 글자 칸을 덮지 않음(배경 왼쪽 677px > 글자 칸 오른쪽 637px)
+- 처음 시안에서 배경 위쪽에 가로 줄(이미지 경계)이 보이고 상자 밖으로 번져 글자 칸과 겹칠 수 있어서, 가로·세로 페이드를 겹쳐 두 번 감싸는 방식으로 고침. 우리 차트(천간·지지 포함)는 그대로 앞에 두고 배경 안의 차트는 은은하게만 보임
+- 이미지 합계 캐릭터 186KB + 차트 41KB + 배경 114KB = 약 341KB(현재 히어로 148KB 대비 약 +190KB)
+- 확인 페이지(같은 주소) https://claude.ai/artifact/De13ZBSJVkefuS5k6Vdsa5 갱신: 다시 재생 데모 + 실제 홈에 끼운 휴대폰·PC 완료 상태. **아직 사이트에 안 올림 — 대표 "올려" 대기**
+- "올려" 시 작업: `public/img/hero/`에 character.webp·chart.svg·sun_moon_bg.webp 복사 → `build_home.py`의 `<figure class="portrait">`를 `.pa` 구조(`.pa-bgw > .pa-bg > img`, `.pa-wheel > img`, `.pa-char`, AI 안내 figcaption)로 교체하고 `hero_anim.css`를 홈 CSS에 추가, 기존 jeongwol.jpg는 `.portrait` 규칙과 함께 정리. LCP 이미지는 캐릭터에 `fetchpriority="high"`, 배경은 `decoding="async"`·`loading="lazy"` 불필요(첫 화면). 배포 반영은 이 환경에서 zaoseon.com 접속이 막혀 직접 확인 불가 → 대표 확인 요청
