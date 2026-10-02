@@ -71,19 +71,25 @@ def render(dates, defs, outdir):
         for date in dates:
             d, ov = defs[date]; ov = dict(ov); tri = bool(ov.get("badges"))
             cfg = ov.pop("_cfg", {}); sample = cfg.get("frames")        # 대표 샘플 PNG 7장(0~6번 슬라이드) 그대로 쓰는 경우
+            silent = bool(cfg.get("silent"))     # 네이버 클립: 음악은 대표가 앱에서 직접 고르므로 영상에는 음악을 넣지 않는다
             style = cfg.get("style", "피아노 로파이"); upbeat = style in RM.UP
-            if upbeat:     # 경쾌한 스타일: 장면 길이를 초로 정하고 박 수로 바꾼다
+            if silent:     # 장면 길이를 초로 정하고(템포 없음) 소리를 만들지 않는다
+                beat = 1.0; secs = STRUCT_SECS[cfg.get("struct", "S1")]; seq = [(si, sec) for si, sec in secs]; total_beats = sum(bt for _, bt in seq); wav = None
+                m = {"bpm": 60}
+            elif upbeat:     # 경쾌한 스타일: 장면 길이를 초로 정하고 박 수로 바꾼다
                 bpm = RM.pick_bpm(style, cfg.get("seed", 1)); beat = 60.0 / bpm
                 secs = STRUCT_SECS[cfg.get("struct", "S1")] if not tri else [(0, 2.5), (1, 2.0), (2, 2.0), (3, 2.0), (5, 2.5), (6, 2.5)]
                 seq = [(si, max(3, round(sec / beat))) for si, sec in secs]
             else: seq = STRUCTS[cfg["struct"]] if (cfg.get("struct") and not tri) else (SEQ_TRI if tri else SEQ_DAY)
-            total_beats = sum(bt for _, bt in seq)
-            wav = f"/tmp/v2_{date}.wav"
-            if upbeat:
+            if not silent:
+                total_beats = sum(bt for _, bt in seq)
+                wav = f"/tmp/v2_{date}.wav"
+            if silent: pass
+            elif upbeat:
                 cuts = [sum(bt for _, bt in seq[:j]) for j in range(len(seq))]
                 m = RM.compose_up(style, total_beats, cfg.get("seed", 1), wav, key=cfg.get("key", "C"), bpm=bpm, cuts=cuts)
             else: m = RM.compose(style, total_beats, cfg.get("seed", 1), wav, key=cfg.get("key", "C"), tail=0.3)
-            beat = 60.0 / m["bpm"]
+            if not silent: beat = 60.0 / m["bpm"]
             sample = sample or {}
             if any(si not in sample for si, _ in seq):
                 pg.evaluate(CE.LAYOUT_JS, [d, None]); pg.evaluate(CE.OVERRIDE_JS, ov); pg.wait_for_timeout(120)
@@ -96,9 +102,11 @@ def render(dates, defs, outdir):
                 c = Image.new("RGB", (CE.REEL_W, CE.REEL_H), im.getpixel((5, 5))); c.paste(im, (0, CE.REEL_TOP)); fp = f"/tmp/v2_{date}_{si}.png"; c.save(fp); frames.append((fp, beats * beat))
             cmd = ["ffmpeg", "-y", "-loglevel", "error"]
             for fp, dur in frames: cmd += ["-loop", "1", "-t", f"{dur:.4f}", "-i", fp]
-            cmd += ["-i", wav]; n = len(frames)
+            if not silent: cmd += ["-i", wav]
+            n = len(frames)
             fl = "".join(f"[{i}:v]" for i in range(n)) + f"concat=n={n}:v=1:a=0,format=yuv420p,fps=30[v]"
-            cmd += ["-filter_complex", fl, "-map", "[v]", "-map", f"{n}:a", "-c:v", "libx264", "-crf", "20", "-c:a", "aac", "-b:a", "128k", "-shortest", "-movflags", "+faststart", os.path.join(outdir, f"{date}.mp4")]
-            subprocess.run(cmd, check=True); print(date, f"{total_beats * beat:.1f}s", len(seq), "장면", m["bpm"], "BPM", cfg.get("style", ""))
+            if silent: cmd += ["-filter_complex", fl, "-map", "[v]", "-an", "-c:v", "libx264", "-crf", "20", "-movflags", "+faststart", os.path.join(outdir, f"{date}.mp4")]
+            else: cmd += ["-filter_complex", fl, "-map", "[v]", "-map", f"{n}:a", "-c:v", "libx264", "-crf", "20", "-c:a", "aac", "-b:a", "128k", "-shortest", "-movflags", "+faststart", os.path.join(outdir, f"{date}.mp4")]
+            subprocess.run(cmd, check=True); print(date, f"{total_beats * beat:.1f}s", len(seq), "장면", ("음악 없음" if silent else str(m["bpm"]) + " BPM " + cfg.get("style", "")))
         b.close()
 if __name__ == "__main__": main()
