@@ -99,7 +99,13 @@ def render(dates, defs, outdir):
                 else:
                     url = pg.evaluate(f"(()=>{{active={si}; draw(false); return cv.toDataURL('image/png');}})()")
                     im = Image.open(io.BytesIO(base64.b64decode(url.split(",")[1]))).convert("RGB")
-                c = Image.new("RGB", (CE.REEL_W, CE.REEL_H), im.getpixel((5, 5))); c.paste(im, (0, CE.REEL_TOP)); fp = f"/tmp/v2_{date}_{si}.png"; c.save(fp); frames.append((fp, beats * beat))
+                bgc = im.getpixel((5, 5))
+                if cfg.get("safe"):     # 네이버 클립: 앱 화면이 덮는 곳(왼쪽 위 로고, 오른쪽 아이콘 줄, 아래 프로필·제목 줄)을 피해 슬라이드를 줄여 안쪽에 둔다
+                    sf = cfg["safe"]; sw = round(im.width * sf["scale"]); sh_ = round(im.height * sf["scale"])
+                    c = Image.new("RGB", (CE.REEL_W, CE.REEL_H), bgc); c.paste(im.resize((sw, sh_), Image.LANCZOS), (sf["x"], sf["y"]))
+                else:
+                    c = Image.new("RGB", (CE.REEL_W, CE.REEL_H), bgc); c.paste(im, (0, CE.REEL_TOP))
+                fp = f"/tmp/v2_{date}_{si}.png"; c.save(fp); frames.append((fp, beats * beat))
             cmd = ["ffmpeg", "-y", "-loglevel", "error"]
             for fp, dur in frames: cmd += ["-loop", "1", "-t", f"{dur:.4f}", "-i", fp]
             if not silent: cmd += ["-i", wav]

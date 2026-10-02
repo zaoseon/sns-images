@@ -13,6 +13,9 @@ def day_def(date, nxt, naver=False):
     S = SETS[date]; d = dict(dayChar=S["dayChar"], hanja=S["hanja"], accent=S["accent"], face=("v5_halfup_v2" if S["face"] == "v5_halfup" else S["face"]), kicker=S["kicker"], coverTitle=S["coverTitle"], coverSub=S["coverSub"],
         personality=S["personality"], love=S["love"], money=S["money"], advice=S["advice"], chartNote=S["chartNote"], values=S["values"], highlight=S["highlight"], ctaQ=S["ctaQ"], nextTitle=nxt, variant=S.get("variant", {}))
     return d
+# 네이버 클립 앱 화면이 영상을 덮는 곳(대표 스크린샷에서 잰 값, 1080x1920 기준): 로고(60,98)-(202,248), 오른쪽 아이콘 줄(874,1039)-(988,1841), 아래 프로필·제목·태그 줄 y>=1486
+# 슬라이드(1080x1350)를 0.78배로 줄여 (20,320)에 둔다 → 차지하는 곳 x 20~862, y 320~1373 : 세 영역을 모두 피함
+NAVER_SAFE = dict(scale=0.78, x=20, y=320)
 NAVER_OV = lambda nxt: dict(nextBadge="다음 편", nextTitle=nxt, hint="블로그에서 내 기운 확인")
 NEXT = {"byeong": "정(丁)일생 편", "jeong": "무(戊)일생 편", "mu": "기(己)일생 편", "gi": "경(庚)일생 편", "gyeong": "신(辛)일생 편", "sin": "임(壬)일생 편", "im": "계(癸)일생 편", "gye": "열 가지 한눈에 편"}
 DATE = {"jeong": "2026-10-02", "mu": "2026-10-03", "gi": "2026-10-04", "gyeong": "2026-10-06", "sin": "2026-10-07", "im": "2026-10-08", "gye": "2026-10-09"}
@@ -37,6 +40,7 @@ def naver_defs():
         if k == "byeong": d = dict(RV.BYEONG); d["variant"] = {"cover": "C2", "advice": "A2", "cta": "T1"}
         else: d = day_def(DATE[k], NEXT[k])
         d["nextTitle"] = NEXT[k]; c = dict(cfg); c["silent"] = True     # 네이버 클립은 음악 없이(대표가 앱에서 직접 고름)
+        c["safe"] = NAVER_SAFE
         if k in ("byeong", "jeong", "mu"): c["frames"] = sample_frames(k, 6)      # 표지~조언은 대표 샘플 그대로, CTA는 네이버 문구로 새로 그림
         out[k] = (d, dict(NAVER_OV(NEXT[k]), _cfg=c))
     return out
