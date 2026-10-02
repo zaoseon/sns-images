@@ -24,6 +24,7 @@ def build_html():
     s = s.replace("px sans-serif", "px " + FONT)
     # 본문 글자: 샘플은 세미볼드(600)인데 이 환경의 Noto는 Medium/Bold뿐이라 Bold(700)로 맞추고, 의도치 않은 자동 줄바꿈이 없게 폭 여유를 둔다
     s = s.replace("`600 ${s.bodySize}px", "`700 ${s.bodySize}px").replace("wrapRich(s.body, W-140, bodyFont)", "wrapRich(s.body, W-60, bodyFont)")
+    s = s.replace("BODY_W = W-140, BODY_WEIGHT = 600;", "BODY_W = W-60, BODY_WEIGHT = 700;")   # 편집기 자체 배치 계산도 이 환경의 본문 폭·굵기에 맞춘다
     open("/tmp/editor_noto.html", "w", encoding="utf-8").write(s)
 
 def make_plate():
@@ -54,7 +55,7 @@ LAYOUT_JS = r"""
   const [def, ref] = args;
   const FONT='"Noto Sans CJK KR", sans-serif';
   const F=(w,px)=>`${w} ${px}px ${FONT}`;
-  const sl = buildSet(def); slides.length = 0; sl.forEach(s => slides.push(s));
+  globalThis.__rawBuild = true; const sl = buildSet(def); globalThis.__rawBuild = false; slides.length = 0; sl.forEach(s => slides.push(s));
   const tw=(t,w,px)=>{ ctx.font=F(w,px); return ctx.measureText(t).width; };
   const balance=(txt,w,px,maxW)=>{ if (txt.includes('\n')) return txt.split('\n').map(l=>balance(l,w,px,maxW)).join('\n');
     if (tw(txt,w,px) <= maxW) return txt; let best=null;
