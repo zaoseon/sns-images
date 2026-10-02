@@ -54,7 +54,11 @@ def make_font(src_path, out_path, chars, weight=None, wrange=None):
     f.flavor = "woff2"; f.save(out_path); return os.path.getsize(out_path)
 
 def main():
-    shutil.rmtree(OUT, ignore_errors=True); os.makedirs(os.path.join(OUT, "assets/fonts"), exist_ok=True)
+    os.makedirs(OUT, exist_ok=True)
+    for f in os.listdir(OUT):                              # 영상(video)·구도(compositions)는 따로 만든 파일이라 지우지 않는다
+        if f not in ("video", "compositions"):
+            q = os.path.join(OUT, f); shutil.rmtree(q) if os.path.isdir(q) else os.remove(q)
+    os.makedirs(os.path.join(OUT, "assets/fonts"), exist_ok=True); shutil.copy(os.path.join(SRC, "README.txt"), os.path.join(OUT, "README.txt"))
     A = os.path.join(OUT, "assets"); svg = open(os.path.join(SRC, "assets/chart.svg"), encoding="utf-8").read()
     pc, n = outline_svg(svg); m, _ = outline_svg(thicken(svg), mobile=True)
     open(os.path.join(A, "chart.svg"), "w", encoding="utf-8").write(pc); open(os.path.join(A, "chart-m.svg"), "w", encoding="utf-8").write(m)
