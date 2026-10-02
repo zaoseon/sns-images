@@ -611,3 +611,15 @@ README "2주마다 하는 일" 그대로. 요점만:
 - 상황판 클립 8건의 `desc`를 이 형식으로 다시 씀: 정은 대표 입력 그대로(zaoseon.com), 나머지 7건은 링크를 `zaoseon.com/nc`로 → 길이 195~220자(줄바꿈 포함)로 300자 안. 상황판 복사 버튼에 글자 수 표시
 - 사이트 `public/_redirects`에 `/nc` → `/?utm_source=naver&utm_medium=clip#free`(302) 추가(+3자로 유입 추적). 기존 /ig /th /nb /ny와 같은 방식. 인라인 주석은 파싱 문제 가능성이 있어 별도 줄로 둠. **배포 후 실제 동작은 확인 못 함**(대표가 zaoseon.com/nc 한 번 열어 보면 확인)
 - 저장소 `content/naver_clip_kit.json`도 새 설명으로 갱신(title 비움)
+
+### 10/2 밤: 메리디안 인트로 — 수정본(사이트 폰트) 확인, 글꼴 재생성·용량 축소·모바일 진하게 (대표: "글꼴 니가 다시 만들고, 용량 줄이고, 모바일에서 진하게, 캐릭터는 동일한 거 아냐?")
+- 받은 패키지 보관: `samples/meridian_2026-10-02_sitefont/`(zip 포함). 수정본에서 해결돼 있던 것: 사주 고리(천간 10·지지 12) 포함 SVG 차트, 완성 구도 4종, AI 표시("AI 생성 캐릭터 · 상징적 차트"), MP4에 문구, 사이트 폰트(제목 Noto Serif KR 900, 본문 Pretendard Variable), 차트가 2.0~3.9초에 사라졌다 돌아오는 순서(얼굴에 선 비침 방지)
+- **캐릭터**: 대표 확인 "동일한 거"(웨이브 머리·남색 별달 자수 재킷은 정월의 다른 옷차림) → 정월로 취급. 인트로에 AI 표시 유지
+- **발견·수정한 문제**: 차트 SVG의 한자·별자리·숫자가 `<text>`(글꼴 "Noto Serif CJK SC" 시스템 의존)이라 기기에 글꼴이 없으면 깨지고, **♈~♓가 컬러 이모지로 바뀜**(이전 판 PC/모바일 스크린샷에서 색 점으로 확인). → 43개 글자를 모두 도형(outline)으로 변환(한자·숫자 Noto Serif KR 400, 별자리 DejaVu Sans). 원본 대비 픽셀 차이 0.85(글자 위치 동일)
+- **글꼴 재생성**: 제목 Noto Serif KR 900 = 24자(자오선+브랜드 글자 SAFE_TITLE) 5KB woff2, 본문 Pretendard Variable 400~700 = 153자 19KB woff2. 문구를 고치면 `python3 build.py`로 재생성(제목 새 글자도 자동 포함). 원본 글꼴: Noto Serif KR variable은 google/fonts에서 받음(`NOTO_SERIF_KR` 환경변수)
+- **용량**: index.html+assets 10.1MB → **452KB**, 단독 HTML 8.4MB → 585KB. 캐릭터 275KB·밤하늘 63KB(WebP), 차트 SVG 40KB
+- **모바일 진하게**: 650px 이하에서 `assets/chart-m.svg`(선 1.5→3.6, 불투명도 +0.28, 글자 1.28배+테두리, 색 #efd49a) 사용(`<picture><source media>`). 이전 판과 나란히 비교해 확연히 진해진 것 확인
+- 산출물: `meridian_intro/`(src 원본, build.py, out/ 결과, `meridian_intro_v3.zip` 5.6MB). out에는 index.html·assets·단독 HTML·`meridian_intro_v3.mp4`(1280x720, 24fps, 6초, 0.7MB)·`compositions/03·04`(새 판에서 다시 뽑음, 01·02는 패키지 원본 그대로)·README
+- 확인용 아티팩트: 인트로 https://claude.ai/artifact/BrGVd9JKiMEnirPhtUktRb , 비교 페이지 https://claude.ai/artifact/YFrehvqZxDCmQ8hPttWes2
+- **아직 사이트·SNS에 반영 안 함.** 대기 중인 다음 순서: 감정서 표지·홈 위쪽 배경 목업 → 세 지도 릴스 시험. 사이트 반영 시 사이트가 이미 쓰는 폰트 파일 재사용, 차트는 "예시 이미지" 표기 확인
+- 한계: 모바일 실기기에서 직접 보지 못함(헤드리스 브라우저 확인). 제목 글꼴 SAFE_TITLE 밖 글자를 쓰면 build.py 재실행 필요
