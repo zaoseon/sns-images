@@ -647,3 +647,8 @@ README "2주마다 하는 일" 그대로. 요점만:
 - 이미지 합계 캐릭터 186KB + 차트 41KB + 배경 114KB = 약 341KB(현재 히어로 148KB 대비 약 +190KB)
 - 확인 페이지(같은 주소) https://claude.ai/artifact/De13ZBSJVkefuS5k6Vdsa5 갱신: 다시 재생 데모 + 실제 홈에 끼운 휴대폰·PC 완료 상태. **아직 사이트에 안 올림 — 대표 "올려" 대기**
 - "올려" 시 작업: `public/img/hero/`에 character.webp·chart.svg·sun_moon_bg.webp 복사 → `build_home.py`의 `<figure class="portrait">`를 `.pa` 구조(`.pa-bgw > .pa-bg > img`, `.pa-wheel > img`, `.pa-char`, AI 안내 figcaption)로 교체하고 `hero_anim.css`를 홈 CSS에 추가, 기존 jeongwol.jpg는 `.portrait` 규칙과 함께 정리. LCP 이미지는 캐릭터에 `fetchpriority="high"`, 배경은 `decoding="async"`·`loading="lazy"` 불필요(첫 화면). 배포 반영은 이 환경에서 zaoseon.com 접속이 막혀 직접 확인 불가 → 대표 확인 요청
+
+### 10/2 밤: 정정 — 배경 이미지는 이미 저장소에 있었음 (대표: "이 이미지 이미 저장소에 있는데 또 뭔소리냐")
+- 업로드한 `태양과_달의_천상_궤도.png`는 **`sns-images/characters/cut/bg_sunmoon.jpg`(900x600)와 같은 그림**(비교 차이 0.4, 캐러셀 슬라이드 배경으로 이미 쓰는 파일). 새 자료로 취급해 `samples/hero_bg_2026-10-02/`에 3MB 원본을 중복 저장한 것은 실수 → **삭제함**
+- 홈 연출용 `meridian_intro/hero/sun_moon_bg.webp`는 이제 저장소의 `characters/cut/bg_sunmoon.jpg`에서 만듦(900px, 약 90KB대). 연출 모양은 그대로
+- 규칙: **대표가 이미지를 주면 먼저 두 저장소(`sns-images`, `zaoseon-site`)에서 같은 그림이 있는지 비교한 뒤** 새 자료일 때만 보관한다. 이미 있으면 기존 파일 경로를 쓰고 새로 저장하지 않는다
