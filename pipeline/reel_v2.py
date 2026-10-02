@@ -4,11 +4,16 @@ import os, sys, io, base64, subprocess, wave
 import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import carousel_editor as CE
+import reel_music as RM
 from playwright.sync_api import sync_playwright
 from PIL import Image
 BPM = 96; BEAT = 60.0 / BPM
 # (슬라이드 번호, 박자 수): 훅 4 / 성격 3 / 연애 3 / 돈 3 / 조언(반전) 4 / CTA 4  -> 21박 = 13.1초
 SEQ_DAY = [(0, 4), (1, 3), (2, 3), (3, 3), (5, 4), (6, 4)]
+# 구조 3종(박 수): S1 기본 / S2 차트형(오행 차트를 둘째 장에) / S3 짧은형. 슬라이드 번호 0 표지 1 성격 2 연애 3 돈 4 차트 5 조언 6 CTA
+STRUCTS = {"S1": [(0, 4), (1, 3), (2, 3), (3, 3), (5, 4), (6, 4)],
+           "S2": [(0, 3), (4, 3), (1, 3), (2, 3), (5, 4), (6, 3)],
+           "S3": [(0, 3), (1, 2), (2, 2), (3, 2), (5, 3), (6, 3)]}
 SEQ_TRI = [(0, 4), (1, 3), (2, 3), (3, 3), (5, 4), (6, 4)]
 def music(path, beats, sr=44100):
     n = int(sr * BEAT * beats) + sr // 2; t = np.arange(n) / sr; out = np.zeros(n)
@@ -60,19 +65,28 @@ def render(dates, defs, outdir):
             if k not in ("v1_lowbun", "v2_straight", "v3_ponytail", "v4_glasses", "v5_halfup_v2"): add[k] = u
         for k, u in add.items(): pg.evaluate("async ([k,u])=>{FACES[k]=u; const im=new Image(); im.src=u; await im.decode(); imgCache[k]=im;}", [k, u])
         for date in dates:
-            d, ov = defs[date]; tri = bool(ov.get("badges")); seq = SEQ_TRI if tri else SEQ_DAY
-            pg.evaluate(CE.LAYOUT_JS, [d, None]); pg.evaluate(CE.OVERRIDE_JS, ov); pg.wait_for_timeout(120)
+            d, ov = defs[date]; ov = dict(ov); tri = bool(ov.get("badges"))
+            cfg = ov.pop("_cfg", {}); sample = cfg.get("frames")        # 대표 샘플 PNG 7장(0~6번 슬라이드) 그대로 쓰는 경우
+            seq = STRUCTS[cfg["struct"]] if (cfg.get("struct") and not tri) else (SEQ_TRI if tri else SEQ_DAY)
+            total_beats = sum(bt for _, bt in seq)
+            wav = f"/tmp/v2_{date}.wav"
+            m = RM.compose(cfg.get("style", "피아노 로파이"), total_beats, cfg.get("seed", 1), wav, key=cfg.get("key", "C"), tail=0.3)
+            beat = 60.0 / m["bpm"]
+            sample = sample or {}
+            if any(si not in sample for si, _ in seq):
+                pg.evaluate(CE.LAYOUT_JS, [d, None]); pg.evaluate(CE.OVERRIDE_JS, ov); pg.wait_for_timeout(120)
             frames = []
             for si, beats in seq:
-                url = pg.evaluate(f"(()=>{{active={si}; draw(false); return cv.toDataURL('image/png');}})()")
-                im = Image.open(io.BytesIO(base64.b64decode(url.split(",")[1]))).convert("RGB")
-                c = Image.new("RGB", (CE.REEL_W, CE.REEL_H), im.getpixel((5, 5))); c.paste(im, (0, CE.REEL_TOP)); fp = f"/tmp/v2_{date}_{si}.png"; c.save(fp); frames.append((fp, beats * BEAT))
-            total_beats = sum(bt for _, bt in seq); wav = f"/tmp/v2_{date}.wav"; music(wav, total_beats)
+                if si in sample: im = Image.open(sample[si]).convert("RGB")
+                else:
+                    url = pg.evaluate(f"(()=>{{active={si}; draw(false); return cv.toDataURL('image/png');}})()")
+                    im = Image.open(io.BytesIO(base64.b64decode(url.split(",")[1]))).convert("RGB")
+                c = Image.new("RGB", (CE.REEL_W, CE.REEL_H), im.getpixel((5, 5))); c.paste(im, (0, CE.REEL_TOP)); fp = f"/tmp/v2_{date}_{si}.png"; c.save(fp); frames.append((fp, beats * beat))
             cmd = ["ffmpeg", "-y", "-loglevel", "error"]
             for fp, dur in frames: cmd += ["-loop", "1", "-t", f"{dur:.4f}", "-i", fp]
             cmd += ["-i", wav]; n = len(frames)
             fl = "".join(f"[{i}:v]" for i in range(n)) + f"concat=n={n}:v=1:a=0,format=yuv420p,fps=30[v]"
             cmd += ["-filter_complex", fl, "-map", "[v]", "-map", f"{n}:a", "-c:v", "libx264", "-crf", "20", "-c:a", "aac", "-b:a", "128k", "-shortest", "-movflags", "+faststart", os.path.join(outdir, f"{date}.mp4")]
-            subprocess.run(cmd, check=True); print(date, f"{total_beats * BEAT:.1f}s", len(seq), "장면")
+            subprocess.run(cmd, check=True); print(date, f"{total_beats * beat:.1f}s", len(seq), "장면", m["bpm"], "BPM", cfg.get("style", ""))
         b.close()
 if __name__ == "__main__": main()

@@ -95,7 +95,7 @@ LAYOUT_JS = r"""
   });
   const a = slides[5]; a.bgColor = '#1a1816'; a.imgScale = 0.8; a.imgOffX = 0; a.imgOffY = -205; a.panelOverride = panel(0,625,1080,620,14,212);
   a.badgeX = 540; a.badgeSize = 55; a.titleSize = 100; a.bodySize = 54.5;
-  { const nb = wrapRich(a.body, W-60, F(700,54.5)).length, nt = wrapRich(a.title, W-100, F(900,100)).length; report.push(['advice',6,nt,nb,Math.round(Math.max(...a.title.split('\n').map(l=>tw(l,900,100)))),Math.round(Math.max(...a.body.split('\n').map(l=>tw(l,700,54.5))))]); const up = Math.max(0, nb-2)*40;
+  { const nb = wrapRich(a.body, W-60, F(700,54.5)).length, nt = wrapRich(a.title, W-100, F(900,100)).length; report.push(['advice',6,nt,nb,Math.round(Math.max(...a.title.split('\n').map(l=>tw(l,900,100)))),Math.round(Math.max(...a.body.split('\n').map(l=>tw(l,700,54.5))))]); const up = Math.max(0, nb-2)*40; a.panelOverride = panel(0,625-up,1080,620+up,14,212);
     a.badgeY = 695-up; a.titleY = 874-up + (nt===1?61:0); a.bodyY = 1098-up; }
 
   // ---- 5 오행 차트 ----
