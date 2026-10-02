@@ -14,6 +14,10 @@ SEQ_DAY = [(0, 4), (1, 3), (2, 3), (3, 3), (5, 4), (6, 4)]
 STRUCTS = {"S1": [(0, 4), (1, 3), (2, 3), (3, 3), (5, 4), (6, 4)],
            "S2": [(0, 3), (4, 3), (1, 3), (2, 3), (5, 4), (6, 3)],
            "S3": [(0, 3), (1, 2), (2, 2), (3, 2), (5, 3), (6, 3)]}
+# 장면 길이(초): 템포가 빨라져도 글자를 읽을 시간(본문 2초 안팎)을 지키고, 컷은 가장 가까운 박에 맞춘다
+STRUCT_SECS = {"S1": [(0, 2.5), (1, 2.0), (2, 2.0), (3, 2.0), (5, 2.5), (6, 2.5)],
+               "S2": [(0, 2.2), (4, 2.2), (1, 2.0), (2, 2.0), (5, 2.4), (6, 2.4)],
+               "S3": [(0, 2.0), (1, 1.8), (2, 1.8), (3, 1.8), (5, 2.2), (6, 2.2)]}
 SEQ_TRI = [(0, 4), (1, 3), (2, 3), (3, 3), (5, 4), (6, 4)]
 def music(path, beats, sr=44100):
     n = int(sr * BEAT * beats) + sr // 2; t = np.arange(n) / sr; out = np.zeros(n)
@@ -67,10 +71,18 @@ def render(dates, defs, outdir):
         for date in dates:
             d, ov = defs[date]; ov = dict(ov); tri = bool(ov.get("badges"))
             cfg = ov.pop("_cfg", {}); sample = cfg.get("frames")        # 대표 샘플 PNG 7장(0~6번 슬라이드) 그대로 쓰는 경우
-            seq = STRUCTS[cfg["struct"]] if (cfg.get("struct") and not tri) else (SEQ_TRI if tri else SEQ_DAY)
+            style = cfg.get("style", "피아노 로파이"); upbeat = style in RM.UP
+            if upbeat:     # 경쾌한 스타일: 장면 길이를 초로 정하고 박 수로 바꾼다
+                bpm = RM.pick_bpm(style, cfg.get("seed", 1)); beat = 60.0 / bpm
+                secs = STRUCT_SECS[cfg.get("struct", "S1")] if not tri else [(0, 2.5), (1, 2.0), (2, 2.0), (3, 2.0), (5, 2.5), (6, 2.5)]
+                seq = [(si, max(3, round(sec / beat))) for si, sec in secs]
+            else: seq = STRUCTS[cfg["struct"]] if (cfg.get("struct") and not tri) else (SEQ_TRI if tri else SEQ_DAY)
             total_beats = sum(bt for _, bt in seq)
             wav = f"/tmp/v2_{date}.wav"
-            m = RM.compose(cfg.get("style", "피아노 로파이"), total_beats, cfg.get("seed", 1), wav, key=cfg.get("key", "C"), tail=0.3)
+            if upbeat:
+                cuts = [sum(bt for _, bt in seq[:j]) for j in range(len(seq))]
+                m = RM.compose_up(style, total_beats, cfg.get("seed", 1), wav, key=cfg.get("key", "C"), bpm=bpm, cuts=cuts)
+            else: m = RM.compose(style, total_beats, cfg.get("seed", 1), wav, key=cfg.get("key", "C"), tail=0.3)
             beat = 60.0 / m["bpm"]
             sample = sample or {}
             if any(si not in sample for si, _ in seq):

@@ -18,20 +18,20 @@ NEXT = {"byeong": "정(丁)일생 편", "jeong": "무(戊)일생 편", "mu": "�
 DATE = {"jeong": "2026-10-02", "mu": "2026-10-03", "gi": "2026-10-04", "gyeong": "2026-10-06", "sin": "2026-10-07", "im": "2026-10-08", "gye": "2026-10-09"}
 def ig_defs():
     base = RV.get_defs(); out = {}
-    CFG = {"2026-10-03": dict(style="별빛 오르골", seed=3, key="D"), "2026-10-05": dict(style="맑은 팝", seed=5, key="F"), "2026-10-10": dict(style="따뜻한 기타", seed=10, key="C"), "2026-10-11": dict(style="피아노 로파이", seed=11, key="D"),
-           "2026-10-04": dict(struct="S3", style="따뜻한 기타", seed=4, key="G"), "2026-10-06": dict(struct="S1", style="피아노 로파이", seed=6, key="A"), "2026-10-07": dict(struct="S2", style="별빛 오르골", seed=7, key="E"),
-           "2026-10-08": dict(struct="S3", style="맑은 팝", seed=8, key="G"), "2026-10-09": dict(struct="S2", style="피아노 로파이", seed=9, key="F")}
+    CFG = {"2026-10-03": dict(style="상큼 팝", seed=3, key="D"), "2026-10-05": dict(style="발랄 우쿨렐레", seed=5, key="F"), "2026-10-10": dict(style="경쾌 신스팝", seed=10, key="C"), "2026-10-11": dict(style="통통 마림바", seed=11, key="D"),
+           "2026-10-04": dict(struct="S3", style="상큼 팝", seed=4, key="G"), "2026-10-06": dict(struct="S1", style="발랄 우쿨렐레", seed=6, key="A"), "2026-10-07": dict(struct="S2", style="경쾌 신스팝", seed=7, key="E"),
+           "2026-10-08": dict(struct="S3", style="통통 마림바", seed=8, key="G"), "2026-10-09": dict(struct="S2", style="상큼 팝", seed=9, key="F")}
     for k, cfg in CFG.items():
         d, ov = base[k]; d = dict(d)
         if k in SETS and SETS[k].get("variant"): d["variant"] = SETS[k]["variant"]       # 일주 릴스는 같은 날 캐러셀과 같은 모양
         out[k] = (d, dict(ov, _cfg=cfg))
     B = dict(RV.BYEONG); B["variant"] = {"cover": "C2", "advice": "A2", "cta": "T1"}
-    out["byeong"] = (B, dict(nextBadge="내일 밤 9시", nextTitle="정(丁)일생 편", _cfg=dict(struct="S2", style="맑은 팝", seed=12, key="C", frames=sample_frames("byeong", 7))))
+    out["byeong"] = (B, dict(nextBadge="내일 밤 9시", nextTitle="정(丁)일생 편", _cfg=dict(struct="S2", style="발랄 우쿨렐레", seed=12, key="C", frames=sample_frames("byeong", 7))))
     return out
 def naver_defs():
-    CFG = {"byeong": dict(struct="S2", style="따뜻한 기타", seed=21, key="D"), "jeong": dict(struct="S1", style="피아노 로파이", seed=22, key="C"), "mu": dict(struct="S3", style="별빛 오르골", seed=23, key="A"),
-           "gi": dict(struct="S2", style="맑은 팝", seed=24, key="F"), "gyeong": dict(struct="S3", style="피아노 로파이", seed=25, key="G"), "sin": dict(struct="S1", style="따뜻한 기타", seed=26, key="E"),
-           "im": dict(struct="S2", style="별빛 오르골", seed=27, key="D"), "gye": dict(struct="S3", style="맑은 팝", seed=28, key="C")}
+    CFG = {"byeong": dict(struct="S2", style="발랄 우쿨렐레", seed=21, key="D"), "jeong": dict(struct="S1", style="경쾌 신스팝", seed=22, key="C"), "mu": dict(struct="S3", style="통통 마림바", seed=23, key="A"),
+           "gi": dict(struct="S2", style="상큼 팝", seed=24, key="F"), "gyeong": dict(struct="S3", style="발랄 우쿨렐레", seed=25, key="G"), "sin": dict(struct="S1", style="경쾌 신스팝", seed=26, key="E"),
+           "im": dict(struct="S2", style="통통 마림바", seed=27, key="D"), "gye": dict(struct="S3", style="상큼 팝", seed=28, key="C")}
     out = {}
     for k, cfg in CFG.items():
         if k == "byeong": d = dict(RV.BYEONG); d["variant"] = {"cover": "C2", "advice": "A2", "cta": "T1"}
@@ -42,4 +42,4 @@ def naver_defs():
     return out
 if __name__ == "__main__":
     kind = sys.argv[1]; keys = sys.argv[2:]; defs = ig_defs() if kind == "ig" else naver_defs()
-    RV.render(keys or list(defs), defs, os.path.join(CE.ROOT, "2026-w40car5-reel", kind))
+    RV.render(keys or list(defs), defs, os.path.join(CE.ROOT, "2026-w40car6-reel", kind))
