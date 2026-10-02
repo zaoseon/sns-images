@@ -109,6 +109,45 @@ LAYOUT_JS = r"""
   t.panelOverride = panel(0,167,1080,993,14,128);
   t.qSize = 89; t.qY = 378.5; t.btn = '팔로우하고 같이 얘기 나눠요'; t.btnSize = 50; t.btnY = 558;
   t.nextBadgeSize = 39; t.nextY = 785; t.nextTitleSize = 67; t.hint = '프로필 링크에서 내 기운 1초만에 확인'; t.hintSize = 38;
+
+  // ---- 변형 레이아웃 (대표 샘플 병·무에서 잰 값, pipeline/variant_fit.py) ----
+  const VAR = def.variant || {};
+  const anchors = {};
+  const faceAnchor = (key) => { if (anchors[key]) return anchors[key]; const im = imgCache[key]; if (!im || !im.naturalWidth) return null;
+    const Hb = im.naturalHeight * (W / im.naturalWidth), cvx = document.createElement('canvas'); cvx.width = W; cvx.height = Math.round(Hb);
+    const x = cvx.getContext('2d'); x.drawImage(im, 0, 0, W, Hb); const d = x.getImageData(0, 0, W, cvx.height).data;
+    let top = -1; for (let y = 0; y < cvx.height && top < 0; y++){ let n = 0; for (let xx = 0; xx < W; xx++) if (d[(y*W+xx)*4+3] > 40) n++; if (n > 8) top = y; }
+    let sx = 0, sn = 0; const lim = Math.min(cvx.height, top + Math.round((cvx.height - top) * 0.3));
+    for (let y = top; y < lim; y++) for (let xx = 0; xx < W; xx++) if (d[(y*W+xx)*4+3] > 40){ sx += xx; sn++; }
+    return anchors[key] = {cx: sx / Math.max(sn, 1), top, Hb}; };
+  // 기준 얼굴(샘플에서 맞춘 얼굴)의 머리 위치를 다른 얼굴에도 같게 옮긴다
+  const adjFace = (refKey, ref, key) => { const a = faceAnchor(refKey), b = faceAnchor(key); if (!a || !b || refKey === key) return {imgScale: ref.scale, imgOffX: ref.offX, imgOffY: ref.offY};
+    const s = ref.scale, cTop = (H - a.Hb*s) + ref.offY + a.top*s, cCx = (W - W*s)/2 + ref.offX + a.cx*s;
+    return {imgScale: s, imgOffX: cCx - (W - W*s)/2 - b.cx*s, imgOffY: cTop - (H - b.Hb*s) - b.top*s}; };
+  const fitTitle = (s, tl, start, floor) => { s.titleSize = start; while (s.titleSize > floor && nolines(s.title, W-120, F(900,s.titleSize)) > tl) s.titleSize -= 1; };
+  const fitSub = (s, start) => { s.subSize = start; while (s.subSize > 40 && wrapRich(s.sub, W-120, F(900,s.subSize)).length > 1) s.subSize -= 1; };
+  if (VAR.cover === 'C3') {            // 무 샘플형: 얼굴 오른쪽, 아래 패널, 부제(포인트색) 위 · 제목 아래
+    const f = adjFace('v3_ponytail', {scale:1.12, offX:239, offY:303}, def.face);
+    Object.assign(c, f, {bgColor:'#100a05', kickerX:75, kickerY:103, kickerSize:51, subX:88, subY:950, titleX:85, titleY:1087});
+    c.panelOverride = panel(0,865,1080,393,14,175); fitSub(c, 66); fitTitle(c, tl, 108, 70);
+  } else if (VAR.cover === 'C2') {     // 병 샘플형: 얼굴 위쪽 오른쪽, 아래 패널, 제목 위 · 부제(포인트색) 아래
+    const f = adjFace('v1_lowbun', {scale:1.3, offX:190, offY:547}, def.face);
+    Object.assign(c, f, {bgColor:'#1a1816', kickerX:90, kickerY:117, kickerSize:47, titleX:111, titleY:952, subX:110, subY:1148});
+    c.panelOverride = panel(0,829,1080,398,15,121); fitSub(c, 43); fitTitle(c, tl, 94, 60);
+  }
+  if (VAR.advice === 'A2') {           // 본문형 조언(해·달 배경, 얼굴 없음)
+    const s = slides[5]; s.face = 'bg_sunmoon'; s.imgScale = 1.265; s.imgOffX = -40; s.imgOffY = bgOff(1.265, 216); s.panelOverride = panel(0,216,1080,916,6,102);
+    s.badgeX = 540; s.badgeSize = 55; s.titleSize = 100; s.bodySize = 54.5;
+    const nb = wrapRich(s.body, W-60, F(700,54.5)).length, nt = wrapRich(s.title, W-100, F(900,100)).length;
+    if (nb >= 3) { s.badgeY = 327; s.titleY = 541; s.bodyY = 841; } else { s.badgeY = 350; s.titleY = 597; s.bodyY = 902; }
+    if (nt === 1) s.titleY += 61;
+  }
+  if (VAR.cta === 'T2') {              // 무 샘플형: 어두운 바탕, 얼굴 오른쪽 아래, 글자 왼쪽
+    const f = adjFace('v3_ponytail', {scale:0.62, offX:304, offY:74}, def.face);
+    Object.assign(t, f, {bgColor:'#1a1816', face:def.face, qX:422, qY:210, qSize:89, btnX:434, btnY:391, btnSize:45, nextX:269, nextY:866, nextBadgeSize:39, nextTitleSize:67, hint:''});
+    t.panelOverride = panel(0,0,0,0,0,0); t.panelOverride.enabled = false;
+    t.extraTexts = [{text:'프로필 링크에서\n내 기운 1초만에 확인', x:71, y:1122, size:36, color:'#a8a39e', bold:false, align:'left', stroke:false}];
+  }
   globalThis.__report = report;
   return slides.length;
 }
@@ -132,7 +171,7 @@ def render(sets, out_dir, ref_accent=None, prefix=lambda d: d[5:].replace("-", "
             face = "v5_halfup_v2" if S["face"] == "v5_halfup" else S["face"]
             d = dict(dayChar=S["dayChar"], hanja=S["hanja"], accent=ref_accent or S["accent"], face=face, kicker=S["kicker"], coverTitle=S["coverTitle"], coverSub=S["coverSub"],
                      personality=S["personality"], love=S["love"], money=S["money"], advice=S["advice"], chartNote=S["chartNote"], values=S["values"], highlight=S["highlight"],
-                     ctaQ=S["ctaQ"], nextTitle=S["nextTitle"])
+                     ctaQ=S["ctaQ"], nextTitle=S["nextTitle"], variant=S.get("variant", {}))
             n = pg.evaluate(LAYOUT_JS, [d, None]); pg.wait_for_timeout(150)
             for rep in pg.evaluate('globalThis.__report'): print('   ', rep, '(슬라이드, 제목줄수, 본문줄수, 제목최대폭(<=980), 본문최대폭(<=940))')
             imgs = []
@@ -192,7 +231,7 @@ def reel_defs():
             S = SETS[date]
             d = dict(dayChar=S["dayChar"], hanja=S["hanja"], accent=S["accent"], face=S["face"], kicker=S["kicker"], coverTitle=S["coverTitle"], coverSub=S["coverSub"],
                      personality=S["personality"], love=S["love"], money=S["money"], advice=S["advice"], chartNote=S["chartNote"], values=S["values"], highlight=S["highlight"],
-                     ctaQ=S["ctaQ"], nextTitle=nt)
+                     ctaQ=S["ctaQ"], nextTitle=nt, variant=S.get("variant", {}))
             ov = dict(nextBadge=nb, nextTitle=nt)
         d["face"] = "v5_halfup_v2" if d["face"] == "v5_halfup" else d["face"]
         defs[date] = (d, ov)
