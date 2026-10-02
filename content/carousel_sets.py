@@ -72,17 +72,20 @@ SPARE = {
 VARIANTS = {
     "2026-10-03": {"cover": "C3", "advice": "A2", "cta": "T2"},
     "2026-10-04": {"cover": "C2", "advice": "A1", "cta": "T1"},
-    "2026-10-06": {"cover": "C3", "advice": "A2", "cta": "T1"},
-    "2026-10-07": {"cover": "C1", "advice": "A2", "cta": "T2"},
-    "2026-10-08": {"cover": "C2", "advice": "A2", "cta": "T1"},
-    "2026-10-09": {"cover": "C3", "advice": "A1", "cta": "T1"},
+    "2026-10-06": {"cover": "C1", "advice": "A2", "cta": "T2"},
+    "2026-10-07": {"cover": "C3", "advice": "A1", "cta": "T1"},
+    "2026-10-08": {"cover": "C2", "advice": "A2", "cta": "T2"},
+    "2026-10-09": {"cover": "C1", "advice": "A1", "cta": "T1"},
 }
 for _k, _v in VARIANTS.items():
     if _k in SETS: SETS[_k]["variant"] = _v
 
 
-# 규칙(대표 지시 10/2): 같은 캐릭터 얼굴이 연속 슬라이드에 나오지 않게 한다 → 조언(A1=얼굴)과 CTA(T2=얼굴)를 같이 쓰지 않는다
+# 규칙(대표 지시 10/2): 6번(조언)과 7번(CTA) 슬라이드 중 **한 곳에만** 캐릭터가 나오게 한다.
+#   6에 캐릭터(A1)가 있으면 7에는 없고(T1), 6에 없으면(A2) 7에 있다(T2).  → 허용 (A1,T1) 또는 (A2,T2). 둘 다 있거나 둘 다 없는 조합은 금지
+#   (병은 대표 샘플 그대로라 A2/T1 예외)
 def check_variants():
     for d, v in VARIANTS.items():
-        assert not (v.get("advice") == "A1" and v.get("cta") == "T2"), f"{d}: 조언 A1과 CTA T2는 얼굴이 연속으로 나옴"
+        face6 = v.get("advice") == "A1"; face7 = v.get("cta") == "T2"
+        assert face6 != face7, f"{d}: 조언 {v.get('advice')} / CTA {v.get('cta')} — 6·7번 중 한 곳에만 캐릭터가 있어야 함"
 check_variants()
