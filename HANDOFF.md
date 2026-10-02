@@ -463,3 +463,8 @@ README "2주마다 하는 일" 그대로. 요점만:
 ### 10/2: 대표가 붙여 준 현재 배포본 Apps Script와 비교
 - 백업: zaoseon-site `docs/appscript_deployed_2026-10-02.gs`. 새 버전(`tools/order_mail.gs`)과 비교한 결과 상수(BANK, HOLDER, API_TOKEN)는 같고, **현재 배포본에는 `nyCount`(선착순 카운트)가 없다** → 사이트 `/api/seats`가 항상 count=0(남은 자리 50)으로 계산해 **선착순 50명 마감이 작동하지 않는 상태**(주문이 50건을 넘어도 얼리버드가 안 닫힘). 새 버전 배포로 해결
 - 새 버전이 현재 배포본에서 바꾸는 줄은 2줄뿐(KEEP에 '후기요청' 추가, 무통장 작업 시작 3시간→2시간). 나머지는 추가(nyCount, 후기 기능)이고 삭제되는 기능은 없다
+
+### 10/2 오전: Apps Script 새 버전 배포 완료·확인 (대표)
+- 배포 ID는 사이트가 쓰는 주소와 같고 버전 3(10/2 11:20). 확인 화면: `/api/seats` → `"counted":true,"left":50`(신년 주문 0건 기준), `/api/reviews` → `"ok":true,"count":0`. 이로써 선착순 카운트(nyCount)와 후기 접수·목록, 무통장 작업 시작 2시간, 후기 요청 메일 로직이 모두 배포됨
+- 앞으로 사이트가 Apps Script 연결 이상을 알려 주는 방법: `/api/seats`의 `counted:false`+`why`, `/api/reviews`의 `ok:false`+`msg`
+- 아직 실제 흐름으로 시험하지 않은 것: 후기 요청 메일 발송(reviewMailTest), 후기 접수→시트→승인(H열 Y)→사이트 표시(승인 3개 이상일 때), 무통장 입금 확인 메일의 작업 시작 2시간
