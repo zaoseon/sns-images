@@ -43,7 +43,11 @@ BYEONG = dict(dayChar="병", hanja="丙", accent="#e65c3c", face="v1_lowbun", ki
 def get_defs():
     d = CE.reel_defs(); d["byeong"] = (BYEONG, dict(nextBadge="내일 낮 12시", nextTitle="정(丁)일생 편")); return d
 def main():
-    dates = sys.argv[1:]; defs = get_defs(); outdir = os.path.join(CE.ROOT, "2026-w40car3-reel", "v2"); os.makedirs(outdir, exist_ok=True)
+    render(sys.argv[1:], get_defs(), os.path.join(CE.ROOT, "2026-w40car3-reel", "v2"))
+
+def render(dates, defs, outdir):
+    """defs: {이름: (def, override)}  ->  outdir/<이름>.mp4"""
+    os.makedirs(outdir, exist_ok=True)
     CE.build_html()
     if not os.path.exists(CE.PLATE): CE.make_plate()
     with sync_playwright() as p:
