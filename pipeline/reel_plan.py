@@ -41,7 +41,7 @@ def naver_defs():
     for k, cfg in CFG.items():
         if k == "byeong": d = dict(RV.BYEONG); d["variant"] = {"cover": "C2", "advice": "A2", "cta": "T1"}
         else: d = day_def(DATE[k], NEXT[k])
-        d["nextTitle"] = NEXT[k]; c = dict(cfg); c["silent"] = True     # 네이버 클립은 음악 없이(대표가 앱에서 직접 고름)
+        d["nextTitle"] = NEXT[k]; c = dict(cfg); c["silent"] = os.environ.get("NAVER_SILENT") == "1"     # 10/3: PC 클립 업로드는 음악을 못 넣으므로 기본은 음악 포함(앱에서 직접 고르려면 NAVER_SILENT=1)
         c["safe"] = NAVER_SAFE
         if k in ("byeong", "jeong", "mu"): c["frames"] = sample_frames(k, 6)      # 표지~조언은 대표 샘플 그대로, CTA는 네이버 문구로 새로 그림
         ov = NAVER_OV(NEXT[k])
