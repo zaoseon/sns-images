@@ -58,7 +58,7 @@ function cpt(b){navigator.clipboard.writeText(b.dataset.t).then(function(){b.cla
 function cpb(b){var el=document.getElementById("body");var h=el.innerHTML,t=el.innerText;function done(){b.textContent="본문 복사됨 · 네이버 본문에 붙여 넣으세요";b.className="big ok"}
  function sel(){var r=document.createRange();r.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(r);document.execCommand("copy");done()}
  if(window.ClipboardItem){navigator.clipboard.write([new ClipboardItem({"text/html":new Blob([h],{type:"text/html"}),"text/plain":new Blob([t],{type:"text/plain"})})]).then(done,sel)}else sel()}'''
-def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, category=None, thumbs=None, cid=None, clips=None):
+def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, category=None, thumbs=None, cid=None, clips=None, reserve=None):
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
     chips = "".join(f'<button class="tag" data-t="{html.escape(t)}" onclick="cpt(this)">{html.escape(t)}</button>' for t in tags)
     nav = f'<a href="/naver/{nxt}.html"><button class="big">다음 원고 →</button></a>' if nxt else '<a href="/naver/"><button class="big">목록으로 (마지막 원고)</button></a>'
@@ -72,6 +72,10 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
                       '<p class="hint">주소는 네이버 블로그 글 관리에서 이 제목의 글 → 공유 → URL 복사. 상황판 원고 카드에 발행 주소를 적어 두면 다음부터 여기에 자동으로 나와요.</p>')
                    + f'<p class="hint">유도 문구(본문에 이미 들어 있음): {html.escape(related["phrase"])}</p></div>')
     else: rel_box = ""
+    reserve_box = ("" if not reserve else '<div class="box" style="background:#fff8e6;border-color:#e6d3a0"><p class="lab">📅 예약은 이때부터 걸어요</p>'
+                   f'<p class="val" style="font-size:21px;font-weight:700">{html.escape(reserve["hard"])} 이후</p>'
+                   '<p class="hint">함께 볼 글이 그때 발행돼 주소가 생겨요. 예약만 걸려 있는 글은 주소가 없어서 링크로 걸 수 없어요.</p>'
+                   + (f'<p class="hint">본문에 클립까지 넣으려면 {html.escape(reserve["soft"])} 이후에 걸어요(그 전이면 클립은 건너뛰어도 돼요). 마감: 발행 시각 전까지.</p>' if reserve.get("needsClip") else '') + '</div>')
     clip_box = ("" if not clips else '<div class="box"><p class="lab">3-1. 본문에 클립 넣기 (글쓰기 화면 위쪽 \'클립\' 버튼 → 내 클립)</p><p class="hint">자리: 본문 맨 위 결론 요약 바로 아래, \'이 글의 순서\' 위. 이미 올라가 있는 클립이에요.</p>'
                 + "".join(f'<p class="val" style="font-size:20px;font-weight:700;margin:6px 0">{i+1}. {html.escape(c)}</p>' for i, c in enumerate(clips)) + '</div>')
     cat_box = (f'<div class="box"><p class="lab">6. 카테고리: 글쓰기 화면 오른쪽 카테고리에서 이 이름을 고르세요</p><p class="val" style="font-size:22px;font-weight:700">{html.escape(category)}</p></div>') if category else '<div class="box"><p class="lab">6. 카테고리</p><p class="val">미정 - 알려 주세요</p></div>'
@@ -84,6 +88,7 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
                  '<li>맨 아래에 다음 행동(배너·함께 볼 글)이 하나로 보이나요?</li><li>클립 칸이 있는 글이면 클립을 넣었나요? 함께 볼 글 링크 카드가 붙었나요?</li></ul></div>')
     page = f'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>네이버 원고 · {html.escape(title)}</title><style>{CSS}</style></head><body><div class="wrap">
 <p class="hint"><a href="/naver/">← 네이버 원고 목록</a></p>
+{reserve_box}
 <div class="box"><p class="lab">1. 제목</p><p class="val" id="t">{html.escape(title)}</p><button onclick="cp('t',this)">제목 복사</button></div>
 {cover_box}
 {thumb_box}
@@ -128,7 +133,7 @@ def render_all():
     reg = load(); live = sorted((v["dt"], k) for k, v in reg.items() if not v.get("done") and "body" in v)
     for i, (dt, k) in enumerate(live):
         v = reg[k]; nxt = live[i+1][1] if i+1 < len(live) else None
-        write_page(k, D.datetime.fromisoformat(dt), v["title"], v["tags"], v["body"], nxt, v.get("cover"), v.get("related"), v.get("category") or CATS.get(k), v.get("thumbs"), v.get("cid"), v.get("clips"))
+        write_page(k, D.datetime.fromisoformat(dt), v["title"], v["tags"], v["body"], nxt, v.get("cover"), v.get("related"), v.get("category") or CATS.get(k), v.get("thumbs"), v.get("cid"), v.get("clips"), v.get("reserve"))
     write_index()
 def done(pid):
     """대표가 예약을 마친 글: 목록과 파일에서 뺀다"""

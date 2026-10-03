@@ -10,5 +10,6 @@ for k in [f"n{i}" for i in range(26, 34)]:
     v["body"] = re.sub(r"<p><b>👇 [^<]*</b></p>", lambda m: f"<p><b>👇 {phrase}</b></p>", v["body"], count=1)
     v["related"] = {"id": tgt, "title": LP.TITLE.get(tgt) or pub.get(tgt, {}).get("title", ""), "phrase": phrase, "url": urls.get(tgt) or pub.get(tgt, {}).get("url", "")}
     v["clips"] = [titles[c] for c in LP.EMBED[k]]
+    h, so = LP.reserve_window(k); v["reserve"] = {"hard": LP.fmt(h), "soft": LP.fmt(so), "needsClip": so != h}
 json.dump(reg, open("pages.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 MP.render_all(); print("ok", LP.check() or "규칙 위반 없음")
