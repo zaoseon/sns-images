@@ -80,6 +80,11 @@ CLIP = {
  "clip-sop-n39-c1-12s": dict(sticker="n39", upload=("2026-10-24", "20:00"), embed_later="n39"),
  "clip-sop-n40-c1-12s": dict(sticker="n40", upload=("2026-10-25", "20:00"), embed_later="n40"),
  "clip-sop-n41-c1-12s": dict(sticker="n41", upload=("2026-10-26", "20:00"), embed_later="n41"),
+ "clip-sop-n42-c1-12s": dict(sticker="n42", upload=("2026-10-27", "20:00"), embed_later="n42"),
+ "clip-sop-n43-c1-12s": dict(sticker="n43", upload=("2026-10-28", "20:00"), embed_later="n43"),
+ "clip-sop-n44-c1-12s": dict(sticker="n44", upload=("2026-10-29", "20:00"), embed_later="n44"),
+ "clip-sop-n45-c1-12s": dict(sticker="n45", upload=("2026-10-30", "20:00"), embed_later="n45"),
+ "clip-sop-n46-c1-12s": dict(sticker="n46", upload=("2026-10-31", "20:00"), embed_later="n46"),
 }
 EMBED = {  # 글 → 글 안에 넣을 클립. 예약을 거는 날 이미 올라가 있는 클립만(없으면 건너뛰어도 된다 = 선택). 넣을 자리: 맨 위 결론 요약 바로 아래(「이 글의 순서」 위)
  "n26": ["clip-02-mu"],                    # 무(10/3) → 무토일생. 계 클립은 10/20이라 글보다 늦음
