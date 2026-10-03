@@ -5,10 +5,10 @@
 사용: python3 pipeline/pick_reel.py oct3|oct10   -> 2026-pick/v2/<날짜>.mp4"""
 import os, sys, math, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, ".."); sys.path.insert(0, HERE)
-import clip_motion as M, safezone as Z, reel_music as RM
+import clip_motion as M, safezone as Z, reel_music as RM, palette as P
 from PIL import Image, ImageDraw, ImageFilter
-SER = os.path.join(HERE, "fonts", "serif.otf"); GOLD = M.GOLD[:3]; GOLDA = M.GOLD; CX = M.CX
-CARDS = [("東", (214, 92, 64), "1"), ("西", (236, 142, 52), "2"), ("數", (200, 160, 70), "3")]
+SER = os.path.join(HERE, "fonts", "serif.otf"); GOLD = P.C2["hi"]; GOLDA = GOLD + (255,); CX = M.CX
+CARDS = [("東", P.C2["pt"], "1"), ("西", P.C2["hi"], "2"), ("數", (255, 255, 255), "3")]
 _c = {}
 def card_layer(h, col):
     k = (h, col)
@@ -16,12 +16,12 @@ def card_layer(h, col):
     w, hh = 258, 398; im = Image.new("RGBA", (w + 24, hh + 24), (0, 0, 0, 0)); g = Image.new("RGBA", (w + 24, hh + 24), (0, 0, 0, 0))
     ImageDraw.Draw(g).rounded_rectangle((12, 12, 12 + w, 12 + hh), radius=34, fill=col + (110,)); g = g.filter(ImageFilter.GaussianBlur(18)); im.alpha_composite(g)
     body = Image.new("RGBA", (w, hh)); bd = ImageDraw.Draw(body)
-    for y in range(hh): t = y / hh; bd.line((0, y, w, y), fill=(int(24 + 34 * t), int(20 + 18 * t), int(58 + 40 * t), 255))
+    for y in range(hh): t = y / hh; bd.line((0, y, w, y), fill=(int(30 + 14 * t), int(38 + 16 * t), int(74 + 26 * t), 255))
     m = Image.new("L", (w, hh), 0); ImageDraw.Draw(m).rounded_rectangle((0, 0, w - 1, hh - 1), radius=32, fill=255); body.putalpha(m); im.alpha_composite(body, (12, 12))
     d = ImageDraw.Draw(im); d.rounded_rectangle((12, 12, 12 + w, 12 + hh), radius=34, outline=GOLD + (255,), width=6); d.rounded_rectangle((30, 30, 12 + w - 18, 12 + hh - 18), radius=24, outline=GOLD + (110,), width=2)
     cx, cy = 12 + w // 2, 12 + hh // 2 - 8
     for r, a in ((96, 40), (84, 80)): d.ellipse((cx - r, cy - r, cx + r, cy + r), outline=col + (a,), width=3)
-    d.ellipse((cx - 72, cy - 72, cx + 72, cy + 72), fill=col + (255,)); d.text((cx, cy - 4), h, font=M.font(SER, 92), fill=(255, 255, 255, 255), anchor="mm")
+    d.ellipse((cx - 72, cy - 72, cx + 72, cy + 72), fill=col + (255,)); d.text((cx, cy - 4), h, font=M.font(SER, 92), fill=((41, 51, 92, 255) if col == (255, 255, 255) else (255, 255, 255, 255)), anchor="mm")
     for (sx, sy) in ((46, 52), (w - 22, 52), (46, hh - 28), (w - 22, hh - 28)): d.text((sx, sy), "✦", font=M.font(M.MED, 26), fill=GOLD + (170,), anchor="mm")
     _c[k] = im; return im
 def title(c, s, y, t0, size, color=M.WHITE, lh=1.25): return M.text(c, s, y, t0, size, color=(color + (255,) if len(color) == 3 else color), path=SER, maxw=820, lh=lh, stagger=0.2)
@@ -64,4 +64,4 @@ if __name__ == "__main__":
     key = sys.argv[1] if len(sys.argv) > 1 else "oct3"; cfg = SETS[key]; sc = build(cfg["hook"], cfg["sub"], cfg["instr"], cfg["note"])
     bad = check_frames(sc); print("안전 영역 검사:", "통과" if not bad else bad)
     if bad and "--force" not in sys.argv: sys.exit(1)
-    out, secs = M.render(cfg["date"], sc, os.path.join(ROOT, "2026-pick", "v2")); music(out, sc, 71 if key == "oct3" else 72); print(out, secs, "초")
+    out, secs = M.render(cfg["date"], sc, os.path.join(ROOT, "2026-pick", "v3")); music(out, sc, 71 if key == "oct3" else 72); print(out, secs, "초")
