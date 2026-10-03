@@ -53,37 +53,37 @@ def figure(img, d, face, c, h, cx):
     ch = Image.open(CH + face + ".png").convert("RGBA"); r = h / ch.height; ch = ch.resize((int(ch.width * r), h), Image.LANCZOS)
     d.ellipse([cx - 280, S - h - 20, cx + 280, S + 400], fill=c.md); img.paste(ch, (cx - ch.width // 2, S - h), ch)
 def ailabel(d, c):
-    t = "AI로 생성한 가상의 캐릭터입니다"; f = F(MED, 22); tw = d.textlength(t, font=f)
-    d.rounded_rectangle([S - 60 - tw - 24, S - 82, S - 60, S - 44], 19, fill=c.bg); d.text((S - 72, S - 63), t, font=f, fill=c.gray, anchor="rm")
+    t = "AI로 생성한 가상의 캐릭터입니다"; f = F(MED, 30); tw = d.textlength(t, font=f)
+    d.rounded_rectangle([S - 56 - tw - 30, S - 104, S - 56, S - 48], 28, fill=c.bg); d.text((S - 71, S - 76), t, font=f, fill=c.gray, anchor="rm")
 def pill(d, c, x, y, t, center=False):
-    f = F(SEMI, 34); w = d.textlength(t, font=f) + 52
+    f = F(SEMI, 46); w = d.textlength(t, font=f) + 70
     if center: x = (S - w) / 2
-    d.rounded_rectangle([x, y, x + w, y + 64], 32, fill=c.acc); d.text((x + 26, y + 32), t, font=f, fill=c.pillfg, anchor="lm")
-def logo(d, c): d.text((90, S - 84), "子午線 자오선", font=F(SER, 32), fill=c.acc)
+    d.rounded_rectangle([x, y, x + w, y + 86], 43, fill=c.acc); d.text((x + 35, y + 43), t, font=f, fill=c.pillfg, anchor="lm")
+def logo(d, c): d.text((90, S - 100), "子午線 자오선", font=F(SER, 44), fill=c.acc)
 def lines_at(d, lines, x, y, size, col, center=False, path=SER):
     for l in lines:
         d.text((S // 2 if center else x, y), l, font=F(path, size), fill=col, anchor="ma" if center else "la"); y += int(size * 1.2)
     return y
 def accent(d, c, x, y, center=False):
-    x0 = S // 2 - 70 if center else x; d.line([(x0, y), (x0 + 140, y)], fill=c.acc, width=8)
+    x0 = S // 2 - 80 if center else x; d.line([(x0, y), (x0 + 160, y)], fill=c.acc, width=11)
 def card_rect(d, c, box, r=44): d.rounded_rectangle(box, r, fill=c.card, outline=c.line, width=6)
 
 def q_left(d, img, T, c, face):
     d.text((760, 540), T["glyph"], font=F(SER, 760), fill=c.tint, anchor="mm")
     pill(d, c, 90, 90, T["kick"]); badge(img, d, face, c, S - 185, 190, 105)
-    s = fit(d, T["hook"], 900, 160); h = int(s * 1.2) * len(T["hook"]); y = lines_at(d, T["hook"], 90, max(750 - h, 290), s, c.fg)
-    accent(d, c, 90, y + 30); d.text((90, y + 62), T["sub"], font=F(SEMI, 46), fill=c.acc)
+    s = fit(d, T["hook"], 900, 160); h = int(s * 1.2) * len(T["hook"]); y = lines_at(d, T["hook"], 90, max(705 - h, 290), s, c.fg)
+    accent(d, c, 90, y + 30); d.text((90, y + 62), T["sub"], font=F(SEMI, 56), fill=c.acc)
 def q_center(d, img, T, c, face):
     d.text((S // 2, 600), T["glyph"], font=F(SER, 760), fill=c.tint, anchor="mm")
     pill(d, c, 0, 90, T["kick"], center=True); badge(img, d, face, c, S // 2, 345, 115)
-    s = fit(d, T["hook"], 900, 150); y = lines_at(d, T["hook"], 0, 500, s, c.fg, center=True); accent(d, c, 0, y + 30, center=True)
-    d.text((S // 2, y + 62), T["sub"], font=F(SEMI, 46), fill=c.acc, anchor="ma")
+    s = fit(d, T["hook"], 900, 150); y = lines_at(d, T["hook"], 0, 462, s, c.fg, center=True); accent(d, c, 0, y + 30, center=True)
+    d.text((S // 2, y + 62), T["sub"], font=F(SEMI, 56), fill=c.acc, anchor="ma")
 def q_card(d, img, T, c, face):
     d.text((S - 230, S - 260), T["glyph"], font=F(SER, 600), fill=c.tint, anchor="mm")
     pill(d, c, 90, 90, T["kick"]); card_rect(d, c, [70, 240, S - 70, 890])
     s = fit(d, T["hook"], 800, 150); h = int(s * 1.2) * len(T["hook"]); y0 = 240 + (650 - h - 100) // 2 + 20
     y = lines_at(d, T["hook"], 0, y0, s, c.fg, center=True); accent(d, c, 0, y + 28, center=True)
-    d.text((S // 2, y + 56), T["sub"], font=F(SEMI, 42), fill=c.acc, anchor="ma"); badge(img, d, face, c, S - 175, 215, 100)
+    d.text((S // 2, y + 56), T["sub"], font=F(SEMI, 52), fill=c.acc, anchor="ma"); badge(img, d, face, c, S - 175, 215, 100)
 def big(d, img, T, c, face):
     """큰 숫자·키워드형: 굵은 고딕 거대 글자 + 한 줄 후크. 정보형(숫자 하나)"""
     pill(d, c, 90, 90, T["kick"]); badge(img, d, face, c, S - 185, 190, 105)
@@ -102,12 +102,12 @@ def ring(d, c, cx, cy, r, ch, size):
     d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=c.ring_bg, outline=c.acc, width=10); d.text((cx, cy - 4), ch, font=F(SER, size), fill=c.acc, anchor="mm")
 def n_chips(d, img, T, c, face):
     pill(d, c, 90, 90, T["kick"]); badge(img, d, face, c, S - 185, 190, 105)
-    s = fit(d, T["hook"], 900, 156); y = lines_at(d, T["hook"], 90, 245, s, c.fg); d.text((90, y + 14), T["sub"], font=F(SEMI, 46), fill=c.acc)
-    it = T["items"]; rows = (len(it) + 2) // 3; cw, ch, g = 290, 100, 20; y0 = y + 100
+    s = fit(d, T["hook"], 900, 156); y = lines_at(d, T["hook"], 90, 245, s, c.fg); d.text((90, y + 14), T["sub"], font=F(SEMI, 56), fill=c.acc)
+    it = T["items"]; rows = (len(it) + 2) // 3; cw, ch, g = 290, 100, 20; y0 = y + 112
     if y0 + rows * ch + (rows - 1) * g > 900: ch = 86
     for i, t in enumerate(it):
         x = 90 + (i % 3) * (cw + g); yy = y0 + (i // 3) * (ch + g)
-        d.rounded_rectangle([x, yy, x + cw, yy + ch], 26, fill=c.card, outline=c.line, width=4); d.text((x + cw // 2, yy + ch // 2), t, font=F(SEMI, 46), fill=c.fg, anchor="mm")
+        d.rounded_rectangle([x, yy, x + cw, yy + ch], 26, fill=c.card, outline=c.line, width=4); d.text((x + cw // 2, yy + ch // 2), t, font=F(SEMI, 54), fill=c.fg, anchor="mm")
 def s_gua(d, img, T, c, face):
     pat = [1, 0, 1, 1, 0, 1]; x0, x1 = 830, 990; y = 130
     for i, p in enumerate(pat):
@@ -115,15 +115,15 @@ def s_gua(d, img, T, c, face):
         if p: d.rounded_rectangle([x0, yy, x1, yy + 32], 10, fill=col)
         else: d.rounded_rectangle([x0, yy, x0 + 64, yy + 32], 10, fill=col); d.rounded_rectangle([x1 - 64, yy, x1, yy + 32], 10, fill=col)
     pill(d, c, 90, 90, T["kick"]); s = fit(d, T["hook"], 700, 150); y = lines_at(d, T["hook"], 90, 250, s, c.fg)
-    accent(d, c, 90, y + 30); d.text((90, y + 62), T["sub"], font=F(SEMI, 46), fill=c.acc); badge(img, d, face, c, S - 190, 790, 105)
+    accent(d, c, 90, y + 30); d.text((90, y + 62), T["sub"], font=F(SEMI, 56), fill=c.acc); badge(img, d, face, c, S - 190, 790, 105)
 def s_ring(d, img, T, c, face):
     pill(d, c, 90, 90, T["kick"]); ring(d, c, S - 260, 290, 150, T["glyph"], 190); badge(img, d, face, c, 200, 350, 110)
-    s = fit(d, T["hook"], 900, 140); y = lines_at(d, T["hook"], 90, 470, s, c.fg); accent(d, c, 90, y + 26); d.text((90, y + 62), T["sub"], font=F(SEMI, 46), fill=c.acc)
+    s = fit(d, T["hook"], 900, 140); y = lines_at(d, T["hook"], 90, 470, s, c.fg); accent(d, c, 90, y + 26); d.text((90, y + 62), T["sub"], font=F(SEMI, 56), fill=c.acc)
 def s_trio(d, img, T, c, face):
     pill(d, c, 90, 90, T["kick"]); badge(img, d, face, c, S - 185, 190, 105)
     s = fit(d, T["hook"], 900, 156); y = lines_at(d, T["hook"], 90, 250, s, c.fg)
     for i, ch in enumerate(T["glyph"]): ring(d, c, 250 + i * 290, y + 150, 104, ch, 130)
-    d.text((90, y + 280), T["sub"], font=F(SEMI, 46), fill=c.acc)
+    d.text((90, y + 280), T["sub"], font=F(SEMI, 56), fill=c.acc)
 def s_cal(d, img, T, c, face):
     pill(d, c, 90, 90, T["kick"]); badge(img, d, face, c, S - 185, 190, 105)
     s = fit(d, T["hook"], 900, 150); y = lines_at(d, T["hook"], 90, 235, s, c.fg); hot = T["hot"]; cw, chh, g = 118, 64, 10; y0 = y + 36
@@ -169,12 +169,12 @@ def dark_set():
     order = sorted(T, key=lambda k: (pub.get(k, {}).get("date", "9999"), pub.get(k, {}).get("time", "12:00") or "12:00", k))
     return {k for i, k in enumerate(order) if i % 4 == 2}
 DARK = dark_set()
-def render(pid, path, size=800, dark=None):
+def render(pid, path, size=1080, dark=None):
     t = T[pid]; dk = (pid in DARK) if dark is None else dark; c = Ctx(t["el"], dk)
     face = t.get("face") or FACES[sum(map(ord, pid)) % len(FACES)]
     img = Image.new("RGB", (S, S), c.bg); d = ImageDraw.Draw(img)
     DRAW[t["d"]](d, img, t, c, face); logo(d, c); ailabel(d, c)
-    img.resize((size, size), Image.LANCZOS).save(path, quality=92)
+    (img if size == S else img.resize((size, size), Image.LANCZOS)).save(path, quality=96, subsampling=0, optimize=True)
 if __name__ == "__main__":
     out = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "img")
     for pid in T: render(pid, os.path.join(out, f"sq_{pid}.jpg"))
