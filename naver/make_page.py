@@ -58,15 +58,22 @@ function cpt(b){navigator.clipboard.writeText(b.dataset.t).then(function(){b.cla
 function cpb(b){var el=document.getElementById("body");var h=el.innerHTML,t=el.innerText;function done(){b.textContent="본문 복사됨 · 네이버 본문에 붙여 넣으세요";b.className="big ok"}
  function sel(){var r=document.createRange();r.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(r);document.execCommand("copy");done()}
  if(window.ClipboardItem){navigator.clipboard.write([new ClipboardItem({"text/html":new Blob([h],{type:"text/html"}),"text/plain":new Blob([t],{type:"text/plain"})})]).then(done,sel)}else sel()}'''
-def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, category=None, thumbs=None, cid=None):
+def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, category=None, thumbs=None, cid=None, clips=None):
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
     chips = "".join(f'<button class="tag" data-t="{html.escape(t)}" onclick="cpt(this)">{html.escape(t)}</button>' for t in tags)
     nav = f'<a href="/naver/{nxt}.html"><button class="big">다음 원고 →</button></a>' if nxt else '<a href="/naver/"><button class="big">목록으로 (마지막 원고)</button></a>'
     cover_box = (f'<div class="box"><p class="lab">2. 대표 이미지: 먼저 저장 → 네이버 글쓰기 맨 위에 사진으로 올리기(처음 올린 사진이 대표가 돼요) → 그다음 아래 본문 복사</p>'
                  f'<img src="/naver/img/{cover}?v=sq" style="width:100%;border-radius:8px" alt=""><a href="/naver/img/{cover}" download="{cover}"><button>대표 이미지 저장</button></a></div>') if cover else ""
-    rel_box = (f'<div class="box"><p class="lab">4. 함께 볼 글: 본문 맨 아래(배너 위) 유도 문구 다음 줄에 이 주소를 붙여 넣고 엔터 → 링크 카드</p>'
-               f'<p class="val" id="rl">{html.escape(related["url"])}</p><button onclick="cp(\'rl\',this)">글 주소 복사</button>'
-               f'<p class="hint">유도 문구(본문에 이미 들어 있음): {html.escape(related["phrase"])}</p></div>') if related and related.get("url") else ""
+    if related and (related.get("url") or related.get("title")):
+        _u = related.get("url") or ""
+        rel_box = (f'<div class="box"><p class="lab">4. 함께 볼 글(내부 링크): 본문 맨 아래 유도 문구 다음 줄에 이 글의 주소를 붙여 넣고 엔터 → 링크 카드</p>'
+                   f'<p class="val" style="font-size:20px;font-weight:700" id="rt">{html.escape(related.get("title") or "")}</p><button onclick="cp(\'rt\',this)">글 제목 복사</button>'
+                   + (f'<p class="val" id="rl" style="margin-top:10px">{html.escape(_u)}</p><button onclick="cp(\'rl\',this)">글 주소 복사</button>' if _u else
+                      '<p class="hint">주소는 네이버 블로그 글 관리에서 이 제목의 글 → 공유 → URL 복사. 상황판 원고 카드에 발행 주소를 적어 두면 다음부터 여기에 자동으로 나와요.</p>')
+                   + f'<p class="hint">유도 문구(본문에 이미 들어 있음): {html.escape(related["phrase"])}</p></div>')
+    else: rel_box = ""
+    clip_box = ("" if not clips else '<div class="box"><p class="lab">3-1. 본문에 클립 넣기 (글쓰기 화면 위쪽 \'클립\' 버튼 → 내 클립)</p><p class="hint">자리: 본문 맨 위 결론 요약 바로 아래, \'이 글의 순서\' 위. 이미 올라가 있는 클립이에요.</p>'
+                + "".join(f'<p class="val" style="font-size:20px;font-weight:700;margin:6px 0">{i+1}. {html.escape(c)}</p>' for i, c in enumerate(clips)) + '</div>')
     cat_box = (f'<div class="box"><p class="lab">6. 카테고리: 글쓰기 화면 오른쪽 카테고리에서 이 이름을 고르세요</p><p class="val" style="font-size:22px;font-weight:700">{html.escape(category)}</p></div>') if category else '<div class="box"><p class="lab">6. 카테고리</p><p class="val">미정 - 알려 주세요</p></div>'
     thumb_box = (f'<div class="box"><p class="lab">2-1. 대표 이미지 안에 넣을 문구 후보 (제목을 그대로 반복하지 말고, 클릭할 이유를 한 줄로)</p>'
                  + "".join(f'<p class="val" style="font-size:22px;font-weight:700;margin:6px 0">{i+1}. {html.escape(t)}</p>' for i, t in enumerate(thumbs)) + '</div>') if thumbs else ""
@@ -74,13 +81,14 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
     check_box = ('<div class="box"><p class="lab">9. 올리기 전 확인 (SOP 체크리스트)</p><ul style="font-size:19px;line-height:1.8;margin:6px 0 0;padding-left:22px">'
                  '<li>한 가지 질문만 다뤘나요?</li><li>첫 150자 안에 결론이 있나요?</li><li>제목에 검색어와 얻는 것이 보이나요?</li>'
                  '<li>대표 이미지 문구가 제목과 다른 말인가요?</li><li>태그가 글 내용과 맞고 "인기·추천·일상" 같은 말이 없나요?</li>'
-                 '<li>맨 아래에 다음 행동(배너·함께 볼 글)이 하나로 보이나요?</li></ul></div>')
+                 '<li>맨 아래에 다음 행동(배너·함께 볼 글)이 하나로 보이나요?</li><li>클립 칸이 있는 글이면 클립을 넣었나요? 함께 볼 글 링크 카드가 붙었나요?</li></ul></div>')
     page = f'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>네이버 원고 · {html.escape(title)}</title><style>{CSS}</style></head><body><div class="wrap">
 <p class="hint"><a href="/naver/">← 네이버 원고 목록</a></p>
 <div class="box"><p class="lab">1. 제목</p><p class="val" id="t">{html.escape(title)}</p><button onclick="cp('t',this)">제목 복사</button></div>
 {cover_box}
 {thumb_box}
 <div class="box"><p class="lab">3. 본문 (이미지 포함) - 대표 이미지를 먼저 올린 뒤 그 아래에 붙여 넣으세요</p><button class="big" onclick="cpb(this)">본문 전체 복사</button><p class="hint">버튼이 안 되면 아래 점선 상자 안을 처음부터 끝까지 드래그해서 복사하세요.</p><div id="body">{body}</div></div>
+{clip_box}
 {rel_box}
 <div class="box"><p class="lab">5. CTA 배너 링크: 맨 아래 배너 이미지를 누르고 링크 버튼으로 걸기</p><p class="val" id="c">{html.escape(CTA_LINK)}</p><button onclick="cp('c',this)">링크 복사</button></div>
 {cat_box}
@@ -94,7 +102,7 @@ REG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pages.json")
 def load(): return json.load(open(REG)) if os.path.exists(REG) else {}
 IMG_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "img")
 PUB = os.path.join(os.path.dirname(os.path.abspath(__file__)), "published.json")  # 발행된 네이버 글 주소 {"id": {"title","url","date"}}
-def add(pid, dt, title, tags, body_blocks, related=None, category=None, thumbs=None, cid=None):
+def add(pid, dt, title, tags, body_blocks, related=None, category=None, thumbs=None, cid=None, clips=None):
     """related = {"id": 발행된 글 id, "phrase": 클릭 유도 문구}. 유도 문구는 본문 끝(CTA 배너 앞)에 넣는다"""
     """첫 이미지(대표 이미지)는 본문 복사에서 빼고 따로 내려받게 한다(9/30: 붙여 넣은 이미지는 대표로 못 고름)"""
     reg = load(); cover = None
@@ -110,17 +118,17 @@ def add(pid, dt, title, tags, body_blocks, related=None, category=None, thumbs=N
     rel = None
     if related:
         pub = json.load(open(PUB)) if os.path.exists(PUB) else {}
-        rel = {"phrase": related["phrase"], "url": pub.get(related["id"], {}).get("url", "")}
+        rel = {"id": related["id"], "title": related.get("title") or pub.get(related["id"], {}).get("title", ""), "phrase": related["phrase"], "url": pub.get(related["id"], {}).get("url", "")}
         body_blocks = body_blocks + [("p", ["<b>👇 " + related["phrase"] + "</b>"])]   # 유도 문구는 굵게
     body_blocks = body_blocks + ctas
-    reg[pid] = {"dt": dt.isoformat(), "title": title, "tags": tags[:10], "body": body_html(body_blocks), "cover": cover, "related": rel, "thumbs": thumbs, "cid": cid, "category": category or CATS.get(pid), "done": False}
+    reg[pid] = {"dt": dt.isoformat(), "title": title, "tags": tags[:10], "body": body_html(body_blocks), "cover": cover, "related": rel, "thumbs": thumbs, "cid": cid, "clips": clips, "category": category or CATS.get(pid), "done": False}
     json.dump(reg, open(REG, "w"), ensure_ascii=False, indent=1); render_all()
 def render_all():
     """목록에 남은 글을 발행일 순으로 다시 그린다(다음 원고 버튼 연결)"""
     reg = load(); live = sorted((v["dt"], k) for k, v in reg.items() if not v.get("done") and "body" in v)
     for i, (dt, k) in enumerate(live):
         v = reg[k]; nxt = live[i+1][1] if i+1 < len(live) else None
-        write_page(k, D.datetime.fromisoformat(dt), v["title"], v["tags"], v["body"], nxt, v.get("cover"), v.get("related"), v.get("category") or CATS.get(k), v.get("thumbs"), v.get("cid"))
+        write_page(k, D.datetime.fromisoformat(dt), v["title"], v["tags"], v["body"], nxt, v.get("cover"), v.get("related"), v.get("category") or CATS.get(k), v.get("thumbs"), v.get("cid"), v.get("clips"))
     write_index()
 def done(pid):
     """대표가 예약을 마친 글: 목록과 파일에서 뺀다"""

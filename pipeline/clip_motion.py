@@ -228,7 +228,7 @@ def score_rows(c, y, t0, rows, step=172):
             fnt = font(BLACK, sz)
             if fnt.getlength(txt_) < 680: break
         d.text((140, 80), txt_, font=fnt, fill=WHITE, anchor="lm"); blit(c.fr, im, CX - 424 + (1 - p) * 100, y + i * step, c.alpha(cl(p * 1.5)))
-def cta(c, lines, t0=0.2, pill="zaoseon.com 무료 풀이 · 1초", face="v8_gesture"):
+def cta(c, lines, t0=0.2, pill="블로그 스티커 눌러 보기", face="v8_gesture"):
     y0 = 300; y = text(c, lines, y0, t0, 92, lh=1.33)
     if face: character(c, face, t0=.5, width=760)
     fnt = font(BLACK, 60); w = int(fnt.getlength(pill)) + 90; pl = Image.new("RGBA", (w + 20, 140), (0, 0, 0, 0)); d = ImageDraw.Draw(pl)

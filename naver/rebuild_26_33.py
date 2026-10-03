@@ -13,3 +13,5 @@ for k in [f"n{i}" for i in range(26, 34)]:
     reg[k]["body"] = reg[k]["body"].replace("naver_cta2_", "naver_cta3_")
 json.dump(reg, open("pages.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 import make_page as MP; MP.render_all()
+
+import apply_links_26_33  # 연결표(links_plan.py) 적용: 함께 볼 글·클립 칸
