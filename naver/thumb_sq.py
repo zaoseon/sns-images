@@ -65,6 +65,7 @@ def lines_at(d, lines, x, y, size, col, center=False, path=SER):
         d.text((S // 2 if center else x, y), l, font=F(path, size), fill=col, anchor="ma" if center else "la"); y += int(size * 1.2)
     return y
 def accent(d, c, x, y, center=False):
+    y += 22   # 10/4: 글자 받침(끝·많·운 등)에 밑줄이 붙지 않게 아래로
     x0 = S // 2 - 80 if center else x; d.line([(x0, y), (x0 + 160, y)], fill=c.acc, width=11)
 def card_rect(d, c, box, r=44): d.rounded_rectangle(box, r, fill=c.card, outline=c.line, width=6)
 
@@ -91,11 +92,28 @@ def big(d, img, T, c, face):
     for l in hk: d.text((90, y), l, font=F(SEMI, s1), fill=c.fg); y += int(s1 * 1.25)
     bs = fit(d, [T["big"]], 900, 360, 150, BLK); d.text((90, y + 10), T["big"], font=F(BLK, bs), fill=c.acc)
     y2 = y + 10 + int(bs * 1.12); d.text((90, y2), T["sub"], font=F(SEMI, 46), fill=c.fg)
+
+def split_sub(d, text, maxw, size=40):
+    """부제 줄바꿈: '\\n'이 있으면 그대로. 없으면 '·'로 묶인 말은 한 덩어리로 두고, 줄이 '·'로 시작·끝나지 않게 균형 있게 나눈다."""
+    if "\n" in text: return text.split("\n")
+    toks = text.split(" "); units = []; i = 0
+    while i < len(toks):
+        u = toks[i]
+        while i + 2 < len(toks) and toks[i + 1] == "·": u += " · " + toks[i + 2]; i += 2
+        units.append(u); i += 1
+    w = lambda t: d.textlength(t, font=F(SEMI, size))
+    if w(" ".join(units)) <= maxw or len(units) == 1: return [" ".join(units)]
+    best = None
+    for k in range(1, len(units)):
+        a, b = " ".join(units[:k]), " ".join(units[k:]); sc = max(w(a), w(b))
+        if best is None or sc < best[0]: best = (sc, [a, b])
+    return best[1]
+
 def char_top(d, img, T, c, face):
     """정월 큰 상반신(오른쪽 아래) + 글자는 위. 얼굴 전체 보임."""
     figure(img, d, face, c, 560, S - 270)
     pill(d, c, 90, 90, T["kick"]); s = fit(d, T["hook"], 900, 128); y = lines_at(d, T["hook"], 90, 200, s, c.fg); accent(d, c, 90, y + 24)
-    sub = T["sub"].split(" "); k = (len(sub) + 1) // 2; ls = [" ".join(sub[:k]), " ".join(sub[k:])]
+    ls = split_sub(d, T["sub"], 470)
     yy = max(y + 70, 680)
     for l in ls: d.text((90, yy), l, font=F(SEMI, 40), fill=c.acc); yy += 54
 def ring(d, c, cx, cy, r, ch, size):
@@ -132,7 +150,7 @@ def s_cal(d, img, T, c, face):
         d.rounded_rectangle([x, yy, x + cw, yy + chh], 16, fill=c.acc if on else c.card, outline=c.acc if on else c.line, width=3)
         d.text((x + cw // 2, yy + chh // 2), str(day), font=F(SEMI, 34), fill=(c.bg if c.dark else (255, 255, 255)) if on else c.fg, anchor="mm")
 DRAW = {"QL": q_left, "QC": q_center, "QK": q_card, "BIG": big, "CH": char_top, "N": n_chips, "gua": s_gua, "ring": s_ring, "trio": s_trio, "cal": s_cal}
-SUB3 = "사주 · 별자리 · 숫자로 읽었어요"; K3 = "정월의 세 지도"; SIX = ["사주", "자미두수", "당사주", "하락이수", "점성술", "수비학"]
+SUB3 = "사주 · 별자리 · 숫자를 겹쳐 읽었어요"; K3 = "정월의 세 지도"; SIX = ["사주", "자미두수", "당사주", "하락이수", "점성술", "수비학"]
 T = {
  "s10": dict(d="cal", el="흙", kick="10월 손없는날", hook=["이사 날짜,", "이 날만 피해요"], hot=[9, 10, 19, 20, 29, 30]),
  "n01": dict(d="QL", el="불", kick="2027 띠별 운세", hook=["기운 좋은 띠", "따로 있어요"], sub="12띠 한눈에 보기", glyph="未"),

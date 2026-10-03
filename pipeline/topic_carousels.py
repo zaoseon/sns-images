@@ -33,6 +33,7 @@ def main():
     new = ("n = pg.evaluate(LAYOUT_JS, [d, None]); pg.evaluate(OVERRIDE_JS, S.get('_ov', {})); "
            "print('   검사', date, pg.evaluate(CONVERT_JS, S['_x'])); pg.wait_for_timeout(150)")
     src = src.replace(old, new)
+    assert 'quality=93' in src; src = src.replace('quality=93', 'quality=97, subsampling=0, optimize=True')   # 10/4: 글자 가장자리 번짐(4:2:0) 줄이기
     if check: src = src.replace("imgs = []", "imgs = []; continue", 1)   # 이미지는 그리지 않고 검사만
     CE.CONVERT_JS = CONVERT_JS
     exec(src, CE.__dict__)
