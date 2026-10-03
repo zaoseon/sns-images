@@ -989,3 +989,9 @@ README "2주마다 하는 일" 그대로. 요점만:
 - 규칙(추가): 일정이 바뀌면 `links_plan.CLIP`의 올릴 날부터 앱 일정과 맞춘 뒤 apply 스크립트를 돌린다. check()는 CLIP 날짜가 틀리면 못 잡는다(날짜를 입력값으로 믿는다)
 - 하지 않은 것: 대표가 이미 예약한 글(n02~n25) 날짜 이동 없음(SNS와 이미 1:1), 10/4~10/10 SNS 밤 6개 틀 교체(블로그와 1:1이라 보류)
 - 다음: n34~n41 원고 제작(10/12 월요일 예약분), 해당 글 연결 클립 SOP(`content/clips_sop.py`) 추가, 10/19 이후 SNS 낮 슬롯(월 주간 기운·화/금 일간·수 릴스·목/토 띠) 확인, 성과 스냅샷, n28 함께 볼 글 확인
+
+### 10/4 새벽 (①): 블로그 n34~n37 제작 (대표 "계속", 7번 계획의 첫 묶음)
+- 산출: `naver/build_naver_34_37.py`(내용), `naver/build_naver_34_41_defs.py`(정의 + 세 지도가 아닌 글용 `free()`), `naver/rebuild_34_37.py`(실행: 정사각 대표 이미지 + 컴팩트 본문 이미지). 이미지 `naver/img/naver_z34~37_*.jpg`, `thumb_sq.py` SER_HOOK 34~37 + n35·n36 kick 개별, `series.json` 34~37. 원고 페이지 site `public/naver/n34~n37.html`
+- 연결표: `links_plan.py` TITLE·REL·EMBED에 n34~n37 추가(n34->n15·임 클립, n35->n29, n36->n31·정 클립, n37->n25·신 클립). 적용은 `apply_links_26_33.py`(범위를 n26~n37로 넓힘). 실행 전 `ln -sfn <site> /home/claude/zaoseon-site`
+- 오류 수정: `cross()`가 "공통점를"을 만들었다. 원고 n26~n37은 "~에 대해"로 고쳐 다시 생성, 정의부(16_22·34_41_defs)도 고침. **이미 예약된 n16~n25는 같은 오류가 있다(대표 판단 필요)**
+- 다음: n38~n41 원고(10/23~10/26), 글 연결 클립 SOP 영상(n34~n41) + `clips_sop.py`·`clip_links.json` + ③에 `_redirects` 요청, 두 번째 묶음 n42~n46(10/26~10/31)
