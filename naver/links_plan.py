@@ -180,3 +180,26 @@ if __name__ == "__main__":
     r = check() + check_fix(); print("위반 없음" if not r else "\n".join(r))
     for p in REL:
         h, so = reserve_window(p); print(p, "발행", fmt(POST_DT[p]), "| 예약 가능 시작", fmt(h), "| 클립까지", fmt(so), "| 연결", REL[p][0], "| 클립", EMBED[p])
+
+
+# ---- 10/4: 올릴 날의 원본은 한 곳씩이다. 이 파일의 CLIP 날짜는 복사본이라 어긋나기 쉬워서, 불러올 때 원본 값으로 덮어쓴다 ----
+#   일간 클립 = content/naver_clip_kit.json 의 rec(예: "10/6(화)"), 글 연결 클립 = content/clips_sop.py 의 date. 시각은 이 파일 값을 쓴다.
+def _sync_dates():
+    import os, re, json, importlib.util
+    here = os.path.dirname(os.path.abspath(__file__)); root = os.path.join(here, "..", "content")
+    try:
+        kit = json.load(open(os.path.join(root, "naver_clip_kit.json"), encoding="utf-8")); kit = kit if isinstance(kit, list) else kit.get("clips", [])
+        rec = {c.get("key"): c.get("rec", "") for c in kit}
+        for cid, v in CLIP.items():
+            m = re.match(r"clip-\d+-(\w+)$", cid)
+            if not m or m.group(1) not in rec: continue
+            d = re.search(r"(\d+)/(\d+)", rec[m.group(1)] or "")
+            if d and "올림" not in rec[m.group(1)] and "오늘" not in rec[m.group(1)] and v.get("upload"):
+                v["upload"] = ("2026-%02d-%02d" % (int(d.group(1)), int(d.group(2))), v["upload"][1])
+        spec = importlib.util.spec_from_file_location("clips_sop", os.path.join(root, "clips_sop.py")); cs = importlib.util.module_from_spec(spec); spec.loader.exec_module(cs)
+        for c in cs.CLIPS:
+            k = "clip-sop-%s-12s" % c["id"]
+            if c.get("date") and k in CLIP and CLIP[k].get("upload"): CLIP[k]["upload"] = (c["date"], CLIP[k]["upload"][1])
+    except Exception as e:
+        print("links_plan: 날짜 동기화 실패", e)
+_sync_dates()
