@@ -5,7 +5,7 @@ import make_page as MP, links_plan as LP
 reg = json.load(open("pages.json", encoding="utf-8")); titles = json.load(open("clip_titles.json", encoding="utf-8"))
 urls = json.load(open("urls.json", encoding="utf-8")) if os.path.exists("urls.json") else {}
 pub = json.load(open("published.json", encoding="utf-8"))
-for k in [f"n{i}" for i in range(26, 38)]:
+for k in [f"n{i}" for i in range(26, 42)]:
     tgt, phrase = LP.REL[k]; v = reg[k]
     v["body"] = re.sub(r"<p><b>👇 [^<]*</b></p>", lambda m: f"<p><b>👇 {phrase}</b></p>", v["body"], count=1)
     v["related"] = {"id": tgt, "title": LP.TITLE.get(tgt) or pub.get(tgt, {}).get("title", ""), "phrase": phrase, "url": urls.get(tgt) or pub.get(tgt, {}).get("url", "")}
