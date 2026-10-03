@@ -12,7 +12,7 @@ RAW = "https://raw.githubusercontent.com/zaoseon/sns-images/main/naver/img/"
 def H(t): return f'<p>&nbsp;</p><p><span style="font-size:22px"><b>{t}</b></span></p>'
 def P(*lines): return "<p>" + "<br>".join(lines) + "</p>"
 def IMG(f): return f"<p>[이미지: {f}]</p>"
-END = IMG("naver_cta2_1초무료풀이.jpg")
+END = IMG("naver_cta3_1초무료풀이.jpg")
 SEAL = P("이 글은 재미로, 그리고 나를 돌아보는 계기로 읽어 주세요.")
 READ = (P("자오선은 동서양 여섯 가지 운명학을 겹쳐 읽어요. 이 글에서는 그중 <b>생일만으로 바로 확인되는 세 지도</b>를 먼저 겹쳤어요.") +
  P("🧭 <b>사주</b>: 태어난 날의 첫 글자(일간)예요. 갑·을은 나무, 병·정은 불, 무·기는 흙, 경·신은 쇠, 임·계는 물의 기운이에요.",

@@ -63,7 +63,7 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
     chips = "".join(f'<button class="tag" data-t="{html.escape(t)}" onclick="cpt(this)">{html.escape(t)}</button>' for t in tags)
     nav = f'<a href="/naver/{nxt}.html"><button class="big">다음 원고 →</button></a>' if nxt else '<a href="/naver/"><button class="big">목록으로 (마지막 원고)</button></a>'
     cover_box = (f'<div class="box"><p class="lab">2. 대표 이미지: 먼저 저장 → 네이버 글쓰기 맨 위에 사진으로 올리기(처음 올린 사진이 대표가 돼요) → 그다음 아래 본문 복사</p>'
-                 f'<img src="/naver/img/{cover}" style="width:100%;border-radius:8px" alt=""><a href="/naver/img/{cover}" download="{cover}"><button>대표 이미지 저장</button></a></div>') if cover else ""
+                 f'<img src="/naver/img/{cover}?v=sq" style="width:100%;border-radius:8px" alt=""><a href="/naver/img/{cover}" download="{cover}"><button>대표 이미지 저장</button></a></div>') if cover else ""
     rel_box = (f'<div class="box"><p class="lab">4. 함께 볼 글: 본문 맨 아래(배너 위) 유도 문구 다음 줄에 이 주소를 붙여 넣고 엔터 → 링크 카드</p>'
                f'<p class="val" id="rl">{html.escape(related["url"])}</p><button onclick="cp(\'rl\',this)">글 주소 복사</button>'
                f'<p class="hint">유도 문구(본문에 이미 들어 있음): {html.escape(related["phrase"])}</p></div>') if related and related.get("url") else ""

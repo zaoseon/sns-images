@@ -145,3 +145,15 @@ def ring(path, head, cells, note=""):
         d.text((x+cw//2, y+102), kw, font=R.F(R.SEMI, 26), fill=R.PAPER, anchor="mm")
     if note: d.text((40, H-62), note, font=R.F(R.MED, 22), fill=R.GOLD)
     img.save(path, quality=88)
+
+
+# ---- 10/3 대표 결정: 정사각 대표 이미지 + 컴팩트 본문 이미지를 기본값으로 ----
+import re as _re
+hero_old, table_old, rows_old = hero, table, rows
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "naver"))
+import thumb_sq as _TQ, compact as _C
+def hero(path, el, kicker, lines, sub, mark, face):
+    m = _re.search(r"_z(\d\d)_a", path)
+    if m and "n" + m.group(1) in _TQ.T: return _TQ.render("n" + m.group(1), path)
+    return hero_old(path, el, kicker, lines, sub, mark, face)
+table = _C.table_c; rows = _C.rows_c
