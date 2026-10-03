@@ -5,3 +5,6 @@ def hexrgb(h): h = h.lstrip("#"); return tuple(int(h[i:i + 2], 16) for i in (0, 
 C1 = dict(bg=hexrgb("00272b"), hi=hexrgb("e0ff4f"), pt=hexrgb("ff6663"))
 C2 = dict(pt=hexrgb("e4572e"), bg=hexrgb("29335c"), hi=hexrgb("f3a712"))
 WHITE = (255, 255, 255); CREAM = (250, 244, 232)
+def apply_to_engine(M):
+    """clip_motion 엔진의 강조색(*글자* 표시와 칩·진행 막대)을 조합2 앰버로 바꾼다."""
+    M.GOLD = C2["hi"] + (255,)

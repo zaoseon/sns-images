@@ -7,7 +7,7 @@ import os, sys, math, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, ".."); sys.path.insert(0, HERE)
 import clip_motion as M, safezone as Z, reel_music as RM, palette as P
 from PIL import Image, ImageDraw, ImageFilter
-SER = os.path.join(HERE, "fonts", "serif.otf"); GOLD = P.C2["hi"]; GOLDA = GOLD + (255,); CX = M.CX
+P.apply_to_engine(M); SER = os.path.join(HERE, "fonts", "serif.otf"); GOLD = P.C2["hi"]; GOLDA = GOLD + (255,); CX = M.CX
 CARDS = [("東", P.C2["pt"], "1"), ("西", P.C2["hi"], "2"), ("數", (255, 255, 255), "3")]
 _c = {}
 def card_layer(h, col):

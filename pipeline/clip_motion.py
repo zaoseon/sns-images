@@ -105,12 +105,14 @@ def wrap(text, fnt, maxw):
 def line_layers(text, size, color, path, maxw, lh):
     """줄마다 그림자가 있는 RGBA 조각과 줄 높이를 돌려준다"""
     fnt = font(path, size); out = []
+    hfnt = font(os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts", "serif.otf"), size)   # 한자는 Pretendard에 없어 명조로(깨져 보이는 문제)
+    pick = lambda ch: hfnt if "\u4e00" <= ch <= "\u9fff" else fnt
     for ln in wrap(text, fnt, maxw):
-        tw = int(sum(fnt.getlength(c[0]) for c in ln)) + 60; th = int(size * 1.4) + 40
+        tw = int(sum(pick(c[0]).getlength(c[0]) for c in ln)) + 60; th = int(size * 1.4) + 40
         sh = Image.new("RGBA", (tw, th), (0, 0, 0, 0)); sd = ImageDraw.Draw(sh); x = 30
-        for ch, h in ln: sd.text((x, 22 + 6), ch, font=fnt, fill=(0, 0, 0, 150)); x += fnt.getlength(ch)
+        for ch, h in ln: sd.text((x, 22 + 6), ch, font=pick(ch), fill=(0, 0, 0, 150)); x += pick(ch).getlength(ch)
         sh = sh.filter(ImageFilter.GaussianBlur(7)); im = Image.new("RGBA", (tw, th), (0, 0, 0, 0)); d = ImageDraw.Draw(im); x = 30
-        for ch, h in ln: d.text((x, 22), ch, font=fnt, fill=GOLD if h else color); x += fnt.getlength(ch)
+        for ch, h in ln: d.text((x, 22), ch, font=pick(ch), fill=GOLD if h else color); x += pick(ch).getlength(ch)
         sh.alpha_composite(im); out.append(sh)
     return out, int(size * lh)
 class Ctx:
