@@ -28,12 +28,12 @@ def link_box(k):
                 + f'<p class="val sm" id="g_{k}">{html.escape(FULL.get(t) or LP.TITLE.get(t, t))}</p><button onclick="cp(\'g_{k}\',this)">연결할 글 제목 복사</button>'
                 + (f'<p class="val sm" id="u_{k}">{html.escape(u)}</p><button onclick="cp(\'u_{k}\',this)">주소 복사</button>' if u else '<p class="hint">주소는 네이버 글 관리에서 그 글 → 공유 → URL 복사. 문구 아래 줄에 붙이고 엔터 → 링크 카드.</p>')
                 + f'<p class="hint">연결할 글 발행: {LP.fmt(ready)}</p>'
-                + f'<button class="lchk" data-k="{k}" onclick="lk(this)">링크 교체 완료</button></div>')
+                + '</div>')
     if k in LP.FIX_KEEP: return '<div class="lk keep"><p class="old">함께 볼 글은 그대로 두세요(주제가 맞아요).</p></div>'
     return ''
 items = ''.join(f'''<div class="box" data-dt="{dt}" id="b_{k}"><p class="lab"><span class="st"></span> {int(dt[5:7])}월 {int(dt[8:10])}일</p>
 <img src="/naver/img/sq_{k}.jpg?v=3" alt=""><p class="val" id="t_{k}">{html.escape(t)}</p>
-<div class="btns"><a href="/naver/img/sq_{k}.jpg?v=3" download="{dt[5:10].replace("-","")}_{k}.jpg"><button>이미지 저장</button></a><button onclick="cp('t_{k}',this)">제목 복사</button><button class="chk" data-k="{k}" onclick="ck(this)">교체 완료</button></div>{link_box(k)}</div>''' for dt, k, t in rows)
+<div class="btns"><a href="/naver/img/sq_{k}.jpg?v=3" download="{dt[5:10].replace("-","")}_{k}.jpg"><button>이미지 저장</button></a><button onclick="cp('t_{k}',this)">제목 복사</button></div>{link_box(k)}</div>''' for dt, k, t in rows)
 page = f'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>예약 글 수정 작업판</title><style>
 body{{margin:0;background:#f4f1ea;color:#222;font:18.5px/1.65 -apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}}@media(min-width:760px){{body{{font-size:20px}}}}
 .wrap{{max-width:760px;margin:0 auto;padding:20px 16px 80px}}h1{{text-align:center;font-size:28px;margin:8px 0}}.box{{background:#fff;border:1px solid #ddd;border-radius:14px;padding:14px 16px;margin:0 0 14px}}
@@ -42,20 +42,17 @@ button{{font:inherit;font-weight:700;font-size:19px;border:0;border-radius:12px;
 .ok{{background:#7fb07a}}.done{{opacity:.45}}.st{{display:inline-block;padding:2px 10px;border-radius:99px;font-size:15px;background:#eee;color:#444}}.st.p{{background:#d9ecd6}}.st.s{{background:#f6e7c4}}
 .note{{background:#fff8e6;border:1px solid #e6d3a0}}.lk{{border-top:1px dashed #ccc;margin-top:12px;padding-top:8px}}.lk.keep{{opacity:.6}}.lab2{{font-weight:700;color:#8a6d3b;margin:4px 0}}.sm{{font-size:17px;font-weight:600}}.old{{font-size:15px;color:#777;margin:4px 0}}.hint{{font-size:15px;color:#777;margin:4px 0}}.rd{{font-size:14px;padding:2px 8px;border-radius:99px;background:#eee}}.rd.on{{background:#d9ecd6}}.rd.wait{{background:#f6e7c4}}.lk.done{{opacity:.5}}ol{{padding-left:22px}}li{{margin:6px 0}}.c{{text-align:center}}</style></head><body><div class="wrap">
 <h1>예약 글 수정 작업판</h1><p class="c">글 하나를 열 때 대표 이미지와<br>함께 볼 글을 같이 바꿔요.</p>
-<div class="box note"><p class="lab">교체 방법 (글 하나에 1분)</p><ol><li>아래 <b>이미지 저장</b>을 누릅니다.</li><li>네이버에서 그 글의 <b>수정</b>을 엽니다. 제목은 <b>제목 복사</b>로 찾으면 돼요.</li><li>본문 맨 위 사진을 지우고, 새 사진을 맨 위에 올립니다. 맨 위 사진이 대표 이미지가 돼요.</li><li>함께 볼 글 칸이 있으면: 본문 맨 아래의 옛 문구와 링크 카드를 지우고, 새 문구를 붙인 뒤 아래 줄에 글 주소를 붙입니다. 엔터를 치면 링크 카드가 생겨요.</li><li>저장(예약 글은 예약 시각 그대로)하고, 아래 <b>교체 완료</b>와 <b>링크 교체 완료</b>를 누릅니다.</li></ol><p class="hint">연결할 글이 아직 발행 전이면(칸에 "이후"가 보여요) 그 글이 발행된 뒤에 링크만 따로 바꿔요. 예약만 걸린 글은 주소가 없어요.</p></div>
-<a href="/naver/sq_all.zip"><button class="big">전체 이미지 한 번에 저장 (zip)</button></a><p class="c" id="sum"></p>
+<div class="box note"><p class="lab">교체 방법 (글 하나에 1분)</p><ol><li>아래 <b>이미지 저장</b>을 누릅니다.</li><li>네이버에서 그 글의 <b>수정</b>을 엽니다. 제목은 <b>제목 복사</b>로 찾으면 돼요.</li><li>본문 맨 위 사진을 지우고, 새 사진을 맨 위에 올립니다. 맨 위 사진이 대표 이미지가 돼요.</li><li>함께 볼 글 칸이 있으면: 본문 맨 아래의 옛 문구와 링크 카드를 지우고, 새 문구를 붙인 뒤 아래 줄에 글 주소를 붙입니다. 엔터를 치면 링크 카드가 생겨요.</li><li>저장합니다(예약 글은 예약 시각 그대로 두세요).</li></ol><p class="hint">연결할 글이 아직 발행 전이면(칸에 "이후"가 보여요) 그 글이 발행된 뒤에 링크만 따로 바꿔요. 예약만 걸린 글은 주소가 없어요.</p></div>
+<a href="/naver/sq_all.zip"><button class="big">전체 이미지 한 번에 저장 (zip)</button></a>
 {items}
 <div class="box"><p class="lab">앞으로 올릴 글 (n26~n33)</p><p class="val" style="font-weight:400">이 글들은 원고 페이지에 새 이미지가 이미 들어 있어요.<br>원고 목록에서 올리면 됩니다.</p><a href="/naver/"><button>원고 목록 열기</button></a></div>
 </div><script>
 function cp(id,b){{navigator.clipboard.writeText(document.getElementById(id).innerText).then(function(){{b.textContent="복사됨";b.className="ok"}})}}
-var K="zs_sq_done";function load(){{try{{return JSON.parse(localStorage.getItem(K)||"{{}}")}}catch(e){{return {{}}}}}}
-function ck(b){{var d=load();d[b.dataset.k]=!d[b.dataset.k];try{{localStorage.setItem(K,JSON.stringify(d))}}catch(e){{}}paint()}}
-function lk(b){{var d=load();d['L'+b.dataset.k]=!d['L'+b.dataset.k];try{{localStorage.setItem(K,JSON.stringify(d))}}catch(e){{}}paint()}}
-function paint(){{var d=load(),n=0,now=new Date(new Date().toLocaleString("en-US",{{timeZone:"Asia/Seoul"}}));
-document.querySelectorAll(".box[data-dt]").forEach(function(bx){{var k=bx.id.slice(2),dt=new Date(bx.dataset.dt+":00"),st=bx.querySelector(".st"),c=bx.querySelector(".chk");
+function paint(){{var now=new Date(new Date().toLocaleString("en-US",{{timeZone:"Asia/Seoul"}}));
+document.querySelectorAll(".box[data-dt]").forEach(function(bx){{var dt=new Date(bx.dataset.dt+":00"),st=bx.querySelector(".st");
  if(dt<=now){{st.textContent="발행됨";st.className="st p"}}else{{st.textContent="예약 중";st.className="st s"}}
- if(d[k]){{bx.classList.add("done");c.textContent="교체 완료 ✓";c.className="chk ok";n++}}else{{bx.classList.remove("done");c.textContent="교체 완료";c.className="chk"}}}});
-document.querySelectorAll('.lk[data-ready]').forEach(function(x){{var r=new Date(x.dataset.ready+':00+09:00'),rd=x.querySelector('.rd'),k=x.querySelector('.lchk').dataset.k,on=new Date()>=r;rd.textContent=on?'지금 가능':'연결 글 발행 후';rd.className='rd '+(on?'on':'wait');var c=x.querySelector('.lchk');if(d['L'+k]){{x.classList.add('done');c.textContent='링크 교체 완료 ✓';c.className='lchk ok'}}else{{x.classList.remove('done');c.textContent='링크 교체 완료';c.className='lchk'}}}});
-document.getElementById("sum").textContent="교체 완료 "+n+" / {len(rows)}"}}
+}});
+document.querySelectorAll('.lk[data-ready]').forEach(function(x){{var r=new Date(x.dataset.ready+':00+09:00'),rd=x.querySelector('.rd'),on=new Date()>=r;rd.textContent=on?'지금 가능':'연결 글 발행 후';rd.className='rd '+(on?'on':'wait');}});
+}}
 paint();</script></body></html>'''
 open(SITE + '/daepyo.html', 'w', encoding='utf-8').write(page); print('swap page', len(rows))
