@@ -917,3 +917,10 @@ README "2주마다 하는 일" 그대로. 요점만:
 - 방법: `content/reel_swaps.json`(제목·날짜·상태 wait/done/skip/new·영상 또는 이미지) -> `tools/build_admin_data.py`가 `swaps`로 data.json에 넣음 -> 앱(v51) 콘텐츠 탭 '새 영상' 구역(영상 보기 버튼=받아서 video/mp4로 재생, 영상·이미지 저장). 새 자료를 만들면 이 목록에 항목을 추가하고 푸시한다. 예약에 반영한 뒤에는 status를 done으로 바꾼다.
 - 영상 재생: 저장소가 mp4를 octet-stream으로 내려 줘서 `<video src>` 직접 연결은 아이폰 사파리에서 막힐 수 있어 `swapPlay()`가 fetch->Blob(video/mp4)로 재생한다. 내 테스트 브라우저(H.264 없음)에서는 재생 자체는 못 보고 받기·교체까지만 확인.
 - 이번에 올린 24개: 띠 릴스 12(교체 대기), 12:00 릴스 표지 8(예약 반영됨), 카드 고르기 10/10(반영됨)·10/3(그대로 둠), 카페 대문·프로필(새로 만듦).
+### 10/3 밤: 관리 앱 반영 정리 + 띠 릴스 12건 새 영상 교체
+- **잘못 이해했던 것(정정)**: "운영앱"은 상황판이 아니라 관리 앱(zaoseon.com/admin/). 상황판 db(clip-09~14 등)에 쓴 것은 앱에 안 보인다. 앞으로 클립·글 일정은 `content/naver_clip_kit.json`(일간), `content/clips_sop.py`+`clips_sop/`(글 연결), `content/clip_links.json`, `naver/pages.json`, `naver/links_plan.py`에 쓴다(상황판 갱신 금지)
+- 갑·을: kit에 추가(rec 갑 10/17·을 10/21). 세 지도 클립 4편: clips_sop.py에 n22-c1·n26-c1·n27-c1·n30-c1(영상은 `clips_sop/<id>_12s.mp4`, 앱 날짜 계산은 글 발행 다음 날이라 같은 날과 다름 → ③에 요청)
+- clip_links: 스티커 글이 클립보다 늦는 일간 클립(무·기·경·임·신·병)은 `after`를 비워 앱이 시각을 미루지 않게 함, afterText로 글 발행일만 안내
+- 연결표(links_plan.py) 갱신: n11→10/5 21:00, n24→10/13 21:00, n25→10/20 12:00, n33→10/16 12:00, n17→10/3 21:00(발행 예정), 클립 업로드 날짜를 인스타 릴스와 같은 날로, EMBED 갱신, REL n32→n27. 대표가 이미 예약한 글의 함께 볼 글 수정 필요: n17→n15, n18→n11, n21→n20
+- 원고 n26~n33: 「이 글의 순서」와 1번 사이에 "한눈에 보기" 이미지(`naver/img/naver_zNN_i.jpg`, 스크립트 `naver/add_intro_image.py`). 이미 예약된 글(n03~n25)에는 못 넣음
+- 띠 릴스 12건: `content/reel_swaps.json`의 새 영상(`2026-w42/v2/reel_NN.mp4`)을 Metricool 인스타 TRIAL_REEL 예약 12건에 교체(10/13~25, 같은 uuid), status done
