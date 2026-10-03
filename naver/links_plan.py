@@ -38,15 +38,15 @@ REL = {  # 글 → (연결할 글, 링크 카드 바로 위 유도 문구). 연�
 # 클립 id(상황판 문서 id) -> 메타. stems: 일간 글자, sticker: 이 클립이 스티커로 연결할 글, upload: (날짜, 시각)
 CLIP = {
  "clip-01-jeong": dict(stem="丁", sticker="n23", upload=None, note="이미 올라감(10/2). 클립 앱 > 내 클립 > 정보 수정 > 고급 설정 > 스티커에서 블로그 스티커만 추가"),
- "clip-08-gye": dict(stem="癸", sticker="n17", upload=("2026-10-09", "20:00")),
+ "clip-08-gye": dict(stem="癸", sticker="n17", upload=("2026-10-20", "20:00")),
  "clip-02-mu": dict(stem="戊", sticker="n18", upload=("2026-10-03", "20:00"), later_sticker=True),
- "clip-03-gi": dict(stem="己", sticker="n19", upload=("2026-10-04", "20:00"), later_sticker=True),
- "clip-04-gyeong": dict(stem="庚", sticker="n20", upload=("2026-10-06", "20:00"), later_sticker=True),
- "clip-07-im": dict(stem="壬", sticker="n21", upload=("2026-10-08", "20:00"), later_sticker=True),
+ "clip-03-gi": dict(stem="己", sticker="n19", upload=("2026-10-06", "20:00"), later_sticker=True),
+ "clip-04-gyeong": dict(stem="庚", sticker="n20", upload=("2026-10-09", "20:00")),
+ "clip-07-im": dict(stem="壬", sticker="n21", upload=("2026-10-16", "20:00")),
  "clip-05-byeong": dict(stem="丙", sticker="n22", upload=("2026-10-03", "12:56"), later_sticker=True, note="10/3 12:56에 올라감. n22(10/10 12:00) 발행 뒤 스티커만 추가"),
- "clip-06-sin": dict(stem="辛", sticker="n29", upload=("2026-10-07", "20:00"), later_sticker=True),
- "clip-09-gab": dict(stem="甲", sticker="n32", upload=("2026-10-17", "20:00")),
- "clip-10-eul": dict(stem="乙", sticker="n25", upload=("2026-10-21", "20:00")),
+ "clip-06-sin": dict(stem="辛", sticker="n29", upload=("2026-10-13", "20:00")),
+ "clip-09-gab": dict(stem="甲", sticker="n32", upload=("2026-10-23", "20:00")),
+ "clip-10-eul": dict(stem="乙", sticker="n25", upload=("2026-10-27", "20:00")),
  "clip-post-s10": dict(sticker="s10", upload=("2026-10-04", "20:00")),
  "clip-sop-n28-c1-12s": dict(sticker="n28", upload=("2026-10-13", "20:00"), embed_later="n28"),
  "clip-sop-n28-c2-12s": dict(sticker="n28", upload=("2026-10-15", "20:00"), embed_later="n28"),
@@ -55,24 +55,27 @@ CLIP = {
  "clip-sop-n33-c1-12s": dict(sticker="n33", upload=("2026-10-17", "20:00"), embed_later="n33"),
  "clip-sop-n33-c2-12s": dict(sticker="n33", upload=("2026-10-19", "20:00"), embed_later="n33"),
  "clip-sop-n33-c3-12s": dict(sticker="n33", upload=("2026-10-21", "20:00"), embed_later="n33"),
- "clip-sop-n22-c1-12s": dict(sticker="n22", upload=("2026-10-11", "20:00"), embed_later="n22"),
- "clip-sop-n26-c1-12s": dict(sticker="n26", upload=("2026-10-12", "20:00"), embed_later="n26"),
- "clip-sop-n27-c1-12s": dict(sticker="n27", upload=("2026-10-13", "20:00"), embed_later="n27"),
- "clip-sop-n30-c1-12s": dict(sticker="n30", upload=("2026-10-15", "20:00"), embed_later="n30"),
+ "clip-sop-n22-c1-12s": dict(sticker="n22", upload=("2026-10-10", "20:00"), embed_later="n22"),
+ "clip-sop-n26-c1-12s": dict(sticker="n26", upload=("2026-10-11", "20:00"), embed_later="n26"),
+ "clip-sop-n27-c1-12s": dict(sticker="n27", upload=("2026-10-12", "20:00"), embed_later="n27"),
+ "clip-sop-n30-c1-12s": dict(sticker="n30", upload=("2026-10-14", "20:00"), embed_later="n30"),
 }
 EMBED = {  # 글 → 글 안에 넣을 클립. 예약을 거는 날 이미 올라가 있는 클립만(없으면 건너뛰어도 된다 = 선택). 넣을 자리: 맨 위 결론 요약 바로 아래(「이 글의 순서」 위)
- "n26": ["clip-08-gye", "clip-02-mu"],       # 계(10/5)·무(10/6) → 무토·계수일생
+ "n26": ["clip-02-mu"],                    # 무(10/3) → 무토일생. 계 클립은 10/20이라 글보다 늦음
  "n27": ["clip-01-jeong", "clip-05-byeong"], # 정(10/2)·병(10/3) → 병화·정화일생
  "n28": [],                                  # 궁합 클립은 글보다 늦게 올라감 → 올린 뒤 글에 추가
- "n29": ["clip-08-gye", "clip-06-sin"],     # 계(10/9)·신(10/7) → 신금·계수일생
+ "n29": [],                                  # 신(10/13 20:00)·계(10/20) 클립 모두 글(10/13 12:00)보다 늦다 → LATER
  "n30": ["clip-05-byeong"],                # 병(10/3) → 병화일생
- "n31": ["clip-01-jeong", "clip-07-im"],     # 정(불)·임(물) → 불 일간 vs 물 일간. 임은 10/9 20:00
+ "n31": ["clip-01-jeong"],                 # 정(10/2) → 불 일간. 임(10/16 20:00)은 글(10/15)보다 늦다 → LATER
  "n32": ["clip-05-byeong"],                # 병(10/3) → 병화. 갑 클립은 10/17이라 나중에
- "n33": ["clip-08-gye"],                     # 계(10/5) → 화개, 계수일생
+ "n33": [],                                  # 계 클립은 10/20이라 글(10/16)보다 늦다 → LATER
 }
 LATER = {  # 클립이 글을 예약한 뒤에 올라가는 경우: 클립을 올린 다음 그 글(예약 글이면 예약 수정)에서 넣는다(선택)
- "clip-09-gab": ["n32"],                     # 갑 클립 10/17 20:00 (n32는 10/16 발행)
- "clip-10-eul": ["n25"],                     # 을 클립 10/21 20:00 (n25는 10/20 발행)
+ "clip-09-gab": ["n32"],                     # 갑 클립 10/23 20:00 (n32는 10/16 발행)
+ "clip-10-eul": ["n25"],                     # 을 클립 10/27 20:00 (n25는 10/20 발행)
+ "clip-06-sin": ["n29"],                     # 신 클립 10/13 20:00 (n29는 10/13 12:00 발행)
+ "clip-07-im": ["n31"],                      # 임 클립 10/16 20:00 (n31은 10/15 발행)
+ "clip-08-gye": ["n33", "n29"],              # 계 클립 10/20 20:00 (n33은 10/16, n29는 10/13 발행)
 }
 def clip_up(c):
     u = CLIP[c]["upload"]
