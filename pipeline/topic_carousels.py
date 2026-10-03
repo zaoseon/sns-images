@@ -3,7 +3,8 @@ carousel_editor.render 와 같은 편집기·같은 LAYOUT_JS 를 쓰고, 5번 �
 import sys, os, inspect
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "content"))
 import carousel_editor as CE
-from topic_sets_w41 import SETS
+import importlib
+SETS = importlib.import_module(os.environ.get('TOPIC_SETS','topic_sets_w41')).SETS
 CONVERT_JS = r"""
 (x) => {
   const FONT='"Noto Sans CJK KR", sans-serif', F=(w,px)=>`${w} ${px}px ${FONT}`;
@@ -18,13 +19,14 @@ CONVERT_JS = r"""
   const tw=(t,w,px)=>{ ctx.font=F(w,px); return ctx.measureText(t).width; };
   [1,2,3,4,5].forEach(i => { const q = slides[i]; const tl = wrapRich(q.title, W-100, F(900,100)), bl = wrapRich(q.body, W-60, F(700,54.5));
     out.push([i+1, tl.length, bl.length, Math.round(Math.max(...q.title.split('\n').map(l=>tw(l,900,100)))), Math.round(Math.max(...q.body.split('\n').map(l=>tw(l,700,54.5))))]); });
-  const c = slides[0]; out.push(['cover', c.titleSize, c.subSize]);
+  const c = slides[0]; (c.extraTexts||[]).forEach(e => { e.stroke = true; e.color = '#d9d3cd'; });   // 밝은 옷 위에서도 AI 고지가 읽히게 어두운 테두리(10/3 밤 확인: 밝기 114~197 표지에서 회색 글자가 묻힘)
+  out.push(['cover', c.titleSize, c.subSize]);
   return out;
 }
 """
 def main():
     check = "--check" in sys.argv
-    outdir = os.path.join(CE.ROOT, "2026-w41topic")
+    outdir = os.path.join(CE.ROOT, os.environ.get("TOPIC_OUT","2026-w41topic"))
     src = inspect.getsource(CE.render)
     old = "n = pg.evaluate(LAYOUT_JS, [d, None]); pg.wait_for_timeout(150)"
     assert old in src
