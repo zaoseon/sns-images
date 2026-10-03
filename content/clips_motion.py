@@ -36,7 +36,7 @@ SC[("n28-c1", "30")] = [
 ]
 # ───────── n33 약속 취소 / 화개 ─────────
 SC[("n33-c1", "12")] = [
- (2.2, lambda c: (chip(c, "혼자 충전 · 질문", 220, .05), notice(c, .2), text(c, "속으로 웃은 적\n있나요?", 560, .9, 112, lh=1.3), character(c, "v1_lowbun", t0=.6, width=620))),
+ (2.2, lambda c: (chip(c, "혼자 충전 · 질문", 220, .05), notice(c, .2), text(c, "속으로 웃은 적 있나요?", 560, .9, 100, maxw=820, lh=1.3), character(c, "v1_lowbun", t0=.6, width=620))),
  (2.6, point("사람이", "*싫은 게* 아니에요", lambda c: battery(c, CX, 1130, .7, frm=.1, to=.35, dur=1.4, label="사람 만난 뒤"), y=330)),
  (2.6, point("혼자 있는 시간에", "*힘을 채우는*\n사람이에요", lambda c: battery(c, CX, 1130, .5, frm=.15, to=1.0, dur=1.8, label="혼자 충전 중"), y=300)),
  (2.4, lambda c: (chip(c, "정리하면", 250, .05), text(c, "*충전 방식*이\n다를 뿐이에요", 400, .2, 112, lh=1.32), character(c, "v1_lowbun", t0=.3, width=640))),

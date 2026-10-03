@@ -55,28 +55,51 @@ def background(fr, t, total_t):
     rg = ring_img().rotate(-t * 3.2, resample=Image.BICUBIC); fr.paste(rg, (CX - 500, 800 - 500), rg)
     d.rectangle((70, 143, 880, 147), fill=(255, 255, 255, 40)); d.rectangle((70, 143, 70 + int(810 * cl(t / total_t)), 147), fill=GOLD)
 # ---------- 글자 ----------
+def _dep(wd):
+    """앞 말에 붙여 읽어야 하는 짧은 서술어(걸까요? 이에요 …) - 줄 맨 앞에 혼자 떨어지면 어색하다"""
+    t = "".join(c[0] for c in wd)
+    return len(t) <= 6 and t.endswith(("요", "요?", "요.", "요!", "까?", "죠?", "다", "다.", "가요?", "까요?", "나요?"))
+def _split_line(words, w, maxw):
+    """한 줄(수동 줄바꿈 하나)이 maxw를 넘으면 의미 단위로 균형 있게 나눈다.
+    규칙: 필요한 최소 줄 수로, 가장 긴 줄이 짧아지게(균형) · 3글자 이하 짜투리 줄 금지 · 서술어(걸까요?)가 줄 맨 앞에 혼자 오지 않게."""
+    sp = (" ", False)
+    def width(g): return w([c for i, wd in enumerate(g) for c in (([sp] if i else []) + wd)])
+    if len(words) < 2 or width(words) <= maxw: return [words]
+    n = len(words); best = None
+    import itertools
+    for k in range(2, min(n, 4) + 1):
+        for cuts in itertools.combinations(range(1, n), k - 1):
+            idx = (0,) + cuts + (n,); groups = [words[idx[i]:idx[i + 1]] for i in range(k)]; ws = [width(g) for g in groups]
+            cost = max(ws) + (1000 if max(ws) > maxw else 0)
+            for i, g in enumerate(groups):
+                chars = sum(len(wd) for wd in g)
+                if chars <= 3 and n > 2: cost += 400                  # 짜투리 줄
+                if i > 0 and _dep(g[0]): cost += 250                  # 서술어가 줄 맨 앞
+            cost += (k - 2) * 120                                      # 줄 수는 적을수록
+            if best is None or cost < best[0]: best = (cost, groups)
+        if best is not None and k >= 2 and best[0] < 10 ** 6 and max(width(g) for g in best[1]) <= maxw: break
+    return best[1] if best else [words]
 def wrap(text, fnt, maxw):
     chars, hl = [], False
     for ch in text:
         if ch == "*": hl = not hl; continue
         chars.append((ch, hl))
-    words, cur = [], []
+    segs, words = [], []
+    cur = []
     for c in chars:
         if c[0] == " ":
             if cur: words.append(cur); cur = []
         elif c[0] == "\n":
             if cur: words.append(cur); cur = []
-            words.append("BR")
+            segs.append(words); words = []
         else: cur.append(c)
     if cur: words.append(cur)
-    lines, line = [], []
+    segs.append(words)
     w = lambda cs: fnt.getlength("".join(c[0] for c in cs))
-    for wd in words:
-        if wd == "BR": lines.append(line); line = []; continue
-        cand = line + ([(" ", False)] if line else []) + wd
-        if line and w(cand) > maxw: lines.append(line); line = list(wd)
-        else: line = cand
-    if line: lines.append(line)
+    lines = []
+    for sg in segs:
+        for g in _split_line(sg, w, maxw):
+            lines.append([c for i, wd in enumerate(g) for c in (([(" ", False)] if i else []) + wd)])
     return lines
 @functools.lru_cache(maxsize=None)
 def line_layers(text, size, color, path, maxw, lh):
@@ -98,13 +121,19 @@ def blit(fr, layer, x, y, a=1.0):
     if a < 0.99:
         tb = [int(i * a) for i in range(256)]; r, g, b, al = layer.split(); layer = Image.merge("RGBA", (r, g, b, al.point(tb)))
     fr.paste(layer, (int(x), int(y)), layer)
+def eff_size(s, size, maxw, path):
+    """가장 긴 수동 줄이 maxw를 최대 20%만 넘으면 글자를 줄여 그 줄을 한 줄로 둔다(문구가 중간에서 끊기는 것보다 낫다)."""
+    fnt = font(path, size); widest = max((fnt.getlength(seg.replace("*", "")) for seg in s.split("\n")), default=0)
+    if maxw < widest <= maxw * 1.2: return int(size * maxw / widest)
+    return size
 def text(c, s, y, t0, size=104, color=WHITE, path=BLACK, maxw=800, lh=1.3, stagger=0.2, cx=CX, anim="rise"):
+    size = eff_size(s, size, maxw, path)
     ls, step = line_layers(s, size, color, path, maxw, lh); y0 = y
     for i, L in enumerate(ls):
         p = e_out((c.t - t0 - i * stagger) / 0.42); a = c.alpha(cl(p * 1.4)); dy = (1 - p) * 46 + (1 - c.ex) * -26
         blit(c.fr, L, cx - L.width / 2, y0 + dy - 20, a); y0 += step
     return y0
-def text_h(s, size, maxw=800, lh=1.3, path=BLACK): return len(wrap(s, font(path, size), maxw)) * int(size * lh)
+def text_h(s, size, maxw=800, lh=1.3, path=BLACK): size = eff_size(s, size, maxw, path); return len(wrap(s, font(path, size), maxw)) * int(size * lh)
 @functools.lru_cache(maxsize=None)
 def chip_layer(label, size):
     fnt = font(BLACK, size); w = int(fnt.getlength(label)) + 60; h = size + 30; im = Image.new("RGBA", (w + 8, h + 8), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
@@ -253,11 +282,11 @@ def still(scenes, idx, t, path, total=None):
 def hook(kick, lines, face, size=112):
     def f(c):
         chip(c, kick, 250, 0.05)
-        hh = text_h(lines, size, lh=1.3); text(c, lines, 400, 0.25, size, lh=1.3, stagger=0.26)
+        hh = text_h(lines, size, maxw=820, lh=1.3); text(c, lines, 400, 0.25, size, maxw=820, lh=1.3, stagger=0.26)
         character(c, face, t0=0.2)
     return f
 def point(kick, lines, extra=None, y=None, size=104):
     def f(c):
-        yy = 330 if y is None else y; chip(c, kick, yy - 100, 0.05); text(c, lines, yy, 0.2, size, lh=1.32, stagger=0.22)
+        yy = 330 if y is None else y; chip(c, kick, yy - 100, 0.05); text(c, lines, yy, 0.2, size, maxw=820, lh=1.32, stagger=0.22)
         if extra: extra(c)
     return f
