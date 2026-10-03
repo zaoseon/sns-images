@@ -27,7 +27,7 @@ def cross(no, date, time, face, el, mark, title, hero2, scene, summary, saju, st
     N.hero(f"{OUT}/{pre}_a.jpg", el, "정월의 세 지도", hero2, "사주·별자리·숫자를 겹쳐 읽었어요", mark, face)
     N.theme(el); N.table(f"{OUT}/{pre}_b.jpg", "세 지도로 보면", ["지도", "나온 값", "한 줄"], trow, [180, 400, 320])
     N.theme(el); N.rows(f"{OUT}/{pre}_c.jpg", "이번에 해 볼 것", arow)
-    body = (P(scene, f"<b>{title.split(',')[0]}</b>를 사주·별자리·숫자 세 지도로 읽어 봤어요. 안녕하세요, 자오선의 정월이에요.") + IMG(f"{pre}_a.jpg") +
+    body = (P(scene, f"<b>{title.split(',')[0]}</b>에 대해 사주·별자리·숫자 세 지도로 읽어 봤어요. 안녕하세요, 자오선의 정월이에요.") + IMG(f"{pre}_a.jpg") +
      P("바쁘신 분들을 위해 결론부터 말씀드릴게요.") + P(*summary) +
      P("<b>📌 이 글의 순서</b>", "1. 세 지도는 이렇게 읽어요", "2. 세 지도로 본 결과", "3. 몇 개나 겹치나요", "4. 같은 말을 하는 곳, 다른 말을 하는 곳", "5. 이번에 해 볼 것", "6. 자주 묻는 질문") +
      H("1. 세 지도는 이렇게 읽어요") + READ +
