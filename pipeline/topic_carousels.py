@@ -46,5 +46,7 @@ def main():
         s["_ov"] = {"nextBadge": "다음 편", "nextTitle": t["nextTitle"]}
         s["_x"] = {"badges": t["badges"], "t5": sl[3][0], "b5": sl[3][1]}
         sets[date] = s
+    only = [x for x in os.environ.get('TOPIC_ONLY', '').split(',') if x]
+    if only: sets = {k: v for k, v in sets.items() if k in only}
     CE.render(sets, outdir)
 if __name__ == "__main__": main()
