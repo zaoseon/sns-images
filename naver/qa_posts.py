@@ -15,6 +15,7 @@ for k in ids:
     v = reg[k]; b = v['body']; t = plain(b); issues = []
     for bad in ('—', '엔진', '초안', '리포트', '6체계'):
         if bad in t: issues.append('금지어 ' + bad)
+    if '지도' in t and not v.get('done'): issues.append('금지어 지도(세 지도·두 지도 같은 비유는 독자가 못 알아듣는다, 10/4 대표 지적): 사주·별자리·숫자를 직접 쓰거나 "풀이"로 쓴다')
     n = chars(b)
     if n < 1500: issues.append(f'{n}자')
     imgs = re.findall(r'<img[^>]*src="([^"]+)"', b)
