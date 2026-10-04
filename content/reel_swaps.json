@@ -99,12 +99,12 @@
   "id": "zodiac-17",
   "kind": "띠 릴스",
   "title": "말띠 2027 운세 릴스",
-  "date": "",
-  "time": "",
-  "status": "wait",
+  "date": "2026-11-05",
+  "time": "12:00",
+  "status": "done",
   "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42/v3/reel_17.mp4",
   "old": "",
-  "note": "말띠 릴스 영상은 만들어져 있어요(음악 포함). 그런데 Metricool에는 아직 예약이 없어요(10/4 직접 확인). 예약된 띠 릴스는 8편뿐이에요: 쥐 10/8·소 10/10·호랑이 10/15·용 10/17·원숭이 10/22·개 10/24·토끼 10/29·뱀 10/31. 날짜를 정해 예약한 뒤 이 항목의 날짜·시각과 상태를 고쳐요.",
+  "note": "말띠 릴스 12:00과 같은 날 08:00 인스타 캐러셀·스레드를 Metricool에 예약했어요(10/4). 영상은 음악 포함이에요.",
   "checks": [
    "소리 켜고 끝까지",
    "피드 크롭 안 글자",
@@ -115,12 +115,12 @@
   "id": "zodiac-19",
   "kind": "띠 릴스",
   "title": "양띠 2027 운세 릴스",
-  "date": "",
-  "time": "",
-  "status": "wait",
+  "date": "2026-11-07",
+  "time": "12:00",
+  "status": "done",
   "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42/v3/reel_19.mp4",
   "old": "",
-  "note": "양띠 릴스 영상은 만들어져 있어요(음악 포함). 그런데 Metricool에는 아직 예약이 없어요(10/4 직접 확인). 예약된 띠 릴스는 8편뿐이에요: 쥐 10/8·소 10/10·호랑이 10/15·용 10/17·원숭이 10/22·개 10/24·토끼 10/29·뱀 10/31. 날짜를 정해 예약한 뒤 이 항목의 날짜·시각과 상태를 고쳐요.",
+  "note": "양띠 릴스 12:00과 같은 날 08:00 인스타 캐러셀·스레드를 Metricool에 예약했어요(10/4). 영상은 음악 포함이에요.",
   "checks": [
    "소리 켜고 끝까지",
    "피드 크롭 안 글자",
@@ -147,12 +147,12 @@
   "id": "zodiac-23",
   "kind": "띠 릴스",
   "title": "닭띠 2027 운세 릴스",
-  "date": "",
-  "time": "",
-  "status": "wait",
+  "date": "2026-11-12",
+  "time": "12:00",
+  "status": "done",
   "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42/v3/reel_23.mp4",
   "old": "",
-  "note": "닭띠 릴스 영상은 만들어져 있어요(음악 포함). 그런데 Metricool에는 아직 예약이 없어요(10/4 직접 확인). 예약된 띠 릴스는 8편뿐이에요: 쥐 10/8·소 10/10·호랑이 10/15·용 10/17·원숭이 10/22·개 10/24·토끼 10/29·뱀 10/31. 날짜를 정해 예약한 뒤 이 항목의 날짜·시각과 상태를 고쳐요.",
+  "note": "닭띠 릴스 12:00과 같은 날 08:00 인스타 캐러셀·스레드를 Metricool에 예약했어요(10/4). 영상은 음악 포함이에요.",
   "checks": [
    "소리 켜고 끝까지",
    "피드 크롭 안 글자",
@@ -179,12 +179,12 @@
   "id": "zodiac-27",
   "kind": "띠 릴스",
   "title": "돼지띠 2027 운세 릴스",
-  "date": "",
-  "time": "",
-  "status": "wait",
+  "date": "2026-11-14",
+  "time": "12:00",
+  "status": "done",
   "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42/v3/reel_27.mp4",
   "old": "",
-  "note": "돼지띠 릴스 영상은 만들어져 있어요(음악 포함). 그런데 Metricool에는 아직 예약이 없어요(10/4 직접 확인). 예약된 띠 릴스는 8편뿐이에요: 쥐 10/8·소 10/10·호랑이 10/15·용 10/17·원숭이 10/22·개 10/24·토끼 10/29·뱀 10/31. 날짜를 정해 예약한 뒤 이 항목의 날짜·시각과 상태를 고쳐요.",
+  "note": "돼지띠 릴스 12:00과 같은 날 08:00 인스타 캐러셀·스레드를 Metricool에 예약했어요(10/4). 영상은 음악 포함이에요.",
   "checks": [
    "소리 켜고 끝까지",
    "피드 크롭 안 글자",
@@ -848,6 +848,236 @@
    "샘플 글꼴·크기",
    "소리 켜고 끝까지",
    "숫자가 데이터와 같은지(100명 중 14명 / 86명 / 염소·황소 23% / 천칭 5.6%)"
+  ]
+ },
+ {
+  "id": "night2-1019",
+  "kind": "캐러셀(밤 교체·신규)",
+  "title": "내 첫 마음은 몇 번일까요? 10/19 21:00",
+  "date": "2026-10-19",
+  "time": "21:00",
+  "status": "done",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1019_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1019_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1019_3.jpg"
+  ],
+  "download": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1019_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1019_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1019_3.jpg"
+  ],
+  "note": "블로그 글과 같은 날 같은 주제로 맞춰 인스타·스레드에 예약했어요(10/4). 인스타 3장, 스레드는 글만.",
+  "checks": [
+   "글자 잘림 없음",
+   "블로그 주제와 일치"
+  ]
+ },
+ {
+  "id": "night2-1021",
+  "kind": "캐러셀(밤 교체·신규)",
+  "title": "게으른 걸까, 구간이 다른 걸까? 10/21 21:00",
+  "date": "2026-10-21",
+  "time": "21:00",
+  "status": "done",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1021_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1021_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1021_3.jpg"
+  ],
+  "download": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1021_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1021_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1021_3.jpg"
+  ],
+  "note": "블로그 글과 같은 날 같은 주제로 맞춰 인스타·스레드에 예약했어요(10/4). 인스타 3장, 스레드는 글만.",
+  "checks": [
+   "글자 잘림 없음",
+   "블로그 주제와 일치"
+  ]
+ },
+ {
+  "id": "night2-1022",
+  "kind": "캐러셀(밤 교체·신규)",
+  "title": "비교는 약점이 아니에요 10/22 21:00",
+  "date": "2026-10-22",
+  "time": "21:00",
+  "status": "done",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1022_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1022_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1022_3.jpg"
+  ],
+  "download": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1022_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1022_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1022_3.jpg"
+  ],
+  "note": "블로그 글과 같은 날 같은 주제로 맞춰 인스타·스레드에 예약했어요(10/4). 인스타 3장, 스레드는 글만.",
+  "checks": [
+   "글자 잘림 없음",
+   "블로그 주제와 일치"
+  ]
+ },
+ {
+  "id": "night2-1025",
+  "kind": "캐러셀(밤 교체·신규)",
+  "title": "내가 맡은 역할을 되짚어 봐요 10/25 21:00",
+  "date": "2026-10-25",
+  "time": "21:00",
+  "status": "done",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1025_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1025_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1025_3.jpg"
+  ],
+  "download": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1025_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1025_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1025_3.jpg"
+  ],
+  "note": "블로그 글과 같은 날 같은 주제로 맞춰 인스타·스레드에 예약했어요(10/4). 인스타 3장, 스레드는 글만.",
+  "checks": [
+   "글자 잘림 없음",
+   "블로그 주제와 일치"
+  ]
+ },
+ {
+  "id": "night2-1026",
+  "kind": "캐러셀(밤 교체·신규)",
+  "title": "내 첫마디는 몇 번일까요? 10/26 21:00",
+  "date": "2026-10-26",
+  "time": "21:00",
+  "status": "done",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1026_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1026_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1026_3.jpg"
+  ],
+  "download": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1026_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1026_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1026_3.jpg"
+  ],
+  "note": "블로그 글과 같은 날 같은 주제로 맞춰 인스타·스레드에 예약했어요(10/4). 인스타 3장, 스레드는 글만.",
+  "checks": [
+   "글자 잘림 없음",
+   "블로그 주제와 일치"
+  ]
+ },
+ {
+  "id": "night2-1027",
+  "kind": "캐러셀(밤 교체·신규)",
+  "title": "예민한 걸까, 감각이 큰 걸까? 10/27 21:00",
+  "date": "2026-10-27",
+  "time": "21:00",
+  "status": "done",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1027_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1027_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1027_3.jpg"
+  ],
+  "download": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1027_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1027_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1027_3.jpg"
+  ],
+  "note": "블로그 글과 같은 날 같은 주제로 맞춰 인스타·스레드에 예약했어요(10/4). 인스타 3장, 스레드는 글만.",
+  "checks": [
+   "글자 잘림 없음",
+   "블로그 주제와 일치"
+  ]
+ },
+ {
+  "id": "night2-1028",
+  "kind": "캐러셀(밤 교체·신규)",
+  "title": "내 마음은 몇 번일까요? 10/28 21:00",
+  "date": "2026-10-28",
+  "time": "21:00",
+  "status": "done",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1028_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1028_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1028_3.jpg"
+  ],
+  "download": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1028_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1028_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1028_3.jpg"
+  ],
+  "note": "블로그 글과 같은 날 같은 주제로 맞춰 인스타·스레드에 예약했어요(10/4). 인스타 3장, 스레드는 글만.",
+  "checks": [
+   "글자 잘림 없음",
+   "블로그 주제와 일치"
+  ]
+ },
+ {
+  "id": "night2-1029",
+  "kind": "캐러셀(밤 교체·신규)",
+  "title": "결정 전에 세 가지만 적어요 10/29 21:00",
+  "date": "2026-10-29",
+  "time": "21:00",
+  "status": "done",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1029_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1029_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1029_3.jpg"
+  ],
+  "download": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1029_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1029_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1029_3.jpg"
+  ],
+  "note": "블로그 글과 같은 날 같은 주제로 맞춰 인스타·스레드에 예약했어요(10/4). 인스타 3장, 스레드는 글만.",
+  "checks": [
+   "글자 잘림 없음",
+   "블로그 주제와 일치"
+  ]
+ },
+ {
+  "id": "night2-1030",
+  "kind": "캐러셀(밤 교체·신규)",
+  "title": "게으른 걸까, 방전된 걸까? 10/30 21:00",
+  "date": "2026-10-30",
+  "time": "21:00",
+  "status": "done",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1030_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1030_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1030_3.jpg"
+  ],
+  "download": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1030_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1030_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1030_3.jpg"
+  ],
+  "note": "블로그 글과 같은 날 같은 주제로 맞춰 인스타·스레드에 예약했어요(10/4). 인스타 3장, 스레드는 글만.",
+  "checks": [
+   "글자 잘림 없음",
+   "블로그 주제와 일치"
+  ]
+ },
+ {
+  "id": "night2-1031",
+  "kind": "캐러셀(밤 교체·신규)",
+  "title": "평소에도 가면을 쓰나요? 10/31 21:00",
+  "date": "2026-10-31",
+  "time": "21:00",
+  "status": "done",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1031_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1031_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1031_3.jpg"
+  ],
+  "download": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1031_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1031_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/9ac7a28a5fa227c597a6f733459f911fd4e72279/2026-w42night/1031_3.jpg"
+  ],
+  "note": "블로그 글과 같은 날 같은 주제로 맞춰 인스타·스레드에 예약했어요(10/4). 인스타 3장, 스레드는 글만.",
+  "checks": [
+   "글자 잘림 없음",
+   "블로그 주제와 일치"
   ]
  }
 ]
