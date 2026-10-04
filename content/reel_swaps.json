@@ -1269,5 +1269,40 @@
    "소리 켜고 끝까지",
    "숫자가 데이터와 같은지"
   ]
+ },
+ {
+  "id": "data-harak",
+  "kind": "릴스",
+  "title": "자오선 데이터 · 하락이수 괘, 가장 흔한 괘는? (곤괘 6.2%)",
+  "date": "2026-11-11",
+  "time": "08:00",
+  "status": "new",
+  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42reel-data/ig/harak.mp4",
+  "old": "",
+  "note": "하락이수 편이에요. 인스타 11/11(수) 08:00, 스레드 08:30에 예약돼 있어요. 숫자는 무작위 3,000명 시험 결과예요(곤괘 6.2%, 박괘 4.3%, 나온 괘 60가지). 끝 장면은 \"프로필 링크 > 감정서에서 확인\"이에요.",
+  "checks": [
+   "샘플 글꼴·크기",
+   "소리 켜고 끝까지",
+   "숫자가 데이터와 같은지"
+  ]
+ },
+ {
+  "id": "vote-vs",
+  "kind": "질문 투표 카드",
+  "title": "정월의 질문 · 사주와 별자리가 다른 말을 하면, 나는?",
+  "date": "2026-10-18",
+  "time": "08:00",
+  "status": "new",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42vote/vote_vs.jpg"
+  ],
+  "download": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42vote/vote_vs.jpg"
+  ],
+  "note": "일요일 투표 카드예요. 인스타 10/18(일) 08:00, 스레드 08:30에 예약돼 있어요. 캡션에 \"가장 많이 나온 번호는 다음 데이터 릴스에서 알려 드릴게요\"라고 적었으니, 10/18 이후 댓글 번호를 세어 알려 주는 후속 릴스를 만들어야 해요.",
+  "checks": [
+   "글자 크기",
+   "4번 보기와 얼굴이 겹치지 않는지"
+  ]
  }
 ]
