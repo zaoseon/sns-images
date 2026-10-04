@@ -3,19 +3,39 @@
 사용: images_to_clip(out_mp4, [이미지경로...], hold=2.6, first_hold=3.0, last_hold=3.4, style='상큼 팝', seed=1, key='D')"""
 import os, sys, subprocess, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
-from PIL import Image, ImageFilter, ImageEnhance
+from PIL import Image, ImageFilter, ImageEnhance, ImageDraw, ImageFont
 import reel_music as RM
 W, H = 1080, 1920; FG_W = 1000; TOP = 330; XF = 0.35; FPS = 30
-def frame(src, dst):
-    im = Image.open(src).convert("RGB"); r = FG_W / im.width; fg = im.resize((FG_W, int(im.height * r)), Image.LANCZOS)
+CAP_FONT = "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc"
+def wrap_cap(d, text, f, maxw):
+    ls, cur = [], ""
+    for wd in text.split():
+        t = (cur + " " + wd).strip()
+        if d.textlength(t, font=f) <= maxw: cur = t
+        else:
+            if cur: ls.append(cur)
+            cur = wd
+    if cur: ls.append(cur)
+    return ls
+def frame(src, dst, caption=None):
+    im = Image.open(src).convert("RGB"); fw = W if (caption and im.width / im.height > 1.5) else FG_W
+    r = fw / im.width; fg = im.resize((fw, int(im.height * r)), Image.LANCZOS)
     bg = im.copy(); s = max(W / bg.width, H / bg.height); bg = bg.resize((int(bg.width * s) + 1, int(bg.height * s) + 1), Image.LANCZOS)
     bx, by = (bg.width - W) // 2, (bg.height - H) // 2; bg = bg.crop((bx, by, bx + W, by + H)).filter(ImageFilter.GaussianBlur(40))
-    bg = ImageEnhance.Brightness(bg).enhance(0.55); can = bg.copy(); y = TOP if fg.height <= H - TOP - 340 else max(40, (H - fg.height) // 2)
-    can.paste(fg, ((W - FG_W) // 2, y)); can.save(dst, quality=95)
-def images_to_clip(out_mp4, images, hold=2.6, first_hold=3.0, last_hold=3.4, style="상큼 팝", seed=1, key="D"):
+    bg = ImageEnhance.Brightness(bg).enhance(0.55); can = bg.copy()
+    top = 430 if (caption and fg.height <= 700) else TOP
+    y = top if fg.height <= H - top - 340 else max(40, (H - fg.height) // 2)
+    can.paste(fg, ((W - fw) // 2, y))
+    if caption:
+        d = ImageDraw.Draw(can); f = ImageFont.truetype(CAP_FONT, 58, index=1); ls = wrap_cap(d, caption, f, 900)[:3]
+        by0 = min(y + fg.height + 60, 1580 - len(ls) * 84 - 40); box_h = len(ls) * 84 + 48
+        d.rounded_rectangle([60, by0, W - 60, by0 + box_h], 36, fill=(14, 12, 10))
+        for k, l in enumerate(ls): d.text((W // 2, by0 + 24 + k * 84 + 42), l, font=f, fill=(255, 255, 255), anchor="mm")
+    can.save(dst, quality=95)
+def images_to_clip(out_mp4, images, hold=2.6, first_hold=3.0, last_hold=3.4, style="상큼 팝", seed=1, key="D", captions=None):
     tmp = tempfile.mkdtemp(); segs = []; durs = []
     for i, p in enumerate(images):
-        f = os.path.join(tmp, f"f{i}.jpg"); frame(p, f)
+        f = os.path.join(tmp, f"f{i}.jpg"); frame(p, f, (captions[i] if captions else None))
         d = (first_hold if i == 0 else last_hold if i == len(images) - 1 else hold) + (XF if i < len(images) - 1 else 0); durs.append(d)
         seg = os.path.join(tmp, f"s{i}.mp4"); n = int(d * FPS)
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-i", f, "-vf", f"zoompan=z='1+0.035*on/{n}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={n}:s={W}x{H}:fps={FPS},format=yuv420p", "-t", f"{d:.3f}", "-c:v", "libx264", "-preset", "veryfast", "-crf", "19", seg], check=True); segs.append(seg)
