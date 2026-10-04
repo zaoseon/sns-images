@@ -63,7 +63,7 @@ REEL_JS = r"""
   // CTA
   const t = slides[6]; t.bgColor='#1a1816'; t.face='bg_sunmoon'; t.imgScale=1.379; t.imgOffX=-90; t.imgOffY=bgOff(1.379,167+TB); t.panelOverride=panel(0,167+TB,1080,993,14,128);
   t.qSize=89; t.qY=378.5+TB; t.btn='팔로우하고 같이 얘기 나눠요'; t.btnSize=50; t.btnY=558+TB;
-  t.nextBadge = extra.nextBadge || '내일 밤 9시'; t.nextBadgeSize=39; t.nextY=785+TB; t.nextTitleSize=67; t.nextTitle = extra.nextTitle || t.nextTitle;
+  t.nextBadge = extra.nextBadge || '내일 저녁'; t.nextBadgeSize=39; t.nextY=785+TB; t.nextTitleSize=67; t.nextTitle = extra.nextTitle || t.nextTitle;
   t.hint='프로필 링크에서 내 기운 1초만에 확인'; t.hintSize=38;
   return slides.length;
 }

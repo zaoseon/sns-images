@@ -19,7 +19,7 @@ def frames(card, hook, sub, out, bottom="나는 몇 개 겹쳐? 댓글로 알려
     d.text((W//2, 1720), bottom, font=R.F(R.MED, 40), fill=R.GOLD, anchor="mm")
     b.save(out+"_b.jpg", quality=92); fs.append(out+"_b.jpg")
     c = Image.new("RGB", (W, H), R.INK); d = ImageDraw.Draw(c)
-    for i, (t, f, col) in enumerate([("매일 밤 9시", R.F(R.SER, 80), R.GOLD), ("나를 알아보는 테스트", R.F(R.SER, 80), R.PAPER),
+    for i, (t, f, col) in enumerate([("매일 저녁", R.F(R.SER, 80), R.GOLD), ("나를 알아보는 테스트", R.F(R.SER, 80), R.PAPER),
                                         ("팔로우하면 다음 편을", R.F(R.MED, 50), R.PAPER), ("놓치지 않아요", R.F(R.MED, 50), R.PAPER),
                                         ("내 태어난 날 기운은 프로필 링크에서 1초", R.F(R.MED, 38), R.DIM)]):
         d.text((W//2, 700 + i*120 + (40 if i >= 2 else 0) + (60 if i == 4 else 0)), t, font=f, fill=col, anchor="mm")

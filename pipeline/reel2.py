@@ -41,7 +41,7 @@ def scene_b_text(path, series, hanja, lines):
     d.text((W//2, 1650), "맞으면 ♥, 떠오르는 사람은 태그", font=R.F(R.MED, 46), fill=YEL, anchor="mm"); img.save(path, quality=92)
 def scene_c(path):
     img = face_bg(900); d = ImageDraw.Draw(img)
-    y = big(d, ["매일 밤 9시", "세 지도 테스트"], 1080, 100)
+    y = big(d, ["매일 저녁", "세 지도 테스트"], 1080, 100)
     d.text((W//2, y+30), "팔로우하면 다음 편을 놓치지 않아요", font=R.F(R.MED, 48), fill=(255, 255, 255), anchor="mm")
     d.text((W//2, y+120), "내 태어난 날 기운은 프로필 링크에서 1초", font=R.F(R.MED, 40), fill=(190, 182, 170), anchor="mm")
     d.text((W-36, H-30), "정월은 AI로 생성한 가상 캐릭터예요", font=R.F(R.MED, 24), fill=(150, 144, 136), anchor="rs"); img.save(path, quality=92)

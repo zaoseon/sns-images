@@ -53,7 +53,7 @@ def test_card(path, el, title, rows, note):
     nl = R.wrap(d, note, R.F(R.SEMI, 32), W-200)[:2]; nh = 60 + 46*len(nl)
     d.rounded_rectangle([64, y+10, W-64, y+10+nh], 28, fill=bg); yy = y+10+nh//2-23*(len(nl)-1)
     for l in nl: d.text((W//2, yy), l, font=R.F(R.SEMI, 32), fill=dk, anchor="mm"); yy += 46
-    d.text((64, H-60), "나는 몇 개 겹쳐? 댓글로 · 내일 밤 9시 다음 편", font=R.F(R.MED, 28), fill=GRAY)
+    d.text((64, H-60), "나는 몇 개 겹쳐? 댓글로 · 내일 저녁 다음 편", font=R.F(R.MED, 28), fill=GRAY)
     img.save(path, quality=92)
 def reel_first(path, el, series, hook_lines, sub):
     W, H = 1080, 1920; bg, dk, md = EL[el]

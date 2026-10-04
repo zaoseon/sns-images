@@ -1,4 +1,4 @@
-"""10/12~10/25 밤도 약속(매일 밤 9시 테스트)에 맞춤: 새 테스트 3개(10/13·10/19·10/25) + 다음 날 예고. 9/30"""
+"""10/12~10/25 밤도 약속(매일 저녁 테스트)에 맞춤: 새 테스트 3개(10/13·10/19·10/25) + 다음 날 예고. 9/30"""
 import json, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_2026_w40tests_shim import x, P

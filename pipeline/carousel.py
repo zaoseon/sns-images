@@ -140,7 +140,7 @@ def cta(S, n, m):
     bt = "+ 태그하고 팔로우까지"; bw = int(width(d, bt, BLACK_F, 46)) + 90
     d.rounded_rectangle([(W-bw)//2, y, (W+bw)//2, y+96], 48, fill=acc)
     draw_line(d, W//2, y+64, bt, BLACK_F, 46, (20, 18, 16), (20, 18, 16), "c"); y += 96 + 34
-    pill(d, W//2, y, "내일 밤 9시", (70, 66, 63), WHITE, 30, "c"); y += 78 + 18
+    pill(d, W//2, y, "내일 저녁", (70, 66, 63), WHITE, 30, "c"); y += 78 + 18
     ns = fit(d, S["nextTitle"], BLACK_F, 60, 40, W-120)
     y = draw_block(d, W//2, y, S["nextTitle"], BLACK_F, ns, WHITE, acc, 1.2) + 14
     draw_line(d, W//2, y+26, "프로필 링크에서 내 첫 글자 1초 확인", MED_F, 30, GRAY, GRAY, "c")

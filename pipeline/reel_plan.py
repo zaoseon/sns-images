@@ -31,7 +31,7 @@ def ig_defs():
         if k in SETS and SETS[k].get("variant"): d["variant"] = SETS[k]["variant"]       # 일주 릴스는 같은 날 캐러셀과 같은 모양
         out[k] = (d, dict(ov, _cfg=cfg))
     B = dict(RV.BYEONG); B["variant"] = {"cover": "C2", "advice": "A2", "cta": "T1"}
-    out["byeong"] = (B, dict(nextBadge="내일 밤 9시", nextTitle="정(丁)일생 편", _cfg=dict(struct="S2", style="발랄 우쿨렐레", seed=12, key="C", frames=sample_frames("byeong", 7))))
+    out["byeong"] = (B, dict(nextBadge="내일 저녁", nextTitle="정(丁)일생 편", _cfg=dict(struct="S2", style="발랄 우쿨렐레", seed=12, key="C", frames=sample_frames("byeong", 7))))
     return out
 def naver_defs():
     CFG = {"byeong": dict(struct="S2", style="발랄 우쿨렐레", seed=21, key="D"), "jeong": dict(struct="S1", style="경쾌 신스팝", seed=22, key="C"), "mu": dict(struct="S3", style="통통 마림바", seed=23, key="A"),
