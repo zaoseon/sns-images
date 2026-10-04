@@ -1368,5 +1368,51 @@
    "소리 켜고 끝까지",
    "풀이가 단정 표현이 아닌지"
   ]
+ },
+ {
+  "id": "night-1018",
+  "kind": "저녁 짝 글",
+  "title": "정월의 되짚기 · 일요일 밤, 생각이 많아지는 밤이에요? (블로그 n34 짝 글)",
+  "date": "2026-10-18",
+  "time": "21:00",
+  "status": "new",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1018_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1018_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1018_3.jpg"
+  ],
+  "download": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1018_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1018_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1018_3.jpg"
+  ],
+  "note": "인스타 10/18(일) 21:00(3장 카드), 스레드 21:00(글). ③의 OSMU 정리안에서 요청한 \"저녁 짝 글\"이에요. 문장은 해당 블로그 글에 있는 내용만 썼어요.",
+  "checks": [
+   "블로그 글과 같은 주제인지",
+   "글자 크기"
+  ]
+ },
+ {
+  "id": "night-1024",
+  "kind": "저녁 짝 글",
+  "title": "정월의 오해 풀기 · 기다림이 힘든 건 약해서일까? (블로그 n39 짝 글)",
+  "date": "2026-10-24",
+  "time": "19:00",
+  "status": "new",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1024_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1024_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1024_3.jpg"
+  ],
+  "download": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1024_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1024_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1024_3.jpg"
+  ],
+  "note": "인스타 10/24(토) 19:00(3장 카드), 스레드 19:00(글). 같은 날 18:00·18:30 카드 고르기와 20:00 릴스·21:00 한 줄 사주 사이에 끼워 19:00으로 잡았어요. ③의 OSMU 정리안에서 요청한 \"저녁 짝 글\"이에요. 문장은 해당 블로그 글에 있는 내용만 썼어요.",
+  "checks": [
+   "블로그 글과 같은 주제인지",
+   "글자 크기"
+  ]
  }
 ]
