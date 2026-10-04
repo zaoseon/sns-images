@@ -145,8 +145,8 @@ def s_trio(d, img, T, c, face):
 def s_cal(d, img, T, c, face):
     pill(d, c, 90, 90, T["kick"]); badge(img, d, face, c, S - 185, 190, 105)
     s = fit(d, T["hook"], 900, 150); y = lines_at(d, T["hook"], 90, 235, s, c.fg); hot = T["hot"]; cw, chh, g = 118, 64, 10; y0 = y + 36
-    for k in range(31):
-        day = k + 1; pos = k + 4; x = 90 + (pos % 7) * (cw + g); yy = y0 + (pos // 7) * (chh + g); on = day in hot
+    for k in range(T.get("days", 31)):
+        day = k + 1; pos = k + T.get("off", 4); x = 90 + (pos % 7) * (cw + g); yy = y0 + (pos // 7) * (chh + g); on = day in hot
         d.rounded_rectangle([x, yy, x + cw, yy + chh], 16, fill=c.acc if on else c.card, outline=c.acc if on else c.line, width=3)
         d.text((x + cw // 2, yy + chh // 2), str(day), font=F(SEMI, 34), fill=(c.bg if c.dark else (255, 255, 255)) if on else c.fg, anchor="mm")
 DRAW = {"QL": q_left, "QC": q_center, "QK": q_card, "BIG": big, "CH": char_top, "N": n_chips, "gua": s_gua, "ring": s_ring, "trio": s_trio, "cal": s_cal}
