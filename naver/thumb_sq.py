@@ -39,9 +39,11 @@ def head_circle(face, D, c):
     face = "v5_halfup_v2" if face == "v5_halfup" else face
     ch = Image.open(CH + face + ".png").convert("RGBA"); a = np.array(ch)[:, :, 3]; h, w = a.shape
     ys, xs = np.where(a[:int(h * .40)] > 40); x0, x1, y0 = xs.min(), xs.max(), ys.min()
-    sc = D * 0.72 / (x1 - x0); cw, chh = int(w * sc), int(h * sc); chs = ch.resize((cw, chh), Image.LANCZOS)
+    # 10/4 대표 지적: 원 안에 캐릭터가 제대로 안 들어감(턱이 원 아래에 잘림). 머리 위~턱이 약 머리 폭의 1.2배라서
+    # 폭 0.72로 맞추면 턱이 원 아래 끝에 닿았다. 머리 폭을 원 지름의 0.58로 줄이고, 위 여백 0.12 -> 턱이 0.8쯤, 그 아래에 목·어깨가 보이게 한다
+    sc = D * 0.58 / (x1 - x0); cw, chh = int(w * sc), int(h * sc); chs = ch.resize((cw, chh), Image.LANCZOS)
     cv = Image.new("RGBA", (D, D), c.md + (255,))
-    ox = int(D / 2 - ((x0 + x1) / 2) * sc); oy = int(D * 0.15 - y0 * sc)
+    ox = int(D / 2 - ((x0 + x1) / 2) * sc); oy = int(D * 0.12 - y0 * sc)
     cv.alpha_composite(chs, (ox, oy)) if ox >= 0 and oy >= 0 else cv.paste(chs, (ox, oy), chs)
     m = Image.new("L", (D, D), 0); ImageDraw.Draw(m).ellipse([0, 0, D - 1, D - 1], fill=255); cv.putalpha(m); return cv
 def badge(img, d, face, c, cx, cy, r):
@@ -73,18 +75,18 @@ def q_left(d, img, T, c, face):
     d.text((760, 540), T["glyph"], font=F(SER, 760), fill=c.tint, anchor="mm")
     pill(d, c, 90, 90, T["kick"]); badge(img, d, face, c, S - 185, 190, 105)
     s = fit(d, T["hook"], 900, 160); h = int(s * 1.2) * len(T["hook"]); y = lines_at(d, T["hook"], 90, max(705 - h, 290), s, c.fg)
-    accent(d, c, 90, y + 30); d.text((90, y + 62), T["sub"], font=F(SEMI, 56), fill=c.acc)
+    accent(d, c, 90, y + 30); d.text((90, y + 74), T["sub"], font=F(SEMI, 56), fill=c.acc)
 def q_center(d, img, T, c, face):
     d.text((S // 2, 600), T["glyph"], font=F(SER, 760), fill=c.tint, anchor="mm")
     pill(d, c, 0, 90, T["kick"], center=True); badge(img, d, face, c, S // 2, 345, 115)
     s = fit(d, T["hook"], 900, 150); y = lines_at(d, T["hook"], 0, 462, s, c.fg, center=True); accent(d, c, 0, y + 30, center=True)
-    d.text((S // 2, y + 62), T["sub"], font=F(SEMI, 56), fill=c.acc, anchor="ma")
+    d.text((S // 2, y + 74), T["sub"], font=F(SEMI, 56), fill=c.acc, anchor="ma")
 def q_card(d, img, T, c, face):
     d.text((S - 230, S - 260), T["glyph"], font=F(SER, 600), fill=c.tint, anchor="mm")
     pill(d, c, 90, 90, T["kick"]); card_rect(d, c, [70, 240, S - 70, 890])
-    s = fit(d, T["hook"], 800, 150); h = int(s * 1.2) * len(T["hook"]); y0 = 240 + (650 - h - 100) // 2 + 20
+    s = fit(d, T["hook"], 800, 150); h = int(s * 1.2) * len(T["hook"]); y0 = 240 + (650 - h - 100) // 2 + 13
     y = lines_at(d, T["hook"], 0, y0, s, c.fg, center=True); accent(d, c, 0, y + 28, center=True)
-    d.text((S // 2, y + 56), T["sub"], font=F(SEMI, 52), fill=c.acc, anchor="ma"); badge(img, d, face, c, S - 175, 215, 100)
+    d.text((S // 2, y + 70), T["sub"], font=F(SEMI, 52), fill=c.acc, anchor="ma"); badge(img, d, face, c, S - 175, 215, 100)
 def big(d, img, T, c, face):
     """큰 숫자·키워드형: 굵은 고딕 거대 글자 + 한 줄 후크. 정보형(숫자 하나)"""
     pill(d, c, 90, 90, T["kick"]); badge(img, d, face, c, S - 185, 190, 105)
@@ -133,10 +135,10 @@ def s_gua(d, img, T, c, face):
         if p: d.rounded_rectangle([x0, yy, x1, yy + 32], 10, fill=col)
         else: d.rounded_rectangle([x0, yy, x0 + 64, yy + 32], 10, fill=col); d.rounded_rectangle([x1 - 64, yy, x1, yy + 32], 10, fill=col)
     pill(d, c, 90, 90, T["kick"]); s = fit(d, T["hook"], 700, 150); y = lines_at(d, T["hook"], 90, 250, s, c.fg)
-    accent(d, c, 90, y + 30); d.text((90, y + 62), T["sub"], font=F(SEMI, 56), fill=c.acc); badge(img, d, face, c, S - 190, 790, 105)
+    accent(d, c, 90, y + 30); d.text((90, y + 74), T["sub"], font=F(SEMI, 56), fill=c.acc); badge(img, d, face, c, S - 190, 790, 105)
 def s_ring(d, img, T, c, face):
     pill(d, c, 90, 90, T["kick"]); ring(d, c, S - 260, 290, 150, T["glyph"], 190); badge(img, d, face, c, 200, 350, 110)
-    s = fit(d, T["hook"], 900, 140); y = lines_at(d, T["hook"], 90, 470, s, c.fg); accent(d, c, 90, y + 26); d.text((90, y + 62), T["sub"], font=F(SEMI, 56), fill=c.acc)
+    s = fit(d, T["hook"], 900, 140); y = lines_at(d, T["hook"], 90, 470, s, c.fg); accent(d, c, 90, y + 26); d.text((90, y + 74), T["sub"], font=F(SEMI, 56), fill=c.acc)
 def s_trio(d, img, T, c, face):
     pill(d, c, 90, 90, T["kick"]); badge(img, d, face, c, S - 185, 190, 105)
     s = fit(d, T["hook"], 900, 156); y = lines_at(d, T["hook"], 90, 250, s, c.fg)

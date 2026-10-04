@@ -45,14 +45,14 @@ def body_html(blocks):
             h += [f'<p>{l}</p>' for l in v]
         first = False
     return "".join(h)
-CSS = '''body{margin:0;background:#f4f1ea;color:#222;font:16px/1.7 -apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
-.wrap{max-width:720px;margin:0 auto;padding:20px 16px 80px}.box{background:#fff;border:1px solid #ddd;border-radius:12px;padding:14px 16px;margin:0 0 12px}
-.lab{font-size:13px;color:#8a6d3b;font-weight:700;margin:0 0 4px}.val{margin:0;white-space:pre-wrap;word-break:break-all}
-button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:10px 16px;background:#c4a062;color:#111;cursor:pointer;margin-top:8px}
-button.big{width:100%;padding:16px;font-size:18px}.ok{background:#7fb07a}
-#body{background:#fff;border:2px dashed #c4a062;border-radius:12px;padding:18px;margin-top:10px}#body p{margin:0}#body img{max-width:100%;height:auto}
-.hint{font-size:14px;color:#666}.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
-.tag{background:#f4efe4;color:#222;border:1px solid #c4a062;border-radius:999px;padding:8px 14px;font-weight:600;margin:0}.tag.ok{background:#7fb07a;border-color:#7fb07a;color:#111}.tag.ok::after{content:" ✓"}'''
+CSS = '''body{margin:0;background:#f4f1ea;color:#222;font:19px/1.7 -apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:20px 16px 80px}.box{background:#fff;border:1px solid #ddd;border-radius:12px;padding:14px 16px;margin:0 0 12px}
+.lab{font-size:16px;color:#8a6d3b;font-weight:700;margin:0 0 6px}.val{margin:0;white-space:pre-wrap;word-break:break-all;font-size:24px;font-weight:700;line-height:1.45}#t{font-size:28px}
+button{font:inherit;font-size:18px;font-weight:700;border:0;border-radius:12px;padding:12px 20px;background:#c4a062;color:#111;cursor:pointer;margin-top:8px}
+button.big{width:100%;padding:18px;font-size:20px}.ok{background:#7fb07a}
+#body{font-size:16px;background:#fff;border:2px dashed #c4a062;border-radius:12px;padding:18px;margin-top:10px}#body p{margin:0}#body img{max-width:100%;height:auto}
+.hint{font-size:16px;color:#666}.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.tag{background:#f4efe4;color:#222;border:1px solid #c4a062;border-radius:999px;padding:10px 16px;font-size:17px;font-weight:600;margin:0}.tag.ok{background:#7fb07a;border-color:#7fb07a;color:#111}.tag.ok::after{content:" ✓"}'''
 JS = '''function cp(id,b){navigator.clipboard.writeText(document.getElementById(id).innerText).then(function(){b.textContent="복사됨";b.className="ok"})}
 function cpt(b){navigator.clipboard.writeText(b.dataset.t).then(function(){b.className="tag ok"})}
 function cpb(b){var el=document.getElementById("body");var h=el.innerHTML,t=el.innerText;function done(){b.textContent="본문 복사됨 · 네이버 본문에 붙여 넣으세요";b.className="big ok"}
@@ -63,7 +63,7 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
     chips = "".join(f'<button class="tag" data-t="{html.escape(t)}" onclick="cpt(this)">{html.escape(t)}</button>' for t in tags)
     nav = f'<a href="/naver/{nxt}.html"><button class="big">다음 원고 →</button></a>' if nxt else '<a href="/naver/"><button class="big">목록으로 (마지막 원고)</button></a>'
     cover_box = (f'<div class="box"><p class="lab">2. 대표 이미지: 먼저 저장 → 네이버 글쓰기 맨 위에 사진으로 올리기(처음 올린 사진이 대표가 돼요) → 그다음 아래 본문 복사</p>'
-                 f'<img src="/naver/img/{cover}?v=sq" style="width:100%;border-radius:8px" alt=""><a href="/naver/img/{cover}" download="{cover}"><button>대표 이미지 저장</button></a></div>') if cover else ""
+                 f'<img src="/naver/img/{cover}?v=b3" style="width:100%;border-radius:8px" alt=""><a href="/naver/img/{cover}?v=b3" download="{os.path.basename(cover)}"><button>대표 이미지 저장</button></a></div>') if cover else ""
     if related and (related.get("url") or related.get("title")):
         _u = related.get("url") or ""
         rel_box = (f'<div class="box"><p class="lab">4. 함께 볼 글(내부 링크): 본문 맨 아래 유도 문구 다음 줄에 이 글의 주소를 붙여 넣고 엔터 → 링크 카드</p>'

@@ -17,34 +17,48 @@ def wrap(d, text, font, maxw):
             cur = wd
     if cur: lines.append(cur)
     return lines
+def balanced(d, text, font, maxw):
+    """줄 수는 그대로 두고 줄 너비를 고르게(마지막 줄에 한두 글자만 남는 일을 막는다)."""
+    ls = wrap(d, text, font, maxw); n = len(ls)
+    if n < 2: return ls
+    lo, hi = int(max(d.textlength(l, font=font) for l in ls) / 2), maxw
+    while hi - lo > 4:
+        mid = (lo + hi) // 2
+        if len(wrap(d, text, font, mid)) == n: hi = mid
+        else: lo = mid
+    return wrap(d, text, font, hi)
 def nohanja(t): return re.sub(r"\([^)]*[\u4e00-\u9fff][^)]*\)", "", t)      # 명조 글꼴에 한자가 없어 괄호 속 한자는 뺀다
 def render(pid, summary, maps, path, label="세 지도"):
+    """10/4 대표 지적: 원 안에 캐릭터가 제대로 안 들어감, 로고(子午線 자오선)가 카드 아래 선에 붙음, 글씨가 작다.
+    -> 얼굴 원을 조금 줄여(반지름 130->108) 글 칸을 600->690으로 넓히고, 라벨 36->40, 요약 최대 56->64, 지도 줄 28->31로 키움.
+       로고·AI 표시는 아래 선에서 40px 띄운 한 줄(y=H-100)에 두고, 글 내용은 그 위(H-125)까지만 쓴다."""
     t = TQ.T[pid]; c = TQ.Ctx(t["el"], False); face = t.get("face") or TQ.FACES[sum(map(ord, pid)) % len(TQ.FACES)]
     W, H = 1080, 540; img = Image.new("RGB", (W, H), c.bg); d = ImageDraw.Draw(img)
     d.rounded_rectangle([30, 30, W - 30, H - 30], 44, fill=c.card, outline=c.line, width=5)
-    TQ.badge(img, d, face, c, 210, 270, 130)                                         # 왼쪽 큰 얼굴 원
-    f = TQ.F(TQ.SEMI, 36); lab = "한눈에 보기"; w = d.textlength(lab, font=f) + 56
-    d.rounded_rectangle([420, 76, 420 + w, 140], 32, fill=c.acc); d.text((420 + 28, 108), lab, font=f, fill=c.pillfg, anchor="lm")
-    maxw = 600; fm = TQ.F(TQ.MED, 28)
-    for size in range(56, 33, -2):                                                   # 요약 3줄 이하 + 세 지도 줄이 아래 로고와 겹치지 않을 때까지 글자를 줄인다
-        fs = TQ.F(TQ.SER, size); ls = wrap(d, summary, fs, maxw); mall = wrap(d, label + "  " + nohanja(maps), fm, maxw)
-        y = 168 + len(ls) * int(size * 1.25); ok = False
-        for nl in (2, 1):                                                            # 세 지도 줄은 2줄이 안 들어가면 1줄로(쉼표 단위로 끊어 문장 중간에서 잘리지 않게)
+    R = 108; TQ.badge(img, d, face, c, 70 + R + 10, 270, R)                            # 왼쪽 얼굴 원(머리~턱~어깨가 원 안에 들어옴)
+    X0 = 330; maxw = W - 62 - X0                                                      # 글 시작 x, 글 칸 너비(오른쪽 카드 선에서 32px 안쪽)
+    f = TQ.F(TQ.SEMI, 40); lab = "한눈에 보기"; w = d.textlength(lab, font=f) + 60
+    d.rounded_rectangle([X0, 62, X0 + w, 132], 35, fill=c.acc); d.text((X0 + 30, 97), lab, font=f, fill=c.pillfg, anchor="lm")
+    fm = TQ.F(TQ.MED, 31); LIM = H - 125; Y0 = 156
+    for size in range(64, 33, -2):                                                   # 요약 3줄 이하 + 지도 줄이 아래 로고와 겹치지 않을 때까지 글자를 줄인다
+        fs = TQ.F(TQ.SER, size); ls = balanced(d, summary, fs, maxw); mall = wrap(d, label + "  " + nohanja(maps), fm, maxw)
+        lh = int(size * 1.22); y = Y0 + len(ls) * lh; ok = False
+        for nl in (2, 1):                                                            # 지도 줄은 2줄이 안 들어가면 1줄로(쉼표 단위로 끊어 문장 중간에서 잘리지 않게)
             if nl == 2 or len(mall) == 1: ml = mall[:nl]
             else:
                 items = (label + "  " + nohanja(maps)).split(", "); ml = [items[0]]
                 for it in items[1:]:
                     if d.textlength(ml[0] + ", " + it, font=fm) <= maxw: ml[0] += ", " + it
                     else: break
-            if len(ls) <= 3 and y + 46 + len(ml) * 38 <= 436 and (len(ml) == len(mall) or nl == 1 or len(mall) <= 2): ok = True; break
+            if len(ls) <= 3 and y + 44 + len(ml) * 42 <= LIM and (len(ml) == len(mall) or nl == 1 or len(mall) <= 2): ok = True; break
         if ok: break
-    y = 168
-    for l in ls: d.text((420, y), l, font=fs, fill=c.fg); y += int(size * 1.25)
-    d.line([(420, y + 22), (420 + 130, y + 22)], fill=c.acc, width=9)
-    yy = y + 46
-    for l in ml: d.text((420, yy), l, font=fm, fill=c.acc); yy += 38
-    d.text((420, H - 74), "子午線 자오선", font=TQ.F(TQ.SER, 32), fill=c.acc)
-    fa = TQ.F(TQ.MED, 22); d.text((W - 62, H - 66), "AI로 생성한 가상의 캐릭터입니다", font=fa, fill=c.gray, anchor="rm")
+    y = Y0
+    for l in ls: d.text((X0, y), l, font=fs, fill=c.fg); y += lh
+    d.line([(X0, y + 18), (X0 + 130, y + 18)], fill=c.acc, width=9)
+    yy = y + 44
+    for l in ml: d.text((X0, yy), l, font=fm, fill=c.acc); yy += 42
+    d.text((X0, H - 100), "子午線 자오선", font=TQ.F(TQ.SER, 32), fill=c.acc)
+    fa = TQ.F(TQ.MED, 23); d.text((W - 62, H - 84), "AI로 생성한 가상의 캐릭터입니다", font=fa, fill=c.gray, anchor="rm")
     img.resize((1280, 640), Image.LANCZOS).save(path, quality=95, subsampling=0, optimize=True)
 def main():
     reg = json.load(open(os.path.join(HERE, "pages.json"), encoding="utf-8")); done = []

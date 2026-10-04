@@ -38,8 +38,8 @@ def link_box(k):
     if k in LP.FIX_KEEP: return '<div class="lk keep"><p class="old">함께 볼 글은 그대로 두세요(주제가 맞아요).</p></div>'
     return ''
 items = ''.join(f'''<div class="box" data-dt="{dt}" id="b_{k}"><p class="lab"><span class="st"></span> {int(dt[5:7])}월 {int(dt[8:10])}일</p>
-<img src="/naver/img/sq_{k}.jpg?v=3" alt=""><p class="val" id="t_{k}">{html.escape(t)}</p>
-<div class="btns"><a href="/naver/img/sq_{k}.jpg?v=3" download="{dt[5:10].replace("-","")}_{k}.jpg"><button>이미지 저장</button></a><button onclick="cp('t_{k}',this)">제목 복사</button>{body_btn(k)}</div>{link_box(k)}</div>''' for dt, k, t in rows)
+<img src="/naver/img/sq_{k}.jpg?v=4" alt=""><p class="val" id="t_{k}">{html.escape(t)}</p>
+<div class="btns"><a href="/naver/img/sq_{k}.jpg?v=4" download="{dt[5:10].replace("-","")}_{k}.jpg"><button>이미지 저장</button></a><button onclick="cp('t_{k}',this)">제목 복사</button>{body_btn(k)}</div>{link_box(k)}</div>''' for dt, k, t in rows)
 page = f'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>예약 글 수정 작업판</title><style>
 body{{margin:0;background:#f4f1ea;color:#222;font:18.5px/1.65 -apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}}@media(min-width:760px){{body{{font-size:20px}}}}
 .wrap{{max-width:760px;margin:0 auto;padding:20px 16px 80px}}h1{{text-align:center;font-size:28px;margin:8px 0}}.box{{background:#fff;border:1px solid #ddd;border-radius:14px;padding:14px 16px;margin:0 0 14px}}
