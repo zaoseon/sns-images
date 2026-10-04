@@ -1287,25 +1287,6 @@
   ]
  },
  {
-  "id": "vote-vs",
-  "kind": "질문 투표 카드",
-  "title": "정월의 질문 · 사주와 별자리가 다른 말을 하면, 나는?",
-  "date": "2026-10-18",
-  "time": "08:00",
-  "status": "new",
-  "images": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42vote/vote_vs.jpg"
-  ],
-  "download": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42vote/vote_vs.jpg"
-  ],
-  "note": "일요일 투표 카드예요. 인스타 10/18(일) 08:00, 스레드 08:30에 예약돼 있어요. 캡션에 \"가장 많이 나온 번호는 다음 데이터 릴스에서 알려 드릴게요\"라고 적었으니, 10/18 이후 댓글 번호를 세어 알려 주는 후속 릴스를 만들어야 해요.",
-  "checks": [
-   "글자 크기",
-   "4번 보기와 얼굴이 겹치지 않는지"
-  ]
- },
- {
   "id": "data-alone",
   "kind": "릴스",
   "title": "자오선 데이터 · 사주만 혼자 다른 사람은? (100명 중 37명)",
@@ -1335,6 +1316,25 @@
    "샘플 글꼴·크기",
    "소리 켜고 끝까지",
    "숫자가 데이터와 같은지"
+  ]
+ },
+ {
+  "id": "quiz-four",
+  "kind": "퀴즈 카드",
+  "title": "정월의 퀴즈 · 여섯 운명학 중 넷 이상이 같은 말을 하는 사람은 100명 중 몇 명?",
+  "date": "2026-10-18",
+  "time": "08:00",
+  "status": "new",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42vote/quiz_four.jpg"
+  ],
+  "download": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42vote/quiz_four.jpg"
+  ],
+  "note": "일요일 퀴즈 카드예요. 인스타 10/18(일) 08:00, 스레드 08:30에 예약돼 있어요. 정답(약 5명)은 11/1(일) 12:00 데이터 릴스 \"여섯 운명학이 다 같은 날은?\"이 알려 줘요. 투표가 아니라 정답이 있는 퀴즈라서 반응이 적어도 약속이 지켜져요. 이전 투표 카드(vote_vs)는 쓰지 않아요.",
+  "checks": [
+   "글자 크기",
+   "정답이 11/1 릴스 숫자와 같은지(100명 중 5명)"
   ]
  }
 ]
