@@ -1079,5 +1079,30 @@
    "글자 잘림 없음",
    "블로그 주제와 일치"
   ]
+ },
+ {
+  "id": "sample-pisces",
+  "kind": "캐러셀(샘플)",
+  "title": "물고기자리는 우유부단할까? (샘플, 예약 전)",
+  "date": "2026-10-07",
+  "time": "08:00",
+  "status": "new",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/26117f0f33ddeb23c74a21927a79b4e777a952f4/2026-w43sample/pisces_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/26117f0f33ddeb23c74a21927a79b4e777a952f4/2026-w43sample/pisces_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/26117f0f33ddeb23c74a21927a79b4e777a952f4/2026-w43sample/pisces_3.jpg"
+  ],
+  "download": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/26117f0f33ddeb23c74a21927a79b4e777a952f4/2026-w43sample/pisces_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/26117f0f33ddeb23c74a21927a79b4e777a952f4/2026-w43sample/pisces_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/26117f0f33ddeb23c74a21927a79b4e777a952f4/2026-w43sample/pisces_3.jpg"
+  ],
+  "note": "네이버 물고기자리 글(10/6 저녁)과 사이트 글(10/7 새벽 공개)에 맞춘 같은 주제 샘플이에요. 예약에는 아직 안 넣었어요. 권장: 10/7 아침 자리(지금 \"회사의 나와 집의 나\")를 이 카드로 바꾸는 거예요. 문안은 저장소 content/pisces_sample_copy.md에 있어요.",
+  "checks": [
+   "글자 잘림 없음",
+   "줄바꿈 의미 단위",
+   "블로그 글에 있는 내용만 씀",
+   "예약 전 대표 확인"
+  ]
  }
 ]
