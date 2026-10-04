@@ -60,6 +60,7 @@ function cpb(b){var el=document.getElementById("body");var h=el.innerHTML,t=el.i
  if(window.ClipboardItem){navigator.clipboard.write([new ClipboardItem({"text/html":new Blob([h],{type:"text/html"}),"text/plain":new Blob([t],{type:"text/plain"})})]).then(done,sel)}else sel()}'''
 def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, category=None, thumbs=None, cid=None, clips=None, reserve=None):
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
+    body = body.replace("naver_cta2_", "naver_cta4_").replace("naver_cta3_", "naver_cta4_")   # 10/4: CTA 배너를 2/3 크기로(compact.cta_small)
     chips = "".join(f'<button class="tag" data-t="{html.escape(t)}" onclick="cpt(this)">{html.escape(t)}</button>' for t in tags)
     nav = f'<a href="/naver/{nxt}.html"><button class="big">다음 원고 →</button></a>' if nxt else '<a href="/naver/"><button class="big">목록으로 (마지막 원고)</button></a>'
     cover_box = (f'<div class="box"><p class="lab">2. 대표 이미지: 먼저 저장 → 네이버 글쓰기 맨 위에 사진으로 올리기(처음 올린 사진이 대표가 돼요) → 그다음 아래 본문 복사</p>'

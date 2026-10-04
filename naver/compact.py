@@ -40,3 +40,14 @@ def cta_c(src, dst):
     d.rounded_rectangle([x0, y0, x0 + bw, y0 + bh], bh // 2, fill=R.GOLD)
     d.text((Wc // 2, y0 + bh // 2), "1초 만에 내 기운 보기", font=R.HF("1초 만에", R.F(R.SEMI, int(30 * k))), fill=R.INK, anchor="mm")
     img.save(dst, quality=96, subsampling=0, optimize=True)
+
+def cta_small(dst, ratio=2 / 3):
+    """CTA 배너를 지금의 2/3 크기로 보이게 한다(10/4 대표 지적: 맨 아래 배너가 너무 크다).
+    네이버는 글 폭에 맞춰 그림을 보여 주므로, 그림 파일 폭을 줄이면 크기가 글마다 달라진다. 그래서 1280 폭 흰 바탕 가운데에 배너를 ratio(2/3) 폭·높이로 놓는다.
+    -> 글 폭이 얼마든 배너는 가로·세로 모두 지금의 2/3, 가운데 정렬. 배너는 큰 그림(1280x400)을 줄여 놓아 선명하다. 흰 바탕은 글 바탕과 같은 색이다."""
+    import tempfile, os
+    tmp = os.path.join(tempfile.gettempdir(), "_cta_full.jpg"); cta_c(None, tmp)
+    full = Image.open(tmp).convert("RGB"); bw, bh = int(round(1280 * ratio)), int(round(400 * ratio))
+    small = full.resize((bw, bh), Image.LANCZOS); can = Image.new("RGB", (1280, bh), (255, 255, 255)); can.paste(small, ((1280 - bw) // 2, 0))
+    can.save(dst, quality=96, subsampling=0, optimize=True); return can.size
+
