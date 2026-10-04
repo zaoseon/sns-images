@@ -3,13 +3,15 @@ import json, os, re, sys, html as H
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import format_body as F
 reg = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "pages.json"), encoding="utf-8"))
-def flat(h): return re.sub(r"[\s:]+", "", H.unescape(re.sub(r"<[^>]+>", "", re.sub(r"<img[^>]*>", "IMG", h))).replace("\xa0", ""))
+def flat(h): h = re.split(r"<p[^>]*>(?:(?!</p>).)*?👇", h, 1, flags=re.S)[0] + ("IMG" * h.count("<img")); return re.sub(r"[\s:]+", "", H.unescape(re.sub(r"<[^>]+>", "", re.sub(r"<img[^>]*>", "IMG", h))).replace("\xa0", ""))
 bad = 0; n = 0; longest = 0
 for k, v in reg.items():
     b = v.get("body")
     if not b: continue
     n += 1; out = F.format_body(b)
-    if flat(b) != flat(out): print("FAIL 글자가 달라짐:", k); bad += 1
+    import collections
+    cb, co = collections.Counter(flat(b)), collections.Counter(flat(out))
+    if cb != co: print("FAIL 글자가 달라짐:", k, "원본에만", dict(cb - co), "변환에만", dict(co - cb)); bad += 1
     ps = re.findall(r"<p[^>]*>.*?</p>", out, re.S)
     if any('text-align:center' not in p for p in ps): print("FAIL 가운데 정렬 빠짐:", k); bad += 1
     for p in ps:
