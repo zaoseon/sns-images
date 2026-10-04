@@ -41,7 +41,9 @@ def build(hook, sub, instr, note, face="v1_lowbun"):
         small(c, "내 태어난 날 기운은 프로필 링크에서 1초", 1160, 1.3, 38, (200, 192, 176))
     return [(3.0, s1), (5.4, s2), (2.8, s3)]
 SETS = {"oct3": dict(hook="10월, 나에게\n*먼저 오는 소식*", sub="세 장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="풀이는 캡션에 있어요 (먼저 고르고 보기!)", date="2026-10-03"),
-        "oct10": dict(hook="그 사람이\n*곧 보여줄 행동*", sub="마음에 떠오르는 사람을 생각하세요", instr="끌리는 카드 번호를 댓글로", note="풀이는 캡션에 있어요 (먼저 고르고 보기!)", date="2026-10-10")}
+        "oct10": dict(hook="그 사람이\n*곧 보여줄 행동*", sub="마음에 떠오르는 사람을 생각하세요", instr="끌리는 카드 번호를 댓글로", note="풀이는 캡션에 있어요 (먼저 고르고 보기!)", date="2026-10-10"),
+        "oct17": dict(hook="마음이 복잡한 날,\n*나에게 필요한 것*", sub="세 장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="풀이는 캡션에 있어요 (먼저 고르고 보기!)", date="2026-10-17"),
+        "oct24": dict(hook="요즘 마음에 걸린 일,\n*풀어 가는 순서*", sub="마음에 걸린 일 하나를 떠올리세요", instr="끌리는 카드 번호를 댓글로", note="풀이는 캡션에 있어요 (먼저 고르고 보기!)", date="2026-10-24")}
 def check_frames(scenes):
     """장면마다 몇 시점의 그림을 배경만 있는 그림과 비교해, 바뀐 부분(글자·카드·정월)이 안전 영역 밖으로 나가는지 검사한다."""
     bad = []; total = sum(d for d, _ in scenes); acc = 0
@@ -64,4 +66,4 @@ if __name__ == "__main__":
     key = sys.argv[1] if len(sys.argv) > 1 else "oct3"; cfg = SETS[key]; sc = build(cfg["hook"], cfg["sub"], cfg["instr"], cfg["note"])
     bad = check_frames(sc); print("안전 영역 검사:", "통과" if not bad else bad)
     if bad and "--force" not in sys.argv: sys.exit(1)
-    out, secs = M.render(cfg["date"], sc, os.path.join(ROOT, "2026-pick", "v3")); music(out, sc, 71 if key == "oct3" else 72); print(out, secs, "초")
+    out, secs = M.render(cfg["date"], sc, os.path.join(ROOT, "2026-pick", "v3")); music(out, sc, {"oct3": 71, "oct10": 72, "oct17": 73, "oct24": 74}[key]); print(out, secs, "초")
