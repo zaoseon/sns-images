@@ -480,7 +480,7 @@
   "title": "자미두수 캐러셀 10/07 08:00",
   "date": "2026-10-07",
   "time": "08:00",
-  "status": "done",
+  "status": "skip",
   "images": [
    "https://raw.githubusercontent.com/zaoseon/sns-images/96be6192a5a92fa374fef2d4803482dd2742670a/2026-w41topic/1007_1.jpg",
    "https://raw.githubusercontent.com/zaoseon/sns-images/96be6192a5a92fa374fef2d4803482dd2742670a/2026-w41topic/1007_2.jpg",
@@ -499,7 +499,7 @@
    "https://raw.githubusercontent.com/zaoseon/sns-images/96be6192a5a92fa374fef2d4803482dd2742670a/2026-w41topic/1007_6.jpg",
    "https://raw.githubusercontent.com/zaoseon/sns-images/96be6192a5a92fa374fef2d4803482dd2742670a/2026-w41topic/1007_7.jpg"
   ],
-  "note": "인스타·스레드 예약에 반영했어요(10/3 밤). 표지 C1 · 조언 A1 · CTA T1, 정·병·무 샘플 글꼴·크기 그대로. 표지 AI 문구에 테두리를 넣어 다시 올렸어요.",
+  "note": "10/7 아침 자리를 물고기자리 자가진단 카드로 바꿨어요(10/4, 대표 승인). 이 자미두수 카드는 예약에서 빠졌고 다른 날 쓰려고 보관해요.",
   "checks": [
    "글자 잘림 없음",
    "표지에만 AI 문구",
@@ -1082,27 +1082,26 @@
  },
  {
   "id": "sample-pisces",
-  "kind": "캐러셀(샘플)",
-  "title": "물고기자리는 우유부단할까? (샘플, 예약 전)",
+  "kind": "캐러셀(밤 교체·신규)",
+  "title": "물고기자리인 나, 몇 개 해당돼요? 10/07 08:00",
   "date": "2026-10-07",
   "time": "08:00",
-  "status": "new",
+  "status": "done",
   "images": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/26117f0f33ddeb23c74a21927a79b4e777a952f4/2026-w43sample/pisces_1.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/26117f0f33ddeb23c74a21927a79b4e777a952f4/2026-w43sample/pisces_2.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/26117f0f33ddeb23c74a21927a79b4e777a952f4/2026-w43sample/pisces_3.jpg"
+   "https://raw.githubusercontent.com/zaoseon/sns-images/a18d8519049a35d510a66ff3f752676974d28cef/2026-w43sample/pisces_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/a18d8519049a35d510a66ff3f752676974d28cef/2026-w43sample/pisces_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/a18d8519049a35d510a66ff3f752676974d28cef/2026-w43sample/pisces_3.jpg"
   ],
   "download": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/26117f0f33ddeb23c74a21927a79b4e777a952f4/2026-w43sample/pisces_1.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/26117f0f33ddeb23c74a21927a79b4e777a952f4/2026-w43sample/pisces_2.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/26117f0f33ddeb23c74a21927a79b4e777a952f4/2026-w43sample/pisces_3.jpg"
+   "https://raw.githubusercontent.com/zaoseon/sns-images/a18d8519049a35d510a66ff3f752676974d28cef/2026-w43sample/pisces_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/a18d8519049a35d510a66ff3f752676974d28cef/2026-w43sample/pisces_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/a18d8519049a35d510a66ff3f752676974d28cef/2026-w43sample/pisces_3.jpg"
   ],
-  "note": "네이버 물고기자리 글(10/6 저녁)과 사이트 글(10/7 새벽 공개)에 맞춘 같은 주제 샘플이에요. 예약에는 아직 안 넣었어요. 권장: 10/7 아침 자리(지금 \"회사의 나와 집의 나\")를 이 카드로 바꾸는 거예요. 문안은 저장소 content/pisces_sample_copy.md에 있어요.",
+  "note": "네이버 물고기자리 글(10/6 저녁)·사이트 글(10/7 새벽)과 같은 주제로 인스타·스레드 10/7 아침에 예약했어요(10/4). 번호로 답하는 자가진단 틀이에요(실측에서 댓글 반응이 가장 컸던 틀). 인스타 3장, 스레드는 글만.",
   "checks": [
    "글자 잘림 없음",
    "줄바꿈 의미 단위",
-   "블로그 글에 있는 내용만 씀",
-   "예약 전 대표 확인"
+   "블로그 글에 있는 내용만 씀"
   ]
  }
 ]
