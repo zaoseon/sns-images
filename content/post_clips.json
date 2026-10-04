@@ -18,6 +18,15 @@
   "zip": "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_post/s10.zip",
   "rec": "2026-10-04",
   "time": "20:00",
-  "note": "1080x1350(4:5). 핵심 글자는 가운데 정사각 안에 있어요. 1·6번 장에 정월(AI 캐릭터)이 나와 AI 표시가 들어 있어요."
+  "note": "10/4 대표 지시: 이미지가 아니라 이 이미지들로 만든 영상(16.8초, 음악 포함)을 올려요. 위 페이지 번호와 \"옆으로 넘겨서\" 안내는 뺐어요. 영상 파일은 video 항목이에요.",
+  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_post/s10_nopage/s10_clip.mp4",
+  "images_nopage": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_post/s10_nopage/s10_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_post/s10_nopage/s10_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_post/s10_nopage/s10_3.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_post/s10_nopage/s10_4.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_post/s10_nopage/s10_5.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_post/s10_nopage/s10_6.jpg"
+  ]
  }
 ]

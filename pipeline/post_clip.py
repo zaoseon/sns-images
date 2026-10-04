@@ -17,7 +17,10 @@ def wk(d): return "월화수목금토일"[d.weekday()]
 def new(c): im = Image.new("RGB", (W, H), c.bg); return im, ImageDraw.Draw(im)
 def pill(d, c, x, y, t):
     f = F(SEMI, 38); w = d.textlength(t, font=f) + 58; d.rounded_rectangle([x, y, x + w, y + 70], 35, fill=c.acc); d.text((x + 29, y + 35), t, font=f, fill=c.pillfg, anchor="lm")
-def pager(d, c, n, total): d.text((W - 80, 125), f"{n} / {total}", font=F(SEMI, 34), fill=c.gray, anchor="rm")
+NOPAGE = bool(os.environ.get("NOPAGE"))        # 10/4 대표: 영상용은 위 페이지 번호를 뺀다
+def pager(d, c, n, total):
+    if NOPAGE: return
+    d.text((W - 80, 125), f"{n} / {total}", font=F(SEMI, 34), fill=c.gray, anchor="rm")
 def footer(d, c):
     d.text((80, 1262), "子午線 자오선", font=F(SER, 34), fill=c.acc); d.text((W - 80, 1262), "zaoseon.com", font=F(MED, 28), fill=c.gray, anchor="rm")
 def ai(d, c, y=1170):
@@ -48,7 +51,7 @@ def build_s10():
     d.text((820, 640), "宅", font=F(SER, 760), fill=Dk.tint, anchor="mm")
     cv = T.head_circle("v1_lowbun", 240, Dk); d.ellipse([80, 255, 340, 515], fill=T.GOLD); im.paste(cv, (90, 265), cv)
     y = lines(d, ["이사 날짜,", "이 6일이면", "돼요"], 80, 540, 140, Dk.fg)
-    d.text((80, y + 10), "9 · 10 · 19 · 20 · 29 · 30일", font=F(SEMI, 50), fill=Dk.acc); d.text((80, y + 88), "옆으로 넘겨서 달력 보기 →", font=F(MED, 34), fill=Dk.gray)
+    d.text((80, y + 10), "9 · 10 · 19 · 20 · 29 · 30일", font=F(SEMI, 50), fill=Dk.acc); (None if NOPAGE else d.text((80, y + 88), "옆으로 넘겨서 달력 보기 →", font=F(MED, 34), fill=Dk.gray))
     ai(d, Dk); footer(d, Dk); out.append(im)
     # 2 달력
     im, d = new(L); pill(d, L, 80, 150, "10월 달력"); pager(d, L, 2, tot)
@@ -97,10 +100,10 @@ def build_s10():
     return out
 BUILD = {"s10": build_s10}
 if __name__ == "__main__":
-    pid = sys.argv[1] if len(sys.argv) > 1 else "s10"; imgs = BUILD[pid](); od = os.path.join(ROOT, "clips_post", pid); os.makedirs(od, exist_ok=True)
+    pid = sys.argv[1] if len(sys.argv) > 1 else "s10"; imgs = BUILD[pid](); od = os.path.join(ROOT, "clips_post", pid + ("_nopage" if NOPAGE else "")); os.makedirs(od, exist_ok=True)
     names = []
     for i, im in enumerate(imgs, 1):
         p = os.path.join(od, f"{pid}_{i}.jpg"); im.save(p, quality=92); names.append(p)
-    with zipfile.ZipFile(os.path.join(ROOT, "clips_post", f"{pid}.zip"), "w", zipfile.ZIP_STORED) as z:
+    with zipfile.ZipFile(os.path.join(ROOT, "clips_post", f"{pid}{'_nopage' if NOPAGE else ''}.zip"), "w", zipfile.ZIP_STORED) as z:
         for p in names: z.write(p, os.path.basename(p))
     print(pid, len(imgs), "장", [os.path.getsize(p) // 1024 for p in names], "KB")
