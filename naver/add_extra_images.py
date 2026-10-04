@@ -49,7 +49,7 @@ def parse_rows(b):
     return title, rows
 def main():
     reg = json.load(open(os.path.join(HERE, "pages.json"), encoding="utf-8")); done_i, done_s, skip = [], [], []
-    for k in [f"n{i}" for i in range(47, 64)]:
+    for k in [f"n{i}" for i in range(47, 70)]:
         b = reg[k]["body"]; fn = f"naver_z{k[1:]}_i.jpg"
         if fn in b: continue
         m1 = re.search(r"<b>한 줄 요약</b>:\s*(.*?)</p>", b); m2 = re.search(r"<b>(세 가지|달력|세 지도|두 지도|[^<]{2,6})</b>:\s*(.*?)</p>", b[b.find("한 줄 요약") + 10:])
