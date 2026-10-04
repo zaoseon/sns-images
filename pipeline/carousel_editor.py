@@ -220,7 +220,7 @@ def reel_defs():
     defs = {}
     for date, R in REELS.items():
         nxt = R["next"]
-        nb, nt = ("내일 낮 12시", nxt.split(": ", 1)[1]) if nxt.startswith("내일 낮 12시: ") else ("월요일 아침 8시", "이번 주 기운 편")
+        nb, nt = (nxt.split(": ", 1)[0], nxt.split(": ", 1)[1]) if nxt.startswith(("내일: ", "다음 편: ")) else ("다음 편", "이번 주 기운 편")   # 10/4: 게시 시각(몇 시)은 문구에 쓰지 않는다
         if date in tri_idx:
             im = fix[tri_idx[date] - 1]["image"]; rows = im["rows"]
             d = dict(dayChar="", hanja="", accent=R["accent"], face=R["face"], kicker=R["kicker"], coverTitle=R["hook"], coverSub=R["sub"],

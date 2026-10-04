@@ -38,7 +38,7 @@ def test_card(path, el, title, rows, note):
     W, H = 1080, 1350; bg, dk, md = EL[el]
     img = Image.new("RGB", (W, H), (250, 247, 241)); d = ImageDraw.Draw(img)
     d.rectangle([0, 0, W, 16], fill=dk); logo(d, 64, 56, dk)
-    d.text((64, 140), "세 가지 지도로 보면", font=R.F(R.MED, 32), fill=GRAY)
+    d.text((64, 140), "사주·별자리·숫자로 보면", font=R.F(R.MED, 32), fill=GRAY)
     ts = 70
     while ts > 44 and d.textlength(title, font=R.F(R.SER, ts)) > W-128: ts -= 2
     d.text((64, 190), title, font=R.HF(title, R.F(R.SER, ts)), fill=INKD)

@@ -5,7 +5,7 @@ g=dict(CS.SPARE['갑'], variant={'cover':'C3','advice':'A1','cta':'T1'})
 g['advice']=['곧음은 무기,\n휘는 법도 알아요','센 바람엔 가지도 흔들려야\n부러지지 않아요.\n한 번쯤은 먼저 끄덕여 보세요.']
 e=dict(CS.SPARE['을'], variant={'cover':'C1','advice':'A2','cta':'T2'})
 e['advice']=['유연함은 무기,\n내 마음도 챙겨요','맞추는 건 강점이지만 늘 내가 맞추면 지쳐요.\n하고 싶은 말 하나는 꼭 꺼내 보세요.']
-NEXT={'gab':'을(乙)일생 편','eul':'세 지도 테스트'}
+NEXT={'gab':'을(乙)일생 편','eul':'사주·별자리·숫자 테스트'}
 def mk(S,nxt):
     return dict(dayChar=S['dayChar'],hanja=S['hanja'],accent=S['accent'],face=S['face'],kicker=S['kicker'],coverTitle=S['coverTitle'],coverSub=S['coverSub'],
         personality=S['personality'],love=S['love'],money=S['money'],advice=S['advice'],chartNote=S['chartNote'],values=S['values'],highlight=S['highlight'],

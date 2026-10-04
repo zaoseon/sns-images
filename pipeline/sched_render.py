@@ -3,7 +3,7 @@
 import sys, os, inspect
 sys.path.insert(0,'pipeline'); sys.path.insert(0,'content')
 import carousel_sets as CS, carousel_editor as CE, reel_v2 as RV, reel_plan as RP
-CHAIN = {"기":"경(庚)일생 편","경":"신(辛)일생 편","신":"임(壬)일생 편","임":"계(癸)일생 편","계":"갑(甲)일생 편","갑":"을(乙)일생 편","을":"세 지도 테스트"}
+CHAIN = {"기":"경(庚)일생 편","경":"신(辛)일생 편","신":"임(壬)일생 편","임":"계(癸)일생 편","계":"갑(甲)일생 편","갑":"을(乙)일생 편","을":"사주·별자리·숫자 테스트"}
 src=inspect.getsource(CE.render)
 src=src.replace("n = pg.evaluate(LAYOUT_JS, [d, None]); pg.wait_for_timeout(150)","n = pg.evaluate(LAYOUT_JS, [d, None]); pg.evaluate(OVERRIDE_JS, S.get('_ov', {})); pg.wait_for_timeout(150)")
 exec(src, CE.__dict__)

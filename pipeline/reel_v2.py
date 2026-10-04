@@ -50,7 +50,7 @@ BYEONG = dict(dayChar="병", hanja="丙", accent="#e65c3c", face="v1_lowbun", ki
     advice=["표현은 무기,\n속도만 조절하면 돼요", "다 보여주는 게 나쁜 게 아니에요.\n타이밍만 살짝 늦추면\n관계가 더 편해져요."], chartNote="", values=[.35, 1.0, .45, .3, .4], highlight=1,
     ctaQ="주변에 *병화* 같은\n사람이 있나요?", nextTitle="정(丁)일생 편")
 def get_defs():
-    d = CE.reel_defs(); d["byeong"] = (BYEONG, dict(nextBadge="내일 낮 12시", nextTitle="정(丁)일생 편")); return d
+    d = CE.reel_defs(); d["byeong"] = (BYEONG, dict(nextBadge="내일", nextTitle="정(丁)일생 편")); return d
 def main():
     render(sys.argv[1:], get_defs(), os.path.join(CE.ROOT, "2026-w40car3-reel", "v2"))
 

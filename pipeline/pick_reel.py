@@ -37,7 +37,7 @@ def build(hook, sub, instr, note, face="v1_lowbun"):
             M.text(c, no, 1180, .7 + i * .12, 84, color=GOLDA, path=SER, maxw=300, cx=cx, stagger=0)
         title(c, instr, 1290, 1.3, 64, color=GOLDA); small(c, note, 1385, 1.7, 40)
     def s3(c):
-        title(c, "매일 저녁\n세 지도 테스트", 480, .1, 112, color=GOLDA); small(c, "팔로우하면 다음 편을\n놓치지 않아요", 900, .8, 56)
+        title(c, "매일 저녁\n사주·별자리·숫자 테스트", 480, .1, 112, color=GOLDA); small(c, "팔로우하면 다음 편을\n놓치지 않아요", 900, .8, 56)
         small(c, "내 태어난 날 기운은 프로필 링크에서 1초", 1160, 1.3, 38, (200, 192, 176))
     return [(3.0, s1), (5.4, s2), (2.8, s3)]
 SETS = {"oct3": dict(hook="10월, 나에게\n*먼저 오는 소식*", sub="세 장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="풀이는 캡션에 있어요 (먼저 고르고 보기!)", date="2026-10-03"),

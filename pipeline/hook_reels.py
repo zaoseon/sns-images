@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw
 def frames(card, hook, sub, out, bottom="나는 몇 개 겹쳐? 댓글로 알려 주세요"):
     W, H = 1080, 1920; fs = []
     a = Image.new("RGB", (W, H), R.INK); d = ImageDraw.Draw(a)
-    d.text((W//2, 560), "자오선 · 세 지도 테스트", font=R.F(R.MED, 38), fill=R.GOLD, anchor="mm")
+    d.text((W//2, 560), "자오선 · 사주·별자리·숫자 테스트", font=R.F(R.MED, 38), fill=R.GOLD, anchor="mm")
     y = 700
     for l in R.wrap(d, hook, R.F(R.SER, 92), W-140): d.text((W//2, y), l, font=R.HF(l, R.F(R.SER, 92)), fill=R.PAPER, anchor="mm"); y += 120
     y += 40

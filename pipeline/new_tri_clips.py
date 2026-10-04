@@ -1,4 +1,4 @@
-"""네이버 클립용 세 지도 4편(10/3 밤): 첫눈 10/10, 티 안 나는 사랑 10/11, 설득 10/12, 달아오름 10/14. 앱이 덮는 곳을 피하는 safe 배치(reel_plan.NAVER_SAFE), 음악 포함.
+"""네이버 클립용 사주·별자리·숫자 4편(10/3 밤): 첫눈 10/10, 티 안 나는 사랑 10/11, 설득 10/12, 달아오름 10/14. 앱이 덮는 곳을 피하는 safe 배치(reel_plan.NAVER_SAFE), 음악 포함.
 사용: python3 pipeline/new_tri_clips.py -> 2026-w42reel-new/naver/<키>.mp4"""
 import sys, os
 sys.path.insert(0,'pipeline'); sys.path.insert(0,'content')
