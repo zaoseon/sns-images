@@ -3,6 +3,7 @@
   python3 pipeline/precheck.py video <mp4...>            소리 크기(-30dB보다 커야 함)·소리 줄 있음·1080x1920
   python3 pipeline/precheck.py text "<캡션>" | <파일>     내부 용어·슬래시 날짜·근거(cross_data)에 없는 퍼센트/명수
   python3 pipeline/precheck.py schedule                   앱 일정(sns_plan)에서 같은 채널 같은 분 겹침·하루 인스타 4개 초과·자료 나이
+  python3 pipeline/precheck.py captions                   앞으로 예약된 모든 글 본문의 내부 용어·슬래시 날짜(다른 세션 글 포함)
   python3 pipeline/precheck.py slot YYYY-MM-DDTHH:MM [net] 그 시각 칸이 비었는지(앱 일정 기준; 최신은 Metricool getScheduledPosts로 한 번 더)
   python3 pipeline/precheck.py all                         reel_swaps.json의 영상 전부 + 일정 점검
 종료 코드 0=통과, 1=걸림. 샘플 서체 대조와 최종 눈 확인은 사람이 한다(QA_CHECKLIST.md)."""
@@ -10,7 +11,8 @@ import os, re, sys, json, subprocess, datetime as D, collections
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, "..")
 SITE = os.environ.get("ZAOSEON_SITE", os.path.join(ROOT, "..", "zaoseon-site"))
 BANNED = ["엔진", "의미축", "환산", "데이터 릴스", "교차 시험", "기궁", "6체계", "초안", "리포트", "흉성", "수린"]
-SLASH = re.compile(r"(?<![\d./])(\d{1,2})/(\d{1,2})(?![\d/])")
+# 약속·안내 문장에 쓰인 슬래시 날짜만 잡는다("11/1에", "10/23 릴스", "10/23, 10/27에"). 별자리 날짜 범위(8/23~9/22)와 주간 표 머리말(10/5~10/11)은 보통 표기라 건드리지 않는다
+SLASH = re.compile(r"(?<![\d./~])(\d{1,2})/(\d{1,2})(?![\d/~])(?=\s*(?:에|부터|까지|일|릴스|영상|편|글|카드|퀴즈)|,\s*\d{1,2}/\d{1,2})")
 def vol(path):
     out = subprocess.run(["ffmpeg", "-hide_banner", "-i", path, "-af", "volumedetect", "-vn", "-f", "null", "-"], capture_output=True, text=True).stderr
     m = re.search(r"mean_volume: (-?[\d.]+) dB", out); return float(m.group(1)) if m else None
@@ -53,6 +55,15 @@ def check_schedule():
     for day, c in sorted(ig.items()):
         if c > 4: bad.append(f"{day} 인스타 {c}개(4개 초과)")
     return bad
+def check_captions():
+    """앞으로 예약된 모든 인스타·스레드 글(다른 세션이 만든 것 포함)의 본문 전체(보관본 data/sns_archive.json의 tx)를 내부 용어·슬래시 날짜 기준으로 훑는다."""
+    arch = json.load(open(os.path.join(SITE, "data", "sns_archive.json"), encoding="utf-8")); now = D.datetime.now(D.timezone(D.timedelta(hours=9))).strftime("%Y-%m-%dT%H:%M"); bad = []
+    for k, v in sorted(arch.items(), key=lambda kv: kv[1].get("t", "")):
+        if (v.get("t") or "") <= now or v.get("st") == "ERROR": continue
+        t = v.get("tx") or v.get("x") or ""
+        hits = check_text(t, facts=False)
+        if hits: bad.append(f"{v['t']} {','.join(v.get('n') or [])} [{(v.get('x') or '')[:18]}] " + "; ".join(hits))
+    return bad
 def main():
     a = sys.argv[1:]
     if not a: print(__doc__); return 0
@@ -62,6 +73,7 @@ def main():
     elif cmd == "text":
         t = rest[0]; t = open(t, encoding="utf-8").read() if os.path.exists(t) else t; bad = check_text(t)
     elif cmd == "schedule": bad = check_schedule()
+    elif cmd == "captions": bad = check_captions()
     elif cmd == "slot":
         t = rest[0]; net = rest[1] if len(rest) > 1 else None; d, plan = load_plan()
         hit = [(r["n"], (r["x"] or "")[:24]) for r in plan if r["t"][:16] == t[:16] and (net is None or net in r["n"])]
@@ -72,7 +84,7 @@ def main():
             v = e.get("video") or ""
             if v.startswith(prefix) and e.get("status") != "skip":
                 bad += check_video(os.path.join(ROOT, v[len(prefix):].split("?")[0]))
-        bad += check_schedule()
+        bad += check_schedule(); bad += check_captions()
     else: print(__doc__); return 1
     for b in bad: print("걸림:", b)
     print("통과" if not bad else f"{len(bad)}건 걸림"); return 1 if bad else 0
