@@ -1,14 +1,14 @@
-"""w42 밤 7개를 세 지도 교차형으로 교체 + 팔로우·좋아요·공유·태그 유도. 출력 2026-w42fix.json"""
+"""w42 밤 7개를 사주·별자리·숫자 교차형으로 교체 + 팔로우·좋아요·공유·태그 유도. 출력 2026-w42fix.json"""
 import json, os
 HT = "#사주 #운세"
-DIFF = "사주 하나, 별자리 하나만 보면 한쪽 이야기만 듣게 돼요.\n자오선은 여러 지도를 겹쳐서, 같은 답이 나오는 곳을 찾아요."
+DIFF = "사주 하나, 별자리 하나만 보면 한쪽 이야기만 듣게 돼요.\n자오선은 여섯 가지 운명학을 겹쳐서, 같은 답이 나오는 곳을 찾아요."
 IG_CTA = "맞다 싶으면 ♥, 떠오르는 사람이 있으면 공유하거나 태그해 주세요.\n매일 저녁, 나를 알아보는 테스트가 올라와요. 놓치지 않으려면 팔로우해 두세요."
 TH_CTA = "맞으면 하트, 아니면 댓글로 반박해 주세요.\n떠오르는 사람이 있으면 태그!\n매일 저녁 테스트가 올라와요. 팔로우해 두면 이어서 볼 수 있어요."
 P = []
 def x(date, tag, title, hook, rows, note, q, iht, foot="저장해 두고 친구 것도 맞혀 보세요"):
     lines = "\n".join(f"{r[0]}({r[1]}): {r[2]} - {r[3]}" for r in rows)
-    th = f"{hook}\n\n세 가지 지도로 보면 이래요.\n{lines}\n\n{note}\n\n{q}\n\n{TH_CTA}\n\n#{tag}"
-    ig = f"{hook}\n\n세 가지 지도로 보면 이래요.\n{lines}\n\n{note}\n{q}\n\n{IG_CTA}\n\n{DIFF}\n이 내용은 재미로, 그리고 나를 돌아보는 계기로 봐 주세요.\n\n{HT} {iht}"
+    th = f"{hook}\n\n사주·별자리·숫자로 보면 이래요.\n{lines}\n\n{note}\n\n{q}\n\n{TH_CTA}\n\n#{tag}"
+    ig = f"{hook}\n\n사주·별자리·숫자로 보면 이래요.\n{lines}\n\n{note}\n{q}\n\n{IG_CTA}\n\n{DIFF}\n이 내용은 재미로, 그리고 나를 돌아보는 계기로 봐 주세요.\n\n{HT} {iht}"
     assert len(th) <= 500, (date, len(th))
     P.append(dict(date=date, slot="pm", tag=tag, threads=[th], instagram=ig, threads_image=False,
                   image=dict(type="cross", title=title, rows=rows, note=note, foot=foot)))
@@ -59,7 +59,7 @@ x("2026-10-22", "궁합", "동양과 서양이 말하는 잘 맞는 사이",
   [["사주", "동양", "서로 키워 주는 기운", "물은 나무를, 나무는 불을, 불은 흙을 키워요"],
    ["별자리", "서양", "불 ↔ 공기, 흙 ↔ 물", "불은 바람에 커지고, 흙은 물을 머금어 살아나요"],
    ["수비학", "숫자", "같은 무리의 숫자", "1·5·7, 2·4·8, 3·6·9끼리 잘 통한다고 봐요"]],
-  "세 지도가 모두 '잘 맞는다'고 하는 사이라면, 그건 꽤 믿어도 되는 인연이에요.",
+  "사주·별자리·숫자가 모두 '잘 맞는다'고 하는 사이라면, 그건 꽤 믿어도 되는 인연이에요.",
   "나랑 제일 잘 맞는 사람, 태그해서 확인해 보세요.", "#궁합 #연애궁합 #별자리궁합", foot="잘 맞는 사람을 태그해 보세요")
 json.dump({"posts": P}, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "2026-w42fix.json"), "w"), ensure_ascii=False, indent=1)
 print([len(p["threads"][0]) for p in P])

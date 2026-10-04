@@ -264,9 +264,9 @@ def tti(s, outdir, prefix):
     return files
 
 def cross(s, path):
-    """세 지도 교차 카드. {"type":"cross","kicker":"..","title":"..","rows":[["사주","동양","값","풀이"],...],"note":"..","foot":".."}"""
+    """사주·별자리·숫자 교차 카드. {"type":"cross","kicker":"..","title":"..","rows":[["사주","동양","값","풀이"],...],"note":"..","foot":".."}"""
     img, d, L, R = base(None, None); mw = R - L
-    d.text((L, 235), s.get("kicker", "세 가지 지도로 보면"), font=F(MED, 32), fill=GOLD)
+    d.text((L, 235), s.get("kicker", "사주·별자리·숫자로 보면"), font=F(MED, 32), fill=GOLD)
     tf = F(SER, 64); tl = wrap(d, s["title"], tf, mw); y = 295
     for l in tl: d.text((L, y), l, font=HF(l, tf), fill=PAPER); y += 84
     y += 26
@@ -282,7 +282,7 @@ def cross(s, path):
     y += 6
     nf = F(MED, 34)
     for l in wrap(d, s["note"], nf, mw): d.text((L, y), l, font=nf, fill=GOLD); y += 50
-    foot(d, L, s.get("foot", "세 지도가 겹치는 곳에 내가 있어요")); img.save(path, quality=90)
+    foot(d, L, s.get("foot", "사주·별자리·숫자가 겹치는 곳에 내가 있어요")); img.save(path, quality=90)
 
 if __name__ == "__main__":
     src = sys.argv[1]; C = json.load(open(src)); name = os.path.splitext(os.path.basename(src))[0]
