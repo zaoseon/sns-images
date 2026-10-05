@@ -6,22 +6,24 @@
 import base64, asyncio, sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from style_spec import check_page
+import fonts_kit as K
 from playwright.async_api import async_playwright
 R = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 def b64(p): return base64.b64encode(open(os.path.join(R, p), 'rb').read()).decode()
 SUN = b64('characters/cut/bg_sunmoon.jpg'); SKY = b64('meridian_intro/src/assets/sky.png'); CHART = b64('meridian_intro/src/assets/chart.svg')
 INTRO = b64('meridian_intro/src/assets/character.png')
 def face_b64(n): return INTRO if n == 'intro' else b64(f'characters/cut/{n}.png')
-F = "font-family:'Noto Sans CJK KR','Noto Sans KR',sans-serif;font-weight:900"
+F = f"font-family:{K.D};font-weight:900"   # 제목=페이퍼로지(또는 G마켓 산스), 본문 요소에만 프리텐다드(K.B)를 따로 지정한다
+CUR = 'pl'
 def bg(kind, acc):
     if kind == 'sun':   return f"background:#0e0c18 url(data:image/jpeg;base64,{SUN}) center/cover", '<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,6,16,.45),rgba(6,6,16,.72))"></div>'
     if kind == 'sky':   return f"background:#050912 url(data:image/png;base64,{SKY}) center/cover", '<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,4,10,.2),rgba(2,4,10,.55))"></div>'
     if kind == 'chart': return "background:#070b16", f'<img src="data:image/svg+xml;base64,{CHART}" style="position:absolute;left:-210px;top:150px;width:1500px;opacity:.30"><div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(7,11,22,.15),rgba(7,11,22,.8))"></div>'
     if kind == 'ink':   return "background:#0b0806", f'<div style="position:absolute;inset:0;background:radial-gradient(circle at 80% 85%,{acc}33,transparent 55%)"></div>'
-def handle(acc, right=False): return f'<div style="position:absolute;{"right:55px" if right else "left:55px"};bottom:46px;display:flex;align-items:center;gap:14px;font-size:34px;color:#fff;z-index:6"><span style="width:34px;height:34px;border-radius:50%;background:{acc};display:inline-block"></span>zaoseon.com</div>'
-def ai_note(left=False): return '<div style="position:absolute;' + ('left:46px;text-align:left' if left else 'right:46px;text-align:right') + ';bottom:36px;font-size:23px;color:#fff;line-height:1.4;z-index:6;background:rgba(0,0,0,.65);padding:8px 14px;border-radius:12px">※ 자오선의 상담가 정월은<br>AI로 생성한 가상 캐릭터입니다</div>'
+def handle(acc, right=False): return f'<div style="position:absolute;{"right:55px" if right else "left:55px"};bottom:46px;display:flex;align-items:center;gap:14px;font-size:34px;font-family:{K.B};font-weight:800;color:#fff;z-index:6"><span style="width:34px;height:34px;border-radius:50%;background:{acc};display:inline-block"></span>zaoseon.com</div>'
+def ai_note(left=False): return '<div style="position:absolute;' + ('left:46px;text-align:left' if left else 'right:46px;text-align:right') + ';bottom:36px;font-size:23px;font-family:{K.B};font-weight:800;color:#fff;line-height:1.4;z-index:6;background:rgba(0,0,0,.65);padding:8px 14px;border-radius:12px">※ 자오선의 상담가 정월은<br>AI로 생성한 가상 캐릭터입니다</div>'
 def page(inner, bgkind, acc):
-    st, ov = bg(bgkind, acc); return f'<html><body style="margin:0;width:1080px;height:1350px;position:relative;overflow:hidden;{F};color:#fff;word-break:keep-all;line-break:strict;{st}">{ov}{inner}</body></html>'
+    st, ov = bg(bgkind, acc); return f'<html><head><meta charset="utf-8"><style>{K.css(CUR)}</style></head><body style="margin:0;width:1080px;height:1350px;position:relative;overflow:hidden;{F};color:#fff;word-break:keep-all;line-break:strict;{st}">{ov}{inner}</body></html>'
 def img_tag(fc, h, pos, flip=False, z=2, extra=''):
     tf = 'transform:scaleX(-1);' if flip else ''
     return f'<img src="data:image/png;base64,{face_b64(fc)}" style="position:absolute;{pos};height:{h}px;{tf}z-index:{z};{extra}">'
@@ -29,10 +31,10 @@ def halo(acc, cx, cy, r=330): return f'<div style="position:absolute;left:{cx-r}
 def sparkles(acc): return ''.join(f'<div data-deco="1" style="position:absolute;left:{x}px;top:{y}px;font-size:{fs}px;color:{acc};z-index:4">✦</div>' for x,y,fs in ((920,380,54),(980,520,34),(120,1020,46),(900,980,36)))
 def phone(acc, x, y):   # 소품: 휴대폰과 대화 말풍선
     return f'''<div data-deco="1" style="position:absolute;left:{x}px;top:{y}px;width:330px;height:560px;border:8px solid #e9e4dc;border-radius:48px;background:rgba(8,8,18,.78);z-index:3;transform:rotate(6deg)">
-<div style="position:absolute;left:24px;top:60px;width:230px;background:#fff;color:#111;font-size:30px;line-height:1.5;padding:14px 20px;border-radius:24px 24px 24px 6px">읽었어요 ✓</div>
-<div style="position:absolute;right:24px;top:190px;width:200px;background:{acc};color:#111;font-size:30px;line-height:1.5;padding:14px 20px;border-radius:24px 24px 6px 24px">…</div>
-<div style="position:absolute;left:24px;top:320px;width:150px;background:#fff;color:#111;font-size:30px;padding:14px 20px;border-radius:24px 24px 24px 6px">곧 답할게</div></div>'''
-def bubble(acc, text, x, y, w=420): return f'<div style="position:absolute;left:{x}px;top:{y}px;width:{w}px;background:#fff;color:#111;font-size:44px;line-height:1.5;padding:22px 30px;border-radius:36px;z-index:6">{text}<div style="position:absolute;left:60px;bottom:-26px;width:0;height:0;border-left:26px solid transparent;border-right:26px solid transparent;border-top:36px solid #fff"></div></div>'
+<div style="position:absolute;left:24px;top:60px;width:230px;background:#fff;color:#111;font-size:30px;font-family:{K.B};font-weight:800;line-height:1.5;padding:14px 20px;border-radius:24px 24px 24px 6px">읽었어요 ✓</div>
+<div style="position:absolute;right:24px;top:190px;width:200px;background:{acc};color:#111;font-size:30px;font-family:{K.B};font-weight:800;line-height:1.5;padding:14px 20px;border-radius:24px 24px 6px 24px">…</div>
+<div style="position:absolute;left:24px;top:320px;width:150px;background:#fff;color:#111;font-size:30px;font-family:{K.B};font-weight:800;padding:14px 20px;border-radius:24px 24px 24px 6px">곧 답할게</div></div>'''
+def bubble(acc, text, x, y, w=420): return f'<div style="position:absolute;left:{x}px;top:{y}px;width:{w}px;background:#fff;color:#111;font-size:44px;font-family:{K.B};font-weight:800;line-height:1.5;padding:22px 30px;border-radius:36px;z-index:6">{text}<div style="position:absolute;left:60px;bottom:-26px;width:0;height:0;border-left:26px solid transparent;border-right:26px solid transparent;border-top:36px solid #fff"></div></div>'
 def cover(c):
     acc = c['acc']; L = c.get('cl', 'br'); fc = c['face']; big = fc == 'intro'
     head = f'''<div style="position:absolute;left:75px;top:80px;background:{acc};color:#111;font-size:44px;padding:14px 42px;border-radius:60px;z-index:5">{c['badge']}</div>'''
@@ -51,12 +53,12 @@ def cover(c):
     return page(ink + sparkles(acc) + handle(acc, right=leftchar) + ai_note(left=leftchar), c['bg'], acc)
 def options(c):
     acc = c['acc']; ql = c.get('ql', 'rows'); head = f'<div style="position:absolute;left:75px;top:80px;background:{acc};color:#111;font-size:44px;padding:14px 42px;border-radius:60px;z-index:5">선택지</div><div style="position:absolute;left:90px;top:210px;width:900px;font-size:100px;line-height:1.4;z-index:5;text-shadow:0 4px 18px rgba(0,0,0,.55)">{c["q"]}</div>'
-    foot = f'<div style="position:absolute;left:0;right:0;top:1150px;text-align:center;font-size:44px;color:{acc};z-index:5">고른 번호를 세어 보세요</div>'
+    foot = f'<div style="position:absolute;left:0;right:0;top:1150px;text-align:center;font-size:44px;font-family:{K.B};font-weight:800;color:{acc};z-index:5">고른 번호를 세어 보세요</div>'
     if ql == 'cards':    # 세로 카드 세 장
-        cards = ''.join(f'<div style="position:absolute;left:{70+i*315}px;top:520px;width:295px;height:560px;background:rgba(10,10,24,.66);border:3px solid {acc};border-radius:36px;z-index:5;padding:30px 24px;box-sizing:border-box;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center"><div style="margin:0 0 30px;width:96px;height:96px;border-radius:50%;background:{acc};color:#111;font-size:64px;display:flex;align-items:center;justify-content:center">{i+1}</div><div style="font-size:42px;line-height:1.6">{t}</div></div>' for i, t in enumerate(c['opts_short']))
+        cards = ''.join(f'<div style="position:absolute;left:{70+i*315}px;top:520px;width:295px;height:560px;background:rgba(10,10,24,.66);border:3px solid {acc};border-radius:36px;z-index:5;padding:30px 24px;box-sizing:border-box;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center"><div style="margin:0 0 30px;width:96px;height:96px;border-radius:50%;background:{acc};color:#111;font-size:64px;display:flex;align-items:center;justify-content:center">{i+1}</div><div style="font-size:42px;font-family:{K.B};font-weight:800;line-height:1.6">{t}</div></div>' for i, t in enumerate(c['opts_short']))
         ink = head + cards + foot
     else:                 # 가로 줄 세 개 (+ 얼굴이 오른쪽 아래에서 빼꼼)
-        rows = ''.join(f'<div style="position:absolute;left:70px;right:70px;top:{500+i*210}px;height:180px;background:rgba(10,10,24,.62);border:3px solid {acc};border-radius:36px;display:flex;align-items:center;gap:32px;padding:0 38px;z-index:5"><span style="flex:none;width:92px;height:92px;border-radius:50%;background:{acc};color:#111;font-size:60px;display:flex;align-items:center;justify-content:center">{i+1}</span><span style="font-size:46px;line-height:1.5">{t}</span></div>' for i, t in enumerate(c['opts']))
+        rows = ''.join(f'<div style="position:absolute;left:70px;right:70px;top:{500+i*210}px;height:180px;background:rgba(10,10,24,.62);border:3px solid {acc};border-radius:36px;display:flex;align-items:center;gap:32px;padding:0 38px;z-index:5"><span style="flex:none;width:92px;height:92px;border-radius:50%;background:{acc};color:#111;font-size:60px;display:flex;align-items:center;justify-content:center">{i+1}</span><span style="font-size:46px;font-family:{K.B};font-weight:800;line-height:1.5">{t}</span></div>' for i, t in enumerate(c['opts']))
         peek = img_tag(c['peek'], 360, 'right:-30px;top:60px', flip=bool(c.get('peek_flip')), z=3) if c.get('peek') else ''
         ink = head + rows + foot + peek
     return page(ink + handle(acc), c['bg2'], acc)
@@ -69,7 +71,7 @@ def result(c):
     cta_l = '300px' if rl == 'bl' and fc else '70px'
     ink = f'''<div style="position:absolute;left:75px;top:80px;background:{acc};color:#111;font-size:44px;padding:14px 42px;border-radius:60px;z-index:5">결과</div>
 <div style="position:absolute;left:90px;top:210px;width:900px;font-size:100px;line-height:1.4;z-index:5;text-shadow:0 4px 18px rgba(0,0,0,.55)">{c['rt']}</div>
-<div style="position:absolute;left:70px;top:470px;width:900px;background:rgba(10,10,24,.66);border-radius:36px;padding:44px 48px;font-size:46px;line-height:1.9;z-index:5;box-sizing:border-box">{c['body']}</div>{img}
+<div style="position:absolute;left:70px;top:470px;width:900px;background:rgba(10,10,24,.66);border-radius:36px;padding:44px 48px;font-size:46px;font-family:{K.B};font-weight:800;line-height:1.9;z-index:5;box-sizing:border-box">{c['body']}</div>{img}
 <div style="position:absolute;left:{cta_l};right:{'70px' if not (fc and rl=='br') else '240px'};top:1090px;height:110px;background:{acc};color:#111;border-radius:60px;display:flex;align-items:center;justify-content:center;font-size:46px;z-index:5">{c['cta']}</div>'''
     return page(ink + handle(acc, right=(fc is not None and rl == 'bl')), c['bg3'], acc)
 SETS = {
@@ -87,9 +89,11 @@ async def main():
     out = os.path.join(R, '2026-w43swap', 'cards'); os.makedirs(out, exist_ok=True); bad = 0
     async with async_playwright() as p:
         b = await p.chromium.launch(); pg = await b.new_page(viewport={'width': 1080, 'height': 1350})
+        global CUR
         for k, c in SETS.items():
+            txt = ''.join(str(v) if not isinstance(v, (list, tuple)) else ''.join(v) for v in c.values() if isinstance(v, (str, list, tuple))); CUR = K.pick_display([txt], 'pl'); print(k, '제목 글꼴:', '페이퍼로지' if CUR == 'pl' else 'G마켓 산스')
             for i, fn in enumerate((cover, options, result), 1):
-                await pg.set_content(fn(c)); await pg.wait_for_timeout(350)
+                open('/tmp/card_kit.html', 'w', encoding='utf-8').write(fn(c)); await pg.goto('file:///tmp/card_kit.html'); await pg.evaluate('document.fonts.ready'); await pg.wait_for_timeout(350)
                 for x in await check_page(pg, f'{k}_{i}', 'cover' if i == 1 else None): print('검사:', x); bad += 1
                 await pg.screenshot(path=os.path.join(out, f'{k}_{i}.jpg'), type='jpeg', quality=92)
         await b.close()

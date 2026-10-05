@@ -4,6 +4,7 @@
 import os, sys, base64, asyncio
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 from style_spec import check_page
+import fonts_kit as K
 from playwright.async_api import async_playwright
 R = os.path.join(HERE, "..")
 CH = base64.b64encode(open(os.path.join(R, "meridian_intro/src/assets/chart.svg"), "rb").read()).decode()
@@ -14,15 +15,15 @@ SCENES = [("1 훅", "박자 0~4", "금빛 입자 120~200개가 깊이를 두고 
           ("4 숫자", "박자 18~26", "사주 무리만 따로 떨어져요", "카운트업: 감속해서 올라가고 끝에서 살짝 팝", "100명 중 약 37명은 사주만 혼자 달랐어요"),
           ("5 결과", "박자 26~30", "차트가 완성되고 빛이 퍼져요", "한 박 가만히 머물기", "같은 말은 타고난 결, 다른 말은 내가 고를 곳"),
           ("6 공유", "박자 30~34", "차트가 작아지고 문구가 올라와요", "차례로 등장", "떠오르는 사람에게 보내 보세요")]
-BASE = f'''<!doctype html><meta charset=utf-8><style>
-html,body{{margin:0;width:1080px;height:1350px;background:#0b1020;color:#fff;font-family:'Noto Sans CJK KR',sans-serif;font-weight:800;word-break:keep-all;line-break:strict;overflow:hidden;position:relative}}
-.k{{position:absolute;left:60px;top:56px;font-size:48px;font-weight:900;color:{GOLD}}}
-.nm{{position:absolute;left:60px;top:130px;font-size:96px;font-weight:900;color:{GOLD};line-height:1.3}} .nm span{{font-size:52px;color:#c5cdf0;font-weight:800;margin-left:20px}}
+BASE = f'''<!doctype html><meta charset=utf-8><style>{K.css('gm')}
+html,body{{margin:0;width:1080px;height:1350px;background:#0b1020;color:#fff;font-family:{K.B};font-weight:800;word-break:keep-all;line-break:strict;overflow:hidden;position:relative}}
+.k{{font-family:{K.D};position:absolute;left:60px;top:56px;font-size:48px;font-weight:900;color:{GOLD}}}
+.nm{{font-family:{K.D};position:absolute;left:60px;top:130px;font-size:96px;font-weight:900;color:{GOLD};line-height:1.3}} .nm span{{font-size:52px;color:#c5cdf0;font-weight:800;margin-left:20px}}
 .th{{position:absolute;left:60px;top:300px;width:380px;height:676px;border-radius:28px;overflow:hidden;border:4px solid #3a4585;background:#0a1226}}canvas{{width:380px;height:676px;display:block}}
 .col{{position:absolute;left:490px;top:300px;width:530px}}.lb{{font-size:44px;font-weight:900;color:{GOLD};margin-top:0}}.vl{{font-size:54px;font-weight:800;line-height:1.65;margin:8px 0 44px}}.mv{{color:{TEAL}}}
 .box{{position:absolute;left:60px;right:60px;top:1020px;background:#161c33;border-radius:32px;padding:34px 44px 38px}}.box .lb{{font-size:44px}}.box .vl{{margin:6px 0 0;font-size:56px;line-height:1.6}}
 .info{{position:absolute;left:60px;right:60px;top:380px}}.row{{background:#161c33;border-radius:30px;padding:22px 40px 26px;margin-bottom:22px}}.row .lb{{font-size:44px}}.row .vl{{font-size:52px;margin:6px 0 0;line-height:1.55}}
-.t1{{position:absolute;left:60px;top:120px;font-size:80px;font-weight:900;line-height:1.4}}
+.t1{{font-family:{K.D};position:absolute;left:60px;top:120px;font-size:80px;font-weight:900;line-height:1.4}}
 #c2 .row{{padding:16px 40px 20px;margin-bottom:16px}}#c2 .vl{{font-size:50px;line-height:1.5}}
 </style><body>'''
 JS = f'''<script>

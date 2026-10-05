@@ -19,10 +19,10 @@ FI = FP.pick("data", "motion-dots"); FACE = FI["face"] + ("_flip" if FI["flip"] 
 def build():
     def s1(c):
         M.chip(c, "정월의 숫자 퀴즈", 345, .05)
-        y = PK.title(c, "나랑 같은 말을 하는\n*운명학*, 몇 개일까요?", 430, .2, 118, lh=1.5)
+        y = PK.title(c, "나랑 같은 말을 하는\n*운명학*, 몇 개일까요?", 430, .2, 92, lh=1.5)
         PK.small(c, "먼저 답을 골라 보세요", y + 40, .9, 54, PK.GOLDA); M.character(c, FACE, t0=.3, width=760, bottom=1460, dx=DX)
     def s2(c):
-        PK.title(c, "여섯 운명학 중\n한 곳에 모인 수는?", 400, .05, 108, lh=1.5)
+        PK.title(c, "여섯 운명학 중\n한 곳에 모인 수는?", 400, .05, 92, lh=1.5)
         for i, (lab, col) in enumerate((("둘", GOLDC), ("셋", TEAL), ("넷 이상", CORAL))):
             cy = 880 + i * 215; t0 = .35 + i * .18; p = M.e_back((c.t - t0) / .45)
             if p > 0.02:
@@ -45,10 +45,10 @@ def build():
         lx = 90
         for gi in range(4):
             if c.t >= starts[gi] + durs[gi]:
-                lab, n, col = GROUPS[gi]; d = dot_layer(col, 16); M.blit(c.fr, d, lx, 1402, c.alpha(1)); T = layer_text(f"{lab} {n}", 48, (255, 255, 255)); M.blit(c.fr, T, lx + 40, 1392, c.alpha(1)); lx += 40 + T.width + 20
+                lab, n, col = GROUPS[gi]; d = dot_layer(col, 16); M.blit(c.fr, d, lx, 1402, c.alpha(1)); T = layer_text(f"{lab} {n}", 48, (255, 255, 255), path=PK.PR); M.blit(c.fr, T, lx + 40, 1392, c.alpha(1)); lx += 40 + T.width + 20
     def s4(c):
-        PK.title(c, "넷 이상이 같은 말은\n100명 중 5명뿐", 400, .1, 116, color=PK.GOLDA, lh=1.5); PK.small(c, "대부분은 둘이나 셋만 만나요\n나머지는 내가 고를 수 있는 곳이에요", 820, .8, 54, (255, 255, 255))
-        PK.title(c, "떠오르는 사람에게\n보내 보세요", 1090, 1.5, 88, lh=1.5)
+        PK.title(c, "넷 이상이 같은 말은\n100명 중 5명뿐", 400, .1, 96, color=PK.GOLDA, lh=1.5); PK.small(c, "대부분은 둘이나 셋만 만나요\n나머지는 내가 고를 수 있는 곳이에요", 820, .8, 54, (255, 255, 255))
+        PK.title(c, "떠오르는 사람에게\n보내 보세요", 1090, 1.5, 80, lh=1.5)
     return [(3.2, s1), (3.6, s2), (6.2, s3), (3.4, s4)]
 if __name__ == "__main__":
     sc = build(); bad = PK.check_frames(sc); print("안전 영역 검사:", "통과" if not bad else bad[:3])

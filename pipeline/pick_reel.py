@@ -5,9 +5,9 @@
 사용: python3 pipeline/pick_reel.py oct3|oct10   -> 2026-pick/v2/<날짜>.mp4"""
 import os, sys, math, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, ".."); sys.path.insert(0, HERE)
-import clip_motion as M, safezone as Z, reel_music as RM, palette as P, music_plan as MP, face_plan as FP
+import fonts_kit as K, clip_motion as M, safezone as Z, reel_music as RM, palette as P, music_plan as MP, face_plan as FP
 from PIL import Image, ImageDraw, ImageFilter
-P.apply_to_engine(M); SER = os.path.join(HERE, "fonts", "serif.otf"); BOLD = os.path.join(HERE, "fonts", "PRETENDARD-BLACK.OTF"); GOLD = P.C2["hi"]; GOLDA = GOLD + (255,); CX = M.CX
+P.apply_to_engine(M); M.BLACK = K.P["pr_xb"]; SER = os.path.join(HERE, "fonts", "serif.otf"); GM = K.P["gm_bold"]; PR = K.P["pr_xb"]; BOLD = GM; GOLD = P.C2["hi"]; GOLDA = GOLD + (255,); CX = M.CX
 CARDS = [("東", P.C2["pt"], "1"), ("西", P.C2["hi"], "2"), ("數", (255, 255, 255), "3")]
 _c = {}
 def card_layer(h, col):
@@ -24,8 +24,8 @@ def card_layer(h, col):
     d.ellipse((cx - 72, cy - 72, cx + 72, cy + 72), fill=col + (255,)); d.text((cx, cy - 4), h, font=M.font(SER, 92), fill=((41, 51, 92, 255) if col == (255, 255, 255) else (255, 255, 255, 255)), anchor="mm")
     for (sx, sy) in ((46, 52), (w - 22, 52), (46, hh - 28), (w - 22, hh - 28)): d.text((sx, sy), "✦", font=M.font(M.MED, 26), fill=GOLD + (170,), anchor="mm")
     _c[k] = im; return im
-def title(c, s, y, t0, size, color=M.WHITE, lh=1.4): return M.text(c, s, y, t0, size, color=(color + (255,) if len(color) == 3 else color), path=BOLD, maxw=820, lh=lh, stagger=0.2)
-def small(c, s, y, t0, size, color=M.WHITE): return M.text(c, s, y, t0, size, color=(color + (255,) if len(color) == 3 else color), path=BOLD, maxw=820, lh=1.5, stagger=0.15)
+def title(c, s, y, t0, size, color=M.WHITE, lh=1.4): return M.text(c, s, y, t0, size, color=(color + (255,) if len(color) == 3 else color), path=GM, maxw=820, lh=lh, stagger=0.2)
+def small(c, s, y, t0, size, color=M.WHITE): return M.text(c, s, y, t0, size, color=(color + (255,) if len(color) == 3 else color), path=PR, maxw=820, lh=1.5, stagger=0.15)
 def build(hook, sub, instr, note, face="v1_lowbun", cta="follow", dx=0):
     def s1(c):
         M.chip(c, "정월의 카드 고르기", 345, .05); y = title(c, hook, 445, .2, 108)

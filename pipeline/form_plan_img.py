@@ -3,6 +3,7 @@
 import os, sys, asyncio
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 from style_spec import check_page
+import fonts_kit as K
 from playwright.async_api import async_playwright
 R = os.path.join(HERE, "..")
 GOLD = "#e7c88d"; TEAL = "#7fd6c8"; CORAL = "#ff8a73"; GRAY = "#9aa0bd"
@@ -15,14 +16,14 @@ TYPES = [("04", "키네틱 타이포", "주력", "장면 한 줄 자가진단 ·
          ("07", "원테이크 모핑", "보조", "사주 명식 → 별자리 → 숫자로 모양이 바뀜", "원테이크 모핑으로 명식에서 숫자까지 컷 없이 이어지게."),
          ("08", "캐릭터 애니", "조건부", "정월은 사진이라 눈 깜빡임·말풍선만 가능", "2D 마스코트를 새로 만들면 팔·표정 연기도 가능."),
          ("01", "런칭 필름", "보류", "신년 감정서 판매를 시작할 때 한 편", "광고 느낌 지적 때문에 지금은 만들지 않아요.")]
-BASE = f'''<!doctype html><meta charset=utf-8><style>
-html,body{{margin:0;width:1080px;height:1350px;background:#0b1020;color:#fff;font-family:'Noto Sans CJK KR',sans-serif;font-weight:800;word-break:keep-all;line-break:strict;overflow:hidden;position:relative}}
-.k{{position:absolute;left:60px;top:50px;font-size:46px;font-weight:900;color:{GOLD}}}
+BASE = f'''<!doctype html><meta charset=utf-8><style>{K.css('gm')}
+html,body{{margin:0;width:1080px;height:1350px;background:#0b1020;color:#fff;font-family:{K.B};font-weight:800;word-break:keep-all;line-break:strict;overflow:hidden;position:relative}}
+.k{{font-family:{K.D};position:absolute;left:60px;top:50px;font-size:46px;font-weight:900;color:{GOLD}}}
 .card{{position:absolute;left:60px;right:60px;background:#161c33;border-radius:34px;padding:30px 44px 34px}}
-.hd{{display:flex;align-items:center;gap:26px;margin-bottom:12px}}.no{{flex:none;width:92px;height:92px;border-radius:50%;background:{GOLD};color:#111;font-size:50px;font-weight:900;display:flex;align-items:center;justify-content:center}}
-.nm{{font-size:62px;font-weight:900;line-height:1.3;flex:1}}.chip{{flex:none;font-size:44px;font-weight:900;color:#111;padding:6px 26px;border-radius:40px}}
+.hd{{display:flex;align-items:center;gap:26px;margin-bottom:12px}}.no{{font-family:{K.D};flex:none;width:92px;height:92px;border-radius:50%;background:{GOLD};color:#111;font-size:50px;font-weight:900;display:flex;align-items:center;justify-content:center}}
+.nm{{font-family:{K.D};font-size:62px;font-weight:900;line-height:1.3;flex:1}}.chip{{font-family:{K.D};flex:none;font-size:44px;font-weight:900;color:#111;padding:6px 26px;border-radius:40px}}
 .lb{{font-size:40px;font-weight:900;margin-top:12px}}.vl{{font-size:48px;font-weight:800;line-height:1.55;margin-top:2px}}
-.t1{{position:absolute;left:60px;top:130px;font-size:80px;font-weight:900;line-height:1.4}}
+.t1{{font-family:{K.D};position:absolute;left:60px;top:130px;font-size:80px;font-weight:900;line-height:1.4}}
 .row{{background:#161c33;border-radius:30px;padding:22px 40px 26px;margin-bottom:22px}}.info{{position:absolute;left:60px;right:60px}}
 </style><body>'''
 def card(t, top):

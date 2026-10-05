@@ -25,7 +25,9 @@ def _lum(c):
 def contrast(a,b):
     la,lb=_lum(a),_lum(b); hi,lo=max(la,lb),min(la,lb); return (hi+0.05)/(lo+0.05)
 async def check_page(pg, name, kind_hint=None):
+    err=await pg.evaluate("async()=>{await document.fonts.ready;return [...document.fonts].filter(f=>f.status==='error').map(f=>f.family)}")
     els=await pg.evaluate(JS); png=await pg.screenshot(type='png'); im=Image.open(io.BytesIO(png)).convert('RGB'); issues=[]
+    if err: issues.append(f"{name}: 글꼴 불러오기 실패 {sorted(set(err))} (대체 글꼴로 그려짐)")
     # 전체 배치: 위쪽과 아래쪽을 다 써야 한다(가운데 몰림 방지)
     main=[e for e in els if not (e['y']>1150 and e['w']<520)]
     if main:

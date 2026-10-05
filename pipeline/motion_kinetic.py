@@ -2,20 +2,20 @@
 사용: python3 pipeline/motion_kinetic.py -> 2026-motion/kinetic_reply.mp4"""
 import os, sys, json
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
-import music_plan as MP, html_motion as HM
+import music_plan as MP, html_motion as HM, fonts_kit as K
 ACC = "#ff5c8a"; BLACK = os.path.join(HERE, "fonts", "PRETENDARD-BLACK.OTF")
-SPEC_REPLY = dict(acc="#ff5c8a", name="kinetic_reply", tag="정월의 연락 테스트", hook=["읽고도", "답장", "못 한 날"], q="나는 <span class=c>어느 쪽</span>?", opts=["바로 답해야 편해요", "썼다 지웠다 늦게 보내요", "읽고 이따 하고 잊어요"],
+SPEC_REPLY = dict(acc="#ff5c8a", name="kinetic_reply", tag="정월의 연락 테스트", hook=["읽고도", "답장", "못 한 날"], q="나는 <span class=c>어느 쪽</span>?", opts=["바로 답해야 편해요", "고민하다 늦게 보내요", "읽고 이따 하고 잊어요"],
     r="많이 고른 번호는<span class=c>?</span>", res=["바로 답하는 쪽", "다듬어 보내는 쪽", "천천히 답하는 쪽"], note="빠르다 느리다가 아니라<br><span class=c>연락의 리듬</span>이에요", cta=["떠오르는", "사람에게", "보내 보세요"], music="fun")
 def html(beat, S=None):
     S = S or SPEC_REPLY
     h = """<!doctype html><meta charset=utf-8><style>
-@font-face{font-family:PB;src:url('file://%s')}
-html,body{margin:0;width:1080px;height:1920px;background:#0a0a0c;overflow:hidden;word-break:keep-all;line-break:strict;font-family:PB,'Noto Sans CJK KR',sans-serif;color:#fff}
+@@FONTS@@
+html,body{margin:0;width:1080px;height:1920px;background:#0a0a0c;overflow:hidden;word-break:keep-all;line-break:strict;font-family:'JW-B',sans-serif;font-weight:800;color:#fff}
 .e{position:absolute;left:0;width:1080px;text-align:center;opacity:0;will-change:transform}
-.w{font-size:168px;line-height:1.3;letter-spacing:-2px}
-.t{font-size:112px;line-height:1.35}
+.w{font-family:'JW-D',sans-serif;font-weight:900;font-size:150px;line-height:1.3;letter-spacing:-2px}
+.t{font-family:'JW-D',sans-serif;font-weight:900;font-size:100px;line-height:1.35}
 .o{font-size:76px;line-height:1.45;text-align:left;left:90px;width:900px;display:flex;align-items:center;gap:34px}
-.o b{flex:none;width:112px;height:112px;border-radius:50%%;background:%s;color:#0a0a0c;display:flex;align-items:center;justify-content:center;font-size:76px}
+.o b{font-family:'JW-D',sans-serif;flex:none;width:112px;height:112px;border-radius:50%%;background:%s;color:#0a0a0c;display:flex;align-items:center;justify-content:center;font-size:76px}
 .c{color:%s}
 .sh{position:absolute;opacity:0}
 .tag{position:absolute;left:90px;top:335px;font-size:46px;background:%s;color:#0a0a0c;padding:12px 36px;border-radius:50px;opacity:0}
@@ -58,9 +58,10 @@ function seek(ms){const b=B(ms);
  const tri=document.getElementById('tri');tri.style.opacity=(b>25&&b<33)?0.95:(b>0&&b<6?0.0:0);tri.style.transform=`rotate(${b*22}deg) scale(${1+0.15*pulse()})`;
 }
 seek(0);
-</script>""" % (BLACK, S["acc"], S["acc"], S["acc"], S["acc"], S["acc"], beat)
+</script>""" % (S["acc"], S["acc"], S["acc"], S["acc"], S["acc"], beat)
     m = {"H1": S["hook"][0], "H2": S["hook"][1], "H3": S["hook"][2], "TAG": S["tag"], "Q": S["q"], "O1": S["opts"][0], "O2": S["opts"][1], "O3": S["opts"][2], "R": S["r"], "D1": S["res"][0], "D2": S["res"][1], "D3": S["res"][2], "N": S["note"], "F1": S["cta"][0], "F2": S["cta"][1], "F3": S["cta"][2]}
     for k, v in m.items(): h = h.replace("@@" + k + "@@", v)
+    h = h.replace("@@FONTS@@", K.css("gm"))
     return h
 def check_spec(S):
     import re
