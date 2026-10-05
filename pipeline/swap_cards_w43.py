@@ -33,6 +33,9 @@ sets={
  'c_1023':[cover('v1_lowbun',C,'정월의 유행 테스트','요즘 도는 에겐·테토, 사주로도 볼까요?','나는 어느 쪽에<br>가까울까요?'),
    band(C,'선택지','세 가지 중<br>몇 개예요?','1 약속은 내가 먼저 잡아요<br>2 불편해도 하고 싶은 말은 해요<br>3 계획이 틀어지면 바로 대안을 내요'),
    band(C,'결과','2개 이상이라면','앞장서는 쪽(테토 결)이에요.<br>사주에 불, 별자리도 불, 생명수 1번이면<br>세 가지가 같은 말을 해요.','0~1개면 맞추고 살피는 쪽(에겐 결)',34)],
+ 'd_1023':[cover('v1_lowbun',C,'정월의 연락 테스트','읽고 답장하기까지 걸리는 시간','나는 어느 쪽에<br>가까울까요?'),
+   band(C,'선택지','세 가지 중<br>어느 쪽이에요?','1 메시지가 오면 바로 답해야 편해요<br>2 답장을 썼다 지웠다 하다 늦게 보내요<br>3 읽고 이따 답해야지 하고 잊어요'),
+   band(C,'결과','많이 고른 번호는요','1번은 바로 답하는 쪽, 2번은 다듬어 보내는 쪽,<br>3번은 천천히 답하는 쪽이에요.<br>빠르다 느리다가 아니라 연락의 리듬이에요.','내 번호를 댓글로 남겨 주세요',34)],
 }
 async def m():
     async with async_playwright() as p:
@@ -44,7 +47,7 @@ async def m():
         await b.close()
 asyncio.run(m())
 from PIL import Image
-ims=[Image.open(f'2026-w43swap/cards/{k}_{i}.jpg').resize((360,450)) for k in('c_1023',) for i in (1,2,3)]
+ims=[Image.open(f'2026-w43swap/cards/{k}_{i}.jpg').resize((360,450)) for k in('d_1023',) for i in (1,2,3)]
 s=Image.new('RGB',(1080,450))
 for n,im in enumerate(ims): s.paste(im,(n*360,0))
 s.save('/tmp/sheets/cards2.png')
