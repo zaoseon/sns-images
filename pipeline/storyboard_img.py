@@ -5,7 +5,7 @@ from playwright.async_api import async_playwright
 R = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 CH = base64.b64encode(open(os.path.join(R, "meridian_intro/src/assets/chart.svg"), "rb").read()).decode()
 GOLD = "#e7c88d"
-SCENES = [("1 훅", "박자 0~4", "금빛 입자가 흩어져 떠다님", "파티클 필드 · 홀드", "내 사주는 혼자 다른 말을 하고 있을까요?"),
+SCENES = [("1 훅", "박자 0~4", "금빛 입자 120~200개가 깊이를 두고 떠다님(앞은 크고 흐림)", "3D 깊이 파티클 · 카메라 전진", "내 사주는 혼자 다른 말을 하고 있을까요?"),
           ("2 질문", "박자 4~10", "입자가 여섯 무리로 나뉨", "스태거 · 이징", "1 아니다  2 그럴 수도  3 그렇다"),
           ("3 모임", "박자 10~18", "입자가 흘러 차트 고리가 됨", "모핑 · 비트 싱크", "(글자 없음, 음악에 맞춰 합쳐짐)"),
           ("4 숫자", "박자 18~26", "사주 무리만 따로 떨어짐", "카운트업", "100명 중 약 37명은 사주만 혼자 달랐어요"),
@@ -27,7 +27,7 @@ html,body{{margin:0;width:1080px;background:#0b1020;color:#fff;font-family:'Noto
 <div class=h><div class=k>스토리보드 · 승인 요청</div><div class=tt>파티클 편<br>"내 사주는 혼자 다른 말을 하고 있을까요?"</div></div>
 <div class=info><div class=i><b>길이·비율</b>약 16초 · 세로</div><div class=i><b>색</b>짙은 남색 + 금색 + 흰색</div>
 <div class=i><b>음악</b>느린 곡 (자동 선택, 최근 3편과 다름)</div><div class=i><b>정월 얼굴</b>없음 (차트가 주인공)</div>
-<div class=i><b>숫자 출처</b>사주만 혼자 다른 비율 36.5% (자오선 계산)</div><div class=i><b>기둥</b>교차 데이터</div></div>
+<div class=i><b>숫자 출처</b>사주만 혼자 다른 비율 36.5% (자오선 계산)</div><div class=i><b>움직임 규칙</b>입자는 깊이 있게, 숫자는 감속해 올라가고 끝에서 살짝 팝, 바운스는 약하게</div></div>
 <div class=g>{"".join(card(i, s) for i, s in enumerate(SCENES))}</div>
 <div class=f>고칠 곳이 있으면 채팅으로 알려 주세요.<br>① 주제 문장 ② 선택지 ③ 색 ④ 장면 순서<br>괜찮으면 "그대로 만들어"라고만 하시면 돼요.</div>
 <script>
