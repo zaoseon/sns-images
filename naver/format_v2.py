@@ -149,7 +149,7 @@ def _dividers(paras):
     for i, p in enumerate(paras):
         if p != HR and ((i in heads) or (after_order is not None and False)):
             out.append(HR)
-        if p != HR and (pl(p).startswith("👇") or pl(p).startswith("📌 이 글의 순서")):   # 마무리 유도 문구 앞, 이 글의 순서 앞
+        if p != HR and ((pl(p).startswith("👇") and not ENGAGE.search(pl(p))) or pl(p).startswith("📌 이 글의 순서")):   # 함께 볼 글 안내(👇) 앞, 이 글의 순서 앞. 댓글·공유 유도 문구의 👇 앞에는 두지 않는다
             out.append(HR)
         out.append(p)
     return out
@@ -160,6 +160,23 @@ def _bold_guide(paras):
     for p in paras:
         if p != HR and not p.startswith("<table") and pl(p).startswith("👇") and "<b>" not in p:
             p = re.sub(r"(<span[^>]*>)(.*)(</span>)", r"\1<b>\2</b>\3", p, count=1, flags=re.S)
+        out.append(p)
+    return out
+
+ENGAGE = re.compile(r"댓글(?:로|에)[^.!?]{0,30}(?:남겨|알려)|이 글을 공유해 주세요")
+def _engage_emoji(paras):
+    """댓글·공유를 청하는 유도 문구 문단 맨 앞에 👇를 붙인다(10/5 대표 요청). 첫 줄에 자리가 없으면(폰 한 줄 22자 넘음) 이모지만 윗줄에 둔다. 이미 이모지·번호로 시작하는 줄은 건드리지 않는다."""
+    out = []
+    for p in paras:
+        if p != HR and not p.startswith("<table") and "<img" not in p and "<a " not in p:
+            t = pl(p).strip()
+            if ENGAGE.search(t) and len(t) < 160 and not re.match(r"^(👇|📌|✔|🔹|🔸|\d+\.|Q\.|A\.|[\U0001F300-\U0001FAFF])", t):
+                m = re.match(r"(<p[^>]*><span[^>]*>)(.*)(</span></p>)$", p, re.S)
+                if m:
+                    lines = m.group(2).split("<br>")
+                    if FB.width(FB.plain_of(lines[0])) + 2.0 <= FB.BODY_LIMIT: lines[0] = "👇 " + lines[0]
+                    else: lines.insert(0, "👇")
+                    p = m.group(1) + "<br>".join(lines) + m.group(3)
         out.append(p)
     return out
 
@@ -216,7 +233,7 @@ def link_guide(body, url):
     """👇 유도 문구 바로 아래 제목 줄에 연결 글 주소로 링크를 건다(이미 걸려 있으면 그대로). 주소는 앱에 저장된 값(data/naver_urls.json)."""
     if not url: return body
     import html as _h
-    ms = list(re.finditer(r"<p[^>]*>.*?</p>", body, re.S)); g = next((i for i, m in enumerate(ms) if "👇" in FB.plain_of(m.group(0))), None)
+    ms = list(re.finditer(r"<p[^>]*>.*?</p>", body, re.S)); g = max((i for i, m in enumerate(ms) if "👇" in FB.plain_of(m.group(0))), default=None)   # 함께 볼 글 안내는 본문 끝(CTA 앞)의 마지막 👇 줄. 앞쪽 댓글·공유 유도 문구의 👇와 헷갈리지 않게
     if g is None: return body
     for m in ms[g + 1:]:
         t = FB.plain_of(m.group(0)).replace("\xa0", " ").strip()
@@ -236,6 +253,7 @@ def apply(body):
     paras = _move_order(paras)
     paras = _items_blank(paras)
     paras = _bold_guide(paras)
+    paras = _engage_emoji(paras)
     paras = _dividers(paras)
     paras = _after_heading_blank(paras)
     paras = _dedupe_blanks(paras)

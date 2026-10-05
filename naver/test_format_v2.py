@@ -9,7 +9,7 @@ def ok(c, m):
     if not c: bad += 1
 pg = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "pages.json"), encoding="utf-8"))
 prep = lambda b: b.replace("naver_cta2_", "naver_cta4_").replace("naver_cta3_", "naver_cta4_")
-text = lambda h: re.sub(r"\s+", "", re.sub(r"<[^>]+>", "", h).replace("&nbsp;", ""))
+text = lambda h: re.sub(r"\s+", "", re.sub(r"<[^>]+>", "", h).replace("&nbsp;", "").replace("👇", ""))   # 댓글·공유 유도 문구에 👇가 붙는 것은 허용
 EL = re.compile(r"<table.*?</table>|<hr[^>]*>|<p[^>]*>.*?</p>", re.S)
 posts = {k: v for k, v in pg.items() if not v.get("done") and "body" in v}
 res = {}
@@ -42,9 +42,11 @@ def hr_ok(els):
     return all(i > 0 and els[i - 1] == V2.HR for i in heads) and all(i + 1 < len(els) and V2.blank(els[i + 1]) for i in heads)
 ok(all(hr_ok(e) for _, _, e in res.values()), "번호 제목마다 앞에 구분선, 뒤에 빈 줄 한 칸")
 def pre_guide(els):
-    g = [i for i, e in enumerate(els) if e != V2.HR and V2.pl(e).startswith("👇")]
-    return all(els[i - 1] == V2.HR for i in g)
-ok(all(pre_guide(e) for _, _, e in res.values()), "👇 유도 문구 앞에 구분선")
+    g = [i for i, e in enumerate(els) if e != V2.HR and V2.pl(e).startswith("👇") and not V2.ENGAGE.search(V2.pl(e))]
+    return bool(g) and all(els[i - 1] == V2.HR for i in g)
+ok(all(pre_guide(e) for _, _, e in res.values()), "👇 함께 볼 글 유도 문구 앞에 구분선")
+def no_hr_eng(els): return all(els[i - 1] != V2.HR for i, e in enumerate(els) if i and e != V2.HR and V2.pl(e).startswith("👇") and V2.ENGAGE.search(V2.pl(e)))
+ok(all(no_hr_eng(e) for _, _, e in res.values()), "댓글·공유 유도 문구(👇) 앞에는 구분선이 없음")
 def pre_order(els):
     h = [i for i, e in enumerate(els) if e != V2.HR and V2.pl(e).startswith("📌 이 글의 순서")]
     return all(els[i - 1] == V2.HR for i in h)
@@ -61,7 +63,7 @@ def box_gaps(n):
 ok(all(box_gaps(n) for _, n, _ in res.values()), "박스 안 한 줄 요약 / 세 풀이 / 해 볼 것 사이가 한 줄씩 띄워짐")
 hrs = [t for _, n, _ in res.values() for t in re.findall(r"<hr[^>]*>", n)]
 ok(hrs and all(V2.LINE_GRAY in t and 'width="%d"' % V2.LINE_W in t for t in hrs), f"구분선 {len(hrs)}개는 모두 회색({V2.LINE_GRAY}), 가운데, 폭 {V2.LINE_W}px(이미지보다 짧게)")
-ok(all(re.search(r"<b>👇", p) for _, n, _ in res.values() for p in re.findall(r"<p[^>]*>(?:(?!</p>).)*👇(?:(?!</p>).)*</p>", n, re.S)), "👇 유도 문구 줄은 모두 굵게")
+ok(all(re.search(r"<b>👇", p) for _, n, _ in res.values() for p in re.findall(r"<p[^>]*>(?:(?!</p>).)*👇(?:(?!</p>).)*</p>", n, re.S) if not V2.ENGAGE.search(re.sub(r"<[^>]+>", "", p))), "👇 함께 볼 글 유도 문구 줄은 모두 굵게")
 ok(all(len(re.findall(r"<p[^>]*>(?:(?!</p>).)*👇(?:(?!</p>).)*</p>", n, re.S)) >= 1 for _, n, _ in res.values() if "👇" in n), "👇 유도 문구가 있는 글 확인")
 ok(all(not (V2.isimg(els[i]) and V2.blank(els[i + 1])) for _, _, els in res.values() for i in range(len(els) - 1)), "이미지 바로 다음에 빈 줄이 없음")
 ok(all(not (els[i] == V2.HR and V2.blank(els[i + 1])) and not (V2.blank(els[i]) and els[i + 1] == V2.HR) for _, _, els in res.values() for i in range(len(els) - 1)), "구분선 앞뒤에 빈 줄이 없음")
@@ -78,4 +80,13 @@ body = res[next(iter(res))][1]
 lk = V2.link_guide(body, "https://blog.naver.com/zaoseon/1234?a=1&b=2")
 ok(lk.count('<a href="https://blog.naver.com/zaoseon/1234?a=1&amp;b=2">') == 1 and re.sub(r"<[^>]+>", "", lk) == re.sub(r"<[^>]+>", "", body), "연결 글 링크: 👇 아래 제목 줄에 한 번, 글자는 그대로, 주소의 &는 &amp;로")
 ok(V2.link_guide(lk, "https://x.com/y") == lk and V2.link_guide(body, "") == body, "이미 링크가 있거나 주소가 없으면 바꾸지 않음")
+eng = [(k, p) for k, (_, n, _) in res.items() for p in re.findall(r"<p[^>]*>.*?</p>", n, re.S) if V2.ENGAGE.search(re.sub(r"<[^>]+>", "", p)) and len(V2.pl(p).strip()) < 160 and not re.match(r"^(📌|✔|🔹|🔸|\d+\.|Q\.|A\.)", V2.pl(p).strip())]
+ok(eng and all(re.search(r"<span[^>]*>👇( |<br>)", p) for _, p in eng), f"댓글·공유 유도 문구 {len(eng)}곳은 모두 👇로 시작")
+ok(all(FB.width(FB.plain_of(l)) <= FB.BODY_LIMIT + 0.5 for _, p in eng for l in re.sub(r"</?p[^>]*>|</?span[^>]*>", "", p).split("<br>")), "👇를 붙인 뒤에도 유도 문구 줄이 한 줄 최대 폭을 넘지 않음")
+bad_link = []
+for k, (_, n, _) in res.items():
+    lk = V2.link_guide(n, "https://blog.naver.com/zaoseon/999"); ps = re.findall(r"<p[^>]*>.*?</p>", lk, re.S); g = max(i for i, q in enumerate(ps) if "👇" in re.sub(r"<[^>]+>", "", q))
+    linked = [i for i, q in enumerate(ps) if "<a " in q and "blog.naver.com/zaoseon/999" in q]
+    if linked != [g + 1] or "👇" in ps[g + 1]: bad_link.append((k, linked, g))
+ok(not bad_link, "연결 글 링크: 마지막 👇 줄 바로 아래 제목 줄에만 걸리고 댓글·공유 유도 문구에는 안 걸림 " + str(bad_link[:4]))
 print("모두 통과" if not bad else f"실패 {bad}"); sys.exit(1 if bad else 0)
