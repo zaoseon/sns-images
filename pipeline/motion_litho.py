@@ -51,7 +51,8 @@ for(let i=0;i<100;i++){const e=document.createElement('div');e.className='a dot'
 const stamp=(el,b0,dur=.5,from=1.12)=>{const p=out(cl((b-b0)/dur));return {o:Math.min(1,p*6),s:from+(1-from)*p}};
 let b=0;
 function seek(ms){b=B(ms);
- const drift=1+0.025*cl(b/12);               // 움직이는 정지: 장면 1·2 동안 천천히 커짐
+ const ph=b-Math.floor(b), pulse=0.03*Math.exp(-ph*5);   // 박마다 살짝 튐(움직이는 정지)
+ const drift=1+0.03*cl(b/12)+pulse;
  // 헤드라인
  const hl=g('hl'); hl.style.opacity=1-cl((b-12)/.8); hl.style.transform=`scale(${drift})`;
  // 핑크 원(첫 프레임부터 보임, 도장 찍히듯 살짝 줄어듦)
@@ -60,29 +61,30 @@ function seek(ms){b=B(ms);
  // 블루 원(박 6에 도장)
  const bs=stamp(null,6,.45,1.18); const bo=b<6?0:Math.min(1,bs.o);
  g('blueC').style.opacity=bo*(1-cl((b-12)/.6)); g('blueC').style.transform=`scale(${bo?bs.s*drift:1})`;
- g('blueD').style.opacity=(b<6?.55:0)*(1-cl((b-12)/.6)); g('blueD').style.transform=`scale(${drift})`;
+ g('blueD').style.opacity=(b<6?.55:0)*(1-cl((b-12)/.6)); g('blueD').style.transform=`scale(${drift}) rotate(${b*9}deg)`;
  g('wStar').style.opacity=(b<6?0.0:bo)*(1-cl((b-12)/.6)); g('wStar').style.transform=`scale(${bo?bs.s*drift:1})`;
  const ss=stamp(null,7,.4,1.3); g('wSame').style.opacity=(b<7?0:ss.o)*(1-cl((b-12)/.6)); g('wSame').style.transform=`scale(${b<7?1:ss.s})`;
  // 점 격자(박 12~20)
  let purOn=0;
  for(let i=0;i<100;i++){const t0=12.9+i/100*2.8; const p=out(cl((b-t0)/.5)); const isP=PUR.indexOf(i)>=0; let col='#d8ccb8', sc=p, ring='#c7baa3';
    if(isP){const k=PUR.indexOf(i), tp=15.4+k*.18; const q=out(cl((b-tp)/.35)); if(q>0){col='#7a4fd0';ring='#5b2fb0';sc=p*(1+0.28*q);} if(b>=tp+.1)purOn=Math.max(purOn,k+1)}
-   D[i].style.opacity=p*(1-cl((b-20)/.6)); D[i].style.background=col; D[i].style.boxShadow=`inset 0 0 0 4px ${ring}`; D[i].style.transform=`scale(${Math.max(sc,0.001)})`}
+   D[i].style.opacity=p*(1-cl((b-20)/.6)); D[i].style.background=col; D[i].style.boxShadow=`inset 0 0 0 4px ${ring}`; D[i].style.transform=`scale(${Math.max(sc*(1+(b>13&&b<20?pulse*.8:0)),0.001)})`}
  const cnOn=cl((b-12.9)/.5); const fade=1-cl((b-20)/.6);
  g('cnLb').style.opacity=cnOn*fade; g('cnTx').style.opacity=cl((b-16.2)/.5)*fade;
  g('cnNum').textContent=purOn; 
  // 종이 넘기기: 박 20(문장 2), 박 26(보내기)
  const x4=(1-out(cl((b-20)/.7)))*1180; g('p4').style.transform=`translateX(${x4}px)`; g('p4').style.display=b<19.9?'none':'block';
- const d4=1+0.02*cl((b-20.7)/5); const f4=b<20.4?0:1;
+ const d4=1+0.02*cl((b-20.7)/5)+(b>20.6&&b<26?pulse*.6:0); const f4=b<20.4?0:1;
  g('t4a').style.opacity=cl((b-20.6)/.4); g('t4a').style.transform=`scale(${d4})`;
  g('t4b').style.opacity=cl((b-22)/.4); g('t4b').style.transform=`scale(${d4})`;
  g('t4c').style.opacity=cl((b-22.6)/.5);
  const x5=(1-out(cl((b-26)/.7)))*1180; g('p5').style.transform=`translateX(${x5}px)`; g('p5').style.display=b<25.9?'none':'block';
- const d5=1+0.025*cl((b-26.7)/5.3);
+ const d5=1+0.025*cl((b-26.7)/5.3)+(b>26.6?pulse*.6:0);
  g('t5a').style.opacity=cl((b-26.6)/.4); g('t5a').style.transform=`scale(${d5})`;
  g('t5b').style.opacity=cl((b-27.8)/.4); g('t5b').style.transform=`scale(${d5})`;
  const pf=out(cl((b-29)/.8)); g('plane').style.opacity=cl((b-29)/.3); g('plane').style.transform=`translate(${(1-pf)*-160}px,${(1-pf)*120}px) rotate(${-8+8*pf}deg)`;
  g('zs').style.opacity=cl((b-29.6)/.5);
+ const gr=document.querySelector('.grain'); gr.style.backgroundPosition=((Math.floor(b*6)%7)*41)+'px '+((Math.floor(b*6)%5)*57)+'px';   // 종이 질감이 흔들림
 }
 seek(0);
 </script>"""
