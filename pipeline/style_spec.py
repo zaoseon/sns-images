@@ -34,7 +34,7 @@ async def check_page(pg, name, kind_hint=None):
         if bot<1050 and kind_hint!='cover': issues.append(f"{name}: 글자가 위로 몰림(맨 아래 글자 끝 y={bot:.0f}, 1050 이상이어야 함)")
     # 화면 밖으로 넘침, 글자끼리 겹침
     for e in els:
-        if e['y']+e['h']>1350+2: issues.append(f"{name} 「{e['t']}」: 화면 아래로 넘침(끝 y={e['y']+e['h']:.0f})")
+        if e['y']+e['h']>1325: issues.append(f"{name} 「{e['t']}」: 아래 여백 부족(끝 y={e['y']+e['h']:.0f}, 1325 이내여야 함)")
     for a_i in range(len(els)):
         for b_i in range(a_i+1,len(els)):
             a,b=els[a_i],els[b_i]

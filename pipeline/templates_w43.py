@@ -54,8 +54,8 @@ def t6():
     inner=f'''<div style="position:absolute;left:0;top:0;width:540px;height:1350px;background:{A}"></div><div style="position:absolute;left:540px;top:0;width:540px;height:1350px;background:{B}"></div>
 <div style="position:absolute;left:0;right:0;top:80px;text-align:center;font-size:36px;color:#111">정월의 투표 · 견본</div>
 <div style="position:absolute;left:60px;right:60px;top:150px;text-align:center;font-size:70px;line-height:1.4;color:#111">좋아하는 사람에게<br>연락은 누가 먼저?</div>
-<div style="position:absolute;left:0;width:540px;top:560px;text-align:center;font-size:260px;color:#111">A</div><div style="position:absolute;left:540px;width:540px;top:560px;text-align:center;font-size:260px;color:#111">B</div>
-<div style="position:absolute;left:0;width:540px;top:900px;text-align:center;font-size:46px;color:#111;line-height:1.4">내가<br>먼저 한다</div><div style="position:absolute;left:540px;width:540px;top:900px;text-align:center;font-size:46px;color:#111;line-height:1.4">상대가 할 때<br>기다린다</div>
+<div style="position:absolute;left:0;width:540px;top:520px;text-align:center;font-size:260px;color:#111">A</div><div style="position:absolute;left:540px;width:540px;top:520px;text-align:center;font-size:260px;color:#111">B</div>
+<div style="position:absolute;left:0;width:540px;top:940px;text-align:center;font-size:46px;color:#111;line-height:1.4">내가<br>먼저 한다</div><div style="position:absolute;left:540px;width:540px;top:940px;text-align:center;font-size:46px;color:#111;line-height:1.4">상대가 할 때<br>기다린다</div>
 <div style="position:absolute;left:0;right:0;top:1150px;text-align:center;font-size:42px;color:#111">댓글에 A 또는 B를 남겨 주세요</div>{handle("#111",False)}'''
     return wrap(inner,"background:#222")
 # T7 한마디
