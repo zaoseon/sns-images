@@ -74,4 +74,8 @@ for t in small + cta:
     m = re.search(r"/naver/img/(?:%s|%s)/([^\"?]+)" % (V2.SMALL_DIR, V2.CTA_DIR), t); n = __import__("urllib.parse", fromlist=["x"]).unquote(m.group(1))
     if not os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "img", (V2.CTA_DIR if "naver_cta" in n else V2.SMALL_DIR), n)): miss.append(n)
 ok(not miss, "작은 판 이미지 파일이 모두 있음" + (f" 없음: {miss[:3]}" if miss else ""))
+body = res[next(iter(res))][1]
+lk = V2.link_guide(body, "https://blog.naver.com/zaoseon/1234?a=1&b=2")
+ok(lk.count('<a href="https://blog.naver.com/zaoseon/1234?a=1&amp;b=2">') == 1 and re.sub(r"<[^>]+>", "", lk) == re.sub(r"<[^>]+>", "", body), "연결 글 링크: 👇 아래 제목 줄에 한 번, 글자는 그대로, 주소의 &는 &amp;로")
+ok(V2.link_guide(lk, "https://x.com/y") == lk and V2.link_guide(body, "") == body, "이미 링크가 있거나 주소가 없으면 바꾸지 않음")
 print("모두 통과" if not bad else f"실패 {bad}"); sys.exit(1 if bad else 0)

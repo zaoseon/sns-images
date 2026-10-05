@@ -213,6 +213,20 @@ def _small_images(body):
         return tag
     return re.sub(r"<img[^>]*>", sub, body)
 
+def link_guide(body, url):
+    """👇 유도 문구 바로 아래 제목 줄에 연결 글 주소로 링크를 건다(이미 걸려 있으면 그대로). 주소는 앱에 저장된 값(data/naver_urls.json)."""
+    if not url: return body
+    import html as _h
+    ms = list(re.finditer(r"<p[^>]*>.*?</p>", body, re.S)); g = next((i for i, m in enumerate(ms) if "👇" in FB.plain_of(m.group(0))), None)
+    if g is None: return body
+    for m in ms[g + 1:]:
+        t = FB.plain_of(m.group(0)).replace("\xa0", " ").strip()
+        if not t: continue
+        if "<img" in m.group(0) or "<a " in m.group(0): return body
+        new = re.sub(r"(<span[^>]*>)(.*)(</span>)", lambda k: k.group(1) + '<a href="' + _h.escape(url, quote=True) + '">' + k.group(2) + "</a>" + k.group(3), m.group(0), count=1, flags=re.S)
+        return body[:m.start()] + new + body[m.end():]
+    return body
+
 def apply(body):
     paras = PTAG.findall(body)
     paras = _split_greeting(paras)

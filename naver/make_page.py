@@ -8,6 +8,13 @@ import re, html, json, os, datetime as D
 import format_body as FB
 import format_v2 as V2
 
+def saved_urls():
+    """앱에서 저장한 글 주소(+발행 기록)를 사이트 저장소 data/naver_urls.json에서 읽는다(30분마다 앱 자료 갱신 때 같이 갱신). {글 id: 주소}"""
+    try:
+        u = json.load(open(f"{SITE}/data/naver_urls.json", encoding="utf-8")); items = u.get("items", u) if isinstance(u, dict) else u
+        return {x["id"]: x["url"] for x in items if isinstance(x, dict) and x.get("url")}
+    except Exception: return {}
+
 def sop_clips_for(pid):
     """이 글에서 파생된 글 연결 클립 [(제목, 올릴 날 'M/D')]. content/clips_sop.py의 CLIPS(대표가 글 발행 다음 날부터 블로그 앱에서 올리는 클립)."""
     try:
@@ -76,8 +83,10 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
     nav = f'<a href="/naver/{nxt}.html"><button class="big">다음 원고 →</button></a>' if nxt else '<a href="/naver/"><button class="big">목록으로 (마지막 원고)</button></a>'
     cover_box = (f'<div class="box"><p class="lab">2. 대표 이미지: 먼저 저장 → 네이버 글쓰기 맨 위에 사진으로 올리기(처음 올린 사진이 대표가 돼요) → 그다음 아래 본문 복사</p>'
                  f'<img src="/naver/img/{cover}?v=b3" style="width:100%;border-radius:8px" alt=""><a href="/naver/img/{cover}?v=b3" download="{os.path.basename(cover)}"><button>대표 이미지 저장</button></a></div>') if cover else ""
-    if related and (related.get("url") or related.get("title")):
-        _u = related.get("url") or ""
+    _ru = (saved_urls().get((related or {}).get("id")) or (related or {}).get("url") or "") if related else ""   # 앱에 저장된 주소가 우선, 없으면 발행 기록의 주소
+    if v2 and _ru: body = V2.link_guide(body, _ru)   # 본문의 연결 글 제목 줄에 링크(복사하면 같이 감)
+    if related and (related.get("url") or related.get("title") or _ru):
+        _u = _ru
         rel_box = (f'<div class="box"><p class="lab">4. 함께 볼 글(내부 링크): 글 주소가 앱에 저장돼 있으면 본문 맨 아래 제목 줄에 링크가 자동으로 걸려요. 링크 카드도 원하면 제목 줄 다음 줄에 주소를 붙여 넣고 엔터</p>'
                    f'<p class="val" style="font-size:20px;font-weight:700" id="rt">{html.escape(related.get("title") or "")}</p><button onclick="cp(\'rt\',this)">글 제목 복사</button>'
                    + (f'<p class="val" id="rl" style="margin-top:10px">{html.escape(_u)}</p><button onclick="cp(\'rl\',this)">글 주소 복사</button>' if _u else
