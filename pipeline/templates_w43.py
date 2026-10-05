@@ -1,7 +1,9 @@
 """돌려쓰기용 새 카드 틀 5종 견본(10/5 대표: 피드가 질리지 않게 틀을 여러 개 두고 돌려 쓴다).
 T3 배치표(2축) · T4 순위 사다리 · T5 대화형 · T6 투표(A vs B) · T7 한마디 카드. 견본의 내용은 예시이며 올리기 전에 풀이 기준으로 확정한다.
 사용: python3 pipeline/templates_w43.py -> 2026-w43tpl/T3~T7.jpg"""
-import base64, asyncio
+import base64, asyncio, sys, os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from style_spec import check_page
 from playwright.async_api import async_playwright
 def b64(p): return base64.b64encode(open(p,'rb').read()).decode()
 BG=b64('characters/cut/bg_sunmoon.jpg')
@@ -22,18 +24,18 @@ def t3():
 <div style="position:absolute;left:70px;top:130px;width:940px;font-size:72px;line-height:1.25;color:#fff">연락할 때<br>나는 어디에 있을까요?</div>
 <div style="position:absolute;left:90px;top:330px;width:900px;height:760px;border:3px solid #ffffff55;border-radius:24px"></div>
 <div style="position:absolute;left:540px;top:330px;width:3px;height:760px;background:#ffffff55"></div><div style="position:absolute;left:90px;top:710px;width:900px;height:3px;background:#ffffff55"></div>
-<div style="position:absolute;left:0;right:0;top:350px;text-align:center;font-size:30px;color:#fff">먼저 연락해요</div><div style="position:absolute;left:0;right:0;top:1030px;text-align:center;font-size:30px;color:#fff">기다려요</div>
-<div style="position:absolute;left:92px;top:670px;font-size:28px;color:#fff">속으로 품어요</div><div style="position:absolute;right:92px;top:670px;font-size:28px;color:#fff">바로 표현해요</div>
-{d}<div style="position:absolute;left:70px;right:70px;top:1180px;font-size:32px;color:#fff;text-align:center">내 오행은 어디에 있나요? 댓글로 알려 주세요</div>{handle(A)}'''
+<div style="position:absolute;left:0;right:0;top:345px;text-align:center;font-size:40px;color:#fff">먼저 연락해요</div><div style="position:absolute;left:0;right:0;top:1025px;text-align:center;font-size:40px;color:#fff">기다려요</div>
+<div style="position:absolute;left:92px;top:665px;font-size:40px;color:#fff">속으로 품어요</div><div style="position:absolute;right:92px;top:665px;font-size:40px;color:#fff">바로 표현해요</div>
+{d}<div style="position:absolute;left:70px;right:70px;top:1180px;font-size:36px;color:#fff;text-align:center">내 오행은 어디에 있나요? 댓글로 알려 주세요</div>{handle(A)}'''
     return wrap(inner,f"background:#1b1830 url(data:image/jpeg;base64,{BG}) center/cover;color:#fff")
 # T4 순위 사다리
 def t4():
-    C="#7fd6c8"; rows=[("1","물","생각이 깊어서 답장도 깊게 써요"),("2","나무","먼저 말 꺼내고 곧게 이어 가요"),("3","불","마음이 바로 문자에 나와요"),("4","흙","느려도 꾸준히 연락해요"),("5","쇠","짧고 분명하게 보내요")]
-    d=''.join(f'<div style="position:absolute;left:{70+i*28}px;right:{70+i*28}px;top:{330+i*150}px;height:124px;background:#ffffff14;border:2px solid {C};border-radius:26px;display:flex;align-items:center;gap:22px;padding:0 30px;color:#fff"><span style="font-size:60px;color:{C};width:56px">{n}</span><span style="background:{C};color:#111;font-size:36px;padding:8px 24px;border-radius:30px">{o}</span><span style="font-size:32px">{t}</span></div>' for i,(n,o,t) in enumerate(rows))
+    C="#7fd6c8"; rows=[("1","물","깊게 생각해 쓴다"),("2","나무","먼저 말을 꺼낸다"),("3","불","마음이 바로 나온다"),("4","흙","느려도 꾸준하다"),("5","쇠","짧고 분명하다")]
+    d=''.join(f'<div style="position:absolute;left:{70+i*28}px;right:{70+i*28}px;top:{330+i*150}px;height:124px;background:#ffffff14;border:2px solid {C};border-radius:26px;display:flex;align-items:center;gap:22px;padding:0 30px;color:#fff"><span style="font-size:64px;color:#fff;width:56px">{n}</span><span style="background:{C};color:#111;font-size:40px;padding:6px 22px;border-radius:30px">{o}</span><span style="font-size:40px">{t}</span></div>' for i,(n,o,t) in enumerate(rows))
     inner=f'''<div style="position:absolute;left:70px;top:70px;font-size:36px;color:{C}">정월의 순위 · 견본</div>
 <div style="position:absolute;left:70px;top:130px;width:940px;font-size:72px;line-height:1.25;color:#fff">답장 쓰는 방식<br>오행별로 늘어놓으면?</div>{d}
-<div style="position:absolute;left:70px;right:70px;top:1110px;font-size:30px;color:#cfc9e0;text-align:center">순위는 재미로 본 것이고, 높고 낮음이 아니라 리듬의 차이예요</div>
-<div style="position:absolute;left:70px;right:70px;top:1180px;font-size:34px;color:#fff;text-align:center">내 오행은 몇 번에 있나요?</div>{handle(C)}'''
+<div style="position:absolute;left:70px;right:70px;top:1100px;font-size:40px;color:#fff;text-align:center">재미로 본 순위예요. 리듬의 차이일 뿐이에요</div>
+<div style="position:absolute;left:70px;right:70px;top:1190px;font-size:40px;color:#fff;text-align:center">내 오행은 몇 번에 있나요?</div>{handle(C)}'''
     return wrap(inner,f"background:#171528 url(data:image/jpeg;base64,{BG}) center/cover;color:#fff")
 # T5 대화형
 def t5():
@@ -51,9 +53,9 @@ def t6():
     inner=f'''<div style="position:absolute;left:0;top:0;width:540px;height:1350px;background:{A}"></div><div style="position:absolute;left:540px;top:0;width:540px;height:1350px;background:{B}"></div>
 <div style="position:absolute;left:0;right:0;top:80px;text-align:center;font-size:36px;color:#111">정월의 투표 · 견본</div>
 <div style="position:absolute;left:60px;right:60px;top:150px;text-align:center;font-size:70px;line-height:1.25;color:#111">좋아하는 사람에게<br>연락은 누가 먼저?</div>
-<div style="position:absolute;left:0;width:540px;top:560px;text-align:center;font-size:260px;color:#fff">A</div><div style="position:absolute;left:540px;width:540px;top:560px;text-align:center;font-size:260px;color:#fff">B</div>
+<div style="position:absolute;left:0;width:540px;top:560px;text-align:center;font-size:260px;color:#111">A</div><div style="position:absolute;left:540px;width:540px;top:560px;text-align:center;font-size:260px;color:#111">B</div>
 <div style="position:absolute;left:0;width:540px;top:900px;text-align:center;font-size:46px;color:#111;line-height:1.4">내가<br>먼저 한다</div><div style="position:absolute;left:540px;width:540px;top:900px;text-align:center;font-size:46px;color:#111;line-height:1.4">상대가 할 때<br>기다린다</div>
-<div style="position:absolute;left:0;right:0;top:1150px;text-align:center;font-size:38px;color:#111">댓글에 A 또는 B를 남겨 주세요</div>{handle("#111",False)}'''
+<div style="position:absolute;left:0;right:0;top:1150px;text-align:center;font-size:42px;color:#111">댓글에 A 또는 B를 남겨 주세요</div>{handle("#111",False)}'''
     return wrap(inner,"background:#222")
 # T7 한마디
 def t7():
@@ -61,13 +63,15 @@ def t7():
     inner=f'''<div style="position:absolute;left:70px;top:80px;font-size:36px;color:{C}">정월의 한마디 · 견본</div>
 <div style="position:absolute;left:90px;top:230px;width:900px;font-size:92px;line-height:1.35;color:#fff">답장이 늦는 건<br>마음이 식어서가<br>아니라,<br><span style="color:{C}">말을 고르는 중</span><br>일 수 있어요.</div>
 <img src="data:image/png;base64,{fc}" style="position:absolute;right:-70px;bottom:0;height:560px">
-<div style="position:absolute;left:90px;bottom:150px;font-size:36px;color:#fff;text-shadow:0 0 8px #000">오늘 한 줄만 먼저 보내 보세요</div>{handle(C)}'''
+<div style="position:absolute;left:90px;bottom:150px;font-size:40px;color:#fff;text-shadow:0 0 8px #000">오늘 한 줄만 먼저 보내 보세요</div>{handle(C)}'''
     return wrap(inner,f"background:#0f0d16 url(data:image/jpeg;base64,{BG}) center/cover;color:#fff")
 async def m():
     async with async_playwright() as p:
         b=await p.chromium.launch(); pg=await b.new_page(viewport={'width':1080,'height':1350})
         for k,f in (('T3',t3),('T4',t4),('T5',t5),('T6',t6),('T7',t7)):
-            await pg.set_content(f()); await pg.wait_for_timeout(300); await pg.screenshot(path=f'2026-w43tpl/{k}.jpg',type='jpeg',quality=92)
+            await pg.set_content(f()); await pg.wait_for_timeout(300)
+            for _i in await check_page(pg, k): print('검사:', _i)
+            await pg.screenshot(path=f'2026-w43tpl/{k}.jpg',type='jpeg',quality=92)
         await b.close()
 asyncio.run(m())
 from PIL import Image

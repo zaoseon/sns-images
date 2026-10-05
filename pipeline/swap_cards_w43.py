@@ -1,4 +1,6 @@
-import base64,asyncio
+import base64,asyncio,sys,os
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+from style_spec import check_page
 from playwright.async_api import async_playwright
 def b64(p): return base64.b64encode(open(p,'rb').read()).decode()
 BG=b64('characters/cut/bg_sunmoon.jpg')
@@ -12,7 +14,7 @@ def cover(face,acc,badge,sub,title):
 <div style="position:absolute;left:90px;top:430px;font-size:100px;line-height:1.2;z-index:3">{title}</div>
 <img src="data:image/png;base64,{ch}" style="position:absolute;right:-150px;bottom:0;height:760px;z-index:1">
 {handle(acc)}
-<div style="position:absolute;right:46px;bottom:34px;text-align:right;font-size:23px;color:#fff;line-height:1.3;z-index:4;text-shadow:0 0 6px #000,0 0 10px #000">※ 자오선의 상담가 정월은<br>AI로 생성한 가상 캐릭터입니다</div></body>"""
+<div style="position:absolute;right:46px;bottom:34px;text-align:right;font-size:23px;color:#fff;line-height:1.3;z-index:4;background:rgba(0,0,0,.62);padding:8px 14px;border-radius:12px">※ 자오선의 상담가 정월은<br>AI로 생성한 가상 캐릭터입니다</div></body>"""
 def band(acc,badge,title,body,foot='',bs=40):
     return f"""<body style="margin:0;width:1080px;height:1350px;background:#181615;position:relative;overflow:hidden;{F};color:#fff">
 <div style="position:absolute;left:0;right:0;top:216px;height:914px;background:url(data:image/jpeg;base64,{BG}) center/cover"></div>
@@ -26,16 +28,16 @@ A='#ff8a73'; B='#f6b042'; C='#7fd6c8'
 sets={
  'a_1009':[cover('v2_straight',A,'정월의 연애 테스트','한 번 정하면 뒤돌아보지 않는 나','연애에서도<br>몇 개 해당돼요?'),
    band(A,'선택지','세 가지 중<br>몇 개예요?','1 마음이 식으면 정리가 빨라요<br>2 좋아하면 먼저 표현해요<br>3 헤어진 뒤 뒤돌아본 적이 드물어요'),
-   band(A,'결과','2개 이상이라면','확신이 빠른 만큼 상대는 갑작스럽게 느낄 수 있어요.<br>정리하기 전에 이유를 한 문장으로<br>말해 주세요.','내 숫자를 댓글로 남겨 주세요',36)],
+   band(A,'결과','2개 이상이라면','확신이 빠른 만큼<br>상대는 갑작스럽게 느낄 수 있어요.<br>정리하기 전에 이유를<br>한 문장으로 말해 주세요.','내 숫자를 댓글로 남겨 주세요',40)],
  'b_1011':[cover('v3_ponytail',B,'정월의 관계 테스트','먼저 말하지 못하고<br>기다리다 놓친 사람이 있다면','나는 몇 개<br>해당돼요?'),
    band(B,'선택지','세 가지 중<br>몇 개예요?','1 상대가 먼저 말해 주길 기다려요<br>2 말할까 고민하다 때를 놓친 적 있어요<br>3 놓치고 나서야 말할걸 생각해요'),
-   band(B,'결과','2개 이상이라면','말이 느린 게 아니라<br>거절을 먼저 헤아리는 쪽일 수 있어요.<br>이번 주에 안부 한 줄을 먼저 보내 보세요.','내 숫자를 댓글로 남겨 주세요',36)],
+   band(B,'결과','2개 이상이라면','말이 느린 게 아니라<br>거절을 먼저 헤아리는 쪽일 수 있어요.<br>이번 주에 안부 한 줄을<br>먼저 보내 보세요.','내 숫자를 댓글로 남겨 주세요',40)],
  'c_1023':[cover('v1_lowbun',C,'정월의 유행 테스트','요즘 도는 에겐·테토, 사주로도 볼까요?','나는 어느 쪽에<br>가까울까요?'),
    band(C,'선택지','세 가지 중<br>몇 개예요?','1 약속은 내가 먼저 잡아요<br>2 불편해도 하고 싶은 말은 해요<br>3 계획이 틀어지면 바로 대안을 내요'),
-   band(C,'결과','2개 이상이라면','앞장서는 쪽(테토 결)이에요.<br>사주에 불, 별자리도 불, 생명수 1번이면<br>세 가지가 같은 말을 해요.','0~1개면 맞추고 살피는 쪽(에겐 결)',34)],
+   band(C,'결과','2개 이상이라면','앞장서는 쪽(테토 결)이에요.<br>사주에 불, 별자리도 불,<br>생명수 1번이면 세 가지가<br>같은 말을 해요.','0~1개면 맞추고 살피는 쪽(에겐 결)',40)],
  'd_1023':[cover('v1_lowbun',C,'정월의 연락 테스트','읽고 답장하기까지 걸리는 시간','나는 어느 쪽에<br>가까울까요?'),
    band(C,'선택지','세 가지 중<br>어느 쪽이에요?','1 메시지가 오면 바로 답해야 편해요<br>2 답장을 썼다 지웠다 하다 늦게 보내요<br>3 읽고 이따 답해야지 하고 잊어요'),
-   band(C,'결과','많이 고른 번호는요','1번은 바로 답하는 쪽, 2번은 다듬어 보내는 쪽,<br>3번은 천천히 답하는 쪽이에요.<br>빠르다 느리다가 아니라 연락의 리듬이에요.','내 번호를 댓글로 남겨 주세요',34)],
+   band(C,'결과','많이 고른 번호는요','1번은 바로 답하는 쪽,<br>2번은 다듬어 보내는 쪽,<br>3번은 천천히 답하는 쪽이에요.<br>빠르다 느리다가 아니라<br>연락의 리듬이에요.','내 번호를 댓글로 남겨 주세요',40)],
 }
 async def m():
     async with async_playwright() as p:
@@ -43,6 +45,7 @@ async def m():
         for k,s in sets.items():
             for i,h in enumerate(s,1):
                 await pg.set_content('<html>'+h+'</html>'); await pg.wait_for_timeout(300)
+                for _i in await check_page(pg, f'{k}_{i}'): print('검사:', _i)
                 await pg.screenshot(path=f'2026-w43swap/cards/{k}_{i}.jpg',type='jpeg',quality=92)
         await b.close()
 asyncio.run(m())
