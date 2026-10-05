@@ -21,7 +21,7 @@ def bg(kind, acc):
 def handle(acc, right=False): return f'<div style="position:absolute;{"right:55px" if right else "left:55px"};bottom:46px;display:flex;align-items:center;gap:14px;font-size:34px;color:#fff;z-index:6"><span style="width:34px;height:34px;border-radius:50%;background:{acc};display:inline-block"></span>zaoseon.com</div>'
 def ai_note(left=False): return '<div style="position:absolute;' + ('left:46px;text-align:left' if left else 'right:46px;text-align:right') + ';bottom:36px;font-size:23px;color:#fff;line-height:1.4;z-index:6;background:rgba(0,0,0,.65);padding:8px 14px;border-radius:12px">※ 자오선의 상담가 정월은<br>AI로 생성한 가상 캐릭터입니다</div>'
 def page(inner, bgkind, acc):
-    st, ov = bg(bgkind, acc); return f'<html><body style="margin:0;width:1080px;height:1350px;position:relative;overflow:hidden;{F};color:#fff;{st}">{ov}{inner}</body></html>'
+    st, ov = bg(bgkind, acc); return f'<html><body style="margin:0;width:1080px;height:1350px;position:relative;overflow:hidden;{F};color:#fff;word-break:keep-all;line-break:strict;{st}">{ov}{inner}</body></html>'
 def img_tag(fc, h, pos, flip=False, z=2, extra=''):
     tf = 'transform:scaleX(-1);' if flip else ''
     return f'<img src="data:image/png;base64,{face_b64(fc)}" style="position:absolute;{pos};height:{h}px;{tf}z-index:{z};{extra}">'

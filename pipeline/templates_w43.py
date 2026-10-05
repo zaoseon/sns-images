@@ -13,7 +13,7 @@ def face(n): return b64(f'characters/cut/{n}.png')
 def handle(c,dark=True):
     col="#fff" if dark else "#222"
     return f'<div style="position:absolute;left:55px;bottom:46px;display:flex;align-items:center;gap:14px;font-size:34px;color:{col};{F}"><span style="width:34px;height:34px;border-radius:50%;background:{c}"></span>zaoseon.com</div>'
-def wrap(inner,bg): return f'<html><body style="margin:0;width:1080px;height:1350px;position:relative;overflow:hidden;{F};{bg}">{inner}</body></html>'
+def wrap(inner,bg): return f'<html><body style="margin:0;width:1080px;height:1350px;position:relative;overflow:hidden;{F};word-break:keep-all;line-break:strict;{bg}">{inner}</body></html>'
 def chip(t,c,x,y,fs=34,fg="#111"): return f'<div style="position:absolute;left:{x}px;top:{y}px;background:{c};color:{fg};font-size:{fs}px;padding:10px 26px;border-radius:40px;white-space:nowrap">{t}</div>'
 # T3 배치표
 def t3():

@@ -15,16 +15,16 @@ def card(i, s):
     return f'''<div class=card><div class=th id=t{i}><canvas width=300 height=533></canvas></div>
 <div class=nm>{s[0]} <span>{s[1]}</span></div><div class=tx>{s[2]}</div><div class=mv>{s[3]}</div><div class=sc>"{s[4]}"</div></div>'''
 HTML = f'''<!doctype html><meta charset=utf-8><style>
-html,body{{margin:0;width:1080px;background:#0b1020;color:#fff;font-family:'Noto Sans CJK KR',sans-serif;font-weight:900}}
-.h{{padding:70px 60px 20px}}.k{{font-size:40px;color:{GOLD}}}.tt{{font-size:76px;line-height:1.4;margin-top:14px}}
+html,body{{margin:0;width:1080px;background:#0b1020;color:#fff;font-family:'Noto Sans CJK KR',sans-serif;font-weight:700;word-break:keep-all;line-break:strict;overflow-wrap:break-word}}
+.h{{padding:70px 60px 20px}}.k{{font-size:40px;color:{GOLD}}}.tt{{font-size:72px;line-height:1.45;margin-top:14px;font-weight:900}}
 .info{{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:20px 60px 10px}}
-.i{{background:#161c33;border-radius:26px;padding:24px 30px;font-size:38px;line-height:1.6}}.i b{{color:{GOLD};display:block;font-size:34px}}
+.i{{background:#161c33;border-radius:26px;padding:24px 30px;font-size:38px;line-height:1.6}}.i b{{color:{GOLD};display:block;font-size:34px;font-weight:900}}
 .g{{display:grid;grid-template-columns:repeat(3,320px);gap:30px;padding:30px 45px}}
 .card{{}} .th{{width:320px;height:569px;border-radius:24px;overflow:hidden;background:#0a1226;border:3px solid #2a3360}}canvas{{width:320px;height:569px;display:block}}
-.nm{{font-size:44px;margin-top:16px;color:{GOLD}}}.nm span{{font-size:32px;color:#aab3d6}}.tx{{font-size:36px;line-height:1.5;margin-top:6px}}.mv{{font-size:32px;color:#7fd6c8;margin-top:6px}}.sc{{font-size:32px;line-height:1.5;color:#dfe4f7;margin-top:8px;font-weight:700}}
-.f{{margin:20px 60px 70px;background:{GOLD};color:#111;border-radius:30px;padding:34px 40px;font-size:42px;line-height:1.6}}
+.nm{{font-size:44px;margin-top:16px;color:{GOLD};font-weight:900}}.nm span{{font-size:32px;color:#aab3d6}}.tx{{font-size:36px;line-height:1.55;margin-top:6px;font-weight:700}}.mv{{font-size:32px;color:#7fd6c8;margin-top:6px;font-weight:700}}.sc{{font-size:32px;line-height:1.5;color:#dfe4f7;margin-top:8px;font-weight:500}}
+.f{{margin:20px 60px 70px;background:{GOLD};color:#111;border-radius:30px;padding:34px 40px;font-size:42px;line-height:1.65;font-weight:800}}
 </style><body>
-<div class=h><div class=k>스토리보드 · 승인 요청</div><div class=tt>파티클 편<br>"내 사주는 혼자 다른 말을 하고 있을까요?"</div></div>
+<div class=h><div class=k>스토리보드 · 승인 요청</div><div class=tt>파티클 편<br>"내 사주는 혼자 다른 말을<br>하고 있을까요?"</div></div>
 <div class=info><div class=i><b>길이·비율</b>약 16초 · 세로</div><div class=i><b>색</b>짙은 남색 + 금색 + 흰색</div>
 <div class=i><b>음악</b>느린 곡 (자동 선택, 최근 3편과 다름)</div><div class=i><b>정월 얼굴</b>없음 (차트가 주인공)</div>
 <div class=i><b>숫자 출처</b>사주만 혼자 다른 비율 36.5% (자오선 계산)</div><div class=i><b>움직임 규칙</b>입자는 깊이 있게, 숫자는 감속해 올라가고 끝에서 살짝 팝, 바운스는 약하게</div></div>

@@ -10,7 +10,7 @@ def html(beat, S=None):
     S = S or SPEC_REPLY
     h = """<!doctype html><meta charset=utf-8><style>
 @font-face{font-family:PB;src:url('file://%s')}
-html,body{margin:0;width:1080px;height:1920px;background:#0a0a0c;overflow:hidden;font-family:PB,'Noto Sans CJK KR',sans-serif;color:#fff}
+html,body{margin:0;width:1080px;height:1920px;background:#0a0a0c;overflow:hidden;word-break:keep-all;line-break:strict;font-family:PB,'Noto Sans CJK KR',sans-serif;color:#fff}
 .e{position:absolute;left:0;width:1080px;text-align:center;opacity:0;will-change:transform}
 .w{font-size:168px;line-height:1.3;letter-spacing:-2px}
 .t{font-size:112px;line-height:1.35}
