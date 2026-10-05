@@ -1,6 +1,7 @@
 """인스타·스레드에 올리는 영상에 네이버 전용 CTA(\"블로그 스티커 눌러 보기\")가 남아 있지 않은지 점검한다 (10/5 대표 지적, 10/4 s10 클립이 네이버용 그대로 인스타에 올라감).
  1) reuse/<id>/reel.mp4(인스타용 재활용)가 네이버용 파일(clips_sop/*, clips_post/*, */naver/*, */naver_music/*)과 바이트가 같으면 실패
  2) content/reel_swaps.json의 인스타·스레드용 영상 경로(상태 skip 제외, 글 연결 클립·네이버 클립·카페 제외)가 네이버용 폴더를 가리키면 실패
+ 3) 저장소의 mp4 중 20KB 미만(영상 데이터가 없는 빈 파일)이 있으면 실패
 사용: python3 pipeline/check_ig_videos.py   (예약 전·후에 돌린다. 문제가 있으면 목록을 보이고 종료 코드 1)"""
 import os, sys, re, json, glob, hashlib
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
@@ -21,6 +22,8 @@ def main():
         v = re.sub(r".*/main/", "", x.get("video") or "")
         if x.get("status") == "skip" or x.get("kind") in SKIP_KINDS or not v: continue
         if re.search(r"/naver/|naver_music|clips_sop|clips_post", v): bad.append(f"새 영상 계획 {x['id']}({x['kind']} {x['date']} {x['time']})가 네이버용 영상 {v} 를 가리킴")
+    for p in sorted(glob.glob(os.path.join(ROOT, "**", "*.mp4"), recursive=True)):   # 3) 영상 데이터가 없는 빈 파일(20KB 미만)은 어디에 있든 실패 - 10/4 naver/jeong.mp4가 48바이트로 올라간 적이 있다
+        if os.path.getsize(p) < 20000: bad.append(f"영상 파일이 비어 있음({os.path.getsize(p)}바이트): {os.path.relpath(p, ROOT)}")
     print(f"인스타·스레드 영상 점검: 문제 {len(bad)}건 (네이버용 파일 {len(nv)}개와 대조)"); [print(" -", b) for b in bad]
     return 1 if bad else 0
 if __name__ == "__main__": sys.exit(main())
