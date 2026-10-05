@@ -3,7 +3,7 @@
 사용: python3 pipeline/motion_dots.py -> 2026-motion/dots_cross.mp4"""
 import os, sys, math
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
-import pick_reel as PK, clip_motion as M
+import pick_reel as PK, clip_motion as M, music_plan as MP, face_plan as FP
 from PIL import Image, ImageDraw
 CX = M.CX; BOLD = PK.BOLD
 GOLDC = (231, 200, 141); TEAL = (127, 214, 200); CORAL = (255, 138, 115); GRAY = (120, 124, 140)
@@ -15,22 +15,23 @@ def dot_layer(col, r=30, glow=False):
     if glow:
         for k, a in ((18, 40), (12, 70), (6, 110)): d.ellipse((s / 2 - r - k, s / 2 - r - k, s / 2 + r + k, s / 2 + r + k), fill=col + (a,))
     d.ellipse((s / 2 - r, s / 2 - r, s / 2 + r, s / 2 + r), fill=col + (255,)); return im
+FI = FP.pick("data", "motion-dots"); FACE = FI["face"] + ("_flip" if FI["flip"] else ""); DX = -70 if FI["flip"] else 70
 def build():
     def s1(c):
         M.chip(c, "정월의 숫자 퀴즈", 345, .05)
-        y = PK.title(c, "나랑 같은 말을 하는\n*운명학*, 몇 개일까요?", 445, .2, 104)
-        PK.small(c, "먼저 답을 골라 보세요", y + 10, .9, 48, PK.GOLDA); M.character(c, "v2_straight", t0=.3, width=730, bottom=1455, dx=-60)
+        y = PK.title(c, "나랑 같은 말을 하는\n*운명학*, 몇 개일까요?", 430, .2, 118, lh=1.5)
+        PK.small(c, "먼저 답을 골라 보세요", y + 40, .9, 54, PK.GOLDA); M.character(c, FACE, t0=.3, width=760, bottom=1460, dx=DX)
     def s2(c):
-        PK.title(c, "여섯 운명학 중\n한 곳에 모인 수는?", 420, .05, 96)
+        PK.title(c, "여섯 운명학 중\n한 곳에 모인 수는?", 400, .05, 108, lh=1.5)
         for i, (lab, col) in enumerate((("둘", GOLDC), ("셋", TEAL), ("넷 이상", CORAL))):
-            cy = 860 + i * 190; t0 = .35 + i * .18; p = M.e_back((c.t - t0) / .45)
+            cy = 880 + i * 215; t0 = .35 + i * .18; p = M.e_back((c.t - t0) / .45)
             if p > 0.02:
-                pill = M.rr(760, 150, col + (255,), None, r=75); M.pop(c, pill, CX, cy, t0, a=1.0)
-                M.text(c, f"{i+1}   {lab}", cy - 52, t0 + .1, 70, color=(20, 20, 30, 255), path=BOLD, maxw=700, stagger=0)
-        PK.small(c, "고른 번호를 댓글로 남겨 주세요", 1400, 1.4, 44, PK.GOLDA)
+                pill = M.rr(800, 170, col + (255,), None, r=85); M.pop(c, pill, CX, cy, t0, a=1.0)
+                M.text(c, f"{i+1}   {lab}", cy - 60, t0 + .1, 82, color=(20, 20, 30, 255), path=BOLD, maxw=700, stagger=0)
+        PK.small(c, "고른 번호를 댓글로 남겨 주세요", 1380, 1.4, 52, PK.GOLDA)
     def s3(c):
-        M.text(c, "100명 중", 345, .05, 72, color=(255, 255, 255, 255), path=BOLD, maxw=800, stagger=0)
-        x0, y0, cell = CX - 390 + 39, 640, 76; idx = 0; starts = [.3, 2.0, 3.4, 4.3]; durs = [1.5, 1.2, .8, .4]; cur = None; shown = {}
+        M.text(c, "100명 중", 345, .05, 84, color=(255, 255, 255, 255), path=BOLD, maxw=800, stagger=0)
+        x0, y0, cell = CX - 390 + 39, 650, 78; idx = 0; starts = [.3, 2.0, 3.4, 4.3]; durs = [1.5, 1.2, .8, .4]; cur = None; shown = {}
         for gi, (lab, n, col) in enumerate(GROUPS):
             for k in range(n):
                 t0 = starts[gi] + durs[gi] * k / n; p = M.e_back((c.t - t0) / .28)
@@ -40,16 +41,16 @@ def build():
             if c.t >= starts[gi]: cur = gi; shown[gi] = int(round(n * M.cl((c.t - starts[gi]) / durs[gi])))
         if cur is not None:
             lab, n, col = GROUPS[cur]; v = shown[cur]
-            L = layer_text(f"{lab} {v}명" if lab != "흩어짐" else f"{lab} {v}명", 96 if cur != 2 else 108, col); M.blit(c.fr, L, CX - L.width / 2, 452, c.alpha(1))
+            L = layer_text(f"{lab} {v}명", 124 if cur != 2 else 138, col); M.blit(c.fr, L, CX - L.width / 2, 440, c.alpha(1))
         lx = 90
         for gi in range(4):
             if c.t >= starts[gi] + durs[gi]:
-                lab, n, col = GROUPS[gi]; d = dot_layer(col, 16); M.blit(c.fr, d, lx, 1402, c.alpha(1)); T = layer_text(f"{lab} {n}", 44, (255, 255, 255)); M.blit(c.fr, T, lx + 40, 1396, c.alpha(1)); lx += 40 + T.width + 20
+                lab, n, col = GROUPS[gi]; d = dot_layer(col, 16); M.blit(c.fr, d, lx, 1402, c.alpha(1)); T = layer_text(f"{lab} {n}", 48, (255, 255, 255)); M.blit(c.fr, T, lx + 40, 1392, c.alpha(1)); lx += 40 + T.width + 20
     def s4(c):
-        PK.title(c, "넷 이상이 같은 말은\n100명 중 5명뿐", 430, .1, 100, color=PK.GOLDA); PK.small(c, "대부분은 둘이나 셋만 만나요\n나머지는 내가 고를 수 있는 곳이에요", 800, .8, 46, (255, 255, 255))
-        PK.title(c, "떠오르는 사람에게\n보내 보세요", 1080, 1.5, 78); PK.small(c, "내 운명학은 프로필 링크에서 1초", 1330, 2.0, 44, (255, 255, 255))
+        PK.title(c, "넷 이상이 같은 말은\n100명 중 5명뿐", 400, .1, 116, color=PK.GOLDA, lh=1.5); PK.small(c, "대부분은 둘이나 셋만 만나요\n나머지는 내가 고를 수 있는 곳이에요", 820, .8, 54, (255, 255, 255))
+        PK.title(c, "떠오르는 사람에게\n보내 보세요", 1090, 1.5, 88, lh=1.5)
     return [(3.2, s1), (3.6, s2), (6.2, s3), (3.4, s4)]
 if __name__ == "__main__":
     sc = build(); bad = PK.check_frames(sc); print("안전 영역 검사:", "통과" if not bad else bad[:3])
     if bad and "--force" not in sys.argv: sys.exit(1)
-    out, secs = M.render("dots_cross", sc, os.path.join(HERE, "..", "2026-motion")); PK.music(out, sc, 77); print(out, secs, "초")
+    out, secs = M.render("dots_cross", sc, os.path.join(HERE, "..", "2026-motion")); mi = MP.choose("data", "motion-dots"); MP.mux(out, [d for d, _ in sc], mi, 77); print("음악:", mi["style"], mi["bpm"], mi["key"], "| 얼굴:", FACE); print(out, secs, "초")

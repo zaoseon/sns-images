@@ -1,0 +1,26 @@
+[
+ {
+  "name": "pick-oct31",
+  "kind": "love",
+  "style": "피아노 로파이",
+  "mode": "slow",
+  "bpm": 88,
+  "key": "C"
+ },
+ {
+  "name": "pick-nov7",
+  "kind": "love",
+  "style": "별빛 오르골",
+  "mode": "slow",
+  "bpm": 93,
+  "key": "E"
+ },
+ {
+  "name": "motion-dots",
+  "kind": "data",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 104,
+  "key": "F"
+ }
+]

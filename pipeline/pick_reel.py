@@ -5,7 +5,7 @@
 사용: python3 pipeline/pick_reel.py oct3|oct10   -> 2026-pick/v2/<날짜>.mp4"""
 import os, sys, math, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, ".."); sys.path.insert(0, HERE)
-import clip_motion as M, safezone as Z, reel_music as RM, palette as P
+import clip_motion as M, safezone as Z, reel_music as RM, palette as P, music_plan as MP, face_plan as FP
 from PIL import Image, ImageDraw, ImageFilter
 P.apply_to_engine(M); SER = os.path.join(HERE, "fonts", "serif.otf"); BOLD = os.path.join(HERE, "fonts", "PRETENDARD-BLACK.OTF"); GOLD = P.C2["hi"]; GOLDA = GOLD + (255,); CX = M.CX
 CARDS = [("東", P.C2["pt"], "1"), ("西", P.C2["hi"], "2"), ("數", (255, 255, 255), "3")]
@@ -68,7 +68,13 @@ def music(mp4, scenes, seed):
     wav = f"/tmp/pick_{seed}.wav"; RM.compose_up("경쾌 신스팝", max(8, (total - .3) / spb), seed, wav, key="D", bpm=bpm, cuts=cuts, tail=.3)
     tmp = mp4 + ".m.mp4"; subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mp4, "-i", wav, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-shortest", "-movflags", "+faststart", tmp], check=True); os.replace(tmp, mp4)
 if __name__ == "__main__":
-    key = sys.argv[1] if len(sys.argv) > 1 else "oct3"; cfg = SETS[key]; sc = build(cfg["hook"], cfg["sub"], cfg["instr"], cfg["note"], cta=cfg.get("cta", "follow"), face=cfg.get("face", "v1_lowbun"), dx=cfg.get("dx", 0))
+    key = sys.argv[1] if len(sys.argv) > 1 else "oct3"; cfg = dict(SETS[key])
+    if key in ("oct31", "nov7"):      # 새 편은 얼굴·음악을 돌려 쓰기 계획에서 고른다(계절 사진 포함)
+        fi = FP.pick("ask", "pick-" + key, md=cfg["date"][5:]); cfg["face"] = fi["face"] + ("_flip" if fi["flip"] else ""); cfg["dx"] = -80 if fi["flip"] else 80
+    sc = build(cfg["hook"], cfg["sub"], cfg["instr"], cfg["note"], cta=cfg.get("cta", "follow"), face=cfg.get("face", "v1_lowbun"), dx=cfg.get("dx", 0))
     bad = check_frames(sc); print("안전 영역 검사:", "통과" if not bad else bad)
     if bad and "--force" not in sys.argv: sys.exit(1)
-    out, secs = M.render(cfg["date"], sc, os.path.join(ROOT, "2026-pick", "v3")); music(out, sc, {"oct3": 71, "oct10": 72, "oct17": 73, "oct24": 74, "oct31": 75, "nov7": 76}[key]); print(out, secs, "초")
+    out, secs = M.render(cfg["date"], sc, os.path.join(ROOT, "2026-pick", "v3"))
+    if key in ("oct31", "nov7"): mi = MP.choose("love", "pick-" + key); MP.mux(out, [d for d, _ in sc], mi, {"oct31": 75, "nov7": 76}[key]); print("음악:", mi["style"], mi["bpm"], mi["key"], "| 얼굴:", cfg["face"])
+    else: music(out, sc, {"oct3": 71, "oct10": 72, "oct17": 73, "oct24": 74}[key])
+    print(out, secs, "초")
