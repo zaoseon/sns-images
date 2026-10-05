@@ -70,5 +70,13 @@
   "mode": "up",
   "bpm": 114,
   "key": "G"
+ },
+ {
+  "name": "ticket-2027",
+  "kind": "fun",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 124,
+  "key": "A"
  }
 ]
