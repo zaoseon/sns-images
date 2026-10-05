@@ -1760,5 +1760,25 @@
    "B의 눈 깜빡임이 어색한지",
    "이 정도 움직임이면 영상에 쓸 만한지"
   ]
+ },
+ {
+  "id": "plan-styles",
+  "kind": "영상 스타일 후보(결정 요청)",
+  "title": "모션그래픽 스타일 30 가이드 → 자오선에 맞는 12가지 (6장)",
+  "status": "new",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/styles_01.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/styles_02.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/styles_03.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/styles_04.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/styles_05.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/styles_06.png?v=1"
+  ],
+  "note": "대표가 주신 kimju.kr/motion 내용(스타일 30가지)을 읽고 자오선에 맞는 12가지를 골랐어요. 1번째 장이 핵심(색만 바꾸면 같은 영상이 된다는 경고 포함), 2~5번째가 쓰임, 6번째가 대표님께 드리는 질문 3개예요. 번호와 답만 채팅으로 알려 주세요.",
+  "checks": [
+   "먼저 만들 3가지 고르기",
+   "색만 바꾼 키네틱 2번째 편을 쓸지",
+   "신년 감정서를 탑승권 스타일로 해도 될지"
+  ]
  }
 ]
