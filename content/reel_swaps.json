@@ -1751,22 +1751,9 @@
  {
   "id": "test-anim-a",
   "kind": "정월 움직임 시험(게시용 아님)",
-  "title": "정월 움직임 시험 A · 숨쉬기 + 머리 끄덕임 + 머리카락 흔들림 (눈 깜빡임 없음)",
+  "title": "정월 움직임 시험 · 숨쉬기 + 머리 끄덕임 + 머리카락 흔들림 (눈 깜빡임 없음, 게시용 아님)",
   "status": "new",
   "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/char_anim_A.mp4?v=1",
-  "note": "대표 질문 '정월도 캐릭터처럼 움직일 수 있나'를 직접 시험한 거예요(8초 반복, 소리 없음, 게시용 아님). A는 자연스럽게 보이는 움직임만, B는 눈 깜빡임을 더했는데 가까이 보면 가짜 티가 나요. 두 개를 비교해 보세요.",
-  "checks": [
-   "A가 자연스러운지",
-   "B의 눈 깜빡임이 어색한지",
-   "이 정도 움직임이면 영상에 쓸 만한지"
-  ]
- },
- {
-  "id": "test-anim-b",
-  "kind": "정월 움직임 시험(게시용 아님)",
-  "title": "정월 움직임 시험 B · A에 눈 깜빡임을 더함 (어색함 확인용)",
-  "status": "new",
-  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/char_anim_B.mp4?v=1",
   "note": "대표 질문 '정월도 캐릭터처럼 움직일 수 있나'를 직접 시험한 거예요(8초 반복, 소리 없음, 게시용 아님). A는 자연스럽게 보이는 움직임만, B는 눈 깜빡임을 더했는데 가까이 보면 가짜 티가 나요. 두 개를 비교해 보세요.",
   "checks": [
    "A가 자연스러운지",
