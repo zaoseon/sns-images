@@ -6,8 +6,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from style_spec import check_page
 from playwright.async_api import async_playwright
 def b64(p): return base64.b64encode(open(p,'rb').read()).decode()
-BG=b64('characters/cut/bg_sunmoon.jpg')
-F="font-family:'Noto Sans CJK KR','Noto Sans KR',sans-serif;font-weight:800"
+BG=b64('characters/cut/bg_sunmoon.jpg'); SKYB=b64('meridian_intro/src/assets/sky.png'); CHARTB=b64('meridian_intro/src/assets/chart.svg'); INTROB=b64('meridian_intro/src/assets/character.png')
+F="font-family:'Noto Sans CJK KR','Noto Sans KR',sans-serif;font-weight:900"
 INK="#12111a"; PAPER="#f6f1e8"
 def face(n): return b64(f'characters/cut/{n}.png')
 def handle(c,dark=True):
@@ -21,29 +21,30 @@ def t3():
     dots=[("불",A,"#111",760,430),("나무","#7fd6a0","#111",430,470),("쇠","#d9dde3","#111",790,860),("흙","#e8c36a","#111",440,930),("물","#6fb7ff","#111",170,880)]
     d=''.join(chip(n,c,x,y,40,fg) for n,c,fg,x,y in dots)
     inner=f'''<div style="position:absolute;left:70px;top:70px;font-size:36px;color:{A}">정월의 배치표 · 견본</div>
-<div style="position:absolute;left:70px;top:130px;width:940px;font-size:72px;line-height:1.25;color:#fff">연락할 때<br>나는 어디에 있을까요?</div>
+<div style="position:absolute;left:70px;top:130px;width:940px;font-size:72px;line-height:1.4;color:#fff">연락할 때<br>나는 어디에 있을까요?</div>
 <div style="position:absolute;left:90px;top:330px;width:900px;height:760px;border:3px solid #ffffff55;border-radius:24px"></div>
 <div style="position:absolute;left:540px;top:330px;width:3px;height:760px;background:#ffffff55"></div><div style="position:absolute;left:90px;top:710px;width:900px;height:3px;background:#ffffff55"></div>
 <div style="position:absolute;left:0;right:0;top:345px;text-align:center;font-size:40px;color:#fff">먼저 연락해요</div><div style="position:absolute;left:0;right:0;top:1025px;text-align:center;font-size:40px;color:#fff">기다려요</div>
 <div style="position:absolute;left:92px;top:665px;font-size:40px;color:#fff">속으로 품어요</div><div style="position:absolute;right:92px;top:665px;font-size:40px;color:#fff">바로 표현해요</div>
 {d}<div style="position:absolute;left:70px;right:70px;top:1180px;font-size:36px;color:#fff;text-align:center">내 오행은 어디에 있나요? 댓글로 알려 주세요</div>{handle(A)}'''
-    return wrap(inner,f"background:#1b1830 url(data:image/jpeg;base64,{BG}) center/cover;color:#fff")
+    return wrap(inner,f"background:#050912 url(data:image/png;base64,{SKYB}) center/cover;color:#fff")
 # T4 순위 사다리
 def t4():
     C="#7fd6c8"; rows=[("1","물","깊게 생각해 쓴다"),("2","나무","먼저 말을 꺼낸다"),("3","불","마음이 바로 나온다"),("4","흙","느려도 꾸준하다"),("5","쇠","짧고 분명하다")]
     d=''.join(f'<div style="position:absolute;left:{70+i*28}px;right:{70+i*28}px;top:{330+i*150}px;height:124px;background:#ffffff14;border:2px solid {C};border-radius:26px;display:flex;align-items:center;gap:22px;padding:0 30px;color:#fff"><span style="font-size:64px;color:#fff;width:56px">{n}</span><span style="background:{C};color:#111;font-size:40px;padding:6px 22px;border-radius:30px">{o}</span><span style="font-size:40px">{t}</span></div>' for i,(n,o,t) in enumerate(rows))
     inner=f'''<div style="position:absolute;left:70px;top:70px;font-size:36px;color:{C}">정월의 순위 · 견본</div>
-<div style="position:absolute;left:70px;top:130px;width:940px;font-size:72px;line-height:1.25;color:#fff">답장 쓰는 방식<br>오행별로 늘어놓으면?</div>{d}
+<div style="position:absolute;left:70px;top:130px;width:940px;font-size:72px;line-height:1.4;color:#fff">답장 쓰는 방식<br>오행별로 늘어놓으면?</div>{d}
 <div style="position:absolute;left:70px;right:70px;top:1100px;font-size:40px;color:#fff;text-align:center">재미로 본 순위예요. 리듬의 차이일 뿐이에요</div>
 <div style="position:absolute;left:70px;right:70px;top:1190px;font-size:40px;color:#fff;text-align:center">내 오행은 몇 번에 있나요?</div>{handle(C)}'''
-    return wrap(inner,f"background:#171528 url(data:image/jpeg;base64,{BG}) center/cover;color:#fff")
+    inner=f'<img src="data:image/svg+xml;base64,{CHARTB}" style="position:absolute;left:-210px;top:140px;width:1500px;opacity:.28">'+inner
+    return wrap(inner,"background:#070b16;color:#fff")
 # T5 대화형
 def t5():
     C="#f6b042"; fc=face('v3_ponytail')
-    def me(t,y): return f'<div style="position:absolute;right:70px;top:{y}px;max-width:640px;background:#fee500;color:#111;font-size:40px;line-height:1.4;padding:26px 34px;border-radius:34px 34px 6px 34px">{t}</div>'
-    def jw(t,y): return f'<div style="position:absolute;left:190px;top:{y}px;max-width:700px;background:#fff;color:#111;font-size:40px;line-height:1.45;padding:26px 34px;border-radius:34px 34px 34px 6px">{t}</div><img src="data:image/png;base64,{fc}" style="position:absolute;left:50px;top:{y}px;width:110px;height:110px;border-radius:50%;object-fit:cover;object-position:50% 12%;border:4px solid {C}">'
+    def me(t,y): return f'<div style="position:absolute;right:70px;top:{y}px;max-width:640px;background:#fee500;color:#111;font-size:42px;line-height:1.6;padding:28px 36px;border-radius:34px 34px 6px 34px">{t}</div>'
+    def jw(t,y): return f'<div style="position:absolute;left:190px;top:{y}px;max-width:700px;background:#fff;color:#111;font-size:42px;line-height:1.6;padding:28px 36px;border-radius:34px 34px 34px 6px">{t}</div><img src="data:image/png;base64,{fc}" style="position:absolute;left:50px;top:{y}px;width:110px;height:110px;border-radius:50%;object-fit:cover;object-position:50% 12%;border:4px solid {C}">'
     inner=f'''<div style="position:absolute;left:70px;top:70px;font-size:36px;color:{C}">정월과 나의 대화 · 견본</div>
-<div style="position:absolute;left:70px;top:130px;font-size:64px;line-height:1.25;color:#fff;width:940px">읽씹한 건 아닌데<br>답을 못 하겠어요</div>
+<div style="position:absolute;left:70px;top:130px;font-size:64px;line-height:1.4;color:#fff;width:940px">읽씹한 건 아닌데<br>답을 못 하겠어요</div>
 {me("읽고도 답장이 안 나가요. 제가 이상한 걸까요?",400)}{jw("이상한 게 아니에요.<br>말을 고르는 중일 수 있어요.",580)}{me("그럼 어떻게 해요?",830)}{jw("한 줄만 먼저 보내 보세요.<br>읽었어, 이따 답할게. 그걸로 충분해요.",940)}
 <div style="position:absolute;left:70px;right:70px;top:1220px;font-size:30px;color:#cfc9e0;text-align:center">비슷한 고민이 있다면 댓글로 남겨 주세요</div>{handle(C)}'''
     return wrap(inner,"background:#2b2a3a;color:#fff")
@@ -52,19 +53,19 @@ def t6():
     A="#ff8a73"; B="#6fb7ff"
     inner=f'''<div style="position:absolute;left:0;top:0;width:540px;height:1350px;background:{A}"></div><div style="position:absolute;left:540px;top:0;width:540px;height:1350px;background:{B}"></div>
 <div style="position:absolute;left:0;right:0;top:80px;text-align:center;font-size:36px;color:#111">정월의 투표 · 견본</div>
-<div style="position:absolute;left:60px;right:60px;top:150px;text-align:center;font-size:70px;line-height:1.25;color:#111">좋아하는 사람에게<br>연락은 누가 먼저?</div>
+<div style="position:absolute;left:60px;right:60px;top:150px;text-align:center;font-size:70px;line-height:1.4;color:#111">좋아하는 사람에게<br>연락은 누가 먼저?</div>
 <div style="position:absolute;left:0;width:540px;top:560px;text-align:center;font-size:260px;color:#111">A</div><div style="position:absolute;left:540px;width:540px;top:560px;text-align:center;font-size:260px;color:#111">B</div>
 <div style="position:absolute;left:0;width:540px;top:900px;text-align:center;font-size:46px;color:#111;line-height:1.4">내가<br>먼저 한다</div><div style="position:absolute;left:540px;width:540px;top:900px;text-align:center;font-size:46px;color:#111;line-height:1.4">상대가 할 때<br>기다린다</div>
 <div style="position:absolute;left:0;right:0;top:1150px;text-align:center;font-size:42px;color:#111">댓글에 A 또는 B를 남겨 주세요</div>{handle("#111",False)}'''
     return wrap(inner,"background:#222")
 # T7 한마디
 def t7():
-    C="#ffd84d"; fc=face('v2_straight')
+    C="#ffd84d"; fc=INTROB
     inner=f'''<div style="position:absolute;left:70px;top:80px;font-size:36px;color:{C}">정월의 한마디 · 견본</div>
-<div style="position:absolute;left:90px;top:230px;width:900px;font-size:92px;line-height:1.35;color:#fff">답장이 늦는 건<br>마음이 식어서가<br>아니라,<br><span style="color:{C}">말을 고르는 중</span><br>일 수 있어요.</div>
-<img src="data:image/png;base64,{fc}" style="position:absolute;right:-70px;bottom:0;height:560px">
+<div style="position:absolute;left:90px;top:230px;width:900px;font-size:92px;line-height:1.45;color:#fff">답장이 늦는 건<br>마음이 식어서가<br>아니라,<br><span style="color:{C}">말을 고르는 중</span><br>일 수 있어요.</div>
+<img src="data:image/png;base64,{fc}" style="position:absolute;right:-60px;bottom:0;height:640px">
 <div style="position:absolute;left:90px;bottom:150px;font-size:40px;color:#fff;text-shadow:0 0 8px #000">오늘 한 줄만 먼저 보내 보세요</div>{handle(C)}'''
-    return wrap(inner,f"background:#0f0d16 url(data:image/jpeg;base64,{BG}) center/cover;color:#fff")
+    return wrap(inner,f"background:#050912 url(data:image/png;base64,{SKYB}) center/cover;color:#fff")
 async def m():
     async with async_playwright() as p:
         b=await p.chromium.launch(); pg=await b.new_page(viewport={'width':1080,'height':1350})
