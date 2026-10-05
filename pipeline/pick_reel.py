@@ -26,7 +26,7 @@ def card_layer(h, col):
     _c[k] = im; return im
 def title(c, s, y, t0, size, color=M.WHITE, lh=1.25): return M.text(c, s, y, t0, size, color=(color + (255,) if len(color) == 3 else color), path=SER, maxw=820, lh=lh, stagger=0.2)
 def small(c, s, y, t0, size, color=M.WHITE): return M.text(c, s, y, t0, size, color=(color + (255,) if len(color) == 3 else color), path=M.MED, maxw=820, lh=1.35, stagger=0.15)
-def build(hook, sub, instr, note, face="v1_lowbun"):
+def build(hook, sub, instr, note, face="v1_lowbun", cta="follow"):
     def s1(c):
         M.chip(c, "정월의 카드 고르기", 345, .05); y = title(c, hook, 445, .2, 108)
         small(c, sub, y + 4, .8, 46, GOLDA); M.character(c, face, t0=.3, width=730, bottom=1455)
@@ -37,13 +37,18 @@ def build(hook, sub, instr, note, face="v1_lowbun"):
             M.text(c, no, 1180, .7 + i * .12, 84, color=GOLDA, path=SER, maxw=300, cx=cx, stagger=0)
         title(c, instr, 1290, 1.3, 64, color=GOLDA); small(c, note, 1385, 1.7, 40)
     def s3(c):
-        title(c, "매일 저녁\n사주·별자리·숫자 테스트", 480, .1, 112, color=GOLDA); small(c, "팔로우하면 다음 편을\n놓치지 않아요", 900, .8, 56)
+        if cta == "share":
+            title(c, "떠오르는 사람에게\n보내 보세요", 480, .1, 112, color=GOLDA); small(c, "고른 번호와 함께 보내도 좋아요\n다음 편은 매주 올라와요", 900, .8, 56)
+        else:
+            title(c, "매일 저녁\n사주·별자리·숫자 테스트", 480, .1, 112, color=GOLDA); small(c, "팔로우하면 다음 편을\n놓치지 않아요", 900, .8, 56)
         small(c, "내 태어난 날 기운은 프로필 링크에서 1초", 1160, 1.3, 38, (200, 192, 176))
     return [(3.0, s1), (5.4, s2), (2.8, s3)]
 SETS = {"oct3": dict(hook="10월, 나에게\n*먼저 오는 소식*", sub="세 장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="풀이는 캡션에 있어요 (먼저 고르고 보기!)", date="2026-10-03"),
         "oct10": dict(hook="그 사람이\n*곧 보여줄 행동*", sub="마음에 떠오르는 사람을 생각하세요", instr="끌리는 카드 번호를 댓글로", note="풀이는 캡션에 있어요 (먼저 고르고 보기!)", date="2026-10-10"),
         "oct17": dict(hook="마음이 복잡한 날,\n*나에게 필요한 것*", sub="세 장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="풀이는 캡션에 있어요 (먼저 고르고 보기!)", date="2026-10-17"),
-        "oct24": dict(hook="요즘 마음에 걸린 일,\n*풀어 가는 순서*", sub="마음에 걸린 일 하나를 떠올리세요", instr="끌리는 카드 번호를 댓글로", note="풀이는 캡션에 있어요 (먼저 고르고 보기!)", date="2026-10-24")}
+        "oct24": dict(hook="요즘 마음에 걸린 일,\n*풀어 가는 순서*", sub="마음에 걸린 일 하나를 떠올리세요", instr="끌리는 카드 번호를 댓글로", note="풀이는 캡션에 있어요 (먼저 고르고 보기!)", date="2026-10-24"),
+        "oct31": dict(hook="읽고도 답장 못 한 날,\n*내 마음이 하는 말*", sub="세 장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="풀이는 캡션에 있어요 (먼저 고르고 보기!)", date="2026-10-31", cta="share"),
+        "nov7": dict(hook="말 걸고 싶은 날,\n*필요한 한 걸음*", sub="세 장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="풀이는 캡션에 있어요 (먼저 고르고 보기!)", date="2026-11-07", cta="share")}
 def check_frames(scenes):
     """장면마다 몇 시점의 그림을 배경만 있는 그림과 비교해, 바뀐 부분(글자·카드·정월)이 안전 영역 밖으로 나가는지 검사한다."""
     bad = []; total = sum(d for d, _ in scenes); acc = 0
@@ -63,7 +68,7 @@ def music(mp4, scenes, seed):
     wav = f"/tmp/pick_{seed}.wav"; RM.compose_up("경쾌 신스팝", max(8, (total - .3) / spb), seed, wav, key="D", bpm=bpm, cuts=cuts, tail=.3)
     tmp = mp4 + ".m.mp4"; subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mp4, "-i", wav, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-shortest", "-movflags", "+faststart", tmp], check=True); os.replace(tmp, mp4)
 if __name__ == "__main__":
-    key = sys.argv[1] if len(sys.argv) > 1 else "oct3"; cfg = SETS[key]; sc = build(cfg["hook"], cfg["sub"], cfg["instr"], cfg["note"])
+    key = sys.argv[1] if len(sys.argv) > 1 else "oct3"; cfg = SETS[key]; sc = build(cfg["hook"], cfg["sub"], cfg["instr"], cfg["note"], cta=cfg.get("cta", "follow"))
     bad = check_frames(sc); print("안전 영역 검사:", "통과" if not bad else bad)
     if bad and "--force" not in sys.argv: sys.exit(1)
-    out, secs = M.render(cfg["date"], sc, os.path.join(ROOT, "2026-pick", "v3")); music(out, sc, {"oct3": 71, "oct10": 72, "oct17": 73, "oct24": 74}[key]); print(out, secs, "초")
+    out, secs = M.render(cfg["date"], sc, os.path.join(ROOT, "2026-pick", "v3")); music(out, sc, {"oct3": 71, "oct10": 72, "oct17": 73, "oct24": 74, "oct31": 75, "nov7": 76}[key]); print(out, secs, "초")
