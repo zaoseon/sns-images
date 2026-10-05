@@ -62,5 +62,13 @@
   "mode": "slow",
   "bpm": 96,
   "key": "F"
+ },
+ {
+  "name": "boarding-2027",
+  "kind": "fun",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 114,
+  "key": "G"
  }
 ]
