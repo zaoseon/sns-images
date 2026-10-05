@@ -1726,5 +1726,26 @@
    "색(남색+금색)",
    "장면 순서"
   ]
+ },
+ {
+  "id": "plan-forms",
+  "kind": "영상 형태 정리(결정 요청)",
+  "title": "영상 형태 8가지 → 우리가 만들 순서 (7장)",
+  "status": "new",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/form_01.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/form_02.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/form_03.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/form_04.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/form_05.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/form_06.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/form_07.png?v=1"
+  ],
+  "note": "올려 주신 8가지를 보면서 자오선에 맞춰 정리했어요. 1번째 장이 결론(주력·보조·조건부·보류), 2~5번째가 형태별 쓰임과 시키는 말, 6번째가 4주 순서, 7번째가 대표님께 드리는 질문 3개예요. 번호와 답만 채팅으로 알려 주세요.",
+  "checks": [
+   "주력 3가지가 맞는지",
+   "캐릭터 애니: 2D 마스코트를 새로 만들지",
+   "4주 순서"
+  ]
  }
 ]
