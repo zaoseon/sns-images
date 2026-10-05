@@ -22,7 +22,7 @@ def band(acc,badge,title,body,foot='',bs=40):
 <div style="position:absolute;left:0;right:0;top:740px;text-align:center;font-size:{bs}px;line-height:1.7;color:#efe9e4">{body}</div>
 {('<div style="position:absolute;left:0;right:0;top:1180px;text-align:center;font-size:34px;color:'+acc+'">'+foot+'</div>') if foot else ''}
 {handle(acc)}</body>"""
-A='#ff8a73'; B='#f6b042'
+A='#ff8a73'; B='#f6b042'; C='#7fd6c8'
 sets={
  'a_1009':[cover('v2_straight',A,'정월의 연애 테스트','한 번 정하면 뒤돌아보지 않는 나','연애에서도<br>몇 개 해당돼요?'),
    band(A,'선택지','세 가지 중<br>몇 개예요?','1 마음이 식으면 정리가 빨라요<br>2 좋아하면 먼저 표현해요<br>3 헤어진 뒤 뒤돌아본 적이 드물어요'),
@@ -30,6 +30,9 @@ sets={
  'b_1011':[cover('v3_ponytail',B,'정월의 관계 테스트','먼저 말하지 못하고<br>기다리다 놓친 사람이 있다면','나는 몇 개<br>해당돼요?'),
    band(B,'선택지','세 가지 중<br>몇 개예요?','1 상대가 먼저 말해 주길 기다려요<br>2 말할까 고민하다 때를 놓친 적 있어요<br>3 놓치고 나서야 말할걸 생각해요'),
    band(B,'결과','2개 이상이라면','말이 느린 게 아니라<br>거절을 먼저 헤아리는 쪽일 수 있어요.<br>이번 주에 안부 한 줄을 먼저 보내 보세요.','내 숫자를 댓글로 남겨 주세요',36)],
+ 'c_1023':[cover('v1_lowbun',C,'정월의 유행 테스트','요즘 도는 에겐·테토, 사주로도 볼까요?','나는 어느 쪽에<br>가까울까요?'),
+   band(C,'선택지','세 가지 중<br>몇 개예요?','1 약속은 내가 먼저 잡아요<br>2 불편해도 하고 싶은 말은 해요<br>3 계획이 틀어지면 바로 대안을 내요'),
+   band(C,'결과','2개 이상이라면','앞장서는 쪽(테토 결)이에요.<br>사주에 불, 별자리도 불, 생명수 1번이면<br>세 가지가 같은 말을 해요.','0~1개면 맞추고 살피는 쪽(에겐 결)',34)],
 }
 async def m():
     async with async_playwright() as p:
@@ -41,7 +44,7 @@ async def m():
         await b.close()
 asyncio.run(m())
 from PIL import Image
-ims=[Image.open(f'2026-w43swap/cards/{k}_{i}.jpg').resize((360,450)) for k in('a_1009','b_1011') for i in (1,3)]
-s=Image.new('RGB',(1440,450))
+ims=[Image.open(f'2026-w43swap/cards/{k}_{i}.jpg').resize((360,450)) for k in('c_1023',) for i in (1,2,3)]
+s=Image.new('RGB',(1080,450))
 for n,im in enumerate(ims): s.paste(im,(n*360,0))
 s.save('/tmp/sheets/cards2.png')
