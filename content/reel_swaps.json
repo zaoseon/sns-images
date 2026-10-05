@@ -1780,5 +1780,26 @@
    "색만 바꾼 키네틱 2번째 편을 쓸지",
    "신년 감정서를 탑승권 스타일로 해도 될지"
   ]
+ },
+ {
+  "id": "sb-styles3",
+  "kind": "스토리보드(승인 요청)",
+  "title": "리소그래프 · 지하철 노선도 · 탑승권 — 우리 프롬프트와 장면표 (7장)",
+  "status": "new",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/sbx_01.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/sbx_02.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/sbx_03.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/sbx_04.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/sbx_05.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/sbx_06.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/sbx_07.png?v=1"
+  ],
+  "note": "스타일 30 가이드의 프롬프트를 쓰되 색과 글자, 내용만 자오선 것으로 바꿨어요. 스타일마다 2장(프롬프트, 장면표)씩이고 마지막 장이 대표님께 드리는 질문 3개예요. 괜찮으면 '그대로 만들어'라고만 하시면 돼요.",
+  "checks": [
+   "3개 스토리보드 그대로 만들어도 될지",
+   "탑승권을 판매 정보 없이 맛보기로 할지",
+   "프로필 링크 문구를 세 편 중 한 편에만 넣을지"
+  ]
  }
 ]
