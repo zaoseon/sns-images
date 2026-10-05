@@ -13,7 +13,7 @@ SPEC = dict(
     margin_x=70,         # 좌우 안쪽 여백(그리드 잘림 대비)
 )
 JS = """() => { const out=[]; const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
- let n; while(n=w.nextNode()){ const t=n.textContent.trim(); if(!t) continue; const e=n.parentElement; const cs=getComputedStyle(e);
+ let n; while(n=w.nextNode()){ const t=n.textContent.trim(); if(!t) continue; const e=n.parentElement; if(e.closest('[data-deco]')) continue; const cs=getComputedStyle(e);
   const r=document.createRange(); r.selectNodeContents(n); const b=r.getBoundingClientRect(); if(b.width<2) continue;
   out.push({t:t.slice(0,24),fs:parseFloat(cs.fontSize),fw:parseInt(cs.fontWeight),color:cs.color,lh:cs.lineHeight,x:b.left,y:b.top,w:b.width,h:b.height}); } return out; }"""
 def _rgb(s):

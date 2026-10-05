@@ -6,6 +6,7 @@
  - 캐릭터 정월(AI 생성)이 나오는 장면이 있으므로 영상 안에 "AI 생성 캐릭터" 작은 글씨를 넣는다.
 사용: python3 pipeline/clip_motion.py n28-c1 12   (clip id, 길이)  → clips_sop/<id>_<길이>s.mp4"""
 import os, sys, math, random, subprocess, functools
+from PIL import ImageOps
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageChops
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, "..")
 BLACK = os.path.join(HERE, "fonts", "PRETENDARD-BLACK.OTF"); MED = os.path.join(HERE, "fonts", "PRETENDARD-MEDIUM.OTF")
@@ -146,7 +147,10 @@ def chip(c, label, y, t0, size=44):
 # ---------- 캐릭터 ----------
 @functools.lru_cache(maxsize=None)
 def char_layer(name, width=900, crop=0.66):
-    im = Image.open(os.path.join(ROOT, "characters", "cut", name + ".png")).convert("RGBA"); im = im.crop((0, 0, im.width, int(im.height * crop)))
+    flip = name.endswith("_flip"); base = name[:-5] if flip else name
+    src = os.path.join(ROOT, "meridian_intro", "src", "assets", "character.png") if base == "intro" else os.path.join(ROOT, "characters", "cut", base + ".png")
+    im = Image.open(src).convert("RGBA"); im = im.crop((0, 0, im.width, int(im.height * crop)))
+    if flip: im = ImageOps.mirror(im)
     im = im.resize((width, int(im.height * width / im.width)), Image.LANCZOS)
     al = im.getchannel("A"); fade = Image.new("L", im.size, 255); fd = ImageDraw.Draw(fade); fh = 170
     for y in range(fh): fd.line((0, im.height - fh + y, im.width, im.height - fh + y), fill=int(255 * (1 - y / fh)))
