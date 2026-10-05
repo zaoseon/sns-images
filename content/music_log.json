@@ -22,5 +22,13 @@
   "mode": "up",
   "bpm": 104,
   "key": "F"
+ },
+ {
+  "name": "kinetic-reply",
+  "kind": "fun",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 124,
+  "key": "G"
  }
 ]

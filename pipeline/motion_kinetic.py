@@ -1,0 +1,62 @@
+"""키네틱 타이포 모션그래픽 견본 K1 '읽고도 답장 못 한 날'(10/5). 검정 + 흰 글자 + 강조색, 글자와 도형이 음악 박자마다 튀어나온다. 얼굴 없음(글자가 주인공).
+사용: python3 pipeline/motion_kinetic.py -> 2026-motion/kinetic_reply.mp4"""
+import os, sys, json
+HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
+import music_plan as MP, html_motion as HM
+ACC = "#ff5c8a"; BLACK = os.path.join(HERE, "fonts", "PRETENDARD-BLACK.OTF")
+def html(beat):
+    return """<!doctype html><meta charset=utf-8><style>
+@font-face{font-family:PB;src:url('file://%s')}
+html,body{margin:0;width:1080px;height:1920px;background:#0a0a0c;overflow:hidden;font-family:PB,'Noto Sans CJK KR',sans-serif;color:#fff}
+.e{position:absolute;left:0;width:1080px;text-align:center;opacity:0;will-change:transform}
+.w{font-size:168px;line-height:1.3;letter-spacing:-2px}
+.t{font-size:112px;line-height:1.35}
+.o{font-size:76px;line-height:1.45;text-align:left;left:90px;width:900px;display:flex;align-items:center;gap:34px}
+.o b{flex:none;width:112px;height:112px;border-radius:50%%;background:%s;color:#0a0a0c;display:flex;align-items:center;justify-content:center;font-size:76px}
+.c{color:%s}
+.sh{position:absolute;opacity:0}
+.tag{position:absolute;left:90px;top:335px;font-size:46px;background:%s;color:#0a0a0c;padding:12px 36px;border-radius:50px;opacity:0}
+.hd{position:absolute;left:70px;bottom:60px;font-size:36px;opacity:.9}
+</style><body>
+<div class=tag id=tag>정월의 연락 테스트</div>
+<div class=sh id=c1 style="left:-140px;top:700px;width:520px;height:520px;border-radius:50%%;background:%s"></div>
+<div class=sh id=bar style="left:440px;top:1415px;width:640px;height:40px;background:#fff"></div>
+<div class=sh id=tri style="left:790px;top:420px;width:0;height:0;border-left:120px solid transparent;border-right:120px solid transparent;border-bottom:208px solid %s"></div>
+<div class="e w" id=a1 style="top:600px">읽고도</div><div class="e w c" id=a2 style="top:840px">답장</div><div class="e w" id=a3 style="top:1080px">못 한 날</div>
+<div class="e t" id=b0 style="top:470px">나는 <span class=c>어느 쪽</span>?</div>
+<div class="e o" id=b1 style="top:700px"><b>1</b>바로 답해야 편해요</div><div class="e o" id=b2 style="top:920px"><b>2</b>썼다 지웠다 늦게 보내요</div><div class="e o" id=b3 style="top:1140px"><b>3</b>읽고 이따 하고 잊어요</div>
+<div class="e t" id=c0 style="top:470px">많이 고른 번호는<span class=c>?</span></div>
+<div class="e o" id=d1 style="top:660px"><b>1</b>바로 답하는 쪽</div><div class="e o" id=d2 style="top:830px"><b>2</b>다듬어 보내는 쪽</div><div class="e o" id=d3 style="top:1000px"><b>3</b>천천히 답하는 쪽</div>
+<div class="e t" id=c9 style="top:1170px;font-size:68px;line-height:1.5">빠르다 느리다가 아니라<br><span class=c>연락의 리듬</span>이에요</div>
+<div class="e w" id=f1 style="top:560px;font-size:140px">떠오르는</div><div class="e w c" id=f2 style="top:780px;font-size:140px">사람에게</div><div class="e w" id=f3 style="top:1000px;font-size:140px">보내 보세요</div>
+<div class=hd>zaoseon.com</div>
+<script>
+const BEAT=%f; const B=ms=>ms/1000/BEAT;
+const ez={out:x=>1-Math.pow(1-x,3),back:x=>{const c=1.9;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)},in:x=>x*x*x};
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+// 요소: [id, 들어옴(박자), 나감(박자), 종류, 방향]
+const E=[['a1',0,5.5,'slam',0],['a2',1,5.5,'slam',0],['a3',2,5.5,'slam',0],
+ ['b0',6,14.5,'slam',0],['b1',8,14.5,'slide',-1],['b2',10,14.5,'slide',1],['b3',12,14.5,'slide',-1],
+ ['c0',15,24.5,'slam',0],['d1',17,24.5,'slide',-1],['d2',19,24.5,'slide',1],['d3',21,24.5,'slide',-1],['c9',23,24.5,'slam',0],
+ ['f1',25,33,'slam',0],['f2',26,33,'slam',0],['f3',27,33,'slam',0]];
+const els=Object.fromEntries(E.map(e=>[e[0],document.getElementById(e[0])]));
+function seek(ms){const b=B(ms);
+ for(const [id,tin,tout,kind,dir] of E){const el=els[id];let p=cl((b-tin)/0.5),q=cl((b-tout)/0.5);
+  if(b<tin||q>=1){el.style.opacity=0;continue}
+  let op=Math.min(1,p*2)*(1-q),tx=0,ty=0,sc=1;
+  if(kind=='slam'){sc=1+0.7*(1-ez.back(p));ty=-60*q}else{tx=dir*(520*(1-ez.out(p)))+(-dir)*0;sc=1+0.04*(1-ez.back(p));ty=-60*q}
+  el.style.opacity=op;el.style.transform=`translate(${tx}px,${ty}px) scale(${sc})`}
+ const pulse=x=>Math.pow(Math.max(0,1-(b%%1)/0.45),2);
+ const tg=document.getElementById('tag');tg.style.opacity=cl(b/1)*(b<32?1:cl(33-b));tg.style.transform=`scale(${1+0.05*pulse()})`;
+ const c1=document.getElementById('c1');c1.style.opacity=((b>3&&b<5.5)?cl((b-3)/1)*0.9:(b>14.8&&b<17)?cl((b-14.8)/0.4)*0.9*cl(17-b):0);c1.style.transform=`scale(${1+0.12*pulse()+0.25}) translateY(${Math.sin(b*0.8)*20}px)`;
+ const bar=document.getElementById('bar');bar.style.opacity=(b>6&&b<14.5)||(b>15&&b<22.5)?0.9:0;bar.style.transform=`translateX(${(1-ez.out(cl((b%%8)/1.5)))*400}px)`;
+ const tri=document.getElementById('tri');tri.style.opacity=(b>25&&b<33)?0.95:(b>0&&b<6?0.0:0);tri.style.transform=`rotate(${b*22}deg) scale(${1+0.15*pulse()})`;
+}
+seek(0);
+</script>""" % (BLACK, ACC, ACC, ACC, ACC, ACC, beat)
+if __name__ == "__main__":
+    mi = MP.choose("fun", "kinetic-reply"); beat = 60.0 / mi["bpm"]; total = 33 * beat
+    hp = "/tmp/kinetic_reply.html"; open(hp, "w", encoding="utf-8").write(html(beat))
+    out = os.path.join(HERE, "..", "2026-motion", "kinetic_reply.mp4"); secs = HM.render_html(hp, out, total)
+    durs = [6 * beat, 9 * beat, 10 * beat, 8 * beat]; MP.mux(out, durs, mi, 91)
+    print("음악:", mi["style"], mi["bpm"], mi["key"], "| 박자", round(beat, 3), "초 | 길이", round(secs, 1), "초")
