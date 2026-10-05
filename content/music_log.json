@@ -54,5 +54,13 @@
   "mode": "slow",
   "bpm": 105,
   "key": "E"
+ },
+ {
+  "name": "subway-life",
+  "kind": "love",
+  "style": "따뜻한 기타",
+  "mode": "slow",
+  "bpm": 96,
+  "key": "F"
  }
 ]
