@@ -1,104 +1,80 @@
-"""리소그래프 모션그래픽 '사주와 별자리, 같은 말을 할까요?'(10/5, 스타일 30 가이드 프롬프트를 자오선 내용으로 바꿈).
-핑크 잉크=사주, 블루 잉크=별자리, 겹친 곳(곱하기 섞임)=보라=같은 말. 숫자는 cross_data(사주-점성술 같은 축 13.5% → 100명 중 14명).
-규칙: 첫 프레임 완성, 글자 굵게·크게, 문장은 2초 이상, 정지 구간엔 천천히 움직임(움직이는 정지), 장면마다 새 종이가 넘어감.
+"""리소그래프 모션그래픽 v2 '내 별자리, 사주랑 같은 말 할까?'(10/5 대표 지적 반영).
+지적: ①겹치는 영역이 커서 글자가 앉을 자리가 없다 ②원 안 글자는 흰색이 깔끔 ③내용이 안 끌린다(릴스 공식과 안 맞음).
+고침: 겹침을 좁히고, 원 안 글자를 흰색으로, 가운데를 '12별자리 순위'(자기 별자리를 찾아보게)로 바꿨다.
+숫자: content/cross_data/README.md '태양별자리별 사주=점성술 일치율'(무작위 3,000명, 별자리당 약 250명이라 오차가 큼).
 사용: python3 pipeline/motion_litho.py -> 2026-motion/litho_cross.mp4"""
 import os, sys
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 import music_plan as MP, html_motion as HM, fonts_kit as K
-PINK = "#ff6fa8"; BLUE = "#5b7bff"; INK = "#17102b"; PAPER = "#f4ead7"
+PINK = "#ee3f86"; BLUE = "#4560f0"; INK = "#17102b"; PAPER = "#f4ead7"
+RANK = [("염소", 23.0), ("황소", 22.7), ("처녀", 18.1), ("사자", 16.3), ("물병", 14.1), ("사수", 13.4), ("쌍둥이", 12.9), ("게", 12.6), ("양", 9.9), ("전갈", 7.3), ("물고기", 6.1), ("천칭", 5.6)]
 GRAIN = "data:image/svg+xml;utf8," + "%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .28  0 0 0 0 .2  0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"
+def HT(col, pos, fade, op): return f'<div class="a" style="left:0;{pos};width:1080px;height:560px;background:radial-gradient(circle at center,{col} 34%,transparent 36%) 0 0/34px 34px;-webkit-mask-image:linear-gradient(to {fade},#000,transparent);mix-blend-mode:multiply;opacity:{op}"></div>'
 def html(beat):
+    bars = "".join(f'<div class="a bar" id=bar{i} style="top:{520 + i * 76}px"><div class="a d bl" style="left:24px;top:6px;font-size:46px;color:#fff">{n}</div><div class="a d bv" id=bv{i} style="top:6px;font-size:46px;color:@@INK@@">{v:.1f}%</div></div>' for i, (n, v) in enumerate(RANK))
     h = """<!doctype html><meta charset=utf-8><style>@@FONTS@@
 html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:@@PAPER@@;font-family:'JW-B',sans-serif;font-weight:800;color:@@INK@@;word-break:keep-all}
-.a{position:absolute}.d{font-family:'JW-D',sans-serif;font-weight:900}
+.a{position:absolute}.d{font-family:'JW-D',sans-serif;font-weight:900}.t{text-align:center;white-space:nowrap}
 .c{border-radius:50%;mix-blend-mode:multiply;will-change:transform,opacity}
-.t{text-align:center;white-space:nowrap}
 .paper{left:0;top:0;width:1080px;height:1920px;background:@@PAPER@@}
 .grain{left:0;top:0;width:1080px;height:1920px;background:url("@@GRAIN@@");mix-blend-mode:multiply;opacity:.26;pointer-events:none;z-index:50}
-.dot{width:66px;height:66px;border-radius:50%;background:#d8ccb8;box-shadow:inset 0 0 0 4px #c7baa3}
+.bar{left:70px;height:64px;width:0;background:#5b2fb0;border-radius:0 32px 32px 0;opacity:0}
+.bv{white-space:nowrap}
 </style><body>
 <div class="a paper" id=p0>
- <div class="a" style="left:0;top:0;width:1080px;height:560px;background:radial-gradient(circle at center,@@PINK@@ 34%,transparent 36%) 0 0/34px 34px;-webkit-mask-image:linear-gradient(to bottom,#000,transparent);mix-blend-mode:multiply;opacity:.5"></div><div class="a" style="left:0;top:1360px;width:1080px;height:560px;background:radial-gradient(circle at center,@@BLUE@@ 34%,transparent 36%) 0 0/34px 34px;-webkit-mask-image:linear-gradient(to top,#000,transparent);mix-blend-mode:multiply;opacity:.5"></div><div class="a" style="left:36px;top:36px;width:56px;height:56px;border:5px solid @@INK@@;border-radius:50%;opacity:.55"></div><div class="a" style="left:63px;top:20px;width:5px;height:88px;background:@@INK@@;opacity:.55"></div><div class="a" style="left:20px;top:63px;width:88px;height:5px;background:@@INK@@;opacity:.55"></div><div class="a" style="left:60px;top:1700px;width:120px;height:60px;background:@@PINK@@;mix-blend-mode:multiply"></div><div class="a" style="left:150px;top:1700px;width:120px;height:60px;background:@@BLUE@@;mix-blend-mode:multiply"></div><div class="a t" style="left:300px;width:720px;top:1706px;font-size:44px;opacity:.7">사주 × 별자리 · 자오선 계산</div>
- <div class="a d t" id=hl style="left:0;width:1080px;top:330px;font-size:98px;line-height:1.3">사주와 별자리,<br>같은 말을 할까요?</div>
- <div class="a c" id=pinkC style="left:-50px;top:640px;width:760px;height:760px;background:@@PINK@@"></div>
- <div class="a c" id=blueC style="left:370px;top:640px;width:760px;height:760px;background:@@BLUE@@"></div>
- <div class="a c" id=blueD style="left:370px;top:640px;width:760px;height:760px;box-sizing:border-box;border:10px dashed @@BLUE@@;background:transparent;opacity:.6"></div>
- <div class="a d t" id=wSaju style="left:20px;width:340px;top:950px;font-size:128px">사주</div>
- <div class="a d t" id=wStar style="left:730px;width:330px;top:975px;font-size:92px">별자리</div>
- <div class="a d t" id=wSame style="left:380px;width:320px;top:1090px;font-size:80px;color:#fff">같은 말</div>
- <div id=dots></div>
- <div class="a t d" id=cnLb style="left:0;width:1080px;top:320px;font-size:118px;line-height:1.3">100명 중 <span id=cnNum style="color:#7a4fd0;font-size:190px">0</span>명이</div>
- <div class="a t d" id=cnTx style="left:0;width:1080px;top:520px;font-size:72px;line-height:1.4">같은 말을 했어요</div>
+ @@HT1@@@@HT2@@
+ <div class="a d t" id=hl style="left:0;width:1080px;top:340px;font-size:96px;line-height:1.3">내 별자리,<br>사주랑 같은 말 할까?</div>
+ <div class="a c" id=pinkC style="left:-20px;top:700px;width:660px;height:660px;background:@@PINK@@"></div>
+ <div class="a c" id=blueC style="left:440px;top:700px;width:660px;height:660px;background:@@BLUE@@"></div>
+ <div class="a c" id=blueD style="left:440px;top:700px;width:660px;height:660px;box-sizing:border-box;border:10px dashed @@BLUE@@;background:transparent;opacity:.6"></div>
+ <div class="a d t" id=wSaju style="left:20px;width:380px;top:962px;font-size:120px;color:#fff">사주</div>
+ <div class="a d t" id=wStar style="left:670px;width:420px;top:975px;font-size:96px;color:#fff">별자리</div>
+ <div class="a d t" id=wSame style="left:440px;width:200px;top:1090px;font-size:46px;color:#fff">같은 말</div>
+ @@BARS@@
+ <div class="a d t" id=rk style="left:0;width:1080px;top:310px;font-size:66px;line-height:1.3">사주와 같은 말을 하는<br>별자리 순위</div>
 </div>
 <div class="a paper" id=p4 style="box-shadow:-30px 0 40px rgba(60,40,20,.25)">
- <div class="a" style="left:0;top:0;width:1080px;height:560px;background:radial-gradient(circle at center,@@BLUE@@ 34%,transparent 36%) 0 0/34px 34px;-webkit-mask-image:linear-gradient(to bottom,#000,transparent);mix-blend-mode:multiply;opacity:.45"></div><div class="a" style="left:0;top:1360px;width:1080px;height:560px;background:radial-gradient(circle at center,@@PINK@@ 34%,transparent 36%) 0 0/34px 34px;-webkit-mask-image:linear-gradient(to top,#000,transparent);mix-blend-mode:multiply;opacity:.45"></div>
- <div class="a c" id=disk4 style="left:80px;top:520px;width:920px;height:920px;background:@@PINK@@"></div>
- <div class="a d t" id=t4a style="left:0;width:1080px;top:760px;font-size:140px;line-height:1.3;color:@@INK@@">다른 말은</div>
- <div class="a d t" id=t4b style="left:0;width:1080px;top:930px;font-size:130px;line-height:1.3;color:@@INK@@">내가 고를 곳</div>
- <div class="a t d" id=t4c style="left:0;width:1080px;top:1150px;font-size:56px;line-height:1.4;color:@@INK@@">같은 말은 타고난 결이에요</div>
-</div>
-<div class="a paper" id=p5 style="box-shadow:-30px 0 40px rgba(60,40,20,.25)">
- <div class="a" style="left:0;top:0;width:1080px;height:560px;background:radial-gradient(circle at center,@@PINK@@ 34%,transparent 36%) 0 0/34px 34px;-webkit-mask-image:linear-gradient(to bottom,#000,transparent);mix-blend-mode:multiply;opacity:.5"></div><div class="a" style="left:0;top:1360px;width:1080px;height:560px;background:radial-gradient(circle at center,@@BLUE@@ 34%,transparent 36%) 0 0/34px 34px;-webkit-mask-image:linear-gradient(to top,#000,transparent);mix-blend-mode:multiply;opacity:.5"></div>
- <div class="a c" id=disk5 style="left:80px;top:520px;width:920px;height:920px;background:@@BLUE@@"></div>
- <div class="a d t" id=t5a style="left:0;width:1080px;top:710px;font-size:88px;line-height:1.35;color:@@INK@@">떠오르는 사람에게</div>
- <div class="a d t" id=t5b style="left:0;width:1080px;top:860px;font-size:112px;line-height:1.35;color:@@INK@@">보내 보세요</div>
- <svg class="a" id=plane viewBox="0 0 100 100" style="left:390px;top:1010px;width:300px;height:300px"><path d="M8 52 L92 10 L66 90 L50 60 Z" fill="@@PINK@@" style="mix-blend-mode:multiply"/><path d="M30 46 L92 10 L50 60 Z" fill="@@INK@@" opacity=".35"/></svg>
- <div class="a t d" id=zs style="left:0;width:1080px;top:1330px;font-size:48px;color:@@INK@@">zaoseon.com</div>
+ @@HT3@@@@HT4@@
+ <div class="a c" id=disk4 style="left:80px;top:520px;width:920px;height:920px;background:@@BLUE@@"></div>
+ <div class="a d t" id=t4a style="left:0;width:1080px;top:730px;font-size:108px;line-height:1.3;color:#fff">내 별자리는</div>
+ <div class="a d t" id=t4b style="left:0;width:1080px;top:880px;font-size:108px;line-height:1.3;color:#fff">몇 위일까요?</div>
+ <div class="a t d" id=t4c style="left:0;width:1080px;top:1100px;font-size:60px;line-height:1.4;color:#fff">댓글로 알려 주세요</div>
+ <div class="a t" id=t4d style="left:0;width:1080px;top:1210px;font-size:54px;line-height:1.4;color:#fff">친구 별자리도 보내 보세요</div>
 </div>
 <div class="a grain"></div>
 <script>
 const BEAT=@@BEAT@@, B=ms=>ms/1000/BEAT, cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
 function bez(x1,y1,x2,y2){return t=>{if(t<=0)return 0;if(t>=1)return 1;let a=0,b=1,u=t;for(let i=0;i<24;i++){const x=3*(1-u)*(1-u)*u*x1+3*(1-u)*u*u*x2+u*u*u;if(x<t)a=u;else b=u;u=(a+b)/2}return 3*(1-u)*(1-u)*u*y1+3*(1-u)*u*u*y2+u*u*u}}
 const out=bez(.23,1,.32,1), g=id=>document.getElementById(id);
-// 점 100개(10x10) — 겹침 14개는 고정 위치
-const dots=g('dots'); const PUR=[7,13,22,28,35,41,47,53,58,66,72,79,85,93]; const D=[];
-for(let i=0;i<100;i++){const e=document.createElement('div');e.className='a dot';const r=Math.floor(i/10),c=i%10;e.style.left=(129+c*84)+'px';e.style.top=(640+r*84)+'px';e.style.opacity=0;dots.appendChild(e);D.push(e)}
-const stamp=(el,b0,dur=.5,from=1.12)=>{const p=out(cl((b-b0)/dur));return {o:Math.min(1,p*6),s:from+(1-from)*p}};
-let b=0;
+const VAL=@@VALS@@; let b=0;
+const stamp=(b0,dur,from)=>{const p=out(cl((b-b0)/dur));return {o:Math.min(1,p*6),s:from+(1-from)*p}};
 function seek(ms){b=B(ms);
- const ph=b-Math.floor(b), pulse=0.03*Math.exp(-ph*5);   // 박마다 살짝 튐(움직이는 정지)
- const drift=1+0.03*cl(b/12)+pulse;
- // 헤드라인
- const hl=g('hl'); hl.style.opacity=1-cl((b-12)/.8); hl.style.transform=`scale(${drift})`;
- // 핑크 원(첫 프레임부터 보임, 도장 찍히듯 살짝 줄어듦)
- let s=stamp(null,0,.45,1.1); g('pinkC').style.opacity=1-cl((b-12)/.8); g('pinkC').style.transform=`scale(${s.s*drift})`;
- g('wSaju').style.opacity=1-cl((b-12)/.8); g('wSaju').style.transform=`scale(${s.s*drift})`;
- // 블루 원(박 6에 도장)
- const bs=stamp(null,6,.45,1.18); const bo=b<6?0:Math.min(1,bs.o);
- g('blueC').style.opacity=bo*(1-cl((b-12)/.6)); g('blueC').style.transform=`scale(${bo?bs.s*drift:1})`;
- g('blueD').style.opacity=(b<6?.55:0)*(1-cl((b-12)/.6)); g('blueD').style.transform=`scale(${drift}) rotate(${b*9}deg)`;
- g('wStar').style.opacity=(b<6?0.0:bo)*(1-cl((b-12)/.6)); g('wStar').style.transform=`scale(${bo?bs.s*drift:1})`;
- const ss=stamp(null,7,.4,1.3); g('wSame').style.opacity=(b<7?0:ss.o)*(1-cl((b-12)/.6)); g('wSame').style.transform=`scale(${b<7?1:ss.s})`;
- // 점 격자(박 12~20)
- let purOn=0;
- for(let i=0;i<100;i++){const t0=12.9+i/100*2.8; const p=out(cl((b-t0)/.5)); const isP=PUR.indexOf(i)>=0; let col='#d8ccb8', sc=p, ring='#c7baa3';
-   if(isP){const k=PUR.indexOf(i), tp=15.4+k*.18; const q=out(cl((b-tp)/.35)); if(q>0){col='#7a4fd0';ring='#5b2fb0';sc=p*(1+0.28*q);} if(b>=tp+.1)purOn=Math.max(purOn,k+1)}
-   D[i].style.opacity=p*(1-cl((b-20)/.6)); D[i].style.background=col; D[i].style.boxShadow=`inset 0 0 0 4px ${ring}`; D[i].style.transform=`scale(${Math.max(sc*(1+(b>13&&b<20?pulse*.8:0)),0.001)})`}
- const cnOn=cl((b-12.9)/.5); const fade=1-cl((b-20)/.6);
- g('cnLb').style.opacity=cnOn*fade; g('cnTx').style.opacity=cl((b-16.2)/.5)*fade;
- g('cnNum').textContent=purOn; 
- // 종이 넘기기: 박 20(문장 2), 박 26(보내기)
- const x4=(1-out(cl((b-20)/.7)))*1180; g('p4').style.transform=`translateX(${x4}px)`; g('p4').style.display=b<19.9?'none':'block';
- const d4=1+0.02*cl((b-20.7)/5)+(b>20.6&&b<26?pulse*.6:0); const f4=b<20.4?0:1;
- g('t4a').style.opacity=cl((b-20.6)/.4); g('t4a').style.transform=`scale(${d4})`;
- g('t4b').style.opacity=cl((b-22)/.4); g('t4b').style.transform=`scale(${d4})`;
- g('t4c').style.opacity=cl((b-22.6)/.5);
- const x5=(1-out(cl((b-26)/.7)))*1180; g('p5').style.transform=`translateX(${x5}px)`; g('p5').style.display=b<25.9?'none':'block';
- const d5=1+0.025*cl((b-26.7)/5.3)+(b>26.6?pulse*.6:0);
- g('t5a').style.opacity=cl((b-26.6)/.4); g('t5a').style.transform=`scale(${d5})`;
- g('t5b').style.opacity=cl((b-27.8)/.4); g('t5b').style.transform=`scale(${d5})`;
- const pf=out(cl((b-29)/.8)); g('plane').style.opacity=cl((b-29)/.3); g('plane').style.transform=`translate(${(1-pf)*-160}px,${(1-pf)*120}px) rotate(${-8+8*pf}deg)`;
- g('zs').style.opacity=cl((b-29.6)/.5);
- g('disk4').style.transform=`scale(${1+pulse*.8})`; g('disk5').style.transform=`scale(${1+pulse*.8})`;
- const gr=document.querySelector('.grain'); gr.style.backgroundPosition=((Math.floor(b*6)%7)*41)+'px '+((Math.floor(b*6)%5)*57)+'px';   // 종이 질감이 흔들림
+ const ph=b-Math.floor(b), pulse=0.03*Math.exp(-ph*5), drift=1+0.03*cl(b/8)+pulse, fo=1-cl((b-8)/.6);
+ g('hl').style.opacity=fo; g('hl').style.transform=`scale(${drift})`;
+ const s=stamp(0,.45,1.1); g('pinkC').style.opacity=fo; g('pinkC').style.transform=`scale(${s.s*drift})`; g('wSaju').style.opacity=fo; g('wSaju').style.transform=`scale(${s.s*drift})`;
+ const bs=stamp(4,.45,1.18), bo=b<4?0:Math.min(1,bs.o);
+ g('blueC').style.opacity=bo*fo; g('blueC').style.transform=`scale(${bo?bs.s*drift:1})`; g('blueD').style.opacity=(b<4?.6:0)*fo; g('blueD').style.transform=`scale(${drift}) rotate(${b*9}deg)`;
+ g('wStar').style.opacity=bo*fo; g('wStar').style.transform=`scale(${bo?bs.s*drift:1})`;
+ const ss=stamp(5,.4,1.3); g('wSame').style.opacity=(b<5?0:ss.o)*fo; g('wSame').style.transform=`scale(${b<5?1:ss.s})`;
+ // 순위: 박 9부터 아래(천칭)에서 위(염소)로 한 박에 하나씩
+ g('rk').style.opacity=cl((b-8.8)/.5)*(1-cl((b-22)/.6));
+ for(let i=0;i<12;i++){const t0=9+(11-i)*1.0; const q=out(cl((b-t0)/.7)); const el=g('bar'+i);
+   el.style.opacity=q*(1-cl((b-22)/.6)); el.style.width=(168+VAL[i]*27*q)+'px';
+   const bv=g('bv'+i); bv.style.left=(168+VAL[i]*27*q+18)+'px'; const top1=(i===0&&b>20)?1+0.06*Math.exp(-ph*5):1; el.style.transform=`scaleY(${top1})`}
+ // 종이 넘기기
+ const x4=(1-out(cl((b-22)/.7)))*1180; g('p4').style.transform=`translateX(${x4}px)`; g('p4').style.display=b<21.9?'none':'block';
+ g('disk4').style.transform=`scale(${1+(b>22?pulse*.8:0)})`;
+ g('t4a').style.opacity=cl((b-22.6)/.4); g('t4b').style.opacity=cl((b-23.4)/.4); g('t4c').style.opacity=cl((b-24.4)/.4); g('t4d').style.opacity=cl((b-25.2)/.4);
+ const gr=document.querySelector('.grain'); gr.style.backgroundPosition=((Math.floor(b*6)%7)*41)+'px '+((Math.floor(b*6)%5)*57)+'px';
 }
 seek(0);
 </script>"""
-    for k, v in {"@@FONTS@@": K.css("gm"), "@@PAPER@@": PAPER, "@@INK@@": INK, "@@PINK@@": PINK, "@@BLUE@@": BLUE, "@@GRAIN@@": GRAIN, "@@BEAT@@": repr(beat)}.items(): h = h.replace(k, v)
+    for k, v in {"@@FONTS@@": K.css("gm"), "@@PAPER@@": PAPER, "@@INK@@": INK, "@@PINK@@": PINK, "@@BLUE@@": BLUE, "@@GRAIN@@": GRAIN, "@@BEAT@@": repr(beat), "@@BARS@@": bars,
+                 "@@HT1@@": HT(PINK, "top:0", "bottom", ".5"), "@@HT2@@": HT(BLUE, "top:1360px", "top", ".5"), "@@HT3@@": HT(PINK, "top:0", "bottom", ".5"), "@@HT4@@": HT(BLUE, "top:1360px", "top", ".5"), "@@VALS@@": str([v for _, v in RANK])}.items(): h = h.replace(k, v)
     return h
 if __name__ == "__main__":
-    mi = MP.choose("data", "litho-cross"); beat = 60.0 / mi["bpm"]; nb = 32; total = nb * beat
+    mi = MP.choose("data", "litho-cross"); beat = 60.0 / mi["bpm"]; nb = 27; total = nb * beat
     hp = "/tmp/litho.html"; open(hp, "w", encoding="utf-8").write(html(beat))
     out = os.path.join(HERE, "..", "2026-motion", "litho_cross.mp4"); secs = HM.render_html(hp, out, total)
-    MP.mux(out, [6 * beat, 6 * beat, 8 * beat, 6 * beat, 6 * beat], mi, 97)
+    MP.mux(out, [4 * beat, 4 * beat, 14 * beat, 5 * beat], mi, 97)
     print("음악:", mi["style"], mi["bpm"], mi["key"], "| 박자", round(beat, 3), "초 | 길이", round(secs, 1), "초")
