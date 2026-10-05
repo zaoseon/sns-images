@@ -4,7 +4,7 @@
  3) '📌 이 글의 순서'를 요약 이미지(한눈에 보기) 다음으로 옮긴다
  4) 구분선(<hr>, 회색·이미지 폭): 이 글의 순서 앞과 뒤, 번호 제목 사이, 마무리와 👇 유도 문구 사이
  5) 번호 제목 다음 한 줄 띄우기, 항목(🔹·1위·1.)마다 한 줄 띄우기
- 6) 본문 이미지는 가로 IMG_W px 작은 판(img/m640/)을, CTA 배너는 링크 카드와 같은 LINE_W px 작은 판(img/m480/)을 쓴다 → 네이버에 붙이면 문서 너비로 커지지 않는다
+ 6) 본문 이미지는 가로 IMG_W px 작은 판(img/m640/)을, CTA 배너도 같은 IMG_W px 작은 판(img/m640/)을 쓴다 → 네이버에 붙이면 문서 너비로 커지지 않는다
  7) 구분선·이미지 바로 뒤에는 빈 줄을 두지 않는다. 구분선은 LINE_W px 가운데 회색
 글자는 더하지 않는다. 단 '정월이에요.'만 있던 인사말은 전체 인사말로 바꾼다. test_format_v2.py가 글자 보존을 확인한다.
 복사해 붙일 때 네이버가 표·구분선·이미지 크기를 어떻게 받는지는 네이버 쪽 동작이라, 처음 한 편으로 확인한다."""
@@ -13,8 +13,8 @@ import format_body as FB
 
 IMG_W = 640
 SMALL_DIR = "m640"
-LINE_W = 480       # 구분선·CTA 배너·링크 카드 폭(px). 링크 카드는 네이버에서 480px 고정이라 CTA 배너를 같은 폭으로 맞춘다(10/5 대표 캡처)
-CTA_DIR = "m480"
+LINE_W = 480       # 구분선 폭(px, 이미지보다 짧게 가운데)
+CTA_W = IMG_W      # CTA 배너는 본문 이미지와 같은 폭(640px). 네이버 에디터가 붙인 이미지 폭을 화면 폭에 비례해 줄이므로, 이미지 640px ≈ 링크 카드 폭(10/5 대표: 480px 배너가 카드보다 작게 나옴)
 GREET = "안녕하세요, 자오선의 정월이에요."
 HR = "<hr>"
 PTAG = re.compile(r"<p[^>]*>.*?</p>|<hr>", re.S)
@@ -206,10 +206,9 @@ def _no_blank_after_image(paras):
 def _small_images(body):
     def sub(m):
         tag = m.group(0)
-        if f"/{SMALL_DIR}/" in tag or f"/{CTA_DIR}/" in tag: return tag
-        cta = "naver_cta" in tag; d, w = (CTA_DIR, LINE_W) if cta else (SMALL_DIR, IMG_W)
-        tag = re.sub(r'(/naver/img/)([^"/?]+)', r"\1" + d + r"/\2", tag)
-        if "width=" not in tag: tag = tag.replace("<img ", f'<img width="{w}" ', 1)
+        if f"/{SMALL_DIR}/" in tag: return tag
+        tag = re.sub(r'(/naver/img/)([^"/?]+)', r"\1" + SMALL_DIR + r"/\2", tag)    # 본문 이미지와 CTA 배너 모두 같은 폭(640px) 작은 판
+        if "width=" not in tag: tag = tag.replace("<img ", f'<img width="{IMG_W}" ', 1)
         return tag
     return re.sub(r"<img[^>]*>", sub, body)
 

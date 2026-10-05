@@ -5,7 +5,7 @@ CTA 배너(naver_cta*)는 링크 카드와 같은 가로 LINE_W px 판을 naver/
 import os, re, json, urllib.parse
 from PIL import Image
 import format_v2 as V2
-HERE = os.path.dirname(os.path.abspath(__file__)); IMG = os.path.join(HERE, "img"); OUT = os.path.join(IMG, V2.SMALL_DIR); OUT_CTA = os.path.join(IMG, V2.CTA_DIR); os.makedirs(OUT, exist_ok=True); os.makedirs(OUT_CTA, exist_ok=True)
+HERE = os.path.dirname(os.path.abspath(__file__)); IMG = os.path.join(HERE, "img"); OUT = os.path.join(IMG, V2.SMALL_DIR); OUT_CTA = OUT; os.makedirs(OUT, exist_ok=True); os.makedirs(OUT_CTA, exist_ok=True)
 def main():
     pg = json.load(open(os.path.join(HERE, "pages.json"), encoding="utf-8")); names = set()
     for v in pg.values():
@@ -15,7 +15,7 @@ def main():
             if "/" not in n: names.add(n)
     made = skipped = missing = 0
     for n in sorted(names):
-        cta = "naver_cta" in n; src, dst = os.path.join(IMG, n), os.path.join(OUT_CTA if cta else OUT, n); W = V2.LINE_W if cta else V2.IMG_W
+        cta = "naver_cta" in n; src, dst = os.path.join(IMG, n), os.path.join(OUT_CTA if cta else OUT, n); W = V2.IMG_W
         if not os.path.exists(src): missing += 1; print("원본 없음:", n); continue
         if os.path.exists(dst) and os.path.getmtime(dst) >= os.path.getmtime(src): skipped += 1; continue
         im = Image.open(src).convert("RGB")

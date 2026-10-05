@@ -68,11 +68,11 @@ ok(all(not (els[i] == V2.HR and V2.blank(els[i + 1])) and not (V2.blank(els[i]) 
 imgs = [t for _, n, _ in res.values() for t in re.findall(r"<img[^>]*>", n)]
 small = [t for t in imgs if "naver_cta" not in t]; cta = [t for t in imgs if "naver_cta" in t]
 ok(all(f"/{V2.SMALL_DIR}/" in t and f'width="{V2.IMG_W}"' in t for t in small), f"본문 이미지 {len(small)}개는 모두 작은 판 주소와 width {V2.IMG_W}")
-ok(all(f"/{V2.CTA_DIR}/" in t and 'width="%d"' % V2.LINE_W in t for t in cta), f"CTA 배너 {len(cta)}개는 링크 카드와 같은 폭({V2.LINE_W}px) 작은 판")
+ok(all(f"/{V2.SMALL_DIR}/" in t and 'width="%d"' % V2.CTA_W in t for t in cta), f"CTA 배너 {len(cta)}개는 본문 이미지와 같은 폭({V2.CTA_W}px) 작은 판")
 miss = []
 for t in small + cta:
-    m = re.search(r"/naver/img/(?:%s|%s)/([^\"?]+)" % (V2.SMALL_DIR, V2.CTA_DIR), t); n = __import__("urllib.parse", fromlist=["x"]).unquote(m.group(1))
-    if not os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "img", (V2.CTA_DIR if "naver_cta" in n else V2.SMALL_DIR), n)): miss.append(n)
+    m = re.search(r"/naver/img/%s/([^\"?]+)" % V2.SMALL_DIR, t); n = __import__("urllib.parse", fromlist=["x"]).unquote(m.group(1))
+    if not os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "img", V2.SMALL_DIR, n)): miss.append(n)
 ok(not miss, "작은 판 이미지 파일이 모두 있음" + (f" 없음: {miss[:3]}" if miss else ""))
 body = res[next(iter(res))][1]
 lk = V2.link_guide(body, "https://blog.naver.com/zaoseon/1234?a=1&b=2")

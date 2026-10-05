@@ -178,8 +178,8 @@ def format_body(body):
             else:
                 mm = re.match(r"^(.+?),\s*(.+)$", t); tea, ttl = (mm.group(1) + "?", mm.group(2)) if mm else (t, "")
             ttl = ttl.split(", ")[0].strip()
-            out.append(P("👇 " + tea + ("<br>" + ttl if False else ""))); 
-            if ttl: out.append(P(ttl))
+            out.append(P("<br>".join(wrap("👇 " + tea, BODY_LIMIT, 0.0, 17.0))))   # 10/5 대표 지적: 긴 유도 문구·제목 줄이 폰에서 아무 데서나 꺾였다 → 일반 문장처럼 짧은 줄로 나눈다
+            if ttl: out.append(P("<br>".join(wrap(ttl, BODY_LIMIT, 0.0, 17.0))))
             k += 1; continue
         m = re.fullmatch(r"<b>(.*)</b>", inner)
         if m and "<b>" not in m.group(1):                            # 굵은 글씨만 있는 줄 = 제목류
