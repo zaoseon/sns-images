@@ -60,16 +60,18 @@ def box_gaps(n):
     return all(V2.blank(ps[i - 1]) for i, p in enumerate(ps) if i and not V2.blank(p) and V2.emoji0(V2.pl(p)) and not V2.big(p))
 ok(all(box_gaps(n) for _, n, _ in res.values()), "박스 안 한 줄 요약 / 세 풀이 / 해 볼 것 사이가 한 줄씩 띄워짐")
 hrs = [t for _, n, _ in res.values() for t in re.findall(r"<hr[^>]*>", n)]
-ok(hrs and all(V2.LINE_GRAY in t and 'width="%d"' % V2.IMG_W in t for t in hrs), f"구분선 {len(hrs)}개는 모두 회색({V2.LINE_GRAY})이고 이미지 폭({V2.IMG_W}px)")
+ok(hrs and all(V2.LINE_GRAY in t and 'width="%d"' % V2.LINE_W in t for t in hrs), f"구분선 {len(hrs)}개는 모두 회색({V2.LINE_GRAY}), 가운데, 폭 {V2.LINE_W}px(이미지보다 짧게)")
 ok(all(re.search(r"<b>👇", p) for _, n, _ in res.values() for p in re.findall(r"<p[^>]*>(?:(?!</p>).)*👇(?:(?!</p>).)*</p>", n, re.S)), "👇 유도 문구 줄은 모두 굵게")
 ok(all(len(re.findall(r"<p[^>]*>(?:(?!</p>).)*👇(?:(?!</p>).)*</p>", n, re.S)) >= 1 for _, n, _ in res.values() if "👇" in n), "👇 유도 문구가 있는 글 확인")
+ok(all(not (V2.isimg(els[i]) and V2.blank(els[i + 1])) for _, _, els in res.values() for i in range(len(els) - 1)), "이미지 바로 다음에 빈 줄이 없음")
+ok(all(not (els[i] == V2.HR and V2.blank(els[i + 1])) and not (V2.blank(els[i]) and els[i + 1] == V2.HR) for _, _, els in res.values() for i in range(len(els) - 1)), "구분선 앞뒤에 빈 줄이 없음")
 imgs = [t for _, n, _ in res.values() for t in re.findall(r"<img[^>]*>", n)]
 small = [t for t in imgs if "naver_cta" not in t]; cta = [t for t in imgs if "naver_cta" in t]
 ok(all(f"/{V2.SMALL_DIR}/" in t and f'width="{V2.IMG_W}"' in t for t in small), f"본문 이미지 {len(small)}개는 모두 작은 판 주소와 width {V2.IMG_W}")
-ok(all(f"/{V2.SMALL_DIR}/" not in t for t in cta), f"CTA 배너 {len(cta)}개는 그대로(문서 너비)")
+ok(all(f"/{V2.CTA_DIR}/" in t and 'width="%d"' % V2.LINE_W in t for t in cta), f"CTA 배너 {len(cta)}개는 링크 카드와 같은 폭({V2.LINE_W}px) 작은 판")
 miss = []
-for t in small:
-    m = re.search(r"/naver/img/%s/([^\"?]+)" % V2.SMALL_DIR, t); n = __import__("urllib.parse", fromlist=["x"]).unquote(m.group(1))
-    if not os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "img", V2.SMALL_DIR, n)): miss.append(n)
+for t in small + cta:
+    m = re.search(r"/naver/img/(?:%s|%s)/([^\"?]+)" % (V2.SMALL_DIR, V2.CTA_DIR), t); n = __import__("urllib.parse", fromlist=["x"]).unquote(m.group(1))
+    if not os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "img", (V2.CTA_DIR if "naver_cta" in n else V2.SMALL_DIR), n)): miss.append(n)
 ok(not miss, "작은 판 이미지 파일이 모두 있음" + (f" 없음: {miss[:3]}" if miss else ""))
 print("모두 통과" if not bad else f"실패 {bad}"); sys.exit(1 if bad else 0)

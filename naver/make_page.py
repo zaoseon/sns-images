@@ -71,7 +71,7 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
                  f'<img src="/naver/img/{cover}?v=b3" style="width:100%;border-radius:8px" alt=""><a href="/naver/img/{cover}?v=b3" download="{os.path.basename(cover)}"><button>대표 이미지 저장</button></a></div>') if cover else ""
     if related and (related.get("url") or related.get("title")):
         _u = related.get("url") or ""
-        rel_box = (f'<div class="box"><p class="lab">4. 함께 볼 글(내부 링크): 본문 맨 아래 유도 문구 다음 줄에 이 글의 주소를 붙여 넣고 엔터 → 링크 카드</p>'
+        rel_box = (f'<div class="box"><p class="lab">4. 함께 볼 글(내부 링크): 글 주소가 앱에 저장돼 있으면 본문 맨 아래 제목 줄에 링크가 자동으로 걸려요. 링크 카드도 원하면 제목 줄 다음 줄에 주소를 붙여 넣고 엔터</p>'
                    f'<p class="val" style="font-size:20px;font-weight:700" id="rt">{html.escape(related.get("title") or "")}</p><button onclick="cp(\'rt\',this)">글 제목 복사</button>'
                    + (f'<p class="val" id="rl" style="margin-top:10px">{html.escape(_u)}</p><button onclick="cp(\'rl\',this)">글 주소 복사</button>' if _u else
                       '<p class="hint">주소는 네이버 블로그 글 관리에서 이 제목의 글 → 공유 → URL 복사. 상황판 원고 카드에 발행 주소를 적어 두면 다음부터 여기에 자동으로 나와요.</p>')
