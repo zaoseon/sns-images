@@ -1638,5 +1638,24 @@
    "풀이가 캡션에 있는지",
    "끝 2초 공유 문구"
   ]
+ },
+ {
+  "id": "tpl-w43",
+  "kind": "틀 견본(돌려쓰기)",
+  "title": "새 카드 틀 견본 5종 - 배치표·순위·대화형·투표·한마디",
+  "status": "new",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43tpl/T3.jpg?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43tpl/T4.jpg?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43tpl/T5.jpg?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43tpl/T6.jpg?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43tpl/T7.jpg?v=1"
+  ],
+  "note": "피드가 질리지 않게 돌려 쓸 새 틀 견본이에요(10/5). 안의 내용은 예시이고, 올리기 전에 풀이 기준으로 확정해요. 글자 크기·색 기준은 docs/디자인_기준_2026-10-05.md. 이 중 1주차에 시험할 틀을 정해 주세요(투표를 제안해요).",
+  "checks": [
+   "글자가 폰에서 읽히는지",
+   "틀마다 색이 다른지",
+   "마음에 드는 틀 고르기"
+  ]
  }
 ]
