@@ -30,5 +30,21 @@
   "mode": "up",
   "bpm": 124,
   "key": "G"
+ },
+ {
+  "name": "kinetic_reply",
+  "kind": "fun",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 114,
+  "key": "A"
+ },
+ {
+  "name": "kinetic_talk",
+  "kind": "fun",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "C"
  }
 ]

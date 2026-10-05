@@ -4,8 +4,11 @@ import os, sys, json
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 import music_plan as MP, html_motion as HM
 ACC = "#ff5c8a"; BLACK = os.path.join(HERE, "fonts", "PRETENDARD-BLACK.OTF")
-def html(beat):
-    return """<!doctype html><meta charset=utf-8><style>
+SPEC_REPLY = dict(acc="#ff5c8a", name="kinetic_reply", tag="정월의 연락 테스트", hook=["읽고도", "답장", "못 한 날"], q="나는 <span class=c>어느 쪽</span>?", opts=["바로 답해야 편해요", "썼다 지웠다 늦게 보내요", "읽고 이따 하고 잊어요"],
+    r="많이 고른 번호는<span class=c>?</span>", res=["바로 답하는 쪽", "다듬어 보내는 쪽", "천천히 답하는 쪽"], note="빠르다 느리다가 아니라<br><span class=c>연락의 리듬</span>이에요", cta=["떠오르는", "사람에게", "보내 보세요"], music="fun")
+def html(beat, S=None):
+    S = S or SPEC_REPLY
+    h = """<!doctype html><meta charset=utf-8><style>
 @font-face{font-family:PB;src:url('file://%s')}
 html,body{margin:0;width:1080px;height:1920px;background:#0a0a0c;overflow:hidden;font-family:PB,'Noto Sans CJK KR',sans-serif;color:#fff}
 .e{position:absolute;left:0;width:1080px;text-align:center;opacity:0;will-change:transform}
@@ -18,17 +21,17 @@ html,body{margin:0;width:1080px;height:1920px;background:#0a0a0c;overflow:hidden
 .tag{position:absolute;left:90px;top:335px;font-size:46px;background:%s;color:#0a0a0c;padding:12px 36px;border-radius:50px;opacity:0}
 .hd{position:absolute;left:70px;bottom:60px;font-size:36px;opacity:.9}
 </style><body>
-<div class=tag id=tag>정월의 연락 테스트</div>
+<div class=tag id=tag>@@TAG@@</div>
 <div class=sh id=c1 style="left:-140px;top:700px;width:520px;height:520px;border-radius:50%%;background:%s"></div>
 <div class=sh id=bar style="left:440px;top:1415px;width:640px;height:40px;background:#fff"></div>
 <div class=sh id=tri style="left:790px;top:420px;width:0;height:0;border-left:120px solid transparent;border-right:120px solid transparent;border-bottom:208px solid %s"></div>
-<div class="e w" id=a1 style="top:600px">읽고도</div><div class="e w c" id=a2 style="top:840px">답장</div><div class="e w" id=a3 style="top:1080px">못 한 날</div>
-<div class="e t" id=b0 style="top:470px">나는 <span class=c>어느 쪽</span>?</div>
-<div class="e o" id=b1 style="top:700px"><b>1</b>바로 답해야 편해요</div><div class="e o" id=b2 style="top:920px"><b>2</b>썼다 지웠다 늦게 보내요</div><div class="e o" id=b3 style="top:1140px"><b>3</b>읽고 이따 하고 잊어요</div>
-<div class="e t" id=c0 style="top:470px">많이 고른 번호는<span class=c>?</span></div>
-<div class="e o" id=d1 style="top:660px"><b>1</b>바로 답하는 쪽</div><div class="e o" id=d2 style="top:830px"><b>2</b>다듬어 보내는 쪽</div><div class="e o" id=d3 style="top:1000px"><b>3</b>천천히 답하는 쪽</div>
-<div class="e t" id=c9 style="top:1170px;font-size:68px;line-height:1.5">빠르다 느리다가 아니라<br><span class=c>연락의 리듬</span>이에요</div>
-<div class="e w" id=f1 style="top:560px;font-size:140px">떠오르는</div><div class="e w c" id=f2 style="top:780px;font-size:140px">사람에게</div><div class="e w" id=f3 style="top:1000px;font-size:140px">보내 보세요</div>
+<div class="e w" id=a1 style="top:600px">@@H1@@</div><div class="e w c" id=a2 style="top:840px">@@H2@@</div><div class="e w" id=a3 style="top:1080px">@@H3@@</div>
+<div class="e t" id=b0 style="top:470px">@@Q@@</div>
+<div class="e o" id=b1 style="top:700px"><b>1</b>@@O1@@</div><div class="e o" id=b2 style="top:920px"><b>2</b>@@O2@@</div><div class="e o" id=b3 style="top:1140px"><b>3</b>@@O3@@</div>
+<div class="e t" id=c0 style="top:470px">@@R@@</div>
+<div class="e o" id=d1 style="top:660px"><b>1</b>@@D1@@</div><div class="e o" id=d2 style="top:830px"><b>2</b>@@D2@@</div><div class="e o" id=d3 style="top:1000px"><b>3</b>@@D3@@</div>
+<div class="e t" id=c9 style="top:1170px;font-size:68px;line-height:1.5">@@N@@</div>
+<div class="e w" id=f1 style="top:560px;font-size:140px">@@F1@@</div><div class="e w c" id=f2 style="top:780px;font-size:140px">@@F2@@</div><div class="e w" id=f3 style="top:1000px;font-size:140px">@@F3@@</div>
 <div class=hd>zaoseon.com</div>
 <script>
 const BEAT=%f; const B=ms=>ms/1000/BEAT;
@@ -55,10 +58,25 @@ function seek(ms){const b=B(ms);
  const tri=document.getElementById('tri');tri.style.opacity=(b>25&&b<33)?0.95:(b>0&&b<6?0.0:0);tri.style.transform=`rotate(${b*22}deg) scale(${1+0.15*pulse()})`;
 }
 seek(0);
-</script>""" % (BLACK, ACC, ACC, ACC, ACC, ACC, beat)
+</script>""" % (BLACK, S["acc"], S["acc"], S["acc"], S["acc"], S["acc"], beat)
+    m = {"H1": S["hook"][0], "H2": S["hook"][1], "H3": S["hook"][2], "TAG": S["tag"], "Q": S["q"], "O1": S["opts"][0], "O2": S["opts"][1], "O3": S["opts"][2], "R": S["r"], "D1": S["res"][0], "D2": S["res"][1], "D3": S["res"][2], "N": S["note"], "F1": S["cta"][0], "F2": S["cta"][1], "F3": S["cta"][2]}
+    for k, v in m.items(): h = h.replace("@@" + k + "@@", v)
+    return h
+def check_spec(S):
+    import re
+    bad = []
+    for t in S["opts"] + S["res"]:
+        if len(t) > 12: bad.append("선택지·결과는 12자 이내: " + t)
+    for t in S["hook"] + S["cta"]:
+        if len(re.sub("<[^>]+>", "", t)) > 6: bad.append("큰 글자는 한 줄 6자 이내: " + t)
+    if bad: raise SystemExit("대본 점검 실패\n" + "\n".join(bad))
+def build(S):
+    check_spec(S)
+    mi = MP.choose(S.get("music", "fun"), S["name"]); beat = 60.0 / mi["bpm"]; total = 33 * beat
+    hp = "/tmp/%s.html" % S["name"]; open(hp, "w", encoding="utf-8").write(html(beat, S))
+    out = os.path.join(HERE, "..", "2026-motion", S["name"] + ".mp4"); secs = HM.render_html(hp, out, total)
+    MP.mux(out, [6 * beat, 9 * beat, 10 * beat, 8 * beat], mi, 91 + len(S["name"])); print("음악:", mi["style"], mi["bpm"], mi["key"], "| 박자", round(beat, 3), "초 | 길이", round(secs, 1), "초 |", out); return out
 if __name__ == "__main__":
-    mi = MP.choose("fun", "kinetic-reply"); beat = 60.0 / mi["bpm"]; total = 33 * beat
-    hp = "/tmp/kinetic_reply.html"; open(hp, "w", encoding="utf-8").write(html(beat))
-    out = os.path.join(HERE, "..", "2026-motion", "kinetic_reply.mp4"); secs = HM.render_html(hp, out, total)
-    durs = [6 * beat, 9 * beat, 10 * beat, 8 * beat]; MP.mux(out, durs, mi, 91)
-    print("음악:", mi["style"], mi["bpm"], mi["key"], "| 박자", round(beat, 3), "초 | 길이", round(secs, 1), "초")
+    S = dict(SPEC_REPLY)
+    if len(sys.argv) > 1: S.update(json.load(open(sys.argv[1], encoding="utf-8")))     # 대본 JSON만 바꿔서 새 편을 만든다
+    build(S)
