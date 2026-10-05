@@ -15,30 +15,37 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:@@PAPER
 .t{text-align:center;white-space:nowrap}
 .paper{left:0;top:0;width:1080px;height:1920px;background:@@PAPER@@}
 .grain{left:0;top:0;width:1080px;height:1920px;background:url("@@GRAIN@@");mix-blend-mode:multiply;opacity:.26;pointer-events:none;z-index:50}
-.dot{width:52px;height:52px;border-radius:50%;background:#d8ccb8;box-shadow:inset 0 0 0 4px #c7baa3}
+.dot{width:66px;height:66px;border-radius:50%;background:#d8ccb8;box-shadow:inset 0 0 0 4px #c7baa3}
 </style><body>
 <div class="a paper" id=p0>
- <div class="a d t" id=hl style="left:0;width:1080px;top:350px;font-size:84px;line-height:1.35">사주와 별자리,<br>같은 말을 할까요?</div>
- <div class="a c" id=pinkC style="left:100px;top:600px;width:600px;height:600px;background:@@PINK@@"></div>
- <div class="a c" id=blueC style="left:380px;top:600px;width:600px;height:600px;background:@@BLUE@@"></div>
- <div class="a c" id=blueD style="left:380px;top:600px;width:592px;height:592px;border:8px dashed @@BLUE@@;background:transparent;opacity:.55"></div>
- <div class="a d t" id=wSaju style="left:130px;width:360px;top:850px;font-size:120px">사주</div>
- <div class="a d t" id=wStar style="left:610px;width:360px;top:860px;font-size:92px">별자리</div>
- <div class="a d t" id=wSame style="left:390px;width:300px;top:1100px;font-size:64px;color:#fff">같은 말</div>
+ <div class="a" style="left:0;top:0;width:1080px;height:560px;background:radial-gradient(circle at center,@@PINK@@ 34%,transparent 36%) 0 0/34px 34px;-webkit-mask-image:linear-gradient(to bottom,#000,transparent);mix-blend-mode:multiply;opacity:.5"></div><div class="a" style="left:0;top:1360px;width:1080px;height:560px;background:radial-gradient(circle at center,@@BLUE@@ 34%,transparent 36%) 0 0/34px 34px;-webkit-mask-image:linear-gradient(to top,#000,transparent);mix-blend-mode:multiply;opacity:.5"></div><div class="a" style="left:36px;top:36px;width:56px;height:56px;border:5px solid @@INK@@;border-radius:50%;opacity:.55"></div><div class="a" style="left:63px;top:20px;width:5px;height:88px;background:@@INK@@;opacity:.55"></div><div class="a" style="left:20px;top:63px;width:88px;height:5px;background:@@INK@@;opacity:.55"></div><div class="a" style="left:60px;top:1700px;width:120px;height:60px;background:@@PINK@@;mix-blend-mode:multiply"></div><div class="a" style="left:150px;top:1700px;width:120px;height:60px;background:@@BLUE@@;mix-blend-mode:multiply"></div><div class="a t" style="left:300px;width:720px;top:1706px;font-size:44px;opacity:.7">사주 × 별자리 · 자오선 계산</div>
+ <div class="a d t" id=hl style="left:0;width:1080px;top:330px;font-size:98px;line-height:1.3">사주와 별자리,<br>같은 말을 할까요?</div>
+ <div class="a c" id=pinkC style="left:-50px;top:640px;width:760px;height:760px;background:@@PINK@@"></div>
+ <div class="a c" id=blueC style="left:370px;top:640px;width:760px;height:760px;background:@@BLUE@@"></div>
+ <div class="a c" id=blueD style="left:370px;top:640px;width:760px;height:760px;box-sizing:border-box;border:10px dashed @@BLUE@@;background:transparent;opacity:.6"></div>
+ <div class="a d t" id=wSaju style="left:10px;width:380px;top:940px;font-size:150px">사주</div>
+ <div class="a d t" id=wStar style="left:690px;width:420px;top:965px;font-size:112px">별자리</div>
+ <div class="a d t" id=wSame style="left:380px;width:320px;top:1090px;font-size:80px;color:#fff">같은 말</div>
  <div id=dots></div>
- <div class="a t d" id=cnLb style="left:0;width:1080px;top:350px;font-size:104px;line-height:1.3">100명 중 <span id=cnNum style="color:#7a4fd0;font-size:150px">0</span>명이</div>
- <div class="a t d" id=cnTx style="left:0;width:1080px;top:520px;font-size:76px;line-height:1.4">같은 말을 했어요</div>
+ <div class="a t d" id=cnLb style="left:0;width:1080px;top:320px;font-size:118px;line-height:1.3">100명 중 <span id=cnNum style="color:#7a4fd0;font-size:190px">0</span>명이</div>
+ <div class="a t d" id=cnTx style="left:0;width:1080px;top:520px;font-size:72px;line-height:1.4">같은 말을 했어요</div>
 </div>
 <div class="a paper" id=p4 style="box-shadow:-30px 0 40px rgba(60,40,20,.25)">
- <div class="a d t" id=t4a style="left:0;width:1080px;top:640px;font-size:132px;line-height:1.3;color:@@INK@@;text-shadow:7px 5px 0 @@PINK@@">다른 말은</div>
- <div class="a d t" id=t4b style="left:0;width:1080px;top:860px;font-size:132px;line-height:1.3;color:@@INK@@;text-shadow:-7px 5px 0 @@BLUE@@">내가 고를 곳</div>
- <div class="a t" id=t4c style="left:0;width:1080px;top:1180px;font-size:56px;line-height:1.5">같은 말은 타고난 결이에요</div>
+ <div class="a" style="left:0;top:0;width:1080px;height:560px;background:radial-gradient(circle at center,@@BLUE@@ 34%,transparent 36%) 0 0/34px 34px;-webkit-mask-image:linear-gradient(to bottom,#000,transparent);mix-blend-mode:multiply;opacity:.45"></div><div class="a" style="left:0;top:1360px;width:1080px;height:560px;background:radial-gradient(circle at center,@@PINK@@ 34%,transparent 36%) 0 0/34px 34px;-webkit-mask-image:linear-gradient(to top,#000,transparent);mix-blend-mode:multiply;opacity:.45"></div>
+ <div class="a c" style="left:-260px;top:420px;width:900px;height:900px;background:@@PINK@@;opacity:.5"></div>
+ <div class="a c" style="left:420px;top:760px;width:860px;height:860px;background:@@BLUE@@;opacity:.5"></div>
+ <div class="a d t" id=t4a style="left:0;width:1080px;top:600px;font-size:156px;line-height:1.3;color:@@INK@@;text-shadow:8px 6px 0 @@PINK@@">다른 말은</div>
+ <div class="a d t" id=t4b style="left:0;width:1080px;top:850px;font-size:150px;line-height:1.3;color:@@INK@@;text-shadow:-8px 6px 0 @@BLUE@@">내가 고를 곳</div>
+ <div class="a t d" id=t4c style="left:0;width:1080px;top:1180px;font-size:68px;line-height:1.4">같은 말은 타고난 결이에요</div>
 </div>
 <div class="a paper" id=p5 style="box-shadow:-30px 0 40px rgba(60,40,20,.25)">
- <div class="a d t" id=t5a style="left:0;width:1080px;top:620px;font-size:116px;line-height:1.35;text-shadow:6px 4px 0 @@PINK@@">떠오르는 사람에게</div>
- <div class="a d t" id=t5b style="left:0;width:1080px;top:820px;font-size:116px;line-height:1.35;text-shadow:-6px 4px 0 @@BLUE@@">보내 보세요</div>
- <svg class="a" id=plane viewBox="0 0 100 100" style="left:410px;top:1060px;width:260px;height:260px"><path d="M8 52 L92 10 L66 90 L50 60 Z" fill="@@PINK@@" style="mix-blend-mode:multiply"/><path d="M30 46 L92 10 L50 60 Z" fill="@@BLUE@@" style="mix-blend-mode:multiply"/></svg>
- <div class="a t" id=zs style="left:0;width:1080px;top:1380px;font-size:46px">zaoseon.com</div>
+ <div class="a" style="left:0;top:0;width:1080px;height:560px;background:radial-gradient(circle at center,@@PINK@@ 34%,transparent 36%) 0 0/34px 34px;-webkit-mask-image:linear-gradient(to bottom,#000,transparent);mix-blend-mode:multiply;opacity:.5"></div><div class="a" style="left:0;top:1360px;width:1080px;height:560px;background:radial-gradient(circle at center,@@BLUE@@ 34%,transparent 36%) 0 0/34px 34px;-webkit-mask-image:linear-gradient(to top,#000,transparent);mix-blend-mode:multiply;opacity:.5"></div>
+ <div class="a c" style="left:140px;top:520px;width:800px;height:800px;background:@@PINK@@;opacity:.35"></div>
+ <div class="a c" style="left:300px;top:640px;width:800px;height:800px;background:@@BLUE@@;opacity:.35"></div>
+ <div class="a d t" id=t5a style="left:0;width:1080px;top:560px;font-size:120px;line-height:1.35;text-shadow:7px 5px 0 @@PINK@@">떠오르는 사람에게</div>
+ <div class="a d t" id=t5b style="left:0;width:1080px;top:770px;font-size:132px;line-height:1.35;text-shadow:-7px 5px 0 @@BLUE@@">보내 보세요</div>
+ <svg class="a" id=plane viewBox="0 0 100 100" style="left:330px;top:1020px;width:420px;height:420px"><path d="M8 52 L92 10 L66 90 L50 60 Z" fill="@@PINK@@" style="mix-blend-mode:multiply"/><path d="M30 46 L92 10 L50 60 Z" fill="@@BLUE@@" style="mix-blend-mode:multiply"/></svg>
+ <div class="a t d" id=zs style="left:0;width:1080px;top:1470px;font-size:56px">zaoseon.com</div>
 </div>
 <div class="a grain"></div>
 <script>
@@ -47,7 +54,7 @@ function bez(x1,y1,x2,y2){return t=>{if(t<=0)return 0;if(t>=1)return 1;let a=0,b
 const out=bez(.23,1,.32,1), g=id=>document.getElementById(id);
 // 점 100개(10x10) — 겹침 14개는 고정 위치
 const dots=g('dots'); const PUR=[7,13,22,28,35,41,47,53,58,66,72,79,85,93]; const D=[];
-for(let i=0;i<100;i++){const e=document.createElement('div');e.className='a dot';const r=Math.floor(i/10),c=i%10;e.style.left=(189+c*72)+'px';e.style.top=(720+r*72)+'px';e.style.opacity=0;dots.appendChild(e);D.push(e)}
+for(let i=0;i<100;i++){const e=document.createElement('div');e.className='a dot';const r=Math.floor(i/10),c=i%10;e.style.left=(129+c*84)+'px';e.style.top=(640+r*84)+'px';e.style.opacity=0;dots.appendChild(e);D.push(e)}
 const stamp=(el,b0,dur=.5,from=1.12)=>{const p=out(cl((b-b0)/dur));return {o:Math.min(1,p*6),s:from+(1-from)*p}};
 let b=0;
 function seek(ms){b=B(ms);
