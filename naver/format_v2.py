@@ -151,6 +151,15 @@ def _dividers(paras):
         out.append(p)
     return out
 
+def _bold_guide(paras):
+    """마무리 유도 문구(👇 줄)를 굵게. 기존 변환기가 굵은 표시를 지우므로 여기서 다시 입힌다. 바로 아래 연결 글 제목 줄은 그대로."""
+    out = []
+    for p in paras:
+        if p != HR and not p.startswith("<table") and pl(p).startswith("👇") and "<b>" not in p:
+            p = re.sub(r"(<span[^>]*>)(.*)(</span>)", r"\1<b>\2</b>\3", p, count=1, flags=re.S)
+        out.append(p)
+    return out
+
 def _after_heading_blank(paras):
     out = []
     for i, p in enumerate(paras):
@@ -201,6 +210,7 @@ def apply(body):
     paras = _blank_after_box(paras)
     paras = _move_order(paras)
     paras = _items_blank(paras)
+    paras = _bold_guide(paras)
     paras = _dividers(paras)
     paras = _after_heading_blank(paras)
     paras = _dedupe_blanks(paras)

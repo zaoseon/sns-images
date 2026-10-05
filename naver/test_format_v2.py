@@ -57,6 +57,8 @@ def box_gaps(n):
 ok(all(box_gaps(n) for _, n, _ in res.values()), "박스 안 한 줄 요약 / 세 풀이 / 해 볼 것 사이가 한 줄씩 띄워짐")
 hrs = [t for _, n, _ in res.values() for t in re.findall(r"<hr[^>]*>", n)]
 ok(hrs and all(V2.LINE_GRAY in t and 'width="%d"' % V2.IMG_W in t for t in hrs), f"구분선 {len(hrs)}개는 모두 회색({V2.LINE_GRAY})이고 이미지 폭({V2.IMG_W}px)")
+ok(all(re.search(r"<b>👇", p) for _, n, _ in res.values() for p in re.findall(r"<p[^>]*>(?:(?!</p>).)*👇(?:(?!</p>).)*</p>", n, re.S)), "👇 유도 문구 줄은 모두 굵게")
+ok(all(len(re.findall(r"<p[^>]*>(?:(?!</p>).)*👇(?:(?!</p>).)*</p>", n, re.S)) >= 1 for _, n, _ in res.values() if "👇" in n), "👇 유도 문구가 있는 글 확인")
 imgs = [t for _, n, _ in res.values() for t in re.findall(r"<img[^>]*>", n)]
 small = [t for t in imgs if "naver_cta" not in t]; cta = [t for t in imgs if "naver_cta" in t]
 ok(all(f"/{V2.SMALL_DIR}/" in t and f'width="{V2.IMG_W}"' in t for t in small), f"본문 이미지 {len(small)}개는 모두 작은 판 주소와 width {V2.IMG_W}")
