@@ -91,7 +91,7 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
                  '<li>한 가지 질문만 다뤘나요?</li><li>첫 150자 안에 결론이 있나요?</li><li>제목에 검색어와 얻는 것이 보이나요?</li>'
                  '<li>대표 이미지 문구가 제목과 다른 말인가요?</li><li>태그가 글 내용과 맞고 "인기·추천·일상" 같은 말이 없나요?</li>'
                  '<li>맨 아래에 다음 행동(배너·함께 볼 글)이 하나로 보이나요?</li><li>클립 칸이 있는 글이면 클립을 넣었나요? 함께 볼 글 링크 카드가 붙었나요?</li></ul></div>')
-    page = f'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>네이버 원고 · {html.escape(title)}</title><style>{CSS}</style><link rel="stylesheet" href="/naver/m.css?v=1"></head><body><div class="wrap">
+    page = f'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>네이버 원고 · {html.escape(title)}</title><style>{CSS}</style><link rel="stylesheet" href="/naver/m.css?v=3"></head><body><div class="wrap">
 <p class="hint"><a href="/naver/">← 네이버 원고 목록</a></p>
 {reserve_box}
 <div class="box"><p class="lab">1. 제목</p><p class="val" id="t">{html.escape(title)}</p><button onclick="cp('t',this)">제목 복사</button></div>
@@ -150,7 +150,7 @@ def write_index():
     reg = load(); items = sorted((v["dt"], k, v["title"]) for k, v in reg.items() if not v.get("done"))
     rows = "".join(f'<div class="box"><p class="lab">{when_text(D.datetime.fromisoformat(dt))}</p><p class="val"><a href="/naver/{k}.html">{html.escape(t)}</a></p></div>' for dt, k, t in items) \
         or '<div class="box"><p class="val">지금 올릴 원고가 없어요. 예약을 마친 글은 목록에서 빠져요.</p></div>'
-    open(f"{SITE}/public/naver/index.html", "w").write(f'<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>네이버 원고 목록</title><style>{CSS}</style><link rel="stylesheet" href="/naver/m.css?v=1"></head><body><div class="wrap"><h1>네이버 블로그 원고</h1><p class="hint">예약 발행일 순서예요.</p>{rows}</div></body></html>')
+    open(f"{SITE}/public/naver/index.html", "w").write(f'<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>네이버 원고 목록</title><style>{CSS}</style><link rel="stylesheet" href="/naver/m.css?v=3"></head><body><div class="wrap"><h1>네이버 블로그 원고</h1><p class="hint">예약 발행일 순서예요.</p>{rows}</div></body></html>')
 
 def alert_text(pids):
     """원고를 목록에 올린 뒤 캘린더 알림 설명문. ①이 Google Calendar create_event로 만든다(9/30 대표 요청)."""

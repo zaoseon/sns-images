@@ -1,8 +1,8 @@
 """네이버 본문 서식 2판 (10/5 대표 요청 6가지). format_body.format_body()가 만든 본문 위에 얹는다(기존 변환기는 그대로).
  1) 첫 문단 / 인사말(안녕하세요, 자오선의 정월이에요.) / 간단 설명+결론 안내를 빈 줄로 나눈다
- 2) 한 줄 요약·세 풀이·해 볼 것 같은 요약 줄을 네모 박스(1칸 표) 안에 넣는다
+ 2) 한 줄 요약·세 풀이·해 볼 것 같은 요약 줄을 네모 박스(1칸 표, 이미지 폭·흰 바탕·회색 윤곽선) 안에 넣고 항목 사이를 한 줄 띄운다
  3) '📌 이 글의 순서'를 요약 이미지(한눈에 보기) 다음으로 옮긴다
- 4) 구분선(<hr>): 이 글의 순서 뒤, 번호 제목 사이, 마무리와 👇 유도 문구 사이
+ 4) 구분선(<hr>, 회색·이미지 폭): 이 글의 순서 뒤, 번호 제목 사이, 마무리와 👇 유도 문구 사이
  5) 번호 제목 다음 한 줄 띄우기, 항목(🔹·1위·1.)마다 한 줄 띄우기
  6) 본문 이미지는 가로 IMG_W px 작은 판(img/m640/)을 쓴다 → 네이버에 붙이면 문서 너비로 커지지 않는다. CTA 배너는 그대로(문서 너비)
 글자는 더하지 않는다. 단 '정월이에요.'만 있던 인사말은 전체 인사말로 바꾼다. test_format_v2.py가 글자 보존을 확인한다.
@@ -15,8 +15,10 @@ SMALL_DIR = "m640"
 GREET = "안녕하세요, 자오선의 정월이에요."
 HR = "<hr>"
 PTAG = re.compile(r"<p[^>]*>.*?</p>|<hr>", re.S)
-BOX_OPEN = '<table style="width:100%;border-collapse:collapse"><tbody><tr><td style="border:1px solid #c4a062;background:#fbf7ee;padding:14px 12px;text-align:center">'
+LINE_GRAY = "#c8c8c8"
+BOX_OPEN = f'<table width="{IMG_W}" align="center" style="width:{IMG_W}px;max-width:100%;border-collapse:collapse"><tbody><tr><td style="border:1px solid #cfcfcf;background:#ffffff;padding:16px 12px;text-align:center">'
 BOX_CLOSE = "</td></tr></tbody></table>"
+HR_HTML = f'<hr width="{IMG_W}" align="center" style="width:{IMG_W}px;max-width:100%;border:0;border-top:1px solid {LINE_GRAY};margin:16px auto">'   # 구분선: 회색, 이미지와 같은 폭
 ITEM = re.compile(r"^(🔹|🔸|▪️|▫️|•|[①-⑩]|\d+위|\d+\)|\d+\.\s)")
 NUMHEAD = re.compile(r"^\d+\.\s")
 
@@ -108,8 +110,12 @@ def _summary_range(paras):
 def _box_summary(paras):
     r = _summary_range(paras)
     if not r: return paras
-    s, e = r; inner = "".join(p for p in paras[s:e + 1])
-    return paras[:s] + [BOX_OPEN + inner + BOX_CLOSE] + paras[e + 1:]
+    s, e = r; inner = []
+    for p in paras[s:e + 1]:
+        if p != HR and not blank(p) and emoji0(pl(p)) and not big(p) and inner and not blank(inner[-1]): inner.append(FB.BLANK())   # 한 줄 요약 / 세 풀이 / 해 볼 것을 한 줄씩 띄운다
+        inner.append(p)
+    while inner and blank(inner[-1]): inner.pop()
+    return paras[:s] + [BOX_OPEN + "".join(inner) + BOX_CLOSE] + paras[e + 1:]
 
 def _order_block(paras):
     h = next((i for i, p in enumerate(paras) if p != HR and pl(p).startswith("📌 이 글의 순서")), None)
@@ -198,4 +204,4 @@ def apply(body):
     paras = _dividers(paras)
     paras = _after_heading_blank(paras)
     paras = _dedupe_blanks(paras)
-    return _small_images("".join(paras))
+    return _small_images("".join(paras).replace(HR, HR_HTML))

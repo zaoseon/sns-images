@@ -10,11 +10,11 @@ def ok(c, m):
 pg = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "pages.json"), encoding="utf-8"))
 prep = lambda b: b.replace("naver_cta2_", "naver_cta4_").replace("naver_cta3_", "naver_cta4_")
 text = lambda h: re.sub(r"\s+", "", re.sub(r"<[^>]+>", "", h).replace("&nbsp;", ""))
-EL = re.compile(r"<table.*?</table>|<hr>|<p[^>]*>.*?</p>", re.S)
+EL = re.compile(r"<table.*?</table>|<hr[^>]*>|<p[^>]*>.*?</p>", re.S)
 posts = {k: v for k, v in pg.items() if not v.get("done") and "body" in v}
 res = {}
 for k, v in posts.items():
-    base = FB.format_body(prep(v["body"])); new = V2.apply(base); res[k] = (base, new, EL.findall(new))
+    base = FB.format_body(prep(v["body"])); new = V2.apply(base); res[k] = (base, new, [V2.HR if e.startswith("<hr") else e for e in EL.findall(new)])
 ok(len(posts) > 0, f"시험 대상 원고 {len(posts)}편")
 lost = []
 for k, (base, new, _) in res.items():
@@ -47,6 +47,16 @@ def pre_guide(els):
 ok(all(pre_guide(e) for _, _, e in res.values()), "👇 유도 문구 앞에 구분선")
 ok(all(not (els[i] == V2.HR and els[i + 1] == V2.HR) for _, _, els in res.values() for i in range(len(els) - 1)), "구분선이 연달아 나오지 않음")
 ok(all(not (V2.blank(els[i]) and V2.blank(els[i + 1])) for _, _, els in res.values() for i in range(len(els) - 1)), "빈 줄이 두 칸 이상 이어지지 않음")
+
+def box_inner(n): return re.search(r"<table.*?</table>", n, re.S).group(0)
+ok(all("background:#ffffff" in box_inner(n) and "border:1px solid #cfcfcf" in box_inner(n) and 'width="%d"' % V2.IMG_W in box_inner(n) for _, n, _ in res.values()), f"박스: 흰 바탕 + 회색 윤곽선 + 이미지 폭({V2.IMG_W}px)")
+ok(all("#fbf7ee" not in n and "#c4a062" not in n for _, n, _ in res.values()), "박스·구분선에 베이지 배경·금색이 없음")
+def box_gaps(n):
+    ps = re.findall(r"<p[^>]*>.*?</p>", box_inner(n), re.S)
+    return all(V2.blank(ps[i - 1]) for i, p in enumerate(ps) if i and not V2.blank(p) and V2.emoji0(V2.pl(p)) and not V2.big(p))
+ok(all(box_gaps(n) for _, n, _ in res.values()), "박스 안 한 줄 요약 / 세 풀이 / 해 볼 것 사이가 한 줄씩 띄워짐")
+hrs = [t for _, n, _ in res.values() for t in re.findall(r"<hr[^>]*>", n)]
+ok(hrs and all(V2.LINE_GRAY in t and 'width="%d"' % V2.IMG_W in t for t in hrs), f"구분선 {len(hrs)}개는 모두 회색({V2.LINE_GRAY})이고 이미지 폭({V2.IMG_W}px)")
 imgs = [t for _, n, _ in res.values() for t in re.findall(r"<img[^>]*>", n)]
 small = [t for t in imgs if "naver_cta" not in t]; cta = [t for t in imgs if "naver_cta" in t]
 ok(all(f"/{V2.SMALL_DIR}/" in t and f'width="{V2.IMG_W}"' in t for t in small), f"본문 이미지 {len(small)}개는 모두 작은 판 주소와 width {V2.IMG_W}")
