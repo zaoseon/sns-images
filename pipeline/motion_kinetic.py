@@ -32,7 +32,8 @@ html,body{margin:0;width:1080px;height:1920px;background:#0a0a0c;overflow:hidden
 <div class=hd>zaoseon.com</div>
 <script>
 const BEAT=%f; const B=ms=>ms/1000/BEAT;
-const ez={out:x=>1-Math.pow(1-x,3),back:x=>{const c=1.9;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)},in:x=>x*x*x};
+function bez(x1,y1,x2,y2){return t=>{if(t<=0)return 0;if(t>=1)return 1;let a=0,b=1,u=t;for(let i=0;i<24;i++){const x=3*(1-u)*(1-u)*u*x1+3*(1-u)*u*u*x2+u*u*u;if(x<t)a=u;else b=u;u=(a+b)/2}return 3*(1-u)*(1-u)*u*y1+3*(1-u)*u*u*y2+u*u*u}}
+const ez={out:bez(0.23,1,0.32,1),back:x=>{const c=1.2;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)}};
 const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
 // 요소: [id, 들어옴(박자), 나감(박자), 종류, 방향]
 const E=[['a1',0,5.5,'slam',0],['a2',1,5.5,'slam',0],['a3',2,5.5,'slam',0],
@@ -44,7 +45,8 @@ function seek(ms){const b=B(ms);
  for(const [id,tin,tout,kind,dir] of E){const el=els[id];let p=cl((b-tin)/0.5),q=cl((b-tout)/0.5);
   if(b<tin||q>=1){el.style.opacity=0;continue}
   let op=Math.min(1,p*2)*(1-q),tx=0,ty=0,sc=1;
-  if(kind=='slam'){sc=1+0.7*(1-ez.back(p));ty=-60*q}else{tx=dir*(520*(1-ez.out(p)))+(-dir)*0;sc=1+0.04*(1-ez.back(p));ty=-60*q}
+  if(kind=='slam'){sc=(1+0.6*(1-ez.back(p)))*(1-0.08*ez.out(q))}
+  else{tx=dir*520*(1-ez.out(p))+dir*520*ez.out(q);sc=1+0.04*(1-ez.back(p))}   // 들어온 쪽으로 다시 나간다
   el.style.opacity=op;el.style.transform=`translate(${tx}px,${ty}px) scale(${sc})`}
  const pulse=x=>Math.pow(Math.max(0,1-(b%%1)/0.45),2);
  const tg=document.getElementById('tag');tg.style.opacity=cl(b/1)*(b<32?1:cl(33-b));tg.style.transform=`scale(${1+0.05*pulse()})`;
