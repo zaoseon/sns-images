@@ -2,7 +2,7 @@
  1) 첫 문단 / 인사말(안녕하세요, 자오선의 정월이에요.) / 간단 설명+결론 안내를 빈 줄로 나눈다
  2) 한 줄 요약·세 풀이·해 볼 것 같은 요약 줄을 네모 박스(1칸 표, 이미지 폭·흰 바탕·회색 윤곽선) 안에 넣고 항목 사이를 한 줄 띄운다
  3) '📌 이 글의 순서'를 요약 이미지(한눈에 보기) 다음으로 옮긴다
- 4) 구분선(<hr>, 회색·이미지 폭): 이 글의 순서 뒤, 번호 제목 사이, 마무리와 👇 유도 문구 사이
+ 4) 구분선(<hr>, 회색·이미지 폭): 이 글의 순서 앞과 뒤, 번호 제목 사이, 마무리와 👇 유도 문구 사이
  5) 번호 제목 다음 한 줄 띄우기, 항목(🔹·1위·1.)마다 한 줄 띄우기
  6) 본문 이미지는 가로 IMG_W px 작은 판(img/m640/)을 쓴다 → 네이버에 붙이면 문서 너비로 커지지 않는다. CTA 배너는 그대로(문서 너비)
 글자는 더하지 않는다. 단 '정월이에요.'만 있던 인사말은 전체 인사말로 바꾼다. test_format_v2.py가 글자 보존을 확인한다.
@@ -146,7 +146,7 @@ def _dividers(paras):
     for i, p in enumerate(paras):
         if p != HR and ((i in heads) or (after_order is not None and False)):
             out.append(HR)
-        if p != HR and pl(p).startswith("👇"):
+        if p != HR and (pl(p).startswith("👇") or pl(p).startswith("📌 이 글의 순서")):   # 마무리 유도 문구 앞, 이 글의 순서 앞
             out.append(HR)
         out.append(p)
     return out

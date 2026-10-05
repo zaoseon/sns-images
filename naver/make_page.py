@@ -60,11 +60,11 @@ function cpt(b){navigator.clipboard.writeText(b.dataset.t).then(function(){b.cla
 function cpb(b){var el=document.getElementById("body");var h=el.innerHTML,t=el.innerText;function done(){b.textContent="본문 복사됨 · 네이버 본문에 붙여 넣으세요";b.className="big ok"}
  function sel(){var r=document.createRange();r.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(r);document.execCommand("copy");done()}
  if(window.ClipboardItem){navigator.clipboard.write([new ClipboardItem({"text/html":new Blob([h],{type:"text/html"}),"text/plain":new Blob([t],{type:"text/plain"})})]).then(done,sel)}else sel()}'''
-def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, category=None, thumbs=None, cid=None, clips=None, reserve=None, v2=False):
+def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, category=None, thumbs=None, cid=None, clips=None, reserve=None, v2=True):
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
     body = body.replace("naver_cta2_", "naver_cta4_").replace("naver_cta3_", "naver_cta4_")   # 10/4: CTA 배너를 2/3 크기로(compact.cta_small)
     body = FB.format_body(body)   # 10/4: 가운데 정렬 · 본문 16px · 제목 19px · 짧은 줄바꿈(네이버에 붙이면 바로 이 모양)
-    if v2: body = V2.apply(body)   # 10/5 서식 2판(대표 요청 6가지): 인사말 줄 나눔·요약 박스·순서 위치·구분선·항목 빈 줄·작은 이미지. 기본은 꺼 둠(미리보기 n##v2.html로 확인한 뒤 켠다)
+    if v2: body = V2.apply(body)   # 10/5 서식 2판(대표 요청 6가지): 인사말 줄 나눔·요약 박스·순서 위치·구분선·항목 빈 줄·작은 이미지. 10/5 대표 확인 뒤 기본으로 켬(v2=False를 주면 옛 서식)
     chips = "".join(f'<button class="tag" data-t="{html.escape(t)}" onclick="cpt(this)">{html.escape(t)}</button>' for t in tags)
     nav = f'<a href="/naver/{nxt}.html"><button class="big">다음 원고 →</button></a>' if nxt else '<a href="/naver/"><button class="big">목록으로 (마지막 원고)</button></a>'
     cover_box = (f'<div class="box"><p class="lab">2. 대표 이미지: 먼저 저장 → 네이버 글쓰기 맨 위에 사진으로 올리기(처음 올린 사진이 대표가 돼요) → 그다음 아래 본문 복사</p>'

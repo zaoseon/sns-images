@@ -45,6 +45,10 @@ def pre_guide(els):
     g = [i for i, e in enumerate(els) if e != V2.HR and V2.pl(e).startswith("👇")]
     return all(els[i - 1] == V2.HR for i in g)
 ok(all(pre_guide(e) for _, _, e in res.values()), "👇 유도 문구 앞에 구분선")
+def pre_order(els):
+    h = [i for i, e in enumerate(els) if e != V2.HR and V2.pl(e).startswith("📌 이 글의 순서")]
+    return all(els[i - 1] == V2.HR for i in h)
+ok(all(pre_order(e) for _, _, e in res.values()), "📌 이 글의 순서 앞에 구분선 한 개")
 ok(all(not (els[i] == V2.HR and els[i + 1] == V2.HR) for _, _, els in res.values() for i in range(len(els) - 1)), "구분선이 연달아 나오지 않음")
 ok(all(not (V2.blank(els[i]) and V2.blank(els[i + 1])) for _, _, els in res.values() for i in range(len(els) - 1)), "빈 줄이 두 칸 이상 이어지지 않음")
 
