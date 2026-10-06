@@ -5,73 +5,82 @@
 사용: python3 pipeline/motion_litho_star.py -> 2026-motion/litho_star6.mp4 + litho_star6_cover.jpg"""
 import os, sys, asyncio
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
-import music_plan as MP, html_motion as HM, fonts_kit as K
+import music_plan as MP, html_motion as HM, fonts_kit as K, brand_frame as BF
 R = os.path.abspath(os.path.join(HERE, ".."))
 AS = os.path.join(R, "assets", "brand_bg")
 GOLD = "#e7c88d"; PINK = "#ff5c9d"; BLUE = "#4560f0"
 RANK = [("염소", 23.0), ("황소", 22.7), ("처녀", 18.1), ("사자", 16.3), ("물병", 14.1), ("사수", 13.4), ("쌍둥이", 12.9), ("게", 12.6), ("양", 9.9), ("전갈", 7.3), ("물고기", 6.1), ("천칭", 5.6)]
 def html(beat):
     chips = "".join(f'<div class="a d chip" id=chip{k} style="left:{60 + k * 162}px">{n}</div>' for k, n in enumerate(["안정", "표현", "유연", "생성", "결단", "소통"]))
-    bars = "".join(f'<div class="a bar" id=bar{i} style="top:{540 + i * 77}px"><div class="a d bl">{n}</div><div class="a d bv">{v:.1f}%</div></div>' for i, (n, v) in enumerate(RANK))
+    bars = "".join(f'<div class="a bar" id=bar{i} style="top:{512 + i * 74}px"><div class="a d bl">{n}</div><div class="a d bv">{v:.1f}%</div></div>' for i, (n, v) in enumerate(RANK))
     h = """<!doctype html><meta charset=utf-8><style>@@FONTS@@
 html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#050a1c;font-family:'JW-B',sans-serif;font-weight:800;color:#fff;word-break:keep-all}
 .a{position:absolute}.d{font-family:'JW-D',sans-serif;font-weight:900}.t{text-align:center;white-space:nowrap}
 #bg{left:0;top:0;width:1080px;height:1920px}
 #chart{left:-60px;top:360px;width:1200px;height:1200px;opacity:.42}
-#sun{left:60px;top:90px;width:300px;height:288px;mix-blend-mode:screen;-webkit-mask-image:radial-gradient(circle,#000 52%,transparent 74%)}
-#moon{left:730px;top:70px;width:262px;height:288px;mix-blend-mode:screen;-webkit-mask-image:radial-gradient(circle,#000 52%,transparent 74%)}
-.cover #sun{left:20px;top:300px;width:230px;height:221px}.cover #moon{left:834px;top:290px;width:216px;height:238px}
-.jwimg{left:0;top:340px;width:380px;height:334px;-webkit-mask-image:linear-gradient(to bottom,#000 82%,transparent);opacity:0}
-.bub{left:420px;top:345px;width:630px;height:350px;background:#fff;color:#17102b;border-radius:38px;opacity:0}
-.bub:before{content:"";position:absolute;left:-26px;top:130px;border:22px solid transparent;border-right-color:#fff;border-left:0}
-.bt{left:34px;top:50%;transform:translateY(-50%);width:566px;font-size:58px;line-height:1.36;font-weight:800;font-family:'JW-B',sans-serif;opacity:0}
-.bt em{font-style:normal;font-family:'JW-D',sans-serif;font-weight:900;color:#c2306f}
-.ai{left:36px;top:690px;font-size:30px;color:#fff;opacity:0}
-.chip{top:1130px;width:150px;height:110px;border-radius:30px;border:4px solid rgba(231,200,141,.65);background:rgba(255,255,255,.1);font-size:54px;line-height:100px;text-align:center;opacity:0}
+#sun{left:60px;top:60px;width:270px;height:259px;mix-blend-mode:screen;-webkit-mask-image:radial-gradient(circle,#000 52%,transparent 74%)}
+#moon{left:760px;top:20px;width:230px;height:253px;mix-blend-mode:screen;-webkit-mask-image:radial-gradient(circle,#000 52%,transparent 74%)}
+.cover #sun{left:20px;top:420px;width:230px;height:221px}.cover #moon{left:834px;top:410px;width:216px;height:238px}
+.avatar{left:40px;top:420px;width:330px;height:330px;border-radius:50%;overflow:hidden;border:6px solid #e7c88d;background:radial-gradient(circle at 50% 35%,#27346f,#0b1235);box-shadow:0 0 44px rgba(231,200,141,.35);opacity:0}
+.avatar img{position:absolute;left:-52px;top:10px;width:440px}
+.bub{left:402px;top:430px;width:622px;height:322px;background:linear-gradient(145deg,rgba(28,40,92,.95),rgba(9,14,44,.95));border:3px solid #e7c88d;border-radius:42px;box-shadow:0 0 46px rgba(231,200,141,.28),inset 0 0 36px rgba(231,200,141,.10);opacity:0}
+.tailo{left:372px;top:540px;width:0;height:0;border:26px solid transparent;border-right:34px solid #e7c88d;border-left:0;opacity:0}
+.taili{left:376px;top:545px;width:0;height:0;border:21px solid transparent;border-right:29px solid #151f55;border-left:0;opacity:0}
+.spk{left:42px;top:-27px;padding:4px 26px 6px;border-radius:30px;background:#e7c88d;color:#17102b;font-size:38px;line-height:1.2}
+.bt{left:36px;top:52%;transform:translateY(-50%);width:550px;font-size:58px;line-height:1.36;font-weight:800;font-family:'JW-B',sans-serif;color:#fff;opacity:0}
+.bt em{font-style:normal;font-family:'JW-D',sans-serif;font-weight:900;color:#e7c88d}
+.chip{top:1115px;width:150px;height:100px;border-radius:30px;border:4px solid rgba(231,200,141,.65);background:rgba(255,255,255,.1);font-size:52px;line-height:92px;text-align:center;opacity:0}
 .tok{width:120px;height:120px;border-radius:50%;opacity:0;mix-blend-mode:multiply}
-.ban{left:0;width:1080px;top:770px;text-align:center;font-size:72px;line-height:1.2;color:#e7c88d;opacity:0;white-space:nowrap}
+.ban{left:0;width:1080px;top:795px;text-align:center;font-size:72px;line-height:1.2;color:#e7c88d;opacity:0;white-space:nowrap}
 .leg{left:70px;font-size:54px;line-height:1.2;opacity:0;white-space:nowrap}.leg i{display:inline-block;width:44px;height:44px;border-radius:50%;vertical-align:-6px;margin-right:22px}
-.sixl{left:0;width:1080px;top:1056px;text-align:center;font-size:50px;color:#e7c88d;opacity:0;white-space:nowrap}
+.sixl{left:0;width:1080px;top:1046px;text-align:center;font-size:50px;color:#e7c88d;opacity:0;white-space:nowrap}
 .vig{left:0;top:0;width:1080px;height:1920px;background:radial-gradient(ellipse 62% 40% at 50% 52%,rgba(4,8,26,.62),transparent 78%)}
 .grp{left:0;top:0;width:1080px;height:1920px;isolation:isolate}
 .c{border-radius:50%;mix-blend-mode:multiply;will-change:transform,opacity}
 .lab{transform:translate(-50%,-50%);line-height:1}
-.bar{left:70px;height:66px;width:0;border-radius:0 33px 33px 0;background:linear-gradient(90deg,#6a3fc8,#ff5c9d);opacity:0;overflow:hidden}
-.bl{left:26px;top:7px;font-size:52px;line-height:1.15;color:#fff}.bv{right:26px;top:7px;font-size:52px;line-height:1.15;color:#fff}
+.bar{left:70px;height:64px;width:0;border-radius:0 32px 32px 0;background:linear-gradient(90deg,#6a3fc8,#ff5c9d);opacity:0;overflow:hidden}
+.bl{left:26px;top:6px;font-size:52px;line-height:1.15;color:#fff}.bv{right:26px;top:6px;font-size:52px;line-height:1.15;color:#fff}
 .top1{background:linear-gradient(90deg,#c9a24a,#e7c88d)}.top1 .bl,.top1 .bv{color:#17102b}
-</style><body>
+@@BFCSS@@</style><body>
 <img class="a" id=bg src="file://@@BG@@">
 <img class="a" id=chart src="file://@@CHART@@">
 <img class="a" id=sun src="file://@@SUN@@"><img class="a" id=moon src="file://@@MOON@@">
 <div class="a vig"></div><svg class="a" id=stars width=1080 height=1920 style="left:0;top:0"></svg>
-<div class="a d t" id=hl style="left:0;width:1080px;top:330px;font-size:112px;line-height:1.22">내 별자리,<br>사주랑 같은 말<br>할까?</div>
+<div class="a d t" id=hl style="left:0;width:1080px;top:408px;font-size:100px;line-height:1.2">내 별자리,<br>사주랑 같은 말<br>할까?</div>
 <div class="a grp" id=grp>
- <div class="a c" id=pinkC style="left:50px;top:790px;width:640px;height:640px;background:@@PINK@@"></div>
- <div class="a c" id=blueC style="left:390px;top:790px;width:640px;height:640px;background:@@BLUE@@"></div>
+ <div class="a c" id=pinkC style="left:50px;top:792px;width:600px;height:600px;background:@@PINK@@"></div>
+ <div class="a c" id=blueC style="left:430px;top:792px;width:600px;height:600px;background:@@BLUE@@"></div>
 </div>
-<div class="a c" id=blueD style="left:390px;top:790px;width:640px;height:640px;box-sizing:border-box;border:8px dashed @@BLUE@@;background:transparent;opacity:.7;mix-blend-mode:normal"></div>
-<div class="a d t lab" id=wSaju style="left:215px;top:1110px;font-size:122px">사주</div>
-<div class="a d t lab" id=wStar style="left:866px;top:1110px;font-size:92px">별자리</div>
-<div class="a d t lab" id=wSame style="left:540px;top:1110px;font-size:68px">같은 말</div>
-<img class="a jwimg" id=jw src="file://@@JW@@"><div class="a ai" id=aiL>AI 생성 캐릭터</div>
-<div class="a bub" id=bub>
+<div class="a c" id=blueD style="left:430px;top:792px;width:600px;height:600px;box-sizing:border-box;border:8px dashed @@BLUE@@;background:transparent;opacity:.7;mix-blend-mode:normal"></div>
+<div class="a d t lab" id=wSaju style="left:240px;top:1092px;font-size:108px">사주</div>
+<div class="a d t lab" id=wStar style="left:842px;top:1092px;font-size:82px">별자리</div>
+<div class="a d t lab" id=wSame style="left:540px;top:1092px;font-size:58px">같은 말</div>
+<div class="a avatar" id=jw><img src="file://@@JW@@"></div>
+<div class="a tailo" id=tlo></div><div class="a taili" id=tli></div>
+<div class="a bub" id=bub><div class="a d spk">정월</div>
  <div class="a bt" id=b1>사주와 별자리는 각자 내 마음의 <em>방향</em>을 하나씩 짚어요</div>
  <div class="a bt" id=b2>둘이 같은 방향을 짚으면 <em>'같은&nbsp;말'</em>이에요</div>
  <div class="a bt" id=b3>방향이 다르면 <em>'다른&nbsp;말'</em>이에요. 내가 고를 곳이에요</div>
 </div>
 <div class="a d ban" id=banA>같은 말 = 타고난 결</div><div class="a d ban" id=banB>다른 말 = 내가 고를 곳</div>
-<div class="a grp" id=grp2><div class="a tok" id=tkP style="top:900px;background:@@PINK@@"></div><div class="a tok" id=tkB style="top:900px;background:@@BLUE@@"></div></div>
+<div class="a grp" id=grp2><div class="a tok" id=tkP style="top:905px;background:@@PINK@@"></div><div class="a tok" id=tkB style="top:905px;background:@@BLUE@@"></div></div>
 <div class="a d sixl" id=sixl>자오선이 나눈 여섯 방향</div>
 @@CHIPS@@
-<div class="a d leg" id=leg1 style="top:1290px;color:#fff"><i style="background:@@PINK@@"></i>사주가 짚은 방향</div>
-<div class="a d leg" id=leg2 style="top:1366px;color:#fff"><i style="background:@@BLUE@@"></i>별자리가 짚은 방향</div>
-<div class="a d t" id=rk style="left:0;width:1080px;top:340px;font-size:66px;line-height:1.25;opacity:0">사주와 같은 말을 하는<br>별자리 순위</div>
+<div class="a d leg" id=leg1 style="top:1250px;color:#fff"><i style="background:@@PINK@@"></i>사주가 짚은 방향</div>
+<div class="a d leg" id=leg2 style="top:1322px;color:#fff"><i style="background:@@BLUE@@"></i>별자리가 짚은 방향</div>
+<div class="a d t" id=rk style="left:0;width:1080px;top:412px;font-size:56px;line-height:1.25;opacity:0">사주와 같은 말을 하는 별자리 순위</div>
 @@BARS@@
 <div class="a d t" id=c1 style="left:0;width:1080px;top:520px;font-size:116px;line-height:1.22;opacity:0">내 별자리는</div>
 <div class="a d t" id=c2 style="left:0;width:1080px;top:670px;font-size:116px;line-height:1.22;opacity:0;color:@@GOLD@@">몇 위일까요?</div>
 <div class="a d t" id=c3 style="left:0;width:1080px;top:880px;font-size:78px;line-height:1.3;opacity:0">댓글로 알려 주세요</div>
-<div class="a d t" id=c4 style="left:0;width:1080px;top:990px;font-size:66px;line-height:1.3;opacity:0">친구 별자리도 보내 보세요</div>
-<svg class="a" id=plane viewBox="0 0 100 100" style="left:410px;top:1130px;width:260px;height:260px;opacity:0"><path d="M8 52 L92 10 L66 90 L50 60 Z" fill="@@GOLD@@"/><path d="M30 46 L92 10 L50 60 Z" fill="#b8903c"/></svg>
+<div class="a d t" id=f1 style="left:0;width:1080px;top:430px;font-size:100px;line-height:1.2;opacity:0">팔로우하고</div>
+<div class="a d t" id=f2 style="left:0;width:1080px;top:550px;font-size:80px;line-height:1.2;color:@@GOLD@@;opacity:0">더 많은 이야기 나눠요</div>
+<div class="a" id=fcard style="left:60px;top:700px;width:960px;height:430px;border:3px solid #e7c88d;border-radius:44px;background:linear-gradient(145deg,rgba(28,40,92,.9),rgba(9,14,44,.9));box-shadow:0 0 46px rgba(231,200,141,.25);opacity:0"></div>
+<div class="a d t" id=f3 style="left:0;width:1080px;top:738px;font-size:54px;line-height:1.2;color:@@GOLD@@;opacity:0">프로필 링크에서</div>
+<div class="a d t" id=f4 style="left:0;width:1080px;top:820px;font-size:78px;line-height:1.2;opacity:0">생년월일 입력하고</div>
+<div class="a d t" id=f5 style="left:0;width:1080px;top:940px;font-size:56px;line-height:1.25;opacity:0">내 첫글자와 타고난 기운 알아보기</div>
+<div class="a d t" id=fbtn style="left:300px;top:1190px;width:480px;height:104px;border-radius:52px;background:#e7c88d;color:#17102b;font-size:58px;line-height:104px;opacity:0">＋ 팔로우</div>
+@@BF@@
 <script>
 const BEAT=@@BEAT@@, B=ms=>ms/1000/BEAT, cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
 function bez(x1,y1,x2,y2){return t=>{if(t<=0)return 0;if(t>=1)return 1;let a=0,b=1,u=t;for(let i=0;i<24;i++){const x=3*(1-u)*(1-u)*u*x1+3*(1-u)*u*u*x2+u*u*u;if(x<t)a=u;else b=u;u=(a+b)/2}return 3*(1-u)*(1-u)*u*y1+3*(1-u)*u*u*y2+u*u*u}}
@@ -95,8 +104,8 @@ function seek(ms){b=B(ms);
  const ss=out(cl((b-3)/.4)); lab('wSame',(b<3?0:Math.min(1,ss*6))*fo,b<3?1:1.3+(1-1.3)*ss);
  // 장면 2: 정월이 설명(박 6.2~17.8)
  const e2=cl((b-6.2)/.6), x2=1-cl((b-17.4)/.6); const jwq=out(e2);
- g('jw').style.opacity=jwq*x2; g('jw').style.transform=`translateX(${(1-jwq)*-140}px)`; g('aiL').style.opacity=jwq*x2*.9;
- g('bub').style.opacity=jwq*x2; g('bub').style.transform=`scale(${.96+.04*jwq+(b>6.6&&b<17?pulse*.35:0)})`;
+ g('jw').style.opacity=jwq*x2; g('jw').style.transform=`translateX(${(1-jwq)*-140}px) scale(${1+(b>6.6&&b<17.4?pulse*.4:0)})`; const bfa=g('bfAI'); if(bfa) bfa.style.opacity=jwq*x2;
+ g('bub').style.opacity=jwq*x2; g('bub').style.transform=`scale(${.96+.04*jwq+(b>6.6&&b<17?pulse*.35:0)})`; g('tlo').style.opacity=jwq*x2; g('tli').style.opacity=jwq*x2;
  const tx=(id,a,c)=>{g(id).style.opacity=cl((b-a)/.35)*(1-cl((b-c)/.35))};
  tx('b1',6.7,10.3); tx('b2',10.5,14.1); tx('b3',14.3,17.4);
  g('sixl').style.opacity=cl((b-7.2)/.5)*x2;
@@ -110,16 +119,17 @@ function seek(ms){b=B(ms);
  const tk=g('tkP'), tb=g('tkB'); tk.style.left=pkx+'px'; tb.style.left=bkx+'px'; tk.style.opacity=tq*x2; tb.style.opacity=tq*x2; tk.style.transform=`scale(${.6+.4*tq})`; tb.style.transform=`scale(${.6+.4*tq})`; g('grp2').style.opacity=1;
  g('banA').style.opacity=cl((b-11.0)/.4)*(1-cl((b-14.5)/.3))*x2; g('banB').style.opacity=cl((b-15.0)/.4)*x2;
  // 장면 3: 순위(박 18.2~27)
- const rf=1-cl((b-26.2)/.6); g('rk').style.opacity=cl((b-18)/.5)*rf;
- for(let i=0;i<12;i++){const t0=18.5+(11-i)*.55, q=out(cl((b-t0)/.5)); const el=g('bar'+i); el.style.opacity=q*rf; el.style.width=(190+VAL[i]*30*q)+'px'; if(i===0){el.classList.add('top1'); el.style.transform=`scaleY(${1+(b>24.6&&b<26.2?pulse*1.6:0)})`}}
- // 장면 4: CTA(박 27~33)
- g('c1').style.opacity=cl((b-27)/.4); g('c2').style.opacity=cl((b-28)/.4); g('c3').style.opacity=cl((b-29.2)/.4); g('c4').style.opacity=cl((b-30.2)/.4);
- const pf=out(cl((b-30.8)/.8)); g('plane').style.opacity=cl((b-30.8)/.3); g('plane').style.transform=`translate(${(1-pf)*-170}px,${(1-pf)*130}px) rotate(${-8+8*pf}deg) scale(${1+(b>31.8?pulse*.7:0)})`;
+ const rf=1-cl((b-25.6)/.6); g('rk').style.opacity=cl((b-18)/.5)*rf;
+ for(let i=0;i<12;i++){const t0=18.4+(11-i)*.5, q=out(cl((b-t0)/.45)); const el=g('bar'+i); el.style.opacity=q*rf; el.style.width=(190+VAL[i]*30*q)+'px'; if(i===0){el.classList.add('top1'); el.style.transform=`scaleY(${1+(b>24.2&&b<25.6?pulse*1.6:0)})`}}
+ // 장면 4: 마무리 — 댓글 한 줄(박 26~29) 뒤 팔로우 + 홈페이지(박 29~36)
+ const cA=1-cl((b-28.6)/.5); g('c1').style.opacity=cl((b-26)/.4)*cA; g('c2').style.opacity=cl((b-26.6)/.4)*cA; g('c3').style.opacity=cl((b-27.4)/.4)*cA;
+ g('f1').style.opacity=cl((b-29.2)/.4); g('f2').style.opacity=cl((b-29.9)/.4); g('fcard').style.opacity=cl((b-30.6)/.5); g('f3').style.opacity=cl((b-31)/.4); g('f4').style.opacity=cl((b-31.6)/.4); g('f5').style.opacity=cl((b-32.4)/.4);
+ const bq=out(cl((b-33.2)/.5)); g('fbtn').style.opacity=bq; g('fbtn').style.transform=`scale(${.8+.2*bq+(b>34?pulse*1.2:0)})`;
 }
 seek(0);
 </script>"""
     for k, v in {"@@FONTS@@": K.css("gm"), "@@BG@@": os.path.join(AS, "derived", "bg_cosmos.jpg"), "@@CHART@@": os.path.join(AS, "chart.png"), "@@SUN@@": os.path.join(AS, "derived", "sun.png"), "@@MOON@@": os.path.join(AS, "derived", "moon.png"),
-                 "@@PINK@@": PINK, "@@BLUE@@": BLUE, "@@GOLD@@": GOLD, "@@BEAT@@": repr(beat), "@@BARS@@": bars, "@@CHIPS@@": chips, "@@JW@@": os.path.join(AS, "derived", "jw_gesture.png"), "@@VALS@@": str([v for _, v in RANK])}.items(): h = h.replace(k, v)
+                 "@@PINK@@": PINK, "@@BLUE@@": BLUE, "@@GOLD@@": GOLD, "@@BEAT@@": repr(beat), "@@BF@@": BF.html("reel", ai=True), "@@BFCSS@@": BF.css(), "@@BARS@@": bars, "@@CHIPS@@": chips, "@@JW@@": os.path.join(AS, "derived", "jw_gesture.png"), "@@VALS@@": str([v for _, v in RANK])}.items(): h = h.replace(k, v)
     return h
 async def cover(hp, beat, out):
     from playwright.async_api import async_playwright
@@ -127,9 +137,9 @@ async def cover(hp, beat, out):
         b = await p.chromium.launch(); pg = await b.new_page(viewport={"width": 1080, "height": 1920}); await pg.goto("file://" + hp); await pg.evaluate("document.fonts.ready"); await pg.wait_for_timeout(600)
         await pg.evaluate("document.body.classList.add('cover')"); await pg.evaluate(f"seek({4.2 * beat * 1000})"); await pg.wait_for_timeout(300); await pg.screenshot(path=out, type="jpeg", quality=92); await b.close()
 if __name__ == "__main__":
-    mi = MP.choose("data", "litho-star6"); beat = 60.0 / mi["bpm"]; nb = 33; total = nb * beat
+    mi = MP.choose("data", "litho-star6"); beat = 60.0 / mi["bpm"]; nb = 36; total = nb * beat
     hp = "/tmp/litho_star.html"; open(hp, "w", encoding="utf-8").write(html(beat))
     outp = os.path.join(R, "2026-motion", "litho_star6.mp4"); secs = HM.render_html(hp, outp, total)
-    MP.mux(outp, [6 * beat, 12 * beat, 9 * beat, 6 * beat], mi, 103)
+    MP.mux(outp, [6 * beat, 12 * beat, 8 * beat, 3 * beat, 7 * beat], mi, 103)
     asyncio.run(cover(hp, beat, os.path.join(R, "2026-motion", "litho_star6_cover.jpg")))
     print("음악:", mi["style"], mi["bpm"], mi["key"], "| 박자", round(beat, 3), "초 | 길이", round(secs, 1), "초")
