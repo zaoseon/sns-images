@@ -1923,5 +1923,26 @@
    "네이버 클립 안전영역을 릴스와 같게 쓸지",
    "블로그 썸네일 서비스 표시 위치"
   ]
+ },
+ {
+  "id": "litho-pages",
+  "kind": "페이지별 안전영역(검토 요청)",
+  "title": "리소그래프 6판 — 페이지별 안전영역 겹쳐 보기 (7장)",
+  "status": "new",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p1.jpg?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p2.jpg?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p3.jpg?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p4.jpg?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p5.jpg?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p6.jpg?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p7.jpg?v=1"
+  ],
+  "note": "영상 장면을 한 장씩 뽑아 릴스·클립·캐러셀 안전영역을 겹쳐 그렸어요. 빨강=인스타 릴스 UI, 주황=네이버 클립 UI, 초록 점선=공통 안전 영역(x 50~900, y 330~1470), 파랑=캐러셀로 쓸 때(3:4 격자·4:5·안전 점선), 자홍 상자=안전 영역을 넘는 요소예요. 왼쪽 100px 눈금과 아래 가로 눈금으로 위치를 말씀해 주시면 돼요. 넘는 요소 수: 1번 3 · 2번 5 · 3번 6 · 4번 5 · 5번 6 · 6번 1 · 7번 4.",
+  "checks": [
+   "페이지마다 고정할 위치(눈금 기준)",
+   "넘는 요소를 안으로 옮길지 줄일지",
+   "캐러셀로 쓸 때 파랑 점선 기준이 맞는지"
+  ]
  }
 ]
