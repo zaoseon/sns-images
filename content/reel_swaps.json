@@ -1900,5 +1900,28 @@
    "8번째 장: 표지와 마무리 표준",
    "10번째 장: 정해 주실 7가지"
   ]
+ },
+ {
+  "id": "guide-channels",
+  "kind": "제작 기준(검토 요청)",
+  "title": "채널별 규격·안전영역·표지·CTA·글꼴 표준 (8장)",
+  "status": "new",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_01.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_02.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_03.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_04.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_05.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_06.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_07.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_08.png?v=1"
+  ],
+  "note": "블로그 썸네일·네이버 클립·인스타 캐러셀·인스타 릴스를 채널별로 정리했어요. 1번째 장이 한눈에 표, 2~5번째가 채널별 안전영역 그림(빨강=인스타가 가리는 곳, 초록 점선=안전 영역), 6~7번째가 글꼴·표지·CTA, 8번째가 정해 주실 5가지예요. 네이버 클립과 블로그 썸네일은 공식 수치를 못 찾아 우리 실측·추정으로 표시했어요.",
+  "checks": [
+   "채널별 크기와 안전영역",
+   "캐러셀을 3:4(1080x1440)로 바꿀지",
+   "네이버 클립 안전영역을 릴스와 같게 쓸지",
+   "블로그 썸네일 서비스 표시 위치"
+  ]
  }
 ]
