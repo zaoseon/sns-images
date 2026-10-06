@@ -15,10 +15,10 @@ async def dom_boxes():
     import motion_litho_star as M
     from playwright.async_api import async_playwright
     open("/tmp/page_dom.html", "w", encoding="utf-8").write(M.html(B))   # 현재 brand_frame(우측 x 900) 기준 — 영상 v4와 같다
-    JS = """()=>{const out=[];const skip=new Set(['bg','chart','sun','moon','stars']);document.querySelectorAll('body *').forEach(e=>{
+    JS = r"""()=>{const out=[];const skip=new Set(['bg','chart','sun','moon','stars']);document.querySelectorAll('body *').forEach(e=>{
       if(skip.has(e.id)||e.closest('#stars')||e.tagName==='SCRIPT'||e.tagName==='STYLE'||e.tagName==='path'||e.tagName==='circle'||e.tagName==='svg'&&e.id==='stars')return;
       const cs=getComputedStyle(e); if(parseFloat(cs.opacity)<0.35||cs.display==='none')return; let p=e.parentElement,op=1; while(p&&p!==document.body){op*=parseFloat(getComputedStyle(p).opacity);p=p.parentElement}
-      if(op<0.35)return; let r=e.getBoundingClientRect(); const txt=(e.childElementCount===0||e.classList.contains('bt')||e.classList.contains('t'))?(e.textContent||'').trim():''; if(txt&&!['c','bar','chip','tok','avatar','bub'].some(c=>e.classList.contains(c))){const rg=document.createRange();rg.selectNodeContents(e);const rr=rg.getBoundingClientRect();if(rr.width>0)r=rr} if(r.width<8||r.height<8||r.width>1070&&r.height>1900)return; const isShape=['c','bar','chip','tok','avatar','bub'].some(c=>e.classList.contains(c))||['fcard','fbtn'].includes(e.id);
+      if(op<0.35)return; let r=e.getBoundingClientRect(); const txt=(e.childElementCount===0||e.classList.contains('bt')||e.classList.contains('t')||e.classList.contains('xt')||e.classList.contains('xban'))?(e.textContent||'').trim():''; if(txt&&!['c','bar','chip','tok','avatar','bub'].some(c=>e.classList.contains(c))&&!/^(chip\d|bub|jw)$/.test(e.id)){const rg=document.createRange();rg.selectNodeContents(e);const rr=rg.getBoundingClientRect();if(rr.width>0)r=rr} if(r.width<8||r.height<8||r.width>1070&&r.height>1900)return; const isShape=['c','bar','chip','tok','avatar','bub'].some(c=>e.classList.contains(c))||['fcard','fbtn','jw','bub','tkP','tkB'].includes(e.id)||/^chip\d$/.test(e.id);
       if(!txt&&!isShape)return; out.push({id:e.id||e.className.toString().split(' ')[0],t:txt.slice(0,14),x0:r.left,y0:r.top,x1:r.right,y1:r.bottom})});return out}"""
     res = {}
     async with async_playwright() as p:

@@ -5,11 +5,40 @@
 사용: python3 pipeline/motion_litho_star.py -> 2026-motion/litho_star6.mp4 + litho_star6_cover.jpg"""
 import os, sys, asyncio
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
-import music_plan as MP, html_motion as HM, fonts_kit as K, brand_frame as BF
+import music_plan as MP, html_motion as HM, fonts_kit as K, brand_frame as BF, template_engine as TE
 R = os.path.abspath(os.path.join(HERE, ".."))
 AS = os.path.join(R, "assets", "brand_bg")
 GOLD = "#e7c88d"; PINK = "#ff5c9d"; BLUE = "#4560f0"
 RANK = [("염소", 23.0), ("황소", 22.7), ("처녀", 18.1), ("사자", 16.3), ("물병", 14.1), ("사수", 13.4), ("쌍둥이", 12.9), ("게", 12.6), ("양", 9.9), ("전갈", 7.3), ("물고기", 6.1), ("천칭", 5.6)]
+
+def ex_blocks():
+    L = TE.explain_layout("reel"); u = L["u"]; cx = L["cx"]; ax, ay, D = L["avatar"]; bl, bt, bw, bh = L["bubble"]; fs = L["bubble_fs"]
+    def mark(l): return l.replace("'같은\u00a0말'", "<b class=gm>'같은&nbsp;말'</b>").replace("'다른\u00a0말'", "<b class=gm>'다른&nbsp;말'</b>")
+    texts = "".join(f'<div class="a xt" id=b{i + 1}><div style="text-align:center">{"<br>".join(mark(l) for l in L["bubble_lines"][i])}</div></div>' for i in range(3))
+    bx, by, bhh = L["badge"]; bwid = TE.font(K.P["gm_bold"], int(38 * u)).getlength("정월") + 56 * u
+    h = (f'<div class="a" id=jw style="left:{ax:.0f}px;top:{ay:.0f}px;width:{D:.0f}px;height:{D:.0f}px;border-radius:50%;overflow:hidden;border:{6 * u:.0f}px solid #e7c88d;background:radial-gradient(circle at 50% 35%,#27346f,#0b1235);box-shadow:0 0 44px rgba(231,200,141,.35);opacity:0"><img style="position:absolute;left:{-D * .158:.0f}px;top:{D * .03:.0f}px;width:{D * 1.333:.0f}px" src="file://@@JW@@"></div>'
+         f'<div class="a" id=tlo style="left:{bl - 30:.0f}px;top:{bt + bh / 2 - 26:.0f}px;width:0;height:0;border:26px solid transparent;border-right:34px solid #e7c88d;border-left:0;opacity:0"></div><div class="a" id=tli style="left:{bl - 26:.0f}px;top:{bt + bh / 2 - 21:.0f}px;width:0;height:0;border:21px solid transparent;border-right:29px solid #151f55;border-left:0;opacity:0"></div>'
+         f'<div class="a" id=bub style="left:{bl:.0f}px;top:{bt:.0f}px;width:{bw:.0f}px;height:{bh:.0f}px;box-sizing:border-box;background:linear-gradient(145deg,rgba(28,40,92,.95),rgba(9,14,44,.95));border:3px solid #e7c88d;border-radius:{42 * u:.0f}px;box-shadow:0 0 46px rgba(231,200,141,.28);opacity:0">'
+         f'<div class="a d" style="left:{30 * u:.0f}px;top:{-27 * u:.0f}px;width:{bwid:.0f}px;height:{bhh:.0f}px;border-radius:{bhh:.0f}px;background:#e7c88d;color:#17102b;display:flex;align-items:center;justify-content:center;font-size:{int(38 * u)}px;line-height:1">정월</div>{texts}</div>')
+    btop, bfs = L["banner"]; ltop, lfs = L["label"]; ttop, td = L["tok"]; gtop, gh, gfs = L["legend"]
+    h += (f'<div class="a d xban" id=banA style="top:{btop:.0f}px;font-size:{bfs}px">같은 말 = 타고난 결</div><div class="a d xban" id=banB style="top:{btop:.0f}px;font-size:{bfs}px">다른 말 = 내가 고를 곳</div>'
+          f'<div class="a" id=grp2 style="left:0;top:0;width:1080px;height:1920px;isolation:isolate"><div class="a" id=tkP style="top:{ttop:.0f}px;width:{td:.0f}px;height:{td:.0f}px;border-radius:50%;background:@@PINK@@;mix-blend-mode:multiply;opacity:0"></div><div class="a" id=tkB style="top:{ttop:.0f}px;width:{td:.0f}px;height:{td:.0f}px;border-radius:50%;background:@@BLUE@@;mix-blend-mode:multiply;opacity:0"></div></div>'
+          f'<div class="a d xban" id=sixl style="top:{ltop:.0f}px;font-size:{lfs}px;opacity:0">자오선이 나눈 여섯 방향</div>')
+    for k, (xx, yy, ww, hh) in enumerate(L["chips"]): h += f'<div class="a d" id=chip{k} style="left:{xx:.0f}px;top:{yy:.0f}px;width:{ww:.0f}px;height:{hh:.0f}px;box-sizing:border-box;border-radius:{26 * u:.0f}px;border:4px solid rgba(231,200,141,.65);background:rgba(255,255,255,.1);color:#fff;display:flex;align-items:center;justify-content:center;font-size:{L["chip_fs"]}px;opacity:0">{TE.SIX[k]}</div>'
+    for j, (col, tx) in enumerate((("@@PINK@@", "사주가 짚은 방향"), ("@@BLUE@@", "별자리가 짚은 방향"))): h += f'<div class="a d xban" id=leg{j + 1} style="top:{gtop + j * gh:.0f}px;font-size:{gfs}px;line-height:{gh:.0f}px;color:rgba(255,255,255,.88);opacity:0"><span style="display:inline-block;width:{gfs * .8:.0f}px;height:{gfs * .8:.0f}px;border-radius:50%;background:{col};vertical-align:-2px;margin-right:14px"></span>{tx}</div>'
+    js = (" // 장면 2: 정월이 설명(박 6.2~17.8) — 좌표는 template_engine.explain_layout 계산값\n const e2=cl((b-6.2)/.6), x2=1-cl((b-17.4)/.6); const jwq=out(e2);\n"
+          " g('jw').style.opacity=jwq*x2; g('jw').style.transform=`translateX(${(1-jwq)*-140}px) scale(${1+(b>6.6&&b<17.4?pulse*.4:0)})`; const bfa=g('bfAI'); if(bfa) bfa.style.opacity=jwq*x2*.9;\n"
+          " g('bub').style.opacity=jwq*x2; g('bub').style.transform=`scale(${.96+.04*jwq+(b>6.6&&b<17?pulse*.35:0)})`; g('tlo').style.opacity=jwq*x2; g('tli').style.opacity=jwq*x2;\n"
+          " const tx=(id,a,c)=>{g(id).style.opacity=cl((b-a)/.35)*(1-cl((b-c)/.35))};\n tx('b1',6.7,10.3); tx('b2',10.5,14.1); tx('b3',14.3,17.4);\n g('sixl').style.opacity=cl((b-7.2)/.5)*x2;\n"
+          " for(let k=0;k<6;k++){const ch=g('chip'+k), q=out(cl((b-(7.0+k*.2))/.4)); ch.style.opacity=q*x2; ch.style.transform=`translateY(${(1-q)*30}px)`;\n"
+          "   const on=(b>10.8&&b<14.6&&k===0)||(b>=14.8&&b<17.4&&(k===0||k===1)); ch.style.background=on?(k===0&&b<14.8?'rgba(122,79,208,.75)':(k===0?'rgba(255,92,157,.55)':'rgba(69,96,240,.6)')):'rgba(255,255,255,.1)'}\n"
+          " g('leg1').style.opacity=cl((b-8.4)/.5)*x2; g('leg2').style.opacity=cl((b-8.9)/.5)*x2;\n"
+          f" const tq=out(cl((b-10.6)/.45)), mv=out(cl((b-14.4)/.8)); const dd={td:.1f}, c0={L['tok_c0']:.1f}, c1={L['tok_c1']:.1f}, off=dd*.28;\n"
+          " const pkx=(c0-dd/2-off)+(b>14.4?off*mv:0), bkx=(c0-dd/2+off)+(c1-c0-off)*mv;\n"
+          " const tk=g('tkP'), tb=g('tkB'); tk.style.left=pkx+'px'; tb.style.left=bkx+'px'; tk.style.opacity=tq*x2; tb.style.opacity=tq*x2; tk.style.transform=`scale(${.6+.4*tq})`; tb.style.transform=`scale(${.6+.4*tq})`;\n"
+          " g('banA').style.opacity=cl((b-11.0)/.4)*(1-cl((b-14.5)/.3))*x2; g('banB').style.opacity=cl((b-15.0)/.4)*x2;\n")
+    return h, js
+
 def html(beat):
     chips = "".join(f'<div class="a d chip" id=chip{k} style="left:{60 + k * 162}px">{n}</div>' for k, n in enumerate(["안정", "표현", "유연", "생성", "결단", "소통"]))
     bars = "".join(f'<div class="a bar" id=bar{i} style="top:{588 + i * 66}px"><div class="a d bl">{n}</div><div class="a d bv">{v:.1f}%</div></div>' for i, (n, v) in enumerate(RANK))
@@ -41,6 +70,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#050a1c
 .bar{left:70px;height:58px;width:0;border-radius:0 29px 29px 0;background:linear-gradient(90deg,#6a3fc8,#ff5c9d);opacity:0;overflow:hidden}
 .bl{left:26px;top:4px;font-size:46px;line-height:1.15;color:#fff}.bv{right:26px;top:4px;font-size:46px;line-height:1.15;color:#fff}
 .top1{background:linear-gradient(90deg,#c9a24a,#e7c88d)}.top1 .bl,.top1 .bv{color:#17102b}
+.xt{left:0;top:0;width:100%;height:100%;box-sizing:border-box;display:flex;align-items:center;justify-content:center;padding:0 30px;font-family:'JW-B',sans-serif;font-weight:800;font-size:@@XFS@@px;line-height:1.32;color:#fff;opacity:0}.xt .gm,.gm{font-family:'JW-D',sans-serif;font-weight:900;color:#e7c88d}.xban{left:0;width:1080px;text-align:center;white-space:nowrap;color:#e7c88d}
 @@BFCSS@@</style><body>
 <img class="a" id=bg src="file://@@BG@@">
 <img class="a" id=chart src="file://@@CHART@@">
@@ -55,19 +85,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#050a1c
 <div class="a d t lab" id=wSaju style="left:240px;top:1092px;font-size:108px">사주</div>
 <div class="a d t lab" id=wStar style="left:842px;top:1092px;font-size:82px">별자리</div>
 <div class="a d t lab" id=wSame style="left:540px;top:1092px;font-size:58px">같은 말</div>
-<div class="a avatar" id=jw><img src="file://@@JW@@"></div>
-<div class="a tailo" id=tlo></div><div class="a taili" id=tli></div>
-<div class="a bub" id=bub><div class="a d spk">정월</div>
- <div class="a bt" id=b1>사주와 별자리는 각자 내 마음의 <em>방향</em>을 하나씩 짚어요</div>
- <div class="a bt" id=b2>둘이 같은 방향을 짚으면 <em>'같은&nbsp;말'</em>이에요</div>
- <div class="a bt" id=b3>방향이 다르면 <em>'다른&nbsp;말'</em>이에요. 내가 고를 곳이에요</div>
-</div>
-<div class="a d ban" id=banA>같은 말 = 타고난 결</div><div class="a d ban" id=banB>다른 말 = 내가 고를 곳</div>
-<div class="a grp" id=grp2><div class="a tok" id=tkP style="top:905px;background:@@PINK@@"></div><div class="a tok" id=tkB style="top:905px;background:@@BLUE@@"></div></div>
-<div class="a d sixl" id=sixl>자오선이 나눈 여섯 방향</div>
-@@CHIPS@@
-<div class="a d leg" id=leg1 style="top:1250px;color:#fff"><i style="background:@@PINK@@"></i>사주가 짚은 방향</div>
-<div class="a d leg" id=leg2 style="top:1322px;color:#fff"><i style="background:@@BLUE@@"></i>별자리가 짚은 방향</div>
+@@EXHTML@@
 <div class="a d t" id=rk style="left:0;width:1080px;top:410px;font-size:56px;line-height:1.22;opacity:0">사주와 같은 말을 하는<br>별자리 순위</div>
 @@BARS@@
 <div class="a d t" id=c1 style="left:0;width:1080px;top:520px;font-size:116px;line-height:1.22;opacity:0">내 별자리는</div>
@@ -102,22 +120,7 @@ function seek(ms){b=B(ms);
  g('grp').style.opacity=fo;
  lab('wSaju',fo,s0*(1+pulse*.5)); lab('wStar',(b<2?0:bo)*fo,bo?bs:1);
  const ss=out(cl((b-3)/.4)); lab('wSame',(b<3?0:Math.min(1,ss*6))*fo,b<3?1:1.3+(1-1.3)*ss);
- // 장면 2: 정월이 설명(박 6.2~17.8)
- const e2=cl((b-6.2)/.6), x2=1-cl((b-17.4)/.6); const jwq=out(e2);
- g('jw').style.opacity=jwq*x2; g('jw').style.transform=`translateX(${(1-jwq)*-140}px) scale(${1+(b>6.6&&b<17.4?pulse*.4:0)})`; const bfa=g('bfAI'); if(bfa) bfa.style.opacity=jwq*x2;
- g('bub').style.opacity=jwq*x2; g('bub').style.transform=`scale(${.96+.04*jwq+(b>6.6&&b<17?pulse*.35:0)})`; g('tlo').style.opacity=jwq*x2; g('tli').style.opacity=jwq*x2;
- const tx=(id,a,c)=>{g(id).style.opacity=cl((b-a)/.35)*(1-cl((b-c)/.35))};
- tx('b1',6.7,10.3); tx('b2',10.5,14.1); tx('b3',14.3,17.4);
- g('sixl').style.opacity=cl((b-7.2)/.5)*x2;
- const CX=[135,297,459,621,783,945];
- for(let k=0;k<6;k++){const ch=g('chip'+k), q=out(cl((b-(7.0+k*.2))/.4)); ch.style.opacity=q*x2; ch.style.transform=`translateY(${(1-q)*30}px)`;
-   const on=(b>10.8&&b<14.6&&k===0)||(b>=14.8&&b<17.4&&(k===0||k===1)); ch.style.background=on?(k===0&&b<14.8?'rgba(122,79,208,.75)':(k===0?'rgba(255,92,157,.55)':'rgba(69,96,240,.6)')):'rgba(255,255,255,.1)'}
- g('leg1').style.opacity=cl((b-8.4)/.5)*x2; g('leg2').style.opacity=cl((b-8.9)/.5)*x2;
- // 토큰: 같은 방향(박 10.6) -> 다른 방향(박 14.4~15.2)
- const tq=out(cl((b-10.6)/.45)), mv=out(cl((b-14.4)/.8));
- const pkx=CX[0]-35-60+(b>14.4?(mv*35):0), bkx=(CX[0]+35-60)+(CX[1]-CX[0]-35)*mv;
- const tk=g('tkP'), tb=g('tkB'); tk.style.left=pkx+'px'; tb.style.left=bkx+'px'; tk.style.opacity=tq*x2; tb.style.opacity=tq*x2; tk.style.transform=`scale(${.6+.4*tq})`; tb.style.transform=`scale(${.6+.4*tq})`; g('grp2').style.opacity=1;
- g('banA').style.opacity=cl((b-11.0)/.4)*(1-cl((b-14.5)/.3))*x2; g('banB').style.opacity=cl((b-15.0)/.4)*x2;
+@@EXJS@@
  // 장면 3: 순위(박 18.2~27)
  const rf=1-cl((b-25.6)/.6); g('rk').style.opacity=cl((b-18)/.5)*rf;
  for(let i=0;i<12;i++){const t0=18.4+(11-i)*.5, q=out(cl((b-t0)/.45)); const el=g('bar'+i); el.style.opacity=q*rf; el.style.width=(190+VAL[i]*30*q)+'px'; if(i===0){el.classList.add('top1'); el.style.transform=`scaleY(${1+(b>24.2&&b<25.6?pulse*1.6:0)})`}}
@@ -128,8 +131,9 @@ function seek(ms){b=B(ms);
 }
 seek(0);
 </script>"""
-    for k, v in {"@@FONTS@@": K.css("gm"), "@@BG@@": os.path.join(AS, "derived", "bg_cosmos.jpg"), "@@CHART@@": os.path.join(AS, "chart.png"), "@@SUN@@": os.path.join(AS, "derived", "sun.png"), "@@MOON@@": os.path.join(AS, "derived", "moon.png"),
-                 "@@PINK@@": PINK, "@@BLUE@@": BLUE, "@@GOLD@@": GOLD, "@@BEAT@@": repr(beat), "@@BF@@": BF.html("reel", ai=True), "@@BFCSS@@": BF.css(), "@@BARS@@": bars, "@@CHIPS@@": chips, "@@JW@@": os.path.join(AS, "derived", "jw_gesture.png"), "@@VALS@@": str([v for _, v in RANK])}.items(): h = h.replace(k, v)
+    for _ in range(2):
+        for k, v in {"@@FONTS@@": K.css("gm"), "@@BG@@": os.path.join(AS, "derived", "bg_cosmos.jpg"), "@@CHART@@": os.path.join(AS, "chart.png"), "@@SUN@@": os.path.join(AS, "derived", "sun.png"), "@@MOON@@": os.path.join(AS, "derived", "moon.png"),
+                 "@@PINK@@": PINK, "@@BLUE@@": BLUE, "@@GOLD@@": GOLD, "@@BEAT@@": repr(beat), "@@BF@@": BF.html("reel", ai=True), "@@BFCSS@@": BF.css(), "@@XFS@@": str(TE.explain_layout("reel")["bubble_fs"]), "@@EXHTML@@": ex_blocks()[0], "@@EXJS@@": ex_blocks()[1], "@@BARS@@": bars, "@@CHIPS@@": chips, "@@JW@@": os.path.join(AS, "derived", "jw_gesture.png"), "@@VALS@@": str([v for _, v in RANK])}.items(): h = h.replace(k, v)
     return h
 async def cover(hp, beat, out):
     from playwright.async_api import async_playwright

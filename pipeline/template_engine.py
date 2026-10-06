@@ -111,8 +111,58 @@ def t_cta(ch, big, accent, card_top, card_mid, btn):
     iw = cxr - cxl - 60; ia = p.text("카드 첫줄", card_top, "title", cx, cy0 + ch_ * .08, iw, ch_ * .16, 54, 44, color=GOLD, lh=1.2); ib = p.text("카드 가운데", card_mid[0], "title", cx, cy0 + ch_ * .30, iw, ch_ * .26, 78, 52, lh=1.2); ic = p.text("카드 끝줄", card_mid[1], "title", cx, cy0 + ch_ * .30 + ib["h"] + 10, iw, ch_ * .26, 56, 44, lh=1.25)
     by = cy0 + ch_ + 36; bw = min(cw * .56, 520); bh = min(104, y1 - by); p.add("버튼", (cx - bw / 2, by, cx + bw / 2, by + bh), f'<div style="position:absolute;left:{cx - bw / 2:.0f}px;top:{by:.0f}px;width:{bw:.0f}px;height:{bh:.0f}px;border-radius:{bh / 2:.0f}px;background:{GOLD};color:#17102b;text-align:center;font-family:{K.D};font-weight:900;font-size:58px;line-height:{bh:.0f}px">{btn}</div>')
     return p
+
+SIX = ["안정", "표현", "유연", "생성", "결단", "소통"]
+def explain_layout(ch, texts=("사주와 별자리는 각자 내 마음의 방향을 하나씩 짚어요", "둘이 같은 방향을 짚으면 '같은\u00a0말'이에요", "방향이 다르면 '다른\u00a0말'이에요. 내가 고를 곳이에요")):
+    """정월 설명 틀의 모든 좌표(10/6 대표 지정): ① 말풍선 글은 의미 단위 줄바꿈·가운데 정렬, 정월 배지 글자는 중앙 ② 여섯 방향은 3x2로 가운데 정렬(크기는 전체 배치에 맞춤) ③ 설명글(사주가 짚은 방향 등)은 작게 ④ 가운데 기준은 캔버스 가운데."""
+    c = CHAN[ch]; x0, y0, x1, y1 = content_box(ch); W = c["W"]; cx = W / 2; chh = y1 - y0; u = chh / 990.0; half = min(cx - x0, x1 - cx); L = dict(cx=cx, u=u, half=half)
+    rowA = 300 * u; D = 270 * u; L["avatar"] = (x0 + 10, y0 + 6 * u, D)
+    bl = x0 + 10 + D + 30; bw = x1 - bl - 12; bh = rowA - 14 * u; bt = y0 + 10 * u; L["bubble"] = (bl, bt, bw, bh)
+    path = K.P["pr_xb"]; pad_x, pad_y = 36 * u, 30 * u; fits = [fit(t, path, bw - 2 * pad_x, bh - 2 * pad_y, 58, 44, 1.32) for t in texts]
+    fs = min(f["size"] for f in fits); lines = []
+    for t in texts:
+        r = fit(t, path, bw - 2 * pad_x, bh - 2 * pad_y, fs, fs, 1.32); lines.append(r["lines"])      # 같은 글자 크기로 줄바꿈
+    L["bubble_fs"] = fs; L["bubble_lines"] = lines; L["bubble_overflow"] = any(f["overflow"] for f in fits)
+    L["badge"] = (bl + 30 * u, bt - 27 * u, 54 * u)                                                      # 왼쪽, 위, 높이 (너비는 글자 폭 + 여백, 글자는 중앙)
+    y = y0 + rowA; ban_top = y + 40 * u; ban_fs = int(72 * u) // 2 * 2; L["banner"] = (ban_top, ban_fs); y = ban_top + 82 * u
+    td = 112 * u; tok_top = y + 14 * u; L["tok"] = (tok_top, td); y = tok_top + td
+    lab_top = y + 14 * u; lab_fs = int(46 * u) // 2 * 2; L["label"] = (lab_top, lab_fs); y = lab_top + 56 * u
+    gap = 14 * u; cwid = min(240 * u * (1 if ch == "reel" else 1.15), (2 * half - 2 * gap) / 3); chh_ = 88 * u; top = y + 8 * u; xs = cx - (3 * cwid + 2 * gap) / 2
+    L["chips"] = [(xs + (i % 3) * (cwid + gap), top + (i // 3) * (chh_ + 10 * u), cwid, chh_) for i in range(6)]; L["chip_fs"] = int(50 * u) // 2 * 2
+    y = top + 2 * chh_ + 10 * u; leg_fs = int(36 * u) // 2 * 2; L["legend"] = (y + 26 * u, 46 * u, leg_fs); L["end"] = y + 26 * u + 92 * u; L["tok_c0"] = L["chips"][0][0] + cwid / 2; L["tok_c1"] = L["chips"][1][0] + cwid / 2
+    return L
+def t_explain(ch, state, texts=None):
+    """state: 'same'(두 토큰이 같은 방향) | 'diff'(다른 방향). 정월 설명 장면의 한 컷."""
+    p = Page(ch); L = explain_layout(ch) if texts is None else explain_layout(ch, texts); u = L["u"]; cx = L["cx"]; ax, ay, D = L["avatar"]; bl, bt, bw, bh = L["bubble"]
+    if L["bubble_overflow"]: p.problems.append("말풍선 글자가 칸에 안 들어감")
+    i = 1 if state == "same" else 2; lines = L["bubble_lines"][i]
+    p.add("아바타", (ax, ay, ax + D, ay + D), f'<div style="position:absolute;left:{ax:.0f}px;top:{ay:.0f}px;width:{D:.0f}px;height:{D:.0f}px;border-radius:50%;overflow:hidden;border:{6 * u:.0f}px solid {GOLD};background:radial-gradient(circle at 50% 35%,#27346f,#0b1235);box-shadow:0 0 44px rgba(231,200,141,.35)"><img style="position:absolute;left:{-D * .158:.0f}px;top:{D * .03:.0f}px;width:{D * 1.333:.0f}px" src="file://{os.path.join(AS, "derived", "jw_gesture.png")}"></div>')
+    hl = "방향" if False else None
+    def mark(l): return l.replace("'같은\u00a0말'", f"<b style='color:{GOLD};font-family:{K.D}'>'같은&nbsp;말'</b>").replace("'다른\u00a0말'", f"<b style='color:{GOLD};font-family:{K.D}'>'다른&nbsp;말'</b>")
+    txt = "<br>".join(mark(l) for l in lines); th = len(lines) * L["bubble_fs"] * 1.32; tw = max(font(K.P["pr_xb"], L["bubble_fs"]).getlength(l) for l in lines)
+    p.add("말풍선", (bl, bt, bl + bw, bt + bh), f'<div style="position:absolute;left:{bl:.0f}px;top:{bt:.0f}px;width:{bw:.0f}px;height:{bh:.0f}px;box-sizing:border-box;background:linear-gradient(145deg,rgba(28,40,92,.95),rgba(9,14,44,.95));border:3px solid {GOLD};border-radius:{42 * u:.0f}px;box-shadow:0 0 46px rgba(231,200,141,.28)"></div>')
+    p.add("말풍선 글", (bl + bw / 2 - tw / 2, bt + bh / 2 - th / 2, bl + bw / 2 + tw / 2, bt + bh / 2 + th / 2), f'<div style="position:absolute;left:{bl:.0f}px;top:{bt:.0f}px;width:{bw:.0f}px;height:{bh:.0f}px;display:flex;align-items:center;justify-content:center;text-align:center;font-family:{K.B};font-weight:800;font-size:{L["bubble_fs"]}px;line-height:1.32;color:#fff"><div style="text-align:center">{txt}</div></div>')
+    bx, by, bhh = L["badge"]; bwid = font(K.P["gm_bold"], int(38 * u)).getlength("정월") + 56 * u
+    p.add("정월 배지", (bx, by, bx + bwid, by + bhh), f'<div style="position:absolute;left:{bx:.0f}px;top:{by:.0f}px;width:{bwid:.0f}px;height:{bhh:.0f}px;border-radius:{bhh:.0f}px;background:{GOLD};color:#17102b;display:flex;align-items:center;justify-content:center;font-family:{K.D};font-weight:900;font-size:{int(38 * u)}px;line-height:1">정월</div>')
+    p.add("꼬리", (bl - 30, bt + bh / 2 - 26, bl, bt + bh / 2 + 26), f'<div style="position:absolute;left:{bl - 30:.0f}px;top:{bt + bh / 2 - 26:.0f}px;width:0;height:0;border:26px solid transparent;border-right:34px solid {GOLD};border-left:0"></div><div style="position:absolute;left:{bl - 26:.0f}px;top:{bt + bh / 2 - 21:.0f}px;width:0;height:0;border:21px solid transparent;border-right:29px solid #151f55;border-left:0"></div>')
+    btop, bfs = L["banner"]; bt_txt = "같은 말 = 타고난 결" if state == "same" else "다른 말 = 내가 고를 곳"; r = fit_line(bt_txt, p.title_path(), 2 * L["half"], bfs * 1.2, bfs, 40)
+    p.add("배너", (cx - r["w"] / 2, btop, cx + r["w"] / 2, btop + r["h"]), f'<div style="position:absolute;left:0;top:{btop:.0f}px;width:{p.c["W"]}px;text-align:center;font-family:{K.D};font-weight:900;font-size:{r["size"]}px;line-height:1.1;color:{GOLD};white-space:nowrap">{bt_txt}</div>')
+    ttop, td = L["tok"]; c0, c1 = L["tok_c0"], L["tok_c1"]; off = td * .28
+    pk = c0 - td / 2 - off + (off if state == "diff" else 0); bk = (c0 - td / 2 + off) if state == "same" else (c1 - td / 2)
+    p.add("토큰 묶음", (min(pk, bk), ttop, max(pk, bk) + td, ttop + td), f'<div style="position:absolute;left:0;top:0;width:{p.c["W"]}px;height:{p.c["H"]}px;isolation:isolate"><div style="position:absolute;left:{pk:.0f}px;top:{ttop:.0f}px;width:{td:.0f}px;height:{td:.0f}px;border-radius:50%;background:{PINK};mix-blend-mode:multiply"></div><div style="position:absolute;left:{bk:.0f}px;top:{ttop:.0f}px;width:{td:.0f}px;height:{td:.0f}px;border-radius:50%;background:{BLUE};mix-blend-mode:multiply"></div></div>')
+    ltop, lfs = L["label"]; lr = fit_line("자오선이 나눈 여섯 방향", p.title_path(), 2 * L["half"], lfs * 1.2, lfs, 36)
+    p.add("여섯 방향 제목", (cx - lr["w"] / 2, ltop, cx + lr["w"] / 2, ltop + lr["h"]), f'<div style="position:absolute;left:0;top:{ltop:.0f}px;width:{p.c["W"]}px;text-align:center;font-family:{K.D};font-weight:900;font-size:{lr["size"]}px;line-height:1.1;color:{GOLD};white-space:nowrap">자오선이 나눈 여섯 방향</div>')
+    for k, (cxx, cyy, cww, chh_) in enumerate(L["chips"]):
+        on = (state == "same" and k == 0) or (state == "diff" and k in (0, 1)); bgc = ("rgba(122,79,208,.75)" if state == "same" else ("rgba(255,92,157,.55)" if k == 0 else "rgba(69,96,240,.6)")) if on else "rgba(255,255,255,.1)"
+        p.add(f"칩 {SIX[k]}", (cxx, cyy, cxx + cww, cyy + chh_), f'<div style="position:absolute;left:{cxx:.0f}px;top:{cyy:.0f}px;width:{cww:.0f}px;height:{chh_:.0f}px;box-sizing:border-box;border-radius:{26 * u:.0f}px;border:4px solid rgba(231,200,141,.65);background:{bgc};color:#fff;display:flex;align-items:center;justify-content:center;font-family:{K.D};font-weight:900;font-size:{L["chip_fs"]}px">{SIX[k]}</div>')
+    gtop, gh, gfs = L["legend"]
+    for j, (col, tx) in enumerate(((PINK, "사주가 짚은 방향"), (BLUE, "별자리가 짚은 방향"))):
+        w = font(K.P["gm_bold"], gfs).getlength(tx) + gfs + 14; y0_ = gtop + j * gh
+        p.add(f"설명글 {j + 1}", (cx - w / 2, y0_, cx + w / 2, y0_ + gh), f'<div style="position:absolute;left:0;top:{y0_:.0f}px;width:{p.c["W"]}px;text-align:center;font-family:{K.D};font-weight:900;font-size:{gfs}px;line-height:{gh:.0f}px;color:rgba(255,255,255,.88);white-space:nowrap"><span style="display:inline-block;width:{gfs * .8:.0f}px;height:{gfs * .8:.0f}px;border-radius:50%;background:{col};vertical-align:-2px;margin-right:14px"></span>{tx}</div>')
+    p.ai = True; return p
+
 def render_html(p):
-    c = p.c; ai = False
+    c = p.c; ai = getattr(p, 'ai', False)
     head = f'<!doctype html><meta charset=utf-8><style>{K.css("gm" if p.ch == "reel" else "pl")}{BF.css()}html,body{{margin:0;width:{c["W"]}px;height:{c["H"]}px;overflow:hidden;background:#050a1c;position:relative;word-break:keep-all;line-break:strict}}</style><body>'
     return head + bg_html(p.ch) + "".join(p.html) + BF.html(c["kind"], ai=ai, stacked=c["stacked"]) + "<script>document.title='ok'</script>"
 async def render(pages):
@@ -132,6 +182,8 @@ if __name__ == "__main__":
         pages[f"{ch}_hook"] = t_hook(ch, "내 별자리,\n사주랑 같은 말\n할까?", "사주", "별자리", "같은 말")
         pages[f"{ch}_ranking"] = t_ranking(ch, "사주와 같은 말을 하는\n별자리 순위", RANK)
         pages[f"{ch}_cta"] = t_cta(ch, "팔로우하고", "더 많은 이야기 나눠요", "프로필 링크에서", ("생년월일 입력하고", "내 첫글자와 타고난 기운 알아보기"), "＋ 팔로우")
+    for ch in ("reel", "carousel"):
+        pages[f"{ch}_explain_same"] = t_explain(ch, "same"); pages[f"{ch}_explain_diff"] = t_explain(ch, "diff")
     bad = {k: p.problems for k, p in pages.items() if p.problems}
     for k, p in pages.items(): print(k, "요소", len(p.els), "문제", len(p.problems), p.problems[:3])
     json.dump({k: [(n, [round(v) for v in r]) for n, r in p.els] for k, p in pages.items()}, open("/tmp/tpl_rects.json", "w", encoding="utf-8"), ensure_ascii=False)
