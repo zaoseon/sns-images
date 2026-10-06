@@ -11,6 +11,7 @@ AS = os.path.join(R, "assets", "brand_bg")
 GOLD = "#e7c88d"; PINK = "#ff5c9d"; BLUE = "#4560f0"
 RANK = [("염소", 23.0), ("황소", 22.7), ("처녀", 18.1), ("사자", 16.3), ("물병", 14.1), ("사수", 13.4), ("쌍둥이", 12.9), ("게", 12.6), ("양", 9.9), ("전갈", 7.3), ("물고기", 6.1), ("천칭", 5.6)]
 def html(beat):
+    chips = "".join(f'<div class="a d chip" id=chip{k} style="left:{60 + k * 162}px">{n}</div>' for k, n in enumerate(["안정", "표현", "유연", "생성", "결단", "소통"]))
     bars = "".join(f'<div class="a bar" id=bar{i} style="top:{540 + i * 77}px"><div class="a d bl">{n}</div><div class="a d bv">{v:.1f}%</div></div>' for i, (n, v) in enumerate(RANK))
     h = """<!doctype html><meta charset=utf-8><style>@@FONTS@@
 html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#050a1c;font-family:'JW-B',sans-serif;font-weight:800;color:#fff;word-break:keep-all}
@@ -20,6 +21,17 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#050a1c
 #sun{left:60px;top:90px;width:300px;height:288px;mix-blend-mode:screen;-webkit-mask-image:radial-gradient(circle,#000 52%,transparent 74%)}
 #moon{left:730px;top:70px;width:262px;height:288px;mix-blend-mode:screen;-webkit-mask-image:radial-gradient(circle,#000 52%,transparent 74%)}
 .cover #sun{left:20px;top:300px;width:230px;height:221px}.cover #moon{left:834px;top:290px;width:216px;height:238px}
+.jwimg{left:0;top:340px;width:380px;height:334px;-webkit-mask-image:linear-gradient(to bottom,#000 82%,transparent);opacity:0}
+.bub{left:420px;top:345px;width:630px;height:350px;background:#fff;color:#17102b;border-radius:38px;opacity:0}
+.bub:before{content:"";position:absolute;left:-26px;top:130px;border:22px solid transparent;border-right-color:#fff;border-left:0}
+.bt{left:34px;top:50%;transform:translateY(-50%);width:566px;font-size:58px;line-height:1.36;font-weight:800;font-family:'JW-B',sans-serif;opacity:0}
+.bt em{font-style:normal;font-family:'JW-D',sans-serif;font-weight:900;color:#c2306f}
+.ai{left:36px;top:690px;font-size:30px;color:#fff;opacity:0}
+.chip{top:1130px;width:150px;height:110px;border-radius:30px;border:4px solid rgba(231,200,141,.65);background:rgba(255,255,255,.1);font-size:54px;line-height:100px;text-align:center;opacity:0}
+.tok{width:120px;height:120px;border-radius:50%;opacity:0;mix-blend-mode:multiply}
+.ban{left:0;width:1080px;top:770px;text-align:center;font-size:72px;line-height:1.2;color:#e7c88d;opacity:0;white-space:nowrap}
+.leg{left:70px;font-size:54px;line-height:1.2;opacity:0;white-space:nowrap}.leg i{display:inline-block;width:44px;height:44px;border-radius:50%;vertical-align:-6px;margin-right:22px}
+.sixl{left:0;width:1080px;top:1056px;text-align:center;font-size:50px;color:#e7c88d;opacity:0;white-space:nowrap}
 .vig{left:0;top:0;width:1080px;height:1920px;background:radial-gradient(ellipse 62% 40% at 50% 52%,rgba(4,8,26,.62),transparent 78%)}
 .grp{left:0;top:0;width:1080px;height:1920px;isolation:isolate}
 .c{border-radius:50%;mix-blend-mode:multiply;will-change:transform,opacity}
@@ -41,6 +53,18 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#050a1c
 <div class="a d t lab" id=wSaju style="left:215px;top:1110px;font-size:122px">사주</div>
 <div class="a d t lab" id=wStar style="left:866px;top:1110px;font-size:92px">별자리</div>
 <div class="a d t lab" id=wSame style="left:540px;top:1110px;font-size:68px">같은 말</div>
+<img class="a jwimg" id=jw src="file://@@JW@@"><div class="a ai" id=aiL>AI 생성 캐릭터</div>
+<div class="a bub" id=bub>
+ <div class="a bt" id=b1>사주와 별자리는 각자 내 마음의 <em>방향</em>을 하나씩 짚어요</div>
+ <div class="a bt" id=b2>둘이 같은 방향을 짚으면 <em>'같은&nbsp;말'</em>이에요</div>
+ <div class="a bt" id=b3>방향이 다르면 <em>'다른&nbsp;말'</em>이에요. 내가 고를 곳이에요</div>
+</div>
+<div class="a d ban" id=banA>같은 말 = 타고난 결</div><div class="a d ban" id=banB>다른 말 = 내가 고를 곳</div>
+<div class="a grp" id=grp2><div class="a tok" id=tkP style="top:900px;background:@@PINK@@"></div><div class="a tok" id=tkB style="top:900px;background:@@BLUE@@"></div></div>
+<div class="a d sixl" id=sixl>자오선이 나눈 여섯 방향</div>
+@@CHIPS@@
+<div class="a d leg" id=leg1 style="top:1290px;color:#fff"><i style="background:@@PINK@@"></i>사주가 짚은 방향</div>
+<div class="a d leg" id=leg2 style="top:1366px;color:#fff"><i style="background:@@BLUE@@"></i>별자리가 짚은 방향</div>
 <div class="a d t" id=rk style="left:0;width:1080px;top:340px;font-size:66px;line-height:1.25;opacity:0">사주와 같은 말을 하는<br>별자리 순위</div>
 @@BARS@@
 <div class="a d t" id=c1 style="left:0;width:1080px;top:520px;font-size:116px;line-height:1.22;opacity:0">내 별자리는</div>
@@ -57,39 +81,55 @@ const SP=[]; for(let i=0;i<70;i++){const c=document.createElementNS(NS,'circle')
 let b=0;
 function lab(id,o,s){const e=g(id);e.style.opacity=o;e.style.transform=`translate(-50%,-50%) scale(${s})`}
 function seek(ms){b=B(ms);
- const ph=b-Math.floor(b), pulse=0.03*Math.exp(-ph*5), fo=1-cl((b-8)/.6);
+ const ph=b-Math.floor(b), pulse=0.03*Math.exp(-ph*5), fo=1-cl((b-5.6)/.6);
  // 배경: 황도 차트가 천천히 돈다, 해와 달은 박자에 맞춰 살짝 숨 쉼, 별은 반짝임
  g('chart').style.transform=`rotate(${b*1.6}deg) scale(${1+pulse*.3})`; g('sun').style.transform=`scale(${1+pulse*.9}) rotate(${b*2}deg)`; g('moon').style.transform=`scale(${1+pulse*.9})`;
  SP.forEach(o=>o[0].setAttribute('opacity',(0.25+0.75*Math.abs(Math.sin(b*.9+o[1])))*o[2]+0.1));
  // 장면 1: 헤드라인 + 두 원 + 같은 줄 라벨
- g('hl').style.opacity=fo; g('hl').style.transform=`scale(${1+0.02*cl(b/8)+pulse*.6})`;
+ g('hl').style.opacity=fo; g('hl').style.transform=`scale(${1+0.02*cl(b/6)+pulse*.6})`;
  const ps=out(cl(b/.45)), s0=1.1+(1-1.1)*ps;
- g('pinkC').style.transform=`scale(${s0*(1+pulse*.5)})`; const bp=out(cl((b-3)/.45)), bo=b<3?0:Math.min(1,bp*6), bs=1.18+(1-1.18)*bp;
- g('blueC').style.opacity=bo; g('blueC').style.transform=`scale(${bo?bs*(1+pulse*.5):1})`; g('blueD').style.opacity=(b<3?.7:0)*fo; g('blueD').style.transform=`rotate(${b*9}deg)`;
+ g('pinkC').style.transform=`scale(${s0*(1+pulse*.5)})`; const bp=out(cl((b-2)/.45)), bo=b<2?0:Math.min(1,bp*6), bs=1.18+(1-1.18)*bp;
+ g('blueC').style.opacity=bo; g('blueC').style.transform=`scale(${bo?bs*(1+pulse*.5):1})`; g('blueD').style.opacity=(b<2?.7:0)*fo; g('blueD').style.transform=`rotate(${b*9}deg)`;
  g('grp').style.opacity=fo;
- lab('wSaju',fo,s0*(1+pulse*.5)); lab('wStar',(b<3?0:bo)*fo,bo?bs:1);
- const ss=out(cl((b-4)/.4)); lab('wSame',(b<4?0:Math.min(1,ss*6))*fo,b<4?1:1.3+(1-1.3)*ss);
- // 장면 2: 순위(박 9~19, 천칭부터 염소까지 한 박에 하나)
- const rf=1-cl((b-20.6)/.6); g('rk').style.opacity=cl((b-8.8)/.5)*rf;
- for(let i=0;i<12;i++){const t0=9+(11-i)*.9, q=out(cl((b-t0)/.6)); const el=g('bar'+i); el.style.opacity=q*rf; el.style.width=(190+VAL[i]*30*q)+'px'; if(i===0){el.classList.add('top1'); el.style.transform=`scaleY(${1+(b>19&&b<20.6?pulse*1.6:0)})`}}
- // 장면 3: CTA(박 21.2~28)
- const cp=b>21?1:0; g('c1').style.opacity=cl((b-21.2)/.4); g('c2').style.opacity=cl((b-22.2)/.4); g('c3').style.opacity=cl((b-23.6)/.4); g('c4').style.opacity=cl((b-24.8)/.4);
- const pf=out(cl((b-25.4)/.8)); g('plane').style.opacity=cl((b-25.4)/.3); g('plane').style.transform=`translate(${(1-pf)*-170}px,${(1-pf)*130}px) rotate(${-8+8*pf}deg) scale(${1+(b>26.4?pulse*.7:0)})`;
+ lab('wSaju',fo,s0*(1+pulse*.5)); lab('wStar',(b<2?0:bo)*fo,bo?bs:1);
+ const ss=out(cl((b-3)/.4)); lab('wSame',(b<3?0:Math.min(1,ss*6))*fo,b<3?1:1.3+(1-1.3)*ss);
+ // 장면 2: 정월이 설명(박 6.2~17.8)
+ const e2=cl((b-6.2)/.6), x2=1-cl((b-17.4)/.6); const jwq=out(e2);
+ g('jw').style.opacity=jwq*x2; g('jw').style.transform=`translateX(${(1-jwq)*-140}px)`; g('aiL').style.opacity=jwq*x2*.9;
+ g('bub').style.opacity=jwq*x2; g('bub').style.transform=`scale(${.96+.04*jwq+(b>6.6&&b<17?pulse*.35:0)})`;
+ const tx=(id,a,c)=>{g(id).style.opacity=cl((b-a)/.35)*(1-cl((b-c)/.35))};
+ tx('b1',6.7,10.3); tx('b2',10.5,14.1); tx('b3',14.3,17.4);
+ g('sixl').style.opacity=cl((b-7.2)/.5)*x2;
+ const CX=[135,297,459,621,783,945];
+ for(let k=0;k<6;k++){const ch=g('chip'+k), q=out(cl((b-(7.0+k*.2))/.4)); ch.style.opacity=q*x2; ch.style.transform=`translateY(${(1-q)*30}px)`;
+   const on=(b>10.8&&b<14.6&&k===0)||(b>=14.8&&b<17.4&&(k===0||k===1)); ch.style.background=on?(k===0&&b<14.8?'rgba(122,79,208,.75)':(k===0?'rgba(255,92,157,.55)':'rgba(69,96,240,.6)')):'rgba(255,255,255,.1)'}
+ g('leg1').style.opacity=cl((b-8.4)/.5)*x2; g('leg2').style.opacity=cl((b-8.9)/.5)*x2;
+ // 토큰: 같은 방향(박 10.6) -> 다른 방향(박 14.4~15.2)
+ const tq=out(cl((b-10.6)/.45)), mv=out(cl((b-14.4)/.8));
+ const pkx=CX[0]-35-60+(b>14.4?(mv*35):0), bkx=(CX[0]+35-60)+(CX[1]-CX[0]-35)*mv;
+ const tk=g('tkP'), tb=g('tkB'); tk.style.left=pkx+'px'; tb.style.left=bkx+'px'; tk.style.opacity=tq*x2; tb.style.opacity=tq*x2; tk.style.transform=`scale(${.6+.4*tq})`; tb.style.transform=`scale(${.6+.4*tq})`; g('grp2').style.opacity=1;
+ g('banA').style.opacity=cl((b-11.0)/.4)*(1-cl((b-14.5)/.3))*x2; g('banB').style.opacity=cl((b-15.0)/.4)*x2;
+ // 장면 3: 순위(박 18.2~27)
+ const rf=1-cl((b-26.2)/.6); g('rk').style.opacity=cl((b-18)/.5)*rf;
+ for(let i=0;i<12;i++){const t0=18.5+(11-i)*.55, q=out(cl((b-t0)/.5)); const el=g('bar'+i); el.style.opacity=q*rf; el.style.width=(190+VAL[i]*30*q)+'px'; if(i===0){el.classList.add('top1'); el.style.transform=`scaleY(${1+(b>24.6&&b<26.2?pulse*1.6:0)})`}}
+ // 장면 4: CTA(박 27~33)
+ g('c1').style.opacity=cl((b-27)/.4); g('c2').style.opacity=cl((b-28)/.4); g('c3').style.opacity=cl((b-29.2)/.4); g('c4').style.opacity=cl((b-30.2)/.4);
+ const pf=out(cl((b-30.8)/.8)); g('plane').style.opacity=cl((b-30.8)/.3); g('plane').style.transform=`translate(${(1-pf)*-170}px,${(1-pf)*130}px) rotate(${-8+8*pf}deg) scale(${1+(b>31.8?pulse*.7:0)})`;
 }
 seek(0);
 </script>"""
     for k, v in {"@@FONTS@@": K.css("gm"), "@@BG@@": os.path.join(AS, "derived", "bg_cosmos.jpg"), "@@CHART@@": os.path.join(AS, "chart.png"), "@@SUN@@": os.path.join(AS, "derived", "sun.png"), "@@MOON@@": os.path.join(AS, "derived", "moon.png"),
-                 "@@PINK@@": PINK, "@@BLUE@@": BLUE, "@@GOLD@@": GOLD, "@@BEAT@@": repr(beat), "@@BARS@@": bars, "@@VALS@@": str([v for _, v in RANK])}.items(): h = h.replace(k, v)
+                 "@@PINK@@": PINK, "@@BLUE@@": BLUE, "@@GOLD@@": GOLD, "@@BEAT@@": repr(beat), "@@BARS@@": bars, "@@CHIPS@@": chips, "@@JW@@": os.path.join(AS, "derived", "jw_gesture.png"), "@@VALS@@": str([v for _, v in RANK])}.items(): h = h.replace(k, v)
     return h
 async def cover(hp, beat, out):
     from playwright.async_api import async_playwright
     async with async_playwright() as p:
         b = await p.chromium.launch(); pg = await b.new_page(viewport={"width": 1080, "height": 1920}); await pg.goto("file://" + hp); await pg.evaluate("document.fonts.ready"); await pg.wait_for_timeout(600)
-        await pg.evaluate("document.body.classList.add('cover')"); await pg.evaluate(f"seek({6.5 * beat * 1000})"); await pg.wait_for_timeout(300); await pg.screenshot(path=out, type="jpeg", quality=92); await b.close()
+        await pg.evaluate("document.body.classList.add('cover')"); await pg.evaluate(f"seek({4.2 * beat * 1000})"); await pg.wait_for_timeout(300); await pg.screenshot(path=out, type="jpeg", quality=92); await b.close()
 if __name__ == "__main__":
-    mi = MP.choose("data", "litho-star6"); beat = 60.0 / mi["bpm"]; nb = 28; total = nb * beat
+    mi = MP.choose("data", "litho-star6"); beat = 60.0 / mi["bpm"]; nb = 33; total = nb * beat
     hp = "/tmp/litho_star.html"; open(hp, "w", encoding="utf-8").write(html(beat))
     outp = os.path.join(R, "2026-motion", "litho_star6.mp4"); secs = HM.render_html(hp, outp, total)
-    MP.mux(outp, [3 * beat, 5 * beat, 13 * beat, 7 * beat], mi, 103)
+    MP.mux(outp, [6 * beat, 12 * beat, 9 * beat, 6 * beat], mi, 103)
     asyncio.run(cover(hp, beat, os.path.join(R, "2026-motion", "litho_star6_cover.jpg")))
     print("음악:", mi["style"], mi["bpm"], mi["key"], "| 박자", round(beat, 3), "초 | 길이", round(secs, 1), "초")

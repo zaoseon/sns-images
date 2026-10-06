@@ -16,5 +16,11 @@
   "kind": "data",
   "face": "intro",
   "flip": false
+ },
+ {
+  "name": "litho-star6",
+  "kind": "ask",
+  "face": "v8_gesture",
+  "flip": false
  }
 ]
