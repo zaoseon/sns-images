@@ -78,5 +78,13 @@
   "mode": "up",
   "bpm": 124,
   "key": "A"
+ },
+ {
+  "name": "litho-star6",
+  "kind": "data",
+  "style": "별빛 오르골",
+  "mode": "slow",
+  "bpm": 93,
+  "key": "C"
  }
 ]
