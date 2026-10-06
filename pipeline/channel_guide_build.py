@@ -63,8 +63,22 @@ S.append(page("채널별 표준 · 1 / 8", "채널마다 크기와<br>안전영�
   f'<div class=row><b>{CH[k]["name"]}</b> {CH[k]["w"]}x{CH[k]["h"]}<br>안전 영역 <u>x {CH[k]["safe"][0]}~{CH[k]["safe"][2]} · y {CH[k]["safe"][1]}~{CH[k]["safe"][3]}</u></div>' for k in ("reel", "naver_clip", "insta_carousel", "naver_blog_thumb", "site_blog_thumb")) + '</div>'))
 S.append(page("2 / 8 · 인스타 릴스", "릴스 1080x1920", mock("reel", 110, 250, .36, 40, 560, 480,
   f'<div class=lg style="left:60px;top:1050px;width:960px;font-size:40px"><span class=sw style="background:rgba(255,92,92,.55)"></span>빨강 = 인스타가 가리는 곳 <span class=sw style="background:transparent;border:4px dashed {TEAL}"></span>안전 영역<br><span class=sw style="background:transparent;border:4px dotted #ffb84d"></span>격자 3:4 <span class=sw style="background:transparent;border:4px dotted #c9a6ff"></span>피드 4:5 <span class=sw style="background:transparent;border:4px dotted #9fe870"></span>표지 핵심 1:1</div>')))
-S.append(page("3 / 8 · 네이버 클립", "클립 1080x1920", mock("naver_clip", 110, 250, .36, 40, 560, 480,
-  f'<div class=lg style="left:60px;top:1050px;width:960px;font-size:40px"><b>공식 안전 영역 수치를 못 찾았어요.</b><br>릴스와 같은 값을 빌려 썼어요(추정).<br>주황 점선은 블로그 스티커 자리(추정)예요.<br>12초 안팎, 폰의 블로그 앱에서 올려요.</div>')))
+def clip_slide():
+    sc = .46; L0, T0 = 130, 232            # 캡처 540x1158을 .46*2=0.92배로 쓰지 않고 CSS로 497 폭에 맞춘다
+    f = 497 / 1080
+    def r(x0, y0, x1, y1, col, dash=False, fill=True):
+        st = f"left:{x0 * f:.0f}px;top:{y0 * f:.0f}px;width:{(x1 - x0) * f:.0f}px;height:{max(4, (y1 - y0) * f):.0f}px;"
+        return f'<div class=z style="{st}border:3px {"dashed" if dash else "solid"} {col};{"background:" + col.replace("rgb", "rgba").replace(")", ",.28)") if fill else ""}"></div>'
+    ov = (r(40, 140, 100, 225, "rgb(255,92,92)") + r(945, 140, 1040, 225, "rgb(255,92,92)") + r(905, 925, 1055, 1880, "rgb(255,92,92)") + r(45, 1580, 810, 1910, "rgb(255,92,92)")
+          + r(50, 424, 900, 1564, "rgb(127,214,200)", True, False) + r(0, 94, 1080, 1972, "rgb(255,184,77)", True, False))
+    box = f'<div class=mock style="left:{L0}px;top:{T0}px;width:497px;height:1065px;border-radius:22px;background:url(file://{R}/assets/ref/naver_clip_cap2.jpg) 0 0/497px 1065px">{ov}</div>'
+    ys = [(150 + 182 * f / f * 0) for _ in range(1)]
+    marks = [(1, 200), (2, 560), (3, 900), (4, 400), (5, 1120)]
+    mk = "".join(f'<div class=mk style="left:66px;top:{T0 + int(y * f) - 26}px">{n}</div>' for n, y in [(1, 190), (4, 330), (2, 700), (3, 1000), (5, 1090)])
+    lg = f'<div class=lg style="left:668px;top:232px;width:372px;font-size:40px">' + "".join(f'<div style="display:flex;gap:16px;margin-bottom:14px"><b style="flex:none;width:36px">{n}</b><span>{t}</span></div>' for n, t in (
+        ("1", "위 뒤로·소리<br>y 50~130"), ("2", "오른쪽 버튼 줄<br>x 905 이상<br>y 830~1830"), ("3", "아래 프로필·설명<br>링크 칩<br>y 1489 이상"), ("4", "영상 표시 영역<br>높이 1878"), ("5", "초록 점선 = 안전 영역<br>(릴스와 공통)<br>x 50~900<br>y 330~1470"))) + '</div>'
+    return page("3 / 8 · 네이버 클립", "클립 캡처로 잰 영역", box + mk + lg)
+S.append(clip_slide())
 S.append(page("4 / 8 · 인스타 캐러셀", "캐러셀 1080x1350", mock("insta_carousel", 110, 250, .40, 40, 590, 450,
   f'<div class=lg style="left:60px;top:1050px;width:960px;font-size:40px"><b>2026 변화:</b><br>프로필 격자가 3:4(1080x1440)예요.<br>4:5 이미지는 격자에서 좌우 약 34px씩<br>잘려요(주황 점선). <b>3:4로 바꿀지</b> 정해 주세요.</div>')))
 b = CH["naver_blog_thumb"]; sc = .70

@@ -1907,16 +1907,16 @@
   "title": "채널별 규격·안전영역·표지·CTA·글꼴 표준 (8장)",
   "status": "new",
   "images": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_01.png?v=1",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_02.png?v=1",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_03.png?v=1",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_04.png?v=1",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_05.png?v=1",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_06.png?v=1",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_07.png?v=1",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_08.png?v=1"
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_01.png?v=2",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_02.png?v=2",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_03.png?v=2",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_04.png?v=2",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_05.png?v=2",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_06.png?v=2",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_07.png?v=2",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/chan_08.png?v=2"
   ],
-  "note": "블로그 썸네일·네이버 클립·인스타 캐러셀·인스타 릴스를 채널별로 정리했어요. 1번째 장이 한눈에 표, 2~5번째가 채널별 안전영역 그림(빨강=인스타가 가리는 곳, 초록 점선=안전 영역), 6~7번째가 글꼴·표지·CTA, 8번째가 정해 주실 5가지예요. 네이버 클립과 블로그 썸네일은 공식 수치를 못 찾아 우리 실측·추정으로 표시했어요.",
+  "note": "블로그 썸네일·네이버 클립·인스타 캐러셀·인스타 릴스를 채널별로 정리했어요. 1번째 장이 한눈에 표, 2~5번째가 채널별 안전영역 그림(빨강=인스타가 가리는 곳, 초록 점선=안전 영역), 6~7번째가 글꼴·표지·CTA, 8번째가 정해 주실 5가지예요. 네이버 클립과 블로그 썸네일은 공식 수치를 못 찾아 우리 실측·추정으로 표시했어요. (10/6 갱신: 3번째 장은 대표님이 주신 네이버 클립 캡처 2장을 직접 재서 만든 실측이에요. 오른쪽 버튼 줄이 x 905부터라서 릴스·클립 공통 오른쪽 한계를 960에서 900으로 바꿨어요.)",
   "checks": [
    "채널별 크기와 안전영역",
    "캐러셀을 3:4(1080x1440)로 바꿀지",
