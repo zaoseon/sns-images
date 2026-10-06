@@ -83,4 +83,5 @@ async def main():
         report[k] = [f'{e["id"]}「{e["t"]}」 ' + ", ".join(w) for e, w in v]
     json.dump(report, open("/tmp/page_report.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     for k, n, _ in PAGES: print(k, n, "→ 넘는 요소", len(report[k]))
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())

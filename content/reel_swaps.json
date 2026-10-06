@@ -1944,5 +1944,31 @@
    "넘는 요소를 안으로 옮길지 줄일지",
    "캐러셀로 쓸 때 파랑 점선 기준이 맞는지"
   ]
+ },
+ {
+  "id": "template-demo",
+  "kind": "템플릿 틀 시제품(검토 요청)",
+  "title": "내용만 넣으면 채널 안전영역에 자동 배치 — 같은 내용 3종 × 릴스·캐러셀 (12장)",
+  "status": "new",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_hook.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_hook_check.jpg?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_hook.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_hook_check.jpg?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_ranking.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_ranking_check.jpg?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_ranking.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_ranking_check.jpg?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_cta.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_cta_check.jpg?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_cta.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_cta_check.jpg?v=1"
+  ],
+  "note": "대표 제안(템플릿 틀) 시제품이에요. 내용(제목·항목·문구)만 넣으면 채널 안전영역 안에 글자와 요소가 자동 배치되고, 바깥(UI에 가려지는 곳)에는 배경만 깔려요. 같은 내용을 릴스(1080x1920)와 캐러셀(1080x1350)에 각각 자동으로 맞췄고, 쌍마다 앞 장이 결과, 뒤 장이 안전영역 검증(초록 점선 안 · 넘는 요소 0개)이에요. 순서: 훅(1~4장) · 순위(5~8장) · 마무리(9~12장).",
+  "checks": [
+   "자동 배치 결과가 보기 좋은지",
+   "이 틀로 만들어도 되는지",
+   "추가할 페이지 틀(설명·선택지·표지 등)"
+  ]
  }
 ]
