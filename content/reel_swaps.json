@@ -1875,5 +1875,30 @@
    "표지 제목이 한눈에 보이는지",
    "격자에서 잘리는 곳이 없는지"
   ]
+ },
+ {
+  "id": "guide-prod",
+  "kind": "제작 기준(검토 요청)",
+  "title": "콘텐츠 제작 기준 통합판 — 화면·영상 기준 (10장)",
+  "status": "new",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_01.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_02.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_03.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_04.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_05.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_06.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_07.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_08.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_09.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_10.png?v=1"
+  ],
+  "note": "대표님 지적(10/4~10/6)을 한곳에 모은 제작 기준이에요. 위에서 아래로 10장을 보시고 고칠 곳을 말씀해 주세요. 마지막 장(10번째)은 대표님이 정해 주실 7가지예요. 이 기준은 한 번 정하면 자동으로 적용되고, 지적하시면 기준에 올려 다음 영상부터 반영해요.",
+  "checks": [
+   "2번째 장: 대표님 확인 지점이 2곳이면 충분한지",
+   "5번째 장: 고정 요소 자리",
+   "8번째 장: 표지와 마무리 표준",
+   "10번째 장: 정해 주실 7가지"
+  ]
  }
 ]
