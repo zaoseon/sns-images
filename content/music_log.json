@@ -86,5 +86,13 @@
   "mode": "slow",
   "bpm": 93,
   "key": "C"
+ },
+ {
+  "name": "s10-clip-9x16",
+  "kind": "fun",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "E"
  }
 ]

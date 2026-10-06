@@ -6,10 +6,11 @@ import numpy as np
 from PIL import Image
 HERE = os.path.dirname(os.path.abspath(__file__)); R = os.path.abspath(os.path.join(HERE, ".."))
 RAW_RE = re.compile(r"^https://raw\.githubusercontent\.com/zaoseon/sns-images/[^/]+/")
-SKIP_KINDS = ("스토리보드", "제작 기준", "영상 형태", "영상 스타일", "페이지별 안전영역", "정월 움직임", "템플릿 틀 시제품", "릴스 표지 시안", "네이버 카페", "블로그 대표 이미지")   # 대표 검토용 내부 그림·다른 규격은 대상 아님
+SKIP_KINDS = ("스토리보드", "제작 기준", "영상 형태", "영상 스타일", "확정 규칙", "페이지별 안전영역", "정월 움직임", "템플릿 틀 시제품", "릴스 표지 시안", "네이버 카페", "블로그 대표 이미지")   # 대표 검토용 내부 그림·다른 규격은 대상 아님
 GOLD = np.array([231, 200, 141])
 BOX = {(1080, 1920): dict(hl=(40, 330, 260, 400), hr=(430, 335, 905, 395), url=(640, 1410, 905, 1470)),
-       (1080, 1350): dict(hl=(40, 40, 260, 110), hr=(540, 40, 1040, 110), url=(760, 1250, 1040, 1312))}
+       (1080, 1350): dict(hl=(40, 40, 260, 110), hr=(540, 40, 1040, 110), url=(760, 1250, 1040, 1312)),
+       (1080, 1440): dict(hl=(40, 40, 260, 110), hr=(540, 40, 1040, 110), url=(760, 1340, 1040, 1402))}
 def gold(a, b): 
     x0, y0, x1, y1 = b; r = a[y0:y1, x0:x1].astype(int); return int((np.abs(r - GOLD).sum(axis=2) < 70).sum())
 def white(a, b):

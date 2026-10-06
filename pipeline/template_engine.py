@@ -12,7 +12,7 @@ AS = os.path.join(R, "assets", "brand_bg")
 GOLD = "#e7c88d"; PINK = "#ff5c9d"; BLUE = "#4560f0"
 # 채널 지오메트리: W,H · 안전영역 · 위 고정줄 아래 y · 아래 고정줄 위 y · 제목 글꼴 · brand_frame 종류
 CHAN = {"reel": dict(W=1080, H=1920, safe=(50, 330, 900, 1470), head_bottom=385, foot_top=1425, title="gm_bold", kind="reel", stacked=False, gap=25, min_body=44),
-        "carousel": dict(W=1080, H=1350, safe=(55, 55, 1025, 1295), head_bottom=108, foot_top=1260, title="pl_blk", kind="card", stacked=False, gap=22, min_body=44)}
+        "carousel": dict(W=1080, H=1440, safe=(55, 55, 1025, 1385), head_bottom=108, foot_top=1350, title="pl_blk", kind="card", stacked=False, gap=22, min_body=44)}
 def content_box(ch):
     c = CHAN[ch]; s = c["safe"]; return (s[0], c["head_bottom"] + c["gap"], s[2], c["foot_top"] - c["gap"])
 _F = {}
@@ -227,8 +227,7 @@ if __name__ == "__main__":
             for (x0, y0, x1, y1) in ((a, b, c, b), (c, b, c, e), (c, e, a, e), (a, e, a, b)):
                 n = int(max(abs(x1 - x0), abs(y1 - y0)) // 24)
                 for i in range(0, n, 2): d.line([(x0 + (x1 - x0) * i / n, y0 + (y1 - y0) * i / n), (x0 + (x1 - x0) * (i + 1) / n, y0 + (y1 - y0) * (i + 1) / n)], fill=TEAL, width=6)
-            for x in (34, 1046): d.line([(x, 0), (x, H)], fill=(110, 170, 255, 255), width=5)
             for y in range(100, H, 100): d.line([(0, y), (W, y)], fill=(255, 255, 255, 36), width=1); f = font(K.P["pr_xb"], 26); d.rectangle((2, y - 16, 56, y + 16), fill=(0, 0, 0, 150)); d.text((8, y - 14), str(y), font=f, fill=(255, 235, 120, 255))
-            f34 = font(K.P["pr_xb"], 34); d.text((40, H + 24), "초록 점선 = 캐러셀 안전 영역 x 55~1025 · y 55~1295", font=f34, fill=(255, 255, 255, 255)); d.text((40, H + 78), "파랑 선 = 프로필 격자 3:4에서 좌우 약 34px 잘리는 선", font=f34, fill=(255, 255, 255, 255))
+            f34 = font(K.P["pr_xb"], 34); d.text((40, H + 24), "초록 점선 = 캐러셀(3:4) 안전 영역 x 55~1025 · y 55~1385", font=f34, fill=(255, 255, 255, 255)); d.text((40, H + 78), "프로필 격자도 3:4라 그림 전체가 그대로 보여요", font=f34, fill=(255, 255, 255, 255))
             d.text((40, H + 132), "자홍 상자(안전 영역을 넘는 요소) = 0개", font=f34, fill=(255, 120, 220, 255)); d.text((40, H + 200), "모든 요소의 좌표를 만들기 전에 계산해 검증해요", font=f34, fill=(231, 200, 141, 255))
             Image.alpha_composite(can.convert("RGBA"), ov).convert("RGB").save(path.replace(".png", "_check.jpg"), quality=90)

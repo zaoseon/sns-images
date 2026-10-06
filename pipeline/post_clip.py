@@ -100,6 +100,7 @@ def build_s10():
     return out
 BUILD = {"s10": build_s10}
 if __name__ == "__main__":
+    if os.environ.get("ALLOW_45_CLIP") != "1": sys.exit("R15(10/6 확정): 네이버 클립은 9:16 영상으로만 만든다. 4:5 카드를 클립으로 올리지 않는다 — 클립 엔진(clip_motion)으로 만들 것. (예외로 쓰려면 ALLOW_45_CLIP=1)")
     pid = sys.argv[1] if len(sys.argv) > 1 else "s10"; imgs = BUILD[pid](); od = os.path.join(ROOT, "clips_post", pid + ("_nopage" if NOPAGE else "")); os.makedirs(od, exist_ok=True)
     names = []
     for i, im in enumerate(imgs, 1):

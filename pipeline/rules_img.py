@@ -18,15 +18,15 @@ def page(tag, title, body): return BASE + f'<div class=k>{tag}</div><div class=t
 SHORT = {"R01": "왼쪽 자오선 · 오른쪽 동서양 6개 운명학 교차분석", "R02": "우측 하단 zaoseon.com 고정", "R03": "정월이 나올 때 좌측 하단 '정월은 가상의 AI 캐릭터입니다'(흐린 색)", "R04": "릴스·클립 x 50~900 · y 330~1470. 바깥은 배경만", "R05": "영상 제목 G마켓 산스 · 카드 제목 페이퍼로지 · 본문 프리텐다드",
          "R06": "본문 44px 이상 · 굵기 800 이상 · 줄간격 1.5 이상", "R07": "단색만 · 색 그림자 금지 · 도형에 걸치지 않음", "R08": "안 끝나면 의미 단위로 줄바꿈 · 가운데 정렬", "R09": "제목과 차트 간격은 하단 여백을 고려", "R10": "말풍선 가운데 · 배지 중앙 · 여섯 방향 3×2 · 설명글 작게",
          "R11": "댓글 질문 → 팔로우 → 프로필 링크(홈페이지 유입)", "R12": "해·달·별 브랜드 소재, 가려지는 곳도 배경으로", "R13": "표지 따로 · 첫 프레임 완성 · 정지 0.5초 이하", "R14": "새 그림·영상은 틀로 만들고, 지적은 틀에 올림",
-         "R15": "클립은 9:16 영상으로만(4:5 카드 금지)", "R16": "캐러셀을 1080x1440(3:4)으로 전환", "R17": "캡션 프로필 링크 문장: 하루 1건 vs 영상마다", "R18": "카드·말풍선·배지·버튼 안 글은 정중앙"}
+         "R15": "클립은 9:16 영상으로만(4:5 카드로 올리지 않음)", "R16": "캐러셀은 1080x1440(3:4), 격자에 그림 전체가 보임", "R17": "캡션: 영상마다 다른 홈페이지 유입 한 줄 + 팔로우 유도 한 줄", "R18": "카드·말풍선·배지·버튼 안 글은 정중앙"}
 def row(rid, color=None):
     r = next(x for x in rules.RULES if x[0] == rid); col = {"확정": TEAL, "임시": GOLD, "미정": CORAL}[r[3]]
     return f'<div class=row><b>{r[1]}</b><span class=st style="background:{col}">{r[3]}</span><br>{SHORT[rid]}</div>'
 aud = json.load(open(os.path.join(R, "content", "audit", "rules_audit.json"), encoding="utf-8")); ok = sum(1 for x in aud if x["status"] == "통과"); tot = len(aud)
 S = [page("확정 규칙 · 1 / 5", "확정 규칙 ①", "".join(row(i) for i in ("R01", "R02", "R03", "R05", "R06"))),
      page("2 / 5", "확정 규칙 ②", "".join(row(i) for i in ("R07", "R18", "R08", "R09", "R10"))),
-     page("3 / 5", "확정 규칙 ③ · 임시", "".join(row(i) for i in ("R11", "R12", "R13", "R14", "R04"))),
-     page("4 / 5", "미정(적용 안 함)", "".join(row(i) for i in ("R15", "R16", "R17")) + '<div class=row style="margin-top:30px">이 세 가지는 <b>대표님 답</b>을 받을 때까지 적용하지 않아요</div>'),
+     page("3 / 5", "확정 규칙 ③", "".join(row(i) for i in ("R11", "R12", "R13", "R14", "R04"))),
+     page("4 / 5", "방금 확정한 규칙", "".join(row(i) for i in ("R15", "R16", "R17")) + '<div class=row style="margin-top:30px">이제 <b>미정 규칙은 없어요.</b> 18개 모두 확정이에요</div>'),
      page("5 / 5", "적용 현황", f'<div class=row>앱 영상·그림 <b>{tot}개</b> 자동 측정<br>처음 <b>4개</b> → 지금 <b>{ok}개</b> 적용</div><div class=row>글 연결 클립 <b>13편</b> 모두 통과</div><div class=row>아직 <b>{tot - ok}개</b> 미적용<br>릴스 14 · 견본 6 · 카드·클립·퀴즈 등</div><div class=row>다시 만들 때 자동으로 규칙이 들어가요</div>')]
 async def main():
     bad = 0

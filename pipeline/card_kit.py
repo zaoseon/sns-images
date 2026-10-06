@@ -22,9 +22,10 @@ def bg(kind, acc):
     if kind == 'ink':   return "background:#0b0806", f'<div style="position:absolute;inset:0;background:radial-gradient(circle at 80% 85%,{acc}33,transparent 55%)"></div>'
 def handle(acc, right=False): return f'<div style="position:absolute;{"right:55px" if right else "left:55px"};bottom:46px;display:flex;align-items:center;gap:14px;font-size:34px;font-family:{K.B};font-weight:800;color:#fff;z-index:6"><span style="width:34px;height:34px;border-radius:50%;background:{acc};display:inline-block"></span>zaoseon.com</div>'
 def ai_note(left=False): return '<div style="position:absolute;' + ('left:46px;text-align:left' if left else 'right:46px;text-align:right') + ';bottom:36px;font-size:23px;font-family:{K.B};font-weight:800;color:#fff;line-height:1.4;z-index:6;background:rgba(0,0,0,.65);padding:8px 14px;border-radius:12px">※ 자오선의 상담가 정월은<br>AI로 생성한 가상 캐릭터입니다</div>'
+STRETCH = """()=>{const f=(1440-120)/(1350-120);document.body.querySelectorAll(':scope > *').forEach(e=>{if(getComputedStyle(e).position!=='absolute')return;const t=e.style.top;if(!t||!t.endsWith('px'))return;const v=parseFloat(t);if(v>=200)e.style.top=(120+(v-120)*f)+'px'})}"""   # 3:4(1080x1440): 4:5로 짠 배치를 위아래로 고르게 늘린다(10/6 R16)
 def frame(ai=False): return BF.html('card', ai=ai, stacked=True)
 def page(inner, bgkind, acc):
-    st, ov = bg(bgkind, acc); return f'<html><head><meta charset="utf-8"><style>{K.css(CUR)}{BF.css()}</style></head><body style="margin:0;width:1080px;height:1350px;position:relative;overflow:hidden;{F};color:#fff;word-break:keep-all;line-break:strict;{st}">{ov}{inner}</body></html>'
+    st, ov = bg(bgkind, acc); return f'<html><head><meta charset="utf-8"><style>{K.css(CUR)}{BF.css()}</style></head><body style="margin:0;width:1080px;height:1440px;position:relative;overflow:hidden;{F};color:#fff;word-break:keep-all;line-break:strict;{st}">{ov}{inner}</body></html>'
 def img_tag(fc, h, pos, flip=False, z=2, extra=''):
     tf = 'transform:scaleX(-1);' if flip else ''
     return f'<img src="data:image/png;base64,{face_b64(fc)}" style="position:absolute;{pos};height:{h}px;{tf}z-index:{z};{extra}">'
@@ -89,14 +90,14 @@ SETS = {
 async def main():
     out = os.path.join(R, '2026-w43swap', 'cards'); os.makedirs(out, exist_ok=True); bad = 0
     async with async_playwright() as p:
-        b = await p.chromium.launch(); pg = await b.new_page(viewport={'width': 1080, 'height': 1350})
+        b = await p.chromium.launch(); pg = await b.new_page(viewport={'width': 1080, 'height': 1440})
         global CUR
         for k, c in SETS.items():
             txt = ''.join(str(v) if not isinstance(v, (list, tuple)) else ''.join(v) for v in c.values() if isinstance(v, (str, list, tuple))); CUR = K.pick_display([txt], 'pl'); print(k, '제목 글꼴:', '페이퍼로지' if CUR == 'pl' else 'G마켓 산스')
             for i, fn in enumerate((cover, options, result), 1):
                 open('/tmp/card_kit.html', 'w', encoding='utf-8').write(fn(c)); await pg.goto('file:///tmp/card_kit.html'); await pg.evaluate('document.fonts.ready'); await pg.wait_for_timeout(350)
                 for x in await check_page(pg, f'{k}_{i}', 'cover' if i == 1 else None): print('검사:', x); bad += 1
-                await pg.screenshot(path=os.path.join(out, f'{k}_{i}.jpg'), type='jpeg', quality=92)
+                await pg.evaluate(STRETCH); await pg.screenshot(path=os.path.join(out, f'{k}_{i}.jpg'), type='jpeg', quality=92)
         await b.close()
     print('검사 문제', bad, '건')
 if __name__ == '__main__': asyncio.run(main())

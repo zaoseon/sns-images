@@ -26,17 +26,17 @@ def contrast(a,b):
     la,lb=_lum(a),_lum(b); hi,lo=max(la,lb),min(la,lb); return (hi+0.05)/(lo+0.05)
 async def check_page(pg, name, kind_hint=None):
     err=await pg.evaluate("async()=>{await document.fonts.ready;return [...document.fonts].filter(f=>f.status==='error').map(f=>f.family)}")
-    els=await pg.evaluate(JS); png=await pg.screenshot(type='png'); im=Image.open(io.BytesIO(png)).convert('RGB'); issues=[]
+    els=await pg.evaluate(JS); png=await pg.screenshot(type='png'); im=Image.open(io.BytesIO(png)).convert('RGB'); issues=[]; H=pg.viewport_size['height']   # 캔버스 높이(카드 3:4=1440, 4:5=1350)에서 기준을 계산
     if err: issues.append(f"{name}: 글꼴 불러오기 실패 {sorted(set(err))} (대체 글꼴로 그려짐)")
     # 전체 배치: 위쪽과 아래쪽을 다 써야 한다(가운데 몰림 방지)
-    main=[e for e in els if not (e['y']>1150 and e['w']<520)]
+    main=[e for e in els if not (e['y']>H-200 and e['w']<520)]
     if main:
         top=min(e['y'] for e in main); bot=max(e['y']+e['h'] for e in main)
         if top>200: issues.append(f"{name}: 글자가 아래로 치우침(맨 위 글자 y={top:.0f}, 200 이내여야 함)")
-        if bot<1050 and kind_hint!='cover': issues.append(f"{name}: 글자가 위로 몰림(맨 아래 글자 끝 y={bot:.0f}, 1050 이상이어야 함)")
+        if bot<H-300 and kind_hint!='cover': issues.append(f"{name}: 글자가 위로 몰림(맨 아래 글자 끝 y={bot:.0f}, 1050 이상이어야 함)")
     # 화면 밖으로 넘침, 글자끼리 겹침
     for e in els:
-        if e['y']+e['h']>1325: issues.append(f"{name} 「{e['t']}」: 아래 여백 부족(끝 y={e['y']+e['h']:.0f}, 1325 이내여야 함)")
+        if e['y']+e['h']>H-25: issues.append(f"{name} 「{e['t']}」: 아래 여백 부족(끝 y={e['y']+e['h']:.0f}, {H-25} 이내여야 함)")
     for a_i in range(len(els)):
         for b_i in range(a_i+1,len(els)):
             a,b=els[a_i],els[b_i]
