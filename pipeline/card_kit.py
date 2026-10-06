@@ -6,7 +6,7 @@
 import base64, asyncio, sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from style_spec import check_page
-import fonts_kit as K
+import fonts_kit as K, brand_frame as BF
 from playwright.async_api import async_playwright
 R = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 def b64(p): return base64.b64encode(open(os.path.join(R, p), 'rb').read()).decode()
@@ -22,8 +22,9 @@ def bg(kind, acc):
     if kind == 'ink':   return "background:#0b0806", f'<div style="position:absolute;inset:0;background:radial-gradient(circle at 80% 85%,{acc}33,transparent 55%)"></div>'
 def handle(acc, right=False): return f'<div style="position:absolute;{"right:55px" if right else "left:55px"};bottom:46px;display:flex;align-items:center;gap:14px;font-size:34px;font-family:{K.B};font-weight:800;color:#fff;z-index:6"><span style="width:34px;height:34px;border-radius:50%;background:{acc};display:inline-block"></span>zaoseon.com</div>'
 def ai_note(left=False): return '<div style="position:absolute;' + ('left:46px;text-align:left' if left else 'right:46px;text-align:right') + ';bottom:36px;font-size:23px;font-family:{K.B};font-weight:800;color:#fff;line-height:1.4;z-index:6;background:rgba(0,0,0,.65);padding:8px 14px;border-radius:12px">※ 자오선의 상담가 정월은<br>AI로 생성한 가상 캐릭터입니다</div>'
+def frame(ai=False): return BF.html('card', ai=ai, stacked=True)
 def page(inner, bgkind, acc):
-    st, ov = bg(bgkind, acc); return f'<html><head><meta charset="utf-8"><style>{K.css(CUR)}</style></head><body style="margin:0;width:1080px;height:1350px;position:relative;overflow:hidden;{F};color:#fff;word-break:keep-all;line-break:strict;{st}">{ov}{inner}</body></html>'
+    st, ov = bg(bgkind, acc); return f'<html><head><meta charset="utf-8"><style>{K.css(CUR)}{BF.css()}</style></head><body style="margin:0;width:1080px;height:1350px;position:relative;overflow:hidden;{F};color:#fff;word-break:keep-all;line-break:strict;{st}">{ov}{inner}</body></html>'
 def img_tag(fc, h, pos, flip=False, z=2, extra=''):
     tf = 'transform:scaleX(-1);' if flip else ''
     return f'<img src="data:image/png;base64,{face_b64(fc)}" style="position:absolute;{pos};height:{h}px;{tf}z-index:{z};{extra}">'
@@ -46,11 +47,11 @@ def cover(c):
     elif L == 'bc':     # 가운데 크게 + 둥근 후광, 제목은 위 가운데
         ink = head + f'<div style="position:absolute;left:0;right:0;top:232px;text-align:center;font-size:56px;line-height:1.45;color:{acc};z-index:5">{c["sub"]}</div><div style="position:absolute;left:0;right:0;top:360px;text-align:center;font-size:108px;line-height:1.35;z-index:5;{sh}">{c["title"]}</div>' + halo(acc, 540, 1060) + img_tag(fc, 780, 'left:50%;margin-left:-' + str(290 if not big else 330) + 'px;bottom:-70px')
     elif L == 'tr':     # 오른쪽 위에 걸쳐 있고 말풍선, 제목은 왼쪽 아래
-        ink = head.replace('left:75px','left:75px') + img_tag(fc, 690, 'right:-60px;top:110px', flip=False) + bubble(acc, c.get('bubble', '어느 쪽일까?'), 90, 240, 420) + f'<div style="position:absolute;left:90px;top:810px;width:900px;font-size:56px;line-height:1.45;color:{acc};z-index:5">{c["sub"]}</div><div style="position:absolute;left:90px;top:980px;width:900px;font-size:100px;line-height:1.35;z-index:5;{sh}">{c["title"]}</div>'
+        ink = head.replace('left:75px','left:75px') + img_tag(fc, 690, 'right:-60px;top:176px', flip=False) + bubble(acc, c.get('bubble', '어느 쪽일까?'), 90, 240, 420) + f'<div style="position:absolute;left:90px;top:810px;width:900px;font-size:56px;line-height:1.45;color:{acc};z-index:5">{c["sub"]}</div><div style="position:absolute;left:90px;top:980px;width:900px;font-size:100px;line-height:1.35;z-index:5;{sh}">{c["title"]}</div>'
     elif L == 'phone':  # 소품(휴대폰) + 작은 얼굴 아래 왼쪽
         ink = head + f'<div style="position:absolute;left:90px;top:232px;width:820px;font-size:56px;line-height:1.45;color:{acc};z-index:5">{c["sub"]}</div><div style="position:absolute;left:90px;top:470px;width:900px;font-size:108px;line-height:1.35;z-index:5;{sh}">{c["title"]}</div>' + phone(acc, 690, 780) + img_tag(fc, 620, 'left:-110px;bottom:0', flip=True)
     leftchar = L in ('bl', 'phone')
-    return page(ink + sparkles(acc) + handle(acc, right=leftchar) + ai_note(left=leftchar), c['bg'], acc)
+    return page(ink + sparkles(acc) + frame(True), c['bg'], acc)
 def options(c):
     acc = c['acc']; ql = c.get('ql', 'rows'); head = f'<div style="position:absolute;left:75px;top:80px;background:{acc};color:#111;font-size:44px;padding:14px 42px;border-radius:60px;z-index:5">선택지</div><div style="position:absolute;left:90px;top:210px;width:900px;font-size:100px;line-height:1.4;z-index:5;text-shadow:0 4px 18px rgba(0,0,0,.55)">{c["q"]}</div>'
     foot = f'<div style="position:absolute;left:0;right:0;top:1150px;text-align:center;font-size:44px;font-family:{K.B};font-weight:800;color:{acc};z-index:5">고른 번호를 세어 보세요</div>'
@@ -61,19 +62,19 @@ def options(c):
         rows = ''.join(f'<div style="position:absolute;left:70px;right:70px;top:{500+i*210}px;height:180px;background:rgba(10,10,24,.62);border:3px solid {acc};border-radius:36px;display:flex;align-items:center;gap:32px;padding:0 38px;z-index:5"><span style="flex:none;width:92px;height:92px;border-radius:50%;background:{acc};color:#111;font-size:60px;display:flex;align-items:center;justify-content:center">{i+1}</span><span style="font-size:46px;font-family:{K.B};font-weight:800;line-height:1.5">{t}</span></div>' for i, t in enumerate(c['opts']))
         peek = img_tag(c['peek'], 360, 'right:-30px;top:60px', flip=bool(c.get('peek_flip')), z=3) if c.get('peek') else ''
         ink = head + rows + foot + peek
-    return page(ink + handle(acc), c['bg2'], acc)
+    return page(ink + frame(False), c['bg2'], acc)
 def result(c):
     acc = c['acc']; fc = c.get('face2'); rl = c.get('rl', 'br')
     img = ''
     if fc and rl == 'br': img = img_tag(fc, 380, 'right:-60px;bottom:0', z=3)
     elif fc and rl == 'bl': img = img_tag(fc, 380, 'left:-60px;bottom:0', flip=True, z=3)
-    elif fc and rl == 'tr': img = img_tag(fc, 420, 'right:-70px;top:40px', z=3)
+    elif fc and rl == 'tr': img = img_tag(fc, 420, 'right:-70px;top:150px', z=3)
     cta_l = '300px' if rl == 'bl' and fc else '70px'
     ink = f'''<div style="position:absolute;left:75px;top:80px;background:{acc};color:#111;font-size:44px;padding:14px 42px;border-radius:60px;z-index:5">결과</div>
 <div style="position:absolute;left:90px;top:210px;width:900px;font-size:100px;line-height:1.4;z-index:5;text-shadow:0 4px 18px rgba(0,0,0,.55)">{c['rt']}</div>
 <div style="position:absolute;left:70px;top:470px;width:900px;background:rgba(10,10,24,.66);border-radius:36px;padding:44px 48px;font-size:46px;font-family:{K.B};font-weight:800;line-height:1.9;z-index:5;box-sizing:border-box">{c['body']}</div>{img}
 <div style="position:absolute;left:{cta_l};right:{'70px' if not (fc and rl=='br') else '240px'};top:1090px;height:110px;background:{acc};color:#111;border-radius:60px;display:flex;align-items:center;justify-content:center;font-size:46px;z-index:5">{c['cta']}</div>'''
-    return page(ink + handle(acc, right=(fc is not None and rl == 'bl')), c['bg3'], acc)
+    return page(ink + frame(fc is not None), c['bg3'], acc)
 SETS = {
  'a_1009': dict(acc='#ff8a73', face='v5_halfup', cl='bc', ql='cards', opts_short=['식으면<br>정리가<br>빨라요', '좋아하면<br>먼저<br>표현해요', '뒤돌아본<br>적이<br>드물어요'], rl='bl', bg='sky', badge='정월의 연애 테스트', sub='한 번 정하면 뒤돌아보지 않는 나', title='연애에서도<br>몇 개 해당돼요?',
     bg2='chart', q='세 가지 중<br>몇 개예요?', opts=['마음이 식으면 정리가 빨라요', '좋아하면 먼저 표현해요', '헤어진 뒤 뒤돌아본 적이 드물어요'],

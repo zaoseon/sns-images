@@ -19,6 +19,7 @@ def html(kind="reel", ai=False, ai_id="bfAI", stacked=False):
     P = REEL if kind == "reel" else CARD
     url_fs, ai_fs = (40, 30) if kind == "reel" else (36, 28)
     tag = f'<div class="bf bf-tag{" bf-tag2" if stacked else ""}" id=bfTag style="right:{P["right"]}px;top:{P["tag_top"]}px"><b>{TAG1}</b><i>|</i>{TAG2}</div>'
-    url = f'<div class="bf bf-url" id=bfUrl style="right:{P["right"]}px;bottom:{P["bottom"]}px;font-size:{url_fs}px">{URL}</div>'
+    pill = ";background:rgba(0,0,0,.45);padding:6px 20px;border-radius:24px" if kind != "reel" else ""
+    url = f'<div class="bf bf-url" id=bfUrl style="right:{P["right"]}px;bottom:{P["bottom"]}px;font-size:{url_fs}px{pill}">{URL}</div>'
     a = f'<div class="bf bf-ai" id={ai_id} style="left:{60 if kind == "reel" else 55}px;bottom:{P["bottom"]}px;font-size:{ai_fs}px">{AI}</div>' if ai else ""
     return tag + url + a
