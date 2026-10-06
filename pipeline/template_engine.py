@@ -12,7 +12,7 @@ AS = os.path.join(R, "assets", "brand_bg")
 GOLD = "#e7c88d"; PINK = "#ff5c9d"; BLUE = "#4560f0"
 # 채널 지오메트리: W,H · 안전영역 · 위 고정줄 아래 y · 아래 고정줄 위 y · 제목 글꼴 · brand_frame 종류
 CHAN = {"reel": dict(W=1080, H=1920, safe=(50, 330, 900, 1470), head_bottom=385, foot_top=1425, title="gm_bold", kind="reel", stacked=False, gap=25, min_body=44),
-        "carousel": dict(W=1080, H=1350, safe=(55, 55, 1025, 1295), head_bottom=150, foot_top=1260, title="pl_blk", kind="card", stacked=True, gap=22, min_body=44)}
+        "carousel": dict(W=1080, H=1350, safe=(55, 55, 1025, 1295), head_bottom=108, foot_top=1260, title="pl_blk", kind="card", stacked=False, gap=22, min_body=44)}
 def content_box(ch):
     c = CHAN[ch]; s = c["safe"]; return (s[0], c["head_bottom"] + c["gap"], s[2], c["foot_top"] - c["gap"])
 _F = {}
@@ -20,15 +20,29 @@ def font(path, size):
     k = (path, size)
     if k not in _F: _F[k] = ImageFont.truetype(path, size)
     return _F[k]
+def _greedy(words, fnt, maxw):
+    line = ""; out = []
+    for w in words:
+        t = (line + " " + w).strip()
+        if line and fnt.getlength(t) > maxw: out.append(line); line = w
+        else: line = t
+    out.append(line); return out
+def _balanced(words, fnt, n):
+    """같은 줄 수(n)에서 가장 긴 줄이 가장 짧아지게 나눈다(한 단어만 덜렁 남는 줄바꿈을 막는다)."""
+    import itertools
+    best = None
+    for cuts in itertools.combinations(range(1, len(words)), n - 1):
+        parts = []; prev = 0
+        for c in list(cuts) + [len(words)]: parts.append(" ".join(words[prev:c])); prev = c
+        ws = [fnt.getlength(x) for x in parts]; key = (max(ws), sum(w * w for w in ws))
+        if best is None or key < best[0]: best = (key, parts)
+    return best[1] if best else [" ".join(words)]
 def wrap(text, fnt, maxw):
+    """명시한 줄바꿈(\n)은 그대로 지키고, 한 줄에 안 들어가는 문장만 균형 있게 나눈다. 단어 중간은 끊지 않는다."""
     out = []
     for para in text.split("\n"):
-        line = ""
-        for w in para.split(" "):
-            t = (line + " " + w).strip()
-            if line and fnt.getlength(t) > maxw: out.append(line); line = w
-            else: line = t
-        out.append(line)
+        words = para.split(" "); g = _greedy(words, fnt, maxw)
+        out += _balanced(words, fnt, len(g)) if len(g) > 1 and len(words) <= 14 else g
     return out
 def fit(text, path, box_w, box_h, max_size, min_size, lh=1.25):
     """칸(box_w x box_h)에 들어가는 가장 큰 글자 크기와 줄. 못 들어가면 overflow=True."""
@@ -78,8 +92,11 @@ def t_hook(ch, title, left, right, mid):
         p.add(name, (ccx - r["w"] / 2, t, ccx + r["w"] / 2, t + r["h"]), f'<div style="position:absolute;left:{ccx - wmax / 2:.0f}px;top:{t:.0f}px;width:{wmax:.0f}px;text-align:center;font-family:{K.D};font-weight:900;font-size:{r["size"]}px;line-height:1.1;color:#fff;white-space:nowrap">{r["lines"][0]}</div>')
     return p
 def t_ranking(ch, title, rows, unit="%"):
-    p = Page(ch); x0, y0, x1, y1 = p.cb; cw = x1 - x0; cx = (x0 + x1) / 2
-    tr = p.text("제목", title, "title", cx, y0, cw, 150, 62, 44, lh=1.2); top = y0 + tr["h"] + 22; area = y1 - top; n = len(rows); pitch = area / n; bh = pitch * .88; mx = max(v for _, v in rows)
+    """제목은 의미 단위로 줄바꿈(명시한 \n 우선)·가운데 정렬. 제목과 그래프 사이 간격은 하단 여백을 남기도록 함께 계산한다(10/6 대표 지정)."""
+    p = Page(ch); x0, y0, x1, y1 = p.cb; cw = x1 - x0; cx = (x0 + x1) / 2; chh = y1 - y0
+    tr = p.text("제목", title, "title", cx, y0, cw, 170, 58, 44, lh=1.2)
+    bottom_margin = max(40, chh * .04); gap = max(30, chh * .035)            # 그래프 아래 여백과 제목-그래프 간격을 함께 확보
+    top = y0 + tr["h"] + gap; area = y1 - bottom_margin - top; n = len(rows); pitch = area / n; bh = pitch * .88; mx = max(v for _, v in rows)
     fs = int(min(56, bh * .8)) // 2 * 2
     if fs < p.c["min_body"]: p.problems.append(f"막대 글자가 {fs}px로 최소 {p.c['min_body']}px보다 작음")
     for i, (nm, v) in enumerate(rows):
@@ -113,7 +130,7 @@ if __name__ == "__main__":
     pages = {}
     for ch in ("reel", "carousel"):
         pages[f"{ch}_hook"] = t_hook(ch, "내 별자리,\n사주랑 같은 말\n할까?", "사주", "별자리", "같은 말")
-        pages[f"{ch}_ranking"] = t_ranking(ch, "사주와 같은 말을 하는 별자리 순위", RANK)
+        pages[f"{ch}_ranking"] = t_ranking(ch, "사주와 같은 말을 하는\n별자리 순위", RANK)
         pages[f"{ch}_cta"] = t_cta(ch, "팔로우하고", "더 많은 이야기 나눠요", "프로필 링크에서", ("생년월일 입력하고", "내 첫글자와 타고난 기운 알아보기"), "＋ 팔로우")
     bad = {k: p.problems for k, p in pages.items() if p.problems}
     for k, p in pages.items(): print(k, "요소", len(p.els), "문제", len(p.problems), p.problems[:3])

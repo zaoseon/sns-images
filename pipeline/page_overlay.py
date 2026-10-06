@@ -14,8 +14,7 @@ async def dom_boxes():
     """같은 박자의 HTML을 열어 요소 위치를 잰다(영상 v3은 우측 고정 요소가 x 960이라 같은 값으로 맞춘다)."""
     import motion_litho_star as M
     from playwright.async_api import async_playwright
-    old = BF.REEL["right"]; BF.REEL["right"] = 120
-    open("/tmp/page_dom.html", "w", encoding="utf-8").write(M.html(B)); BF.REEL["right"] = old
+    open("/tmp/page_dom.html", "w", encoding="utf-8").write(M.html(B))   # 현재 brand_frame(우측 x 900) 기준 — 영상 v4와 같다
     JS = """()=>{const out=[];const skip=new Set(['bg','chart','sun','moon','stars']);document.querySelectorAll('body *').forEach(e=>{
       if(skip.has(e.id)||e.closest('#stars')||e.tagName==='SCRIPT'||e.tagName==='STYLE'||e.tagName==='path'||e.tagName==='circle'||e.tagName==='svg'&&e.id==='stars')return;
       const cs=getComputedStyle(e); if(parseFloat(cs.opacity)<0.35||cs.display==='none')return; let p=e.parentElement,op=1; while(p&&p!==document.body){op*=parseFloat(getComputedStyle(p).opacity);p=p.parentElement}

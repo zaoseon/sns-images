@@ -56,13 +56,13 @@ def mock(name, left, top, sc, markers_x, legend_x, legend_w, extra=""):
     for y, i in ys:
         y = max(y, last + 58); pos[i] = y; last = y
     for i in range(len(v["zones"])): o.append(f'<div class=mk style="left:{markers_x}px;top:{pos[i] - 26}px">{i + 1}</div>')
-    lg = f'<div class=lg style="left:{legend_x}px;top:{top}px;width:{legend_w}px">' + "".join(f'<div style="margin-bottom:6px"><b>{i + 1}</b> {n}<br><span style="font-size:40px;color:#c5cdf0;font-weight:800">y {y0}~{y1}</span></div>' for i, (n, x0, y0, x1, y1, t) in enumerate(v["zones"])) + '</div>'
+    lg = f'<div class=lg style="left:{legend_x}px;top:{top}px;width:{legend_w}px">' + "".join(f'<div style="margin-bottom:0"><b>{i + 1}</b> {n}<br><span style="font-size:40px;color:#c5cdf0;font-weight:800">y {y0}~{y1}</span></div>' for i, (n, x0, y0, x1, y1, t) in enumerate(v["zones"])) + '</div>'
     return "".join(o) + lg + extra
 S = []
 S.append(page("채널별 표준 · 1 / 8", "채널마다 크기와<br>안전영역이 달라요", '<div style="position:absolute;left:60px;right:60px;top:330px">' + "".join(
   f'<div class=row><b>{CH[k]["name"]}</b> {CH[k]["w"]}x{CH[k]["h"]}<br>안전 영역 <u>x {CH[k]["safe"][0]}~{CH[k]["safe"][2]} · y {CH[k]["safe"][1]}~{CH[k]["safe"][3]}</u></div>' for k in ("reel", "naver_clip", "insta_carousel", "naver_blog_thumb", "site_blog_thumb")) + '</div>'))
 S.append(page("2 / 8 · 인스타 릴스", "릴스 1080x1920", mock("reel", 110, 250, .36, 40, 560, 480,
-  f'<div class=lg style="left:60px;top:1050px;width:960px;font-size:40px"><span class=sw style="background:rgba(255,92,92,.55)"></span>빨강 = 인스타가 가리는 곳 <span class=sw style="background:transparent;border:4px dashed {TEAL}"></span>안전 영역<br><span class=sw style="background:transparent;border:4px dotted #ffb84d"></span>격자 3:4 <span class=sw style="background:transparent;border:4px dotted #c9a6ff"></span>피드 4:5 <span class=sw style="background:transparent;border:4px dotted #9fe870"></span>표지 핵심 1:1</div>')))
+  f'<div class=lg style="left:60px;top:1150px;width:960px;font-size:40px"><span class=sw style="background:rgba(255,92,92,.55)"></span>빨강 = 인스타가 가리는 곳 <span class=sw style="background:transparent;border:4px dashed {TEAL}"></span>안전 영역<br><span class=sw style="background:transparent;border:4px dotted #ffb84d"></span>격자 3:4 <span class=sw style="background:transparent;border:4px dotted #c9a6ff"></span>피드 4:5 <span class=sw style="background:transparent;border:4px dotted #9fe870"></span>표지 핵심 1:1</div>')))
 def clip_slide():
     sc = .46; L0, T0 = 130, 232            # 캡처 540x1158을 .46*2=0.92배로 쓰지 않고 CSS로 497 폭에 맞춘다
     f = 497 / 1080
@@ -80,7 +80,7 @@ def clip_slide():
     return page("3 / 8 · 네이버 클립", "클립 캡처로 잰 영역", box + mk + lg)
 S.append(clip_slide())
 S.append(page("4 / 8 · 인스타 캐러셀", "캐러셀 1080x1350", mock("insta_carousel", 110, 250, .40, 40, 590, 450,
-  f'<div class=lg style="left:60px;top:1050px;width:960px;font-size:40px"><b>2026 변화:</b><br>프로필 격자가 3:4(1080x1440)예요.<br>4:5 이미지는 격자에서 좌우 약 34px씩<br>잘려요(주황 점선). <b>3:4로 바꿀지</b> 정해 주세요.</div>')))
+  f'<div class=lg style="left:60px;top:1128px;width:960px;font-size:40px"><b>2026 변화:</b> 프로필 격자 3:4(1080x1440).<br>4:5 이미지는 좌우 약 34px씩 잘려요.<br><b>3:4로 바꿀지</b> 정해 주세요.</div>')))
 b = CH["naver_blog_thumb"]; sc = .70
 S.append(page("5 / 8 · 블로그 원고 썸네일", "네이버 블로그 대표 이미지", mock("naver_blog_thumb", 150, 250, sc, 80, 90, 900, "").replace('class=lg style="left:90px;top:250px;width:900px"', 'class=lg style="left:60px;top:820px;width:960px;columns:2;column-gap:30px"') +
   f'<div class=lg style="left:60px;top:1100px;width:960px;font-size:40px"><b>목록</b>은 가운데 정사각만 보여요.<br><b>링크 카드</b>는 전체가 보여요.<br>본문 이미지 1280x600 · CTA 배너 1280x400</div>'))

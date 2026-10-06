@@ -1,5 +1,5 @@
 """브랜드 고정 요소(10/6 대표 지시) — 모든 이미지·영상에 같은 자리에 넣는다.
-- 우측 상단: "자오선 | 동서양 6개 운명학 교차분석" (서비스를 계속 알린다)
+- 상단 왼쪽: "자오선" · 상단 오른쪽: "동서양 6개 운명학 교차분석" (서비스를 계속 알린다, 10/6 대표 지정)
 - 우측 하단: zaoseon.com (고정)
 - 좌측 하단: "AI 생성 캐릭터" (정월이 나오는 이미지·장면에만, 위치는 항상 같은 곳)
 위치는 인스타 화면 가림(UI)을 피한다. 릴스·클립 1080x1920: 안전 영역 위 330 · 아래 1470 · 오른쪽 900(10/6 네이버 클립 캡처 실측: 버튼 줄 x 905~). 카드 1080x1350: 가장자리 55px.
@@ -10,16 +10,18 @@ REEL = dict(right=180, tag_top=340, bottom=455)       # 릴스·클립 공통: �
 CARD = dict(right=55, tag_top=58, bottom=46)
 def css():
     return (".bf{position:absolute;white-space:nowrap;z-index:40}"
-            ".bf-tag{font-family:'JW-B',sans-serif;font-weight:800;font-size:34px;color:#fff;opacity:.95;line-height:1.2;text-align:right}"
-            ".bf-tag b{font-family:'JW-D',sans-serif;font-weight:900;font-size:38px;color:#e7c88d;margin-right:14px}.bf-tag i{font-style:normal;color:rgba(255,255,255,.55);margin-right:14px}"
-            ".bf-tag2 b{display:block;margin:0}.bf-tag2 i{display:none}"
+            ".bf-l{font-family:'JW-D',sans-serif;font-weight:900;font-size:42px;color:#e7c88d;line-height:1.2}"
+            ".bf-r{font-family:'JW-B',sans-serif;font-weight:800;font-size:34px;color:#fff;opacity:.95;line-height:1.2;text-align:right}"
             ".bf-url{font-family:'JW-D',sans-serif;font-weight:900;color:#e7c88d;letter-spacing:.5px}"
             ".bf-ai{font-family:'JW-B',sans-serif;font-weight:800;color:#fff;background:rgba(0,0,0,.5);padding:6px 18px;border-radius:24px;line-height:1.2}")
 def html(kind="reel", ai=False, ai_id="bfAI", stacked=False):
+    """상단 왼쪽 '자오선' · 상단 오른쪽 '동서양 6개 운명학 교차분석'(10/6 대표 지정). stacked는 옛 호출 호환용으로 무시한다."""
     P = REEL if kind == "reel" else CARD
+    left = 60 if kind == "reel" else 55
     url_fs, ai_fs = (40, 30) if kind == "reel" else (36, 28)
-    tag = f'<div class="bf bf-tag{" bf-tag2" if stacked else ""}" id=bfTag style="right:{P["right"]}px;top:{P["tag_top"]}px"><b>{TAG1}</b><i>|</i>{TAG2}</div>'
+    tl = f'<div class="bf bf-l" id=bfL style="left:{left}px;top:{P["tag_top"]}px">{TAG1}</div>'
+    tr = f'<div class="bf bf-r" id=bfR style="right:{P["right"]}px;top:{P["tag_top"] + 6}px">{TAG2}</div>'
     pill = ";background:rgba(0,0,0,.45);padding:6px 20px;border-radius:24px" if kind != "reel" else ""
     url = f'<div class="bf bf-url" id=bfUrl style="right:{P["right"]}px;bottom:{P["bottom"]}px;font-size:{url_fs}px{pill}">{URL}</div>'
-    a = f'<div class="bf bf-ai" id={ai_id} style="left:{60 if kind == "reel" else 55}px;bottom:{P["bottom"]}px;font-size:{ai_fs}px">{AI}</div>' if ai else ""
-    return tag + url + a
+    a = f'<div class="bf bf-ai" id={ai_id} style="left:{left}px;bottom:{P["bottom"]}px;font-size:{ai_fs}px">{AI}</div>' if ai else ""
+    return tl + tr + url + a

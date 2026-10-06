@@ -12,7 +12,7 @@ GOLD = "#e7c88d"; PINK = "#ff5c9d"; BLUE = "#4560f0"
 RANK = [("염소", 23.0), ("황소", 22.7), ("처녀", 18.1), ("사자", 16.3), ("물병", 14.1), ("사수", 13.4), ("쌍둥이", 12.9), ("게", 12.6), ("양", 9.9), ("전갈", 7.3), ("물고기", 6.1), ("천칭", 5.6)]
 def html(beat):
     chips = "".join(f'<div class="a d chip" id=chip{k} style="left:{60 + k * 162}px">{n}</div>' for k, n in enumerate(["안정", "표현", "유연", "생성", "결단", "소통"]))
-    bars = "".join(f'<div class="a bar" id=bar{i} style="top:{512 + i * 74}px"><div class="a d bl">{n}</div><div class="a d bv">{v:.1f}%</div></div>' for i, (n, v) in enumerate(RANK))
+    bars = "".join(f'<div class="a bar" id=bar{i} style="top:{588 + i * 66}px"><div class="a d bl">{n}</div><div class="a d bv">{v:.1f}%</div></div>' for i, (n, v) in enumerate(RANK))
     h = """<!doctype html><meta charset=utf-8><style>@@FONTS@@
 html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#050a1c;font-family:'JW-B',sans-serif;font-weight:800;color:#fff;word-break:keep-all}
 .a{position:absolute}.d{font-family:'JW-D',sans-serif;font-weight:900}.t{text-align:center;white-space:nowrap}
@@ -38,8 +38,8 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#050a1c
 .grp{left:0;top:0;width:1080px;height:1920px;isolation:isolate}
 .c{border-radius:50%;mix-blend-mode:multiply;will-change:transform,opacity}
 .lab{transform:translate(-50%,-50%);line-height:1}
-.bar{left:70px;height:64px;width:0;border-radius:0 32px 32px 0;background:linear-gradient(90deg,#6a3fc8,#ff5c9d);opacity:0;overflow:hidden}
-.bl{left:26px;top:6px;font-size:52px;line-height:1.15;color:#fff}.bv{right:26px;top:6px;font-size:52px;line-height:1.15;color:#fff}
+.bar{left:70px;height:58px;width:0;border-radius:0 29px 29px 0;background:linear-gradient(90deg,#6a3fc8,#ff5c9d);opacity:0;overflow:hidden}
+.bl{left:26px;top:4px;font-size:46px;line-height:1.15;color:#fff}.bv{right:26px;top:4px;font-size:46px;line-height:1.15;color:#fff}
 .top1{background:linear-gradient(90deg,#c9a24a,#e7c88d)}.top1 .bl,.top1 .bv{color:#17102b}
 @@BFCSS@@</style><body>
 <img class="a" id=bg src="file://@@BG@@">
@@ -68,7 +68,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#050a1c
 @@CHIPS@@
 <div class="a d leg" id=leg1 style="top:1250px;color:#fff"><i style="background:@@PINK@@"></i>사주가 짚은 방향</div>
 <div class="a d leg" id=leg2 style="top:1322px;color:#fff"><i style="background:@@BLUE@@"></i>별자리가 짚은 방향</div>
-<div class="a d t" id=rk style="left:0;width:1080px;top:412px;font-size:56px;line-height:1.25;opacity:0">사주와 같은 말을 하는 별자리 순위</div>
+<div class="a d t" id=rk style="left:0;width:1080px;top:410px;font-size:56px;line-height:1.22;opacity:0">사주와 같은 말을 하는<br>별자리 순위</div>
 @@BARS@@
 <div class="a d t" id=c1 style="left:0;width:1080px;top:520px;font-size:116px;line-height:1.22;opacity:0">내 별자리는</div>
 <div class="a d t" id=c2 style="left:0;width:1080px;top:670px;font-size:116px;line-height:1.22;opacity:0;color:@@GOLD@@">몇 위일까요?</div>

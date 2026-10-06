@@ -38,7 +38,7 @@ def phone(acc, x, y):   # 소품: 휴대폰과 대화 말풍선
 def bubble(acc, text, x, y, w=420): return f'<div style="position:absolute;left:{x}px;top:{y}px;width:{w}px;background:#fff;color:#111;font-size:44px;font-family:{K.B};font-weight:800;line-height:1.5;padding:22px 30px;border-radius:36px;z-index:6">{text}<div style="position:absolute;left:60px;bottom:-26px;width:0;height:0;border-left:26px solid transparent;border-right:26px solid transparent;border-top:36px solid #fff"></div></div>'
 def cover(c):
     acc = c['acc']; L = c.get('cl', 'br'); fc = c['face']; big = fc == 'intro'
-    head = f'''<div style="position:absolute;left:75px;top:80px;background:{acc};color:#111;font-size:44px;padding:14px 42px;border-radius:60px;z-index:5">{c['badge']}</div>'''
+    head = f'''<div style="position:absolute;left:75px;top:122px;background:{acc};color:#111;font-size:44px;padding:14px 42px;border-radius:60px;z-index:5">{c['badge']}</div>'''
     sh = 'text-shadow:0 4px 18px rgba(0,0,0,.55)'
     if L == 'br':       # 오른쪽 아래, 제목은 왼쪽 위
         ink = head + f'<div style="position:absolute;left:90px;top:232px;width:820px;font-size:56px;line-height:1.45;color:{acc};z-index:5">{c["sub"]}</div><div style="position:absolute;left:90px;top:470px;width:900px;font-size:108px;line-height:1.35;z-index:5;{sh}">{c["title"]}</div>' + img_tag(fc, 820 if big else 800, f'right:{-40 if big else -150}px;bottom:0')
@@ -53,7 +53,7 @@ def cover(c):
     leftchar = L in ('bl', 'phone')
     return page(ink + sparkles(acc) + frame(True), c['bg'], acc)
 def options(c):
-    acc = c['acc']; ql = c.get('ql', 'rows'); head = f'<div style="position:absolute;left:75px;top:80px;background:{acc};color:#111;font-size:44px;padding:14px 42px;border-radius:60px;z-index:5">선택지</div><div style="position:absolute;left:90px;top:210px;width:900px;font-size:100px;line-height:1.4;z-index:5;text-shadow:0 4px 18px rgba(0,0,0,.55)">{c["q"]}</div>'
+    acc = c['acc']; ql = c.get('ql', 'rows'); head = f'<div style="position:absolute;left:75px;top:122px;background:{acc};color:#111;font-size:44px;padding:14px 42px;border-radius:60px;z-index:5">선택지</div><div style="position:absolute;left:90px;top:210px;width:900px;font-size:100px;line-height:1.4;z-index:5;text-shadow:0 4px 18px rgba(0,0,0,.55)">{c["q"]}</div>'
     foot = f'<div style="position:absolute;left:0;right:0;top:1150px;text-align:center;font-size:44px;font-family:{K.B};font-weight:800;color:{acc};z-index:5">고른 번호를 세어 보세요</div>'
     if ql == 'cards':    # 세로 카드 세 장
         cards = ''.join(f'<div style="position:absolute;left:{70+i*315}px;top:520px;width:295px;height:560px;background:rgba(10,10,24,.66);border:3px solid {acc};border-radius:36px;z-index:5;padding:30px 24px;box-sizing:border-box;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center"><div style="margin:0 0 30px;width:96px;height:96px;border-radius:50%;background:{acc};color:#111;font-size:64px;display:flex;align-items:center;justify-content:center">{i+1}</div><div style="font-size:42px;font-family:{K.B};font-weight:800;line-height:1.6">{t}</div></div>' for i, t in enumerate(c['opts_short']))
@@ -70,7 +70,7 @@ def result(c):
     elif fc and rl == 'bl': img = img_tag(fc, 380, 'left:-60px;bottom:0', flip=True, z=3)
     elif fc and rl == 'tr': img = img_tag(fc, 420, 'right:-70px;top:150px', z=3)
     cta_l = '300px' if rl == 'bl' and fc else '70px'
-    ink = f'''<div style="position:absolute;left:75px;top:80px;background:{acc};color:#111;font-size:44px;padding:14px 42px;border-radius:60px;z-index:5">결과</div>
+    ink = f'''<div style="position:absolute;left:75px;top:122px;background:{acc};color:#111;font-size:44px;padding:14px 42px;border-radius:60px;z-index:5">결과</div>
 <div style="position:absolute;left:90px;top:210px;width:900px;font-size:100px;line-height:1.4;z-index:5;text-shadow:0 4px 18px rgba(0,0,0,.55)">{c['rt']}</div>
 <div style="position:absolute;left:70px;top:470px;width:900px;background:rgba(10,10,24,.66);border-radius:36px;padding:44px 48px;font-size:46px;font-family:{K.B};font-weight:800;line-height:1.9;z-index:5;box-sizing:border-box">{c['body']}</div>{img}
 <div style="position:absolute;left:{cta_l};right:{'70px' if not (fc and rl=='br') else '240px'};top:1090px;height:110px;background:{acc};color:#111;border-radius:60px;display:flex;align-items:center;justify-content:center;font-size:46px;z-index:5">{c['cta']}</div>'''
