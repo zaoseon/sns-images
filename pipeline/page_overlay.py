@@ -38,6 +38,19 @@ def violations(boxes):
         if e["y0"] < SAFE[1] - 2 and not e["id"].startswith("bf") and e["id"] not in ("bfTag",): out.append(f'위 y {e["y0"]:.0f}')
         if out: v.append((e, out))
     return v
+
+def center_issues(boxes, tol=10):
+    """카드(fcard)·말풍선(bub) 안 글 묶음이 박스 가운데에 있는지(R18). 반환: [(박스, 설명)]"""
+    out = []
+    for sh in boxes:
+        if sh["id"] not in ("fcard", "bub"): continue
+        ins = [t for t in boxes if t is not sh and t["t"] and t["x0"] >= sh["x0"] - 2 and t["x1"] <= sh["x1"] + 2 and t["y0"] >= sh["y0"] + 8 and t["y1"] <= sh["y1"] + 2 and not t["id"].startswith("bf")]   # 테두리에 걸친 이름표(정월)는 본문이 아님
+        if not ins: continue
+        ux0 = min(t["x0"] for t in ins); uy0 = min(t["y0"] for t in ins); ux1 = max(t["x1"] for t in ins); uy1 = max(t["y1"] for t in ins)
+        top, bot, lef, rig = uy0 - sh["y0"], sh["y1"] - uy1, ux0 - sh["x0"], sh["x1"] - ux1
+        if abs(top - bot) > tol: out.append((sh, [f"글이 세로로 치우침(위 {top:.0f}px · 아래 {bot:.0f}px)"]))
+        if abs(lef - rig) > (tol if sh["id"] == "fcard" else 40): out.append((sh, [f"글이 가로로 치우침(왼쪽 {lef:.0f}px · 오른쪽 {rig:.0f}px)"]))
+    return out
 def draw(im, title, viol):
     W, H = im.size; base = im.convert("RGBA"); ov = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(ov)
     RED, ORG, TEAL, BLUE, MAG = (255, 80, 80), (255, 170, 60), (127, 214, 200), (110, 170, 255), (255, 60, 200)
@@ -77,7 +90,7 @@ def draw(im, title, viol):
 async def main():
     boxes = await dom_boxes(); os.makedirs(os.path.join(R, "2026-motion", "pages"), exist_ok=True); report = {}
     for k, n, beat in PAGES:
-        still = Image.open(f"/tmp/still_{k}.png").convert("RGB"); v = violations(boxes[k]); out = draw(still, f"페이지 {n}", v)
+        still = Image.open(f"/tmp/still_{k}.png").convert("RGB"); v = violations(boxes[k]) + center_issues(boxes[k]); out = draw(still, f"페이지 {n}", v)
         out.save(os.path.join(R, "2026-motion", "pages", f"litho_{k}.jpg"), quality=90)
         report[k] = [f'{e["id"]}「{e["t"]}」 ' + ", ".join(w) for e, w in v]
     json.dump(report, open("/tmp/page_report.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)

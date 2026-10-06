@@ -3,7 +3,7 @@
  - 배경: 해·달 하늘 그림(어둡게) + 반짝이는 별 + 천천히 도는 지지 고리(子丑寅卯…). 위쪽 진행 막대.
  - 그림: 사주·별자리·숫자 카드, 오행 상생 고리(木→火→土→金→水), 별자리 짝, 숫자 무리, 충전 배터리, 체크 표시, 알림, 취소선, 점수 줄.
  - 1080x1920, 30fps, 소리 없음, 네이버 클립 안전 영역(글자 x70~880, y190~1440).
- - 캐릭터 정월(AI 생성)이 나오는 장면이 있으므로 영상 안에 "AI 생성 캐릭터" 작은 글씨를 넣는다.
+ - 정월이 나오는 장면에는 brand_layer가 좌측 하단에 "정월은 가상의 AI 캐릭터입니다"를 넣는다(10/6 확정 규칙 R03).
 사용: python3 pipeline/clip_motion.py n28-c1 12   (clip id, 길이)  → clips_sop/<id>_<길이>s.mp4"""
 import os, sys, math, random, subprocess, functools
 from PIL import ImageOps
@@ -116,6 +116,21 @@ def line_layers(text, size, color, path, maxw, lh):
         for ch, h in ln: d.text((x, 22), ch, font=pick(ch), fill=GOLD if h else color); x += pick(ch).getlength(ch)
         sh.alpha_composite(im); out.append(sh)
     return out, int(size * lh)
+
+# ---------- 확정 규칙 층(10/6 대표): 모든 프레임에 같은 자리 고정 요소 — 상단 왼쪽 자오선·상단 오른쪽 서비스 문구·우측 하단 주소·(정월이 나올 때) 좌측 하단 AI 고지 ----------
+sys.path.insert(0, HERE)
+import fonts_kit as _FK, brand_frame as _BF
+def brand_layer(fr, ai=False):
+    d = ImageDraw.Draw(fr, "RGBA"); R = 900; gold = (231, 200, 141, 255)
+    d.text((60, 340), _BF.TAG1, font=font(_FK.P["gm_bold"], 42), fill=gold, anchor="la")
+    d.text((R, 346), _BF.TAG2, font=font(_FK.P["pr_xb"], 34), fill=(255, 255, 255, 242), anchor="ra")
+    d.text((R, 1465), _BF.URL, font=font(_FK.P["gm_bold"], 40), fill=gold, anchor="rd")
+    if ai:
+        f = font(_FK.P["pr_xb"], 28); tw = f.getlength(_BF.AI); d.rounded_rectangle((60, 1465 - 28 - 14, 60 + tw + 32, 1465 + 8), radius=22, fill=(0, 0, 0, 72))
+        d.text((76, 1465), _BF.AI, font=f, fill=(255, 255, 255, 140), anchor="ld")
+BRAND = True   # False로 두면 규칙 층을 끈다(시험용)
+AVOID = True   # 글자·배지가 고정 문구 띠를 피한다(그리기와 따로 켜고 끈다)
+HDR_TOP, HDR_BOTTOM = 335, 395   # 상단 왼쪽·오른쪽 고정 문구 띠
 class Ctx:
     def __init__(s, fr, t, dur): s.fr, s.t, s.dur = fr, t, dur; s.ex = e_out(cl((dur - t) / 0.24))   # 장면 끝 0.24초: 위로 사라짐
     def alpha(s, a): return a * s.ex
@@ -130,6 +145,7 @@ def eff_size(s, size, maxw, path):
     if maxw < widest <= maxw * 1.2: return int(size * maxw / widest)
     return size
 def text(c, s, y, t0, size=104, color=WHITE, path=BLACK, maxw=800, lh=1.3, stagger=0.2, cx=CX, anim="rise"):
+    if AVOID and HDR_TOP - 40 <= y < HDR_BOTTOM + 20: y = HDR_BOTTOM + 20   # 상단 문구 띠를 피한다(10/6 확정 규칙 R01)
     size = eff_size(s, size, maxw, path)
     ls, step = line_layers(s, size, color, path, maxw, lh); y0 = y
     for i, L in enumerate(ls):
@@ -142,6 +158,7 @@ def chip_layer(label, size):
     fnt = font(BLACK, size); w = int(fnt.getlength(label)) + 60; h = size + 30; im = Image.new("RGBA", (w + 8, h + 8), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     d.rounded_rectangle((4, 4, 4 + w, 4 + h), radius=h // 2, fill=(224, 184, 102, 28), outline=GOLD, width=3); d.text((4 + w / 2, 4 + h / 2 + 1), label, font=fnt, fill=GOLD, anchor="mm"); return im
 def chip(c, label, y, t0, size=44):
+    if AVOID and HDR_TOP - 60 <= y < HDR_BOTTOM + 10: y = HDR_TOP - 95   # 배지는 상단 문구 띠 위로
     L = chip_layer(label, size); p = e_back((c.t - t0) / 0.4); s = max(.01, p)
     im = L.resize((max(1, int(L.width * s)), max(1, int(L.height * s)))); blit(c.fr, im, CX - im.width / 2, y + (L.height - im.height) / 2, c.alpha(cl(p * 2))); return y + L.height
 # ---------- 캐릭터 ----------
@@ -164,7 +181,7 @@ def character(c, name, t0=0.1, width=900, bottom=1440, dx=0):
     L = char_layer(name, width); p = e_out((c.t - t0) / 0.55); br = 5 * math.sin(c.t * 2.2)
     blit(c.fr, glow(), CX - 400 + dx, bottom - L.height + 80, c.alpha(p * .9))
     blit(c.fr, L, CX - L.width / 2 + dx, bottom - L.height + (1 - p) * 190 + br + (1 - c.ex) * 40, c.alpha(cl(p * 1.6)))
-    f = font(MED, 22); d = ImageDraw.Draw(c.fr, "RGBA"); d.text((CX + width // 2 - 20 + dx, bottom - 6), "AI 생성 캐릭터", font=f, fill=(255, 255, 255, int(120 * c.ex)), anchor="rd")
+    c.ai_seen = True   # 정월이 나온 장면 → brand_layer가 좌측 하단에 "정월은 가상의 AI 캐릭터입니다"를 그린다(10/6 확정 규칙 R03)
 # ---------- 그림 ----------
 def rr(w, h, fill, outline=None, r=36, ow=3):
     im = Image.new("RGBA", (w + 8, h + 8), (0, 0, 0, 0)); ImageDraw.Draw(im).rounded_rectangle((4, 4, 4 + w, 4 + h), radius=r, fill=fill, outline=outline, width=ow); return im
@@ -264,8 +281,8 @@ def score_rows(c, y, t0, rows, step=172):
             if fnt.getlength(txt_) < 680: break
         d.text((140, 80), txt_, font=fnt, fill=WHITE, anchor="lm"); blit(c.fr, im, CX - 424 + (1 - p) * 100, y + i * step, c.alpha(cl(p * 1.5)))
 def cta(c, lines, t0=0.2, pill="블로그 스티커 눌러 보기", face="v8_gesture"):
-    y0 = 300; y = text(c, lines, y0, t0, 92, lh=1.33)
-    if face: character(c, face, t0=.5, width=760)
+    y0 = 300; y = text(c, lines, y0, t0, 88, lh=1.3)
+    if face: character(c, face, t0=.5, width=660)
     fnt = font(BLACK, 60); w = int(fnt.getlength(pill)) + 90; pl = Image.new("RGBA", (w + 20, 140), (0, 0, 0, 0)); d = ImageDraw.Draw(pl)
     d.rounded_rectangle((10, 10, 10 + w, 130), radius=60, fill=GOLD); d.text((10 + w / 2, 71), pill, font=fnt, fill=INK, anchor="mm")
     pulse = 1 + .035 * math.sin(c.t * 6); L = pl.resize((int(pl.width * pulse), int(pl.height * pulse))); p = e_back((c.t - t0 - .6) / .45)
@@ -279,11 +296,15 @@ def render(name, scenes, outdir, kicker=None):
     t_acc = 0.0; n = 0; fr = Image.new("RGB", (W, H))
     for dur, fn in scenes:
         for i in range(int(round(dur * FPS))):
-            t = i / FPS; background(fr, t_acc + t, total); fn(Ctx(fr, t, dur)); pr.stdin.write(fr.tobytes()); n += 1
+            t = i / FPS; background(fr, t_acc + t, total); cx_ = Ctx(fr, t, dur); fn(cx_)
+            if BRAND: brand_layer(fr, getattr(cx_, 'ai_seen', False))
+            pr.stdin.write(fr.tobytes()); n += 1
         t_acc += dur
     pr.stdin.close(); pr.wait(); return out, n / FPS
 def still(scenes, idx, t, path, total=None):
-    fr = Image.new("RGB", (W, H)); total = total or sum(d for d, _ in scenes); acc = sum(d for d, _ in scenes[:idx]); background(fr, acc + t, total); scenes[idx][1](Ctx(fr, t, scenes[idx][0])); fr.save(path); return path
+    fr = Image.new("RGB", (W, H)); total = total or sum(d for d, _ in scenes); acc = sum(d for d, _ in scenes[:idx]); background(fr, acc + t, total); cx_ = Ctx(fr, t, scenes[idx][0]); scenes[idx][1](cx_)
+    if BRAND: brand_layer(fr, getattr(cx_, 'ai_seen', False))
+    fr.save(path); return path
 # 공통 조각
 def hook(kick, lines, face, size=112):
     def f(c):

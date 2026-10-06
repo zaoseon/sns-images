@@ -64,6 +64,12 @@ class Page:
         self.els.append((name, rect)); self.html.append(html)
         s = self.c["safe"]
         if rect[0] < s[0] - 1 or rect[2] > s[2] + 1 or rect[1] < s[1] - 1 or rect[3] > s[3] + 1: self.problems.append(f"{name} 안전영역 밖 {tuple(round(v) for v in rect)}")
+    def check_center(self, name, box, children, tol=8):
+        """박스 안 글 묶음의 위·아래, 왼쪽·오른쪽 안쪽 여백이 같은지 본다(R18). 어긋나면 만들기를 막는다."""
+        ux0 = min(c[0] for c in children); uy0 = min(c[1] for c in children); ux1 = max(c[2] for c in children); uy1 = max(c[3] for c in children)
+        t, b, l, r = uy0 - box[1], box[3] - uy1, ux0 - box[0], box[2] - ux1
+        if abs(t - b) > tol: self.problems.append(f"{name} 안 글이 세로로 치우침(위 {t:.0f}px · 아래 {b:.0f}px)")
+        if abs(l - r) > tol: self.problems.append(f"{name} 안 글이 가로로 치우침(왼쪽 {l:.0f}px · 오른쪽 {r:.0f}px)")
     def text(self, name, txt, role, cx, top, box_w, box_h, max_size, min_size, color="#fff", lh=1.25, align="center", weight=900):
         path = self.title_path() if role == "title" else self.body_path(); r = fit(txt, path, box_w, box_h, max_size, min_size, lh)
         if r["overflow"]: self.problems.append(f"{name} 글자가 칸에 안 들어감(최소 {min_size}px에서도 넘침)")
@@ -103,15 +109,36 @@ def t_ranking(ch, title, rows, unit="%"):
         w = cw * (.30 + .70 * v / mx); t = top + i * pitch; col = "linear-gradient(90deg,#c9a24a,#e7c88d)" if i == 0 else "linear-gradient(90deg,#6a3fc8,#ff5c9d)"; tc = "#17102b" if i == 0 else "#fff"
         p.add(f"막대 {nm}", (x0, t, x0 + w, t + bh), f'<div style="position:absolute;left:{x0:.0f}px;top:{t:.0f}px;width:{w:.0f}px;height:{bh:.0f}px;border-radius:0 {bh / 2:.0f}px {bh / 2:.0f}px 0;background:{col};font-family:{K.D};font-weight:900;font-size:{fs}px;line-height:{bh:.0f}px;color:{tc}"><span style="position:absolute;left:24px">{nm}</span><span style="position:absolute;right:24px">{v:.1f}{unit}</span></div>')
     return p
-def t_cta(ch, big, accent, card_top, card_mid, btn):
-    p = Page(ch); x0, y0, x1, y1 = p.cb; cw = x1 - x0; cx = (x0 + x1) / 2; H = y1 - y0
-    a = p.text("큰 문구", big, "title", cx, y0 + H * .02, cw, H * .14, 100, 64, lh=1.15); b = p.text("강조 문구", accent, "title", cx, y0 + H * .02 + a["h"] + 8, cw, H * .12, 84, 56, color=GOLD, lh=1.15)
-    cy0 = y0 + H * .02 + a["h"] + b["h"] + 40; ch_ = H * .40; cxl, cxr = x0 + cw * .03, x1 - cw * .03
-    p.add("카드", (cxl, cy0, cxr, cy0 + ch_), f'<div style="position:absolute;left:{cxl:.0f}px;top:{cy0:.0f}px;width:{cxr - cxl:.0f}px;height:{ch_:.0f}px;border:3px solid {GOLD};border-radius:44px;background:linear-gradient(145deg,rgba(28,40,92,.9),rgba(9,14,44,.9));box-shadow:0 0 46px rgba(231,200,141,.25)"></div>')
-    iw = cxr - cxl - 60; ia = p.text("카드 첫줄", card_top, "title", cx, cy0 + ch_ * .08, iw, ch_ * .16, 54, 44, color=GOLD, lh=1.2); ib = p.text("카드 가운데", card_mid[0], "title", cx, cy0 + ch_ * .30, iw, ch_ * .26, 78, 52, lh=1.2); ic = p.text("카드 끝줄", card_mid[1], "title", cx, cy0 + ch_ * .30 + ib["h"] + 10, iw, ch_ * .26, 56, 44, lh=1.25)
-    by = cy0 + ch_ + 36; bw = min(cw * .56, 520); bh = min(104, y1 - by); p.add("버튼", (cx - bw / 2, by, cx + bw / 2, by + bh), f'<div style="position:absolute;left:{cx - bw / 2:.0f}px;top:{by:.0f}px;width:{bw:.0f}px;height:{bh:.0f}px;border-radius:{bh / 2:.0f}px;background:{GOLD};color:#17102b;text-align:center;font-family:{K.D};font-weight:900;font-size:58px;line-height:{bh:.0f}px">{btn}</div>')
-    return p
 
+def cta_vertical(ch, hs, pad=60, gaps=None):
+    """마무리 장면의 세로 배치: 카드 높이 = 안쪽 글 높이 + 위아래 같은 여백(글이 카드 가운데), 전체 묶음도 내용 영역 가운데(10/6 대표: 카드 안 글이 위로 치우침).
+    hs: dict a,b,ia,ib,ic,btn = 각 줄 높이."""
+    g = dict(a_b=8, b_card=36, ia_ib=14, ib_ic=12, card_btn=40); g.update(gaps or {})
+    x0, y0, x1, y1 = content_box(ch); chh = y1 - y0
+    inner = hs["ia"] + g["ia_ib"] + hs["ib"] + g["ib_ic"] + hs["ic"]; card_h = inner + 2 * pad
+    stack = hs["a"] + g["a_b"] + hs["b"] + g["b_card"] + card_h + g["card_btn"] + hs["btn"]; top = y0 + (chh - stack) / 2; T = {}
+    T["a"] = top; T["b"] = T["a"] + hs["a"] + g["a_b"]; T["card"] = T["b"] + hs["b"] + g["b_card"]; T["card_h"] = card_h
+    T["ia"] = T["card"] + pad; T["ib"] = T["ia"] + hs["ia"] + g["ia_ib"]; T["ic"] = T["ib"] + hs["ib"] + g["ib_ic"]; T["btn"] = T["card"] + card_h + g["card_btn"]; T["end"] = T["btn"] + hs["btn"]; T["pad"] = pad
+    return T
+
+def t_cta(ch, big, accent, card_top, card_mid, btn):
+    p = Page(ch); x0, y0, x1, y1 = p.cb; cw = x1 - x0; cx = (x0 + x1) / 2; chh = y1 - y0; u = chh / 990.0
+    tp = p.title_path(); cxl, cxr = x0 + cw * .03, x1 - cw * .03; iw = cxr - cxl - 60
+    fa = fit(big, tp, cw, 150 * u, 100, 64, 1.15); fb = fit(accent, tp, cw, 120 * u, 84, 56, 1.15)
+    fia = fit(card_top, tp, iw, 80 * u, 54, 44, 1.2); fib = fit(card_mid[0], tp, iw, 120 * u, 78, 52, 1.2); fic = fit(card_mid[1], tp, iw, 90 * u, 56, 44, 1.25)
+    for nm, f in (("큰 문구", fa), ("강조 문구", fb), ("카드 첫줄", fia), ("카드 가운데", fib), ("카드 끝줄", fic)):
+        if f["overflow"]: p.problems.append(f"{nm} 글자가 칸에 안 들어감")
+    bh = min(104 * u, 110); T = cta_vertical(ch, dict(a=fa["h"], b=fb["h"], ia=fia["h"], ib=fib["h"], ic=fic["h"], btn=bh), pad=60 * u)
+    def line(name, f, top, color="#fff", w=None):
+        w = w or cw; html = f'<div style="position:absolute;left:{cx - w / 2:.0f}px;top:{top:.0f}px;width:{w:.0f}px;text-align:center;font-family:{K.D};font-weight:900;font-size:{f["size"]}px;line-height:{f["lh"]};color:{color};white-space:pre-line">' + "\n".join(f["lines"]) + "</div>"
+        p.add(name, (cx - f["w"] / 2, top, cx + f["w"] / 2, top + f["h"]), html)
+    line("큰 문구", fa, T["a"]); line("강조 문구", fb, T["b"], GOLD)
+    p.add("카드", (cxl, T["card"], cxr, T["card"] + T["card_h"]), f'<div style="position:absolute;left:{cxl:.0f}px;top:{T["card"]:.0f}px;width:{cxr - cxl:.0f}px;height:{T["card_h"]:.0f}px;border:3px solid {GOLD};border-radius:44px;background:linear-gradient(145deg,rgba(28,40,92,.9),rgba(9,14,44,.9));box-shadow:0 0 46px rgba(231,200,141,.25)"></div>')
+    line("카드 첫줄", fia, T["ia"], GOLD, iw); line("카드 가운데", fib, T["ib"], "#fff", iw); line("카드 끝줄", fic, T["ic"], "#fff", iw)
+    p.check_center("카드", (cxl, T["card"], cxr, T["card"] + T["card_h"]), [e[1] for e in p.els if e[0] in ("카드 첫줄", "카드 가운데", "카드 끝줄")])
+    bw = min(cw * .56, 520); by = T["btn"]
+    p.add("버튼", (cx - bw / 2, by, cx + bw / 2, by + bh), f'<div style="position:absolute;left:{cx - bw / 2:.0f}px;top:{by:.0f}px;width:{bw:.0f}px;height:{bh:.0f}px;border-radius:{bh / 2:.0f}px;background:{GOLD};color:#17102b;text-align:center;font-family:{K.D};font-weight:900;font-size:58px;line-height:{bh:.0f}px">{btn}</div>')
+    return p
 SIX = ["안정", "표현", "유연", "생성", "결단", "소통"]
 def explain_layout(ch, texts=("사주와 별자리는 각자 내 마음의 방향을 하나씩 짚어요", "둘이 같은 방향을 짚으면 '같은\u00a0말'이에요", "방향이 다르면 '다른\u00a0말'이에요. 내가 고를 곳이에요")):
     """정월 설명 틀의 모든 좌표(10/6 대표 지정): ① 말풍선 글은 의미 단위 줄바꿈·가운데 정렬, 정월 배지 글자는 중앙 ② 여섯 방향은 3x2로 가운데 정렬(크기는 전체 배치에 맞춤) ③ 설명글(사주가 짚은 방향 등)은 작게 ④ 가운데 기준은 캔버스 가운데."""

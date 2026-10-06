@@ -39,6 +39,18 @@ def ex_blocks():
           " g('banA').style.opacity=cl((b-11.0)/.4)*(1-cl((b-14.5)/.3))*x2; g('banB').style.opacity=cl((b-15.0)/.4)*x2;\n")
     return h, js
 
+def cta_blocks():
+    """마무리 ② 페이지: 틀 엔진의 세로 계산(카드 높이=글 높이+같은 위아래 여백, 묶음 전체는 내용 영역 가운데)을 그대로 쓴다. 가로 배치는 기존과 같다(캔버스 가운데)."""
+    sz = dict(a=100, b=80, ia=54, ib=78, ic=56); lh = dict(a=1.2, b=1.2, ia=1.2, ib=1.2, ic=1.25); btn_h = 104
+    hs = {k: sz[k] * lh[k] for k in sz}; hs["btn"] = btn_h
+    T = TE.cta_vertical("reel", hs, pad=62, gaps=dict(a_b=0, b_card=40, ia_ib=14, ib_ic=12, card_btn=44))
+    def d(i, k, txt, color=""): return f'<div class="a d t" id={i} style="left:0;width:1080px;top:{T[k]:.0f}px;font-size:{sz[k]}px;line-height:{lh[k]};{color}opacity:0">{txt}</div>'
+    h = d("f1", "a", "팔로우하고") + "\n" + d("f2", "b", "더 많은 이야기 나눠요", "color:@@GOLD@@;") + "\n"
+    h += f'<div class="a" id=fcard style="left:60px;top:{T["card"]:.0f}px;width:960px;height:{T["card_h"]:.0f}px;box-sizing:border-box;border:3px solid #e7c88d;border-radius:44px;background:linear-gradient(145deg,rgba(28,40,92,.9),rgba(9,14,44,.9));box-shadow:0 0 46px rgba(231,200,141,.25);opacity:0"></div>\n'
+    h += d("f3", "ia", "프로필 링크에서", "color:@@GOLD@@;") + "\n" + d("f4", "ib", "생년월일 입력하고") + "\n" + d("f5", "ic", "내 첫글자와 타고난 기운 알아보기") + "\n"
+    h += f'<div class="a d t" id=fbtn style="left:300px;top:{T["btn"]:.0f}px;width:480px;height:{btn_h}px;border-radius:52px;background:#e7c88d;color:#17102b;font-size:58px;line-height:{btn_h}px;opacity:0">＋ 팔로우</div>\n'
+    return h
+
 def html(beat):
     chips = "".join(f'<div class="a d chip" id=chip{k} style="left:{60 + k * 162}px">{n}</div>' for k, n in enumerate(["안정", "표현", "유연", "생성", "결단", "소통"]))
     bars = "".join(f'<div class="a bar" id=bar{i} style="top:{588 + i * 66}px"><div class="a d bl">{n}</div><div class="a d bv">{v:.1f}%</div></div>' for i, (n, v) in enumerate(RANK))
@@ -91,13 +103,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#050a1c
 <div class="a d t" id=c1 style="left:0;width:1080px;top:520px;font-size:116px;line-height:1.22;opacity:0">내 별자리는</div>
 <div class="a d t" id=c2 style="left:0;width:1080px;top:670px;font-size:116px;line-height:1.22;opacity:0;color:@@GOLD@@">몇 위일까요?</div>
 <div class="a d t" id=c3 style="left:0;width:1080px;top:880px;font-size:78px;line-height:1.3;opacity:0">댓글로 알려 주세요</div>
-<div class="a d t" id=f1 style="left:0;width:1080px;top:430px;font-size:100px;line-height:1.2;opacity:0">팔로우하고</div>
-<div class="a d t" id=f2 style="left:0;width:1080px;top:550px;font-size:80px;line-height:1.2;color:@@GOLD@@;opacity:0">더 많은 이야기 나눠요</div>
-<div class="a" id=fcard style="left:60px;top:700px;width:960px;height:430px;border:3px solid #e7c88d;border-radius:44px;background:linear-gradient(145deg,rgba(28,40,92,.9),rgba(9,14,44,.9));box-shadow:0 0 46px rgba(231,200,141,.25);opacity:0"></div>
-<div class="a d t" id=f3 style="left:0;width:1080px;top:738px;font-size:54px;line-height:1.2;color:@@GOLD@@;opacity:0">프로필 링크에서</div>
-<div class="a d t" id=f4 style="left:0;width:1080px;top:820px;font-size:78px;line-height:1.2;opacity:0">생년월일 입력하고</div>
-<div class="a d t" id=f5 style="left:0;width:1080px;top:940px;font-size:56px;line-height:1.25;opacity:0">내 첫글자와 타고난 기운 알아보기</div>
-<div class="a d t" id=fbtn style="left:300px;top:1190px;width:480px;height:104px;border-radius:52px;background:#e7c88d;color:#17102b;font-size:58px;line-height:104px;opacity:0">＋ 팔로우</div>
+@@CTAHTML@@
 @@BF@@
 <script>
 const BEAT=@@BEAT@@, B=ms=>ms/1000/BEAT, cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
@@ -133,7 +139,7 @@ seek(0);
 </script>"""
     for _ in range(2):
         for k, v in {"@@FONTS@@": K.css("gm"), "@@BG@@": os.path.join(AS, "derived", "bg_cosmos.jpg"), "@@CHART@@": os.path.join(AS, "chart.png"), "@@SUN@@": os.path.join(AS, "derived", "sun.png"), "@@MOON@@": os.path.join(AS, "derived", "moon.png"),
-                 "@@PINK@@": PINK, "@@BLUE@@": BLUE, "@@GOLD@@": GOLD, "@@BEAT@@": repr(beat), "@@BF@@": BF.html("reel", ai=True), "@@BFCSS@@": BF.css(), "@@XFS@@": str(TE.explain_layout("reel")["bubble_fs"]), "@@EXHTML@@": ex_blocks()[0], "@@EXJS@@": ex_blocks()[1], "@@BARS@@": bars, "@@CHIPS@@": chips, "@@JW@@": os.path.join(AS, "derived", "jw_gesture.png"), "@@VALS@@": str([v for _, v in RANK])}.items(): h = h.replace(k, v)
+                 "@@PINK@@": PINK, "@@BLUE@@": BLUE, "@@GOLD@@": GOLD, "@@BEAT@@": repr(beat), "@@BF@@": BF.html("reel", ai=True), "@@BFCSS@@": BF.css(), "@@XFS@@": str(TE.explain_layout("reel")["bubble_fs"]), "@@EXHTML@@": ex_blocks()[0], "@@CTAHTML@@": cta_blocks(), "@@EXJS@@": ex_blocks()[1], "@@BARS@@": bars, "@@CHIPS@@": chips, "@@JW@@": os.path.join(AS, "derived", "jw_gesture.png"), "@@VALS@@": str([v for _, v in RANK])}.items(): h = h.replace(k, v)
     return h
 async def cover(hp, beat, out):
     from playwright.async_api import async_playwright
