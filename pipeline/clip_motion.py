@@ -130,6 +130,8 @@ def brand_layer(fr, ai=False):
         d.text((76, 1465), _BF.AI, font=f, fill=(255, 255, 255, 140), anchor="ld")
 BRAND = True   # False로 두면 규칙 층을 끈다(시험용)
 AVOID = True   # 글자·배지가 고정 문구 띠를 피한다(그리기와 따로 켜고 끈다)
+LOG = None     # 리스트를 넣으면 배지·글자를 놓은 위치를 기록한다(engine_conflicts 검사용)
+SAFE_TOP = 415 # 안전 영역 안에서 쓸 수 있는 맨 위(상단 문구 띠 아래) — R04: 이보다 위(UI에 가려지는 곳)에는 글자·배지를 두지 않는다
 HDR_TOP, HDR_BOTTOM = 335, 395   # 상단 왼쪽·오른쪽 고정 문구 띠
 class Ctx:
     def __init__(s, fr, t, dur): s.fr, s.t, s.dur = fr, t, dur; s.ex = e_out(cl((dur - t) / 0.24))   # 장면 끝 0.24초: 위로 사라짐
@@ -145,7 +147,10 @@ def eff_size(s, size, maxw, path):
     if maxw < widest <= maxw * 1.2: return int(size * maxw / widest)
     return size
 def text(c, s, y, t0, size=104, color=WHITE, path=BLACK, maxw=800, lh=1.3, stagger=0.2, cx=CX, anim="rise"):
-    if AVOID and HDR_TOP - 40 <= y < HDR_BOTTOM + 20: y = HDR_BOTTOM + 20   # 상단 문구 띠를 피한다(10/6 확정 규칙 R01)
+    if AVOID:
+        if y < SAFE_TOP: y = SAFE_TOP                                                   # 안전 영역 위(UI에 가려지는 곳)에는 글자를 두지 않는다(R04)
+        if getattr(c, 'chip_bottom', 0) and y < c.chip_bottom + 22: y = c.chip_bottom + 22   # 배지 아래에서 시작
+    if LOG is not None: LOG.append(('text', y, s[:12]))
     size = eff_size(s, size, maxw, path)
     ls, step = line_layers(s, size, color, path, maxw, lh); y0 = y
     for i, L in enumerate(ls):
@@ -158,8 +163,11 @@ def chip_layer(label, size):
     fnt = font(BLACK, size); w = int(fnt.getlength(label)) + 60; h = size + 30; im = Image.new("RGBA", (w + 8, h + 8), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     d.rounded_rectangle((4, 4, 4 + w, 4 + h), radius=h // 2, fill=(224, 184, 102, 28), outline=GOLD, width=3); d.text((4 + w / 2, 4 + h / 2 + 1), label, font=fnt, fill=GOLD, anchor="mm"); return im
 def chip(c, label, y, t0, size=44):
-    if AVOID and HDR_TOP - 60 <= y < HDR_BOTTOM + 10: y = HDR_TOP - 95   # 배지는 상단 문구 띠 위로
-    L = chip_layer(label, size); p = e_back((c.t - t0) / 0.4); s = max(.01, p)
+    if AVOID: return y   # R04: 작은 배지는 y 250 안팎(인스타 상단 버튼에 가려지는 곳)에 놓였으므로 그리지 않는다. 분류 글이 필요하면 hook()처럼 제목 위 작은 글로 쓴다
+    L = chip_layer(label, size)
+    c.chip_bottom = max(getattr(c, 'chip_bottom', 0), y + size + 30)
+    if LOG is not None: LOG.append(('chip', y, label))
+    p = e_back((c.t - t0) / 0.4); s = max(.01, p)
     im = L.resize((max(1, int(L.width * s)), max(1, int(L.height * s)))); blit(c.fr, im, CX - im.width / 2, y + (L.height - im.height) / 2, c.alpha(cl(p * 2))); return y + L.height
 # ---------- 캐릭터 ----------
 @functools.lru_cache(maxsize=None)
@@ -308,9 +316,9 @@ def still(scenes, idx, t, path, total=None):
 # 공통 조각
 def hook(kick, lines, face, size=112):
     def f(c):
-        chip(c, kick, 250, 0.05)
-        hh = text_h(lines, size, maxw=820, lh=1.3); text(c, lines, 400, 0.25, size, maxw=820, lh=1.3, stagger=0.26)
-        character(c, face, t0=0.2)
+        yk = text(c, kick, SAFE_TOP, 0.05, 52, color=GOLD, maxw=820, stagger=0)   # 배지 대신 작은 글(R04)
+        text(c, lines, yk + 14, 0.25, size, maxw=820, lh=1.3, stagger=0.26)
+        character(c, face, t0=0.2, width=700)
     return f
 def point(kick, lines, extra=None, y=None, size=104):
     def f(c):

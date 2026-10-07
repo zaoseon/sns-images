@@ -9,21 +9,19 @@ FACE_OK = lambda n: os.path.exists(os.path.join(ROOT, "characters", "cut", n + "
 def face_of(d): n = d.get("face", "v1_lowbun"); return n if FACE_OK(n) else "v1_lowbun"
 def S_hook(d):
     def f(c):
-        chip(c, d.get("kicker") or "정월의 사주·별자리·숫자", 250, .05)
-        y = text(c, d["coverTitle"], 410, .25, 104, maxw=820, lh=1.3, stagger=.26)
+        yk = text(c, d.get("kicker") or "정월의 사주·별자리·숫자", 415, .05, 52, color=GOLD, maxw=820, stagger=0)   # 배지 대신 작은 글(R04)
+        y = text(c, d["coverTitle"], yk + 14, .25, 104, maxw=820, lh=1.3, stagger=.26)
         text(c, d["coverSub"], y + 16, .9, 56, color=DIM, maxw=820)
         character(c, face_of(d), t0=.2, width=700)
     return f
 def S_stat(title, body, n):
     def f(c):
-        chip(c, f"{n} / 3", 250, .05)
         H = text_h(title, 124, 820, 1.25) + 56 + text_h(body, 72, 820, 1.4); y0 = MID - H / 2     # 글 묶음을 안전 영역 가운데로(R18·여백 규칙)
         y = text(c, title, y0, .15, 124, color=GOLD, maxw=820, lh=1.25)
         text(c, body, y + 56, .7, 72, color=WHITE, maxw=820, lh=1.4)
     return f
 def S_advice(d):
     def f(c):
-        chip(c, "조언", 250, .05)
         y = text(c, d["advice"][0], 420, .2, 100, maxw=820, lh=1.3)
         text(c, d["advice"][1], y + 30, .8, 56, color=DIM, maxw=820, lh=1.4)
         character(c, face_of(d), t0=.4, width=520)

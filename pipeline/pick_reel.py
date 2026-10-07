@@ -33,9 +33,9 @@ def build(hook, sub, instr, note, face="v1_lowbun", cta="follow", dx=0):
     def s2(c):
         title(c, "끌리는 카드를\n하나 고르세요", 400, .05, 96)
         for i, (hj, col, no) in enumerate(CARDS):
-            cx = CX + (i - 1) * 290; fl = 8 * math.sin(c.t * 2.4 + i * 1.3); M.pop(c, card_layer(hj, col), cx, 905 + fl, .25 + i * .18)
-            M.text(c, no, 1170, .7 + i * .12, 84, color=GOLDA, path=BOLD, maxw=300, cx=cx, stagger=0)
-        title(c, instr, 1300, 1.3, 62, color=GOLDA); small(c, note, 1408, 1.7, 44)
+            cx = CX + (i - 1) * 290; fl = 8 * math.sin(c.t * 2.4 + i * 1.3); M.pop(c, card_layer(hj, col), cx, 870 + fl, .25 + i * .18)
+            M.text(c, no, 1120, .7 + i * .12, 84, color=GOLDA, path=BOLD, maxw=300, cx=cx, stagger=0)
+        title(c, instr, 1240, 1.3, 62, color=GOLDA); small(c, note, 1334, 1.7, 44)   # 하단 고정 줄(y 1425~1465) 위에서 끝나게(10/7 규칙 층)
     def s3(c):
         if cta == "share":
             title(c, "떠오르는 사람에게\n보내 보세요", 480, .1, 112, color=GOLDA); small(c, "고른 번호와 함께 보내도 좋아요\n다음 편은 매주 올라와요", 900, .8, 56)
