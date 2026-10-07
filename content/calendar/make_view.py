@@ -1,5 +1,7 @@
 import json, html, datetime as D, collections
 E=html.escape
+import sys; sys.path.insert(0,'.')
+from plan_data import EVID
 c=json.load(open('calendar_2026-11.json',encoding='utf-8')); days=c['days']; rep=c['report']; edits=c['edits']
 EV={7:'입동 18:52',8:'손없는날',9:'신월',11:'빼빼로데이',14:'수성 순행',17:'손없는날',18:'손없는날',19:'수능',22:'소설·사수자리',24:'보름달',27:'손없는날',28:'손없는날'}
 NM={"B12":"네이버 글 낮","B21":"네이버 글 밤","P08":"인스타 캐러셀 아침","P21":"인스타 캐러셀 밤","R08":"인스타 릴스 아침","R12":"인스타 릴스 낮","R20":"인스타 릴스 저녁","T08":"스레드 아침","T13":"스레드 낮","T20":"스레드 저녁","T21":"스레드 밤","C":"네이버 클립"}
@@ -13,6 +15,7 @@ cards=""
 for d in days:
     dt=D.date.fromisoformat(d['date']); md=f"{dt.month}/{dt.day}"
     ev=EV.get(dt.day); evh=f'<span class="ev">{E(ev)}</span>' if ev else ''
+    evd=EVID.get(dt.day); evdh=(f'<p class="evid"><b>근거</b> {E(evd)}</p>' if evd else '')
     M=d['themes']['M']['title']; Ee=d['themes']['E']['title']; Dd=d['themes']['D']['title']
     z=d['flag']=='z'
     head=E(M if not z else d['themes']['E']['title'])
@@ -36,7 +39,7 @@ for d in days:
             cv+=1; tot+=1
             rows+=f'<li class="cv"><b>{NM[s]}</b><span class="tag t3">건너뜀</span><br><small>{E(v["note"])}</small></li>'
     cards+=f'''<details class="day"><summary><span class="dt">{md}<small>({d["wd"]})</small></span><span class="hd">{head}</span>{evh}</summary>
-<div class="th"><p><b>{GL["M"]}</b> {E(M)} <em>{E(sysname(d["themes"]["M"]["sys"]))}</em></p><p><b>{GL["E"]}</b> {E(Ee)} <em>{E(sysname(d["themes"]["E"]["sys"]))}</em></p><p><b>{GL["D"]}</b> {E(Dd)} <em>{E(sysname(d["themes"]["D"]["sys"]))}</em></p></div>
+<div class="th">{evdh}<p><b>{GL["M"]}</b> {E(M)} <em>{E(sysname(d["themes"]["M"]["sys"]))}</em></p><p><b>{GL["E"]}</b> {E(Ee)} <em>{E(sysname(d["themes"]["E"]["sys"]))}</em></p><p><b>{GL["D"]}</b> {E(Dd)} <em>{E(sysname(d["themes"]["D"]["sys"]))}</em></p></div>
 <ul class="sl">{rows}</ul></details>'''
 wk=collections.defaultdict(int)
 for d in days:
@@ -78,7 +81,7 @@ details.day{{background:var(--card);border:1px solid var(--line);border-radius:1
 summary{{list-style:none;padding:14px;cursor:pointer;display:flex;gap:10px;align-items:center;flex-wrap:wrap}} summary::-webkit-details-marker{{display:none}}
 .dt{{font-weight:700;font-size:20px;min-width:74px}} .dt small{{font-weight:400;margin-left:2px}} .hd{{flex:1;min-width:150px;font-size:17px}}
 .ev{{background:var(--blue);color:#fff;border-radius:12px;padding:2px 10px;font-size:14px;white-space:nowrap}}
-.th{{padding:0 14px 6px;border-top:1px solid var(--line)}} .th p{{margin:10px 0}} .th b{{display:block;color:var(--blue);font-size:15px}} .th em{{font-style:normal;color:var(--mute);font-size:15px;display:block}}
+.th{{padding:0 14px 6px;border-top:1px solid var(--line)}} .th p{{margin:10px 0}} .th b{{display:block;color:var(--blue);font-size:15px}} .evid{{background:rgba(244,140,4,.12);border-radius:8px;padding:8px 10px;font-size:15px}} .th em{{font-style:normal;color:var(--mute);font-size:15px;display:block}}
 .sl{{padding:4px 14px 14px}} .sl li{{padding:9px 10px;margin:6px 0;border-radius:10px;border-left:6px solid var(--line);font-size:16px}}
 .sl li.lk{{border-left-color:var(--blue)}} .sl li.nw{{border-left-color:var(--acc)}} .sl li.dn{{border-left-color:#2e9e6b}} .sl li i{{font-style:normal;color:var(--mute);font-size:14px;margin-left:4px}}
 .tag{{float:right;font-size:13px;border-radius:10px;padding:1px 8px;color:#fff}} .t1{{background:var(--blue)}} .t2{{background:var(--acc)}} .t3{{background:#8a8fa8}} .t4{{background:#2e9e6b}}

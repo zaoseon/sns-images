@@ -7,7 +7,7 @@ HERE1 = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE1)
 _src = open(os.path.join(HERE1, "build_naver_47_52.py"), encoding="utf-8").read()
 exec(compile(_src.split("# ================= 47편")[0], "head47", "exec"), globals())
 from urllib.parse import quote
-TITLE = "여섯 운명학이 같은 말을 하는 확률, 무작위 3,000명 계산 결과"
+TITLE = "사주·점성술·자미두수 교차분석, 같은 말을 하는 확률 3,000명 결과"
 assert len(TITLE) <= 40, len(TITLE)
 art(71, "2026-11-01", "12:00", "v2_straight", "쇠", False,
  dict(d="BIG", kick="교차분석 3,000명", hook=["여섯 중 넷 이상이", "같은 말을 하는 사람"], big="5.3%", sub="무작위 3,000명 계산"),
