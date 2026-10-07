@@ -91,9 +91,10 @@ def t_hook(ch, title, left, right, mid):
     tr = p.text("제목", title, "title", cx, y0, cw, chh * 0.40, 112, 72, lh=1.2)
     top = y0 + tr["h"] + 24; avail = y1 - top; D = min(avail, cw / 1.62); gap = D * .62; gx0 = cx - (gap + D) / 2; cy = top + (avail - D) / 2
     p.add("원 묶음", (gx0, cy, gx0 + gap + D, cy + D), f'<div style="position:absolute;left:0;top:0;width:{p.c["W"]}px;height:{p.c["H"]}px;isolation:isolate"><div style="position:absolute;left:{gx0:.0f}px;top:{cy:.0f}px;width:{D:.0f}px;height:{D:.0f}px;border-radius:50%;background:{PINK};mix-blend-mode:multiply"></div><div style="position:absolute;left:{gx0 + gap:.0f}px;top:{cy:.0f}px;width:{D:.0f}px;height:{D:.0f}px;border-radius:50%;background:{BLUE};mix-blend-mode:multiply"></div></div>')
+    p.meta = dict(title_size=tr["size"], title_top=y0, title_lines=tr["lines"], D=D, gap=gap, gx0=gx0, cy=cy, labels={})
     mid_y = cy + D / 2; ex = D * .62
     for name, txt, ccx, wmax, mx in (("왼쪽 글자", left, gx0 + ex / 2, ex * .86, 120), ("오른쪽 글자", right, gx0 + gap + D - ex / 2, ex * .86, 96), ("가운데 글자", mid, gx0 + gap + (D - gap) / 2 if False else gx0 + D - (D - gap) / 2, (D - gap) * .8, 64)):
-        r = fit_line(txt, p.title_path(), wmax, D * .3, mx, 40); t = mid_y - r["h"] / 2
+        r = fit_line(txt, p.title_path(), wmax, D * .3, mx, 40); t = mid_y - r["h"] / 2; p.meta["labels"][name] = (ccx, mid_y, r["size"])
         if r["overflow"]: p.problems.append(f"{name} 글자가 칸에 안 들어감")
         p.add(name, (ccx - r["w"] / 2, t, ccx + r["w"] / 2, t + r["h"]), f'<div style="position:absolute;left:{ccx - wmax / 2:.0f}px;top:{t:.0f}px;width:{wmax:.0f}px;text-align:center;font-family:{K.D};font-weight:900;font-size:{r["size"]}px;line-height:1.1;color:#fff;white-space:nowrap">{r["lines"][0]}</div>')
     return p
@@ -104,9 +105,10 @@ def t_ranking(ch, title, rows, unit="%"):
     bottom_margin = max(40, chh * .04); gap = max(30, chh * .035)            # 그래프 아래 여백과 제목-그래프 간격을 함께 확보
     top = y0 + tr["h"] + gap; area = y1 - bottom_margin - top; n = len(rows); pitch = area / n; bh = pitch * .88; mx = max(v for _, v in rows)
     fs = int(min(56, bh * .8)) // 2 * 2
+    p.meta = dict(title_size=tr["size"], title_top=y0, title_lines=tr["lines"], x0=x0, fs=fs, rows=[])
     if fs < p.c["min_body"]: p.problems.append(f"막대 글자가 {fs}px로 최소 {p.c['min_body']}px보다 작음")
     for i, (nm, v) in enumerate(rows):
-        w = cw * (.30 + .70 * v / mx); t = top + i * pitch; col = "linear-gradient(90deg,#c9a24a,#e7c88d)" if i == 0 else "linear-gradient(90deg,#6a3fc8,#ff5c9d)"; tc = "#17102b" if i == 0 else "#fff"
+        w = cw * (.30 + .70 * v / mx); t = top + i * pitch; p.meta["rows"].append((t, bh, w)); col = "linear-gradient(90deg,#c9a24a,#e7c88d)" if i == 0 else "linear-gradient(90deg,#6a3fc8,#ff5c9d)"; tc = "#17102b" if i == 0 else "#fff"
         p.add(f"막대 {nm}", (x0, t, x0 + w, t + bh), f'<div style="position:absolute;left:{x0:.0f}px;top:{t:.0f}px;width:{w:.0f}px;height:{bh:.0f}px;border-radius:0 {bh / 2:.0f}px {bh / 2:.0f}px 0;background:{col};font-family:{K.D};font-weight:900;font-size:{fs}px;line-height:{bh:.0f}px;color:{tc}"><span style="position:absolute;left:24px">{nm}</span><span style="position:absolute;right:24px">{v:.1f}{unit}</span></div>')
     return p
 
@@ -138,11 +140,12 @@ def t_cta(ch, big, accent, card_top, card_mid, btn):
     p.check_center("카드", (cxl, T["card"], cxr, T["card"] + T["card_h"]), [e[1] for e in p.els if e[0] in ("카드 첫줄", "카드 가운데", "카드 끝줄")])
     bw = min(cw * .56, 520); by = T["btn"]
     p.add("버튼", (cx - bw / 2, by, cx + bw / 2, by + bh), f'<div style="position:absolute;left:{cx - bw / 2:.0f}px;top:{by:.0f}px;width:{bw:.0f}px;height:{bh:.0f}px;border-radius:{bh / 2:.0f}px;background:{GOLD};color:#17102b;text-align:center;font-family:{K.D};font-weight:900;font-size:58px;line-height:{bh:.0f}px">{btn}</div>')
+    p.meta = dict(fa=fa, fb=fb, fia=fia, fib=fib, fic=fic, T=T, cxl=cxl, cxr=cxr, bw=bw, bh=bh, cx=cx)
     return p
 SIX = ["안정", "표현", "유연", "생성", "결단", "소통"]
 def explain_layout(ch, texts=("사주와 별자리는 각자 내 마음의 방향을 하나씩 짚어요", "둘이 같은 방향을 짚으면 '같은\u00a0말'이에요", "방향이 다르면 '다른\u00a0말'이에요. 내가 고를 곳이에요")):
     """정월 설명 틀의 모든 좌표(10/6 대표 지정): ① 말풍선 글은 의미 단위 줄바꿈·가운데 정렬, 정월 배지 글자는 중앙 ② 여섯 방향은 3x2로 가운데 정렬(크기는 전체 배치에 맞춤) ③ 설명글(사주가 짚은 방향 등)은 작게 ④ 가운데 기준은 캔버스 가운데."""
-    c = CHAN[ch]; x0, y0, x1, y1 = content_box(ch); W = c["W"]; cx = W / 2; chh = y1 - y0; u = chh / 990.0; half = min(cx - x0, x1 - cx); L = dict(cx=cx, u=u, half=half)
+    c = CHAN[ch]; x0, y0, x1, y1 = content_box(ch); W = c["W"]; cx = (x0 + x1) / 2; chh = y1 - y0; u = chh / 990.0; half = min(cx - x0, x1 - cx); L = dict(cx=cx, u=u, half=half)   # 안전 영역(x 50~900)의 가운데
     rowA = 300 * u; D = 270 * u; L["avatar"] = (x0 + 10, y0 + 6 * u, D)
     bl = x0 + 10 + D + 30; bw = x1 - bl - 12; bh = rowA - 14 * u; bt = y0 + 10 * u; L["bubble"] = (bl, bt, bw, bh)
     path = K.P["pr_xb"]; pad_x, pad_y = 36 * u, 30 * u; fits = [fit(t, path, bw - 2 * pad_x, bh - 2 * pad_y, 58, 44, 1.32) for t in texts]

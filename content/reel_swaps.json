@@ -1807,9 +1807,9 @@
   "kind": "모션그래픽 견본",
   "title": "리소그래프 6판 · 내 별자리, 사주랑 같은 말 할까? (정월이 같은 말·다른 말 설명 + 12별자리 순위)",
   "status": "new",
-  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/litho_star6.mp4?v=6",
+  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/litho_star6.mp4?v=7",
   "caption": "내 별자리, 사주랑 같은 말 할까요? 사주와 별자리는 각자 내 마음의 방향을 하나씩 짚어요. 둘이 같은 방향을 짚으면 '같은 말'이고 타고난 결이에요. 방향이 다르면 '다른 말'이에요. 내가 고를 곳이에요. 1950~2008년생 무작위 3,000명을 자오선으로 계산해 별자리별로 같은 말을 한 비율을 봤어요. 내 별자리는 몇 위일까요? 댓글로 알려 주세요. 내 별자리가 사주와 같은 말을 하는지 궁금하다면 프로필 링크에서 내 생년월일로 첫글자와 타고난 기운을 확인해 보세요. 팔로우하고 더 많은 이야기 나눠요. ※ 자오선의 계산 결과이고, 숫자는 반올림했어요. 정월은 가상의 AI 캐릭터입니다. #사주 #별자리 #운세",
-  "note": "대표 지적(10/6) 3차 반영: ①AI 생성 캐릭터 표시는 좌측 하단(정월이 나오는 장면에만) ②우측 하단 zaoseon.com 고정 ③우측 상단 \"자오선 | 동서양 6개 운명학 교차분석\" 고정(모두 인스타 화면이 가리는 곳을 피해 안전 영역 안에) ④마무리를 \"팔로우하고 더 많은 이야기 나눠요\" + \"프로필 링크에서 생년월일 입력하고 내 첫글자와 타고난 기운 알아보기\"로 바꿈 ⑤말풍선을 정월 아바타(원형 금테)와 이름표가 있는 반투명 말풍선으로 새로 만듦. 곡은 별빛 오르골(박자 93)이고 소리는 제가 직접 듣지 못했어요. (10/6 4차: 상단 왼쪽 자오선·상단 오른쪽 동서양 6개 운명학 교차분석, 5번 페이지 제목 의미 단위 두 줄·가운데 정렬, 제목-그래프 간격과 하단 여백 조정 반영 — 대표 지정 공통·5P 규칙) (10/6 5차: 정월 설명 페이지 — 말풍선 글 의미 단위 줄바꿈·가운데 정렬, 정월 배지 글자 중앙, 여섯 방향 3x2 가운데, 설명글 축소, AI 표시를 \"정월은 가상의 AI 캐릭터입니다\"(흐린 색)로 변경) (10/6 6차: 마무리 ② 페이지 — 카드 안 글을 위아래 여백이 같게 가운데로, 묶음 전체도 화면 가운데로. 규칙 R18)",
+  "note": "대표 지적(10/6) 3차 반영: ①AI 생성 캐릭터 표시는 좌측 하단(정월이 나오는 장면에만) ②우측 하단 zaoseon.com 고정 ③우측 상단 \"자오선 | 동서양 6개 운명학 교차분석\" 고정(모두 인스타 화면이 가리는 곳을 피해 안전 영역 안에) ④마무리를 \"팔로우하고 더 많은 이야기 나눠요\" + \"프로필 링크에서 생년월일 입력하고 내 첫글자와 타고난 기운 알아보기\"로 바꿈 ⑤말풍선을 정월 아바타(원형 금테)와 이름표가 있는 반투명 말풍선으로 새로 만듦. 곡은 별빛 오르골(박자 93)이고 소리는 제가 직접 듣지 못했어요. (10/6 4차: 상단 왼쪽 자오선·상단 오른쪽 동서양 6개 운명학 교차분석, 5번 페이지 제목 의미 단위 두 줄·가운데 정렬, 제목-그래프 간격과 하단 여백 조정 반영 — 대표 지정 공통·5P 규칙) (10/6 5차: 정월 설명 페이지 — 말풍선 글 의미 단위 줄바꿈·가운데 정렬, 정월 배지 글자 중앙, 여섯 방향 3x2 가운데, 설명글 축소, AI 표시를 \"정월은 가상의 AI 캐릭터입니다\"(흐린 색)로 변경) (10/6 6차: 마무리 ② 페이지 — 카드 안 글을 위아래 여백이 같게 가운데로, 묶음 전체도 화면 가운데로. 규칙 R18) [10/7 확정 규칙으로 직접 맞춤: 1번(표지) 원 묶음, 5번(순위) 막대, 7번(마무리) 카드를 틀 엔진 계산값(안전 영역 x 50~900, 가운데 정렬, 위아래 여백)으로 다시 만들어 7개 페이지 모두 안전 영역 초과 0·글 치우침 0]",
   "checks": [
    "고정 요소(우상단·우하단·좌하단) 위치",
    "말풍선이 허접해 보이지 않는지",
@@ -1870,7 +1870,7 @@
   "title": "리소그래프 6판 표지 (프로필 격자 3:4로 잘려도 제목·원이 다 보여요)",
   "status": "new",
   "images": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/litho_star6_cover.jpg?v=4"
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/litho_star6_cover.jpg?v=5"
   ],
   "note": "릴스 표지(프로필 격자에 보이는 그림)예요. 1080x1920이고, 인스타 격자의 가운데 3:4(위아래 240px씩 잘림)로 보여도 해·달·제목·두 원이 모두 보여요. 예약할 때 표지로 지정할 그림이에요. (3차: 우측 상단 서비스 문구·우측 하단 주소 포함)",
   "checks": [
@@ -1938,13 +1938,13 @@
   "title": "리소그래프 6판 — 페이지별 안전영역 겹쳐 보기 (7장)",
   "status": "new",
   "images": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p1.jpg?v=4",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p2.jpg?v=4",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p3.jpg?v=4",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p4.jpg?v=4",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p5.jpg?v=4",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p6.jpg?v=4",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p7.jpg?v=4"
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p1.jpg?v=5",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p2.jpg?v=5",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p3.jpg?v=5",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p4.jpg?v=5",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p5.jpg?v=5",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p6.jpg?v=5",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/pages/litho_p7.jpg?v=5"
   ],
   "note": "영상 장면을 한 장씩 뽑아 릴스·클립·캐러셀 안전영역을 겹쳐 그렸어요. 빨강=인스타 릴스 UI, 주황=네이버 클립 UI, 초록 점선=공통 안전 영역(x 50~900, y 330~1470), 파랑=캐러셀로 쓸 때(3:4 격자·4:5·안전 점선), 자홍 상자=안전 영역을 넘는 요소예요. 왼쪽 100px 눈금과 아래 가로 눈금으로 위치를 말씀해 주시면 돼요. 넘는 요소 수: 1번 3 · 2번 5 · 3번 6 · 4번 5 · 5번 6 · 6번 1 · 7번 4.",
   "checks": [
@@ -1961,26 +1961,26 @@
   "title": "내용만 넣으면 채널 안전영역에 자동 배치 — 5종 × 릴스·캐러셀 (20장, 정월 설명 틀 추가)",
   "status": "new",
   "images": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_hook.png?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_hook_check.jpg?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_hook.png?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_hook_check.jpg?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_ranking.png?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_ranking_check.jpg?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_ranking.png?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_ranking_check.jpg?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_cta.png?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_cta_check.jpg?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_cta.png?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_cta_check.jpg?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_explain_same.png?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_explain_same_check.jpg?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_explain_same.png?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_explain_same_check.jpg?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_explain_diff.png?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_explain_diff_check.jpg?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_explain_diff.png?v=5",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_explain_diff_check.jpg?v=5"
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_hook.png?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_hook_check.jpg?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_hook.png?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_hook_check.jpg?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_ranking.png?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_ranking_check.jpg?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_ranking.png?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_ranking_check.jpg?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_cta.png?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_cta_check.jpg?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_cta.png?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_cta_check.jpg?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_explain_same.png?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_explain_same_check.jpg?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_explain_same.png?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_explain_same_check.jpg?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_explain_diff.png?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/reel_explain_diff_check.jpg?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_explain_diff.png?v=6",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/tpl/carousel_explain_diff_check.jpg?v=6"
   ],
   "note": "템플릿 시제품이에요. 훅·순위·마무리·정월 설명(같은 말/다른 말) 5종을 릴스(1080x1920)와 캐러셀(1080x1350)에 자동 배치했고, 쌍마다 앞 장이 결과, 뒤 장이 안전영역 검증(넘는 요소 0개)이에요. 정월 설명 틀은 대표 지정(말풍선 글 의미 단위 줄바꿈·가운데, 정월 배지 중앙, 여섯 방향 3x2 가운데, 설명글 축소, AI 표시 \"정월은 가상의 AI 캐릭터입니다\" 흐린 색)을 그대로 넣었어요. 순서: 훅 1~4 · 순위 5~8 · 마무리 9~12 · 정월 설명(같은 말) 13~16 · 정월 설명(다른 말) 17~20.",
   "checks": [

@@ -39,21 +39,40 @@ def ex_blocks():
           " g('banA').style.opacity=cl((b-11.0)/.4)*(1-cl((b-14.5)/.3))*x2; g('banB').style.opacity=cl((b-15.0)/.4)*x2;\n")
     return h, js
 
+import functools
+@functools.lru_cache(maxsize=None)
+def lay():
+    """표지(1)·순위(5)·마무리(7) 페이지를 틀 엔진이 계산한 값으로 쓴다 — 가로는 안전 영역 x 50~900 안(R04), 가운데 정렬·간격은 R08·R09·R18."""
+    p1 = TE.t_hook("reel", "내 별자리,\n사주랑 같은 말\n할까?", "사주", "별자리", "같은 말")
+    p5 = TE.t_ranking("reel", "사주와 같은 말을 하는\n별자리 순위", list(RANK))
+    p7 = TE.t_cta("reel", "팔로우하고", "더 많은 이야기 나눠요", "프로필 링크에서", ("생년월일 입력하고", "내 첫글자와 타고난 기운 알아보기"), "＋ 팔로우")
+    return p1, p5, p7
+def hook_blocks(p):
+    m = p.meta; D = m["D"]; gap = m["gap"]; gx0 = m["gx0"]; cy = m["cy"]
+    h = f'<div class="a d t" id=hl style="left:0;width:950px;top:{m["title_top"]:.0f}px;font-size:{m["title_size"]}px;line-height:1.2">{"<br>".join(m["title_lines"])}</div>\n'
+    h += f'<div class="a grp" id=grp><div class="a c" id=pinkC style="left:{gx0:.0f}px;top:{cy:.0f}px;width:{D:.0f}px;height:{D:.0f}px;background:@@PINK@@"></div><div class="a c" id=blueC style="left:{gx0 + gap:.0f}px;top:{cy:.0f}px;width:{D:.0f}px;height:{D:.0f}px;background:@@BLUE@@"></div></div>\n'
+    h += f'<div class="a c" id=blueD style="left:{gx0 + gap:.0f}px;top:{cy:.0f}px;width:{D:.0f}px;height:{D:.0f}px;box-sizing:border-box;border:8px dashed @@BLUE@@;background:transparent;opacity:.7;mix-blend-mode:normal"></div>\n'
+    for i, k, tx in (("wSaju", "왼쪽 글자", "사주"), ("wStar", "오른쪽 글자", "별자리"), ("wSame", "가운데 글자", "같은 말")):
+        cx_, cy_, sz = m["labels"][k]; h += f'<div class="a d t lab" id={i} style="left:{cx_:.0f}px;top:{cy_:.0f}px;font-size:{sz}px">{tx}</div>\n'
+    return h
+def rank_blocks(p):
+    m = p.meta
+    rk = f'<div class="a d t" id=rk style="left:0;width:950px;top:{m["title_top"]:.0f}px;font-size:{m["title_size"]}px;line-height:1.2;opacity:0">{"<br>".join(m["title_lines"])}</div>'
+    bars = "".join(f'<div class="a bar" id=bar{i} style="left:{m["x0"]:.0f}px;top:{t:.0f}px;height:{bh:.0f}px;border-radius:0 {bh / 2:.0f}px {bh / 2:.0f}px 0"><div class="a d bl" style="font-size:{m["fs"]}px;line-height:{bh:.0f}px;top:0">{n}</div><div class="a d bv" style="font-size:{m["fs"]}px;line-height:{bh:.0f}px;top:0">{v:.1f}%</div></div>' for i, ((t, bh, w), (n, v)) in enumerate(zip(m["rows"], RANK)))
+    return rk, bars, [round(w) for _, _, w in m["rows"]]
 def cta_blocks():
-    """마무리 ② 페이지: 틀 엔진의 세로 계산(카드 높이=글 높이+같은 위아래 여백, 묶음 전체는 내용 영역 가운데)을 그대로 쓴다. 가로 배치는 기존과 같다(캔버스 가운데)."""
-    sz = dict(a=100, b=80, ia=54, ib=78, ic=56); lh = dict(a=1.2, b=1.2, ia=1.2, ib=1.2, ic=1.25); btn_h = 104
-    hs = {k: sz[k] * lh[k] for k in sz}; hs["btn"] = btn_h
-    T = TE.cta_vertical("reel", hs, pad=62, gaps=dict(a_b=0, b_card=40, ia_ib=14, ib_ic=12, card_btn=44))
-    def d(i, k, txt, color=""): return f'<div class="a d t" id={i} style="left:0;width:1080px;top:{T[k]:.0f}px;font-size:{sz[k]}px;line-height:{lh[k]};{color}opacity:0">{txt}</div>'
-    h = d("f1", "a", "팔로우하고") + "\n" + d("f2", "b", "더 많은 이야기 나눠요", "color:@@GOLD@@;") + "\n"
-    h += f'<div class="a" id=fcard style="left:60px;top:{T["card"]:.0f}px;width:960px;height:{T["card_h"]:.0f}px;box-sizing:border-box;border:3px solid #e7c88d;border-radius:44px;background:linear-gradient(145deg,rgba(28,40,92,.9),rgba(9,14,44,.9));box-shadow:0 0 46px rgba(231,200,141,.25);opacity:0"></div>\n'
-    h += d("f3", "ia", "프로필 링크에서", "color:@@GOLD@@;") + "\n" + d("f4", "ib", "생년월일 입력하고") + "\n" + d("f5", "ic", "내 첫글자와 타고난 기운 알아보기") + "\n"
-    h += f'<div class="a d t" id=fbtn style="left:300px;top:{T["btn"]:.0f}px;width:480px;height:{btn_h}px;border-radius:52px;background:#e7c88d;color:#17102b;font-size:58px;line-height:{btn_h}px;opacity:0">＋ 팔로우</div>\n'
+    """마무리 ② 페이지: 틀 엔진 계산값(카드 높이=글 높이+같은 위아래 여백, 묶음 전체 가운데, 가로는 안전 영역 안)을 그대로 쓴다."""
+    m = lay()[2].meta; T = m["T"]; fz = {k: m[k] for k in ("fa", "fb", "fia", "fib", "fic")}
+    def d(i, k, f, color=""): return f'<div class="a d t" id={i} style="left:0;width:950px;top:{T[k]:.0f}px;font-size:{f["size"]}px;line-height:{f["lh"]};{color}opacity:0">{"<br>".join(f["lines"])}</div>'
+    h = d("f1", "a", fz["fa"]) + "\n" + d("f2", "b", fz["fb"], "color:@@GOLD@@;") + "\n"
+    h += f'<div class="a" id=fcard style="left:{m["cxl"]:.0f}px;top:{T["card"]:.0f}px;width:{m["cxr"] - m["cxl"]:.0f}px;height:{T["card_h"]:.0f}px;box-sizing:border-box;border:3px solid #e7c88d;border-radius:44px;background:linear-gradient(145deg,rgba(28,40,92,.9),rgba(9,14,44,.9));box-shadow:0 0 46px rgba(231,200,141,.25);opacity:0"></div>\n'
+    h += d("f3", "ia", fz["fia"], "color:@@GOLD@@;") + "\n" + d("f4", "ib", fz["fib"]) + "\n" + d("f5", "ic", fz["fic"]) + "\n"
+    h += f'<div class="a d t" id=fbtn style="left:{m["cx"] - m["bw"] / 2:.0f}px;top:{T["btn"]:.0f}px;width:{m["bw"]:.0f}px;height:{m["bh"]:.0f}px;border-radius:{m["bh"] / 2:.0f}px;background:#e7c88d;color:#17102b;font-size:58px;line-height:{m["bh"]:.0f}px;opacity:0">＋ 팔로우</div>\n'
     return h
 
 def html(beat):
     chips = "".join(f'<div class="a d chip" id=chip{k} style="left:{60 + k * 162}px">{n}</div>' for k, n in enumerate(["안정", "표현", "유연", "생성", "결단", "소통"]))
-    bars = "".join(f'<div class="a bar" id=bar{i} style="top:{588 + i * 66}px"><div class="a d bl">{n}</div><div class="a d bv">{v:.1f}%</div></div>' for i, (n, v) in enumerate(RANK))
+    p1_, p5_, p7_ = lay(); rk_html, bars, WIDS = rank_blocks(p5_); p1_html = hook_blocks(p1_)
     h = """<!doctype html><meta charset=utf-8><style>@@FONTS@@
 html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#050a1c;font-family:'JW-B',sans-serif;font-weight:800;color:#fff;word-break:keep-all}
 .a{position:absolute}.d{font-family:'JW-D',sans-serif;font-weight:900}.t{text-align:center;white-space:nowrap}
@@ -82,34 +101,26 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#050a1c
 .bar{left:70px;height:58px;width:0;border-radius:0 29px 29px 0;background:linear-gradient(90deg,#6a3fc8,#ff5c9d);opacity:0;overflow:hidden}
 .bl{left:26px;top:4px;font-size:46px;line-height:1.15;color:#fff}.bv{right:26px;top:4px;font-size:46px;line-height:1.15;color:#fff}
 .top1{background:linear-gradient(90deg,#c9a24a,#e7c88d)}.top1 .bl,.top1 .bv{color:#17102b}
-.xt{left:0;top:0;width:100%;height:100%;box-sizing:border-box;display:flex;align-items:center;justify-content:center;padding:0 30px;font-family:'JW-B',sans-serif;font-weight:800;font-size:@@XFS@@px;line-height:1.32;color:#fff;opacity:0}.xt .gm,.gm{font-family:'JW-D',sans-serif;font-weight:900;color:#e7c88d}.xban{left:0;width:1080px;text-align:center;white-space:nowrap;color:#e7c88d}
+.xt{left:0;top:0;width:100%;height:100%;box-sizing:border-box;display:flex;align-items:center;justify-content:center;padding:0 30px;font-family:'JW-B',sans-serif;font-weight:800;font-size:@@XFS@@px;line-height:1.32;color:#fff;opacity:0}.xt .gm,.gm{font-family:'JW-D',sans-serif;font-weight:900;color:#e7c88d}.xban{left:0;width:950px;text-align:center;white-space:nowrap;color:#e7c88d}
 @@BFCSS@@</style><body>
 <img class="a" id=bg src="file://@@BG@@">
 <img class="a" id=chart src="file://@@CHART@@">
 <img class="a" id=sun src="file://@@SUN@@"><img class="a" id=moon src="file://@@MOON@@">
 <div class="a vig"></div><svg class="a" id=stars width=1080 height=1920 style="left:0;top:0"></svg>
-<div class="a d t" id=hl style="left:0;width:1080px;top:408px;font-size:100px;line-height:1.2">내 별자리,<br>사주랑 같은 말<br>할까?</div>
-<div class="a grp" id=grp>
- <div class="a c" id=pinkC style="left:50px;top:792px;width:600px;height:600px;background:@@PINK@@"></div>
- <div class="a c" id=blueC style="left:430px;top:792px;width:600px;height:600px;background:@@BLUE@@"></div>
-</div>
-<div class="a c" id=blueD style="left:430px;top:792px;width:600px;height:600px;box-sizing:border-box;border:8px dashed @@BLUE@@;background:transparent;opacity:.7;mix-blend-mode:normal"></div>
-<div class="a d t lab" id=wSaju style="left:240px;top:1092px;font-size:108px">사주</div>
-<div class="a d t lab" id=wStar style="left:842px;top:1092px;font-size:82px">별자리</div>
-<div class="a d t lab" id=wSame style="left:540px;top:1092px;font-size:58px">같은 말</div>
+@@P1HTML@@
 @@EXHTML@@
-<div class="a d t" id=rk style="left:0;width:1080px;top:410px;font-size:56px;line-height:1.22;opacity:0">사주와 같은 말을 하는<br>별자리 순위</div>
+@@RKHTML@@
 @@BARS@@
-<div class="a d t" id=c1 style="left:0;width:1080px;top:520px;font-size:116px;line-height:1.22;opacity:0">내 별자리는</div>
-<div class="a d t" id=c2 style="left:0;width:1080px;top:670px;font-size:116px;line-height:1.22;opacity:0;color:@@GOLD@@">몇 위일까요?</div>
-<div class="a d t" id=c3 style="left:0;width:1080px;top:880px;font-size:78px;line-height:1.3;opacity:0">댓글로 알려 주세요</div>
+<div class="a d t" id=c1 style="left:0;width:950px;top:520px;font-size:116px;line-height:1.22;opacity:0">내 별자리는</div>
+<div class="a d t" id=c2 style="left:0;width:950px;top:670px;font-size:116px;line-height:1.22;opacity:0;color:@@GOLD@@">몇 위일까요?</div>
+<div class="a d t" id=c3 style="left:0;width:950px;top:880px;font-size:78px;line-height:1.3;opacity:0">댓글로 알려 주세요</div>
 @@CTAHTML@@
 @@BF@@
 <script>
 const BEAT=@@BEAT@@, B=ms=>ms/1000/BEAT, cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
 function bez(x1,y1,x2,y2){return t=>{if(t<=0)return 0;if(t>=1)return 1;let a=0,b=1,u=t;for(let i=0;i<24;i++){const x=3*(1-u)*(1-u)*u*x1+3*(1-u)*u*u*x2+u*u*u;if(x<t)a=u;else b=u;u=(a+b)/2}return 3*(1-u)*(1-u)*u*y1+3*(1-u)*u*u*y2+u*u*u}}
 const out=bez(.23,1,.32,1), g=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
-const VAL=@@VALS@@; let seed=5; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+const VAL=@@VALS@@; const WID=@@WIDS@@; let seed=5; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
 const SP=[]; for(let i=0;i<70;i++){const c=document.createElementNS(NS,'circle');const y=rnd()<.55?rnd()*330:(rnd()<.5?1470+rnd()*450:330+rnd()*1140);c.setAttribute('cx',rnd()*1080);c.setAttribute('cy',y);c.setAttribute('r',1.6+rnd()*3.2);c.setAttribute('fill',rnd()<.5?'#e7c88d':'#ffffff');g('stars').appendChild(c);SP.push([c,rnd()*6.28,.25+rnd()*.6])}
 let b=0;
 function lab(id,o,s){const e=g(id);e.style.opacity=o;e.style.transform=`translate(-50%,-50%) scale(${s})`}
@@ -129,7 +140,7 @@ function seek(ms){b=B(ms);
 @@EXJS@@
  // 장면 3: 순위(박 18.2~27)
  const rf=1-cl((b-25.6)/.6); g('rk').style.opacity=cl((b-18)/.5)*rf;
- for(let i=0;i<12;i++){const t0=18.4+(11-i)*.5, q=out(cl((b-t0)/.45)); const el=g('bar'+i); el.style.opacity=q*rf; el.style.width=(190+VAL[i]*30*q)+'px'; if(i===0){el.classList.add('top1'); el.style.transform=`scaleY(${1+(b>24.2&&b<25.6?pulse*1.6:0)})`}}
+ for(let i=0;i<12;i++){const t0=18.4+(11-i)*.5, q=out(cl((b-t0)/.45)); const el=g('bar'+i); el.style.opacity=q*rf; el.style.width=(WID[i]*q)+'px'; if(i===0){el.classList.add('top1'); el.style.transform=`scaleY(${1+(b>24.2&&b<25.6?pulse*1.6:0)})`}}
  // 장면 4: 마무리 — 댓글 한 줄(박 26~29) 뒤 팔로우 + 홈페이지(박 29~36)
  const cA=1-cl((b-28.6)/.5); g('c1').style.opacity=cl((b-26)/.4)*cA; g('c2').style.opacity=cl((b-26.6)/.4)*cA; g('c3').style.opacity=cl((b-27.4)/.4)*cA;
  g('f1').style.opacity=cl((b-29.2)/.4); g('f2').style.opacity=cl((b-29.9)/.4); g('fcard').style.opacity=cl((b-30.6)/.5); g('f3').style.opacity=cl((b-31)/.4); g('f4').style.opacity=cl((b-31.6)/.4); g('f5').style.opacity=cl((b-32.4)/.4);
@@ -139,7 +150,7 @@ seek(0);
 </script>"""
     for _ in range(2):
         for k, v in {"@@FONTS@@": K.css("gm"), "@@BG@@": os.path.join(AS, "derived", "bg_cosmos.jpg"), "@@CHART@@": os.path.join(AS, "chart.png"), "@@SUN@@": os.path.join(AS, "derived", "sun.png"), "@@MOON@@": os.path.join(AS, "derived", "moon.png"),
-                 "@@PINK@@": PINK, "@@BLUE@@": BLUE, "@@GOLD@@": GOLD, "@@BEAT@@": repr(beat), "@@BF@@": BF.html("reel", ai=True), "@@BFCSS@@": BF.css(), "@@XFS@@": str(TE.explain_layout("reel")["bubble_fs"]), "@@EXHTML@@": ex_blocks()[0], "@@CTAHTML@@": cta_blocks(), "@@EXJS@@": ex_blocks()[1], "@@BARS@@": bars, "@@CHIPS@@": chips, "@@JW@@": os.path.join(AS, "derived", "jw_gesture.png"), "@@VALS@@": str([v for _, v in RANK])}.items(): h = h.replace(k, v)
+                 "@@PINK@@": PINK, "@@BLUE@@": BLUE, "@@GOLD@@": GOLD, "@@BEAT@@": repr(beat), "@@BF@@": BF.html("reel", ai=True), "@@BFCSS@@": BF.css(), "@@XFS@@": str(TE.explain_layout("reel")["bubble_fs"]), "@@EXHTML@@": ex_blocks()[0], "@@CTAHTML@@": cta_blocks(), "@@EXJS@@": ex_blocks()[1], "@@BARS@@": bars, "@@P1HTML@@": p1_html, "@@RKHTML@@": rk_html, "@@WIDS@@": str(WIDS), "@@CHIPS@@": chips, "@@JW@@": os.path.join(AS, "derived", "jw_gesture.png"), "@@VALS@@": str([v for _, v in RANK])}.items(): h = h.replace(k, v)
     return h
 async def cover(hp, beat, out):
     from playwright.async_api import async_playwright
