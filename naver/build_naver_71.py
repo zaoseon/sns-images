@@ -7,10 +7,10 @@ HERE1 = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE1)
 _src = open(os.path.join(HERE1, "build_naver_47_52.py"), encoding="utf-8").read()
 exec(compile(_src.split("# ================= 47편")[0], "head47", "exec"), globals())
 from urllib.parse import quote
-TITLE = "사주·점성술·자미두수 교차분석, 같은 말을 하는 확률 3,000명 결과"
+TITLE = "사주·점성술·자미두수가 같은 말을 하는 확률, 3,000명 결과"
 assert len(TITLE) <= 40, len(TITLE)
 art(71, "2026-11-01", "12:00", "v2_straight", "쇠", False,
- dict(d="BIG", kick="교차분석 3,000명", hook=["여섯 중 넷 이상이", "같은 말을 하는 사람"], big="5.3%", sub="무작위 3,000명 계산"),
+ dict(d="BIG", kick="3,000명 계산", hook=["여섯 중 넷 이상이", "같은 말을 하는 사람"], big="5.3%", sub="무작위 3,000명 계산"),
  TITLE,
  ["사주는 이렇다는데 별자리는 다르다고 해서, 어느 쪽 말이 맞는지 헷갈렸던 적 있으세요?", "<b>여섯 운명학이 같은 말을 하는 확률</b>을 무작위 3,000명으로 계산해 봤어요. 안녕하세요, 자오선의 정월이에요."],
  ["📊 <b>한 줄 요약</b>: 여섯 중 네 개 이상이 같은 방향을 가리킨 사람은 100명 중 5명이었어요.", "여섯 개가 모두 같은 사람은 3,000명 중 한 명도 없었어요.", "🧭 <b>세 가지</b>: 계산 방법, 몇 개가 같은 말을 하는지, 사주만 혼자 다른 사람", "✔️ <b>해 볼 것</b>: 내 사주와 별자리가 같은 말을 하는지 한 줄로 적어 보세요."],
