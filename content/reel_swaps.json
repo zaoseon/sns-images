@@ -1377,19 +1377,28 @@
   "time": "21:00",
   "status": "new",
   "images": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1018_1.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1018_2.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1018_3.jpg"
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night5/final/1018_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night5/final/1018_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night5/final/1018_3.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night5/final/1018_4.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night5/final/1018_5.jpg"
   ],
   "download": [
    "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1018_1.jpg",
    "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1018_2.jpg",
    "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1018_3.jpg"
   ],
-  "note": "인스타 10/18(일) 21:00(3장 카드), 스레드 21:00(글). ③의 OSMU 정리안에서 요청한 \"저녁 짝 글\"이에요. 문장은 해당 블로그 글에 있는 내용만 썼어요.",
+  "note": "인스타 10/18(일) 21:00(3장 카드), 스레드 21:00(글). ③의 OSMU 정리안에서 요청한 \"저녁 짝 글\"이에요. 문장은 해당 블로그 글에 있는 내용만 썼어요. [5장 10/7] 대표 지적(캐러셀은 표지·본문·CTA와 기승전결)에 따라 3장에서 5장으로 늘렸어요. 1~3장(표지·본문·겹쳐 보면)은 처음 만든 이미지 그대로이고, 4장(풀이)과 5장(마무리: 댓글 질문·팔로우·다음 편)만 새로 그렸어요. 문장은 짝 글 n34에 있는 내용만 썼어요. 4장 '몇 개나 겹치나요?'는 원고 n34 3번(3개/2개/0~1개). 줄 폭 때문에 '2개: 평소엔 괜찮다가 쉬는 밤에 생각이 커지는 편이에요'를 '2개: 쉬는 밤에 생각이 커지는 편이에요'로, '1개'와 '0개'를 '0~1개: 틀린 게 아니에요'로 줄였어요. 5장 아래쪽 '프로필 링크에서 내 기운 1초만에 확인'은 일간 카드용 고정 문구라 그대로 뒀어요(물고기자리 시안과 같은 확인 대기). 원래 3장 주소는 old에 남겼어요. 아직 인스타에 예약 안 된 카드라 되돌릴 일은 없어요.",
   "checks": [
    "블로그 글과 같은 주제인지",
-   "글자 크기"
+   "글자 크기",
+   "3장에서 5장으로 늘린 구성(풀이 1장·마무리 1장 추가)이 괜찮은지",
+   "줄 폭 때문에 원고 문장을 줄인 곳이 의미를 해치지 않는지"
+  ],
+  "old": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1018_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1018_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1018_3.jpg"
   ]
  },
  {
@@ -1400,19 +1409,28 @@
   "time": "19:00",
   "status": "new",
   "images": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1024_1.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1024_2.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1024_3.jpg"
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night5/final/1024_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night5/final/1024_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night5/final/1024_3.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night5/final/1024_4.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night5/final/1024_5.jpg"
   ],
   "download": [
    "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1024_1.jpg",
    "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1024_2.jpg",
    "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1024_3.jpg"
   ],
-  "note": "인스타 10/24(토) 19:00(3장 카드), 스레드 19:00(글). 같은 날 18:00·18:30 카드 고르기와 20:00 릴스·21:00 한 줄 사주 사이에 끼워 19:00으로 잡았어요. ③의 OSMU 정리안에서 요청한 \"저녁 짝 글\"이에요. 문장은 해당 블로그 글에 있는 내용만 썼어요.",
+  "note": "인스타 10/24(토) 19:00(3장 카드), 스레드 19:00(글). 같은 날 18:00·18:30 카드 고르기와 20:00 릴스·21:00 한 줄 사주 사이에 끼워 19:00으로 잡았어요. ③의 OSMU 정리안에서 요청한 \"저녁 짝 글\"이에요. 문장은 해당 블로그 글에 있는 내용만 썼어요. [5장 10/7] 대표 지적(캐러셀은 표지·본문·CTA와 기승전결)에 따라 3장에서 5장으로 늘렸어요. 1~3장(표지·본문·겹쳐 보면)은 처음 만든 이미지 그대로이고, 4장(풀이)과 5장(마무리: 댓글 질문·팔로우·다음 편)만 새로 그렸어요. 문장은 짝 글 n39에 있는 내용만 썼어요. 4장 '내 기다림은 어떤 모양인가요'는 원고 n39 3번. 줄 폭 때문에 '속으로 생각이 깊어져요'를 '속으로 깊어져요'로 줄였어요. 5장 아래쪽 '프로필 링크에서 내 기운 1초만에 확인'은 일간 카드용 고정 문구라 그대로 뒀어요(물고기자리 시안과 같은 확인 대기). 원래 3장 주소는 old에 남겼어요. 아직 인스타에 예약 안 된 카드라 되돌릴 일은 없어요.",
   "checks": [
    "블로그 글과 같은 주제인지",
-   "글자 크기"
+   "글자 크기",
+   "3장에서 5장으로 늘린 구성(풀이 1장·마무리 1장 추가)이 괜찮은지",
+   "줄 폭 때문에 원고 문장을 줄인 곳이 의미를 해치지 않는지"
+  ],
+  "old": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1024_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1024_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w42night/1024_3.jpg"
   ]
  },
  {
