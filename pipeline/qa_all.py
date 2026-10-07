@@ -6,7 +6,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); R = os.path.abspath(os.path.j
 def text_checks():
     out = {}
     import linebreak_audit as LB, claims_audit as CA, caption_rules as CR
-    files = [os.path.join(R, "content", x) for x in ("pilot_variety.py", "clips_motion_2027.py", "reels_engine.py")] + [os.path.join(R, "pipeline", x) for x in ("data_reels.py", "new_tri_reels.py", "pick_reel.py", "motion_dots.py", "motion_kinetic.py")]
+    files = [os.path.join(R, "content", x) for x in ("pilot_variety.py", "clips_motion_2027.py", "clips_motion_zodiac.py", "reels_engine.py")] + [os.path.join(R, "pipeline", x) for x in ("data_reels.py", "new_tri_reels.py", "pick_reel.py", "motion_dots.py", "motion_kinetic.py")]
     out["줄바꿈(서술어만 남기기 금지)"] = len(LB.scan(files))
     out["문구 안전(확신·불안·단정)"] = len([1 for w, t in CA.corpus() for k, m in CA.scan_text(t)])
     d = json.load(open(os.path.join(R, "content", "reel_swaps.json"), encoding="utf-8")); out["캡션(프로필 링크 1개·팔로우·반복 금지)"] = len([1 for i, p in CR.audit_all(d) if p])
