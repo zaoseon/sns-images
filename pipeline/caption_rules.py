@@ -10,6 +10,13 @@ LEADS = {"swap-card-1009": "연애에서 한 번 정하면 뒤돌아보지 않�
          "add-kinetic-reply": "내 연락의 리듬이 어느 쪽인지 궁금하다면", "add-kinetic-talk": "먼저 말 걸고 싶은 날의 내 결이 궁금하다면", "add-litho": "내 별자리가 사주와 같은 말을 하는지 궁금하다면",
          "add-subway": "지금 내 10년이 어느 역인지 궁금하다면", "add-boarding": "2027 정미년행 탑승권, 내 열두 달이 궁금하다면", "add-ticket": "2027년 내 열두 달의 흐름이 궁금하다면",
          "clip-s10-video": "내 이사 날짜가 궁금하다면"}
+LEADS.update({"tri-vs": "사주와 별자리가 다른 말을 할 때 어느 쪽을 믿을지 궁금하다면", "tri-first": "3초 만에 사랑에 빠지는 사람, 나는 몇 개 겹치는지 궁금하다면", "tri-talk": "이 사람이 말하면 다들 끄덕이는 이유, 내 결은 어떤지 궁금하다면",
+  "gab-ig": "갑(甲)일생인 내 결이 궁금하다면", "eul-ig": "을(乙)일생인 내 결이 궁금하다면", "data-vs14": "사주와 별자리가 같은 말을 하는지 궁금하다면", "data-pair": "내 사주와 닮은 운명학이 무엇인지 궁금하다면",
+  "data-star": "내 별자리와 사주가 통하는지 궁금하다면", "data-ziwei": "내 명궁에 별이 있는지 궁금하다면", "data-dang": "내 중심별이 흔한 별인지 궁금하다면", "data-liuyao": "내 괘가 바뀔지 궁금하다면",
+  "data-harak": "내 하락이수 괘가 무엇인지 궁금하다면", "data-alone": "내 사주만 혼자 다른지 궁금하다면", "data-four": "내 여섯 운명학이 몇 개나 같은지 궁금하다면"})
+def lines_for(i):
+    """영상 교체(캡션이 메트리쿨 예약 글에 있는 경우)에 넣을 두 문장: 홈페이지 유입 한 줄 + 팔로우 유도 한 줄(R17)."""
+    k = list(LEADS).index(i); return home_line(i, k), FOLLOW[k % len(FOLLOW)]
 def _strip(c):
     c = re.sub(r"[^.!?\n※#]*프로필 링크[^.!?\n※#]*[.!?]?\s*", "", c); c = re.sub(r"[^.!?\n※#]*팔로우[^.!?\n※#]*[.!?]?\s*", "", c); return re.sub(r"\s{2,}", " ", c).strip()
 def home_line(i, idx): return f"{LEADS[i]} {TAIL[idx % len(TAIL)]}."

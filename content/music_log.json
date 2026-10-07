@@ -94,5 +94,117 @@
   "mode": "up",
   "bpm": 120,
   "key": "E"
+ },
+ {
+  "name": "reel-vs",
+  "kind": "data",
+  "style": "맑은 팝",
+  "mode": "slow",
+  "bpm": 105,
+  "key": "F"
+ },
+ {
+  "name": "reel-first",
+  "kind": "data",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 104,
+  "key": "G"
+ },
+ {
+  "name": "reel-talk",
+  "kind": "data",
+  "style": "별빛 오르골",
+  "mode": "slow",
+  "bpm": 93,
+  "key": "A"
+ },
+ {
+  "name": "reel-vs14",
+  "kind": "data",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 108,
+  "key": "C"
+ },
+ {
+  "name": "reel-pair",
+  "kind": "data",
+  "style": "맑은 팝",
+  "mode": "slow",
+  "bpm": 105,
+  "key": "E"
+ },
+ {
+  "name": "reel-star",
+  "kind": "data",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 104,
+  "key": "F"
+ },
+ {
+  "name": "reel-ziwei",
+  "kind": "data",
+  "style": "별빛 오르골",
+  "mode": "slow",
+  "bpm": 93,
+  "key": "G"
+ },
+ {
+  "name": "reel-dang",
+  "kind": "data",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 108,
+  "key": "A"
+ },
+ {
+  "name": "reel-liuyao",
+  "kind": "data",
+  "style": "맑은 팝",
+  "mode": "slow",
+  "bpm": 105,
+  "key": "C"
+ },
+ {
+  "name": "reel-harak",
+  "kind": "data",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 104,
+  "key": "E"
+ },
+ {
+  "name": "reel-alone",
+  "kind": "data",
+  "style": "별빛 오르골",
+  "mode": "slow",
+  "bpm": 93,
+  "key": "F"
+ },
+ {
+  "name": "reel-four",
+  "kind": "data",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 108,
+  "key": "G"
+ },
+ {
+  "name": "reel-gab",
+  "kind": "data",
+  "style": "맑은 팝",
+  "mode": "slow",
+  "bpm": 105,
+  "key": "A"
+ },
+ {
+  "name": "reel-eul",
+  "kind": "data",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 104,
+  "key": "C"
  }
 ]
