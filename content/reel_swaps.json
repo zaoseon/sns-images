@@ -2119,5 +2119,25 @@
    "×(예전)로 표시한 것이 모두 고쳐야 할 것인지",
    "빠진 규칙이 있는지"
   ]
+ },
+ {
+  "id": "pisces5-proposal",
+  "kind": "카드 구조 시안(승인 요청)",
+  "title": "물고기자리 카드를 5장으로: 표지·선택지·풀이·조언·마무리(CTA) — 올라간 3장은 풀이에서 끝나 이야기가 끊겼어요",
+  "status": "new",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43sample/pisces5_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43sample/pisces5_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43sample/pisces5_3.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43sample/pisces5_4.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43sample/pisces5_5.jpg"
+  ],
+  "note": "5장을 위에서 아래로 보세요. 1 표지(훅) → 2 선택지 → 3 풀이 → 4 조언(2027년 흐름) → 5 마무리(댓글 질문·팔로우·다음 편). 올라간 3장(10/7 18:30)은 3번 풀이에서 끝나서 조언·마무리가 없었어요. 같은 7장 틀의 장들이라 새 디자인은 아니에요. 문장은 네이버 n48 원고에 있는 내용만 썼어요(조언은 원고 5번 '2027년 2월 19일에 한 줄 적기', 2027년은 원고 3번). 마무리의 '다음 편'은 n48 원고 맨 끝에 실제로 연결된 '2027 띠별 운세 총정리'예요. 올라간 게시물과 예약은 건드리지 않았어요(시안만).",
+  "checks": [
+   "5장 구조(표지·선택지·풀이·조언·마무리)로 괜찮은지, 4장이나 7장이 낫다면 몇 장인지",
+   "마무리 장 아래쪽 '프로필 링크에서 내 기운 1초만에 확인'은 일간 카드용 문구라서 이 카드에는 '생년월일 입력'(R11)으로 바꿀지",
+   "마무리 질문 '나는 물 일간일까 불 일간일까요?'(원고 끝 문장)로 괜찮은지",
+   "승인하시면 예약된 3장 13건도 같은 방식으로 5장으로 풀어 바꿀지"
+  ]
  }
 ]
