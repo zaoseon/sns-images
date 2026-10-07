@@ -7,7 +7,8 @@ from clip_motion import *
 from PIL import ImageChops
 import clip_motion as _M, fonts_kit as _FK, music_plan as MP
 CORAL = (255, 138, 115, 255); TEAL = (127, 214, 200, 255); BLUE = (92, 120, 255, 255); PINK = (255, 92, 157, 255)
-MID = 940   # 안전 영역(상단 문구 아래 475 ~ 하단 고정 위 1405)의 세로 가운데
+MID = 907   # 상단 문구 아래(395)와 하단 주소 위(1425)의 가운데 910에 맞춘 값(실제 글 범위를 재서 보정, 10/7 대표 '아래로 쏠림')
+AUDIT = False   # 배치 검사 때 장식(워터마크 막)을 끈다
 # ---------- 글 효과(영상마다 다르게 쓴다, R19) ----------
 def _lines(s, size, color, maxw, lh, path=BLACK): return line_layers(s, size, color, path, maxw, lh)
 def fx_slide(c, s, y, t0, size, color=WHITE, maxw=820, lh=1.3, dirn=-1, cx=CX):
@@ -53,7 +54,7 @@ def overlap_d(r, f):
         if area > f: lo = d
         else: hi = d
     return (lo + hi) / 2
-R_V = 190; D_V = overlap_d(R_V, 0.135); VY = 1000
+R_V = 170; D_V = overlap_d(R_V, 0.135); VY = 985
 def venn_layer(state, k=1.0):
     """state 'same': 겹침(금색) 강조 / 'diff': 바깥(산호색) 강조."""
     im = Image.new("RGBA", (1080, 620), (0, 0, 0, 0)); oy = VY - 310; cxL = CX - D_V / 2 * k - (1 - k) * 260; cxR = CX + D_V / 2 * k + (1 - k) * 260
@@ -73,12 +74,12 @@ def A2(c):
     p = e_out(cl((c.t - .1) / .9)); im, oy, mx = venn_layer("same", p); blit(c.fr, im, 0, oy, c.alpha(cl(p * 1.5)))
     g = e_out(cl((c.t - 1.7) / .5))
     if g > 0:
-        L = Image.new("RGBA", (6, 90), (224, 184, 102, int(255 * g))); blit(c.fr, L, mx - 3, VY + 225, 1.0)
-        fx_wipe(c, "사주와 별자리가\n같은 방향을 가리켰어요", 1355 - 60, 1.9, 52, lh=1.3)
+        L = Image.new("RGBA", (6, 84), (224, 184, 102, int(255 * g))); blit(c.fr, L, mx - 3, VY + 120, 1.0)
+        fx_wipe(c, "사주와 별자리가\n같은 방향을 가리켰어요", 1215, 1.9, 52, lh=1.3)
 def A3(c):
     p = 1.0; im, oy, mx = venn_layer("diff", 1.0); blit(c.fr, im, 0, oy, 1.0)
     fx_slide(c, "나머지는", 490, .05, 64, DIM, dirn=-1); fx_count(c, 86, 565, .3, 190, CORAL, "명", 1.2)
-    fx_wipe(c, "서로 다른 방향을 가리켰어요\n이게 보통이에요", 1290, 1.6, 52, lh=1.3)
+    fx_wipe(c, "서로 다른 방향을 가리켰어요\n이게 보통이에요", 1215, 1.6, 52, lh=1.3)
 def A4(c):
     fx_zoom(c, "별자리마다 크게 달라요", 490, .05, 68, maxw=840)
     rows = [("염소자리", 23.0, GOLD), ("황소자리", 22.7, GOLD), ("천칭자리", 5.6, CORAL)]; im, d = lay(900); f52 = font(BLACK, 52); f56 = font(BLACK, 56)
@@ -86,7 +87,7 @@ def A4(c):
         y = 680 + i * 190 - 480; t0 = .5 + i * .5; g = e_out(cl((c.t - t0) / .7)); a = int(255 * cl(g * 1.5))
         d.text((70, y), nm, font=f52, fill=(255, 255, 255, a), anchor="lm"); w = 640 * (v / 23.0) * g
         d.rounded_rectangle((70, y + 36, 70 + max(10, w), y + 100), radius=32, fill=(col[0], col[1], col[2], a)); d.text((70 + max(10, w) + 20, y + 68), f"{v * g:.1f}%", font=f56, fill=(255, 255, 255, a), anchor="lm")
-    blit(c.fr, im, 0, 480, 1.0); fx_slide(c, "무작위 3,000명을 계산했어요", 1330, 2.4, 44, DIM, dirn=1)
+    blit(c.fr, im, 0, 480, 1.0); fx_slide(c, "무작위 3,000명을 계산했어요", 1295, 2.4, 44, DIM, dirn=1)
 def A5(c):
     H = text_h("다르다고\n틀린 게 아니에요", 100, 820, 1.3) + 40 + text_h("같은 말은 타고난 결이에요.\n다른 말은 내가 고를 수 있는 곳이에요.", 52, 840, 1.4); y0 = MID - H / 2
     y = fx_zoom(c, "다르다고\n틀린 게 아니에요", y0, .1, 100, GOLD); fx_slide(c, "같은 말은 타고난 결이에요.\n다른 말은 내가 고를 수 있는 곳이에요.", y + 40, 1.0, 52, DIM, maxw=840, lh=1.4, dirn=1)
@@ -101,7 +102,7 @@ def color_row(items, size, gap=34):
     return im, centers
 def A7(c):
     """마무리 ⑤: 숫자 반복(14=같은 말 금색, 86=다른 말 산호색) + 팔로우"""
-    t0 = .1; Htot = int(190 * 1.2) + 14 + int(60 * 1.3) + 56 + int(60 * 1.3) + 36 + int(46 * 1.4) * 2 + 40 + 124; y = MID - Htot / 2
+    t0 = .1; Htot = int(190 * 1.2) + 14 + int(60 * 1.3) + 56 + int(60 * 1.3) + 36 + int(46 * 1.4) * 2 + 40 + 124; y = MID - 30 - Htot / 2
     nums, nc = color_row((("14", GOLD), (":", (255, 255, 255, 255)), ("86", CORAL)), 190)
     p = e_out((c.t - t0) / .5); k = 1.45 - .45 * p; L = nums.resize((max(1, int(nums.width * k)), max(1, int(nums.height * k))), Image.LANCZOS)
     blit(c.fr, L, CX - L.width / 2, y - 20 + (nums.height - L.height) / 2, c.alpha(cl(p * 1.6))); x0 = CX - nums.width / 2
@@ -150,16 +151,16 @@ def B4(c):
     im, d = lay(800); cols = [PINK, BLUE, TEAL, GOLD, CORAL, (170, 140, 255, 255)]
     for i, nm in enumerate(SIX):
         t0 = .4 + i * .22; p = e_out(cl((c.t - t0) / .5)); cx_ = 190 + (i % 3) * 270; cy_ = 660 - 480 + (i // 3) * 150
-        st = e_out(cl((c.t - 2.3) / 1.0)); tx = CX - 24 + i * 9; ty = 900 - 480 + i * 9                      # 마지막엔 한 더미로 겹친다
+        st = e_out(cl((c.t - 2.3) / 1.0)); tx = CX - 24 + i * 9; ty = 930 - 480 + i * 9                      # 마지막엔 한 더미로 겹친다
         x = cx_ + (tx - cx_) * st; y = cy_ + (ty - cy_) * st
         d.rounded_rectangle((x - 120, y - 55, x + 120, y + 55), radius=30, fill=(cols[i][0], cols[i][1], cols[i][2], int(235 * cl(p * 1.4)))); d.text((x, y + 2), nm, font=font(BLACK, 52), fill=(30, 20, 40, int(255 * cl(p * 1.4))), anchor="mm")
-    blit(c.fr, im, 0, 480, 1.0); fx_wipe(c, "같은 답과 다른 답을 나눠 봐요", 1180, 2.6, 52, GOLD, maxw=840)
+    blit(c.fr, im, 0, 480, 1.0); fx_wipe(c, "같은 답과 다른 답을 나눠 봐요", 1215, 2.6, 52, GOLD, maxw=840)
 def B5(c):
     H = text_h("같은 답은 결,\n다른 답은 선택", 108, 820, 1.3) + 40 + text_h("모순처럼 보여도\n그 사이에 내가 서 있어요", 54, 820, 1.4); y0 = MID - H / 2
     y = fx_wipe(c, "같은 답은 결,\n다른 답은 선택", y0, .1, 108, GOLD); fx_slide(c, "모순처럼 보여도\n그 사이에 내가 서 있어요", y + 40, 1.1, 54, DIM, dirn=1)
 def B6(c):
     """마무리 ②: 댓글 질문 크게 + 팔로우 한 줄 + 프로필 링크 한 줄 + 하단 선택(동양? 서양?)"""
-    Htot = text_h("어느 쪽을\n더 믿으세요?", 118, 830, 1.25) + 44 + int(60 * 1.3) + 26 + int(46 * 1.4) * 2 + 48 + 110; y = MID - Htot / 2
+    Htot = text_h("어느 쪽을\n더 믿으세요?", 118, 830, 1.25) + 44 + int(60 * 1.3) + 26 + int(46 * 1.4) * 2 + 48 + 110; y = MID - 24 - Htot / 2
     y = fx_zoom(c, "어느 쪽을\n더 믿으세요?", y, .1, 118, GOLD); y = fx_slide(c, "댓글로 알려 주시고 팔로우해 주세요", y + 44, 1.0, 60, maxw=840, dirn=-1)
     y = fx_slide(c, "프로필 링크에서 생년월일 입력하고\n내 첫글자와 타고난 기운 알아보기", y + 26, 1.5, 46, DIM, maxw=840, lh=1.4, dirn=1)
     im, d = lay(140); f = font(BLACK, 64)
@@ -174,6 +175,7 @@ SETS["B"] = ("vs_split", SC_B, "fun")
 # ---------- ③ 오행: 큰 나무(갑목)가 자란다 ----------
 def watermark(c, hanja, t0=.0, alpha=.13, size=720):
     """일간 한자를 배경 차트 가운데(x 470, y 800)에 워터마크처럼 깐다(10/7 대표). 일간 설명 장면의 맨 먼저 그려 글·그림 뒤로 간다."""
+    if AUDIT: return
     k = e_out(cl((c.t - t0) / .7)); im = Image.new("RGBA", (900, 900), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     d.ellipse((50, 50, 850, 850), fill=(9, 13, 30, int(150 * k)))   # 차트 위에서 한자가 묻히지 않도록 뒤에 어두운 막을 깐다
     d.text((450, 440), hanja, font=font(_FK.P["serif"], size), fill=(GOLD[0], GOLD[1], GOLD[2], int(255 * .05 * k)), anchor="mm", stroke_width=5, stroke_fill=(GOLD[0], GOLD[1], GOLD[2], int(255 * .26 * k))); blit(c.fr, im, CX - 450, 800 - 450, 1.0)   # 윤곽선 위주의 은은한 워터마크
@@ -184,7 +186,7 @@ def tree_layer(g, sway=0.0, coins=0.0, roots=0.0, t=0.0, wind=0.0):
     im, d = lay(1000); base = GROUND - 480; cx = CX; H = max(10, 290 * g)
     gl = Image.new("RGBA", (1080, 40), (0, 0, 0, 0)); ImageDraw.Draw(gl).rounded_rectangle((160, 14, 790, 22), radius=4, fill=(255, 255, 255, 70)); im.alpha_composite(gl, (0, base - 14))
     if roots > 0:
-        for ang, ln in ((-38, 70), (-14, 85), (12, 80), (36, 65)):
+        for ang, ln in ((-38, 36), (-14, 44), (12, 42), (36, 34)):
             a = math.radians(ang); L = ln * roots; d.line([(cx, base + 6), (cx + math.sin(a) * L * .55, base + 6 + math.cos(a) * L * .55), (cx + math.sin(a) * L, base + 6 + math.cos(a) * L)], fill=(224, 184, 102, 255), width=9, joint="curve")
     def tx(h): return cx + sway * (h / H) ** 2 * 70
     L_, R_ = [], []
@@ -210,7 +212,7 @@ def tree_layer(g, sway=0.0, coins=0.0, roots=0.0, t=0.0, wind=0.0):
             d.line([(xx, yy), (xx + 170, yy - 10)], fill=(255, 255, 255, int(110 * wind)), width=5)
     return im
 def C1(c):
-    H = text_h("곧게 뻗어\n굽히기 싫은 사람", 100, 820, 1.3); y = fx_zoom(c, "곧게 뻗어\n굽히기 싫은 사람", 540, .1, 100, GOLD); fx_wipe(c, "태어난 날 첫 글자가 갑(甲)이라면", y + 36, 1.0, 52, DIM, maxw=840)
+    H = text_h("곧게 뻗어\n굽히기 싫은 사람", 100, 820, 1.3); y = fx_zoom(c, "곧게 뻗어\n굽히기 싫은 사람", 515, .1, 100, GOLD); fx_wipe(c, "태어난 날 첫 글자가 갑(甲)이라면", y + 36, 1.0, 52, DIM, maxw=840)
     blit(c.fr, tree_layer(.32 * e_out(cl(c.t / 2.4))), 0, 480, 1.0)
 def C2(c):
     watermark(c, "甲")

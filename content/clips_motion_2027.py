@@ -16,7 +16,7 @@ def S_hook(c):
     H = text_h("2027년", 140, 820, 1.2) + text_h("수성이 거꾸로 가는 날", 92, 820, 1.25) + text_h("딱 세 번이에요", 124, 820, 1.2) + 40 + text_h("날짜로 알려 드려요", 56, 820, 1.4); y0 = 910 - H / 2
     y = text(c, "2027년", y0, .1, 140, color=GOLD, maxw=820, lh=1.2); y = text(c, "수성이 거꾸로 가는 날", y, .5, 92, maxw=820, lh=1.25); y = text(c, "딱 세 번이에요", y, 1.0, 124, color=GOLD, maxw=820, lh=1.2); text(c, "날짜로 알려 드려요", y + 40, 1.6, 56, color=DIM, maxw=820)
 def S_map(c):
-    t = c.t; TOP = 610; RH = 58; X0, X1 = 190, 880; W = X1 - X0
+    t = c.t; TOP = 610; RH = 55; X0, X1 = 190, 880; W = X1 - X0
     text(c, "2027 수성 역행 · 일식", 490, .05, 56, maxw=840, stagger=0)
     im, d = lay(1000); f44 = font(BLACK, 44); f40 = font(BLACK, 40)
     def fx(m, day, end=False): return X0 + W * ((day if end else day - 1) / DAYS[m - 1])
@@ -46,7 +46,7 @@ def S_map(c):
 def S_trine(c):
     t = c.t; y0 = text(c, "세 번 모두", 490, .05, 84, maxw=840, stagger=0)
     text(c, "사주에서 '불의 삼합' 달이에요", y0 - 6, .45, 60, color=DIM, maxw=840, stagger=0)
-    pts = [(CX, 830, "午", "6월"), (CX - 240, 1215, "寅", "2월"), (CX + 240, 1215, "戌", "10월")]
+    pts = [(CX, 800, "午", "6월"), (CX - 240, 1185, "寅", "2월"), (CX + 240, 1185, "戌", "10월")]
     im, d = lay(1000); R = 100; fh = font(_FK.P["serif"], 110); fm = font(BLACK, 58)
     prog = e_out(cl((t - 1.4) / 1.4)); order = [(0, 1), (1, 2), (2, 0)]
     for k, (a, b) in enumerate(order):
@@ -62,7 +62,7 @@ def S_trine(c):
         d.text((x, yy - 4), hj, font=fh, fill=(40, 20, 28, 255), anchor="mm"); d.text((x, yy + R + 50), mo, font=fm, fill=(255, 255, 255, int(255 * cl(g))), anchor="mm")
     blit(c.fr, im, 0, 480, 1.0)
     cen = e_out(cl((t - 2.9) / .5))
-    if cen > 0: text(c, "수성 역행", 1062, 2.9, 66, color=GOLD, maxw=600, stagger=0)
+    if cen > 0: text(c, "수성 역행", 1035, 2.9, 66, color=GOLD, maxw=600, stagger=0)
 def S_hanmadi(c):
     body = "불의 해, 불의 달마다\n수성이 돌아와요.\n약속은 한 번 더 확인해 보세요."; note = "재미로 보는 풀이예요"
     bw = 840; pad = 40; hb = text_h(body, 62, bw - 2 * pad, 1.36); H = pad + 66 + 12 + hb + 18 + int(44 * 1.3) + pad; top = 490
@@ -74,7 +74,7 @@ def S_ctaA(c):
     H = text_h("어느 달이 가장\n궁금하세요?", 104, 820, 1.3) + 48 + int(72 * 1.3); y0 = 910 - H / 2
     y = text(c, "어느 달이 가장\n궁금하세요?", y0, .1, 104, maxw=820, lh=1.3); text(c, "댓글로 알려 주세요", y + 48, .7, 72, color=GOLD)
 def S_ctaB(c):
-    t0 = .1; Htot = int(96 * 1.3) + 30 + int(60 * 1.3) + 56 + int(52 * 1.4) * 2 + 40 + 124; y = 910 - Htot / 2
+    t0 = .1; Htot = int(96 * 1.3) + 30 + int(60 * 1.3) + 56 + int(52 * 1.4) * 2 + 40 + 124; y = 910 - 62 - Htot / 2
     y = text(c, "수성 역행 세 번,\n불의 삼합 달", y, t0, 96, color=GOLD, maxw=820, lh=1.25)
     y = text(c, "팔로우하고 더 많은 이야기 나눠요", y + 30, t0 + .6, 60, maxw=830, lh=1.3)
     y = text(c, "내 일간 12개월은 프로필 링크에서\n생년월일 입력하고 확인해 보세요", y + 56, t0 + 1.2, 52, color=DIM, maxw=830, lh=1.4)
