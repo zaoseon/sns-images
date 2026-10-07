@@ -161,6 +161,7 @@ SETS["B"] = ("vs_split", SC_B, "fun")
 def watermark(c, hanja, t0=.0, alpha=.13, size=720):
     """일간 한자를 배경 차트 가운데(x 470, y 800)에 워터마크처럼 깐다(10/7 대표). 일간 설명 장면의 맨 먼저 그려 글·그림 뒤로 간다."""
     k = e_out(cl((c.t - t0) / .7)); im = Image.new("RGBA", (900, 900), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.ellipse((50, 50, 850, 850), fill=(9, 13, 30, int(150 * k)))   # 차트 위에서 한자가 묻히지 않도록 뒤에 어두운 막을 깐다
     d.text((450, 440), hanja, font=font(_FK.P["serif"], size), fill=(GOLD[0], GOLD[1], GOLD[2], int(255 * .05 * k)), anchor="mm", stroke_width=5, stroke_fill=(GOLD[0], GOLD[1], GOLD[2], int(255 * .26 * k))); blit(c.fr, im, CX - 450, 800 - 450, 1.0)   # 윤곽선 위주의 은은한 워터마크
 GROUND = 1320   # 땅 선(절대 y)
 LEAF = [(84, 170, 110), (70, 150, 100), (110, 190, 120), (96, 178, 104)]

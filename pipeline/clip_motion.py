@@ -39,21 +39,16 @@ def stars():
     r = random.Random(11); return [(r.randint(20, W - 20), r.randint(160, 1460), r.choice([1, 2, 2, 3]), r.random() * 6.28, .6 + r.random() * 1.4) for _ in range(95)]
 @functools.lru_cache(maxsize=1)
 def ring_img():
-    S = 1000; im = Image.new("RGBA", (S, S), (0, 0, 0, 0)); d = ImageDraw.Draw(im); c = S // 2
-    for r, a, w in ((470, 70, 2), (452, 40, 1), (330, 30, 1)): d.ellipse((c - r, c - r, c + r, c + r), outline=(224, 184, 102, a), width=w)
-    f = serif(40)
-    for i, ch in enumerate("子丑寅卯辰巳午未申酉戌亥"):
-        a = math.radians(i * 30 - 90); x, y = c + 400 * math.cos(a), c + 400 * math.sin(a); g = Image.new("RGBA", (70, 70), (0, 0, 0, 0)); ImageDraw.Draw(g).text((35, 35), ch, font=f, fill=(224, 184, 102, 120), anchor="mm")
-        g = g.rotate(-(i * 30), resample=Image.BICUBIC); im.alpha_composite(g, (int(x - 35), int(y - 35)))
-        for k in range(1, 3):
-            b = math.radians(i * 30 + k * 10 - 90); d.line((c + 452 * math.cos(b), c + 452 * math.sin(b), c + 470 * math.cos(b), c + 470 * math.sin(b)), fill=(224, 184, 102, 60), width=2)
-    return im
+    """뒤에서 돌아가는 차트 = 브랜드 황도 차트(assets/brand_bg/chart.png, 10/7 대표 지적: 엔진 영상이 직접 그린 고리를 쓰고 있었다). 선만 은은하게 보이도록 투명도를 낮춘다."""
+    src = Image.open(os.path.join(ROOT, "assets", "brand_bg", "chart.png")).convert("RGBA"); S = CHART_S
+    im = src.resize((S, S), Image.LANCZOS); al = im.getchannel("A").point(lambda v: int(v * CHART_ALPHA)); im.putalpha(al); return im
+CHART_S = 1040; CHART_ALPHA = .30
 def background(fr, t, total_t):
     fr.paste(bg_static())
     d = ImageDraw.Draw(fr, "RGBA")
     for x, y, r, ph, sp in stars():
         a = int(90 + 120 * (0.5 + 0.5 * math.sin(t * sp + ph))); d.ellipse((x - r, y - r, x + r, y + r), fill=(255, 236, 190, a))
-    rg = ring_img().rotate(-t * 3.2, resample=Image.BICUBIC); fr.paste(rg, (CX - 500, 800 - 500), rg)
+    rg = ring_img().rotate(-t * 2.4, resample=Image.BICUBIC); fr.paste(rg, (CX - CHART_S // 2, 800 - CHART_S // 2), rg)
     d.rectangle((70, 143, 880, 147), fill=(255, 255, 255, 40)); d.rectangle((70, 143, 70 + int(810 * cl(t / total_t)), 147), fill=GOLD)
 # ---------- 글자 ----------
 def _dep(wd):
