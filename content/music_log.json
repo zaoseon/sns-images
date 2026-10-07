@@ -214,5 +214,29 @@
   "mode": "slow",
   "bpm": 93,
   "key": "E"
+ },
+ {
+  "name": "pilot-vs14_venn",
+  "kind": "data",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 108,
+  "key": "F"
+ },
+ {
+  "name": "pilot-vs_split",
+  "kind": "fun",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 124,
+  "key": "G"
+ },
+ {
+  "name": "pilot-gab_tree",
+  "kind": "love",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 98,
+  "key": "A"
  }
 ]

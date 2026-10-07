@@ -1,0 +1,204 @@
+"""양산형 방지 시범 3편(10/7 대표 '시범안 확인'): ① 데이터(두 원이 겹치는 넓이=실제 비율) ② 비교(좌우 패널) ③ 오행(나무가 자란다).
+새 규칙을 처음부터: R21 본문 y 475 이상 · R19 정월 얼굴 40% 이하(①②는 얼굴 없음) · 영상마다 다른 글 효과·마무리 · R04 x 50~900 · R06 글자 44px 이상 · R18 가운데.
+사용: python3 content/pilot_variety.py A|B|C  -> 2026-pilot/<이름>.mp4"""
+import sys, os, math, subprocess
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, "..")); sys.path.insert(0, os.path.join(ROOT, "pipeline"))
+from clip_motion import *
+from PIL import ImageChops
+import clip_motion as _M, fonts_kit as _FK, music_plan as MP
+CORAL = (255, 138, 115, 255); TEAL = (127, 214, 200, 255); BLUE = (92, 120, 255, 255); PINK = (255, 92, 157, 255)
+MID = 940   # 안전 영역(상단 문구 아래 475 ~ 하단 고정 위 1405)의 세로 가운데
+# ---------- 글 효과(영상마다 다르게 쓴다, R19) ----------
+def _lines(s, size, color, maxw, lh, path=BLACK): return line_layers(s, size, color, path, maxw, lh)
+def fx_slide(c, s, y, t0, size, color=WHITE, maxw=820, lh=1.3, dirn=-1, cx=CX):
+    ls, step = _lines(s, eff_size(s, size, maxw, BLACK), color, maxw, lh)
+    for i, L in enumerate(ls):
+        p = e_out((c.t - t0 - i * .14) / .5); blit(c.fr, L, cx - L.width / 2 + (1 - p) * dirn * 280, y + i * step - 20, c.alpha(cl(p * 1.5)))
+    return y + len(ls) * step
+def fx_wipe(c, s, y, t0, size, color=WHITE, maxw=820, lh=1.3, cx=CX):
+    ls, step = _lines(s, eff_size(s, size, maxw, BLACK), color, maxw, lh)
+    for i, L in enumerate(ls):
+        p = e_out((c.t - t0 - i * .3) / .6); w = int(L.width * cl(p))
+        if w > 2: blit(c.fr, L.crop((0, 0, w, L.height)), cx - L.width / 2, y + i * step - 20, c.alpha(1))
+    return y + len(ls) * step
+def fx_zoom(c, s, y, t0, size, color=WHITE, maxw=820, lh=1.3, cx=CX):
+    ls, step = _lines(s, eff_size(s, size, maxw, BLACK), color, maxw, lh)
+    for i, L in enumerate(ls):
+        p = e_out((c.t - t0 - i * .12) / .5); k = 1.45 - .45 * p; im = L.resize((max(1, int(L.width * k)), max(1, int(L.height * k))), Image.LANCZOS)
+        blit(c.fr, im, cx - im.width / 2, y + i * step - 20 + (L.height - im.height) / 2, c.alpha(cl(p * 1.6)))
+    return y + len(ls) * step
+def fx_count(c, to, y, t0, size, color=GOLD, suffix="", dur=1.1, cx=CX):
+    p = e_out(cl((c.t - t0) / dur)); n = int(round(to * p)); s = f"{n}{suffix}"; L = line_layers(s, size, color, BLACK, 900, 1.2)[0][0]
+    a = c.alpha(cl((c.t - t0) / .25)); blit(c.fr, L, cx - L.width / 2, y - 20, a); return y + int(size * 1.2)
+def lay(h=1000, off=0): im = Image.new("RGBA", (1080, h), (0, 0, 0, 0)); return im, ImageDraw.Draw(im)
+# ---------- ① 데이터: 두 원이 겹치는 넓이 = 실제 비율 ----------
+def overlap_d(r, f):
+    lo, hi = 0.0, 2.0 * r
+    for _ in range(60):
+        d = (lo + hi) / 2; x = d / (2 * r); area = (2 * r * r * math.acos(x) - (d / 2) * math.sqrt(max(0, 4 * r * r - d * d))) / (math.pi * r * r)
+        if area > f: lo = d
+        else: hi = d
+    return (lo + hi) / 2
+R_V = 190; D_V = overlap_d(R_V, 0.135); VY = 1000
+def venn_layer(state, k=1.0):
+    """state 'same': 겹침(금색) 강조 / 'diff': 바깥(산호색) 강조."""
+    im = Image.new("RGBA", (1080, 620), (0, 0, 0, 0)); oy = VY - 310; cxL = CX - D_V / 2 * k - (1 - k) * 260; cxR = CX + D_V / 2 * k + (1 - k) * 260
+    mL = Image.new("L", im.size, 0); mR = Image.new("L", im.size, 0); ImageDraw.Draw(mL).ellipse((cxL - R_V, 310 - R_V, cxL + R_V, 310 + R_V), fill=255); ImageDraw.Draw(mR).ellipse((cxR - R_V, 310 - R_V, cxR + R_V, 310 + R_V), fill=255)
+    lens = ImageChops.multiply(mL, mR); only = ImageChops.subtract(ImageChops.lighter(mL, mR), lens)
+    base = (255, 255, 255, 40); im.paste(Image.new("RGBA", im.size, base), (0, 0), ImageChops.lighter(mL, mR))
+    if state == "same": im.paste(Image.new("RGBA", im.size, GOLD), (0, 0), lens)
+    else: im.paste(Image.new("RGBA", im.size, CORAL), (0, 0), only); im.paste(Image.new("RGBA", im.size, (255, 255, 255, 70)), (0, 0), lens)
+    d = ImageDraw.Draw(im)
+    for (x, nm) in ((cxL - R_V * .52, "사주"), (cxR + R_V * .52, "별자리")): d.text((x, 310), nm, font=font(BLACK, 56), fill=(255, 255, 255, 235), anchor="mm")
+    return im, oy, (cxL + cxR) / 2
+def A1(c):
+    H = text_h("사주와 별자리,\n같은 말을 할까요?", 104, 820, 1.3) + 36 + text_h("무작위 3,000명을 계산했어요", 56, 820, 1.4); y0 = MID - H / 2
+    y = fx_wipe(c, "사주와 별자리,\n같은 말을 할까요?", y0, .1, 104, lh=1.3); fx_slide(c, "무작위 3,000명을 계산했어요", y + 36, 1.1, 56, DIM, dirn=1)
+def A2(c):
+    fx_slide(c, "100명 중", 490, .05, 64, DIM, dirn=-1); fx_count(c, 14, 565, .3, 190, GOLD, "명", 1.2)
+    p = e_out(cl((c.t - .1) / .9)); im, oy, mx = venn_layer("same", p); blit(c.fr, im, 0, oy, c.alpha(cl(p * 1.5)))
+    g = e_out(cl((c.t - 1.7) / .5))
+    if g > 0:
+        L = Image.new("RGBA", (6, 90), (224, 184, 102, int(255 * g))); blit(c.fr, L, mx - 3, VY + 225, 1.0)
+        fx_wipe(c, "사주와 별자리가\n같은 방향을 가리켰어요", 1355 - 60, 1.9, 52, lh=1.3)
+def A3(c):
+    p = 1.0; im, oy, mx = venn_layer("diff", 1.0); blit(c.fr, im, 0, oy, 1.0)
+    fx_slide(c, "나머지는", 490, .05, 64, DIM, dirn=-1); fx_count(c, 86, 565, .3, 190, CORAL, "명", 1.2)
+    fx_wipe(c, "서로 다른 방향을 가리켰어요\n이게 보통이에요", 1290, 1.6, 52, lh=1.3)
+def A4(c):
+    fx_zoom(c, "별자리마다 크게 달라요", 490, .05, 68, maxw=840)
+    rows = [("염소자리", 23.0, GOLD), ("황소자리", 22.7, GOLD), ("천칭자리", 5.6, CORAL)]; im, d = lay(900); f52 = font(BLACK, 52); f56 = font(BLACK, 56)
+    for i, (nm, v, col) in enumerate(rows):
+        y = 680 + i * 190 - 480; t0 = .5 + i * .5; g = e_out(cl((c.t - t0) / .7)); a = int(255 * cl(g * 1.5))
+        d.text((70, y), nm, font=f52, fill=(255, 255, 255, a), anchor="lm"); w = 640 * (v / 23.0) * g
+        d.rounded_rectangle((70, y + 36, 70 + max(10, w), y + 100), radius=32, fill=(col[0], col[1], col[2], a)); d.text((70 + max(10, w) + 20, y + 68), f"{v * g:.1f}%", font=f56, fill=(255, 255, 255, a), anchor="lm")
+    blit(c.fr, im, 0, 480, 1.0); fx_slide(c, "무작위 3,000명을 계산했어요", 1330, 2.4, 44, DIM, dirn=1)
+def A5(c):
+    H = text_h("다르다고\n틀린 게 아니에요", 100, 820, 1.3) + 40 + text_h("같은 말은 타고난 결이에요.\n다른 말은 내가 고를 수 있는 곳이에요.", 52, 840, 1.4); y0 = MID - H / 2
+    y = fx_zoom(c, "다르다고\n틀린 게 아니에요", y0, .1, 100, GOLD); fx_slide(c, "같은 말은 타고난 결이에요.\n다른 말은 내가 고를 수 있는 곳이에요.", y + 40, 1.0, 52, DIM, maxw=840, lh=1.4, dirn=1)
+def A6(c):
+    H = text_h("나는 어느 쪽일까요?", 100, 820, 1.3) + 48 + int(72 * 1.3); y0 = MID - H / 2
+    y = fx_slide(c, "나는 어느 쪽일까요?", y0, .1, 100, dirn=-1); fx_slide(c, "댓글로 알려 주세요", y + 48, .6, 72, GOLD, dirn=1)
+def A7(c):
+    """마무리 ⑤: 숫자 반복 + 팔로우"""
+    t0 = .1; Htot = int(190 * 1.2) + 10 + int(56 * 1.3) + 56 + int(60 * 1.3) + 36 + int(46 * 1.4) * 2 + 40 + 124; y = MID - Htot / 2
+    y = fx_zoom(c, "14 : 86", y, t0, 190, GOLD); y = fx_slide(c, "같은 말 : 다른 말", y + 10, t0 + .4, 56, DIM, dirn=-1)
+    y = fx_slide(c, "팔로우하고 더 많은 이야기 나눠요", y + 56, t0 + 1.0, 60, maxw=830, dirn=1)
+    y = fx_slide(c, "프로필 링크에서 생년월일 입력하고\n내 첫글자와 타고난 기운 알아보기", y + 36, t0 + 1.5, 46, DIM, maxw=840, lh=1.4, dirn=-1)
+    fnt = font(BLACK, 58); pl = "＋ 팔로우"; pw = int(fnt.getlength(pl)) + 100; im = Image.new("RGBA", (pw + 20, 140), (0, 0, 0, 0)); d = ImageDraw.Draw(im); d.rounded_rectangle((10, 10, 10 + pw, 130), radius=60, fill=GOLD); d.text((10 + pw / 2, 71), pl, font=fnt, fill=INK, anchor="mm")
+    q = e_back((c.t - t0 - 2.1) / .45); pulse = 1 + .03 * math.sin(c.t * 6); L = im.resize((int(im.width * pulse), int(im.height * pulse))); blit(c.fr, L, CX - L.width / 2, y + 40 + (1 - e_out(q)) * 40, c.alpha(cl(q * 2)))
+SC_A = [(2.8, A1), (5.0, A2), (3.6, A3), (4.2, A4), (3.4, A5), (2.2, A6), (3.4, A7)]
+SETS = {"A": ("vs14_venn", SC_A, "data")}
+
+# ---------- ② 비교: 좌우 패널이 만나고 갈라진다 ----------
+PW, PH, PY = 330, 480, 600
+def panels(c, gap_px, tint_same=0.0, t0=.0):
+    """gap_px: 두 패널 사이 간격(음수면 겹침). tint_same: 겹침 영역 금색 강도."""
+    im, d = lay(800); oy = 0; T0 = PY - 480
+    xl = CX - PW - gap_px / 2 if gap_px >= 0 else CX - PW + (-gap_px) / 2
+    xr = CX + gap_px / 2 if gap_px >= 0 else CX - (-gap_px) / 2
+    d.rounded_rectangle((xl, T0, xl + PW, T0 + PH), radius=40, fill=(255, 92, 157, 215)); d.rounded_rectangle((xr, T0, xr + PW, T0 + PH), radius=40, fill=(92, 120, 255, 215))
+    if gap_px < 0 and tint_same > 0:
+        x0 = xr; x1 = xl + PW; d.rectangle((x0, T0, x1, T0 + PH), fill=(224, 184, 102, int(235 * tint_same)))
+    d.text((xl + PW / 2 - (0 if gap_px >= 0 else 40), T0 + 90), "사주", font=font(BLACK, 72), fill=(255, 255, 255, 255), anchor="mm"); d.text((xl + PW / 2 - (0 if gap_px >= 0 else 40), T0 + 175), "(동양)", font=font(BLACK, 46), fill=(255, 255, 255, 230), anchor="mm")
+    d.text((xr + PW / 2 + (0 if gap_px >= 0 else 40), T0 + 90), "별자리", font=font(BLACK, 72), fill=(255, 255, 255, 255), anchor="mm"); d.text((xr + PW / 2 + (0 if gap_px >= 0 else 40), T0 + 175), "(서양)", font=font(BLACK, 46), fill=(255, 255, 255, 230), anchor="mm")
+    blit(c.fr, im, 0, 480, 1.0)
+def B1(c):
+    H = text_h("사주와 별자리가\n다른 말을 할 때", 100, 820, 1.3) + 36 + text_h("어느 쪽 말을 들어야 할까요?", 56, 820, 1.4); y0 = MID - H / 2
+    y = fx_slide(c, "사주와 별자리가\n다른 말을 할 때", y0, .1, 100, dirn=-1); fx_slide(c, "어느 쪽 말을 들어야 할까요?", y + 36, 1.0, 56, DIM, dirn=1)
+def B2(c):
+    p = e_out(cl((c.t - .2) / 1.6)); gap = 150 - 280 * p   # 150 → -130 : 두 패널이 만나 겹친다
+    fx_wipe(c, "같은 답이 나오면", 490, .05, 60, DIM); panels(c, gap, tint_same=cl((c.t - 1.4) / .6))
+    g = e_out(cl((c.t - 1.9) / .5))
+    if g > 0: fx_zoom(c, "타고난 결", 1150, 2.0, 96, GOLD)
+def B3(c):
+    p = e_out(cl((c.t - .2) / 1.4)); gap = -130 + 280 * p   # 겹침 → 간격 150 : 갈라진다
+    fx_wipe(c, "답이 갈리면", 490, .05, 60, DIM); panels(c, gap, tint_same=0.0)
+    g = e_out(cl((c.t - 1.5) / .5))
+    if g > 0:
+        im, d = lay(200); a = int(255 * g); d.rounded_rectangle((CX - 190 + (1 - g) * 40, 40, CX + 190 - (1 - g) * 40, 140), radius=50, outline=(224, 184, 102, a), width=6); d.text((CX, 90), "내가 고를 곳", font=font(BLACK, 58), fill=(224, 184, 102, a), anchor="mm"); blit(c.fr, im, 0, PY + PH + 20 - 40, 1.0)
+    fx_slide(c, "풀이끼리 답이 갈리는 곳은\n내가 선택해서 바꿀 수 있어요", PY + PH + 150, 2.0, 46, DIM, maxw=840, lh=1.35, dirn=1)
+SIX = ["사주", "별자리", "수비학", "자미두수", "당사주", "하락이수"]
+def B4(c):
+    fx_zoom(c, "여섯 가지를 겹쳐서", 490, .05, 72, maxw=840)
+    im, d = lay(800); cols = [PINK, BLUE, TEAL, GOLD, CORAL, (170, 140, 255, 255)]
+    for i, nm in enumerate(SIX):
+        t0 = .4 + i * .22; p = e_out(cl((c.t - t0) / .5)); cx_ = 190 + (i % 3) * 270; cy_ = 660 - 480 + (i // 3) * 150
+        st = e_out(cl((c.t - 2.3) / 1.0)); tx = CX - 24 + i * 9; ty = 900 - 480 + i * 9                      # 마지막엔 한 더미로 겹친다
+        x = cx_ + (tx - cx_) * st; y = cy_ + (ty - cy_) * st
+        d.rounded_rectangle((x - 120, y - 55, x + 120, y + 55), radius=30, fill=(cols[i][0], cols[i][1], cols[i][2], int(235 * cl(p * 1.4)))); d.text((x, y + 2), nm, font=font(BLACK, 52), fill=(30, 20, 40, int(255 * cl(p * 1.4))), anchor="mm")
+    blit(c.fr, im, 0, 480, 1.0); fx_wipe(c, "같은 답과 다른 답을 나눠 봐요", 1180, 2.6, 52, GOLD, maxw=840)
+def B5(c):
+    H = text_h("같은 답은 결,\n다른 답은 선택", 108, 820, 1.3) + 40 + text_h("모순처럼 보여도\n그 사이에 내가 서 있어요", 54, 820, 1.4); y0 = MID - H / 2
+    y = fx_wipe(c, "같은 답은 결,\n다른 답은 선택", y0, .1, 108, GOLD); fx_slide(c, "모순처럼 보여도\n그 사이에 내가 서 있어요", y + 40, 1.1, 54, DIM, dirn=1)
+def B6(c):
+    """마무리 ②: 댓글 질문 크게 + 팔로우 한 줄 + 프로필 링크 한 줄"""
+    Htot = text_h("나는 어느 쪽을\n더 믿어요?", 118, 830, 1.25) + 48 + int(60 * 1.3) + 28 + int(46 * 1.4) * 2; y = MID - Htot / 2
+    y = fx_zoom(c, "나는 어느 쪽을\n더 믿어요?", y, .1, 118, GOLD); y = fx_slide(c, "댓글로 알려 주시고 팔로우해 주세요", y + 48, 1.0, 60, maxw=840, dirn=-1)
+    fx_slide(c, "프로필 링크에서 생년월일 입력하고\n내 첫글자와 타고난 기운 알아보기", y + 28, 1.5, 46, DIM, maxw=840, lh=1.4, dirn=1)
+SC_B = [(2.8, B1), (4.6, B2), (4.4, B3), (4.4, B4), (3.4, B5), (4.2, B6)]
+SETS["B"] = ("vs_split", SC_B, "fun")
+
+# ---------- ③ 오행: 큰 나무(갑목)가 자란다 ----------
+GROUND = 1320   # 땅 선(절대 y)
+LEAF = [(84, 170, 110), (70, 150, 100), (110, 190, 120), (96, 178, 104)]
+def tree_layer(g, sway=0.0, coins=0.0, roots=0.0, t=0.0, wind=0.0):
+    """g: 자란 정도 0~1, sway: 흔들림(-1~1), coins: 잎이 금화로 바뀌는 정도, roots: 뿌리 길이 0~1."""
+    im, d = lay(1000); base = GROUND - 480; cx = CX; H = max(10, 290 * g)
+    gl = Image.new("RGBA", (1080, 40), (0, 0, 0, 0)); ImageDraw.Draw(gl).rounded_rectangle((160, 14, 790, 22), radius=4, fill=(255, 255, 255, 70)); im.alpha_composite(gl, (0, base - 14))
+    if roots > 0:
+        for ang, ln in ((-38, 70), (-14, 85), (12, 80), (36, 65)):
+            a = math.radians(ang); L = ln * roots; d.line([(cx, base + 6), (cx + math.sin(a) * L * .55, base + 6 + math.cos(a) * L * .55), (cx + math.sin(a) * L, base + 6 + math.cos(a) * L)], fill=(224, 184, 102, 255), width=9, joint="curve")
+    def tx(h): return cx + sway * (h / H) ** 2 * 70
+    L_, R_ = [], []
+    for k in range(11):
+        h = H * k / 10; w = 30 * (1 - k / 10) + 11; L_.append((tx(h) - w, base - h)); R_.append((tx(h) + w, base - h))
+    d.polygon(L_ + R_[::-1], fill=(120, 84, 56, 255)); d.line([(tx(H * k / 10) - 4, base - H * k / 10) for k in range(11)], fill=(150, 108, 72, 255), width=6)
+    tips = []
+    for f, ang, ln in ((.42, -52, 150), (.52, 50, 160), (.66, -40, 130), (.74, 42, 135), (.88, -24, 100), (.9, 26, 100)):
+        if g < f * .9: continue
+        gg = cl((g - f * .9) / .25) * g; h = H * f; x0, y0 = tx(h), base - h; a = math.radians(ang + sway * 18); x1 = x0 + math.sin(a) * ln * gg; y1 = y0 - math.cos(a) * ln * gg
+        d.line([(x0, y0), (x1, y1)], fill=(120, 84, 56, 255), width=int(14 * (1 - f * .5))); tips.append((x1, y1, 40 + 12 * gg))
+    tips.append((tx(H), base - H - 24 * g, 70 * g + 16))
+    for n, (x, y, r) in enumerate(tips):
+        for j in range(6):
+            ox = math.cos(j * 1.3 + n) * r * .55; oy = math.sin(j * 1.9 + n) * r * .45; rr_ = r * (.55 + .12 * ((j + n) % 3)); col = LEAF[(j + n) % 4]
+            if coins > 0:
+                k = cl(coins * 1.4 - j * .12); col = tuple(int(col[i] + ((246, 196, 64)[i] - col[i]) * k) for i in range(3))
+            d.ellipse((x + ox - rr_, y + oy - rr_, x + ox + rr_, y + oy + rr_), fill=col + (235,))
+            if coins > .3: d.ellipse((x + ox - rr_ * .62, y + oy - rr_ * .62, x + ox + rr_ * .62, y + oy + rr_ * .62), outline=(176, 120, 24, int(230 * coins)), width=5)
+    if wind > 0:
+        for k in range(5):
+            xx = (-200 + ((t * 700 + k * 260) % 1400)); yy = base - 40 - k * 80
+            d.line([(xx, yy), (xx + 170, yy - 10)], fill=(255, 255, 255, int(110 * wind)), width=5)
+    return im
+def C1(c):
+    H = text_h("곧게 뻗어\n굽히기 싫은 사람", 100, 820, 1.3); y = fx_zoom(c, "곧게 뻗어\n굽히기 싫은 사람", 540, .1, 100, GOLD); fx_wipe(c, "태어난 날 첫 글자가 갑(甲)이라면", y + 36, 1.0, 52, DIM, maxw=840)
+    blit(c.fr, tree_layer(.32 * e_out(cl(c.t / 2.4))), 0, 480, 1.0)
+def C2(c):
+    y = fx_slide(c, "우뚝 서서\n앞장서는 타입", 490, .05, 80, GOLD, dirn=-1); fx_wipe(c, "큰 나무 같은 기운이라, 한번 정한 방향으로\n곧게 자라려는 힘이 강해요", y + 16, 1.0, 44, DIM, maxw=840, lh=1.35)
+    blit(c.fr, tree_layer(.32 + .68 * e_out(cl((c.t - .2) / 2.8))), 0, 480, 1.0)
+def C3(c):
+    y = fx_zoom(c, "책임지는 사랑을\n해요", 490, .05, 80); fx_slide(c, "표현은 서툴러도 한번 정하면 결을 오래 지켜요.\n마음은 말로 한 번씩 꺼내 주세요", y + 16, 1.0, 44, DIM, maxw=840, lh=1.35, dirn=1)
+    blit(c.fr, tree_layer(1.0, sway=.06 * math.sin(c.t * 2), roots=e_out(cl((c.t - .4) / 1.4))), 0, 480, 1.0)
+def C4(c):
+    y = fx_wipe(c, "성장에 쓰는\n투자형", 490, .05, 80, GOLD); fx_slide(c, "배우고 키우는 일에 기꺼이 써요.\n큰 지출 전엔 회수 시기를 적어 보세요", y + 16, 1.0, 44, DIM, maxw=840, lh=1.35, dirn=-1)
+    blit(c.fr, tree_layer(1.0, sway=.05 * math.sin(c.t * 2), roots=1.0, coins=e_out(cl((c.t - .6) / 2.4))), 0, 480, 1.0)
+def C5(c):
+    y = fx_slide(c, "곧음은 무기,\n휘는 법도 알아요", 490, .05, 80, dirn=1); fx_zoom(c, "센 바람엔 가지도 흔들려야\n부러지지 않아요", y + 16, 1.0, 44, GOLD, maxw=840, lh=1.35)
+    amp = e_out(cl(c.t / 1.0)); blit(c.fr, tree_layer(1.0, sway=amp * (.55 * math.sin(c.t * 2.6)), roots=1.0, coins=.0, t=c.t, wind=amp), 0, 480, 1.0)
+def C6(c):
+    """마무리 ③: 정월(이 장면에만 등장) + 질문 + 팔로우 알약"""
+    y = fx_slide(c, "주변에 갑목 같은\n사람이 있나요?", 490, .1, 84, GOLD, dirn=-1); y = fx_slide(c, "댓글로 알려 주시고 팔로우해 주세요", y + 22, .8, 54, maxw=840, dirn=1)
+    y = fx_slide(c, "프로필 링크에서 생년월일 입력하고\n내 첫글자와 타고난 기운 알아보기", y + 16, 1.2, 44, DIM, maxw=840, lh=1.35, dirn=-1)
+    fnt = font(BLACK, 54); pl = "＋ 팔로우"; pw = int(fnt.getlength(pl)) + 90; im = Image.new("RGBA", (pw + 20, 120), (0, 0, 0, 0)); d = ImageDraw.Draw(im); d.rounded_rectangle((10, 10, 10 + pw, 110), radius=50, fill=GOLD); d.text((10 + pw / 2, 61), pl, font=fnt, fill=INK, anchor="mm")
+    q = e_back((c.t - 1.6) / .45); pulse = 1 + .03 * math.sin(c.t * 6); L = im.resize((int(im.width * pulse), int(im.height * pulse))); blit(c.fr, L, CX - L.width / 2, y + 24 + (1 - e_out(q)) * 40, c.alpha(cl(q * 2)))
+    character(c, "v5_halfup_v2", t0=.5, width=430)
+SC_C = [(3.0, C1), (5.0, C2), (4.4, C3), (4.2, C4), (4.8, C5), (3.6, C6)]
+SETS["C"] = ("gab_tree", SC_C, "love")
+
+def build(key):
+    name, sc, mood = SETS[key]; out = os.path.join(ROOT, "2026-pilot"); p, d = render(name, sc, out); mi = MP.choose(mood, "pilot-" + name); MP.mux(p, [x for x, _ in sc], mi, 400 + ord(key))
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "1.0", "-i", p, "-frames:v", "1", os.path.join(out, name + "_thumb.png")], check=True); print("완료", name, round(d, 1), "초 · 음악", mi["style"], mi["bpm"])
+if __name__ == "__main__":
+    build(sys.argv[1])
