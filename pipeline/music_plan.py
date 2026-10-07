@@ -34,5 +34,5 @@ def mux(mp4, durs, info, seed):
     if info["mode"] == "slow": RM.compose(info["style"], beats, seed, wav, key=info["key"], tail=.3)
     else: RM.compose_up(info["style"], beats, seed, wav, key=info["key"], bpm=info["bpm"], cuts=cuts, tail=.3)
     tmp = mp4 + ".m.mp4"
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mp4, "-i", wav, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-shortest", "-movflags", "+faststart", tmp], check=True)
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mp4, "-i", wav, "-filter_complex", f"[1:a]apad=whole_dur={total:.3f}[a]", "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-t", f"{total:.3f}", "-movflags", "+faststart", tmp], check=True)   # 음악이 영상보다 짧으면 무음으로 채워 영상 끝을 자르지 않는다(10/7)
     os.replace(tmp, mp4); return info

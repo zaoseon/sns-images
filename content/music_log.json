@@ -238,5 +238,21 @@
   "mode": "up",
   "bpm": 98,
   "key": "A"
+ },
+ {
+  "name": "v2-pair",
+  "kind": "data",
+  "style": "맑은 팝",
+  "mode": "slow",
+  "bpm": 105,
+  "key": "C"
+ },
+ {
+  "name": "v2-star",
+  "kind": "data",
+  "style": "별빛 오르골",
+  "mode": "slow",
+  "bpm": 93,
+  "key": "E"
  }
 ]
