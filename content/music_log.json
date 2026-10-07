@@ -254,5 +254,53 @@
   "mode": "slow",
   "bpm": 93,
   "key": "E"
+ },
+ {
+  "name": "v2-ziwei",
+  "kind": "data",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 108,
+  "key": "F"
+ },
+ {
+  "name": "v2-dang",
+  "kind": "data",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 104,
+  "key": "G"
+ },
+ {
+  "name": "v2-liuyao",
+  "kind": "data",
+  "style": "맑은 팝",
+  "mode": "slow",
+  "bpm": 105,
+  "key": "A"
+ },
+ {
+  "name": "v2-harak",
+  "kind": "data",
+  "style": "별빛 오르골",
+  "mode": "slow",
+  "bpm": 93,
+  "key": "C"
+ },
+ {
+  "name": "v2-alone",
+  "kind": "data",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 108,
+  "key": "E"
+ },
+ {
+  "name": "v2-four",
+  "kind": "data",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 104,
+  "key": "F"
  }
 ]
