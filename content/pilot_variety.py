@@ -49,7 +49,7 @@ def venn_layer(state, k=1.0):
     if state == "same": im.paste(Image.new("RGBA", im.size, GOLD), (0, 0), lens)
     else: im.paste(Image.new("RGBA", im.size, CORAL), (0, 0), only); im.paste(Image.new("RGBA", im.size, (255, 255, 255, 70)), (0, 0), lens)
     d = ImageDraw.Draw(im)
-    for (x, nm) in ((cxL - R_V * .52, "사주"), (cxR + R_V * .52, "별자리")): d.text((x, 310), nm, font=font(BLACK, 56), fill=(255, 255, 255, 235), anchor="mm")
+    for (x, nm) in ((cxL, "사주"), (cxR, "별자리")): d.text((x, 310), nm, font=font(BLACK, 56), fill=(255, 255, 255, 235), anchor="mm")   # 각 원의 한가운데(10/7 대표)
     return im, oy, (cxL + cxR) / 2
 def A1(c):
     H = text_h("사주와 별자리,\n같은 말을 할까요?", 104, 820, 1.3) + 36 + text_h("무작위 3,000명을 계산했어요", 56, 820, 1.4); y0 = MID - H / 2
@@ -79,14 +79,26 @@ def A5(c):
 def A6(c):
     H = text_h("나는 어느 쪽일까요?", 100, 820, 1.3) + 48 + int(72 * 1.3); y0 = MID - H / 2
     y = fx_slide(c, "나는 어느 쪽일까요?", y0, .1, 100, dirn=-1); fx_slide(c, "댓글로 알려 주세요", y + 48, .6, 72, GOLD, dirn=1)
+def color_row(items, size, gap=34):
+    """색이 다른 조각을 한 줄로 이어 붙인 층과 각 조각의 가운데 x를 돌려준다."""
+    ls = [line_layers(t, size, col, BLACK, 900, 1.2)[0][0] for t, col in items]; W_ = sum(L.width for L in ls) + gap * (len(ls) - 1); H_ = max(L.height for L in ls)
+    im = Image.new("RGBA", (W_, H_), (0, 0, 0, 0)); x = 0; centers = []
+    for L in ls: im.alpha_composite(L, (x, 0)); centers.append(x + L.width / 2); x += L.width + gap
+    return im, centers
 def A7(c):
-    """마무리 ⑤: 숫자 반복 + 팔로우"""
-    t0 = .1; Htot = int(190 * 1.2) + 10 + int(56 * 1.3) + 56 + int(60 * 1.3) + 36 + int(46 * 1.4) * 2 + 40 + 124; y = MID - Htot / 2
-    y = fx_zoom(c, "14 : 86", y, t0, 190, GOLD); y = fx_slide(c, "같은 말 : 다른 말", y + 10, t0 + .4, 56, DIM, dirn=-1)
+    """마무리 ⑤: 숫자 반복(14=같은 말 금색, 86=다른 말 산호색) + 팔로우"""
+    t0 = .1; Htot = int(190 * 1.2) + 14 + int(60 * 1.3) + 56 + int(60 * 1.3) + 36 + int(46 * 1.4) * 2 + 40 + 124; y = MID - Htot / 2
+    nums, nc = color_row((("14", GOLD), (":", (255, 255, 255, 255)), ("86", CORAL)), 190)
+    p = e_out((c.t - t0) / .5); k = 1.45 - .45 * p; L = nums.resize((max(1, int(nums.width * k)), max(1, int(nums.height * k))), Image.LANCZOS)
+    blit(c.fr, L, CX - L.width / 2, y - 20 + (nums.height - L.height) / 2, c.alpha(cl(p * 1.6))); x0 = CX - nums.width / 2
+    q = e_out((c.t - t0 - .4) / .5); ly = y + int(190 * 1.2) + 14 - 20 + (1 - q) * 40
+    for tx, col, cxn in (("같은 말", GOLD, nc[0]), ("다른 말", CORAL, nc[2])):
+        Lt = line_layers(tx, 60, col, BLACK, 600, 1.2)[0][0]; blit(c.fr, Lt, x0 + cxn - Lt.width / 2, ly, c.alpha(cl(q * 1.5)))
+    y = y + int(190 * 1.2) + 14 + int(60 * 1.3)
     y = fx_slide(c, "팔로우하고 더 많은 이야기 나눠요", y + 56, t0 + 1.0, 60, maxw=830, dirn=1)
     y = fx_slide(c, "프로필 링크에서 생년월일 입력하고\n내 첫글자와 타고난 기운 알아보기", y + 36, t0 + 1.5, 46, DIM, maxw=840, lh=1.4, dirn=-1)
     fnt = font(BLACK, 58); pl = "＋ 팔로우"; pw = int(fnt.getlength(pl)) + 100; im = Image.new("RGBA", (pw + 20, 140), (0, 0, 0, 0)); d = ImageDraw.Draw(im); d.rounded_rectangle((10, 10, 10 + pw, 130), radius=60, fill=GOLD); d.text((10 + pw / 2, 71), pl, font=fnt, fill=INK, anchor="mm")
-    q = e_back((c.t - t0 - 2.1) / .45); pulse = 1 + .03 * math.sin(c.t * 6); L = im.resize((int(im.width * pulse), int(im.height * pulse))); blit(c.fr, L, CX - L.width / 2, y + 40 + (1 - e_out(q)) * 40, c.alpha(cl(q * 2)))
+    q2 = e_back((c.t - t0 - 2.1) / .45); pulse = 1 + .03 * math.sin(c.t * 6); L2 = im.resize((int(im.width * pulse), int(im.height * pulse))); blit(c.fr, L2, CX - L2.width / 2, y + 40 + (1 - e_out(q2)) * 40, c.alpha(cl(q2 * 2)))
 SC_A = [(2.8, A1), (5.0, A2), (3.6, A3), (4.2, A4), (3.4, A5), (2.2, A6), (3.4, A7)]
 SETS = {"A": ("vs14_venn", SC_A, "data")}
 
