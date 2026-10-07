@@ -206,5 +206,13 @@
   "mode": "up",
   "bpm": 104,
   "key": "C"
+ },
+ {
+  "name": "sky-2027",
+  "kind": "data",
+  "style": "별빛 오르골",
+  "mode": "slow",
+  "bpm": 93,
+  "key": "E"
  }
 ]
