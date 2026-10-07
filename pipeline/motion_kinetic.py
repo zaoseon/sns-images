@@ -2,7 +2,7 @@
 사용: python3 pipeline/motion_kinetic.py -> 2026-motion/kinetic_reply.mp4"""
 import os, sys, json
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
-import music_plan as MP, html_motion as HM, fonts_kit as K
+import music_plan as MP, html_motion as HM, fonts_kit as K, brand_frame as BF
 ACC = "#ff5c8a"; BLACK = os.path.join(HERE, "fonts", "PRETENDARD-BLACK.OTF")
 SPEC_REPLY = dict(acc="#ff5c8a", name="kinetic_reply", tag="정월의 연락 테스트", hook=["읽고도", "답장", "못 한 날"], q="나는 <span class=c>어느 쪽</span>?", opts=["바로 답해야 편해요", "고민하다 늦게 보내요", "읽고 이따 하고 잊어요"],
     r="많이 고른 번호는<span class=c>?</span>", res=["바로 답하는 쪽", "다듬어 보내는 쪽", "천천히 답하는 쪽"], note="빠르다 느리다가 아니라<br><span class=c>연락의 리듬</span>이에요", cta=["떠오르는", "사람에게", "보내 보세요"], music="fun")
@@ -14,25 +14,25 @@ html,body{margin:0;width:1080px;height:1920px;background:#0a0a0c;overflow:hidden
 .e{position:absolute;left:0;width:1080px;text-align:center;opacity:0;will-change:transform}
 .w{font-family:'JW-D',sans-serif;font-weight:900;font-size:150px;line-height:1.3;letter-spacing:-2px}
 .t{font-family:'JW-D',sans-serif;font-weight:900;font-size:100px;line-height:1.35}
-.o{font-size:76px;line-height:1.45;text-align:left;left:90px;width:900px;display:flex;align-items:center;gap:34px}
-.o b{font-family:'JW-D',sans-serif;flex:none;width:112px;height:112px;border-radius:50%%;background:%s;color:#0a0a0c;display:flex;align-items:center;justify-content:center;font-size:76px}
+.o{font-size:64px;line-height:1.45;text-align:left;left:60px;width:840px;display:flex;align-items:center;gap:28px}
+.o b{font-family:'JW-D',sans-serif;flex:none;width:96px;height:96px;border-radius:50%%;background:%s;color:#0a0a0c;display:flex;align-items:center;justify-content:center;font-size:64px}
 .c{color:%s}
 .sh{position:absolute;opacity:0}
-.tag{position:absolute;left:90px;top:335px;font-size:46px;background:%s;color:#0a0a0c;padding:12px 36px;border-radius:50px;opacity:0}
-.hd{position:absolute;left:70px;bottom:60px;font-size:36px;opacity:.9}
+.tag{position:absolute;left:60px;top:412px;font-size:46px;color:%s;font-family:'JW-D',sans-serif;font-weight:900;opacity:0}   /* R04: 배지 대신 작은 글, 상단 문구 띠 아래 */
+@@BFCSS@@
 </style><body>
 <div class=tag id=tag>@@TAG@@</div>
 <div class=sh id=c1 style="left:-140px;top:700px;width:520px;height:520px;border-radius:50%%;background:%s"></div>
-<div class=sh id=bar style="left:440px;top:1415px;width:640px;height:40px;background:#fff"></div>
+<div class=sh id=bar style="left:260px;top:1360px;width:640px;height:40px;background:#fff"></div>
 <div class=sh id=tri style="left:790px;top:420px;width:0;height:0;border-left:120px solid transparent;border-right:120px solid transparent;border-bottom:208px solid %s"></div>
 <div class="e w" id=a1 style="top:600px">@@H1@@</div><div class="e w c" id=a2 style="top:840px">@@H2@@</div><div class="e w" id=a3 style="top:1080px">@@H3@@</div>
-<div class="e t" id=b0 style="top:470px">@@Q@@</div>
+<div class="e t" id=b0 style="top:520px">@@Q@@</div>
 <div class="e o" id=b1 style="top:700px"><b>1</b>@@O1@@</div><div class="e o" id=b2 style="top:920px"><b>2</b>@@O2@@</div><div class="e o" id=b3 style="top:1140px"><b>3</b>@@O3@@</div>
-<div class="e t" id=c0 style="top:470px">@@R@@</div>
+<div class="e t" id=c0 style="top:520px">@@R@@</div>
 <div class="e o" id=d1 style="top:660px"><b>1</b>@@D1@@</div><div class="e o" id=d2 style="top:830px"><b>2</b>@@D2@@</div><div class="e o" id=d3 style="top:1000px"><b>3</b>@@D3@@</div>
 <div class="e t" id=c9 style="top:1170px;font-size:68px;line-height:1.5">@@N@@</div>
 <div class="e w" id=f1 style="top:560px;font-size:140px">@@F1@@</div><div class="e w c" id=f2 style="top:780px;font-size:140px">@@F2@@</div><div class="e w" id=f3 style="top:1000px;font-size:140px">@@F3@@</div>
-<div class=hd>zaoseon.com</div>
+@@BF@@
 <script>
 const BEAT=%f; const B=ms=>ms/1000/BEAT;
 function bez(x1,y1,x2,y2){return t=>{if(t<=0)return 0;if(t>=1)return 1;let a=0,b=1,u=t;for(let i=0;i<24;i++){const x=3*(1-u)*(1-u)*u*x1+3*(1-u)*u*u*x2+u*u*u;if(x<t)a=u;else b=u;u=(a+b)/2}return 3*(1-u)*(1-u)*u*y1+3*(1-u)*u*u*y2+u*u*u}}
@@ -61,7 +61,7 @@ seek(0);
 </script>""" % (S["acc"], S["acc"], S["acc"], S["acc"], S["acc"], beat)
     m = {"H1": S["hook"][0], "H2": S["hook"][1], "H3": S["hook"][2], "TAG": S["tag"], "Q": S["q"], "O1": S["opts"][0], "O2": S["opts"][1], "O3": S["opts"][2], "R": S["r"], "D1": S["res"][0], "D2": S["res"][1], "D3": S["res"][2], "N": S["note"], "F1": S["cta"][0], "F2": S["cta"][1], "F3": S["cta"][2]}
     for k, v in m.items(): h = h.replace("@@" + k + "@@", v)
-    h = h.replace("@@FONTS@@", K.css("gm"))
+    h = h.replace("@@FONTS@@", K.css("gm")).replace("@@BFCSS@@", BF.css()).replace("@@BF@@", BF.html("reel", ai=False))   # 확정 규칙 층: 상단 왼쪽 자오선·상단 오른쪽 문구·우측 하단 주소(R01·R02)
     return h
 def check_spec(S):
     import re
