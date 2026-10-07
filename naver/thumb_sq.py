@@ -202,6 +202,8 @@ def dark_set():
     order = sorted(T, key=lambda k: (pub.get(k, {}).get("date", "9999"), pub.get(k, {}).get("time", "12:00") or "12:00", k))
     return {k for i, k in enumerate(order) if i % 4 == 2}
 DARK = dark_set()
+# 10/7 피드·그리드 점검(이웃 겹침) 보정: n40 어두운 판 연속·n41/n43 같은 얼굴·n45 같은 팔레트
+T['n41']['face'] = 'v13_horn_glasses'; T['n43']['face'] = 'v13_horn_glasses'; T['n45']['el'] = '불'; T['n40']['el'] = '불'; DARK.discard('n40'); DARK.discard('n46')   # n46: 앞 글 n62(어두운 판)와 연속이라 밝은 판으로
 def render(pid, path, size=1080, dark=None):
     t = T[pid]; dk = (pid in DARK) if dark is None else dark; c = Ctx(t["el"], dk)
     face = t.get("face") or FACES[sum(map(ord, pid)) % len(FACES)]
