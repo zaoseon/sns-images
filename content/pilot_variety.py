@@ -144,7 +144,7 @@ def B3(c):
     g = e_out(cl((c.t - 1.5) / .5))
     if g > 0:
         im, d = lay(200); a = int(255 * g); d.rounded_rectangle((CX - 190 + (1 - g) * 40, 40, CX + 190 - (1 - g) * 40, 140), radius=50, outline=(224, 184, 102, a), width=6); d.text((CX, 90), "내가 고를 곳", font=font(BLACK, 58), fill=(224, 184, 102, a), anchor="mm"); blit(c.fr, im, 0, PY + PH + 20 - 40, 1.0)
-    fx_slide(c, "풀이끼리 답이 갈리는 곳은\n내가 선택해서 바꿀 수 있어요", PY + PH + 150, 2.0, 46, DIM, maxw=840, lh=1.35, dirn=1)
+    fx_slide(c, "풀이끼리 답이 갈리는 곳은\n내가 선택해서 바꿀 수 있어요", PY + PH + 150, 2.0, 46, DIM, maxw=840, lh=1.4, dirn=1)
 SIX = ["사주", "별자리", "수비학", "자미두수", "당사주", "하락이수"]
 def B4(c):
     fx_zoom(c, "여섯 가지를 겹쳐서", 490, .05, 72, maxw=840)
@@ -216,24 +216,24 @@ def C1(c):
     blit(c.fr, tree_layer(.32 * e_out(cl(c.t / 2.4))), 0, 480, 1.0)
 def C2(c):
     watermark(c, "甲")
-    y = fx_slide(c, "우뚝 서서\n앞장서는 타입", 490, .05, 80, GOLD, dirn=-1); fx_wipe(c, "큰 나무 같은 기운이라, 한번 정한 방향으로\n곧게 자라려는 힘이 강해요", y + 16, 1.0, 44, DIM, maxw=840, lh=1.35)
+    y = fx_slide(c, "우뚝 서서\n앞장서는 타입", 490, .05, 80, GOLD, dirn=-1); fx_wipe(c, "큰 나무 같은 기운이라, 한번 정한 방향으로\n곧게 자라려는 힘이 강해요", y + 16, 1.0, 44, DIM, maxw=840, lh=1.4)
     blit(c.fr, tree_layer(.32 + .68 * e_out(cl((c.t - .2) / 2.8))), 0, 480, 1.0)
 def C3(c):
     watermark(c, "甲")
-    y = fx_zoom(c, "책임지는\n사랑을 해요", 490, .05, 80); fx_slide(c, "표현은 서툴러도 한번 정하면 결을 오래 지켜요.\n마음은 말로 한 번씩 꺼내 주세요", y + 16, 1.0, 44, DIM, maxw=840, lh=1.35, dirn=1)
+    y = fx_zoom(c, "책임지는\n사랑을 해요", 490, .05, 80); fx_slide(c, "표현은 서툴러도 한번 정하면 결을 오래 지켜요.\n마음은 말로 한 번씩 꺼내 주세요", y + 16, 1.0, 44, DIM, maxw=840, lh=1.4, dirn=1)
     blit(c.fr, tree_layer(1.0, sway=.06 * math.sin(c.t * 2), roots=e_out(cl((c.t - .4) / 1.4))), 0, 480, 1.0)
 def C4(c):
     watermark(c, "甲")
-    y = fx_wipe(c, "성장에 쓰는\n투자형", 490, .05, 80, GOLD); fx_slide(c, "배우고 키우는 일에 기꺼이 써요.\n큰 지출 전엔 회수 시기를 적어 보세요", y + 16, 1.0, 44, DIM, maxw=840, lh=1.35, dirn=-1)
+    y = fx_wipe(c, "성장에 쓰는\n투자형", 490, .05, 80, GOLD); fx_slide(c, "배우고 키우는 일에 기꺼이 써요.\n큰 지출 전엔 회수 시기를 적어 보세요", y + 16, 1.0, 44, DIM, maxw=840, lh=1.4, dirn=-1)
     blit(c.fr, tree_layer(1.0, sway=.05 * math.sin(c.t * 2), roots=1.0, coins=e_out(cl((c.t - .6) / 2.4))), 0, 480, 1.0)
 def C5(c):
     watermark(c, "甲")
-    y = fx_slide(c, "곧음은 무기,\n휘는 법도 알아요", 490, .05, 80, dirn=1); fx_zoom(c, "센 바람엔 가지도 흔들려야\n부러지지 않아요", y + 16, 1.0, 44, GOLD, maxw=840, lh=1.35)
+    y = fx_slide(c, "곧음은 무기,\n휘는 법도 알아요", 490, .05, 80, dirn=1); fx_zoom(c, "센 바람엔 가지도 흔들려야\n부러지지 않아요", y + 16, 1.0, 44, GOLD, maxw=840, lh=1.4)
     amp = e_out(cl(c.t / 1.0)); blit(c.fr, tree_layer(1.0, sway=amp * (.55 * math.sin(c.t * 2.6)), roots=1.0, coins=.0, t=c.t, wind=amp), 0, 480, 1.0)
 def C6(c):
     """마무리 ③: 정월(이 장면에만 등장) + 질문 + 팔로우 알약"""
     y = fx_slide_rich(c, [[("주변에 ", WHITE), ("갑목", GOLD), (" 같은", WHITE)], [("사람이 있나요?", WHITE)]], 490, .1, 84, dirn=-1); y = fx_slide(c, "댓글로 알려 주시고 팔로우해 주세요", y + 22, .8, 54, maxw=840, dirn=1)
-    y = fx_slide(c, "프로필 링크에서 생년월일 입력하고\n내 첫글자와 타고난 기운 알아보기", y + 16, 1.2, 44, DIM, maxw=840, lh=1.35, dirn=-1)
+    y = fx_slide(c, "프로필 링크에서 생년월일 입력하고\n내 첫글자와 타고난 기운 알아보기", y + 16, 1.2, 44, DIM, maxw=840, lh=1.4, dirn=-1)
     fnt = font(BLACK, 54); pl = "＋ 팔로우"; pw = int(fnt.getlength(pl)) + 90; im = Image.new("RGBA", (pw + 20, 120), (0, 0, 0, 0)); d = ImageDraw.Draw(im); d.rounded_rectangle((10, 10, 10 + pw, 110), radius=50, fill=GOLD); d.text((10 + pw / 2, 61), pl, font=fnt, fill=INK, anchor="mm")
     q = e_back((c.t - 1.6) / .45); pulse = 1 + .03 * math.sin(c.t * 6); L = im.resize((int(im.width * pulse), int(im.height * pulse))); blit(c.fr, L, CX - L.width / 2, y + 24 + (1 - e_out(q)) * 40, c.alpha(cl(q * 2)))
     character(c, "v5_halfup_v2", t0=.5, width=430)

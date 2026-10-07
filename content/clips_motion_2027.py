@@ -65,10 +65,10 @@ def S_trine(c):
     if cen > 0: text(c, "수성 역행", 1035, 2.9, 66, color=GOLD, maxw=600, stagger=0)
 def S_hanmadi(c):
     body = "불의 해, 불의 달마다\n수성이 돌아와요.\n약속은 한 번 더 확인해 보세요."; note = "재미로 보는 풀이예요"
-    bw = 840; pad = 40; hb = text_h(body, 62, bw - 2 * pad, 1.36); H = pad + 66 + 12 + hb + 18 + int(44 * 1.3) + pad; top = 490
+    bw = 840; pad = 40; hb = text_h(body, 62, bw - 2 * pad, 1.4); H = pad + 66 + 12 + hb + 18 + int(44 * 1.3) + pad; top = 490
     p = e_back((c.t - .1) / .5); card = rr(bw, H, (26, 33, 54, 238), GOLD, r=44, ow=3); blit(c.fr, card, CX - bw / 2 - 4, top - 4 + (1 - e_out(p)) * 40, c.alpha(cl(p * 2)))
     text(c, "정월의 한마디", top + pad, .5, 54, color=GOLD, maxw=bw - 2 * pad, stagger=0); y = top + pad + 66 + 12
-    text(c, body, y, .9, 62, maxw=bw - 2 * pad, lh=1.36, stagger=.3); text(c, note, y + hb + 18, 2.2, 44, color=DIM, maxw=bw - 2 * pad, stagger=0)
+    text(c, body, y, .9, 62, maxw=bw - 2 * pad, lh=1.4, stagger=.3); text(c, note, y + hb + 18, 2.2, 44, color=DIM, maxw=bw - 2 * pad, stagger=0)
     character(c, "v6_winter", t0=.3, width=560)
 def S_ctaA(c):
     H = text_h("어느 달이 가장\n궁금하세요?", 104, 820, 1.3) + 48 + int(72 * 1.3); y0 = 910 - H / 2

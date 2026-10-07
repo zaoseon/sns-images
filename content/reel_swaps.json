@@ -2088,11 +2088,36 @@
    "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_final_09.png?v=1",
    "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_final_10.png?v=1"
   ],
-  "note": "흩어져 있던 규칙을 숫자까지 한 문서로 확정했어요. 이 문서가 옛 문서(제작 기준, 채널별 규격, 페이지별 고정 규칙, 템플릿 엔진 설계)를 대체해요. 올리기 전에는 검사 한 번(qa_all)으로 상단 문구·주소, 글·그림 배치, 줄바꿈, 문구 안전, 캡션, 양산형 유사도를 모두 확인하고 하나라도 걸리면 앱에 올리지 않아요. 10번째 장은 현황이에요: 앱 대기 영상 33편이 모두 배치 기준 밖(장면 178개 중 108개)이고, 시범 3편·수성 역행 영상만 통과했어요. 확인 한 가지: 영상 본문 줄간격을 1.35~1.4로 확정할지(규칙은 1.5 이상인데 영상은 1.3~1.4로 만들어 왔어요).",
+  "note": "[대표 확인용은 바로 아래 \"제작 가이드(그림판)\"을 보세요. 이 항목은 ①·③이 쓰는 숫자 기준표예요] 흩어져 있던 규칙을 숫자까지 한 문서로 확정했어요. 이 문서가 옛 문서(제작 기준, 채널별 규격, 페이지별 고정 규칙, 템플릿 엔진 설계)를 대체해요. 올리기 전에는 검사 한 번(qa_all)으로 상단 문구·주소, 글·그림 배치, 줄바꿈, 문구 안전, 캡션, 양산형 유사도를 모두 확인하고 하나라도 걸리면 앱에 올리지 않아요. 10번째 장은 현황이에요: 앱 대기 영상 33편이 모두 배치 기준 밖(장면 178개 중 108개)이고, 시범 3편·수성 역행 영상만 통과했어요. 확인 한 가지: 영상 본문 줄간격을 1.35~1.4로 확정할지(규칙은 1.5 이상인데 영상은 1.3~1.4로 만들어 왔어요).",
   "checks": [
    "규칙 숫자가 맞는지",
    "영상 본문 줄간격 1.35~1.4 확정 여부",
    "나머지 영상 33편을 새 구성으로 다시 만들 순서"
+  ]
+ },
+ {
+  "id": "guide-visual",
+  "kind": "제작 가이드(그림판)",
+  "title": "제작 가이드 그림판 — 예전(×)과 지금(○)을 나란히 (9장)",
+  "status": "new",
+  "date": "2026-09-28",
+  "time": "00:00",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_visual_01.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_visual_02.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_visual_03.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_visual_04.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_visual_05.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_visual_06.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_visual_07.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_visual_08.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_visual_09.png?v=1"
+  ],
+  "note": "숫자로는 확인이 어려우시다고 해서, 가이드를 그림으로 다시 만들었어요. 왼쪽 빨간 틀이 문제였던 모양, 오른쪽 초록 틀이 지금 규칙대로 그린 모양이에요. 1 화면 나누기 · 2 맨 위 줄과 본문 간격 · 3 글은 위아래 가운데(대표님이 올려 주신 캡처) · 4 아래 글과 주소 간격(대표님 캡처) · 5 줄바꿈은 뜻 단위로 · 6 숫자와 글은 같은 색 · 7 뒤 차트는 브랜드 차트 · 8 모양이 다 같으면 안 돼요 · 9 마무리 5가지. 영상 본문 줄간격은 1.4로 확정했어요(대표님 답). 앞으로 대표님께 보여 드릴 때는 숫자 대신 이런 그림이나 앱에서 바로 보이는 영상으로 드릴게요.",
+  "checks": [
+   "그림의 ○(지금) 모양이 원하시는 모양인지",
+   "×(예전)로 표시한 것이 모두 고쳐야 할 것인지",
+   "빠진 규칙이 있는지"
   ]
  }
 ]
