@@ -118,7 +118,7 @@ SC_A = [(2.8, A1), (5.0, A2), (3.6, A3), (4.2, A4), (3.4, A5), (2.2, A6), (3.4, 
 SETS = {"A": ("vs14_venn", SC_A, "data")}
 
 # ---------- ② 비교: 좌우 패널이 만나고 갈라진다 ----------
-PW, PH, PY = 330, 480, 600
+PW, PH, PY = 330, 420, 612
 def panels(c, gap_px, tint_same=0.0, t0=.0):
     """gap_px: 두 패널 사이 간격(음수면 겹침). tint_same: 겹침 영역 금색 강도."""
     im, d = lay(800); oy = 0; T0 = PY - 480
@@ -137,24 +137,30 @@ def B2(c):
     p = e_out(cl((c.t - .2) / 1.6)); gap = 150 - 280 * p   # 150 → -130 : 두 패널이 만나 겹친다
     fx_wipe(c, "같은 답이 나오면", 490, .05, 60, DIM); panels(c, gap, tint_same=cl((c.t - 1.4) / .6))
     g = e_out(cl((c.t - 1.9) / .5))
-    if g > 0: fx_zoom(c, "타고난 결", 1150, 2.0, 96, GOLD)
+    if g > 0: fx_zoom(c, "타고난 결", PY + PH + 50, 2.0, 96, GOLD)
 def B3(c):
     p = e_out(cl((c.t - .2) / 1.4)); gap = -130 + 280 * p   # 겹침 → 간격 150 : 갈라진다
     fx_wipe(c, "답이 갈리면", 490, .05, 60, DIM); panels(c, gap, tint_same=0.0)
-    g = e_out(cl((c.t - 1.5) / .5))
+    g = e_out(cl((c.t - 1.5) / .5)); by = PY + PH + 45
     if g > 0:
-        im, d = lay(200); a = int(255 * g); d.rounded_rectangle((CX - 190 + (1 - g) * 40, 40, CX + 190 - (1 - g) * 40, 140), radius=50, outline=(224, 184, 102, a), width=6); d.text((CX, 90), "내가 고를 곳", font=font(BLACK, 58), fill=(224, 184, 102, a), anchor="mm"); blit(c.fr, im, 0, PY + PH + 20 - 40, 1.0)
-    fx_slide(c, "풀이끼리 답이 갈리는 곳은\n내가 선택해서 바꿀 수 있어요", PY + PH + 150, 2.0, 46, DIM, maxw=840, lh=1.4, dirn=1)
+        im, d = lay(200); a = int(255 * g); d.rounded_rectangle((CX - 190 + (1 - g) * 40, 10, CX + 190 - (1 - g) * 40, 110), radius=50, outline=(224, 184, 102, a), width=6, fill=(11, 16, 32, int(215 * g))); d.text((CX, 60), "내가 고를 곳", font=font(BLACK, 58), fill=(224, 184, 102, a), anchor="mm"); blit(c.fr, im, 0, by - 10, 1.0)
+    fx_slide(c, "풀이끼리 답이 갈리는 곳은\n내가 선택해서 바꿀 수 있어요", by + 100 + 45, 2.0, 46, DIM, maxw=840, lh=1.4, dirn=1)
 SIX = ["사주", "별자리", "수비학", "자미두수", "당사주", "하락이수"]
 def B4(c):
     fx_zoom(c, "여섯 가지를 겹쳐서", 490, .05, 72, maxw=840)
-    im, d = lay(800); cols = [PINK, BLUE, TEAL, GOLD, CORAL, (170, 140, 255, 255)]
+    im, d = lay(900); cols = [PINK, BLUE, TEAL, GOLD, CORAL, (170, 140, 255, 255)]; f52 = font(BLACK, 52)
+    st = e_out(cl((c.t - 2.0) / .9)); vis = 1 - e_out(cl((c.t - 2.6) / .5))      # 2.0초부터 가운데로 모이고 사라진다
     for i, nm in enumerate(SIX):
-        t0 = .4 + i * .22; p = e_out(cl((c.t - t0) / .5)); cx_ = 190 + (i % 3) * 270; cy_ = 660 - 480 + (i // 3) * 150
-        st = e_out(cl((c.t - 2.3) / 1.0)); tx = CX - 24 + i * 9; ty = 930 - 480 + i * 9                      # 마지막엔 한 더미로 겹친다
-        x = cx_ + (tx - cx_) * st; y = cy_ + (ty - cy_) * st
-        d.rounded_rectangle((x - 120, y - 55, x + 120, y + 55), radius=30, fill=(cols[i][0], cols[i][1], cols[i][2], int(235 * cl(p * 1.4)))); d.text((x, y + 2), nm, font=font(BLACK, 52), fill=(30, 20, 40, int(255 * cl(p * 1.4))), anchor="mm")
-    blit(c.fr, im, 0, 480, 1.0); fx_wipe(c, "같은 답과 다른 답을 나눠 봐요", 1215, 2.6, 52, GOLD, maxw=840)
+        t0 = .4 + i * .2; p = e_out(cl((c.t - t0) / .5)); cx_ = 190 + (i % 3) * 270; cy_ = 700 - 480 + (i // 3) * 150; tx = CX; ty = 850 - 480
+        x = cx_ + (tx - cx_) * st; y = cy_ + (ty - cy_) * st; sc = 1 - .45 * st; al = int(235 * cl(p * 1.4) * vis)
+        if al > 3: d.rounded_rectangle((x - 120 * sc, y - 55 * sc, x + 120 * sc, y + 55 * sc), radius=int(30 * sc), fill=cols[i][:3] + (al,)); d.text((x, y + 2), nm, font=font(BLACK, max(20, int(52 * sc))), fill=(30, 20, 40, int(255 * cl(p * 1.4) * vis)), anchor="mm")
+    blit(c.fr, im, 0, 480, 1.0)
+    k = e_out(cl((c.t - 2.7) / .7))
+    if k > 0:                                                                       # 자오선 로고타입: 子午線 + 자오선 + 한 줄
+        im2, d2 = lay(900); al = int(255 * k); cy0 = 830 - 480; d2.ellipse((CX - 280, cy0 - 280, CX + 280, cy0 + 280), outline=GOLD[:3] + (int(120 * k),), width=6, fill=(11, 16, 32, int(150 * k)))
+        d2.text((CX, cy0 - 62), "子午線", font=font(_FK.P["serif"], int(170 * (.8 + .2 * k))), fill=GOLD[:3] + (al,), anchor="mm"); d2.text((CX, cy0 + 100), "자오선", font=font(BLACK, 96), fill=(255, 255, 255, al), anchor="mm"); d2.text((CX, cy0 + 200), "여섯 운명학 교차분석", font=font(BLACK, 46), fill=(214, 218, 228, int(al * .9)), anchor="mm")
+        blit(c.fr, im2, 0, 480, 1.0)
+    fx_wipe(c, "같은 답과 다른 답을 나눠 봐요", 1215, 2.9, 52, GOLD, maxw=840)
 def B5(c):
     H = text_h("같은 답은 결,\n다른 답은 선택", 108, 820, 1.3) + 40 + text_h("모순처럼 보여도\n그 사이에 내가 서 있어요", 54, 820, 1.4); y0 = MID - H / 2
     y = fx_wipe(c, "같은 답은 결,\n다른 답은 선택", y0, .1, 108, GOLD); fx_slide(c, "모순처럼 보여도\n그 사이에 내가 서 있어요", y + 40, 1.1, 54, DIM, dirn=1)
@@ -178,7 +184,7 @@ def watermark(c, hanja, t0=.0, alpha=.13, size=720):
     if AUDIT: return
     k = e_out(cl((c.t - t0) / .7)); im = Image.new("RGBA", (900, 900), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     d.ellipse((50, 50, 850, 850), fill=(9, 13, 30, int(150 * k)))   # 차트 위에서 한자가 묻히지 않도록 뒤에 어두운 막을 깐다
-    d.text((450, 440), hanja, font=font(_FK.P["serif"], size), fill=(GOLD[0], GOLD[1], GOLD[2], int(255 * .05 * k)), anchor="mm", stroke_width=5, stroke_fill=(GOLD[0], GOLD[1], GOLD[2], int(255 * .26 * k))); blit(c.fr, im, CX - 450, 800 - 450, 1.0)   # 윤곽선 위주의 은은한 워터마크
+    d.text((450, 440), hanja, font=font(_FK.P["serif"], size), fill=(GOLD[0], GOLD[1], GOLD[2], int(255 * .05 * k)), anchor="mm", stroke_width=5, stroke_fill=(GOLD[0], GOLD[1], GOLD[2], int(255 * .26 * k))); blit(c.fr, im, CX - 450, 910 - 450, 1.0)   # 윤곽선 위주의 은은한 워터마크
 GROUND = 1320   # 땅 선(절대 y)
 LEAF = [(84, 170, 110), (70, 150, 100), (110, 190, 120), (96, 178, 104)]
 def tree_layer(g, sway=0.0, coins=0.0, roots=0.0, t=0.0, wind=0.0):

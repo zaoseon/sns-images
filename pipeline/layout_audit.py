@@ -7,23 +7,23 @@ import numpy as np
 from PIL import Image
 HERE = os.path.dirname(os.path.abspath(__file__)); R = os.path.abspath(os.path.join(HERE, "..")); sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(R, "content"))
 import clip_motion as M
-CENTER, TOP_MIN, BOT_MAX = 910, 475, 1375
+CENTER, TOP_MIN, BOT_MAX = 910, 470, 1350   # 10/7 대표: 위·아래 여백을 같게(상단 문구 아래 395와 주소 위 1425에서 각각 75px 이상, 가운데 910)
 def bbox(sc, i, t=None, y0=400, y1=1440):
     M.BRAND = False; t = sc[i][0] * .86 if t is None else t
     M.still(sc, i, t, "/tmp/_l1.png"); sc2 = list(sc); sc2[i] = (sc[i][0], lambda c: None); M.still(sc2, i, t, "/tmp/_l2.png")
     a = np.asarray(Image.open("/tmp/_l1.png").convert("RGB")).astype(int); b = np.asarray(Image.open("/tmp/_l2.png").convert("RGB")).astype(int)
     m = (np.abs(a - b).sum(axis=2)[y0:y1] > 40); ys = np.where(m.sum(axis=1) > 2)[0]; M.BRAND = True
     return None if len(ys) == 0 else (y0 + int(ys.min()), y0 + int(ys.max()))
-def audit(name, sc, tol=35, char_scenes=()):
+def audit(name, sc, tol=15, char_scenes=()):
     """char_scenes: 정월이 화면 아래에 붙어 나오는 장면 번호(1부터) — 바닥 규칙·가운데 규칙에서 뺀다."""
     out = []
     for i in range(len(sc)):
         bb = bbox(sc, i)
         if bb is None: continue
         top, bot = bb; c = (top + bot) / 2; why = []
-        if top < TOP_MIN: why.append(f"맨 위 {top} (475 이상이어야 함)")
+        if top < TOP_MIN: why.append(f"맨 위 {top} (470 이상이어야 함)")
         if (i + 1) not in char_scenes:
-            if bot > BOT_MAX: why.append(f"맨 아래 {bot} (주소와 {1425 - bot}px, 50px 이상이어야 함)")
+            if bot > BOT_MAX: why.append(f"맨 아래 {bot} (주소와 {1425 - bot}px, 75px 이상이어야 함)")
             if abs(c - CENTER) > tol: why.append(f"가운데 {c:.0f} ({'아래' if c > CENTER else '위'}로 {abs(c - CENTER):.0f}px 쏠림)")
         out.append((name, i + 1, top, bot, round(c), why))
     return out
@@ -35,6 +35,9 @@ def groups():
     pk = []
     for k in ("oct17", "oct24", "oct31", "nov7"):
         cfg = dict(PR.SETS[k]); pk.append((f"카드고르기-{k}", PR.build(cfg["hook"], cfg["sub"], cfg["instr"], cfg["note"], face=cfg.get("face", "v1_lowbun")), (1,)))
+    import data_reels_v2 as DR, clips_v2 as C2
+    g["reels2"] = [("데이터v2-" + k, DR.REELS[k][0](), (7,) if k in ("star", "harak", "four") else ()) for k in ("pair", "star", "ziwei", "dang", "liuyao", "harak", "alone", "four")]
+    L2 = C2.spec(); g["clips2"] = [("클립v2-" + k, L2[k][1], (4,) if len(L2[k][1]) == 5 else ()) for k in C2.IDS]
     g["misc"] = pk + [("손없는날", S10.SC, (1, 5)), ("점격자", MD.build(), (1,))]
     return g
 def run_group(name):
@@ -44,7 +47,7 @@ def run_group(name):
         for r in audit(nm, sc, char_scenes=cs): res.append(r); tot += 1; bad_scenes += 1 if r[5] else 0
     return res, tot, bad_scenes
 if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1] in ("reels", "clips", "misc"):
+    if len(sys.argv) > 1 and sys.argv[1] in ("reels", "clips", "misc", "reels2", "clips2", "pilots"):
         import json, collections
         PV = __import__("pilot_variety"); PV.AUDIT = True
         res, tot, bad = run_group(sys.argv[1]); kinds = collections.Counter()

@@ -83,3 +83,8 @@ for i, (im, lab) in enumerate(ends):
     x = 40 + i * 200; c.paste(fit(im, tw, th), (x, 300)); d.rectangle((x - 2, 298, x + tw + 2, 300 + th + 2), outline=GOLD, width=3); d.text((x + tw / 2, 668), lab[0], font=FD(40), fill=GOLD, anchor="mm"); d.text((x + tw / 2, 716), lab[1], font=F(32), fill=WHITE, anchor="mm")
 for i, ln in enumerate(["팔로우하고 더 많은 이야기 나눠요", "프로필 링크에서 생년월일 입력하고", "내 첫글자와 타고난 기운 알아보기", "이 문구는 5가지 모두에 들어가요"]): d.text((60, 810 + i * 62), ln, font=F(46), fill=WHITE if i < 3 else GOLD)
 save(c, 9)
+
+# 10) 위·아래 여백 같게 + 차트도 같은 가운데 (10/7 대표 캡처: 글이 차트보다 아래로 쏠림)
+shot_b = Image.open(UP + "1791416184673.jpeg").convert("RGB").crop((55, 312, 1024, 2032))     # 앱 영상 창에서 영상 부분만
+new_b = still(PV.SC_B, 2, 3.9, "B3new")
+save(pair("10 / 10", "글·그림·차트는 같은 가운데", shot_b, new_b, "차트 중심은 위, 글은 아래라\n글이 아래로 쏠려 보였어요", "차트와 글·그림이 같은 가운데,\n위·아래 여백이 같아요", [("ring", 800, 520, "차트 중심은 여기"), ("gap", 896, 924, "글 가운데는 여기")], [("ring", 910, 520, "차트 중심"), ("gap", 896, 924, "글 가운데 = 같음")]), 10)

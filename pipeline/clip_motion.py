@@ -42,13 +42,13 @@ def ring_img():
     """뒤에서 돌아가는 차트 = 브랜드 황도 차트(assets/brand_bg/chart.png, 10/7 대표 지적: 엔진 영상이 직접 그린 고리를 쓰고 있었다). 선만 은은하게 보이도록 투명도를 낮춘다."""
     src = Image.open(os.path.join(ROOT, "assets", "brand_bg", "chart.png")).convert("RGBA"); S = CHART_S
     im = src.resize((S, S), Image.LANCZOS); al = im.getchannel("A").point(lambda v: int(v * CHART_ALPHA)); im.putalpha(al); return im
-CHART_S = 1040; CHART_ALPHA = .30
+CHART_S = 1040; CHART_ALPHA = .30; CHART_CY = 910   # 차트 중심 = 상단 문구 아래(395)와 주소 위(1425)의 가운데(10/7 대표: 글이 차트보다 아래로 쏠려 보임)
 def background(fr, t, total_t):
     fr.paste(bg_static())
     d = ImageDraw.Draw(fr, "RGBA")
     for x, y, r, ph, sp in stars():
         a = int(90 + 120 * (0.5 + 0.5 * math.sin(t * sp + ph))); d.ellipse((x - r, y - r, x + r, y + r), fill=(255, 236, 190, a))
-    rg = ring_img().rotate(-t * 2.4, resample=Image.BICUBIC); fr.paste(rg, (CX - CHART_S // 2, 800 - CHART_S // 2), rg)
+    rg = ring_img().rotate(-t * 2.4, resample=Image.BICUBIC); fr.paste(rg, (CX - CHART_S // 2, CHART_CY - CHART_S // 2), rg)
     d.rectangle((70, 143, 880, 147), fill=(255, 255, 255, 40)); d.rectangle((70, 143, 70 + int(810 * cl(t / total_t)), 147), fill=GOLD)
 # ---------- 글자 ----------
 def _dep(wd):
@@ -296,6 +296,7 @@ def cta(c, lines, t0=0.2, pill="블로그 스티커 눌러 보기", face="v8_ges
 # ---------- 장면 목록과 렌더 ----------
 def render(name, scenes, outdir, kicker=None):
     """scenes: [(길이(초), 함수(c))]. 프레임을 ffmpeg로 바로 흘려 보낸다."""
+    scenes = [(d_, _auto(f_, d_)) for d_, f_ in scenes]   # 모든 장면에 위·아래 여백 자동 맞춤(R21)
     total = sum(d for d, _ in scenes); os.makedirs(outdir, exist_ok=True); out = os.path.join(outdir, name + ".mp4")
     pr = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-", "-vf", "scale=in_range=full:out_range=tv:out_color_matrix=bt709,format=yuv420p", "-c:v", "libx264", "-profile:v", "high", "-crf", "14", "-preset", "medium", "-x264-params", "aq-mode=3:aq-strength=0.9", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-color_range", "tv", "-an", "-movflags", "+faststart", out], stdin=subprocess.PIPE)
     t_acc = 0.0; n = 0; fr = Image.new("RGB", (W, H))
@@ -307,19 +308,19 @@ def render(name, scenes, outdir, kicker=None):
         t_acc += dur
     pr.stdin.close(); pr.wait(); return out, n / FPS
 def still(scenes, idx, t, path, total=None):
-    fr = Image.new("RGB", (W, H)); total = total or sum(d for d, _ in scenes); acc = sum(d for d, _ in scenes[:idx]); background(fr, acc + t, total); cx_ = Ctx(fr, t, scenes[idx][0]); scenes[idx][1](cx_)
+    fr = Image.new("RGB", (W, H)); total = total or sum(d for d, _ in scenes); acc = sum(d for d, _ in scenes[:idx]); background(fr, acc + t, total); cx_ = Ctx(fr, t, scenes[idx][0]); _auto(scenes[idx][1], scenes[idx][0])(cx_)
     if BRAND: brand_layer(fr, getattr(cx_, 'ai_seen', False))
     fr.save(path); return path
-def autofit(fn, dur, lo=475, hi=1375, mid=910, tol=25):
+def autofit(fn, dur, lo=470, hi=1350, mid=910, tol=15):
     """장면 함수를 한 번 검은 화면에 그려 글·그림이 차지한 세로 범위를 재고, 규칙(R21)에 맞게 장면 전체를 위아래로 옮긴다.
-    정월이 화면 아래에 붙는 장면에는 쓰지 않는다(바닥 고정)."""
+    위·아래 여백을 같게: 맨 위 470 이상 · 맨 아래 1350 이하 · 묶음 가운데 910±15. 정월이 나오는 장면은 바닥에 붙어 있으므로 옮기지 않는다."""
     cache = {}
     def f(c):
         global DY
         if "dy" not in cache:
             import numpy as _np
-            fr = Image.new("RGB", (W, H), (0, 0, 0)); DY = 0; fn(Ctx(fr, dur * .86, dur)); a = _np.asarray(fr).astype("int32").sum(axis=2); ys = _np.where((a > 45).sum(axis=1) > 2)[0]
-            if len(ys) == 0: cache["dy"] = 0
+            fr = Image.new("RGB", (W, H), (0, 0, 0)); DY = 0; cx_ = Ctx(fr, dur * .86, dur); fn(cx_); a = _np.asarray(fr).astype("int32").sum(axis=2); ys = _np.where((a > 45).sum(axis=1) > 2)[0]
+            if len(ys) == 0 or getattr(cx_, "ai_seen", False): cache["dy"] = 0
             else:
                 top, bot = int(ys.min()), int(ys.max()); dy = mid - (top + bot) / 2
                 if abs(dy) <= tol and top >= lo and bot <= hi: dy = 0
@@ -328,7 +329,14 @@ def autofit(fn, dur, lo=475, hi=1375, mid=910, tol=25):
         DY = cache["dy"]
         try: fn(c)
         finally: DY = 0
-    return f
+    f._af = True; return f
+_AFW = {}
+def _auto(fn, dur):
+    """모든 장면에 자동 맞춤을 건다(이미 건 것은 그대로)."""
+    if getattr(fn, "_af", False): return fn
+    k = id(fn)
+    if k not in _AFW or _AFW[k][0] is not fn: _AFW[k] = (fn, autofit(fn, dur))
+    return _AFW[k][1]
 # 공통 조각
 def hook(kick, lines, face, size=112):
     def f(c):
