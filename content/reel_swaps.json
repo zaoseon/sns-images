@@ -2068,5 +2068,31 @@
   "checks": [
    "표지로 써도 되는지"
   ]
+ },
+ {
+  "id": "guide-final",
+  "kind": "제작 가이드(확정판)",
+  "title": "제작 가이드 확정판 — 숫자까지 한 문서로 (10장)",
+  "status": "new",
+  "date": "2026-09-29",
+  "time": "00:00",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_final_01.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_final_02.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_final_03.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_final_04.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_final_05.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_final_06.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_final_07.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_final_08.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_final_09.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/guide_final_10.png?v=1"
+  ],
+  "note": "흩어져 있던 규칙을 숫자까지 한 문서로 확정했어요. 이 문서가 옛 문서(제작 기준, 채널별 규격, 페이지별 고정 규칙, 템플릿 엔진 설계)를 대체해요. 올리기 전에는 검사 한 번(qa_all)으로 상단 문구·주소, 글·그림 배치, 줄바꿈, 문구 안전, 캡션, 양산형 유사도를 모두 확인하고 하나라도 걸리면 앱에 올리지 않아요. 10번째 장은 현황이에요: 앱 대기 영상 33편이 모두 배치 기준 밖(장면 178개 중 108개)이고, 시범 3편·수성 역행 영상만 통과했어요. 확인 한 가지: 영상 본문 줄간격을 1.35~1.4로 확정할지(규칙은 1.5 이상인데 영상은 1.3~1.4로 만들어 왔어요).",
+  "checks": [
+   "규칙 숫자가 맞는지",
+   "영상 본문 줄간격 1.35~1.4 확정 여부",
+   "나머지 영상 33편을 새 구성으로 다시 만들 순서"
+  ]
  }
 ]

@@ -27,7 +27,32 @@ def audit(name, sc, tol=35, char_scenes=()):
             if abs(c - CENTER) > tol: why.append(f"가운데 {c:.0f} ({'아래' if c > CENTER else '위'}로 {abs(c - CENTER):.0f}px 쏠림)")
         out.append((name, i + 1, top, bot, round(c), why))
     return out
+def groups():
+    import pilot_variety as PV, clips_motion_2027 as S27, reels_engine as RE, pick_reel as PR, clips_motion_s10 as S10, motion_dots as MD, engine_conflicts as EC
+    g = {"pilots": [("시범 A 데이터", PV.SC_A, ()), ("시범 B 비교", PV.SC_B, ()), ("시범 C 오행", PV.SC_C, (6,)), ("수성 역행", S27.SC, (4,))]}
+    g["reels"] = [("릴스-" + k, RE.scenes(d, h), (1, 5)) for (dd, k), (d, h) in RE.all_defs().items()]            # 표지(1)·조언(5)은 정월이 화면 아래에 붙는다
+    cl = EC.load_all(); g["clips"] = [(f"클립-n{n}", cl[(f"n{n}-c1", "12")], (1, 4, 5)) for n in range(34, 47)]       # 표지·정리·마무리에 정월
+    pk = []
+    for k in ("oct17", "oct24", "oct31", "nov7"):
+        cfg = dict(PR.SETS[k]); pk.append((f"카드고르기-{k}", PR.build(cfg["hook"], cfg["sub"], cfg["instr"], cfg["note"], face=cfg.get("face", "v1_lowbun")), (1,)))
+    g["misc"] = pk + [("손없는날", S10.SC, (1, 5)), ("점격자", MD.build(), (1,))]
+    return g
+def run_group(name):
+    import json
+    G = groups()[name]; res = []; bad_scenes = 0; tot = 0
+    for nm, sc, cs in G:
+        for r in audit(nm, sc, char_scenes=cs): res.append(r); tot += 1; bad_scenes += 1 if r[5] else 0
+    return res, tot, bad_scenes
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] in ("reels", "clips", "misc"):
+        import json, collections
+        PV = __import__("pilot_variety"); PV.AUDIT = True
+        res, tot, bad = run_group(sys.argv[1]); kinds = collections.Counter()
+        for r in res:
+            for w in r[5]: kinds[w.split(" ")[0] + (" 쏠림" if "쏠림" in w else "")] += 1
+        vids = collections.Counter(r[0] for r in res if r[5]); print(f"{sys.argv[1]}: 장면 {tot}개 중 기준 밖 {bad}개 · 영상 {len(set(r[0] for r in res))}편 중 {len(vids)}편에 있음", dict(kinds))
+        out = os.path.join(R, "content", "audit", "layout_audit.json"); old = json.load(open(out, encoding="utf-8")) if os.path.exists(out) else {}
+        old[sys.argv[1]] = dict(장면=tot, 기준밖=bad, 영상=len(set(r[0] for r in res)), 문제영상=len(vids), 종류=dict(kinds), 목록=[[r[0], r[1], r[2], r[3], r[4], r[5]] for r in res if r[5]][:60]); json.dump(old, open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=1); sys.exit(0)
     import pilot_variety as PV, clips_motion_2027 as S27
     PV.AUDIT = True; bad = 0
     for nm, sc, cs in (("시범 A 데이터", PV.SC_A, ()), ("시범 B 비교", PV.SC_B, ()), ("시범 C 오행", PV.SC_C, (6,)), ("수성 역행", S27.SC, (4,)), ("수성 역행 표지", [(4.0, S27.S_cover)], ())):
