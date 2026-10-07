@@ -1640,25 +1640,6 @@
   ]
  },
  {
-  "id": "tpl-w43",
-  "kind": "틀 견본(돌려쓰기)",
-  "title": "새 카드 틀 견본 5종 - 배치표·순위·대화형·투표·한마디",
-  "status": "new",
-  "images": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43tpl/T3.jpg?v=3",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43tpl/T4.jpg?v=3",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43tpl/T5.jpg?v=3",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43tpl/T6.jpg?v=3",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43tpl/T7.jpg?v=3"
-  ],
-  "note": "피드가 질리지 않게 돌려 쓸 새 틀 견본이에요(10/5). 안의 내용은 예시이고, 올리기 전에 풀이 기준으로 확정해요. 글자 크기·색 기준은 docs/디자인_기준_2026-10-05.md. 이 중 1주차에 시험할 틀을 정해 주세요(투표를 제안해요).",
-  "checks": [
-   "글자가 폰에서 읽히는지",
-   "틀마다 색이 다른지",
-   "마음에 드는 틀 고르기"
-  ]
- },
- {
   "id": "add-motion-dots",
   "kind": "모션그래픽 견본",
   "title": "모션그래픽 견본 · 나랑 같은 말을 하는 운명학, 몇 개일까요? (100명 점 격자 + 숫자 올라가기)",
@@ -2010,6 +1991,29 @@
    "확정 규칙 중 틀린 것",
    "임시 규칙(안전 영역 x 900) 확정 여부",
    "미정 3개에 대한 답"
+  ]
+ },
+ {
+  "id": "variety-plan",
+  "kind": "양산형 방지 구성안(승인 요청)",
+  "title": "양산형 방지 구성안 — 장면 형태·마무리를 영상마다 다르게 (7장)",
+  "status": "new",
+  "date": "2026-10-07",
+  "time": "00:00",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/var_01.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/var_02.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/var_03.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/var_04.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/var_05.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/var_06.png?v=1",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-motion/var_07.png?v=1"
+  ],
+  "note": "대표님 지적이 맞았어요. 앱 대기 영상 39편을 비교하니 처음 장면 34편(87%), 중간 29편, 끝 35편이 거의 같은 모양이었어요. 승인 없이 같은 틀로 다시 만든 제 잘못이에요. 그래서 먼저 구성안을 그림으로 만들었어요: 새 규칙 R19(정월 얼굴 40% 이하, 장면 형태·마무리 돌려 쓰기, 비슷한 장면 묶음 30% 이하), 쓸 수 있는 장면 형태 10가지, 릴스 14편과 클립 13편의 새 구성. 승인해 주시면 시범 3편(데이터·비교·오행)을 먼저 만들어 올릴게요.",
+  "checks": [
+   "이 구성으로 시범 3편 먼저 만들어도 되는지",
+   "바꾸고 싶은 장면 형태나 마무리(번호로)",
+   "정월 얼굴 40% 이하 기준이 맞는지"
   ]
  }
 ]
