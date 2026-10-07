@@ -16,6 +16,14 @@ def scan_pos(SC):
             M.LOG = []; M.still(scenes, i, min(dur * .65, dur - .05), "/tmp/_ec.png"); bad = [e for e in M.LOG if e[1] < 330]
             if bad: out.append((key[0], i, bad[:2]))
     M.LOG = None; M.BRAND = True; return out
+def scan_gap(SC, first_only=True, min_y=475):
+    """상단 문구 띠와 본문 첫 글자 사이가 80px 이상인지(R21: 본문 y 475 이상). 첫 장면만 재도 대표성이 있다."""
+    M.BRAND = False; out = []
+    for key, scenes in SC.items():
+        for i, (dur, fn) in enumerate(scenes[:1] if first_only else scenes):
+            M.LOG = []; M.still(scenes, i, min(dur * .8, dur - .05), "/tmp/_ec.png"); ys = [e[1] for e in M.LOG if e[0] == "text"]
+            if ys and min(ys) < min_y: out.append((key[0], i, round(min(ys))))
+    M.LOG = None; M.BRAND = True; return out
 def scan(SC, only=None):
     M.BRAND = False; out = []
     for key, scenes in SC.items():

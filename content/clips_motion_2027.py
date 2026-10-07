@@ -16,8 +16,8 @@ def S_hook(c):
     H = text_h("2027년", 140, 820, 1.2) + text_h("수성이 거꾸로 가는 날", 92, 820, 1.25) + text_h("딱 세 번이에요", 124, 820, 1.2) + 40 + text_h("날짜로 알려 드려요", 56, 820, 1.4); y0 = 910 - H / 2
     y = text(c, "2027년", y0, .1, 140, color=GOLD, maxw=820, lh=1.2); y = text(c, "수성이 거꾸로 가는 날", y, .5, 92, maxw=820, lh=1.25); y = text(c, "딱 세 번이에요", y, 1.0, 124, color=GOLD, maxw=820, lh=1.2); text(c, "날짜로 알려 드려요", y + 40, 1.6, 56, color=DIM, maxw=820)
 def S_map(c):
-    t = c.t; TOP = 500; RH = 68; X0, X1 = 190, 880; W = X1 - X0
-    text(c, "2027 수성 역행 · 일식", 415, .05, 56, maxw=840, stagger=0)
+    t = c.t; TOP = 610; RH = 58; X0, X1 = 190, 880; W = X1 - X0
+    text(c, "2027 수성 역행 · 일식", 490, .05, 56, maxw=840, stagger=0)
     im, d = lay(1000); f44 = font(BLACK, 44); f40 = font(BLACK, 40)
     def fx(m, day, end=False): return X0 + W * ((day if end else day - 1) / DAYS[m - 1])
     for i in range(12):
@@ -30,24 +30,24 @@ def S_map(c):
         g = e_out(cl((t - ts - (.45 if m in (3, 7) else 0)) / .5))
         if g <= 0: continue
         y = (TOP - 480) + (m - 1) * RH + RH // 2; x0 = fx(m, a0); x1 = x0 + (fx(m, a1, True) - x0) * g
-        d.rounded_rectangle((x0, y - 25, max(x0 + 8, x1), y + 25), radius=25, fill=CORAL)
+        d.rounded_rectangle((x0, y - 23, max(x0 + 8, x1), y + 23), radius=23, fill=CORAL)
         if m in (3, 7):
             d.text((x1 + 14, y), lab, font=f40, fill=(255, 255, 255, int(255 * g)), anchor="lm")
         elif g > .85: d.text((x0 + 16, y), lab, font=f40, fill=(26, 20, 30, 255), anchor="lm")
     for k, (m, day) in enumerate(ECL):
         g = e_back(cl((t - (1.7 + k * 1.7)) / .4))
         if g <= 0: continue
-        y = (TOP - 480) + (m - 1) * RH + RH // 2; x = fx(m, day) + 4; r = 24 * min(g, 1.1)
+        y = (TOP - 480) + (m - 1) * RH + RH // 2; x = fx(m, day) + 4; r = 22 * min(g, 1.1)
         d.ellipse((x - r, y - r, x + r, y + r), fill=(12, 12, 20, 255), outline=GOLD, width=5)
-    lg = e_out(cl((t - 4.4) / .4)); yL = (TOP - 480) + 12 * RH + 24
+    lg = e_out(cl((t - 4.4) / .4)); yL = (TOP - 480) + 12 * RH + 56
     d.rounded_rectangle((70, yL - 14, 118, yL + 14), radius=14, fill=(CORAL[0], CORAL[1], CORAL[2], int(255 * lg))); d.text((132, yL), "수성 역행", font=f44, fill=(255, 255, 255, int(255 * lg)), anchor="lm")
     d.ellipse((430, yL - 17, 464, yL + 17), fill=(12, 12, 20, int(255 * lg)), outline=(GOLD[0], GOLD[1], GOLD[2], int(255 * lg)), width=4); d.text((478, yL), "일식", font=f44, fill=(255, 255, 255, int(255 * lg)), anchor="lm")
     blit(c.fr, im, 0, 480, 1.0)
 def S_trine(c):
-    t = c.t; y0 = text(c, "세 번 모두", 415, .05, 84, maxw=840, stagger=0)
+    t = c.t; y0 = text(c, "세 번 모두", 490, .05, 84, maxw=840, stagger=0)
     text(c, "사주에서 '불의 삼합' 달이에요", y0 - 6, .45, 60, color=DIM, maxw=840, stagger=0)
-    pts = [(CX, 760, "午", "6월"), (CX - 270, 1170, "寅", "2월"), (CX + 270, 1170, "戌", "10월")]
-    im, d = lay(1000); R = 108; fh = font(_FK.P["serif"], 118); fm = font(BLACK, 58)
+    pts = [(CX, 830, "午", "6월"), (CX - 240, 1215, "寅", "2월"), (CX + 240, 1215, "戌", "10월")]
+    im, d = lay(1000); R = 100; fh = font(_FK.P["serif"], 110); fm = font(BLACK, 58)
     prog = e_out(cl((t - 1.4) / 1.4)); order = [(0, 1), (1, 2), (2, 0)]
     for k, (a, b) in enumerate(order):
         seg = cl(prog * 3 - k)
@@ -59,17 +59,17 @@ def S_trine(c):
         if g <= 0: continue
         r = R * min(g, 1.08); yy = y - 480
         d.ellipse((x - r, yy - r, x + r, yy + r), fill=(CORAL[0], CORAL[1], CORAL[2], 255), outline=(255, 235, 200, 255), width=5)
-        d.text((x, yy - 4), hj, font=fh, fill=(40, 20, 28, 255), anchor="mm"); d.text((x, yy + R + 56), mo, font=fm, fill=(255, 255, 255, int(255 * cl(g))), anchor="mm")
+        d.text((x, yy - 4), hj, font=fh, fill=(40, 20, 28, 255), anchor="mm"); d.text((x, yy + R + 50), mo, font=fm, fill=(255, 255, 255, int(255 * cl(g))), anchor="mm")
     blit(c.fr, im, 0, 480, 1.0)
     cen = e_out(cl((t - 2.9) / .5))
-    if cen > 0: text(c, "수성 역행", 950, 2.9, 70, color=GOLD, maxw=600, stagger=0)
+    if cen > 0: text(c, "수성 역행", 1062, 2.9, 66, color=GOLD, maxw=600, stagger=0)
 def S_hanmadi(c):
-    body = "불의 해에 불의 달마다\n수성이 돌아와요.\n말과 약속은 한 번 더\n확인해 보세요."; note = "재미로 보는 풀이예요"
-    bw = 840; pad = 40; hb = text_h(body, 62, bw - 2 * pad, 1.36); H = pad + 66 + 12 + hb + 18 + int(44 * 1.3) + pad; top = 418
+    body = "불의 해, 불의 달마다\n수성이 돌아와요.\n약속은 한 번 더 확인해 보세요."; note = "재미로 보는 풀이예요"
+    bw = 840; pad = 40; hb = text_h(body, 62, bw - 2 * pad, 1.36); H = pad + 66 + 12 + hb + 18 + int(44 * 1.3) + pad; top = 490
     p = e_back((c.t - .1) / .5); card = rr(bw, H, (26, 33, 54, 238), GOLD, r=44, ow=3); blit(c.fr, card, CX - bw / 2 - 4, top - 4 + (1 - e_out(p)) * 40, c.alpha(cl(p * 2)))
     text(c, "정월의 한마디", top + pad, .5, 54, color=GOLD, maxw=bw - 2 * pad, stagger=0); y = top + pad + 66 + 12
     text(c, body, y, .9, 62, maxw=bw - 2 * pad, lh=1.36, stagger=.3); text(c, note, y + hb + 18, 2.2, 44, color=DIM, maxw=bw - 2 * pad, stagger=0)
-    character(c, "v6_winter", t0=.3, width=600)
+    character(c, "v6_winter", t0=.3, width=560)
 def S_ctaA(c):
     H = text_h("어느 달이 가장\n궁금하세요?", 104, 820, 1.3) + 48 + int(72 * 1.3); y0 = 910 - H / 2
     y = text(c, "어느 달이 가장\n궁금하세요?", y0, .1, 104, maxw=820, lh=1.3); text(c, "댓글로 알려 주세요", y + 48, .7, 72, color=GOLD)
