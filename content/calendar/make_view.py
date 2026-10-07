@@ -89,7 +89,7 @@ summary{{list-style:none;padding:14px;cursor:pointer;display:flex;gap:10px;align
 </style></head><body><div class="w">
 <h1>2026년 11월 콘텐츠 캘린더</h1>
 <p class="lead">11월 1일~30일, 모든 채널을 한 장으로 정리했어요. 날짜를 누르면 그날의 11칸이 펼쳐져요. 제목은 작업 제목이고, 세부 기획에서 확정해요.</p>
-<div class="box"><b>칸 상태</b><div class="bigbar"><i></i></div><div class="leg"><span class="l1">이미 있는 것 {lk}</span><span class="l2">새로 만들 것 {nw}</span></div><p class="lead" style="margin:10px 0 0">빈 칸은 0이에요. 지금까지 만들어 둔 것: 네이버 원고 2편(11/1·11/4), 메트리쿨 예약 2건(11/6 릴스·스레드).</p></div>
+<div class="box"><b>칸 상태</b><div class="bigbar"><i></i></div><div class="leg"><span class="l1">이미 있는 것 {lk}</span><span class="l2">새로 만들 것 {nw}</span></div><p class="lead" style="margin:10px 0 0">빈 칸은 0이에요. 지금까지 만들어 둔 것: 네이버 원고 5편(11/1·11/2·11/3·11/4·11/6), 메트리쿨 예약 2건(11/6 릴스·스레드), 띠 릴스 5편 구성 그림(승인 대기).</p></div>
 <h2>점검 결과</h2><div class="box"><ul class="chk">{chk}</ul></div>
 <h2>제작 순서와 양</h2><div class="box"><p class="lead">주마다 그 주 칸을 모두 만들고 예약해요. 막대가 길수록 새로 만들 칸이 많아요.</p>{wkh}</div>
 <h2>날짜별 일정</h2>{cards}
