@@ -80,6 +80,16 @@ def S_ctaB(c):
     y = text(c, "내 일간 12개월은 프로필 링크에서\n생년월일 입력하고 확인해 보세요", y + 56, t0 + 1.2, 52, color=DIM, maxw=830, lh=1.4)
     fnt = font(BLACK, 58); pl = "＋ 팔로우"; pw = int(fnt.getlength(pl)) + 100; im = Image.new("RGBA", (pw + 20, 140), (0, 0, 0, 0)); d = ImageDraw.Draw(im); d.rounded_rectangle((10, 10, 10 + pw, 130), radius=60, fill=GOLD); d.text((10 + pw / 2, 71), pl, font=fnt, fill=INK, anchor="mm")
     q = e_back((c.t - t0 - 1.9) / .45); pulse = 1 + .03 * math.sin(c.t * 6); L = im.resize((int(im.width * pulse), int(im.height * pulse))); blit(c.fr, L, CX - L.width / 2, y + 40 + (1 - e_out(q)) * 40, c.alpha(cl(q * 2)))
+
+def S_cover(c):
+    """릴스 표지(R13): 제목 + 寅·午·戌 세 달. 정지 화면으로 쓰므로 모든 요소가 보이는 상태."""
+    H = text_h("2027년", 130, 820, 1.2) + text_h("수성이 거꾸로 가는 날", 88, 820, 1.25) + text_h("딱 세 번", 124, 820, 1.2); y0 = 520
+    y = text(c, "2027년", y0, 0, 130, color=GOLD, maxw=820, lh=1.2, stagger=0); y = text(c, "수성이 거꾸로 가는 날", y, 0, 88, maxw=820, lh=1.25, stagger=0); text(c, "딱 세 번", y, 0, 124, color=GOLD, maxw=820, lh=1.2, stagger=0)
+    im, d = lay(520); pts = [(CX - 250, 150, "寅", "2월"), (CX, 150, "午", "6월"), (CX + 250, 150, "戌", "10월")]; fh = font(_FK.P["serif"], 84); fm = font(BLACK, 50)
+    d.line([(pts[0][0], 150), (pts[2][0], 150)], fill=(GOLD[0], GOLD[1], GOLD[2], 255), width=8)
+    for x, yy, hj, mo in pts:
+        d.ellipse((x - 76, yy - 76, x + 76, yy + 76), fill=CORAL, outline=(255, 235, 200, 255), width=5); d.text((x, yy - 3), hj, font=fh, fill=(40, 20, 28, 255), anchor="mm"); d.text((x, yy + 76 + 46), mo, font=fm, fill=(255, 255, 255, 255), anchor="mm")
+    blit(c.fr, im, 0, 1010, 1.0)
 SC = [(2.8, S_hook), (5.6, S_map), (4.4, S_trine), (4.4, S_hanmadi), (2.2, S_ctaA), (3.2, S_ctaB)]
 if __name__ == "__main__":
     out = os.path.join(ROOT, "2026-motion"); p, d = render("sky_2027", SC, out); mi = MP.choose("data", "sky-2027"); MP.mux(p, [x for x, _ in SC], mi, 321)
