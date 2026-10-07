@@ -1,0 +1,4051 @@
+{
+ "days": [
+  {
+   "date": "2026-11-01",
+   "wd": "일",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "여섯 운명학이 같은 말을 하는 사람은 몇 명일까",
+     "series": "DATA",
+     "sys": "X"
+    },
+    "E": {
+     "title": "입동 앞에 마무리할 한 가지",
+     "series": "SEASON",
+     "sys": "S"
+    },
+    "D": {
+     "title": "가면은 거짓일까 나를 지키는 방식일까",
+     "series": "TEST",
+     "sys": "Z"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "여섯 운명학이 같은 말을 하는 사람은 몇 명일까",
+     "series": "DATA",
+     "sys": "X",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "A",
+      "N",
+      "S"
+     ],
+     "related": {
+      "id": "n41",
+      "title": "낯선 사람 앞에서 말이 줄어드는 사람의 공통점, 사주·별자리·숫자로 보는",
+      "pub": "2026-10-26"
+     }
+    },
+    "B21": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "blog",
+       "locked": true,
+       "t": "21:00",
+       "title": "입동 뜻과 시기 2026, 입동 전에 태어났다면 사주의 달이 달라요",
+       "id": "n63"
+      }
+     ],
+     "time": "21:00"
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "여섯 운명학이 같은 말을 하는 사람은 몇 명일까",
+     "series": "DATA",
+     "sys": "X",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "입동 앞에 마무리할 한 가지",
+     "series": "SEASON",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "12:00",
+       "title": "내 여섯 운명학 중 몇 개가 같은 말을 할까요?",
+       "kind": "REEL"
+      }
+     ],
+     "time": "12:00"
+    },
+    "R20": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "20:00",
+       "title": "가면은 거짓이 아니라 상황에 맞는 모습을 꺼내는 방식, 나를 지키는 방식일 수 있어요. 속마음은 한 사람에게",
+       "kind": "REEL"
+      }
+     ],
+     "time": "20:00"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "여섯 운명학이 같은 말을 하는 사람은 몇 명일까",
+     "series": "DATA",
+     "sys": "X",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "12:30",
+       "title": "내 여섯 운명학 중 몇 개가 같은 말을 할까요?",
+       "kind": "POST"
+      }
+     ],
+     "time": "12:30"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "가면은 거짓일까 나를 지키는 방식일까",
+     "series": "TEST",
+     "sys": "Z",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "입동 앞에 마무리할 한 가지",
+     "series": "SEASON",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "NEW",
+     "theme": "전날 글을 클립으로: (전날 글 확정 후)",
+     "time": "저녁(앱에서 직접)",
+     "src": null
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-02",
+   "wd": "월",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "사주 궁합 보는 법, 일간 궁합과 지지 육합",
+     "series": "INFO",
+     "sys": "S"
+    },
+    "E": {
+     "title": "앞에 서면 빛나는 사람",
+     "series": "CARE",
+     "sys": "X"
+    },
+    "D": {
+     "title": "궁합, 몇 개가 같은 말을 할까",
+     "series": "TEST",
+     "sys": "X"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "사주 궁합 보는 법, 일간 궁합과 지지 육합",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "n63",
+      "title": "입동 뜻과 시기 2026, 입동 전에 태어났다면 사주의 달이 달라요",
+      "pub": "2026-11-01"
+     }
+    },
+    "B21": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "blog",
+       "locked": true,
+       "t": "21:00",
+       "title": "앞에 서면 빛나는 사람의 공통점, 사주·별자리·숫자로 보는 리더형 성향",
+       "id": "n32"
+      }
+     ],
+     "time": "21:00"
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "사주 궁합 보는 법, 일간 궁합과 지지 육합",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "앞에 서면 빛나는 사람",
+     "series": "CARE",
+     "sys": "X",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "사주 궁합 보는 법, 일간 궁합과 지지 육합",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "19:00",
+       "title": "궁합은 한 가지 풀이로만 보면 한쪽 이야기만 듣게 돼요. 사주·별자리·숫자 중 몇 개가 맞는지 세어 보세요.",
+       "kind": "REEL"
+      }
+     ],
+     "time": "19:00"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "사주 궁합 보는 법, 일간 궁합과 지지 육합",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "사주 궁합 보는 법, 일간 궁합과 지지 육합",
+     "series": "INFO",
+     "sys": "S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "20:30",
+       "title": "예민한 건 약해서가 아니라 감각이 큰 사람이라 받아들이는 정보가 많아서일 수 있어요. 자극이 많은 시간 사이",
+       "kind": "POST"
+      }
+     ],
+     "time": "20:30"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "앞에 서면 빛나는 사람",
+     "series": "CARE",
+     "sys": "X",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "NEW",
+     "theme": "전날 글을 클립으로: 입동 뜻과 시기 2026, 입동 전에 태어났다면 사주의 달이 ",
+     "time": "저녁(앱에서 직접)",
+     "src": "입동 뜻과 시기 2026, 입동 전에 태어났다면 사주의 달이 달라요"
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-03",
+   "wd": "화",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "삼재 뜻과 오해 5가지, 삼재에는 이사·결혼·이직을 피해야 할까",
+     "series": "INFO",
+     "sys": "S"
+    },
+    "E": {
+     "title": "만세력 보는 법, 처음 열면 이것부터",
+     "series": "INFO",
+     "sys": "S"
+    },
+    "D": {
+     "title": "태어난 시간을 모르면 몇 글자가 달라질까",
+     "series": "DATA",
+     "sys": "S"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "삼재 뜻과 오해 5가지, 삼재에는 이사·결혼·이직을 피해야 할까",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "n32",
+      "title": "앞에 서면 빛나는 사람의 공통점, 사주·별자리·숫자로 보는 리더형 성향",
+      "pub": "2026-11-02"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "만세력 보는 법, 처음 열면 이것부터",
+     "series": "INFO",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "n32",
+      "title": "앞에 서면 빛나는 사람의 공통점, 사주·별자리·숫자로 보는 리더형 성향",
+      "pub": "2026-11-02"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "삼재 뜻과 오해 5가지, 삼재에는 이사·결혼·이직을 피해야 할까",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "만세력 보는 법, 처음 열면 이것부터",
+     "series": "INFO",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "삼재 뜻과 오해 5가지, 삼재에는 이사·결혼·이직을 피해야 할까",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "태어난 시간을 모르면 몇 글자가 달라질까",
+     "series": "DATA",
+     "sys": "S",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "삼재 뜻과 오해 5가지, 삼재에는 이사·결혼·이직을 피해야 할까",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "삼재 뜻과 오해 5가지, 삼재에는 이사·결혼·이직을 피해야 할까",
+     "series": "INFO",
+     "sys": "S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "20:30",
+       "title": "비교하면 마음이 작아지는 건 약점이 아니라 좋은 것을 알아보는 눈이 밝다는 뜻이기도 해요. 견주는 대상을 어",
+       "kind": "POST"
+      }
+     ],
+     "time": "20:30"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "만세력 보는 법, 처음 열면 이것부터",
+     "series": "INFO",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "COVERED",
+     "note": "클립은 주 4편(월·수·금·일)만 올려요. 대표가 폰 앱에서 직접 올리는 일이라 매일은 하지 않아요"
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-04",
+   "wd": "수",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "생일 숫자로 보는 연애 스타일",
+     "series": "LOVE",
+     "sys": "N"
+    },
+    "E": {
+     "title": "2027 신년 감정서에는 무엇이 들어 있나",
+     "series": "PRODUCT",
+     "sys": "X"
+    },
+    "D": {
+     "title": "연애할 때 먼저 식는 쪽",
+     "series": "TEST",
+     "sys": "X"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "blog",
+       "locked": true,
+       "t": "12:00",
+       "title": "생일 숫자로 보는 연애 스타일, 내 숫자 한 줄 풀이",
+       "id": "n70"
+      }
+     ],
+     "time": "12:00"
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "2027 신년 감정서에는 무엇이 들어 있나",
+     "series": "PRODUCT",
+     "sys": "X",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "A",
+      "N",
+      "S"
+     ],
+     "related": {
+      "id": "n32",
+      "title": "앞에 서면 빛나는 사람의 공통점, 사주·별자리·숫자로 보는 리더형 성향",
+      "pub": "2026-11-02"
+     }
+    },
+    "R08": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "08:00",
+       "title": "내 질문의 괘는 동전 여섯 번에 바뀔까요?",
+       "kind": "REEL"
+      }
+     ],
+     "time": "08:00"
+    },
+    "P08": {
+     "status": "COVERED",
+     "note": "아침 릴스가 이미 있어 아침 캐러셀은 건너뜀(인스타 하루 4개 이하)"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "2027 신년 감정서에는 무엇이 들어 있나",
+     "series": "PRODUCT",
+     "sys": "X",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "생일 숫자로 보는 연애 스타일",
+     "series": "LOVE",
+     "sys": "N",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "19:00",
+       "title": "연애할 때 먼저 식는 쪽이 늘 나라면 타고난 불이 셀 수 있어요. 사주·별자리·숫자 중 몇 개 겹치나요?",
+       "kind": "REEL"
+      }
+     ],
+     "time": "19:00"
+    },
+    "T08": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "08:30",
+       "title": "내 질문의 괘는 동전 여섯 번에 바뀔까요?",
+       "kind": "POST"
+      }
+     ],
+     "time": "08:30"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "생일 숫자로 보는 연애 스타일",
+     "series": "LOVE",
+     "sys": "N",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "연애할 때 먼저 식는 쪽",
+     "series": "TEST",
+     "sys": "X",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "2027 신년 감정서에는 무엇이 들어 있나",
+     "series": "PRODUCT",
+     "sys": "X",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "NEW",
+     "theme": "전날 글을 클립으로: (전날 글 확정 후)",
+     "time": "저녁(앱에서 직접)",
+     "src": null
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-05",
+   "wd": "목",
+   "flag": "z",
+   "themes": {
+    "M": {
+     "title": "2027 말띠 운세",
+     "series": "ZODIAC12",
+     "sys": "S"
+    },
+    "E": {
+     "title": "내년에 좋은 짝을 만날 수 있는 사람, 2027 연애운 신호",
+     "series": "LOVE",
+     "sys": "S+A"
+    },
+    "D": {
+     "title": "내 별자리 원소는 흔한 쪽일까",
+     "series": "DATA",
+     "sys": "A"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "내년에 좋은 짝을 만날 수 있는 사람, 2027 연애운 신호",
+     "series": "LOVE",
+     "sys": "S+A",
+     "time": "12:00",
+     "group": "E",
+     "sysset": [
+      "A",
+      "S"
+     ],
+     "related": {
+      "id": "c1104B21",
+      "title": "2027 신년 감정서에는 무엇이 들어 있나",
+      "pub": "2026-11-04"
+     }
+    },
+    "B21": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "blog",
+       "locked": true,
+       "t": "21:00",
+       "title": "2027년 말띠 운세, 육합이 되는 해 힘 쓸 달과 아낄 달 총정리",
+       "id": "n59"
+      }
+     ],
+     "time": "21:00"
+    },
+    "P08": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "08:00",
+       "title": "내년에 좋은 짝을 만날 수 있는 사람",
+       "kind": "POST"
+      }
+     ],
+     "time": "08:00"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "내년에 좋은 짝을 만날 수 있는 사람, 2027 연애운 신호",
+     "series": "LOVE",
+     "sys": "S+A",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "12:00",
+       "title": "내년에 좋은 짝을 만날 수 있는 사람",
+       "kind": "TRIAL_REEL"
+      }
+     ],
+     "time": "12:00"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "내 별자리 원소는 흔한 쪽일까",
+     "series": "DATA",
+     "sys": "A",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "08:00",
+       "title": "내년에 좋은 짝을 만날 수 있는 사람",
+       "kind": "POST"
+      }
+     ],
+     "time": "08:00"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "2027 말띠 운세",
+     "series": "ZODIAC12",
+     "sys": "S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "20:30",
+       "title": "결정을 못 하는 건 정보가 모자라서가 아니라 질문이 아직 흐릿해서일 수 있어요. 고민을 한 사건으로 적고, ",
+       "kind": "POST"
+      }
+     ],
+     "time": "20:30"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "내년에 좋은 짝을 만날 수 있는 사람, 2027 연애운 신호",
+     "series": "LOVE",
+     "sys": "S+A",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "COVERED",
+     "note": "클립은 주 4편(월·수·금·일)만 올려요. 대표가 폰 앱에서 직접 올리는 일이라 매일은 하지 않아요"
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-06",
+   "wd": "금",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "수성이 거꾸로 가는 날 2027, 딱 세 번과 불의 삼합 달",
+     "series": "SEASON",
+     "sys": "A+S"
+    },
+    "E": {
+     "title": "태어난 시간을 모르면, 시간 없이 볼 수 있는 풀이와 못 보는 풀이",
+     "series": "INFO",
+     "sys": "S+Z"
+    },
+    "D": {
+     "title": "한 가지 풀이가 안 맞아도 걱정 없는 이유",
+     "series": "CROSS",
+     "sys": "X"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "수성이 거꾸로 가는 날 2027, 딱 세 번과 불의 삼합 달",
+     "series": "SEASON",
+     "sys": "A+S",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "A",
+      "S"
+     ],
+     "related": {
+      "id": "c1105B12",
+      "title": "내년에 좋은 짝을 만날 수 있는 사람, 2027 연애운 신호",
+      "pub": "2026-11-05"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "태어난 시간을 모르면, 시간 없이 볼 수 있는 풀이와 못 보는 풀이",
+     "series": "INFO",
+     "sys": "S+Z",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "S",
+      "Z"
+     ],
+     "related": {
+      "id": "n35",
+      "title": "월요일이 유독 무거운 사람의 공통점, 자미두수 명궁·신궁과 사주로 보는 ",
+      "pub": "2026-10-19"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "수성이 거꾸로 가는 날 2027, 딱 세 번과 불의 삼합 달",
+     "series": "SEASON",
+     "sys": "A+S",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "태어난 시간을 모르면, 시간 없이 볼 수 있는 풀이와 못 보는 풀이",
+     "series": "INFO",
+     "sys": "S+Z",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "수성이 거꾸로 가는 날 2027, 딱 세 번과 불의 삼합 달",
+     "series": "SEASON",
+     "sys": "A+S",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "19:00",
+       "title": "한 가지 풀이가 안 맞는다고 걱정할 필요는 없어요. 안 맞는 곳은 연락 빈도나 쉬는 방식 같은 작은 규칙으로",
+       "kind": "REEL"
+      }
+     ],
+     "time": "19:00"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "수성이 거꾸로 가는 날 2027, 딱 세 번과 불의 삼합 달",
+     "series": "SEASON",
+     "sys": "A+S",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "수성이 거꾸로 가는 날 2027, 딱 세 번과 불의 삼합 달",
+     "series": "SEASON",
+     "sys": "A+S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "20:30",
+       "title": "후회는 쓴 돈보다 쓴 이유에서 올 수 있어요. 설렐 때, 기분이 흔들릴 때, 참다가 한 번에 쓸 때 후회의 ",
+       "kind": "POST"
+      }
+     ],
+     "time": "20:30"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "태어난 시간을 모르면, 시간 없이 볼 수 있는 풀이와 못 보는 풀이",
+     "series": "INFO",
+     "sys": "S+Z",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "NEW",
+     "theme": "전날 글을 클립으로: 2027년 말띠 운세, 육합이 되는 해 힘 쓸 달과 아낄 달 ",
+     "time": "저녁(앱에서 직접)",
+     "src": "2027년 말띠 운세, 육합이 되는 해 힘 쓸 달과 아낄 달 총정리"
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-07",
+   "wd": "토",
+   "flag": "z",
+   "themes": {
+    "M": {
+     "title": "2027 양띠 운세, 내 띠가 돌아오는 해",
+     "series": "ZODIAC12",
+     "sys": "S"
+    },
+    "E": {
+     "title": "도화살 뜻과 연애운, 도화가 있으면 인기가 많을까",
+     "series": "INFO",
+     "sys": "S"
+    },
+    "D": {
+     "title": "입동 전후에 태어난 사람은 몇 %일까",
+     "series": "DATA",
+     "sys": "S"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "도화살 뜻과 연애운, 도화가 있으면 인기가 많을까",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "E",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "n63",
+      "title": "입동 뜻과 시기 2026, 입동 전에 태어났다면 사주의 달이 달라요",
+      "pub": "2026-11-01"
+     }
+    },
+    "B21": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "blog",
+       "locked": true,
+       "t": "21:00",
+       "title": "2027년 양띠 운세",
+       "id": "n04"
+      }
+     ],
+     "time": "21:00"
+    },
+    "P08": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "08:00",
+       "title": "내 띠가 돌아오는 해, 제자리 같아도 괜찮아요",
+       "kind": "POST"
+      }
+     ],
+     "time": "08:00"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "도화살 뜻과 연애운, 도화가 있으면 인기가 많을까",
+     "series": "INFO",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "12:00",
+       "title": "내 띠가 돌아오는 해, 제자리 같아도 괜찮아요",
+       "kind": "TRIAL_REEL"
+      }
+     ],
+     "time": "12:00"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "입동 전후에 태어난 사람은 몇 %일까",
+     "series": "DATA",
+     "sys": "S",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "08:00",
+       "title": "내 띠가 돌아오는 해, 제자리 같아도 괜찮아요",
+       "kind": "POST"
+      }
+     ],
+     "time": "08:00"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "2027 양띠 운세, 내 띠가 돌아오는 해",
+     "series": "ZODIAC12",
+     "sys": "S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "입동 전후에 태어난 사람은 몇 %일까",
+     "series": "DATA",
+     "sys": "S",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "도화살 뜻과 연애운, 도화가 있으면 인기가 많을까",
+     "series": "INFO",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "COVERED",
+     "note": "클립은 주 4편(월·수·금·일)만 올려요. 대표가 폰 앱에서 직접 올리는 일이라 매일은 하지 않아요"
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-08",
+   "wd": "일",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "화개살 뜻, 혼자 있는 시간이 필요한 사주",
+     "series": "INFO",
+     "sys": "S"
+    },
+    "E": {
+     "title": "당사주 열두 별 뜻 한눈에, 천복성·천수성부터",
+     "series": "INFO",
+     "sys": "D"
+    },
+    "D": {
+     "title": "혼자 충전이 필요한 사람의 한 주",
+     "series": "CARE",
+     "sys": "X"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "화개살 뜻, 혼자 있는 시간이 필요한 사주",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "n63",
+      "title": "입동 뜻과 시기 2026, 입동 전에 태어났다면 사주의 달이 달라요",
+      "pub": "2026-11-01"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "당사주 열두 별 뜻 한눈에, 천복성·천수성부터",
+     "series": "INFO",
+     "sys": "D",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "D"
+     ],
+     "related": {
+      "id": "n40",
+      "title": "가족 모임 뒤 유독 지치는 사람의 공통점, 당사주 네 칸과 사주로 보는 ",
+      "pub": "2026-10-25"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "화개살 뜻, 혼자 있는 시간이 필요한 사주",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "당사주 열두 별 뜻 한눈에, 천복성·천수성부터",
+     "series": "INFO",
+     "sys": "D",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "화개살 뜻, 혼자 있는 시간이 필요한 사주",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "19:00",
+       "title": "혼자 충전이 필요한 사람이 이번 주에 해 볼 세 가지예요. 약속 사이에 쉬는 시간을 먼저 넣고, 취소는 미리",
+       "kind": "REEL"
+      }
+     ],
+     "time": "19:00"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "화개살 뜻, 혼자 있는 시간이 필요한 사주",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "화개살 뜻, 혼자 있는 시간이 필요한 사주",
+     "series": "INFO",
+     "sys": "S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "20:30",
+       "title": "퇴근 뒤에 아무것도 하기 싫은 건 게으름이 아니라 에너지를 쓴 방식에 따라 달라지는 피로예요. 퇴근 뒤 30",
+       "kind": "POST"
+      }
+     ],
+     "time": "20:30"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "당사주 열두 별 뜻 한눈에, 천복성·천수성부터",
+     "series": "INFO",
+     "sys": "D",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "NEW",
+     "theme": "전날 글을 클립으로: 2027년 양띠 운세",
+     "time": "저녁(앱에서 직접)",
+     "src": "2027년 양띠 운세"
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-09",
+   "wd": "월",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "신월에 계획 세우는 법, 별자리와 사주로 한 줄",
+     "series": "SEASON",
+     "sys": "A+S"
+    },
+    "E": {
+     "title": "2027년 불의 별자리 3개, 양·사자·사수",
+     "series": "INFO",
+     "sys": "A"
+    },
+    "D": {
+     "title": "신월·보름달에 태어난 사람은 몇 %일까",
+     "series": "DATA",
+     "sys": "A"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "신월에 계획 세우는 법, 별자리와 사주로 한 줄",
+     "series": "SEASON",
+     "sys": "A+S",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "A",
+      "S"
+     ],
+     "related": {
+      "id": "c1106B12",
+      "title": "수성이 거꾸로 가는 날 2027, 딱 세 번과 불의 삼합 달",
+      "pub": "2026-11-06"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "2027년 불의 별자리 3개, 양·사자·사수",
+     "series": "INFO",
+     "sys": "A",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "A"
+     ],
+     "related": {
+      "id": "c1106B12",
+      "title": "수성이 거꾸로 가는 날 2027, 딱 세 번과 불의 삼합 달",
+      "pub": "2026-11-06"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "신월에 계획 세우는 법, 별자리와 사주로 한 줄",
+     "series": "SEASON",
+     "sys": "A+S",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "2027년 불의 별자리 3개, 양·사자·사수",
+     "series": "INFO",
+     "sys": "A",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "신월에 계획 세우는 법, 별자리와 사주로 한 줄",
+     "series": "SEASON",
+     "sys": "A+S",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "신월·보름달에 태어난 사람은 몇 %일까",
+     "series": "DATA",
+     "sys": "A",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "신월에 계획 세우는 법, 별자리와 사주로 한 줄",
+     "series": "SEASON",
+     "sys": "A+S",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "신월에 계획 세우는 법, 별자리와 사주로 한 줄",
+     "series": "SEASON",
+     "sys": "A+S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "20:30",
+       "title": "가면은 거짓이 아니라 상황에 맞는 모습을 꺼내는 방식, 나를 지키는 방식일 수 있어요. 속마음은 한 사람에게",
+       "kind": "POST"
+      }
+     ],
+     "time": "20:30"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "2027년 불의 별자리 3개, 양·사자·사수",
+     "series": "INFO",
+     "sys": "A",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "NEW",
+     "theme": "전날 글을 클립으로: (전날 글 확정 후)",
+     "time": "저녁(앱에서 직접)",
+     "src": null
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-10",
+   "wd": "화",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "신년운세 보는 법, 사주·별자리·숫자로 2027 준비",
+     "series": "INFO",
+     "sys": "X"
+    },
+    "E": {
+     "title": "하락이수 괘 읽는 법, 상괘와 하괘",
+     "series": "INFO",
+     "sys": "H"
+    },
+    "D": {
+     "title": "내 자미두수 신궁에는 어떤 별이 있을까",
+     "series": "DATA",
+     "sys": "Z"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "신년운세 보는 법, 사주·별자리·숫자로 2027 준비",
+     "series": "INFO",
+     "sys": "X",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "A",
+      "N",
+      "S"
+     ],
+     "related": {
+      "id": "c1104B21",
+      "title": "2027 신년 감정서에는 무엇이 들어 있나",
+      "pub": "2026-11-04"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "하락이수 괘 읽는 법, 상괘와 하괘",
+     "series": "INFO",
+     "sys": "H",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "H"
+     ],
+     "related": {
+      "id": "n44",
+      "title": "결정을 자꾸 미루는 사람의 공통점, 육효 질문과 하락이수로 보는 망설임",
+      "pub": "2026-10-29"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "신년운세 보는 법, 사주·별자리·숫자로 2027 준비",
+     "series": "INFO",
+     "sys": "X",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "하락이수 괘 읽는 법, 상괘와 하괘",
+     "series": "INFO",
+     "sys": "H",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "신년운세 보는 법, 사주·별자리·숫자로 2027 준비",
+     "series": "INFO",
+     "sys": "X",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "내 자미두수 신궁에는 어떤 별이 있을까",
+     "series": "DATA",
+     "sys": "Z",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "신년운세 보는 법, 사주·별자리·숫자로 2027 준비",
+     "series": "INFO",
+     "sys": "X",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "신년운세 보는 법, 사주·별자리·숫자로 2027 준비",
+     "series": "INFO",
+     "sys": "X",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "내 자미두수 신궁에는 어떤 별이 있을까",
+     "series": "DATA",
+     "sys": "Z",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "하락이수 괘 읽는 법, 상괘와 하괘",
+     "series": "INFO",
+     "sys": "H",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "COVERED",
+     "note": "클립은 주 4편(월·수·금·일)만 올려요. 대표가 폰 앱에서 직접 올리는 일이라 매일은 하지 않아요"
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-11",
+   "wd": "수",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "연락은 먼저 하는 쪽, 기다리는 쪽",
+     "series": "LOVE",
+     "sys": "X"
+    },
+    "E": {
+     "title": "육효 질문법, 어떤 질문이 좋은 질문일까",
+     "series": "PRODUCT",
+     "sys": "Y"
+    },
+    "D": {
+     "title": "빼빼로데이 연애 케미 체험",
+     "series": "TEST",
+     "sys": "X"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "연락은 먼저 하는 쪽, 기다리는 쪽",
+     "series": "LOVE",
+     "sys": "X",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "A",
+      "N",
+      "S"
+     ],
+     "related": {
+      "id": "c1110B12",
+      "title": "신년운세 보는 법, 사주·별자리·숫자로 2027 준비",
+      "pub": "2026-11-10"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "육효 질문법, 어떤 질문이 좋은 질문일까",
+     "series": "PRODUCT",
+     "sys": "Y",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "Y"
+     ],
+     "related": {
+      "id": "n56",
+      "title": "주역 64괘 조견표, 동전 3개로 내 괘 찾는 법 (8괘 한 장)",
+      "pub": "2026-10-26"
+     }
+    },
+    "R08": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "08:00",
+       "title": "내 하락이수 괘는 흔한 괘일까요, 드문 괘일까요?",
+       "kind": "REEL"
+      }
+     ],
+     "time": "08:00"
+    },
+    "P08": {
+     "status": "COVERED",
+     "note": "아침 릴스가 이미 있어 아침 캐러셀은 건너뜀(인스타 하루 4개 이하)"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "육효 질문법, 어떤 질문이 좋은 질문일까",
+     "series": "PRODUCT",
+     "sys": "Y",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "연락은 먼저 하는 쪽, 기다리는 쪽",
+     "series": "LOVE",
+     "sys": "X",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "빼빼로데이 연애 케미 체험",
+     "series": "TEST",
+     "sys": "X",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "08:30",
+       "title": "내 하락이수 괘는 흔한 괘일까요, 드문 괘일까요?",
+       "kind": "POST"
+      }
+     ],
+     "time": "08:30"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "연락은 먼저 하는 쪽, 기다리는 쪽",
+     "series": "LOVE",
+     "sys": "X",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "20:30",
+       "title": "궁합은 한 가지 풀이로만 보면 한쪽 이야기만 듣게 돼요. 사주·별자리·숫자 중 몇 개가 맞는지 세어 보세요.",
+       "kind": "POST"
+      }
+     ],
+     "time": "20:30"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "육효 질문법, 어떤 질문이 좋은 질문일까",
+     "series": "PRODUCT",
+     "sys": "Y",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "NEW",
+     "theme": "전날 글을 클립으로: (전날 글 확정 후)",
+     "time": "저녁(앱에서 직접)",
+     "src": null
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-12",
+   "wd": "목",
+   "flag": "z",
+   "themes": {
+    "M": {
+     "title": "2027 닭띠 운세",
+     "series": "ZODIAC12",
+     "sys": "S"
+    },
+    "E": {
+     "title": "별자리 원소 궁합, 불·흙·공기·물",
+     "series": "INFO",
+     "sys": "A"
+    },
+    "D": {
+     "title": "생일 숫자와 띠, 가장 흔한 짝은",
+     "series": "DATA",
+     "sys": "N+S"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "별자리 원소 궁합, 불·흙·공기·물",
+     "series": "INFO",
+     "sys": "A",
+     "time": "12:00",
+     "group": "E",
+     "sysset": [
+      "A"
+     ],
+     "related": {
+      "id": "c1111B12",
+      "title": "연락은 먼저 하는 쪽, 기다리는 쪽",
+      "pub": "2026-11-11"
+     }
+    },
+    "B21": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "blog",
+       "locked": true,
+       "t": "21:00",
+       "title": "2027년 닭띠 운세, 실력으로 인정받는 해 힘 쓸 달과 아낄 달 총정리",
+       "id": "n68"
+      }
+     ],
+     "time": "21:00"
+    },
+    "P08": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "08:00",
+       "title": "꼼꼼함이 드디어 인정받는 해",
+       "kind": "POST"
+      }
+     ],
+     "time": "08:00"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "별자리 원소 궁합, 불·흙·공기·물",
+     "series": "INFO",
+     "sys": "A",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "12:00",
+       "title": "꼼꼼함이 드디어 인정받는 해",
+       "kind": "TRIAL_REEL"
+      }
+     ],
+     "time": "12:00"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "생일 숫자와 띠, 가장 흔한 짝은",
+     "series": "DATA",
+     "sys": "N+S",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "08:00",
+       "title": "꼼꼼함이 드디어 인정받는 해",
+       "kind": "POST"
+      }
+     ],
+     "time": "08:00"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "2027 닭띠 운세",
+     "series": "ZODIAC12",
+     "sys": "S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "20:30",
+       "title": "연애할 때 먼저 식는 쪽이 늘 나라면 타고난 불이 셀 수 있어요. 사주·별자리·숫자 중 몇 개 겹치나요?",
+       "kind": "POST"
+      }
+     ],
+     "time": "20:30"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "별자리 원소 궁합, 불·흙·공기·물",
+     "series": "INFO",
+     "sys": "A",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "COVERED",
+     "note": "클립은 주 4편(월·수·금·일)만 올려요. 대표가 폰 앱에서 직접 올리는 일이라 매일은 하지 않아요"
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-13",
+   "wd": "금",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "오행 뜻 한눈에, 내 오행 찾는 법",
+     "series": "INFO",
+     "sys": "S"
+    },
+    "E": {
+     "title": "십성으로 보는 연애, 관성과 재성",
+     "series": "INFO",
+     "sys": "S"
+    },
+    "D": {
+     "title": "내 일주는 60개 중 흔한 쪽일까",
+     "series": "DATA",
+     "sys": "S"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "오행 뜻 한눈에, 내 오행 찾는 법",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "n68",
+      "title": "2027년 닭띠 운세, 실력으로 인정받는 해 힘 쓸 달과 아낄 달 총정리",
+      "pub": "2026-11-12"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "십성으로 보는 연애, 관성과 재성",
+     "series": "INFO",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "n68",
+      "title": "2027년 닭띠 운세, 실력으로 인정받는 해 힘 쓸 달과 아낄 달 총정리",
+      "pub": "2026-11-12"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "오행 뜻 한눈에, 내 오행 찾는 법",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "십성으로 보는 연애, 관성과 재성",
+     "series": "INFO",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "오행 뜻 한눈에, 내 오행 찾는 법",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "내 일주는 60개 중 흔한 쪽일까",
+     "series": "DATA",
+     "sys": "S",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "오행 뜻 한눈에, 내 오행 찾는 법",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "오행 뜻 한눈에, 내 오행 찾는 법",
+     "series": "INFO",
+     "sys": "S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "내 일주는 60개 중 흔한 쪽일까",
+     "series": "DATA",
+     "sys": "S",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "십성으로 보는 연애, 관성과 재성",
+     "series": "INFO",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "NEW",
+     "theme": "전날 글을 클립으로: 2027년 닭띠 운세, 실력으로 인정받는 해 힘 쓸 달과 아낄",
+     "time": "저녁(앱에서 직접)",
+     "src": "2027년 닭띠 운세, 실력으로 인정받는 해 힘 쓸 달과 아낄 달 총정리"
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-14",
+   "wd": "토",
+   "flag": "z",
+   "themes": {
+    "M": {
+     "title": "2027 쥐띠 운세, 돼지띠 운세",
+     "series": "ZODIAC12",
+     "sys": "S"
+    },
+    "E": {
+     "title": "수성이 순행으로 돌아와요, 다시 시작하기 좋은 일",
+     "series": "SEASON",
+     "sys": "A"
+    },
+    "D": {
+     "title": "내 생일에 수성은 거꾸로 가고 있었을까",
+     "series": "DATA",
+     "sys": "A"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "수성이 순행으로 돌아와요, 다시 시작하기 좋은 일",
+     "series": "SEASON",
+     "sys": "A",
+     "time": "12:00",
+     "group": "E",
+     "sysset": [
+      "A"
+     ],
+     "related": {
+      "id": "c1112B12",
+      "title": "별자리 원소 궁합, 불·흙·공기·물",
+      "pub": "2026-11-12"
+     }
+    },
+    "B21": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "blog",
+       "locked": true,
+       "t": "21:00",
+       "title": "2027년 쥐띠 운세, 오해를 줄이는 해 힘 쓸 달과 아낄 달 총정리",
+       "id": "n69"
+      }
+     ],
+     "time": "21:00"
+    },
+    "P08": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "08:00",
+       "title": "2027년, 돈은 들어오는데 마음이 상하는 사람",
+       "kind": "POST"
+      }
+     ],
+     "time": "08:00"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "수성이 순행으로 돌아와요, 다시 시작하기 좋은 일",
+     "series": "SEASON",
+     "sys": "A",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "12:00",
+       "title": "2027년, 돈은 들어오는데 마음이 상하는 사람",
+       "kind": "TRIAL_REEL"
+      }
+     ],
+     "time": "12:00"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "내 생일에 수성은 거꾸로 가고 있었을까",
+     "series": "DATA",
+     "sys": "A",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "08:00",
+       "title": "2027년, 돈은 들어오는데 마음이 상하는 사람",
+       "kind": "POST"
+      }
+     ],
+     "time": "08:00"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "2027 쥐띠 운세, 돼지띠 운세",
+     "series": "ZODIAC12",
+     "sys": "S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "20:30",
+       "title": "한 가지 풀이가 안 맞는다고 걱정할 필요는 없어요. 안 맞는 곳은 연락 빈도나 쉬는 방식 같은 작은 규칙으로",
+       "kind": "POST"
+      }
+     ],
+     "time": "20:30"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "수성이 순행으로 돌아와요, 다시 시작하기 좋은 일",
+     "series": "SEASON",
+     "sys": "A",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "COVERED",
+     "note": "클립은 주 4편(월·수·금·일)만 올려요. 대표가 폰 앱에서 직접 올리는 일이라 매일은 하지 않아요"
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-15",
+   "wd": "일",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "토정비결이란, 사주와 무엇이 다를까",
+     "series": "INFO",
+     "sys": "S+Y"
+    },
+    "E": {
+     "title": "사주와 별자리가 같은 말을 할 때, 다른 말을 할 때",
+     "series": "CROSS",
+     "sys": "X"
+    },
+    "D": {
+     "title": "같은 질문을 두 번 던지면 같은 괘가 나올까",
+     "series": "DATA",
+     "sys": "Y"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "토정비결이란, 사주와 무엇이 다를까",
+     "series": "INFO",
+     "sys": "S+Y",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "S",
+      "Y"
+     ],
+     "related": {
+      "id": "n39",
+      "title": "연락을 기다리다 지치는 사람의 공통점, 육효 질문과 사주로 보는 기다림",
+      "pub": "2026-10-24"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "사주와 별자리가 같은 말을 할 때, 다른 말을 할 때",
+     "series": "CROSS",
+     "sys": "X",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "A",
+      "N",
+      "S"
+     ],
+     "related": {
+      "id": "c1111B12",
+      "title": "연락은 먼저 하는 쪽, 기다리는 쪽",
+      "pub": "2026-11-11"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "토정비결이란, 사주와 무엇이 다를까",
+     "series": "INFO",
+     "sys": "S+Y",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "사주와 별자리가 같은 말을 할 때, 다른 말을 할 때",
+     "series": "CROSS",
+     "sys": "X",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "토정비결이란, 사주와 무엇이 다를까",
+     "series": "INFO",
+     "sys": "S+Y",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "같은 질문을 두 번 던지면 같은 괘가 나올까",
+     "series": "DATA",
+     "sys": "Y",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "토정비결이란, 사주와 무엇이 다를까",
+     "series": "INFO",
+     "sys": "S+Y",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "토정비결이란, 사주와 무엇이 다를까",
+     "series": "INFO",
+     "sys": "S+Y",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "LOCKED",
+     "items": [
+      {
+       "src": "sns",
+       "locked": true,
+       "t": "20:30",
+       "title": "혼자 충전이 필요한 사람이 이번 주에 해 볼 세 가지예요. 약속 사이에 쉬는 시간을 먼저 넣고, 취소는 미리",
+       "kind": "POST"
+      }
+     ],
+     "time": "20:30"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "사주와 별자리가 같은 말을 할 때, 다른 말을 할 때",
+     "series": "CROSS",
+     "sys": "X",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "NEW",
+     "theme": "전날 글을 클립으로: 2027년 쥐띠 운세, 오해를 줄이는 해 힘 쓸 달과 아낄 달",
+     "time": "저녁(앱에서 직접)",
+     "src": "2027년 쥐띠 운세, 오해를 줄이는 해 힘 쓸 달과 아낄 달 총정리"
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-16",
+   "wd": "월",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "2027년 재물운이 오는 사주 신호",
+     "series": "INFO",
+     "sys": "S"
+    },
+    "E": {
+     "title": "2027년 흙의 별자리 3개, 황소·처녀·염소",
+     "series": "INFO",
+     "sys": "A"
+    },
+    "D": {
+     "title": "내 하락이수 괘는 어느 쪽이 흔할까",
+     "series": "DATA",
+     "sys": "H"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "2027년 재물운이 오는 사주 신호",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "c1115B12",
+      "title": "토정비결이란, 사주와 무엇이 다를까",
+      "pub": "2026-11-15"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "2027년 흙의 별자리 3개, 황소·처녀·염소",
+     "series": "INFO",
+     "sys": "A",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "A"
+     ],
+     "related": {
+      "id": "c1115B21",
+      "title": "사주와 별자리가 같은 말을 할 때, 다른 말을 할 때",
+      "pub": "2026-11-15"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "2027년 재물운이 오는 사주 신호",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "2027년 흙의 별자리 3개, 황소·처녀·염소",
+     "series": "INFO",
+     "sys": "A",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "2027년 재물운이 오는 사주 신호",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "내 하락이수 괘는 어느 쪽이 흔할까",
+     "series": "DATA",
+     "sys": "H",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "2027년 재물운이 오는 사주 신호",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "2027년 재물운이 오는 사주 신호",
+     "series": "INFO",
+     "sys": "S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "내 하락이수 괘는 어느 쪽이 흔할까",
+     "series": "DATA",
+     "sys": "H",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "2027년 흙의 별자리 3개, 황소·처녀·염소",
+     "series": "INFO",
+     "sys": "A",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "NEW",
+     "theme": "전날 글을 클립으로: (전날 글 확정 후)",
+     "time": "저녁(앱에서 직접)",
+     "src": null
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-17",
+   "wd": "화",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "이직운 사주로 보는 법, 옮길 때와 버틸 때",
+     "series": "INFO",
+     "sys": "S"
+    },
+    "E": {
+     "title": "수비학 2027, 내 숫자별 한 해 흐름",
+     "series": "INFO",
+     "sys": "N"
+    },
+    "D": {
+     "title": "손없는날은 한 달에 몇 번일까",
+     "series": "DATA",
+     "sys": "S"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "이직운 사주로 보는 법, 옮길 때와 버틸 때",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "c1116B12",
+      "title": "2027년 재물운이 오는 사주 신호",
+      "pub": "2026-11-16"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "수비학 2027, 내 숫자별 한 해 흐름",
+     "series": "INFO",
+     "sys": "N",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "N"
+     ],
+     "related": {
+      "id": "n70",
+      "title": "생일 숫자로 보는 연애 스타일, 내 숫자 한 줄 풀이",
+      "pub": "2026-11-04"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "이직운 사주로 보는 법, 옮길 때와 버틸 때",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "수비학 2027, 내 숫자별 한 해 흐름",
+     "series": "INFO",
+     "sys": "N",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "이직운 사주로 보는 법, 옮길 때와 버틸 때",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "손없는날은 한 달에 몇 번일까",
+     "series": "DATA",
+     "sys": "S",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "이직운 사주로 보는 법, 옮길 때와 버틸 때",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "이직운 사주로 보는 법, 옮길 때와 버틸 때",
+     "series": "INFO",
+     "sys": "S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "손없는날은 한 달에 몇 번일까",
+     "series": "DATA",
+     "sys": "S",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "수비학 2027, 내 숫자별 한 해 흐름",
+     "series": "INFO",
+     "sys": "N",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "COVERED",
+     "note": "클립은 주 4편(월·수·금·일)만 올려요. 대표가 폰 앱에서 직접 올리는 일이라 매일은 하지 않아요"
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-18",
+   "wd": "수",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "수능 전날 부모 체크리스트, 컨디션 한 줄",
+     "series": "SEASON",
+     "sys": "S"
+    },
+    "E": {
+     "title": "대운 보는 법, 10년 단위 흐름 쉬운 말로",
+     "series": "INFO",
+     "sys": "S"
+    },
+    "D": {
+     "title": "수능날 일진과 내 일간의 관계",
+     "series": "TEST",
+     "sys": "S"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "수능 전날 부모 체크리스트, 컨디션 한 줄",
+     "series": "SEASON",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "c1117B12",
+      "title": "이직운 사주로 보는 법, 옮길 때와 버틸 때",
+      "pub": "2026-11-17"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "대운 보는 법, 10년 단위 흐름 쉬운 말로",
+     "series": "INFO",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "c1117B12",
+      "title": "이직운 사주로 보는 법, 옮길 때와 버틸 때",
+      "pub": "2026-11-17"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "수능 전날 부모 체크리스트, 컨디션 한 줄",
+     "series": "SEASON",
+     "sys": "S",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "대운 보는 법, 10년 단위 흐름 쉬운 말로",
+     "series": "INFO",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "수능 전날 부모 체크리스트, 컨디션 한 줄",
+     "series": "SEASON",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "수능날 일진과 내 일간의 관계",
+     "series": "TEST",
+     "sys": "S",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "수능 전날 부모 체크리스트, 컨디션 한 줄",
+     "series": "SEASON",
+     "sys": "S",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "수능 전날 부모 체크리스트, 컨디션 한 줄",
+     "series": "SEASON",
+     "sys": "S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "수능날 일진과 내 일간의 관계",
+     "series": "TEST",
+     "sys": "S",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "대운 보는 법, 10년 단위 흐름 쉬운 말로",
+     "series": "INFO",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "NEW",
+     "theme": "전날 글을 클립으로: (전날 글 확정 후)",
+     "time": "저녁(앱에서 직접)",
+     "src": null
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-19",
+   "wd": "목",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "자미두수 재백궁·관록궁, 돈과 일 읽는 법",
+     "series": "INFO",
+     "sys": "Z"
+    },
+    "E": {
+     "title": "수능 날 밤, 마음이 가라앉지 않는 부모와 수험생",
+     "series": "CARE",
+     "sys": "N"
+    },
+    "D": {
+     "title": "숫자별 긴장 푸는 한마디",
+     "series": "TEST",
+     "sys": "N"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "자미두수 재백궁·관록궁, 돈과 일 읽는 법",
+     "series": "INFO",
+     "sys": "Z",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "Z"
+     ],
+     "related": {
+      "id": "c1106B21",
+      "title": "태어난 시간을 모르면, 시간 없이 볼 수 있는 풀이와 못 보는 풀이",
+      "pub": "2026-11-06"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "수능 날 밤, 마음이 가라앉지 않는 부모와 수험생",
+     "series": "CARE",
+     "sys": "N",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "N"
+     ],
+     "related": {
+      "id": "n70",
+      "title": "생일 숫자로 보는 연애 스타일, 내 숫자 한 줄 풀이",
+      "pub": "2026-11-04"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "자미두수 재백궁·관록궁, 돈과 일 읽는 법",
+     "series": "INFO",
+     "sys": "Z",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "수능 날 밤, 마음이 가라앉지 않는 부모와 수험생",
+     "series": "CARE",
+     "sys": "N",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "자미두수 재백궁·관록궁, 돈과 일 읽는 법",
+     "series": "INFO",
+     "sys": "Z",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "숫자별 긴장 푸는 한마디",
+     "series": "TEST",
+     "sys": "N",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "자미두수 재백궁·관록궁, 돈과 일 읽는 법",
+     "series": "INFO",
+     "sys": "Z",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "자미두수 재백궁·관록궁, 돈과 일 읽는 법",
+     "series": "INFO",
+     "sys": "Z",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "숫자별 긴장 푸는 한마디",
+     "series": "TEST",
+     "sys": "N",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "수능 날 밤, 마음이 가라앉지 않는 부모와 수험생",
+     "series": "CARE",
+     "sys": "N",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "COVERED",
+     "note": "클립은 주 4편(월·수·금·일)만 올려요. 대표가 폰 앱에서 직접 올리는 일이라 매일은 하지 않아요"
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-20",
+   "wd": "금",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "수능 끝난 뒤 허전함, 오행별로 쉬는 법",
+     "series": "CARE",
+     "sys": "S"
+    },
+    "E": {
+     "title": "자미두수 부처궁으로 보는 연애",
+     "series": "INFO",
+     "sys": "Z"
+    },
+    "D": {
+     "title": "내 자미두수 명궁 주성은 흔할까",
+     "series": "DATA",
+     "sys": "Z"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "수능 끝난 뒤 허전함, 오행별로 쉬는 법",
+     "series": "CARE",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "c1118B12",
+      "title": "수능 전날 부모 체크리스트, 컨디션 한 줄",
+      "pub": "2026-11-18"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "자미두수 부처궁으로 보는 연애",
+     "series": "INFO",
+     "sys": "Z",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "Z"
+     ],
+     "related": {
+      "id": "c1119B12",
+      "title": "자미두수 재백궁·관록궁, 돈과 일 읽는 법",
+      "pub": "2026-11-19"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "수능 끝난 뒤 허전함, 오행별로 쉬는 법",
+     "series": "CARE",
+     "sys": "S",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "자미두수 부처궁으로 보는 연애",
+     "series": "INFO",
+     "sys": "Z",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "수능 끝난 뒤 허전함, 오행별로 쉬는 법",
+     "series": "CARE",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "내 자미두수 명궁 주성은 흔할까",
+     "series": "DATA",
+     "sys": "Z",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "수능 끝난 뒤 허전함, 오행별로 쉬는 법",
+     "series": "CARE",
+     "sys": "S",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "수능 끝난 뒤 허전함, 오행별로 쉬는 법",
+     "series": "CARE",
+     "sys": "S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "내 자미두수 명궁 주성은 흔할까",
+     "series": "DATA",
+     "sys": "Z",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "자미두수 부처궁으로 보는 연애",
+     "series": "INFO",
+     "sys": "Z",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "NEW",
+     "theme": "전날 글을 클립으로: (전날 글 확정 후)",
+     "time": "저녁(앱에서 직접)",
+     "src": null
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-21",
+   "wd": "토",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "무료 당사주와 사주, 어떤 걸 먼저 볼까",
+     "series": "INFO",
+     "sys": "D+S"
+    },
+    "E": {
+     "title": "오행별로 다른 연애할 때 말투",
+     "series": "LOVE",
+     "sys": "S"
+    },
+    "D": {
+     "title": "내 당사주 중심별은 흔할까",
+     "series": "DATA",
+     "sys": "D"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "무료 당사주와 사주, 어떤 걸 먼저 볼까",
+     "series": "INFO",
+     "sys": "D+S",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "D",
+      "S"
+     ],
+     "related": {
+      "id": "n40",
+      "title": "가족 모임 뒤 유독 지치는 사람의 공통점, 당사주 네 칸과 사주로 보는 ",
+      "pub": "2026-10-25"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "오행별로 다른 연애할 때 말투",
+     "series": "LOVE",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "c1120B12",
+      "title": "수능 끝난 뒤 허전함, 오행별로 쉬는 법",
+      "pub": "2026-11-20"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "무료 당사주와 사주, 어떤 걸 먼저 볼까",
+     "series": "INFO",
+     "sys": "D+S",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "오행별로 다른 연애할 때 말투",
+     "series": "LOVE",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "무료 당사주와 사주, 어떤 걸 먼저 볼까",
+     "series": "INFO",
+     "sys": "D+S",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "내 당사주 중심별은 흔할까",
+     "series": "DATA",
+     "sys": "D",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "무료 당사주와 사주, 어떤 걸 먼저 볼까",
+     "series": "INFO",
+     "sys": "D+S",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "무료 당사주와 사주, 어떤 걸 먼저 볼까",
+     "series": "INFO",
+     "sys": "D+S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "내 당사주 중심별은 흔할까",
+     "series": "DATA",
+     "sys": "D",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "오행별로 다른 연애할 때 말투",
+     "series": "LOVE",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "COVERED",
+     "note": "클립은 주 4편(월·수·금·일)만 올려요. 대표가 폰 앱에서 직접 올리는 일이라 매일은 하지 않아요"
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-22",
+   "wd": "일",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "사수자리 성격과 2027년 운세, 별자리와 사주로",
+     "series": "INFO",
+     "sys": "A+S"
+    },
+    "E": {
+     "title": "소설 뜻과 절기 이야기, 겨울 앞에서",
+     "series": "SEASON",
+     "sys": "S"
+    },
+    "D": {
+     "title": "사수자리 시즌에 태어난 사람의 일간",
+     "series": "DATA",
+     "sys": "A+S"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "사수자리 성격과 2027년 운세, 별자리와 사주로",
+     "series": "INFO",
+     "sys": "A+S",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "A",
+      "S"
+     ],
+     "related": {
+      "id": "c1115B21",
+      "title": "사주와 별자리가 같은 말을 할 때, 다른 말을 할 때",
+      "pub": "2026-11-15"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "소설 뜻과 절기 이야기, 겨울 앞에서",
+     "series": "SEASON",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "c1121B12",
+      "title": "무료 당사주와 사주, 어떤 걸 먼저 볼까",
+      "pub": "2026-11-21"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "사수자리 성격과 2027년 운세, 별자리와 사주로",
+     "series": "INFO",
+     "sys": "A+S",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "소설 뜻과 절기 이야기, 겨울 앞에서",
+     "series": "SEASON",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "사수자리 성격과 2027년 운세, 별자리와 사주로",
+     "series": "INFO",
+     "sys": "A+S",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "사수자리 시즌에 태어난 사람의 일간",
+     "series": "DATA",
+     "sys": "A+S",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "사수자리 성격과 2027년 운세, 별자리와 사주로",
+     "series": "INFO",
+     "sys": "A+S",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "사수자리 성격과 2027년 운세, 별자리와 사주로",
+     "series": "INFO",
+     "sys": "A+S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "사수자리 시즌에 태어난 사람의 일간",
+     "series": "DATA",
+     "sys": "A+S",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "소설 뜻과 절기 이야기, 겨울 앞에서",
+     "series": "SEASON",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "NEW",
+     "theme": "전날 글을 클립으로: (전날 글 확정 후)",
+     "time": "저녁(앱에서 직접)",
+     "src": null
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-23",
+   "wd": "월",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "재회를 사주로 볼 수 있을까",
+     "series": "INFO",
+     "sys": "S"
+    },
+    "E": {
+     "title": "2027 신년 감정서 샘플 보기, 12개월 달력과 근거",
+     "series": "PRODUCT",
+     "sys": "X"
+    },
+    "D": {
+     "title": "사주와 별자리가 같은 말을 하는 비율",
+     "series": "DATA",
+     "sys": "X"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "재회를 사주로 볼 수 있을까",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "c1122B12",
+      "title": "사수자리 성격과 2027년 운세, 별자리와 사주로",
+      "pub": "2026-11-22"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "2027 신년 감정서 샘플 보기, 12개월 달력과 근거",
+     "series": "PRODUCT",
+     "sys": "X",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "A",
+      "N",
+      "S"
+     ],
+     "related": {
+      "id": "c1115B21",
+      "title": "사주와 별자리가 같은 말을 할 때, 다른 말을 할 때",
+      "pub": "2026-11-15"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "재회를 사주로 볼 수 있을까",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "2027 신년 감정서 샘플 보기, 12개월 달력과 근거",
+     "series": "PRODUCT",
+     "sys": "X",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "재회를 사주로 볼 수 있을까",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "사주와 별자리가 같은 말을 하는 비율",
+     "series": "DATA",
+     "sys": "X",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "재회를 사주로 볼 수 있을까",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "재회를 사주로 볼 수 있을까",
+     "series": "INFO",
+     "sys": "S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "사주와 별자리가 같은 말을 하는 비율",
+     "series": "DATA",
+     "sys": "X",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "2027 신년 감정서 샘플 보기, 12개월 달력과 근거",
+     "series": "PRODUCT",
+     "sys": "X",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "NEW",
+     "theme": "전날 글을 클립으로: (전날 글 확정 후)",
+     "time": "저녁(앱에서 직접)",
+     "src": null
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-24",
+   "wd": "화",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "보름달 밤, 올해 마무리 점검 5분",
+     "series": "SEASON",
+     "sys": "A"
+    },
+    "E": {
+     "title": "2027 불 일간(병·정) 운세",
+     "series": "INFO",
+     "sys": "S"
+    },
+    "D": {
+     "title": "보름달 밤 육효 한 질문",
+     "series": "TEST",
+     "sys": "Y"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "보름달 밤, 올해 마무리 점검 5분",
+     "series": "SEASON",
+     "sys": "A",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "A"
+     ],
+     "related": {
+      "id": "c1123B21",
+      "title": "2027 신년 감정서 샘플 보기, 12개월 달력과 근거",
+      "pub": "2026-11-23"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "2027 불 일간(병·정) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "c1123B12",
+      "title": "재회를 사주로 볼 수 있을까",
+      "pub": "2026-11-23"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "보름달 밤, 올해 마무리 점검 5분",
+     "series": "SEASON",
+     "sys": "A",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "2027 불 일간(병·정) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "보름달 밤, 올해 마무리 점검 5분",
+     "series": "SEASON",
+     "sys": "A",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "보름달 밤 육효 한 질문",
+     "series": "TEST",
+     "sys": "Y",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "보름달 밤, 올해 마무리 점검 5분",
+     "series": "SEASON",
+     "sys": "A",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "보름달 밤, 올해 마무리 점검 5분",
+     "series": "SEASON",
+     "sys": "A",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "보름달 밤 육효 한 질문",
+     "series": "TEST",
+     "sys": "Y",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "2027 불 일간(병·정) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "COVERED",
+     "note": "클립은 주 4편(월·수·금·일)만 올려요. 대표가 폰 앱에서 직접 올리는 일이라 매일은 하지 않아요"
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-25",
+   "wd": "수",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "2027 흙 일간(무·기) 운세",
+     "series": "INFO",
+     "sys": "S"
+    },
+    "E": {
+     "title": "2027 신년 계획, 사주 오행별로 목표 세우는 법",
+     "series": "CARE",
+     "sys": "S"
+    },
+    "D": {
+     "title": "2027년은 불의 해, 내 일간의 불은 몇 %",
+     "series": "DATA",
+     "sys": "S"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "2027 흙 일간(무·기) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "c1124B21",
+      "title": "2027 불 일간(병·정) 운세",
+      "pub": "2026-11-24"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "2027 신년 계획, 사주 오행별로 목표 세우는 법",
+     "series": "CARE",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "c1124B21",
+      "title": "2027 불 일간(병·정) 운세",
+      "pub": "2026-11-24"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "2027 흙 일간(무·기) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "2027 신년 계획, 사주 오행별로 목표 세우는 법",
+     "series": "CARE",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "2027 흙 일간(무·기) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "2027년은 불의 해, 내 일간의 불은 몇 %",
+     "series": "DATA",
+     "sys": "S",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "2027 흙 일간(무·기) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "2027 흙 일간(무·기) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "2027년은 불의 해, 내 일간의 불은 몇 %",
+     "series": "DATA",
+     "sys": "S",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "2027 신년 계획, 사주 오행별로 목표 세우는 법",
+     "series": "CARE",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "NEW",
+     "theme": "전날 글을 클립으로: (전날 글 확정 후)",
+     "time": "저녁(앱에서 직접)",
+     "src": null
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-26",
+   "wd": "목",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "2027 쇠 일간(경·신) 운세",
+     "series": "INFO",
+     "sys": "S"
+    },
+    "E": {
+     "title": "주역 64괘, 하락이수, 육효는 어떻게 다를까",
+     "series": "INFO",
+     "sys": "H+Y"
+    },
+    "D": {
+     "title": "내 생명수와 별자리 원소의 짝",
+     "series": "DATA",
+     "sys": "N+A"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "2027 쇠 일간(경·신) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "c1125B12",
+      "title": "2027 흙 일간(무·기) 운세",
+      "pub": "2026-11-25"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "주역 64괘, 하락이수, 육효는 어떻게 다를까",
+     "series": "INFO",
+     "sys": "H+Y",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "H",
+      "Y"
+     ],
+     "related": {
+      "id": "c1115B12",
+      "title": "토정비결이란, 사주와 무엇이 다를까",
+      "pub": "2026-11-15"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "2027 쇠 일간(경·신) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "주역 64괘, 하락이수, 육효는 어떻게 다를까",
+     "series": "INFO",
+     "sys": "H+Y",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "2027 쇠 일간(경·신) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "내 생명수와 별자리 원소의 짝",
+     "series": "DATA",
+     "sys": "N+A",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "2027 쇠 일간(경·신) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "2027 쇠 일간(경·신) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "내 생명수와 별자리 원소의 짝",
+     "series": "DATA",
+     "sys": "N+A",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "주역 64괘, 하락이수, 육효는 어떻게 다를까",
+     "series": "INFO",
+     "sys": "H+Y",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "COVERED",
+     "note": "클립은 주 4편(월·수·금·일)만 올려요. 대표가 폰 앱에서 직접 올리는 일이라 매일은 하지 않아요"
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-27",
+   "wd": "금",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "블랙프라이데이 충동구매 줄이기, 오행별 체크리스트",
+     "series": "CARE",
+     "sys": "S"
+    },
+    "E": {
+     "title": "2027 물 일간(임·계) 운세",
+     "series": "INFO",
+     "sys": "S"
+    },
+    "D": {
+     "title": "오행별 사고 싶은 순간",
+     "series": "TEST",
+     "sys": "S"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "블랙프라이데이 충동구매 줄이기, 오행별 체크리스트",
+     "series": "CARE",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "c1126B12",
+      "title": "2027 쇠 일간(경·신) 운세",
+      "pub": "2026-11-26"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "2027 물 일간(임·계) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "c1126B12",
+      "title": "2027 쇠 일간(경·신) 운세",
+      "pub": "2026-11-26"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "블랙프라이데이 충동구매 줄이기, 오행별 체크리스트",
+     "series": "CARE",
+     "sys": "S",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "2027 물 일간(임·계) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "블랙프라이데이 충동구매 줄이기, 오행별 체크리스트",
+     "series": "CARE",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "오행별 사고 싶은 순간",
+     "series": "TEST",
+     "sys": "S",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "블랙프라이데이 충동구매 줄이기, 오행별 체크리스트",
+     "series": "CARE",
+     "sys": "S",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "블랙프라이데이 충동구매 줄이기, 오행별 체크리스트",
+     "series": "CARE",
+     "sys": "S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "오행별 사고 싶은 순간",
+     "series": "TEST",
+     "sys": "S",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "2027 물 일간(임·계) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "NEW",
+     "theme": "전날 글을 클립으로: (전날 글 확정 후)",
+     "time": "저녁(앱에서 직접)",
+     "src": null
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-28",
+   "wd": "토",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "2027 나무 일간(갑·을) 운세",
+     "series": "INFO",
+     "sys": "S"
+    },
+    "E": {
+     "title": "연말 회고, 병오년 마무리하는 법",
+     "series": "CARE",
+     "sys": "X"
+    },
+    "D": {
+     "title": "하락이수, 육효, 주역 한 장 비교",
+     "series": "TEST",
+     "sys": "H+Y"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "2027 나무 일간(갑·을) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "c1127B12",
+      "title": "블랙프라이데이 충동구매 줄이기, 오행별 체크리스트",
+      "pub": "2026-11-27"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "연말 회고, 병오년 마무리하는 법",
+     "series": "CARE",
+     "sys": "X",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "A",
+      "N",
+      "S"
+     ],
+     "related": {
+      "id": "c1123B21",
+      "title": "2027 신년 감정서 샘플 보기, 12개월 달력과 근거",
+      "pub": "2026-11-23"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "2027 나무 일간(갑·을) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "연말 회고, 병오년 마무리하는 법",
+     "series": "CARE",
+     "sys": "X",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "2027 나무 일간(갑·을) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "하락이수, 육효, 주역 한 장 비교",
+     "series": "TEST",
+     "sys": "H+Y",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "2027 나무 일간(갑·을) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "2027 나무 일간(갑·을) 운세",
+     "series": "INFO",
+     "sys": "S",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "하락이수, 육효, 주역 한 장 비교",
+     "series": "TEST",
+     "sys": "H+Y",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "연말 회고, 병오년 마무리하는 법",
+     "series": "CARE",
+     "sys": "X",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "COVERED",
+     "note": "클립은 주 4편(월·수·금·일)만 올려요. 대표가 폰 앱에서 직접 올리는 일이라 매일은 하지 않아요"
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-29",
+   "wd": "일",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "12월 운세 달력, 대설·동지·신월",
+     "series": "SEASON",
+     "sys": "S+A"
+    },
+    "E": {
+     "title": "12월 손없는날과 이사 날짜",
+     "series": "SEASON",
+     "sys": "S"
+    },
+    "D": {
+     "title": "당사주로 보는 12월, 내 열두 별의 달",
+     "series": "TEST",
+     "sys": "D"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "12월 운세 달력, 대설·동지·신월",
+     "series": "SEASON",
+     "sys": "S+A",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "A",
+      "S"
+     ],
+     "related": {
+      "id": "c1128B21",
+      "title": "연말 회고, 병오년 마무리하는 법",
+      "pub": "2026-11-28"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "12월 손없는날과 이사 날짜",
+     "series": "SEASON",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "S"
+     ],
+     "related": {
+      "id": "c1128B12",
+      "title": "2027 나무 일간(갑·을) 운세",
+      "pub": "2026-11-28"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "12월 운세 달력, 대설·동지·신월",
+     "series": "SEASON",
+     "sys": "S+A",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "12월 손없는날과 이사 날짜",
+     "series": "SEASON",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "12월 운세 달력, 대설·동지·신월",
+     "series": "SEASON",
+     "sys": "S+A",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "당사주로 보는 12월, 내 열두 별의 달",
+     "series": "TEST",
+     "sys": "D",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "12월 운세 달력, 대설·동지·신월",
+     "series": "SEASON",
+     "sys": "S+A",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "12월 운세 달력, 대설·동지·신월",
+     "series": "SEASON",
+     "sys": "S+A",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "당사주로 보는 12월, 내 열두 별의 달",
+     "series": "TEST",
+     "sys": "D",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "12월 손없는날과 이사 날짜",
+     "series": "SEASON",
+     "sys": "S",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "NEW",
+     "theme": "전날 글을 클립으로: (전날 글 확정 후)",
+     "time": "저녁(앱에서 직접)",
+     "src": null
+    }
+   },
+   "ig_count": 4
+  },
+  {
+   "date": "2026-11-30",
+   "wd": "월",
+   "flag": "n",
+   "themes": {
+    "M": {
+     "title": "12월 시작 전, 이달의 한 줄 적기",
+     "series": "CARE",
+     "sys": "N"
+    },
+    "E": {
+     "title": "2027 신년 감정서 구성·가격·환불 한눈에",
+     "series": "PRODUCT",
+     "sys": "X"
+    },
+    "D": {
+     "title": "자미두수로 보는 12월 한 줄",
+     "series": "TEST",
+     "sys": "Z"
+    }
+   },
+   "slots": {
+    "B12": {
+     "status": "NEW",
+     "theme": "12월 시작 전, 이달의 한 줄 적기",
+     "series": "CARE",
+     "sys": "N",
+     "time": "12:00",
+     "group": "M",
+     "sysset": [
+      "N"
+     ],
+     "related": {
+      "id": "n70",
+      "title": "생일 숫자로 보는 연애 스타일, 내 숫자 한 줄 풀이",
+      "pub": "2026-11-04"
+     }
+    },
+    "B21": {
+     "status": "NEW",
+     "theme": "2027 신년 감정서 구성·가격·환불 한눈에",
+     "series": "PRODUCT",
+     "sys": "X",
+     "time": "21:00",
+     "group": "E",
+     "sysset": [
+      "A",
+      "N",
+      "S"
+     ],
+     "related": {
+      "id": "c1128B21",
+      "title": "연말 회고, 병오년 마무리하는 법",
+      "pub": "2026-11-28"
+     }
+    },
+    "P08": {
+     "status": "NEW",
+     "theme": "12월 시작 전, 이달의 한 줄 적기",
+     "series": "CARE",
+     "sys": "N",
+     "time": "08:00",
+     "group": "M"
+    },
+    "P21": {
+     "status": "NEW",
+     "theme": "2027 신년 감정서 구성·가격·환불 한눈에",
+     "series": "PRODUCT",
+     "sys": "X",
+     "time": "21:00",
+     "group": "E"
+    },
+    "R12": {
+     "status": "NEW",
+     "theme": "12월 시작 전, 이달의 한 줄 적기",
+     "series": "CARE",
+     "sys": "N",
+     "time": "12:00",
+     "group": "M"
+    },
+    "R20": {
+     "status": "NEW",
+     "theme": "자미두수로 보는 12월 한 줄",
+     "series": "TEST",
+     "sys": "Z",
+     "time": "20:00",
+     "group": "D"
+    },
+    "T08": {
+     "status": "NEW",
+     "theme": "12월 시작 전, 이달의 한 줄 적기",
+     "series": "CARE",
+     "sys": "N",
+     "time": "08:30",
+     "group": "M"
+    },
+    "T13": {
+     "status": "NEW",
+     "theme": "12월 시작 전, 이달의 한 줄 적기",
+     "series": "CARE",
+     "sys": "N",
+     "time": "13:00",
+     "group": "M"
+    },
+    "T20": {
+     "status": "NEW",
+     "theme": "자미두수로 보는 12월 한 줄",
+     "series": "TEST",
+     "sys": "Z",
+     "time": "20:30",
+     "group": "D"
+    },
+    "T21": {
+     "status": "NEW",
+     "theme": "2027 신년 감정서 구성·가격·환불 한눈에",
+     "series": "PRODUCT",
+     "sys": "X",
+     "time": "21:00",
+     "group": "E"
+    },
+    "C": {
+     "status": "NEW",
+     "theme": "전날 글을 클립으로: (전날 글 확정 후)",
+     "time": "저녁(앱에서 직접)",
+     "src": null
+    }
+   },
+   "ig_count": 4
+  }
+ ],
+ "report": {
+  "gaps": 0,
+  "new": 278,
+  "locked": 40,
+  "ig_over4": [],
+  "series_run_gt2": [],
+  "pure_S_pct": 39,
+  "series": {
+   "DATA": 18,
+   "SEASON": 9,
+   "TEST": 11,
+   "INFO": 30,
+   "CARE": 8,
+   "LOVE": 4,
+   "PRODUCT": 4,
+   "ZODIAC12": 4,
+   "CROSS": 2
+  },
+  "missing_by_week": {
+   "0": [
+    "D",
+    "H",
+    "Y"
+   ],
+   "3": [
+    "D",
+    "Z"
+   ],
+   "4": [
+    "H",
+    "Y"
+   ]
+  },
+  "rolling14_missing": [],
+  "tail14_missing": [],
+  "same_minute": [],
+  "rel_assigned": 53,
+  "rel_over3": [],
+  "edits": 7
+ },
+ "edits": [
+  {
+   "when": "11/01 새벽",
+   "what": "n11(10월 5일 글) 82번째 줄 \\\"2027 신년 감정서는 10월 얼리버드를 진행 중이에요(10월 31일까지, 선착순 50명, STANDARD 14,900원부터).\\\"를 \\\"2027 신년 감정서는 zaoseon.com에서 신청할 수 있어요. 가격과 구성은 사이트에서 확인해 주세요.\\\"로 고침(발행된 글이라 네이버 편집창에서 한 줄만 바꿈)",
+   "who": "대표(네이버 편집)·①(문구 준비)",
+   "why": "얼리버드가 10/31에 끝나고 사이트 가격이 19,000원부터로 바뀌어 글과 사이트가 달라짐. n12·n46의 \\\"10월 31일\\\"은 그날의 사실이라 그대로 둠"
+  },
+  {
+   "when": "11/01 이후",
+   "what": "SNS 새 글·영상 끝 안내는 \"프로필 링크에서 확인\"까지만 쓰고 가격·얼리버드 문구는 넣지 않음(감정서 소개 글 3편만 가격 표기)",
+   "who": "①",
+   "why": "얼리버드 종료 후 가격 표기는 사이트가 자동으로 바꾸므로 본문에 고정하지 않는 게 안전"
+  },
+  {
+   "when": "새 블로그 글 발행 직후마다",
+   "what": "이 글을 연결 글로 쓰는 다른 글의 제목 줄에 링크가 걸리도록 글 주소를 앱에 저장",
+   "who": "대표(앱 저장)·①(확인)",
+   "why": "연결 대상은 발행된 글만 링크로 걸림"
+  },
+  {
+   "when": "글 발행 다음 날",
+   "what": "글 연결 클립을 올리고 블로그 스티커를 그 글로 연결",
+   "who": "대표(폰 앱에서 업로드)",
+   "why": "스티커는 발행된 글만 고를 수 있음"
+  },
+  {
+   "when": "11/28~11/29",
+   "what": "12월 운세 달력·12월 손없는날 글의 날짜는 대설·동지·신월·보름달·음력 변환을 계산 코드로 확인한 뒤 쓴다",
+   "who": "①",
+   "why": "확인 안 된 날짜를 쓰지 않는 규칙"
+  },
+  {
+   "when": "11/14 12:00 겹침",
+   "what": "쥐띠 인스타 릴스와 돼지띠 인스타 릴스가 같은 시각이라 돼지띠를 12:30으로 옮겨 예약(앱 불일치 알림 1번 해결)",
+   "who": "①",
+   "why": "같은 채널 같은 분 두 글 금지"
+  },
+  {
+   "when": "11/06 11:59",
+   "what": "수성 역행 2027 영상은 표지 시안과 함께 11/6 12:00 릴스로 예약(앱 불일치 알림 2번 해결)",
+   "who": "①",
+   "why": "새 영상 탭에서 대기 중인 승인 영상"
+  }
+ ]
+}
