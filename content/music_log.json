@@ -302,5 +302,109 @@
   "mode": "up",
   "bpm": 104,
   "key": "F"
+ },
+ {
+  "name": "clip2-n34-c1",
+  "kind": "fun",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 124,
+  "key": "G"
+ },
+ {
+  "name": "clip2-n35-c1",
+  "kind": "fun",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 114,
+  "key": "A"
+ },
+ {
+  "name": "clip2-n36-c1",
+  "kind": "fun",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "C"
+ },
+ {
+  "name": "clip2-n37-c1",
+  "kind": "fun",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 118,
+  "key": "E"
+ },
+ {
+  "name": "clip2-n38-c1",
+  "kind": "fun",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 124,
+  "key": "F"
+ },
+ {
+  "name": "clip2-n39-c1",
+  "kind": "fun",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 114,
+  "key": "G"
+ },
+ {
+  "name": "clip2-n40-c1",
+  "kind": "fun",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "A"
+ },
+ {
+  "name": "clip2-n41-c1",
+  "kind": "fun",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 118,
+  "key": "C"
+ },
+ {
+  "name": "clip2-n42-c1",
+  "kind": "fun",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 124,
+  "key": "E"
+ },
+ {
+  "name": "clip2-n43-c1",
+  "kind": "fun",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 114,
+  "key": "F"
+ },
+ {
+  "name": "clip2-n44-c1",
+  "kind": "fun",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "G"
+ },
+ {
+  "name": "clip2-n45-c1",
+  "kind": "fun",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 118,
+  "key": "A"
+ },
+ {
+  "name": "clip2-n46-c1",
+  "kind": "fun",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 124,
+  "key": "C"
  }
 ]

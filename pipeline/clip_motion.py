@@ -131,7 +131,9 @@ HDR_TOP, HDR_BOTTOM = 335, 395   # 상단 왼쪽·오른쪽 고정 문구 띠
 class Ctx:
     def __init__(s, fr, t, dur): s.fr, s.t, s.dur = fr, t, dur; s.ex = e_out(cl((dur - t) / 0.24))   # 장면 끝 0.24초: 위로 사라짐
     def alpha(s, a): return a * s.ex
+DY = 0   # 자동 맞춤이 장면 전체를 세로로 옮길 때 쓰는 값(R21: 묶음 가운데 910, 맨 위 475 이상, 맨 아래 1375 이하)
 def blit(fr, layer, x, y, a=1.0):
+    y = y + DY
     if a <= 0.01: return
     if a < 0.99:
         tb = [int(i * a) for i in range(256)]; r, g, b, al = layer.split(); layer = Image.merge("RGBA", (r, g, b, al.point(tb)))
@@ -308,6 +310,25 @@ def still(scenes, idx, t, path, total=None):
     fr = Image.new("RGB", (W, H)); total = total or sum(d for d, _ in scenes); acc = sum(d for d, _ in scenes[:idx]); background(fr, acc + t, total); cx_ = Ctx(fr, t, scenes[idx][0]); scenes[idx][1](cx_)
     if BRAND: brand_layer(fr, getattr(cx_, 'ai_seen', False))
     fr.save(path); return path
+def autofit(fn, dur, lo=475, hi=1375, mid=910, tol=25):
+    """장면 함수를 한 번 검은 화면에 그려 글·그림이 차지한 세로 범위를 재고, 규칙(R21)에 맞게 장면 전체를 위아래로 옮긴다.
+    정월이 화면 아래에 붙는 장면에는 쓰지 않는다(바닥 고정)."""
+    cache = {}
+    def f(c):
+        global DY
+        if "dy" not in cache:
+            import numpy as _np
+            fr = Image.new("RGB", (W, H), (0, 0, 0)); DY = 0; fn(Ctx(fr, dur * .86, dur)); a = _np.asarray(fr).astype("int32").sum(axis=2); ys = _np.where((a > 45).sum(axis=1) > 2)[0]
+            if len(ys) == 0: cache["dy"] = 0
+            else:
+                top, bot = int(ys.min()), int(ys.max()); dy = mid - (top + bot) / 2
+                if abs(dy) <= tol and top >= lo and bot <= hi: dy = 0
+                elif hi - bot >= lo - top: dy = min(max(dy, lo - top), hi - bot)
+                cache["dy"] = int(round(dy))
+        DY = cache["dy"]
+        try: fn(c)
+        finally: DY = 0
+    return f
 # 공통 조각
 def hook(kick, lines, face, size=112):
     def f(c):
