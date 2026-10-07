@@ -8,6 +8,7 @@ GL={"M":"낮 주제","E":"밤 주제","D":"데이터·체험 릴스"}
 SYSN={'S':'사주','A':'별자리','N':'숫자','Z':'자미두수','D':'당사주','H':'하락이수','Y':'육효·주역','X':'교차'}
 def sysname(s): return '·'.join(SYSN.get(x,x) for x in s.split('+'))
 tot=0;lk=0;nw=0;cv=0
+PL=json.load(open('production_log.json',encoding='utf-8'))
 cards=""
 for d in days:
     dt=D.date.fromisoformat(d['date']); md=f"{dt.month}/{dt.day}"
@@ -28,7 +29,9 @@ for d in days:
             nw+=1; tot+=1
             th=v['theme']; extra=''
             if v.get('related'): extra=f'<br><small>연결 글: {E(v["related"]["title"])}</small>'
-            rows+=f'<li class="nw"><b>{NM[s]}</b> <i>{E(v["time"])}</i><span class="tag t2">새로 만들기</span><br>{E(th)}{extra}</li>'
+            pl=PL.get(d['date']+'|'+s)
+            if pl: rows+=f'<li class="dn"><b>{NM[s]}</b> <i>{E(v["time"])}</i><span class="tag t4">{E(pl["state"])}</span><br>{E(th)}<br><small>{E(pl["note"])}</small></li>'
+            else: rows+=f'<li class="nw"><b>{NM[s]}</b> <i>{E(v["time"])}</i><span class="tag t2">새로 만들기</span><br>{E(th)}{extra}</li>'
         else:
             cv+=1; tot+=1
             rows+=f'<li class="cv"><b>{NM[s]}</b><span class="tag t3">건너뜀</span><br><small>{E(v["note"])}</small></li>'
@@ -77,13 +80,13 @@ summary{{list-style:none;padding:14px;cursor:pointer;display:flex;gap:10px;align
 .ev{{background:var(--blue);color:#fff;border-radius:12px;padding:2px 10px;font-size:14px;white-space:nowrap}}
 .th{{padding:0 14px 6px;border-top:1px solid var(--line)}} .th p{{margin:10px 0}} .th b{{display:block;color:var(--blue);font-size:15px}} .th em{{font-style:normal;color:var(--mute);font-size:15px;display:block}}
 .sl{{padding:4px 14px 14px}} .sl li{{padding:9px 10px;margin:6px 0;border-radius:10px;border-left:6px solid var(--line);font-size:16px}}
-.sl li.lk{{border-left-color:var(--blue)}} .sl li.nw{{border-left-color:var(--acc)}} .sl li i{{font-style:normal;color:var(--mute);font-size:14px;margin-left:4px}}
-.tag{{float:right;font-size:13px;border-radius:10px;padding:1px 8px;color:#fff}} .t1{{background:var(--blue)}} .t2{{background:var(--acc)}} .t3{{background:#8a8fa8}}
+.sl li.lk{{border-left-color:var(--blue)}} .sl li.nw{{border-left-color:var(--acc)}} .sl li.dn{{border-left-color:#2e9e6b}} .sl li i{{font-style:normal;color:var(--mute);font-size:14px;margin-left:4px}}
+.tag{{float:right;font-size:13px;border-radius:10px;padding:1px 8px;color:#fff}} .t1{{background:var(--blue)}} .t2{{background:var(--acc)}} .t3{{background:#8a8fa8}} .t4{{background:#2e9e6b}}
 .ed li{{padding:10px 0;border-bottom:1px solid var(--line)}} .ed li:last-child{{border:0}}
 </style></head><body><div class="w">
 <h1>2026년 11월 콘텐츠 캘린더</h1>
 <p class="lead">11월 1일~30일, 모든 채널을 한 장으로 정리했어요. 날짜를 누르면 그날의 11칸이 펼쳐져요. 제목은 작업 제목이고, 세부 기획에서 확정해요.</p>
-<div class="box"><b>칸 상태</b><div class="bigbar"><i></i></div><div class="leg"><span class="l1">이미 있는 것 {lk}</span><span class="l2">새로 만들 것 {nw}</span></div><p class="lead" style="margin:10px 0 0">빈 칸은 0이에요.</p></div>
+<div class="box"><b>칸 상태</b><div class="bigbar"><i></i></div><div class="leg"><span class="l1">이미 있는 것 {lk}</span><span class="l2">새로 만들 것 {nw}</span></div><p class="lead" style="margin:10px 0 0">빈 칸은 0이에요. 지금까지 만들어 둔 것: 네이버 원고 2편(11/1·11/4), 메트리쿨 예약 2건(11/6 릴스·스레드).</p></div>
 <h2>점검 결과</h2><div class="box"><ul class="chk">{chk}</ul></div>
 <h2>제작 순서와 양</h2><div class="box"><p class="lead">주마다 그 주 칸을 모두 만들고 예약해요. 막대가 길수록 새로 만들 칸이 많아요.</p>{wkh}</div>
 <h2>날짜별 일정</h2>{cards}
