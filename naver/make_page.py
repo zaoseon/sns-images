@@ -82,7 +82,7 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
     chips = "".join(f'<button class="tag" data-t="{html.escape(t)}" onclick="cpt(this)">{html.escape(t)}</button>' for t in tags)
     nav = f'<a href="/naver/{nxt}.html"><button class="big">다음 원고 →</button></a>' if nxt else '<a href="/naver/"><button class="big">목록으로 (마지막 원고)</button></a>'
     cover_box = (f'<div class="box"><p class="lab">2. 대표 이미지: 먼저 저장 → 네이버 글쓰기 맨 위에 사진으로 올리기(처음 올린 사진이 대표가 돼요) → 그다음 아래 본문 복사</p>'
-                 f'<img src="/naver/img/{cover}?v=b3" style="width:100%;border-radius:8px" alt=""><a href="/naver/img/{cover}?v=b3" download="{os.path.basename(cover)}"><button>대표 이미지 저장</button></a></div>') if cover else ""
+                 f'<img src="/naver/img/{cover}?v=b4" style="width:100%;border-radius:8px" alt=""><a href="/naver/img/{cover}?v=b4" download="{os.path.basename(cover)}"><button>대표 이미지 저장</button></a></div>') if cover else ""
     _ru = (saved_urls().get((related or {}).get("id")) or (related or {}).get("url") or "") if related else ""   # 앱에 저장된 주소가 우선, 없으면 발행 기록의 주소
     if v2 and _ru: body = V2.link_guide(body, _ru)   # 본문의 연결 글 제목 줄에 링크(복사하면 같이 감)
     if related and (related.get("url") or related.get("title") or _ru):

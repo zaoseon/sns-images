@@ -39,8 +39,8 @@ def order_ok(els):
 ok(all(order_ok(e) for _, _, e in res.values()), "📌 이 글의 순서는 요약 이미지 다음(그런 이미지가 없으면 요약 박스 다음)")
 def hr_ok(els):
     heads = [i for i, e in enumerate(els) if V2.numhead(e)]
-    return all(i > 0 and els[i - 1] == V2.HR for i in heads) and all(i + 1 < len(els) and V2.blank(els[i + 1]) for i in heads)
-ok(all(hr_ok(e) for _, _, e in res.values()), "번호 제목마다 앞에 구분선, 뒤에 빈 줄 한 칸")
+    return all(i > 0 and els[i - 1] == V2.HR for i in heads) and all(i + 1 < len(els) and (V2.blank(els[i + 1]) or V2.isimg(els[i + 1])) for i in heads)
+ok(all(hr_ok(e) for _, _, e in res.values()), "번호 제목마다 앞에 구분선, 뒤에 빈 줄 한 칸(바로 이미지가 오면 빈 줄 없이 이미지)")
 def pre_guide(els):
     g = [i for i, e in enumerate(els) if e != V2.HR and V2.pl(e).startswith("👇") and not V2.ENGAGE.search(V2.pl(e))]
     return bool(g) and all(els[i - 1] == V2.HR for i in g)

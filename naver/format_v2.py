@@ -111,13 +111,20 @@ def _summary_range(paras):
     while e > s and blank(paras[e]): e -= 1
     return s, e
 
+def _rewrap_box_p(p):
+    m = re.fullmatch(r"(<p[^>]*><span[^>]*>)(.*)(</span></p>)", p, re.S)
+    if not m or "<img" in m.group(2) or FB.plain_of(m.group(2)).strip() in ("", "\xa0"): return p
+    joined = " ".join(x.strip() for x in re.split(r"<br\s*/?>", m.group(2)))
+    if FB.width(FB.plain_of(joined)) <= FB.BOX_LIMIT and "<br" not in m.group(2): return p
+    return m.group(1) + "<br>".join(FB.box_lines(joined)) + m.group(3)
+
 def _box_summary(paras):
     r = _summary_range(paras)
     if not r: return paras
     s, e = r; inner = []
     for p in paras[s:e + 1]:
         if p != HR and not blank(p) and emoji0(pl(p)) and not big(p) and inner and not blank(inner[-1]): inner.append(FB.BLANK())   # 한 줄 요약 / 세 풀이 / 해 볼 것을 한 줄씩 띄운다
-        inner.append(p)
+        inner.append(_rewrap_box_p(p) if not blank(p) and not big(p) else p)
     while inner and blank(inner[-1]): inner.pop()
     return paras[:s] + [BOX_OPEN + "".join(inner) + BOX_CLOSE] + paras[e + 1:]
 
@@ -175,7 +182,7 @@ def _engage_emoji(paras):
                 m = re.match(r"(<p[^>]*><span[^>]*>)(.*)(</span></p>)$", p, re.S)
                 if m:
                     lines = m.group(2).split("<br>")
-                    if FB.width(FB.plain_of(lines[0])) + 2.0 <= FB.BODY_LIMIT: lines[0] = "👇 " + lines[0]
+                    if FB.width(FB.plain_of(lines[0])) + 2.0 <= 18.0: lines[0] = "👇 " + lines[0]
                     else: lines.insert(0, "👇")
                     p = m.group(1) + "<br>".join(lines) + m.group(3)
         out.append(p)
@@ -185,7 +192,7 @@ def _after_heading_blank(paras):
     out = []
     for i, p in enumerate(paras):
         out.append(p)
-        if numhead(p) and i + 1 < len(paras) and not blank(paras[i + 1]) and paras[i + 1] != HR: out.append(FB.BLANK())
+        if numhead(p) and i + 1 < len(paras) and not blank(paras[i + 1]) and paras[i + 1] != HR and not isimg(paras[i + 1]): out.append(FB.BLANK())
     return out
 
 def _is_item(p):
@@ -244,11 +251,81 @@ def link_guide(body, url):
         return body[:m.start()] + new + body[m.end():]
     return body
 
+
+# ---- 10/8 대표 캡처 반영: 문단 사이 줄띄움·도입부 간격·이미지 앞뒤 ----
+def _nlines(p):
+    m = re.search(r"<span[^>]*>(.*)</span>", p, re.S)
+    return len([x for x in re.split(r"<br\s*/?>", m.group(1)) if FB.plain_of(x).strip()]) if m else 1
+def _wholebold(p): return p != HR and not p.startswith("<table") and bool(re.fullmatch(r'<p[^>]*><span[^>]*><b>.*</b></span></p>', p, re.S)) and p.count("<b>") == 1
+def _is_q(p): return pl(p).startswith("Q.")
+def _is_sublabel(p):
+    """🧭 사주 - 무토·경금일생 처럼 이모지로 시작하는 한 줄 작은 제목(굵은 글씨, ' - ' 포함)."""
+    t = pl(p) if p != HR and not p.startswith("<table") else ""
+    return bool(t) and emoji0(t) and " - " in t and "<b>" in p and _nlines(p) == 1 and not big(p)
+def _plainp(p): return p != HR and not p.startswith("<table") and not blank(p) and not isimg(p) and not big(p) and "<a " not in p
+def _conclusion_idx(paras):
+    return next((i for i, p in enumerate(paras) if p != HR and not p.startswith("<table") and ("결론부터" in pl(p) or "한 줄로 정리" in pl(p) or "한 줄 정리" in pl(p))), None)
+
+def _intro_gaps(paras):
+    """도입 문단들·정월 인사·설명 문단·결론 안내 문장을 모두 한 줄씩 띄운다(10/8 대표: 도입 문단 이후 한 줄 띄고 정월 인사, 한 줄 띄고 문단, 한 줄 띄고 결론 안내)."""
+    ci = _conclusion_idx(paras)
+    if ci is None: return paras
+    out = []
+    for i, p in enumerate(paras):
+        if out and i <= ci and _plainp(p) and _plainp(out[-1]): out.append(FB.BLANK())
+        out.append(p)
+    return out
+
+def _paragraph_gaps(paras):
+    """문단과 문단 사이 한 줄 띄움(10/8 대표 캡처). 한 문단 = 짧은 문장 묶음(합쳐서 4줄까지). 굵은 한 줄(핵심 문장)은 따로 한 문단.
+    항목(🔹·1.·이모지 제목:)과 그 설명 줄, Q.와 A. 줄, 이 글의 순서 목록은 한 덩어리로 둔다."""
+    out = []; cnt = 0; chain = False; ci = _conclusion_idx(paras); in_order = False
+    for i, p in enumerate(paras):
+        t = pl(p) if p != HR and not p.startswith("<table") else ""
+        if t.startswith("📌 이 글의 순서"): in_order = True
+        elif in_order and not (NUMHEAD.match(t) and not big(p) and t): in_order = False
+        if out and not blank(out[-1]) and out[-1] != HR and not out[-1].startswith("<table") and not isimg(out[-1]) and _plainp(p) or (out and _is_q(p) and False):
+            prev = out[-1]
+            if in_order: pass
+            elif pl(prev).startswith("👇"): pass                                          # 👇 유도 문구와 바로 아래 연결 글 제목은 붙여 둔다
+            elif chain and not _is_item(p) and not _wholebold(p): pass                       # 항목·Q&A의 설명 줄은 붙여 둔다
+            elif _wholebold(prev) and not _is_q(prev) and not _wholebold(p) and chain is False: out.append(FB.BLANK()); cnt = 0
+            elif _wholebold(p) or _wholebold(prev): out.append(FB.BLANK()); cnt = 0
+            elif _is_item(p): pass                                                           # 항목 앞 빈 줄은 _items_blank가 담당
+            elif cnt + _nlines(p) <= 4: pass                                                 # 짧은 문장끼리는 한 문단
+            else: out.append(FB.BLANK()); cnt = 0
+        if blank(p) or p == HR or p.startswith("<table") or isimg(p) or big(p): cnt = 0; chain = False
+        else:
+            cnt = (cnt + _nlines(p)) if out and not blank(out[-1]) else _nlines(p)
+            chain = bool(_is_item(p) or _is_q(p) or (chain and _plainp(p) and not _wholebold(p)))
+        out.append(p)
+    return out
+
+def _no_blank_before_image(paras):
+    """이미지 앞뒤로는 줄띄움 없이(10/8 대표): 번호 제목 바로 아래 이미지, 상자·본문 뒤 이미지 앞의 빈 줄을 뺀다."""
+    out = []
+    for p in paras:
+        if isimg(p) and out and blank(out[-1]): out.pop()
+        out.append(p)
+    return out
+
+
+def _sublabel_blank(paras):
+    """작은 제목(굵은 한 줄, 이모지·번호로 시작, Q. 제외) 다음에는 한 줄 띄운다. 바로 이미지·구분선이 오면 띄우지 않는다(10/8 대표)."""
+    out = []
+    for i, p in enumerate(paras):
+        out.append(p)
+        order_head = p != HR and not p.startswith("<table") and pl(p).startswith("📌 이 글의 순서")
+        if (order_head or ((_wholebold(p) or _is_sublabel(p)) and not big(p))) and not _is_q(p) and not (p != HR and not p.startswith("<table") and pl(p).startswith("👇")) and i + 1 < len(paras):
+            q = paras[i + 1]
+            if _plainp(q) and not _wholebold(q): out.append(FB.BLANK())
+    return out
+
 def apply(body):
     paras = PTAG.findall(body)
     paras = _split_greeting(paras)
     paras = _blank_around(paras, _is_greeting)
-    paras = _tighten_intro(paras)
+    paras = _intro_gaps(paras)
     paras = _box_summary(paras)
     paras = _blank_after_box(paras)
     paras = _move_order(paras)
@@ -257,6 +334,9 @@ def apply(body):
     paras = _engage_emoji(paras)
     paras = _dividers(paras)
     paras = _after_heading_blank(paras)
+    paras = _paragraph_gaps(paras)
+    paras = _sublabel_blank(paras)
     paras = _dedupe_blanks(paras)
     paras = _no_blank_after_image(paras)
+    paras = _no_blank_before_image(paras)
     return _small_images("".join(paras).replace(HR, HR_HTML))
