@@ -1,4 +1,4 @@
-"""리소그래프 모션그래픽 v2 '내 별자리, 사주랑 같은 말 할까?'(10/5 대표 지적 반영).
+"""리소그래프 모션그래픽 v2 '내 별자리, 사주랑 같은 말 할까요?'(10/5 대표 지적 반영).
 지적: ①겹치는 영역이 커서 글자가 앉을 자리가 없다 ②원 안 글자는 흰색이 깔끔 ③내용이 안 끌린다(릴스 공식과 안 맞음).
 고침: 겹침을 좁히고, 원 안 글자를 흰색으로, 가운데를 '12별자리 순위'(자기 별자리를 찾아보게)로 바꿨다.
 숫자: content/cross_data/README.md '태양별자리별 사주=점성술 일치율'(무작위 3,000명, 별자리당 약 250명이라 오차가 큼).
@@ -23,7 +23,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:@@PAPER
 </style><body>
 <div class="a paper" id=p0>
  @@HT1@@@@HT2@@
- <div class="a d t" id=hl style="left:0;width:1080px;top:340px;font-size:96px;line-height:1.3">내 별자리,<br>사주랑 같은 말 할까?</div>
+ <div class="a d t" id=hl style="left:0;width:1080px;top:340px;font-size:96px;line-height:1.3">내 별자리,<br>사주랑 같은 말 할까요?</div>
  <div class="a c" id=pinkC style="left:-20px;top:700px;width:660px;height:660px;background:@@PINK@@"></div>
  <div class="a c" id=blueC style="left:440px;top:700px;width:660px;height:660px;background:@@BLUE@@"></div>
  <div class="a c" id=blueD style="left:440px;top:700px;width:660px;height:660px;box-sizing:border-box;border:10px dashed @@BLUE@@;background:transparent;opacity:.6"></div>

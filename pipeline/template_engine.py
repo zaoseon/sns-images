@@ -209,7 +209,7 @@ RANK = [("염소", 23.0), ("황소", 22.7), ("처녀", 18.1), ("사자", 16.3), 
 if __name__ == "__main__":
     pages = {}
     for ch in ("reel", "carousel"):
-        pages[f"{ch}_hook"] = t_hook(ch, "내 별자리,\n사주랑 같은 말\n할까?", "사주", "별자리", "같은 말")
+        pages[f"{ch}_hook"] = t_hook(ch, "내 별자리,\n사주랑 같은 말\n할까요?", "사주", "별자리", "같은 말")
         pages[f"{ch}_ranking"] = t_ranking(ch, "사주와 같은 말을 하는\n별자리 순위", RANK)
         pages[f"{ch}_cta"] = t_cta(ch, "팔로우하고", "더 많은 이야기 나눠요", "프로필 링크에서", ("생년월일 입력하고", "내 첫글자와 타고난 기운 알아보기"), "＋ 팔로우")
     for ch in ("reel", "carousel"):

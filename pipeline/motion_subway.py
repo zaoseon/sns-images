@@ -36,7 +36,7 @@ svg text{font-family:'JW-D',sans-serif;font-weight:900}
 <div class="a t" id=sub2 style="left:0;width:1080px;top:572px;font-size:50px;line-height:1.3;color:#6b6277">역 순서는 사람마다 달라요</div>
 @@PLATES@@
 <div class="a board" id=board>@@BOARDS@@
- <div class="a bt d" id=bq style="top:40px;font-size:82px;line-height:1.3;opacity:0">요즘 내 중심은<br>어느 역일까?</div>
+ <div class="a bt d" id=bq style="top:40px;font-size:82px;line-height:1.3;opacity:0">요즘 내 중심은<br>어느 역일까요?</div>
  
  <div class="a bt d" id=bi style="top:40px;font-size:80px;line-height:1.3">대운에 들어오는<br>기운 5가지</div>
  <div class="a bt d" id=bc style="top:40px;font-size:80px;line-height:1.3;opacity:0">떠오르는 사람에게<br>보내 보세요</div>

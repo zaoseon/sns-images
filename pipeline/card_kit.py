@@ -48,7 +48,7 @@ def cover(c):
     elif L == 'bc':     # 가운데 크게 + 둥근 후광, 제목은 위 가운데
         ink = head + f'<div style="position:absolute;left:0;right:0;top:232px;text-align:center;font-size:56px;line-height:1.45;color:{acc};z-index:5">{c["sub"]}</div><div style="position:absolute;left:0;right:0;top:360px;text-align:center;font-size:108px;line-height:1.35;z-index:5;{sh}">{c["title"]}</div>' + halo(acc, 540, 1060) + img_tag(fc, 780, 'left:50%;margin-left:-' + str(290 if not big else 330) + 'px;bottom:-70px')
     elif L == 'tr':     # 오른쪽 위에 걸쳐 있고 말풍선, 제목은 왼쪽 아래
-        ink = head.replace('left:75px','left:75px') + img_tag(fc, 690, 'right:-60px;top:176px', flip=False) + bubble(acc, c.get('bubble', '어느 쪽일까?'), 90, 240, 420) + f'<div style="position:absolute;left:90px;top:810px;width:900px;font-size:56px;line-height:1.45;color:{acc};z-index:5">{c["sub"]}</div><div style="position:absolute;left:90px;top:980px;width:900px;font-size:100px;line-height:1.35;z-index:5;{sh}">{c["title"]}</div>'
+        ink = head.replace('left:75px','left:75px') + img_tag(fc, 690, 'right:-60px;top:176px', flip=False) + bubble(acc, c.get('bubble', '어느 쪽일까요?'), 90, 240, 420) + f'<div style="position:absolute;left:90px;top:810px;width:900px;font-size:56px;line-height:1.45;color:{acc};z-index:5">{c["sub"]}</div><div style="position:absolute;left:90px;top:980px;width:900px;font-size:100px;line-height:1.35;z-index:5;{sh}">{c["title"]}</div>'
     elif L == 'phone':  # 소품(휴대폰) + 작은 얼굴 아래 왼쪽
         ink = head + f'<div style="position:absolute;left:90px;top:232px;width:820px;font-size:56px;line-height:1.45;color:{acc};z-index:5">{c["sub"]}</div><div style="position:absolute;left:90px;top:470px;width:900px;font-size:108px;line-height:1.35;z-index:5;{sh}">{c["title"]}</div>' + phone(acc, 690, 780) + img_tag(fc, 620, 'left:-110px;bottom:0', flip=True)
     leftchar = L in ('bl', 'phone')
@@ -80,7 +80,7 @@ SETS = {
  'a_1009': dict(acc='#ff8a73', face='v5_halfup', cl='bc', ql='cards', opts_short=['식으면<br>정리가<br>빨라요', '좋아하면<br>먼저<br>표현해요', '뒤돌아본<br>적이<br>드물어요'], rl='bl', bg='sky', badge='정월의 연애 테스트', sub='한 번 정하면 뒤돌아보지 않는 나', title='연애에서도<br>몇 개 해당되나요?',
     bg2='chart', q='세 가지 중<br>몇 개인가요?', opts=['마음이 식으면 정리가 빨라요', '좋아하면 먼저 표현해요', '헤어진 뒤 뒤돌아본 적이 드물어요'],
     bg3='sun', face2='v8_gesture', rt='2개 이상이라면', body='확신이 빠른 만큼 상대는<br>갑작스럽게 느낄 수 있어요.<br>정리하기 전에 이유를<br>한 문장으로 말해 주세요.', cta='내 숫자를 댓글로 남겨 주세요'),
- 'b_1011': dict(acc='#f6b042', face='intro', cl='tr', bubble='먼저 말할까,<br>기다릴까?', ql='rows', peek='v11_mug', peek_flip=True, rl='tr', bg='chart', badge='정월의 관계 테스트', sub='먼저 말하지 못하고<br>기다리다 놓친 사람이 있다면', title='나는 몇 개<br>해당되나요?',
+ 'b_1011': dict(acc='#f6b042', face='intro', cl='tr', bubble='먼저 말할까,<br>기다릴까요?', ql='rows', peek='v11_mug', peek_flip=True, rl='tr', bg='chart', badge='정월의 관계 테스트', sub='먼저 말하지 못하고<br>기다리다 놓친 사람이 있다면', title='나는 몇 개<br>해당되나요?',
     bg2='sun', q='세 가지 중<br>몇 개인가요?', opts=['상대가 먼저 말해 주길 기다려요', '말할까 고민하다 때를 놓친 적 있어요', '놓치고 나서야 말할걸 생각해요'],
     bg3='sky', face2='v3_ponytail', rt='2개 이상이라면', body='말이 느린 게 아니라<br>거절을 먼저 헤아리는 쪽일 수 있어요.<br>이번 주에 안부 한 줄을 먼저 보내 보세요.', cta='내 숫자를 댓글로 남겨 주세요'),
  'd_1023': dict(acc='#7fd6c8', face='v4_glasses', cl='phone', ql='rows', peek=None, rl='br', bg='ink', badge='정월의 연락 테스트', sub='읽고 답장하기까지 걸리는 시간', title='나는 어느 쪽에<br>가까울까요?',

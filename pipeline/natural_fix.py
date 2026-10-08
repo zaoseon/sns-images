@@ -7,10 +7,10 @@ PHRASE = [  # (어색한 말, 자연스러운 말) — 문장째로 확정한 �
  ("더 믿어요?", "더 믿으세요?"), ("해당돼요?", "해당되나요?"), ("적 있어요?", "적 있나요?"), ("적 많아요?", "적 많나요?"),
  ("몇 번이 적당해요?", "몇 번이 적당할까요?"), ("주말 밤 뭐 해요?", "주말 밤에는 뭘 하나요?"), ("찔리는 번호 있어요?", "찔리는 번호가 있나요?"),
  ("가장 잘 설명한 건 뭐였어요?", "가장 잘 설명한 건 뭐였나요?"), ("태어난 시간 알아요?", "태어난 시간을 아시나요?"), ("말이 맞아요?", "말이 맞나요?"),
- ("몇 개를 겹쳐요?", "몇 개를 겹치나요?"), ("무작위 3,000명을 계산했어요", "무작위 3,000명의 사주를 계산했어요"),
+ ("몇 개를 겹쳐요?", "몇 개를 겹치나요?"), ("몇 개 같죠?", "몇 개나 같을까요?"), ("무작위 3,000명을 계산했어요", "무작위 3,000명의 사주를 계산했어요"),
 ]
-GEN = [(r"뭐예요\?", "뭔가요?"), (r"뭐였어요\?", "뭐였나요?"), (r"(예요|이에요)\?", "인가요?")]    # 명사+예요? → 명사+인가요?
-SKIP = ("natural_audit.py", "natural_fix.py", "rules.py", "trendy.py", "trendy_audit.py", "trendy_img.py", "guide_final_img.py", "guide_visual_img.py", "variety_img.py")
+GEN = [(r"([가-힣])까\?", r"\1까요?"), (r"뭐예요\?", "뭔가요?"), (r"뭐였어요\?", "뭐였나요?"), (r"(예요|이에요)\?", "인가요?")]    # 명사+예요? → 명사+인가요?
+SKIP = ("natural_img.py", "natural_audit.py", "natural_fix.py", "rules.py", "trendy.py", "trendy_audit.py", "trendy_img.py", "guide_final_img.py", "guide_visual_img.py", "variety_img.py")
 def files():
     f = [x for x in glob.glob(os.path.join(R, "content", "*.py")) + glob.glob(os.path.join(R, "pipeline", "*.py")) if os.path.basename(x) not in SKIP]
     f += [os.path.join(R, "naver", "pages.json"), os.path.join(R, "content", "trendy_lines.json"), os.path.join(R, "content", "caption_lines.json")]
@@ -31,6 +31,7 @@ if __name__ == "__main__":
         if n and apply: open(f, "w", encoding="utf-8").write(t)
     sw = os.path.join(R, "content", "reel_swaps.json"); d = json.load(open(sw, encoding="utf-8")); cn = 0
     for r in d:
+        if r.get("id") in ("natural-ko", "trendy-lines", "guide-visual", "guide-final"): continue   # 설명용 예문이 들어 있는 항목은 고치지 않는다
         for k in ("caption", "note", "title"):
             if r.get(k):
                 t, n = fix_text(r[k]); cn += n
