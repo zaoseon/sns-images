@@ -409,12 +409,48 @@ CFG.update({
  "돼지띠": dict(hook="2027년 돼지띠는\n사람을 통해\n돈이 들어오는 해", years="1983·1995·2007·2019년생", shape="tri", l1="세 글자가 한 팀(삼합)", l2="사람을 통해 돈과 기회가 들어와요", nums=("4", "9"), lucky="4와 9는 쇠의 숫자예요.\n쇠가 물을 키워 줘요", cta="face", face="v4_glasses", q="올해 도움 받고 싶은 일은\n무엇인가요?"),
  "쥐띠": dict(hook="2027년 쥐띠는\n돈은 들어오는데\n마음이 상하기 쉬운 해", years="1972·1984·1996·2008년생", shape="cross", l1="서로 서운하게 만드는 사이(해)", l2="子와 未는 해이면서 원진이에요", nums=("4", "9"), lucky="4와 9는 쇠의 숫자예요.\n쇠가 물을 키워 줘요", cta="q", q="서운한 마음을 마지막으로\n말한 건 언제인가요?"),
 })
+
+# ───────── 띠 릴스 기획서(10/8): 띠마다 장면 문구·캡션·트렌디 표현·연결 글을 한곳에 정한다. 영상과 기획서 화면이 같은 자료(CFG)를 쓴다
+PLAN = {
+ "원숭이띠": dict(rid="zodiac-21", date="10/22 낮", blog="n09 원숭이띠 운세", tags="#원숭이띠운세 #2027년운세 #정미년 #띠별운세 #사주", sub=None,
+    lead="무거운 일이 맡겨지는 해, 책임이 인정으로 돌아오는 때가 언제인지 정리했어요."),
+ "개띠": dict(rid="zodiac-25", date="10/24 낮", blog="n65 개띠 운세", tags="#개띠운세 #2027년운세 #정미년 #띠별운세 #사주", sub=None,
+    lead="말로 한 약속을 한 번 더 확인하는 해, 언제 확인하면 좋은지 정리했어요."),
+ "용띠": dict(rid="zodiac-11", date="10/29 낮", blog="n66 용띠 운세", tags="#용띠운세 #2027년운세 #정미년 #무지출챌린지 #사주", sub="무지출 챌린지처럼, 새는 곳부터 막는 해예요",
+    lead="무지출 챌린지처럼 새는 곳부터 막고 쌓는 해, 언제 시작하면 좋은지 정리했어요."),
+ "뱀띠": dict(rid="zodiac-13", date="10/31 낮", blog="n67 뱀띠 운세", tags="#뱀띠운세 #2027년운세 #정미년 #띠별운세 #사주", sub=None,
+    lead="의욕이 넘칠수록 속도를 줄이는 해, 언제 힘을 쓰고 언제 쉬면 좋은지 정리했어요."),
+ "말띠": dict(rid="zodiac-17", date="11/5 낮", blog="n59 말띠 운세", tags="#말띠운세 #2027년운세 #정미년 #띠별운세 #사주", sub=None,
+    lead="내년에 좋은 짝을 만날 수 있는 해, 언제 마음을 열면 좋은지 정리했어요."),
+ "양띠": dict(rid="zodiac-19", date="11/7 낮", blog="n04 양띠 운세", tags="#양띠운세 #2027년운세 #정미년 #갓생 #사주", sub="갓생은 정리부터, 비우고 나서 다시 서는 해예요",
+    lead="갓생은 정리부터, 내 띠가 돌아오는 해에 언제 비우고 언제 세우면 좋은지 정리했어요."),
+ "닭띠": dict(rid="zodiac-23", date="11/12 낮", blog="n68 닭띠 운세", tags="#닭띠운세 #2027년운세 #정미년 #띠별운세 #사주", sub=None,
+    lead="꼼꼼함이 인정받는 해, 언제 실력을 보여 주면 좋은지 정리했어요."),
+ "돼지띠": dict(rid="zodiac-27", date="11/13 저녁", blog="n49 돼지띠 운세", tags="#돼지띠운세 #2027년운세 #정미년 #띠별운세 #사주", sub=None,
+    lead="사람을 통해 돈이 들어오는 해, 언제 사람을 만나면 좋은지 정리했어요."),
+ "쥐띠": dict(rid="zodiac-03", date="11/14 낮", blog="n69 쥐띠 운세", tags="#쥐띠운세 #2027년운세 #정미년 #띠별운세 #사주", sub=None,
+    lead="돈은 들어오는데 마음이 상하기 쉬운 해, 언제 조심하면 좋은지 정리했어요."),
+}
+# 문장 장면(3번): '~는 건 ~라는 뜻' 형식(대표 원숭이띠 지정)
+CFG["개띠"]["hook"] = "2027년에 개띠에게\\n약속이 자꾸 엇갈리는 건\\n한 번 더 확인하라는 뜻"
+CFG["용띠"]["hook"] = "2027년에 용띠가\\n크게 벌기보다 쌓게 되는 건\\n기반을 다지라는 뜻"
+CFG["뱀띠"]["hook"] = "2027년에 뱀띠가\\n의욕이 넘치는 건\\n속도를 조절하라는 뜻"
+CFG["말띠"]["hook"] = "2027년에 말띠에게\\n좋은 짝이 보이는 건\\n서로 끌리는 짝의 해라는 뜻"
+CFG["양띠"]["hook"] = "2027년에 양띠가\\n제자리 같은 건\\n내 띠가 돌아와 다시 세우는 중이라는 뜻"
+CFG["닭띠"]["hook"] = "2027년에 닭띠의\\n꼼꼼함이 드러나는 건\\n인정받는다는 뜻"
+CFG["돼지띠"]["hook"] = "2027년에 돼지띠에게\\n돈이 사람을 통해 오는 건\\n연결의 해라는 뜻"
+CFG["쥐띠"]["hook"] = "2027년에 쥐띠가\\n돈은 들어오는데 마음이 상하기 쉬운 건\\n오해를 줄이라는 뜻"
+# 단정을 줄인 문구(R20·표현가이드 10번): '분명해요' 같은 확신 표현을 쓰지 않는다
+OVER = {"쥐띠": {"money": ("돈이 들어올 기회가 보이는 해예요.", "가까운 사람과 돈이 섞이면 마음이 먼저 상해요.")}}
+SUB = {n: p["sub"] for n, p in PLAN.items() if p["sub"]}
 def two(sent): a = sent.split(". "); return (a[0] + ("." if not a[0].endswith(".") else ""), (a[1] if len(a) > 1 else ""))
 def G_kw(name):
-    t = T[name]
+    t = T[name]; sub = SUB.get(name)
     def f(c):
-        h1 = th_(f"2027 {name}", 58, 820, 1.25); h2 = th_(t["one"], 118, 820, 1.25); y0, tot = stack_top([h1, h2], [GT])
-        y = tblock(c, f"2027 {name}", y0, .05, 58, color=GOLD, lh=1.25); tblock(c, t["one"], y + GT, .5, 118, lh=1.25)
+        parts = [(f"2027 {name}", 58), (t["one"], 118)] + ([(sub, 44)] if sub else [])
+        hs = [th_(a, b, 820, 1.25) for a, b in parts]; y0, tot = stack_top(hs, [GT] * (len(parts) - 1))
+        y = tblock(c, parts[0][0], y0, .05, 58, color=GOLD, lh=1.25); y = tblock(c, parts[1][0], y + GT, .5, 118, lh=1.25)
+        if sub: tblock(c, sub, y + GT, 1.2, 44, color=DIM, lh=1.25)
     return f
 def G_years(name):
     cf = CFG[name]; ys = cf["years"].replace("년생", "").split("·"); big = f"{ys[0]}·{ys[1]}\n{ys[2]}·{ys[3]}년생"
@@ -501,7 +537,7 @@ def G_cal(name):
         stack_top([760], []); blit(c.fr, im, 0, 910 - 380, 1.0)   # 그림 층 760px, 가운데 y 380이 y 910에 오게
     return f
 def G_one(name, key, label):
-    t = T[name]; l1, l2 = two(t[key])
+    t = T[name]; l1, l2 = OVER.get(name, {}).get(key) or two(t[key])
     def f(c):
         h1 = th_(l1, 62, 820, 1.3); h2 = th_(l2, 50, 820, 1.3) if l2 else 0
         y0, tot = stack_top([280, h1] + ([h2] if l2 else []), [GG] + ([GT] if l2 else []))

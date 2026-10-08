@@ -443,5 +443,117 @@
   "review_by": "",
   "heavy": false,
   "note": "별자리 자가진단: 목록에 뜻이 맞는 낱말이 없어 평이한 말로 둠"
+ },
+ "zodiac-21": {
+  "name": "원숭이띠 2027 운세 릴스",
+  "opener": "",
+  "tags": [],
+  "term": "",
+  "type": "",
+  "fit": "",
+  "source": "",
+  "review_by": "",
+  "heavy": false,
+  "note": "맥락에 안 맞거나 같은 말 반복이라 평이한 말로 둠"
+ },
+ "zodiac-11": {
+  "name": "용띠 2027 운세 릴스",
+  "opener": "무지출 챌린지처럼, 새는 곳부터 막는 해예요",
+  "tags": [
+   "#무지출챌린지"
+  ],
+  "term": "무지출 챌린지",
+  "type": "널리 쓰는 말",
+  "fit": "새는 곳을 막고 쌓는 해라는 풀이와 소비를 줄이는 유행의 방향이 같음. 큰 제목이 아니라 작은 부제와 캡션 첫 줄에 씀",
+  "source": "무지출 챌린지 소개 글(마케팅 트렌드 용어), 트렌디 목록 2026-10",
+  "review_by": "2026-11-08",
+  "heavy": false,
+  "note": ""
+ },
+ "zodiac-25": {
+  "name": "개띠 2027 운세 릴스",
+  "opener": "",
+  "tags": [],
+  "term": "",
+  "type": "",
+  "fit": "",
+  "source": "",
+  "review_by": "",
+  "heavy": false,
+  "note": "맥락에 안 맞거나 같은 말 반복이라 평이한 말로 둠"
+ },
+ "zodiac-13": {
+  "name": "뱀띠 2027 운세 릴스",
+  "opener": "",
+  "tags": [],
+  "term": "",
+  "type": "",
+  "fit": "",
+  "source": "",
+  "review_by": "",
+  "heavy": false,
+  "note": "맥락에 안 맞거나 같은 말 반복이라 평이한 말로 둠"
+ },
+ "zodiac-17": {
+  "name": "말띠 2027 운세 릴스",
+  "opener": "",
+  "tags": [],
+  "term": "",
+  "type": "",
+  "fit": "",
+  "source": "",
+  "review_by": "",
+  "heavy": false,
+  "note": "맥락에 안 맞거나 같은 말 반복이라 평이한 말로 둠"
+ },
+ "zodiac-19": {
+  "name": "양띠 2027 운세 릴스",
+  "opener": "갓생은 정리부터, 비우고 나서 다시 서는 해예요",
+  "tags": [
+   "#갓생"
+  ],
+  "term": "갓생",
+  "type": "널리 쓰는 말",
+  "fit": "정리부터 하면 다시 서는 해라는 풀이와 부지런하게 사는 삶을 가리키는 말의 뜻이 맞음. 큰 제목이 아니라 작은 부제와 캡션 첫 줄에 씀",
+  "source": "브라보 마이 라이프 요즘말 사전 '올해는 갓생 하게 살자고요?'(2026-02-23), 마케팅 트렌드 용어 소개 글",
+  "review_by": "2026-11-08",
+  "heavy": false,
+  "note": ""
+ },
+ "zodiac-23": {
+  "name": "닭띠 2027 운세 릴스",
+  "opener": "",
+  "tags": [],
+  "term": "",
+  "type": "",
+  "fit": "",
+  "source": "",
+  "review_by": "",
+  "heavy": false,
+  "note": "맥락에 안 맞거나 같은 말 반복이라 평이한 말로 둠"
+ },
+ "zodiac-27": {
+  "name": "돼지띠 2027 운세 릴스",
+  "opener": "",
+  "tags": [],
+  "term": "",
+  "type": "",
+  "fit": "",
+  "source": "",
+  "review_by": "",
+  "heavy": false,
+  "note": "맥락에 안 맞거나 같은 말 반복이라 평이한 말로 둠"
+ },
+ "zodiac-03": {
+  "name": "쥐띠 2027 운세 릴스",
+  "opener": "",
+  "tags": [],
+  "term": "",
+  "type": "",
+  "fit": "",
+  "source": "",
+  "review_by": "",
+  "heavy": false,
+  "note": "맥락에 안 맞거나 같은 말 반복이라 평이한 말로 둠"
  }
 }
