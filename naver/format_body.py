@@ -6,7 +6,7 @@
 import html as H, re
 
 BODY_PX, TITLE_PX = 16, 19
-BODY_LIMIT, TITLE_LIMIT = 22.0, 18.5          # 한 줄 최대 너비(한글 1자 = 1.0). 폰 네이버 앱은 16px 기준 약 20~22자
+BODY_LIMIT, TITLE_LIMIT = 22.0, 16.8          # 한 줄 최대 너비(한글 1자 = 1.0). 폰 네이버 앱은 16px 기준 약 20~22자
 
 def cw(c):
     o = ord(c)
@@ -86,7 +86,7 @@ def wrap(inner, limit, slack=0.0, soft=None):
     if n == 0: return [inner]
     ws = [width(t["p"]) for t in toks]
     def W(i, j): return sum(ws[i:j + 1]) + .32 * (j - i)
-    LIM = (limit if limit < 18 else 20.4) + slack   # 본문은 한 줄 20.4(한글 약 20자). 제목(19px)은 더 짧게
+    LIM = (limit if limit < 18 else 19.8) + slack   # 본문은 한 줄 19.8(한글 약 19자, 폰 폭 여유). 제목(19px)은 16.8(10/8 대표: 모바일 줄 길이 정리)
     SING = min(soft, LIM) if soft else LIM          # soft가 있으면 이 너비를 넘는 문장은 두 줄 이상으로 나눈다
     if W(0, n - 1) <= SING: return [_line(toks, 0, n - 1)]
     chunks = []; s0 = 0                              # 1) 쉼표·연결 어미·주어 뒤에서 낱덩이로 자른다
@@ -105,7 +105,7 @@ def wrap(inner, limit, slack=0.0, soft=None):
     if soft and len(out) == 1 and W(0, n - 1) > SING: out = _dp(toks, 0, n - 1, LIM, True)
     if len(out) > 1 and W(*out[-1]) < (4 if soft else 7):                                      # 끝줄에 두세 글자만 남으면 한 줄 너비를 조금 늘려 다시
         if slack == 0.0:
-            alt = wrap(inner, limit, 1.3, soft)
+            alt = wrap(inner, limit, 0.7, soft)
             if len(alt) < len(out) or _tail(alt) >= 7: return alt
         out = _dp(toks, 0, n - 1, LIM)
     return [_line(toks, i, j) for i, j in out]
