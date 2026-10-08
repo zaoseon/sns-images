@@ -9,6 +9,8 @@ try:
     import clips_sop as CS; CLIPS=[(c['date'],c['id'],c['post']) for c in CS.CLIPS if c.get('date')]
 except Exception as e: CLIPS=[]; print('clips_sop load fail',e)
 START=D.date(2026,11,1); N=30
+import os
+NIGHTS=tuple(int(x) for x in os.environ.get('NIGHTS','1,3,4,5').split(','))
 SLOTS=["B12","B21","P08","P21","R12","R20","T08","T13","T20","T21","C"]
 TIME={"B12":"12:00","B21":"21:00","P08":"08:00","P21":"21:00","R12":"12:00","R20":"20:00","T08":"08:30","T13":"13:00","T20":"20:30","T21":"21:00","C":"저녁(앱에서 직접)"}
 NAME={"B12":"네이버 글 낮","B21":"네이버 글 밤","P08":"인스타 캐러셀 아침","P21":"인스타 캐러셀 밤","R12":"인스타 릴스 낮","R20":"인스타 릴스 저녁","T08":"스레드 아침","T13":"스레드 낮","T20":"스레드 저녁","T21":"스레드 밤","C":"네이버 클립"}
@@ -70,6 +72,8 @@ for d in range(N):
             continue
         if ex:
             day['slots'][s]=dict(status='LOCKED',items=ex,time=ex[0]['t']); locked_total+=len(ex)
+        elif s=='P21' and dt.weekday() not in NIGHTS:
+            day['slots'][s]=dict(status='COVERED',note='밤 캐러셀은 7장 기준이라 주 4회(화·목·금·토)만 만들어요(대표 10/7). 이 날 밤은 릴스·스레드·네이버 글로 채워요')
         else:
             g=theme_of(s); t=th[g]; tm=TIME[s]
             if s[0] in 'PRT':

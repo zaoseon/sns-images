@@ -6,7 +6,7 @@
    "id": "n40",
    "title": "가족 모임 뒤 유독 지치는 사람의 공통점, 당사주 네 칸과 사주로 보는 가족 거리",
    "locked": true,
-   "el": "흙",
+   "el": "불",
    "dark": false,
    "face": null
   },
@@ -106,7 +106,7 @@
    "id": "n45",
    "title": "퇴근하면 아무것도 하기 싫은 사람의 공통점, 사주 오행과 별자리 원소로 보는 방전과 충전",
    "locked": true,
-   "el": "흙",
+   "el": "불",
    "dark": false,
    "face": null
   },
@@ -126,8 +126,8 @@
    "id": "n46",
    "title": "웃는 얼굴 뒤에 진짜 마음을 숨기는 사람의 공통점, 자미두수 명궁과 별자리로 보는 가면",
    "locked": true,
-   "el": "나무",
-   "dark": true,
+   "el": "쇠",
+   "dark": false,
    "face": null
   },
   {
@@ -163,12 +163,12 @@
   {
    "date": "2026-11-02",
    "time": "12:00",
-   "id": "new-11-02-B12",
+   "id": "n72",
    "title": "띠 궁합 제대로 보는 법, 삼합·육합·원진으로 보는 띠별 궁합",
-   "locked": false,
+   "locked": true,
    "el": "흙",
    "dark": false,
-   "face": "v1_lowbun"
+   "face": null
   },
   {
    "date": "2026-11-02",
@@ -183,12 +183,12 @@
   {
    "date": "2026-11-03",
    "time": "12:00",
-   "id": "new-11-03-B12",
+   "id": "n73",
    "title": "날삼재 뜻, 2027년 돼지·토끼·양띠 이사·결혼 괜찮을까",
-   "locked": false,
+   "locked": true,
    "el": "나무",
    "dark": true,
-   "face": "v2_straight"
+   "face": null
   },
   {
    "date": "2026-11-03",
@@ -198,7 +198,7 @@
    "locked": false,
    "el": "쇠",
    "dark": false,
-   "face": "v3_ponytail"
+   "face": "v1_lowbun"
   },
   {
    "date": "2026-11-04",
@@ -218,7 +218,7 @@
    "locked": false,
    "el": "물",
    "dark": false,
-   "face": "v5_halfup_v2"
+   "face": "v2_straight"
   },
   {
    "date": "2026-11-05",
@@ -228,7 +228,7 @@
    "locked": false,
    "el": "흙",
    "dark": false,
-   "face": "v13_horn_glasses"
+   "face": "v3_ponytail"
   },
   {
    "date": "2026-11-05",
@@ -243,12 +243,12 @@
   {
    "date": "2026-11-06",
    "time": "12:00",
-   "id": "new-11-06-B12",
-   "title": "수성이 거꾸로 가는 날 2027, 딱 세 번과 불의 삼합 달",
-   "locked": false,
+   "id": "n74",
+   "title": "2027년 수성 역행 날짜, 딱 세 번 2월·6월·10월 한눈에",
+   "locked": true,
    "el": "나무",
    "dark": true,
-   "face": "v8_gesture"
+   "face": null
   },
   {
    "date": "2026-11-06",
@@ -258,7 +258,7 @@
    "locked": false,
    "el": "쇠",
    "dark": false,
-   "face": "v1_lowbun"
+   "face": "v4_glasses"
   },
   {
    "date": "2026-11-07",
@@ -268,7 +268,7 @@
    "locked": false,
    "el": "물",
    "dark": false,
-   "face": "v2_straight"
+   "face": "v5_halfup_v2"
   },
   {
    "date": "2026-11-07",
@@ -288,7 +288,7 @@
    "locked": false,
    "el": "흙",
    "dark": false,
-   "face": "v3_ponytail"
+   "face": "v13_horn_glasses"
   },
   {
    "date": "2026-11-08",
@@ -298,7 +298,7 @@
    "locked": false,
    "el": "불",
    "dark": true,
-   "face": "v4_glasses"
+   "face": "v8_gesture"
   },
   {
    "date": "2026-11-09",
@@ -308,7 +308,7 @@
    "locked": false,
    "el": "나무",
    "dark": false,
-   "face": "v5_halfup_v2"
+   "face": "v1_lowbun"
   },
   {
    "date": "2026-11-09",
@@ -318,7 +318,7 @@
    "locked": false,
    "el": "쇠",
    "dark": false,
-   "face": "v13_horn_glasses"
+   "face": "v2_straight"
   },
   {
    "date": "2026-11-10",
@@ -328,7 +328,7 @@
    "locked": false,
    "el": "물",
    "dark": false,
-   "face": "v8_gesture"
+   "face": "v3_ponytail"
   },
   {
    "date": "2026-11-10",
@@ -338,7 +338,7 @@
    "locked": false,
    "el": "흙",
    "dark": false,
-   "face": "v1_lowbun"
+   "face": "v4_glasses"
   },
   {
    "date": "2026-11-11",
@@ -348,7 +348,7 @@
    "locked": false,
    "el": "불",
    "dark": true,
-   "face": "v2_straight"
+   "face": "v5_halfup_v2"
   },
   {
    "date": "2026-11-11",
@@ -358,7 +358,7 @@
    "locked": false,
    "el": "나무",
    "dark": false,
-   "face": "v3_ponytail"
+   "face": "v13_horn_glasses"
   },
   {
    "date": "2026-11-12",
@@ -368,7 +368,7 @@
    "locked": false,
    "el": "물",
    "dark": false,
-   "face": "v4_glasses"
+   "face": "v8_gesture"
   },
   {
    "date": "2026-11-12",
@@ -388,7 +388,7 @@
    "locked": false,
    "el": "흙",
    "dark": false,
-   "face": "v5_halfup_v2"
+   "face": "v1_lowbun"
   },
   {
    "date": "2026-11-13",
@@ -398,7 +398,7 @@
    "locked": false,
    "el": "불",
    "dark": true,
-   "face": "v13_horn_glasses"
+   "face": "v2_straight"
   },
   {
    "date": "2026-11-14",
@@ -408,7 +408,7 @@
    "locked": false,
    "el": "나무",
    "dark": false,
-   "face": "v8_gesture"
+   "face": "v3_ponytail"
   },
   {
    "date": "2026-11-14",
@@ -428,7 +428,7 @@
    "locked": false,
    "el": "쇠",
    "dark": false,
-   "face": "v1_lowbun"
+   "face": "v4_glasses"
   },
   {
    "date": "2026-11-15",
@@ -438,7 +438,7 @@
    "locked": false,
    "el": "흙",
    "dark": false,
-   "face": "v2_straight"
+   "face": "v5_halfup_v2"
   },
   {
    "date": "2026-11-16",
@@ -448,7 +448,7 @@
    "locked": false,
    "el": "불",
    "dark": true,
-   "face": "v3_ponytail"
+   "face": "v13_horn_glasses"
   },
   {
    "date": "2026-11-16",
@@ -458,7 +458,7 @@
    "locked": false,
    "el": "나무",
    "dark": false,
-   "face": "v4_glasses"
+   "face": "v8_gesture"
   },
   {
    "date": "2026-11-17",
@@ -468,7 +468,7 @@
    "locked": false,
    "el": "물",
    "dark": false,
-   "face": "v5_halfup_v2"
+   "face": "v1_lowbun"
   },
   {
    "date": "2026-11-17",
@@ -478,7 +478,7 @@
    "locked": false,
    "el": "쇠",
    "dark": false,
-   "face": "v13_horn_glasses"
+   "face": "v2_straight"
   },
   {
    "date": "2026-11-18",
@@ -488,7 +488,7 @@
    "locked": false,
    "el": "흙",
    "dark": false,
-   "face": "v8_gesture"
+   "face": "v3_ponytail"
   },
   {
    "date": "2026-11-18",
@@ -498,7 +498,7 @@
    "locked": false,
    "el": "불",
    "dark": true,
-   "face": "v1_lowbun"
+   "face": "v4_glasses"
   },
   {
    "date": "2026-11-19",
@@ -508,7 +508,7 @@
    "locked": false,
    "el": "나무",
    "dark": false,
-   "face": "v2_straight"
+   "face": "v5_halfup_v2"
   },
   {
    "date": "2026-11-19",
@@ -518,7 +518,7 @@
    "locked": false,
    "el": "물",
    "dark": false,
-   "face": "v3_ponytail"
+   "face": "v13_horn_glasses"
   },
   {
    "date": "2026-11-20",
@@ -528,7 +528,7 @@
    "locked": false,
    "el": "쇠",
    "dark": false,
-   "face": "v4_glasses"
+   "face": "v8_gesture"
   },
   {
    "date": "2026-11-20",
@@ -538,7 +538,7 @@
    "locked": false,
    "el": "흙",
    "dark": false,
-   "face": "v5_halfup_v2"
+   "face": "v1_lowbun"
   },
   {
    "date": "2026-11-21",
@@ -548,7 +548,7 @@
    "locked": false,
    "el": "불",
    "dark": true,
-   "face": "v13_horn_glasses"
+   "face": "v2_straight"
   },
   {
    "date": "2026-11-21",
@@ -558,7 +558,7 @@
    "locked": false,
    "el": "나무",
    "dark": false,
-   "face": "v8_gesture"
+   "face": "v3_ponytail"
   },
   {
    "date": "2026-11-22",
@@ -568,7 +568,7 @@
    "locked": false,
    "el": "물",
    "dark": false,
-   "face": "v1_lowbun"
+   "face": "v4_glasses"
   },
   {
    "date": "2026-11-22",
@@ -578,7 +578,7 @@
    "locked": false,
    "el": "쇠",
    "dark": false,
-   "face": "v2_straight"
+   "face": "v5_halfup_v2"
   },
   {
    "date": "2026-11-23",
@@ -588,7 +588,7 @@
    "locked": false,
    "el": "흙",
    "dark": false,
-   "face": "v3_ponytail"
+   "face": "v13_horn_glasses"
   },
   {
    "date": "2026-11-23",
@@ -598,7 +598,7 @@
    "locked": false,
    "el": "불",
    "dark": true,
-   "face": "v4_glasses"
+   "face": "v8_gesture"
   },
   {
    "date": "2026-11-24",
@@ -608,7 +608,7 @@
    "locked": false,
    "el": "나무",
    "dark": false,
-   "face": "v5_halfup_v2"
+   "face": "v1_lowbun"
   },
   {
    "date": "2026-11-24",
@@ -618,7 +618,7 @@
    "locked": false,
    "el": "물",
    "dark": false,
-   "face": "v13_horn_glasses"
+   "face": "v2_straight"
   },
   {
    "date": "2026-11-25",
@@ -628,7 +628,7 @@
    "locked": false,
    "el": "쇠",
    "dark": false,
-   "face": "v8_gesture"
+   "face": "v3_ponytail"
   },
   {
    "date": "2026-11-25",
@@ -638,7 +638,7 @@
    "locked": false,
    "el": "흙",
    "dark": false,
-   "face": "v1_lowbun"
+   "face": "v4_glasses"
   },
   {
    "date": "2026-11-26",
@@ -648,7 +648,7 @@
    "locked": false,
    "el": "불",
    "dark": true,
-   "face": "v2_straight"
+   "face": "v5_halfup_v2"
   },
   {
    "date": "2026-11-26",
@@ -658,7 +658,7 @@
    "locked": false,
    "el": "나무",
    "dark": false,
-   "face": "v3_ponytail"
+   "face": "v13_horn_glasses"
   },
   {
    "date": "2026-11-27",
@@ -668,7 +668,7 @@
    "locked": false,
    "el": "물",
    "dark": false,
-   "face": "v4_glasses"
+   "face": "v8_gesture"
   },
   {
    "date": "2026-11-27",
@@ -678,7 +678,7 @@
    "locked": false,
    "el": "쇠",
    "dark": false,
-   "face": "v5_halfup_v2"
+   "face": "v1_lowbun"
   },
   {
    "date": "2026-11-28",
@@ -688,7 +688,7 @@
    "locked": false,
    "el": "흙",
    "dark": false,
-   "face": "v13_horn_glasses"
+   "face": "v2_straight"
   },
   {
    "date": "2026-11-28",
@@ -698,7 +698,7 @@
    "locked": false,
    "el": "불",
    "dark": true,
-   "face": "v8_gesture"
+   "face": "v3_ponytail"
   },
   {
    "date": "2026-11-29",
@@ -708,7 +708,7 @@
    "locked": false,
    "el": "나무",
    "dark": false,
-   "face": "v1_lowbun"
+   "face": "v4_glasses"
   },
   {
    "date": "2026-11-29",
@@ -718,7 +718,7 @@
    "locked": false,
    "el": "물",
    "dark": false,
-   "face": "v2_straight"
+   "face": "v5_halfup_v2"
   },
   {
    "date": "2026-11-30",
@@ -728,7 +728,7 @@
    "locked": false,
    "el": "쇠",
    "dark": false,
-   "face": "v3_ponytail"
+   "face": "v13_horn_glasses"
   },
   {
    "date": "2026-11-30",
@@ -738,7 +738,7 @@
    "locked": false,
    "el": "흙",
    "dark": false,
-   "face": "v4_glasses"
+   "face": "v8_gesture"
   }
  ],
  "ig": [
@@ -753,34 +753,14 @@
    "kind": "정월 얼굴"
   },
   {
-   "date": "2026-11-01",
-   "slot": "P21",
-   "time": "21:00",
-   "locked": false,
-   "title": "입동 앞에 마무리할 한 가지",
-   "set": 1,
-   "face": null,
-   "kind": "큰 숫자"
-  },
-  {
    "date": "2026-11-02",
    "slot": "P08",
    "time": "08:00",
    "locked": false,
    "title": "띠 궁합 제대로 보는 법, 삼합·육합·원진으로 보는 띠별 궁합",
-   "set": 2,
+   "set": 1,
    "face": null,
-   "kind": "도형·차트"
-  },
-  {
-   "date": "2026-11-02",
-   "slot": "P21",
-   "time": "21:00",
-   "locked": false,
-   "title": "앞에 서면 빛나는 사람",
-   "set": 3,
-   "face": null,
-   "kind": "한자 워터마크"
+   "kind": "큰 숫자"
   },
   {
    "date": "2026-11-03",
@@ -788,9 +768,9 @@
    "time": "08:00",
    "locked": false,
    "title": "날삼재 뜻, 2027년 돼지·토끼·양띠 이사·결혼 괜찮을까",
-   "set": 0,
+   "set": 2,
    "face": null,
-   "kind": "질문 글자"
+   "kind": "도형·차트"
   },
   {
    "date": "2026-11-03",
@@ -798,19 +778,9 @@
    "time": "21:00",
    "locked": false,
    "title": "만세력 보는 법, 처음 열면 이것부터",
-   "set": 1,
+   "set": 3,
    "face": null,
-   "kind": "큰 숫자"
-  },
-  {
-   "date": "2026-11-04",
-   "slot": "P21",
-   "time": "21:00",
-   "locked": false,
-   "title": "2027 신년 감정서에는 무엇이 들어 있나",
-   "set": 2,
-   "face": null,
-   "kind": "도형·차트"
+   "kind": "한자 워터마크"
   },
   {
    "date": "2026-11-05",
@@ -828,9 +798,9 @@
    "time": "21:00",
    "locked": false,
    "title": "내년에 좋은 짝을 만날 수 있는 사람, 2027 연애운 신호",
-   "set": 0,
+   "set": 1,
    "face": null,
-   "kind": "한자 워터마크"
+   "kind": "질문 글자"
   },
   {
    "date": "2026-11-06",
@@ -838,9 +808,9 @@
    "time": "08:00",
    "locked": false,
    "title": "수성이 거꾸로 가는 날 2027, 딱 세 번과 불의 삼합 달",
-   "set": 1,
+   "set": 2,
    "face": null,
-   "kind": "질문 글자"
+   "kind": "큰 숫자"
   },
   {
    "date": "2026-11-06",
@@ -848,9 +818,9 @@
    "time": "21:00",
    "locked": false,
    "title": "사주 시간 환산표, 오후 3시 52분은 무슨 시일까",
-   "set": 2,
+   "set": 3,
    "face": null,
-   "kind": "큰 숫자"
+   "kind": "도형·차트"
   },
   {
    "date": "2026-11-07",
@@ -868,9 +838,9 @@
    "time": "21:00",
    "locked": false,
    "title": "도화살 뜻과 연애운, 도화가 있으면 인기가 많을까",
-   "set": 0,
+   "set": 1,
    "face": null,
-   "kind": "도형·차트"
+   "kind": "한자 워터마크"
   },
   {
    "date": "2026-11-08",
@@ -878,16 +848,6 @@
    "time": "08:00",
    "locked": false,
    "title": "화개살 뜻, 혼자 있는 시간이 필요한 사주",
-   "set": 1,
-   "face": null,
-   "kind": "한자 워터마크"
-  },
-  {
-   "date": "2026-11-08",
-   "slot": "P21",
-   "time": "21:00",
-   "locked": false,
-   "title": "당사주 열두 별 뜻 한눈에, 천복성·천수성부터",
    "set": 2,
    "face": null,
    "kind": "질문 글자"
@@ -899,16 +859,6 @@
    "locked": false,
    "title": "신월에 계획 세우는 법, 별자리와 사주로 한 줄",
    "set": 3,
-   "face": "v2_straight",
-   "kind": "정월 얼굴"
-  },
-  {
-   "date": "2026-11-09",
-   "slot": "P21",
-   "time": "21:00",
-   "locked": false,
-   "title": "2027년 불의 별자리 3개, 양·사자·사수의 연애운",
-   "set": 0,
    "face": null,
    "kind": "큰 숫자"
   },
@@ -918,7 +868,7 @@
    "time": "08:00",
    "locked": false,
    "title": "신년운세 보는 법, 사주·별자리·숫자로 2027 준비",
-   "set": 1,
+   "set": 0,
    "face": null,
    "kind": "도형·차트"
   },
@@ -928,19 +878,9 @@
    "time": "21:00",
    "locked": false,
    "title": "하락이수 괘 읽는 법, 상괘와 하괘",
-   "set": 2,
+   "set": 1,
    "face": null,
    "kind": "한자 워터마크"
-  },
-  {
-   "date": "2026-11-11",
-   "slot": "P21",
-   "time": "21:00",
-   "locked": false,
-   "title": "육효 질문법, 어떤 질문이 좋은 질문일까",
-   "set": 3,
-   "face": null,
-   "kind": "질문 글자"
   },
   {
    "date": "2026-11-12",
@@ -958,9 +898,9 @@
    "time": "21:00",
    "locked": false,
    "title": "별자리 원소 궁합, 불·흙·공기·물",
-   "set": 1,
+   "set": 3,
    "face": null,
-   "kind": "큰 숫자"
+   "kind": "질문 글자"
   },
   {
    "date": "2026-11-13",
@@ -968,9 +908,9 @@
    "time": "08:00",
    "locked": false,
    "title": "오행 뜻 한눈에, 내 오행 찾는 법",
-   "set": 2,
+   "set": 0,
    "face": null,
-   "kind": "도형·차트"
+   "kind": "큰 숫자"
   },
   {
    "date": "2026-11-13",
@@ -978,9 +918,9 @@
    "time": "21:00",
    "locked": false,
    "title": "사주 궁합 보는 법, 일간 궁합과 지지 육합 한눈에",
-   "set": 3,
+   "set": 1,
    "face": null,
-   "kind": "한자 워터마크"
+   "kind": "도형·차트"
   },
   {
    "date": "2026-11-14",
@@ -998,9 +938,9 @@
    "time": "21:00",
    "locked": false,
    "title": "수성이 순행으로 돌아와요, 다시 시작하기 좋은 일",
-   "set": 1,
+   "set": 3,
    "face": null,
-   "kind": "질문 글자"
+   "kind": "한자 워터마크"
   },
   {
    "date": "2026-11-15",
@@ -1008,19 +948,9 @@
    "time": "08:00",
    "locked": false,
    "title": "토정비결이란, 사주와 무엇이 다를까",
-   "set": 2,
+   "set": 0,
    "face": null,
-   "kind": "큰 숫자"
-  },
-  {
-   "date": "2026-11-15",
-   "slot": "P21",
-   "time": "21:00",
-   "locked": false,
-   "title": "사주와 별자리가 같은 말을 할 때, 다른 말을 할 때",
-   "set": 3,
-   "face": null,
-   "kind": "도형·차트"
+   "kind": "질문 글자"
   },
   {
    "date": "2026-11-16",
@@ -1028,19 +958,9 @@
    "time": "08:00",
    "locked": false,
    "title": "2027년 재물운이 오는 사주 신호",
-   "set": 0,
-   "face": "v3_ponytail",
-   "kind": "정월 얼굴"
-  },
-  {
-   "date": "2026-11-16",
-   "slot": "P21",
-   "time": "21:00",
-   "locked": false,
-   "title": "처녀자리 성격과 2027년 운세, 별자리와 사주로 겹쳐 보기",
    "set": 1,
    "face": null,
-   "kind": "한자 워터마크"
+   "kind": "큰 숫자"
   },
   {
    "date": "2026-11-17",
@@ -1049,8 +969,8 @@
    "locked": false,
    "title": "2027년 이사 방향 보는 법, 삼살방과 대장군방",
    "set": 2,
-   "face": null,
-   "kind": "질문 글자"
+   "face": "v2_straight",
+   "kind": "정월 얼굴"
   },
   {
    "date": "2026-11-17",
@@ -1060,7 +980,7 @@
    "title": "수비학 2027, 내 숫자별 한 해 흐름",
    "set": 3,
    "face": null,
-   "kind": "큰 숫자"
+   "kind": "도형·차트"
   },
   {
    "date": "2026-11-18",
@@ -1069,18 +989,8 @@
    "locked": false,
    "title": "수능 전날 부모 체크리스트, 컨디션 한 줄",
    "set": 0,
-   "face": "v4_glasses",
-   "kind": "정월 얼굴"
-  },
-  {
-   "date": "2026-11-18",
-   "slot": "P21",
-   "time": "21:00",
-   "locked": false,
-   "title": "대운 보는 법, 10년 단위 흐름 쉬운 말로",
-   "set": 1,
    "face": null,
-   "kind": "도형·차트"
+   "kind": "한자 워터마크"
   },
   {
    "date": "2026-11-19",
@@ -1088,9 +998,9 @@
    "time": "08:00",
    "locked": false,
    "title": "자미두수 재백궁·관록궁, 돈과 일 읽는 법",
-   "set": 2,
+   "set": 1,
    "face": null,
-   "kind": "한자 워터마크"
+   "kind": "질문 글자"
   },
   {
    "date": "2026-11-19",
@@ -1098,9 +1008,9 @@
    "time": "21:00",
    "locked": false,
    "title": "수능 날 밤, 마음이 가라앉지 않는 부모와 수험생",
-   "set": 3,
-   "face": null,
-   "kind": "질문 글자"
+   "set": 2,
+   "face": "v3_ponytail",
+   "kind": "정월 얼굴"
   },
   {
    "date": "2026-11-20",
@@ -1108,9 +1018,9 @@
    "time": "08:00",
    "locked": false,
    "title": "수능 끝난 뒤 허전함, 오행별로 쉬는 법",
-   "set": 0,
-   "face": "v5_halfup_v2",
-   "kind": "정월 얼굴"
+   "set": 3,
+   "face": null,
+   "kind": "큰 숫자"
   },
   {
    "date": "2026-11-20",
@@ -1118,9 +1028,9 @@
    "time": "21:00",
    "locked": false,
    "title": "자미두수 부처궁으로 보는 연애",
-   "set": 1,
+   "set": 0,
    "face": null,
-   "kind": "큰 숫자"
+   "kind": "도형·차트"
   },
   {
    "date": "2026-11-21",
@@ -1128,9 +1038,9 @@
    "time": "08:00",
    "locked": false,
    "title": "무료 당사주와 사주, 어떤 걸 먼저 볼까",
-   "set": 2,
+   "set": 1,
    "face": null,
-   "kind": "도형·차트"
+   "kind": "한자 워터마크"
   },
   {
    "date": "2026-11-21",
@@ -1138,9 +1048,9 @@
    "time": "21:00",
    "locked": false,
    "title": "오행별로 다른 연애할 때 말투",
-   "set": 3,
-   "face": null,
-   "kind": "한자 워터마크"
+   "set": 2,
+   "face": "v4_glasses",
+   "kind": "정월 얼굴"
   },
   {
    "date": "2026-11-22",
@@ -1148,17 +1058,7 @@
    "time": "08:00",
    "locked": false,
    "title": "사수자리 성격과 2027년 운세, 별자리와 사주로",
-   "set": 0,
-   "face": "v13_horn_glasses",
-   "kind": "정월 얼굴"
-  },
-  {
-   "date": "2026-11-22",
-   "slot": "P21",
-   "time": "21:00",
-   "locked": false,
-   "title": "12월 손없는날과 이사 날짜, 대설 전후 정리",
-   "set": 1,
+   "set": 3,
    "face": null,
    "kind": "질문 글자"
   },
@@ -1168,19 +1068,9 @@
    "time": "08:00",
    "locked": false,
    "title": "재회를 사주로 볼 수 있을까",
-   "set": 2,
+   "set": 0,
    "face": null,
    "kind": "큰 숫자"
-  },
-  {
-   "date": "2026-11-23",
-   "slot": "P21",
-   "time": "21:00",
-   "locked": false,
-   "title": "2027 신년 감정서 샘플 보기, 12개월 달력과 근거",
-   "set": 3,
-   "face": null,
-   "kind": "도형·차트"
   },
   {
    "date": "2026-11-24",
@@ -1188,9 +1078,9 @@
    "time": "08:00",
    "locked": false,
    "title": "보름달 밤, 올해 마무리 점검 5분",
-   "set": 0,
-   "face": "v8_gesture",
-   "kind": "정월 얼굴"
+   "set": 1,
+   "face": null,
+   "kind": "도형·차트"
   },
   {
    "date": "2026-11-24",
@@ -1198,9 +1088,9 @@
    "time": "21:00",
    "locked": false,
    "title": "2027 불 일간(병·정) 운세",
-   "set": 1,
-   "face": null,
-   "kind": "한자 워터마크"
+   "set": 2,
+   "face": "v5_halfup_v2",
+   "kind": "정월 얼굴"
   },
   {
    "date": "2026-11-25",
@@ -1208,19 +1098,9 @@
    "time": "08:00",
    "locked": false,
    "title": "썸 단계에서 연락 속도, 사주·별자리·숫자 유형",
-   "set": 2,
-   "face": null,
-   "kind": "질문 글자"
-  },
-  {
-   "date": "2026-11-25",
-   "slot": "P21",
-   "time": "21:00",
-   "locked": false,
-   "title": "정미년 월별 운세 한눈에, 2027 열두 달 큰 흐름",
    "set": 3,
    "face": null,
-   "kind": "큰 숫자"
+   "kind": "한자 워터마크"
   },
   {
    "date": "2026-11-26",
@@ -1229,8 +1109,8 @@
    "locked": false,
    "title": "별자리 궁합표, 12별자리 한눈에 보기",
    "set": 0,
-   "face": "v1_lowbun",
-   "kind": "정월 얼굴"
+   "face": null,
+   "kind": "질문 글자"
   },
   {
    "date": "2026-11-26",
@@ -1240,7 +1120,7 @@
    "title": "주역 64괘, 하락이수, 육효는 어떻게 다를까",
    "set": 1,
    "face": null,
-   "kind": "도형·차트"
+   "kind": "큰 숫자"
   },
   {
    "date": "2026-11-27",
@@ -1249,8 +1129,8 @@
    "locked": false,
    "title": "블랙프라이데이 충동구매 줄이기, 오행별 체크리스트",
    "set": 2,
-   "face": null,
-   "kind": "한자 워터마크"
+   "face": "v13_horn_glasses",
+   "kind": "정월 얼굴"
   },
   {
    "date": "2026-11-27",
@@ -1260,7 +1140,7 @@
    "title": "싸우고 화해하는 방식, 오행별로 달라요",
    "set": 3,
    "face": null,
-   "kind": "질문 글자"
+   "kind": "도형·차트"
   },
   {
    "date": "2026-11-28",
@@ -1269,8 +1149,8 @@
    "locked": false,
    "title": "2027 나무 일간(갑·을) 운세",
    "set": 0,
-   "face": "v2_straight",
-   "kind": "정월 얼굴"
+   "face": null,
+   "kind": "한자 워터마크"
   },
   {
    "date": "2026-11-28",
@@ -1280,7 +1160,7 @@
    "title": "연말 회고, 병오년 마무리하는 법",
    "set": 1,
    "face": null,
-   "kind": "큰 숫자"
+   "kind": "질문 글자"
   },
   {
    "date": "2026-11-29",
@@ -1289,18 +1169,8 @@
    "locked": false,
    "title": "12월 운세 달력, 대설·동지·신월",
    "set": 2,
-   "face": null,
-   "kind": "도형·차트"
-  },
-  {
-   "date": "2026-11-29",
-   "slot": "P21",
-   "time": "21:00",
-   "locked": false,
-   "title": "대설 뜻과 시기 2026, 대설 전에 태어났다면",
-   "set": 3,
-   "face": null,
-   "kind": "한자 워터마크"
+   "face": "v8_gesture",
+   "kind": "정월 얼굴"
   },
   {
    "date": "2026-11-30",
@@ -1308,19 +1178,9 @@
    "time": "08:00",
    "locked": false,
    "title": "12월 시작 전, 이달의 한 줄 적기",
-   "set": 0,
-   "face": "v3_ponytail",
-   "kind": "정월 얼굴"
-  },
-  {
-   "date": "2026-11-30",
-   "slot": "P21",
-   "time": "21:00",
-   "locked": false,
-   "title": "2027 신년 감정서 구성·가격·환불 한눈에",
-   "set": 1,
+   "set": 3,
    "face": null,
-   "kind": "질문 글자"
+   "kind": "큰 숫자"
   }
  ],
  "reels": [
@@ -1438,10 +1298,10 @@
    "date": "2026-11-06",
    "slot": "R12",
    "time": "12:00",
-   "locked": false,
-   "title": "수성이 거꾸로 가는 날 2027, 딱 세 번과 불의 삼합 달",
-   "scene": "여섯 방향 칸",
-   "ending": "팔로우 카드",
+   "locked": true,
+   "title": "2027년에 수성이 거꾸로 가는 날은 딱 세 번이에요. 2/10~3/3,",
+   "scene": null,
+   "ending": null,
    "face": null
   },
   {
@@ -1470,8 +1330,8 @@
    "time": "20:00",
    "locked": false,
    "title": "입동 전후에 태어난 사람은 몇 %일까",
-   "scene": "체크 목록",
-   "ending": "댓글 질문 크게",
+   "scene": "여섯 방향 칸",
+   "ending": "팔로우 카드",
    "face": null
   },
   {
@@ -1480,8 +1340,8 @@
    "time": "12:00",
    "locked": false,
    "title": "화개살 뜻, 혼자 있는 시간이 필요한 사주",
-   "scene": "게이지",
-   "ending": "정월+알약",
+   "scene": "체크 목록",
+   "ending": "댓글 질문 크게",
    "face": "v1_lowbun"
   },
   {
@@ -1500,8 +1360,8 @@
    "time": "12:00",
    "locked": false,
    "title": "신월에 계획 세우는 법, 별자리와 사주로 한 줄",
-   "scene": "키네틱 글자",
-   "ending": "한 줄 정리+팔로우",
+   "scene": "게이지",
+   "ending": "정월+알약",
    "face": null
   },
   {
@@ -1510,8 +1370,8 @@
    "time": "20:00",
    "locked": false,
    "title": "신월·보름달에 태어난 사람은 몇 %일까",
-   "scene": "카드 뒤집기",
-   "ending": "숫자 반복+팔로우",
+   "scene": "키네틱 글자",
+   "ending": "한 줄 정리+팔로우",
    "face": "v2_straight"
   },
   {
@@ -1520,8 +1380,8 @@
    "time": "12:00",
    "locked": false,
    "title": "신년운세 보는 법, 사주·별자리·숫자로 2027 준비",
-   "scene": "오행 그림",
-   "ending": "팔로우 카드",
+   "scene": "카드 뒤집기",
+   "ending": "숫자 반복+팔로우",
    "face": null
   },
   {
@@ -1530,8 +1390,8 @@
    "time": "20:00",
    "locked": false,
    "title": "내 자미두수 신궁에는 어떤 별이 있을까",
-   "scene": "12궁·60괘 판",
-   "ending": "댓글 질문 크게",
+   "scene": "오행 그림",
+   "ending": "팔로우 카드",
    "face": null
   },
   {
@@ -1550,8 +1410,8 @@
    "time": "12:00",
    "locked": false,
    "title": "연락은 먼저 하는 쪽, 기다리는 쪽",
-   "scene": "노선도",
-   "ending": "정월+알약",
+   "scene": "12궁·60괘 판",
+   "ending": "댓글 질문 크게",
    "face": null
   },
   {
@@ -1560,8 +1420,8 @@
    "time": "20:00",
    "locked": false,
    "title": "빼빼로데이 연애 케미 체험",
-   "scene": "큰 숫자 세기",
-   "ending": "한 줄 정리+팔로우",
+   "scene": "노선도",
+   "ending": "정월+알약",
    "face": null
   },
   {
@@ -1580,8 +1440,8 @@
    "time": "20:00",
    "locked": false,
    "title": "생일 숫자와 띠, 가장 흔한 짝은",
-   "scene": "점 격자",
-   "ending": "숫자 반복+팔로우",
+   "scene": "큰 숫자 세기",
+   "ending": "한 줄 정리+팔로우",
    "face": null
   },
   {
@@ -1590,8 +1450,8 @@
    "time": "12:00",
    "locked": false,
    "title": "오행 뜻 한눈에, 내 오행 찾는 법",
-   "scene": "막대",
-   "ending": "팔로우 카드",
+   "scene": "점 격자",
+   "ending": "숫자 반복+팔로우",
    "face": null
   },
   {
@@ -1600,8 +1460,8 @@
    "time": "20:00",
    "locked": false,
    "title": "내 일주는 60개 중 흔한 쪽일까",
-   "scene": "겹치는 두 원",
-   "ending": "댓글 질문 크게",
+   "scene": "막대",
+   "ending": "팔로우 카드",
    "face": "v3_ponytail"
   },
   {
@@ -1620,8 +1480,8 @@
    "time": "20:00",
    "locked": false,
    "title": "내 생일에 수성은 거꾸로 가고 있었을까",
-   "scene": "좌우 비교 패널",
-   "ending": "정월+알약",
+   "scene": "겹치는 두 원",
+   "ending": "댓글 질문 크게",
    "face": null
   },
   {
@@ -1630,8 +1490,8 @@
    "time": "12:00",
    "locked": false,
    "title": "토정비결이란, 사주와 무엇이 다를까",
-   "scene": "여섯 방향 칸",
-   "ending": "한 줄 정리+팔로우",
+   "scene": "좌우 비교 패널",
+   "ending": "정월+알약",
    "face": "v4_glasses"
   },
   {
@@ -1640,8 +1500,8 @@
    "time": "20:00",
    "locked": false,
    "title": "같은 질문을 두 번 던지면 같은 괘가 나올까",
-   "scene": "체크 목록",
-   "ending": "숫자 반복+팔로우",
+   "scene": "여섯 방향 칸",
+   "ending": "한 줄 정리+팔로우",
    "face": null
   },
   {
@@ -1650,8 +1510,8 @@
    "time": "12:00",
    "locked": false,
    "title": "2027년 재물운이 오는 사주 신호",
-   "scene": "게이지",
-   "ending": "팔로우 카드",
+   "scene": "체크 목록",
+   "ending": "숫자 반복+팔로우",
    "face": null
   },
   {
@@ -1660,8 +1520,8 @@
    "time": "20:00",
    "locked": false,
    "title": "내 하락이수 괘는 어느 쪽이 흔할까",
-   "scene": "키네틱 글자",
-   "ending": "댓글 질문 크게",
+   "scene": "게이지",
+   "ending": "팔로우 카드",
    "face": "v5_halfup_v2"
   },
   {
@@ -1670,8 +1530,8 @@
    "time": "12:00",
    "locked": false,
    "title": "2027년 이사 방향 보는 법, 삼살방과 대장군방",
-   "scene": "카드 뒤집기",
-   "ending": "정월+알약",
+   "scene": "키네틱 글자",
+   "ending": "댓글 질문 크게",
    "face": null
   },
   {
@@ -1680,8 +1540,8 @@
    "time": "20:00",
    "locked": false,
    "title": "손없는날은 한 달에 몇 번일까",
-   "scene": "오행 그림",
-   "ending": "한 줄 정리+팔로우",
+   "scene": "카드 뒤집기",
+   "ending": "정월+알약",
    "face": null
   },
   {
@@ -1690,8 +1550,8 @@
    "time": "12:00",
    "locked": false,
    "title": "수능 전날 부모 체크리스트, 컨디션 한 줄",
-   "scene": "12궁·60괘 판",
-   "ending": "숫자 반복+팔로우",
+   "scene": "오행 그림",
+   "ending": "한 줄 정리+팔로우",
    "face": "v13_horn_glasses"
   },
   {
@@ -1700,8 +1560,8 @@
    "time": "20:00",
    "locked": false,
    "title": "수능날 일진과 내 일간의 관계",
-   "scene": "노선도",
-   "ending": "팔로우 카드",
+   "scene": "12궁·60괘 판",
+   "ending": "숫자 반복+팔로우",
    "face": null
   },
   {
@@ -1710,8 +1570,8 @@
    "time": "12:00",
    "locked": false,
    "title": "자미두수 재백궁·관록궁, 돈과 일 읽는 법",
-   "scene": "큰 숫자 세기",
-   "ending": "댓글 질문 크게",
+   "scene": "노선도",
+   "ending": "팔로우 카드",
    "face": null
   },
   {
@@ -1720,8 +1580,8 @@
    "time": "20:00",
    "locked": false,
    "title": "숫자별 긴장 푸는 한마디",
-   "scene": "점 격자",
-   "ending": "정월+알약",
+   "scene": "큰 숫자 세기",
+   "ending": "댓글 질문 크게",
    "face": "v8_gesture"
   },
   {
@@ -1730,8 +1590,8 @@
    "time": "12:00",
    "locked": false,
    "title": "수능 끝난 뒤 허전함, 오행별로 쉬는 법",
-   "scene": "막대",
-   "ending": "한 줄 정리+팔로우",
+   "scene": "점 격자",
+   "ending": "정월+알약",
    "face": null
   },
   {
@@ -1740,8 +1600,8 @@
    "time": "20:00",
    "locked": false,
    "title": "내 자미두수 명궁 주성은 흔할까",
-   "scene": "겹치는 두 원",
-   "ending": "숫자 반복+팔로우",
+   "scene": "막대",
+   "ending": "한 줄 정리+팔로우",
    "face": null
   },
   {
@@ -1750,8 +1610,8 @@
    "time": "12:00",
    "locked": false,
    "title": "무료 당사주와 사주, 어떤 걸 먼저 볼까",
-   "scene": "좌우 비교 패널",
-   "ending": "팔로우 카드",
+   "scene": "겹치는 두 원",
+   "ending": "숫자 반복+팔로우",
    "face": "v1_lowbun"
   },
   {
@@ -1760,8 +1620,8 @@
    "time": "20:00",
    "locked": false,
    "title": "내 당사주 중심별은 흔할까",
-   "scene": "여섯 방향 칸",
-   "ending": "댓글 질문 크게",
+   "scene": "좌우 비교 패널",
+   "ending": "팔로우 카드",
    "face": null
   },
   {
@@ -1770,8 +1630,8 @@
    "time": "12:00",
    "locked": false,
    "title": "사수자리 성격과 2027년 운세, 별자리와 사주로",
-   "scene": "체크 목록",
-   "ending": "정월+알약",
+   "scene": "여섯 방향 칸",
+   "ending": "댓글 질문 크게",
    "face": null
   },
   {
@@ -1780,8 +1640,8 @@
    "time": "20:00",
    "locked": false,
    "title": "사수자리 시즌에 태어난 사람의 일간",
-   "scene": "게이지",
-   "ending": "한 줄 정리+팔로우",
+   "scene": "체크 목록",
+   "ending": "정월+알약",
    "face": "v2_straight"
   },
   {
@@ -1790,8 +1650,8 @@
    "time": "12:00",
    "locked": false,
    "title": "재회를 사주로 볼 수 있을까",
-   "scene": "키네틱 글자",
-   "ending": "숫자 반복+팔로우",
+   "scene": "게이지",
+   "ending": "한 줄 정리+팔로우",
    "face": null
   },
   {
@@ -1800,8 +1660,8 @@
    "time": "20:00",
    "locked": false,
    "title": "사주와 별자리가 같은 말을 하는 비율",
-   "scene": "카드 뒤집기",
-   "ending": "팔로우 카드",
+   "scene": "키네틱 글자",
+   "ending": "숫자 반복+팔로우",
    "face": null
   },
   {
@@ -1810,8 +1670,8 @@
    "time": "12:00",
    "locked": false,
    "title": "보름달 밤, 올해 마무리 점검 5분",
-   "scene": "오행 그림",
-   "ending": "댓글 질문 크게",
+   "scene": "카드 뒤집기",
+   "ending": "팔로우 카드",
    "face": "v3_ponytail"
   },
   {
@@ -1820,8 +1680,8 @@
    "time": "20:00",
    "locked": false,
    "title": "보름달 밤 육효 한 질문",
-   "scene": "12궁·60괘 판",
-   "ending": "정월+알약",
+   "scene": "오행 그림",
+   "ending": "댓글 질문 크게",
    "face": null
   },
   {
@@ -1830,8 +1690,8 @@
    "time": "12:00",
    "locked": false,
    "title": "썸 단계에서 연락 속도, 사주·별자리·숫자 유형",
-   "scene": "노선도",
-   "ending": "한 줄 정리+팔로우",
+   "scene": "12궁·60괘 판",
+   "ending": "정월+알약",
    "face": null
   },
   {
@@ -1840,8 +1700,8 @@
    "time": "20:00",
    "locked": false,
    "title": "2027년은 불의 해, 내 일간의 불은 몇 %",
-   "scene": "큰 숫자 세기",
-   "ending": "숫자 반복+팔로우",
+   "scene": "노선도",
+   "ending": "한 줄 정리+팔로우",
    "face": "v4_glasses"
   },
   {
@@ -1850,8 +1710,8 @@
    "time": "12:00",
    "locked": false,
    "title": "별자리 궁합표, 12별자리 한눈에 보기",
-   "scene": "점 격자",
-   "ending": "팔로우 카드",
+   "scene": "큰 숫자 세기",
+   "ending": "숫자 반복+팔로우",
    "face": null
   },
   {
@@ -1860,8 +1720,8 @@
    "time": "20:00",
    "locked": false,
    "title": "내 생명수와 별자리 원소의 짝",
-   "scene": "막대",
-   "ending": "댓글 질문 크게",
+   "scene": "점 격자",
+   "ending": "팔로우 카드",
    "face": null
   },
   {
@@ -1870,8 +1730,8 @@
    "time": "12:00",
    "locked": false,
    "title": "블랙프라이데이 충동구매 줄이기, 오행별 체크리스트",
-   "scene": "겹치는 두 원",
-   "ending": "정월+알약",
+   "scene": "막대",
+   "ending": "댓글 질문 크게",
    "face": "v5_halfup_v2"
   },
   {
@@ -1880,8 +1740,8 @@
    "time": "20:00",
    "locked": false,
    "title": "오행별 사고 싶은 순간",
-   "scene": "좌우 비교 패널",
-   "ending": "한 줄 정리+팔로우",
+   "scene": "겹치는 두 원",
+   "ending": "정월+알약",
    "face": null
   },
   {
@@ -1890,8 +1750,8 @@
    "time": "12:00",
    "locked": false,
    "title": "2027 나무 일간(갑·을) 운세",
-   "scene": "여섯 방향 칸",
-   "ending": "숫자 반복+팔로우",
+   "scene": "좌우 비교 패널",
+   "ending": "한 줄 정리+팔로우",
    "face": null
   },
   {
@@ -1900,8 +1760,8 @@
    "time": "20:00",
    "locked": false,
    "title": "하락이수, 육효, 주역 한 장 비교",
-   "scene": "체크 목록",
-   "ending": "팔로우 카드",
+   "scene": "여섯 방향 칸",
+   "ending": "숫자 반복+팔로우",
    "face": "v13_horn_glasses"
   },
   {
@@ -1910,8 +1770,8 @@
    "time": "12:00",
    "locked": false,
    "title": "12월 운세 달력, 대설·동지·신월",
-   "scene": "게이지",
-   "ending": "댓글 질문 크게",
+   "scene": "체크 목록",
+   "ending": "팔로우 카드",
    "face": null
   },
   {
@@ -1920,8 +1780,8 @@
    "time": "20:00",
    "locked": false,
    "title": "당사주로 보는 12월, 내 열두 별의 달",
-   "scene": "키네틱 글자",
-   "ending": "정월+알약",
+   "scene": "게이지",
+   "ending": "댓글 질문 크게",
    "face": null
   },
   {
@@ -1930,8 +1790,8 @@
    "time": "12:00",
    "locked": false,
    "title": "12월 시작 전, 이달의 한 줄 적기",
-   "scene": "카드 뒤집기",
-   "ending": "한 줄 정리+팔로우",
+   "scene": "키네틱 글자",
+   "ending": "정월+알약",
    "face": "v8_gesture"
   },
   {
@@ -1940,8 +1800,8 @@
    "time": "20:00",
    "locked": false,
    "title": "자미두수로 보는 12월 한 줄",
-   "scene": "오행 그림",
-   "ending": "숫자 반복+팔로우",
+   "scene": "카드 뒤집기",
+   "ending": "한 줄 정리+팔로우",
    "face": null
   }
  ],
@@ -1956,31 +1816,16 @@
     "n42",
     "n58",
     "나무"
-   ],
-   [
-    "n66",
-    "n45",
-    "흙"
-   ],
-   [
-    "n62",
-    "n46",
-    "나무"
    ]
   ],
-  "blog_new_dark": 11,
-  "blog_new": 52,
-  "blog_dark_adjacent": [
-   [
-    "n62",
-    "n46"
-   ]
-  ],
-  "ig_new": 54,
-  "ig_face_new": 10,
+  "blog_new_dark": 9,
+  "blog_new": 49,
+  "blog_dark_adjacent": [],
+  "ig_new": 40,
+  "ig_face_new": 7,
   "ig_violations": [],
-  "ig_face_share": 24,
-  "reel_new": 50,
+  "ig_face_share": 25,
+  "reel_new": 49,
   "reel_face": 14
  },
  "SETS": [
