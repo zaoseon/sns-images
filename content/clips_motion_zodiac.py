@@ -442,7 +442,7 @@ CFG["닭띠"]["hook"] = "2027년에 닭띠의\n꼼꼼함이 드러나는 건\n�
 CFG["돼지띠"]["hook"] = "2027년에 돼지띠에게\n돈이 사람을 통해 오는 건\n연결의 해라는 뜻"
 CFG["쥐띠"]["hook"] = "2027년에 쥐띠가\n돈은 들어오는데 마음이 상하기 쉬운 건\n오해를 줄이라는 뜻"
 # 단정을 줄인 문구(R20·표현가이드 10번): '분명해요' 같은 확신 표현을 쓰지 않는다
-OVER = {"쥐띠": {"money": ("돈이 들어올 기회가 보이는 해예요.", "가까운 사람과 돈이 섞이면 마음이 먼저 상해요.")}}
+OVER = {"쥐띠": {"money": ("돈이 들어올 기회가 보이는 해예요.", "가까운 사람과 돈이 섞이면 마음이 먼저 상해요.")}, "개띠": {"money": ("꼼꼼히 챙긴 계약이 돈을 지켜 줘요.", "보증과 명의 빌려주기는 피하세요.")}}   # 기획서 화면과 영상이 같은 문구를 쓰게 여기 한곳에 둔다
 SUB = {n: p["sub"] for n, p in PLAN.items() if p.get("sub")}
 # 배경 돌려 쓰기(R34, 대표 10/8): 날짜 순서대로 5가지를 돌려 이웃 영상은 다른 배경. 브랜드 소재(별빛·달·해) 변주, 항상 어두운 톤, 황도 차트(R22)는 그대로
 BG_ORDER = ("burgundy-sun", "violet-moon", "forest", "teal", "navy")
@@ -453,7 +453,7 @@ def G_kw(name):
     """표지(1번 장면, 첫 프레임): 자기 띠가 제일 먼저 보이게 띠 이름을 가장 크게(R35, 대표 10/8). 트렌디 표현은 맨 위 배지(작은 글, R25), 키워드는 그다음 크기"""
     t = T[name]; P = PLAN.get(name, {}); term = P.get("term"); sub = P.get("sub")
     def f(c):
-        BH = 124; parts = [("2027년", 54, 1.2), (name, 176, 1.15), (t["one"], 92, 1.2)] + ([(sub, 44, 1.3)] if sub else [])
+        BH = 124; parts = [("2027년", 54, 1.2), (name, 176, 1.15), (t["one"], 92, 1.2)] + ([(sub, 50, 1.3)] if sub else [])
         hs = [th_(a, b, 840, lh) for a, b, lh in parts]; gaps = [GT * .6, GT * .8] + [GT] * (len(parts) - 3)
         y0, tot = stack_top(([BH] if term else []) + hs, ([GT] if term else []) + gaps)
         y = y0
@@ -464,13 +464,13 @@ def G_kw(name):
             y += BH + GT
         y = tblock(c, parts[0][0], y, .15, 54, color=GOLD, lh=1.2); y = tblock(c, name, y + GT * .6, .25, 176, color=GOLD, lh=1.15, maxw=840)
         y = tblock(c, t["one"], y + GT * .8, .6, 92, lh=1.2, maxw=840)
-        if sub: tblock(c, sub, y + GT, 1.1, 44, color=DIM, lh=1.3)
+        if sub: tblock(c, sub, y + GT, 1.1, 50, color=DIM, lh=1.3)
     return f
 def G_years(name):
     cf = CFG[name]; ys = cf["years"].replace("년생", "").split("·"); big = f"{ys[0]}·{ys[1]}\n{ys[2]}·{ys[3]}년생"
     def f(c):
-        h1 = th_(f"{name} 출생연도", 84, 840, 1.2); h2 = th_(big, 104, 820, 1.25); y0, tot = stack_top([h1, h2], [GT])
-        y = tblock(c, f"{name} 출생연도", y0, .05, 84, color=GOLD, lh=1.2, maxw=840); tblock(c, big, y + GT, .3, 104, lh=1.25)
+        h1 = th_(f"{name} 출생연도", 84, 840, 1.2); h2 = th_(big, 116, 840, 1.25); y0, tot = stack_top([h1, h2], [GT])
+        y = tblock(c, f"{name} 출생연도", y0, .05, 84, color=GOLD, lh=1.2, maxw=840); tblock(c, big, y + GT, .3, 116, lh=1.25, maxw=840)
     return f
 def G_hook(name):
     cf = CFG[name]
@@ -480,108 +480,117 @@ def G_hook(name):
 def G_why(name):
     cf = CFG[name]
     def f(c):
-        tt = c.t; ht = th_("왜 그럴까", 88, 820, 1.25); h1 = th_(cf["l1"], 58, 820, 1.25); h2 = th_(cf["l2"], 46, 800, 1.35)
-        y0, tot = stack_top([ht, Hg, h1, h2], [GG, GG, GT]); y = tblock(c, "왜 그럴까", y0, .05, 88, lh=1.25)
-        im, d = lay(Hg); cy = Hg // 2; g = lambda t0: e_back(cl((tt - t0) / .45))
+        tt = c.t; TS, S1, S2 = 92, 68, 56
+        ht = th_("왜 그럴까", TS, 840, 1.2); h1 = th_(cf["l1"], S1, 840, 1.2); h2 = th_(cf["l2"], S2, 820, 1.3)
+        Hg = int(max(300, min(430, 880 - (ht + h1 + h2 + GG + GG + GT) - 6)))   # 글 높이를 뺀 나머지만큼 도형을 키운다(화면에 차게, 범위는 R21 안)
+        y0, tot = stack_top([ht, Hg, h1, h2], [GG, GG, GT]); y = tblock(c, "왜 그럴까", y0, .05, TS, lh=1.2, maxw=840)
+        k = Hg / 340.0; kx = min(k, 1.12); im, d = lay(Hg); cy = Hg // 2; g = lambda t0: e_back(cl((tt - t0) / .45)); P_ = lambda v: int(v * k)
         if cf["shape"] == "ring":
-            r = 80 * min(g(.4), 1.05); pulse = 1 + .04 * math.sin(tt * 5)
-            for k, w_ in enumerate((46, 30, 16)):
-                rr_ = (r + 24 + k * 20) * pulse; d.ellipse((CX - rr_, cy - rr_, CX + rr_, cy + rr_), outline=(CORAL[0], CORAL[1], CORAL[2], 200 - k * 55), width=w_ // 4 + 2)
-            circ(d, CX, cy, int(r), cf["hj"], GOLD, fg=(30, 24, 40, 255), fs=100)
-        elif cf["shape"] == "stack2":   # 辰 위, 未 아래 같은 흙
-            a, b = g(.4), g(1.0); circ(d, CX, 74, int(66 * min(a, 1.05)), "辰", (206, 168, 84, 120), GOLD, fs=66); circ(d, CX, Hg - 74, int(66 * min(b, 1.05)), "未", (206, 168, 84, 120), GOLD, fs=66)
-            ln = e_out(cl((tt - 1.4) / .5)); d.line([(CX, 146), (CX, 146 + 48 * ln)], fill=GOLD, width=8)
-        elif cf["shape"] == "pair2":    # 戌 ⇄ 未 서로 조율
-            a, b = g(.4), g(.9); circ(d, CX - 240, cy, int(100 * min(a, 1.05)), "戌", (255, 255, 255, 30), GOLD, fs=96); circ(d, CX + 240, cy, int(100 * min(b, 1.05)), "未", (255, 255, 255, 30), GOLD, fs=96)
-            ar = e_out(cl((tt - 1.2) / .5))
-            if ar > 0: arrow(d, CX - 110, CX - 110 + 220 * ar, cy - 36, GOLD); arrow(d, CX + 110, CX + 110 - 220 * ar, cy + 36, CORAL)
-        elif cf["shape"] == "row3":     # 巳 午 未 여름의 불
-            for k, (x, hj) in enumerate(((CX - 290, "巳"), (CX, "午"), (CX + 290, "未"))):
-                gg = g(.3 + k * .45)
-                if gg > 0: circ(d, x, cy, int(100 * min(gg, 1.05)), hj, CORAL if hj == "午" else (255, 255, 255, 30), CORAL, fs=96)
-            if tt > 1.3: d.rounded_rectangle((CX - 190, cy - 8, CX - 100, cy + 8), 8, fill=(255, 138, 115, 255)); d.rounded_rectangle((CX + 100, cy - 8, CX + 190, cy + 8), 8, fill=(255, 138, 115, 255))
-        elif cf["shape"] == "overlap":  # 午 未 겹침
+            r = P_(96) * min(g(.4), 1.05); pulse = 1 + .04 * math.sin(tt * 5)
+            for kk, w_ in enumerate((46, 30, 16)):
+                rr_ = (r + P_(22) + kk * P_(18)) * pulse; d.ellipse((CX - rr_, cy - rr_, CX + rr_, cy + rr_), outline=(CORAL[0], CORAL[1], CORAL[2], 200 - kk * 55), width=w_ // 4 + 2)
+            circ(d, CX, cy, int(r), cf["hj"], GOLD, fg=(30, 24, 40, 255), fs=P_(118))
+        elif cf["shape"] == "stack2":
+            a_, b_ = g(.4), g(1.0); rr0 = P_(76); circ(d, CX, rr0 + 6, int(rr0 * min(a_, 1.05)), "辰", (206, 168, 84, 120), GOLD, fs=P_(76)); circ(d, CX, Hg - rr0 - 6, int(rr0 * min(b_, 1.05)), "未", (206, 168, 84, 120), GOLD, fs=P_(76))
+            ln = e_out(cl((tt - 1.4) / .5)); d.line([(CX, 2 * rr0 + 8), (CX, 2 * rr0 + 8 + (Hg - 2 * (2 * rr0 + 8)) * ln)], fill=GOLD, width=8)
+        elif cf["shape"] == "pair2":
+            a_, b_ = g(.4), g(.9); ox = int(240 * kx); circ(d, CX - ox, cy, int(P_(112) * min(a_, 1.05)), "戌", (255, 255, 255, 30), GOLD, fs=P_(108)); circ(d, CX + ox, cy, int(P_(112) * min(b_, 1.05)), "未", (255, 255, 255, 30), GOLD, fs=P_(108))
+            ar = e_out(cl((tt - 1.2) / .5)); gx = P_(112) + 12
+            if ar > 0: arrow(d, CX - ox + gx, CX - ox + gx + (2 * ox - 2 * gx) * ar, cy - 36, GOLD); arrow(d, CX + ox - gx, CX + ox - gx - (2 * ox - 2 * gx) * ar, cy + 36, CORAL)
+        elif cf["shape"] == "row3":
+            ox = 285; rr0 = int(110 * min(k, 1.0) + 6)
+            for kk, (x, hj) in enumerate(((CX - ox, "巳"), (CX, "午"), (CX + ox, "未"))):
+                gg = g(.3 + kk * .45)
+                if gg > 0: circ(d, x, cy, int(rr0 * min(gg, 1.05)), hj, CORAL if hj == "午" else (255, 255, 255, 30), CORAL, fs=int(104 * min(k, 1.0)))
+            if tt > 1.3: d.rounded_rectangle((CX - ox + rr0 + 8, cy - 8, CX - rr0 - 8, cy + 8), 8, fill=(255, 138, 115, 255)); d.rounded_rectangle((CX + rr0 + 8, cy - 8, CX + ox - rr0 - 8, cy + 8), 8, fill=(255, 138, 115, 255))
+        elif cf["shape"] == "overlap":
             L1 = Image.new("RGBA", (1080, Hg), (0, 0, 0, 0)); L2 = Image.new("RGBA", (1080, Hg), (0, 0, 0, 0)); d1 = ImageDraw.Draw(L1); d2 = ImageDraw.Draw(L2)
-            a, b = g(.4), g(.9); r1 = int(130 * min(a, 1.05)); r2 = int(130 * min(b, 1.05))
-            d1.ellipse((CX - 95 - r1, cy - r1, CX - 95 + r1, cy + r1), fill=(232, 193, 90, 90), outline=GOLD, width=6); d2.ellipse((CX + 95 - r2, cy - r2, CX + 95 + r2, cy + r2), fill=(244, 140, 4, 90), outline=(244, 140, 4, 255), width=6)
+            a_, b_ = g(.4), g(.9); rb = int(150 * k); r1 = int(rb * min(a_, 1.05)); r2 = int(rb * min(b_, 1.05)); sh = int(95 * kx)
+            d1.ellipse((CX - sh - r1, cy - r1, CX - sh + r1, cy + r1), fill=(232, 193, 90, 90), outline=GOLD, width=6); d2.ellipse((CX + sh - r2, cy - r2, CX + sh + r2, cy + r2), fill=(244, 140, 4, 90), outline=(244, 140, 4, 255), width=6)
             im = Image.alpha_composite(L1, L2); d = ImageDraw.Draw(im)
-            if a > .6: d.text((CX - 185, cy), "午", font=hj_font(104), fill=(255, 255, 255, 255), anchor="mm")
-            if b > .6: d.text((CX + 185, cy), "未", font=hj_font(104), fill=(255, 255, 255, 255), anchor="mm")
-        elif cf["shape"] == "eq":       # 未 = 未 본명년
-            for k, x in enumerate((CX - 210, CX + 210)):
-                gg = g(.4 + k * .5)
-                if gg > 0: circ(d, x, cy, int(110 * min(gg, 1.05)), "未", (255, 255, 255, 30), GOLD, fs=104)
-            ge = e_out(cl((tt - 1.1) / .4)); d.text((CX, cy - 2), "=", font=font(BLACK, 110), fill=(255, 255, 255, int(255 * ge)), anchor="mm")
-        elif cf["shape"] == "arrowjw":  # 丁 → 酉
-            g1, g2 = g(.4), g(1.2); circ(d, CX - 230, cy, int(105 * min(g1, 1.05)), "丁", CORAL, fg=(255, 255, 255, 255), fs=100) if g1 > 0 else None
-            ar = e_out(cl((tt - .8) / .4)); arrow(d, CX - 100, CX - 100 + 200 * ar, cy, (255, 255, 255, 255)) if ar > 0 else None
-            circ(d, CX + 230, cy, int(105 * min(g2, 1.05)), "酉", GOLD, fg=(30, 24, 40, 255), fs=100) if g2 > 0 else None
-        elif cf["shape"] == "tri":      # 亥 卯 未 삼합
-            pts = [(CX, 60, "亥"), (CX - 200, Hg - 70, "卯"), (CX + 200, Hg - 70, "未")]; prog = e_out(cl((tt - 1.3) / 1.2))
-            for k, (a_, b_) in enumerate([(0, 1), (1, 2), (2, 0)]):
-                sg = cl(prog * 3 - k)
-                if sg > 0: d.line([(pts[a_][0], pts[a_][1]), (pts[a_][0] + (pts[b_][0] - pts[a_][0]) * sg, pts[a_][1] + (pts[b_][1] - pts[a_][1]) * sg)], fill=GOLD, width=7)
-            for k, (x, yy, hj) in enumerate(pts):
-                gg = g(.3 + k * .35)
-                if gg > 0: circ(d, x, yy, int(58 * min(gg, 1.08)), hj, GOLD if hj == "未" else (255, 255, 255, 40), GOLD, fg=(30, 24, 40, 255) if hj == "未" else (255, 255, 255, 255), fs=58)
-        else:                           # cross: 子 ✕ 未 서로 서운하게
-            circ(d, CX - 230, cy, int(105 * min(g(.4), 1.05)), "子", (255, 255, 255, 30), GOLD, fs=100)
-            x2 = e_out(cl((tt - .8) / .4)); a2 = int(255 * x2); d.line([(CX - 42, cy - 42), (CX + 42, cy + 42)], fill=(CORAL[0], CORAL[1], CORAL[2], a2), width=14); d.line([(CX + 42, cy - 42), (CX - 42, cy + 42)], fill=(CORAL[0], CORAL[1], CORAL[2], a2), width=14)
+            if a_ > .6: d.text((CX - sh - int(rb * .7), cy), "午", font=hj_font(P_(118)), fill=(255, 255, 255, 255), anchor="mm")
+            if b_ > .6: d.text((CX + sh + int(rb * .7), cy), "未", font=hj_font(P_(118)), fill=(255, 255, 255, 255), anchor="mm")
+        elif cf["shape"] == "eq":
+            ox = int(210 * kx); rr0 = int(125 * k)
+            for kk, x in enumerate((CX - ox, CX + ox)):
+                gg = g(.4 + kk * .5)
+                if gg > 0: circ(d, x, cy, int(rr0 * min(gg, 1.05)), "未", (255, 255, 255, 30), GOLD, fs=int(118 * k))
+            ge = e_out(cl((tt - 1.1) / .4)); d.text((CX, cy - 2), "=", font=font(BLACK, int(124 * k)), fill=(255, 255, 255, int(255 * ge)), anchor="mm")
+        elif cf["shape"] == "arrowjw":
+            ox = int(230 * kx); rr0 = int(118 * k); g1, g2 = g(.4), g(1.2)
+            if g1 > 0: circ(d, CX - ox, cy, int(rr0 * min(g1, 1.05)), "丁", CORAL, fg=(255, 255, 255, 255), fs=int(112 * k))
+            ar = e_out(cl((tt - .8) / .4))
+            if ar > 0: arrow(d, CX - ox + rr0 + 14, CX - ox + rr0 + 14 + (2 * ox - 2 * rr0 - 28) * ar, cy, (255, 255, 255, 255))
+            if g2 > 0: circ(d, CX + ox, cy, int(rr0 * min(g2, 1.05)), "酉", GOLD, fg=(30, 24, 40, 255), fs=int(112 * k))
+        elif cf["shape"] == "tri":
+            rr0 = int(66 * k); pts = [(CX, rr0 + 4, "亥"), (CX - int(200 * kx), Hg - rr0 - 4, "卯"), (CX + int(200 * kx), Hg - rr0 - 4, "未")]; prog = e_out(cl((tt - 1.3) / 1.2))
+            for kk, (a2, b2) in enumerate([(0, 1), (1, 2), (2, 0)]):
+                sg = cl(prog * 3 - kk)
+                if sg > 0: d.line([(pts[a2][0], pts[a2][1]), (pts[a2][0] + (pts[b2][0] - pts[a2][0]) * sg, pts[a2][1] + (pts[b2][1] - pts[a2][1]) * sg)], fill=GOLD, width=7)
+            for kk, (x, yy, hj) in enumerate(pts):
+                gg = g(.3 + kk * .35)
+                if gg > 0: circ(d, x, yy, int(rr0 * min(gg, 1.08)), hj, GOLD if hj == "未" else (255, 255, 255, 40), GOLD, fg=(30, 24, 40, 255) if hj == "未" else (255, 255, 255, 255), fs=int(64 * k))
+        else:
+            ox = int(230 * kx); rr0 = int(118 * k)
+            circ(d, CX - ox, cy, int(rr0 * min(g(.4), 1.05)), "子", (255, 255, 255, 30), GOLD, fs=int(112 * k))
+            x2 = e_out(cl((tt - .8) / .4)); a2_ = int(255 * x2); q_ = int(42 * k); d.line([(CX - q_, cy - q_), (CX + q_, cy + q_)], fill=(CORAL[0], CORAL[1], CORAL[2], a2_), width=14); d.line([(CX + q_, cy - q_), (CX - q_, cy + q_)], fill=(CORAL[0], CORAL[1], CORAL[2], a2_), width=14)
             gg = g(1.1)
-            if gg > 0: circ(d, CX + 230, cy, int(105 * min(gg, 1.05)), "未", (255, 255, 255, 30), CORAL, fs=100)
+            if gg > 0: circ(d, CX + ox, cy, int(rr0 * min(gg, 1.05)), "未", (255, 255, 255, 30), CORAL, fs=int(112 * k))
         y = y + GG; blit(c.fr, im, 0, y, 1.0); y += Hg + GG
-        y = tblock(c, cf["l1"], y, 1.6, 58, color=GOLD, lh=1.25); tblock(c, cf["l2"], y + GT, 2.1, 46, lh=1.35, maxw=800)
+        y = tblock(c, cf["l1"], y, 1.6, S1, color=GOLD, lh=1.2); tblock(c, cf["l2"], y + GT, 2.1, S2, lh=1.3, maxw=820)
     return f
 def G_cal(name):
     t = T[name]; good, save = t["good"], t["save"]
     def f(c):
-        tt = c.t; im, d = lay(760); R = 290; cx_, cy_ = CX, 380
+        tt = c.t; im, d = lay(900); R = 328; cx_, cy_ = CX, 450
         up = lambda t0: e_out(cl((tt - t0) / .35)); ug, us = up(2.0), up(3.5)
         def lerp(a, b, u): return tuple(int(a[i] + (b[i] - a[i]) * u) for i in range(4))
         for i, m in enumerate(MONTHS):
             g = e_back(cl((tt - (.2 + i * .12)) / .35))
             if g <= 0: continue
-            ang = -math.pi / 2 + i * math.pi / 6; x = cx_ + R * math.cos(ang); yy = cy_ + R * math.sin(ang); r = 50 * min(g, 1.05); fs_ = 44
-            if m in good and ug > 0: r = 50 * (1 + .18 * ug); d.ellipse((x - r, yy - r, x + r, yy + r), fill=lerp((255, 255, 255, 26), GOLD, ug), outline=lerp((255, 255, 255, 190), GOLD, ug), width=5); col = lerp((255, 255, 255, 255), (30, 24, 40, 255), ug); fs_ = int(44 * (1 + .12 * ug))
-            elif m in save and us > 0: r = 50 * (1 + .18 * us); d.ellipse((x - r, yy - r, x + r, yy + r), fill=(255, 255, 255, 26), outline=lerp((255, 255, 255, 190), CORAL, us), width=int(5 + 3 * us)); col = lerp((255, 255, 255, 255), CORAL, us); fs_ = int(44 * (1 + .12 * us))
+            ang = -math.pi / 2 + i * math.pi / 6; x = cx_ + R * math.cos(ang); yy = cy_ + R * math.sin(ang); r = 58 * min(g, 1.05); fs_ = 52
+            if m in good and ug > 0: r = 58 * (1 + .18 * ug); d.ellipse((x - r, yy - r, x + r, yy + r), fill=lerp((255, 255, 255, 26), GOLD, ug), outline=lerp((255, 255, 255, 190), GOLD, ug), width=5); col = lerp((255, 255, 255, 255), (30, 24, 40, 255), ug); fs_ = int(52 * (1 + .12 * ug))
+            elif m in save and us > 0: r = 58 * (1 + .18 * us); d.ellipse((x - r, yy - r, x + r, yy + r), fill=(255, 255, 255, 26), outline=lerp((255, 255, 255, 190), CORAL, us), width=int(5 + 3 * us)); col = lerp((255, 255, 255, 255), CORAL, us); fs_ = int(52 * (1 + .12 * us))
             else: d.ellipse((x - r, yy - r, x + r, yy + r), fill=(255, 255, 255, 26), outline=(255, 255, 255, 190), width=5); col = (255, 255, 255, 255)
             d.text((x, yy - 2), ML(m), font=font(BLACK, fs_), fill=col, anchor="mm")
-        d.text((cx_, cy_ - 52), "힘 쓸 달", font=font(BLACK, int(70 * (1 + .12 * ug))), fill=lerp((255, 255, 255, 255), GOLD, ug), anchor="mm")
-        d.text((cx_, cy_ + 52), "아낄 달", font=font(BLACK, int(70 * (1 + .12 * us))), fill=lerp((255, 255, 255, 255), CORAL, us), anchor="mm")
-        stack_top([760], []); blit(c.fr, im, 0, 910 - 380, 1.0)   # 그림 층 760px, 가운데 y 380이 y 910에 오게
+        d.text((cx_, cy_ - 62), "힘 쓸 달", font=font(BLACK, int(86 * (1 + .12 * ug))), fill=lerp((255, 255, 255, 255), GOLD, ug), anchor="mm")
+        d.text((cx_, cy_ + 62), "아낄 달", font=font(BLACK, int(86 * (1 + .12 * us))), fill=lerp((255, 255, 255, 255), CORAL, us), anchor="mm")
+        stack_top([810], []); blit(c.fr, im, 0, 910 - 450, 1.0)   # 그림 층 760px, 가운데 y 380이 y 910에 오게
     return f
 def G_one(name, key, label):
     t = T[name]; l1, l2 = OVER.get(name, {}).get(key) or two(t[key])
     def f(c):
-        h1 = th_(l1, 62, 820, 1.3); h2 = th_(l2, 50, 820, 1.3) if l2 else 0
-        y0, tot = stack_top([280, h1] + ([h2] if l2 else []), [GG] + ([GT] if l2 else []))
-        im, d = lay(280); g = e_back(cl((c.t - .1) / .45)); r = int(140 * min(g, 1.05))
-        if r > 0: d.ellipse((CX - r, 140 - r, CX + r, 140 + r), fill=GOLD); d.text((CX, 136), label, font=font(BLACK, 110 if len(label) < 3 else 90), fill=(30, 24, 40, 255), anchor="mm")
-        blit(c.fr, im, 0, y0, 1.0); y = tblock(c, l1, y0 + 280 + GG, .5, 62, lh=1.3)
-        if l2: tblock(c, l2, y + GT, 1.1, 50, color=DIM, lh=1.3)
+        S1, S2 = 74, 62; h1 = th_(l1, S1, 840, 1.25); h2 = th_(l2, S2, 840, 1.25) if l2 else 0; CD = 380
+        CD = int(max(300, min(380, 880 - (h1 + h2 + GG + (GT if l2 else 0)) - 6)))   # 글 높이를 뺀 나머지 안에서 원을 크게
+        y0, tot = stack_top([CD, h1] + ([h2] if l2 else []), [GG] + ([GT] if l2 else []))
+        im, d = lay(CD); g = e_back(cl((c.t - .1) / .45)); r = int(CD / 2 * min(g, 1.05))
+        if r > 0: d.ellipse((CX - r, CD // 2 - r, CX + r, CD // 2 + r), fill=GOLD); d.text((CX, CD // 2 - 4), label, font=font(BLACK, int(CD * .40) if len(label) < 3 else int(CD * .31)), fill=(30, 24, 40, 255), anchor="mm")
+        blit(c.fr, im, 0, y0, 1.0); y = tblock(c, l1, y0 + CD + GG, .5, S1, lh=1.25, maxw=840)
+        if l2: tblock(c, l2, y + GT, 1.1, S2, color=DIM, lh=1.25, maxw=840)
     return f
 def G_lucky(name):
     cf = CFG[name]
     def f(c):
-        ht = th_("행운의 숫자", 62, 820, 1.25); hl = th_(cf["lucky"], 52, 800, 1.35); y0, tot = stack_top([ht, 300, hl], [GG, GG]); y = tblock(c, "행운의 숫자", y0, .1, 62, color=GOLD, lh=1.25)
-        im, d = lay(300)
-        for x, n_, tg in ((CX - 190, cf["nums"][0], .3), (CX + 190, cf["nums"][1], .8)):
-            g = e_back(cl((c.t - tg) / .45)); r = int(150 * min(g, 1.05))
-            if r > 0: d.ellipse((x - r, 150 - r, x + r, 150 + r), fill=GOLD); d.text((x, 146), n_, font=font(BLACK, 150 if len(n_) == 1 else 130), fill=(30, 24, 40, 255), anchor="mm")
-        blit(c.fr, im, 0, y + GG, 1.0); tblock(c, cf["lucky"], y + GG + 300 + GG, 1.5, 52, lh=1.35, maxw=800)
+        TS, S1 = 74, 64; ht = th_("행운의 숫자", TS, 840, 1.2); hl = th_(cf["lucky"], S1, 820, 1.3)
+        CD = int(max(300, min(380, 880 - (ht + hl + 2 * GG) - 6))); y0, tot = stack_top([ht, CD, hl], [GG, GG]); y = tblock(c, "행운의 숫자", y0, .1, TS, color=GOLD, lh=1.2)
+        im, d = lay(CD); ox = int(CD * .56)
+        for x, n_, tg in ((CX - ox, cf["nums"][0], .3), (CX + ox, cf["nums"][1], .8)):
+            g = e_back(cl((c.t - tg) / .45)); r = int(CD / 2 * min(g, 1.05))
+            if r > 0: d.ellipse((x - r, CD // 2 - r, x + r, CD // 2 + r), fill=GOLD); d.text((x, CD // 2 - 4), n_, font=font(BLACK, int(CD * .50) if len(n_) == 1 else int(CD * .42)), fill=(30, 24, 40, 255), anchor="mm")
+        blit(c.fr, im, 0, y + GG, 1.0); tblock(c, cf["lucky"], y + GG + CD + GG, 1.5, S1, lh=1.3, maxw=820)
     return f
 def G_cta(name):
     cf = CFG[name]
     def f(c):
-        prof_t = "프로필 링크에서 생년월일 입력하고\n내 첫글자와 타고난 기운 알아보기"; hp = 140; hf = th_(prof_t, 44, 840, 1.4)
+        prof_t = "프로필 링크에서 생년월일 입력하고\n내 첫글자와 타고난 기운 알아보기"; hp = 140; hf = th_(prof_t, 50, 840, 1.35)
         if cf["cta"] == "q":
-            hq = th_(cf["q"], 64, 840, 1.25); y0, tot = stack_top([hq, hp, hf], [GG, GT]); y = tblock(c, cf["q"], y0, .1, 64, lh=1.25); pill(c, 1.0, y + GG); tblock(c, prof_t, y + GG + hp + GT, 1.8, 44, color=DIM, lh=1.4, maxw=840)
+            hq = th_(cf["q"], 72, 840, 1.25); y0, tot = stack_top([hq, hp, hf], [GG, GT]); y = tblock(c, cf["q"], y0, .1, 72, lh=1.25); pill(c, 1.0, y + GG); tblock(c, prof_t, y + GG + hp + GT, 1.8, 50, color=DIM, lh=1.35, maxw=840)
         elif cf["cta"] == "big":
-            hq = th_(cf["q"], 96, 840, 1.25); y0, tot = stack_top([hq, hp, hf], [GG, GT]); y = tblock(c, cf["q"], y0, .1, 96, color=GOLD, lh=1.25); pill(c, 1.5, y + GG); tblock(c, prof_t, y + GG + hp + GT, 2.1, 44, color=DIM, lh=1.4, maxw=840)
+            hq = th_(cf["q"], 96, 840, 1.25); y0, tot = stack_top([hq, hp, hf], [GG, GT]); y = tblock(c, cf["q"], y0, .1, 96, color=GOLD, lh=1.25); pill(c, 1.5, y + GG); tblock(c, prof_t, y + GG + hp + GT, 2.1, 50, color=DIM, lh=1.35, maxw=840)
         elif cf["cta"] == "face":   # 정월이 나오는 마무리: 질문 -> 정월 -> 알약 -> 프로필 링크 (위치를 고정해 검산)
             hq = th_(cf["q"], 52, 840, 1.25); y = 487; tblock(c, cf["q"], y, .1, 52, lh=1.25); character(c, cf["face"], t0=.4, width=470, bottom=1042); pill(c, 1.2, 1057); tblock(c, prof_t, 1217, 1.9, 44, color=DIM, lh=1.4, maxw=840)
         else:
-            hc = th_(cf["cm"], 48, 840, 1.25); hb = th_(cf["big"], 92, 840, 1.25); y0, tot = stack_top([hc, hb, hp, hf], [GT, GG, GT]); y = tblock(c, cf["cm"], y0, .1, 48, lh=1.25); y = tblock(c, cf["big"], y + GT, .6, 92, color=GOLD, lh=1.25); pill(c, 1.4, y + GG); tblock(c, prof_t, y + GG + hp + GT, 2.0, 44, color=DIM, lh=1.4, maxw=840)
+            hc = th_(cf["cm"], 54, 840, 1.25); hb = th_(cf["big"], 92, 840, 1.25); y0, tot = stack_top([hc, hb, hp, hf], [GT, GG, GT]); y = tblock(c, cf["cm"], y0, .1, 54, lh=1.25); y = tblock(c, cf["big"], y + GT, .6, 92, color=GOLD, lh=1.25); pill(c, 1.4, y + GG); tblock(c, prof_t, y + GG + hp + GT, 2.0, 50, color=DIM, lh=1.35, maxw=840)
     return f
 GEN = tuple(CFG)
 MUSIC_SEED = {n: 11 * i + 3 for i, n in enumerate(("원숭이띠", "개띠", "용띠", "뱀띠", "말띠", "양띠", "닭띠", "돼지띠", "쥐띠"))}   # 곡 리프가 겹치지 않게 띠마다 씨앗을 다르게
