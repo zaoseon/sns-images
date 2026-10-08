@@ -23,7 +23,7 @@ for k in ids:
     for u in imgs:
         if not os.path.exists('img/' + unquote(u.split('/')[-1])): issues.append('이미지 없음')
     ph = re.findall(r'<p><b>👇 ([^<]+)</b></p>', b)
-    if len(ph) != 1 or ph[0].replace('&amp;', '&') != REL[k][1] or v.get('related', {}).get('id') != REL[k][0]: issues.append(f'연결 문구/글 이상({len(ph)})')
+    if len(ph) != 1 or (k in REL and (ph[0].replace('&amp;', '&') != REL[k][1] or v.get('related', {}).get('id') != REL[k][0])): issues.append(f'연결 문구/글 이상({len(ph)})')   # 10/8: n64 이후 글은 연결표(links_plan)에 없어서 KeyError로 검사가 멈췄다 - 없으면 문구 개수만 본다
     if '한줄요약' not in re.sub(r'\s', '', t)[:300]: issues.append('첫머리에 결론 없음')
     ss = []
     for ln in t.split('\n'):
