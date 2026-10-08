@@ -59,6 +59,7 @@ claude.ai 연결(커넥터): Metricool, Google Calendar, Google Drive. 새 대�
 |---|---|---|
 | 다음 2주 SNS 게시물 요청 | 격주 금 10:00, 첫 회 10/9 | gdhvrjebsvtv6kajd26vvk7d1o |
 | GitHub 접근 키 새로 만들기 | 2027-09-15 10:00 (만료 2주 전) | 9/29 새로 만듦 |
+| **트렌디 표현 월간 점검**(신조어 테스트·요즘 뜨는 밈·기사 검색 → 목록 갱신) | **매월 8일**(첫 점검 2026-10-08, 다음 2026-11-08) | `content/trendy_log.json`에 기록 · `content/trendy_lines.json` 갱신 · `python3 pipeline/trendy_audit.py` 통과(규칙 R24·R25) |
 
 ### 2026-w42 진행 (9/29)
 - 원고 `content/2026-w42.json`(생성 스크립트 `content/build_2026-w42.py`), 이미지 `2026-w42/` 92장 push 완료, 공개 주소 200 확인
