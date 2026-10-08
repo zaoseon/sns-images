@@ -14,7 +14,7 @@ CLIPS = {
 for cid, (n, caps, kw) in CLIPS.items():
     names = [f"naver_z{n}_a.jpg"] + ([f"naver_z{n}_i.jpg"] if os.path.exists(os.path.join(IMG, f"naver_z{n}_i.jpg")) else []) + [f"naver_z{n}_b.jpg", f"naver_z{n}_c.jpg"]
     if len(names) == 3: caps = [c for c in caps if c is not None]
-    imgs = [os.path.join(IMG, x) for x in names]; assert len(imgs) == len(caps), (cid, names, caps)
+    imgs = [(os.path.join(IMG, "master", x) if os.path.exists(os.path.join(IMG, "master", x)) else os.path.join(IMG, x)) for x in names]   # 10/8: 2560 원본이 있으면 그것을 쓴다(영상 1080폭에 줄여 쓰므로 선명); assert len(imgs) == len(caps), (cid, names, caps)
     out = os.path.join(ROOT, "clips_sop", f"{cid}_12s.mp4")
     t = images_to_clip(out, imgs, hold=2.8, first_hold=3.2, last_hold=3.6, captions=caps, **kw)
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "0.8", "-i", out, "-frames:v", "1", os.path.join(ROOT, "clips_sop", f"{cid}_thumb.png")], check=True)

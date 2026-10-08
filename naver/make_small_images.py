@@ -15,7 +15,7 @@ def main():
             if "/" not in n: names.add(n)
     made = skipped = missing = 0
     for n in sorted(names):
-        cta = "naver_cta" in n; src, dst = os.path.join(IMG, n), os.path.join(OUT_CTA if cta else OUT, n); W = V2.IMG_W
+        cta = "naver_cta" in n; src, dst = os.path.join(IMG, n), os.path.join(OUT_CTA if cta else OUT, n); W = V2.DELIV_W   # 10/8: 640이 아니라 1280(납품판). 새 이미지는 imgkit이 직접 만든다
         if not os.path.exists(src): missing += 1; print("원본 없음:", n); continue
         if os.path.exists(dst) and os.path.getmtime(dst) >= os.path.getmtime(src): skipped += 1; continue
         im = Image.open(src).convert("RGB")

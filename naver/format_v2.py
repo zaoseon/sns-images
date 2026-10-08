@@ -12,7 +12,8 @@ import re
 import format_body as FB
 
 IMG_W = 640
-SMALL_DIR = "m640"
+SMALL_DIR = "m1280"   # 10/8: 납품판 폴더. 파일은 가로 1280(imgkit이 2560 원본을 줄여 만듦)이고 HTML width는 아래 IMG_W(640)로 둔다. 편집기에서 크게 붙으면 DELIV_W를 960으로
+DELIV_W = 1280
 LINE_W = 480       # 구분선 폭(px, 이미지보다 짧게 가운데)
 CTA_W = IMG_W      # CTA 배너는 본문 이미지와 같은 폭(640px). 네이버 에디터가 붙인 이미지 폭을 화면 폭에 비례해 줄이므로, 이미지 640px ≈ 링크 카드 폭(10/5 대표: 480px 배너가 카드보다 작게 나옴)
 GREET = "안녕하세요, 자오선의 정월이에요."
