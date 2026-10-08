@@ -2166,5 +2166,50 @@
    "'~일 수 있어요' 허용 기준(3번까지)이 괜찮은지",
    "빠진 어색한 표현이 있는지"
   ]
+ },
+ {
+  "id": "night7-1016",
+  "kind": "밤 카드 7장 시안(승인 요청)",
+  "title": "10/16 18:30 \"싫은 게 아니라 충전 중이에요\" — 3장을 7장으로(구조·문구 한 번에)",
+  "status": "new",
+  "date": "2026-10-16",
+  "time": "18:30",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1016_compare.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1016_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1016_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1016_3.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1016_4.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1016_5.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1016_6.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1016_7.jpg"
+  ],
+  "caption": "약속이 취소됐다는 문자에 반가웠다면, 사람이 싫은 걸까요?\n\n그렇지 않아요. 사주에 화개가 있고, 별자리가 처녀·전갈·염소자리이고, 수비학 숫자가 7이면 혼자 정리하는 시간이 필요한 쪽이에요.\n사람을 싫어하는 게 아니라 충전 방식이 다를 뿐이에요.\n\n넘기면 몇 개가 겹치는지, 취소가 상대에게 서운함이 될 때는 언제인지, 약속 사이에 해 볼 한 가지까지 나와요.\n\n금요일 저녁 약속 취소, 나는 어느 쪽인가요?\n1 반가워요\n2 아쉬워요\n\n맞다 싶으면 ♥, 떠오르는 사람이 있으면 공유하거나 태그해 주세요.\n\n사주 하나, 별자리 하나만 보면 한쪽 이야기만 듣게 돼요.\n자오선은 여섯 가지 운명학을 겹쳐서, 같은 답이 나오는 곳을 찾아요.\n이 내용은 재미로, 그리고 나를 돌아보는 계기로 봐 주세요.\n\n#사주 #운세 #인간관계 #내향인 #집순이",
+  "note": "맨 위 그림은 지금 예약된 3장(위)과 7장 시안(아래)을 나란히 본 거예요. 아래 7장이 시안 한 장씩이에요. 대표님이 ①에게 확정한 \"밤 캐러셀도 7장\"(정본 7-2)에 맞춘 거예요. 예약된 3장은 풀이에서 끝나 조언·마무리가 없었어요. 1~3장(표지·오해·겹쳐 보면)은 지금 예약 이미지와 똑같고(표지·3장은 픽셀까지 같음), 2장은 R26에 맞게 '사람이 싫은 걸까?'를 '싫은 걸까요?'로 고쳤어요. 4~7장은 짝 글 n33에 있는 내용만 썼어요(낱말 겹침 61%). 캡션도 R26에 맞게 '나는 어느 쪽이에요?'를 '어느 쪽인가요?'로 고치고 넘기면 나오는 것을 한 줄 넣었어요. 트렌디 표현은 '서운함'이 들어 있어 쓰지 않았어요. **줄이거나 뺀 곳: ①4장 '몇 개 겹치나요?'에서 원고의 '1개: 바쁜 시기에만 혼자의 시간이 급해져요'를 폭 때문에 뺐어요(2개와 묶으면 뜻이 달라져서 안 묶었어요) ②5장 마지막 줄은 원문 '마음은 없어서가 아니라 충전이 필요한 거예요'에서 '충전이 필요한 거예요'를 앞 장이 이미 말해 뺐어요.** 승인하기 전에는 예약을 바꾸지 않아요. 승인하시면 인스타 글 하나(예약 id 387601551)만 7장·새 캡션으로 바꾸고, 같은 시각 스레드 글은 건드리지 않아요.",
+  "checks": [
+   "7장 구조(표지·오해·겹쳐 보면·몇 개 겹치나요·서운함·조언·마무리)로 괜찮은지",
+   "4장에서 원고의 '1개' 해석을 뺀 게 괜찮은지(넣으려면 8장이 돼요)",
+   "5장 마지막 줄 '마음이 없어서가 아니에요.'가 허전하지 않은지",
+   "마무리 장 아래 '프로필 링크에서 내 기운 1초 만에 확인'을 그대로 둘지(R11은 '생년월일 입력')",
+   "승인하시면 같은 방식으로 짝이 확실한 카드(10/18·10/19·10/21…)를 이어서 만들지"
+  ],
+  "old": {
+   "metricool_id": 387601551,
+   "uuid": "6832919501884638386",
+   "publication": "2026-10-16T18:30:00 Asia/Seoul",
+   "provider": "instagram",
+   "media_metricool": [
+    "https://static.metricool.com/planner/202610/7114921-file-1295391920914552778.jpeg",
+    "https://static.metricool.com/planner/202610/7114921-file-3356569264418235638.jpeg",
+    "https://static.metricool.com/planner/202610/7114921-file-4679537908135310457.jpeg"
+   ],
+   "media_source": [
+    "https://raw.githubusercontent.com/zaoseon/sns-images/96be6192a5a92fa374fef2d4803482dd2742670a/2026-w41night/1016_1.jpg",
+    "https://raw.githubusercontent.com/zaoseon/sns-images/96be6192a5a92fa374fef2d4803482dd2742670a/2026-w41night/1016_2.jpg",
+    "https://raw.githubusercontent.com/zaoseon/sns-images/96be6192a5a92fa374fef2d4803482dd2742670a/2026-w41night/1016_3.jpg"
+   ],
+   "isAiGenerated": true,
+   "text": "약속이 취소됐다는 문자에 반가웠다면, 사람이 싫은 걸까요?\n\n그렇지 않아요. 사주에 화개가 있고, 별자리가 처녀·전갈·염소자리이고, 수비학 숫자가 7이면 혼자 정리하는 시간이 필요한 쪽이에요.\n사람을 싫어하는 게 아니라 충전 방식이 다를 뿐이에요.\n\n금요일 저녁 약속 취소, 나는 어느 쪽이에요?\n1 반가워요\n2 아쉬워요\n\n맞다 싶으면 ♥, 떠오르는 사람이 있으면 공유하거나 태그해 주세요.\n\n사주 하나, 별자리 하나만 보면 한쪽 이야기만 듣게 돼요.\n자오선은 여섯 가지 운명학을 겹쳐서, 같은 답이 나오는 곳을 찾아요.\n이 내용은 재미로, 그리고 나를 돌아보는 계기로 봐 주세요.\n\n#사주 #운세 #인간관계 #내향인 #집순이"
+  }
  }
 ]
