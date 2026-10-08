@@ -578,6 +578,7 @@ def G_cta(name):
             hc = th_(cf["cm"], 48, 840, 1.25); hb = th_(cf["big"], 92, 840, 1.25); y0, tot = stack_top([hc, hb, hp, hf], [GT, GG, GT]); y = tblock(c, cf["cm"], y0, .1, 48, lh=1.25); y = tblock(c, cf["big"], y + GT, .6, 92, color=GOLD, lh=1.25); pill(c, 1.4, y + GG); tblock(c, prof_t, y + GG + hp + GT, 2.0, 44, color=DIM, lh=1.4, maxw=840)
     return f
 GEN = tuple(CFG)
+MUSIC_SEED = {n: 11 * i + 3 for i, n in enumerate(("원숭이띠", "개띠", "용띠", "뱀띠", "말띠", "양띠", "닭띠", "돼지띠", "쥐띠"))}   # 곡 리프가 겹치지 않게 띠마다 씨앗을 다르게
 def zodiac_lint(names=None):
     """R27~R29 자동 검사: 장면마다 끝 상태를 그려 묶음의 위·아래 끝과 가운데를 재고(R21), 박스·줄바꿈·잘림 위반은 그리는 중에 Lint 예외로 잡는다"""
     import numpy as np; probs = []
@@ -595,7 +596,7 @@ def scenes_of(name):
 def build_generic(name, outdir):
     probs = zodiac_lint([name])
     if probs: raise Lint("레이아웃 검사에서 멈춤: " + " / ".join(probs))
-    SC2 = scenes_of(name); p, dur = render(name, SC2, outdir); mi = MP.choose("data", f"zodiac-{name}"); MP.mux(p, [x for x, _ in SC2], mi, 700 + len(name))
+    SC2 = scenes_of(name); p, dur = render(name, SC2, outdir); mi = MP.choose("fun", f"zodiac-{name}"); MP.mux(p, [x for x, _ in SC2], mi, 700 + MUSIC_SEED[name])
     still(SC2, 0, 2.4, os.path.join(outdir, name + "_cover.jpg")); print("완료", name, round(dur, 1), "초 · 장면", len(SC2), "· 음악", mi["style"], mi["bpm"]); return p
 
 def build(name, outdir):
@@ -603,7 +604,7 @@ def build(name, outdir):
     SC = [(2.8, S_hook(name)), (4.2, S_why(name)), (5.4, S_cal(name)), (5.2, S_work(name)), (4.4, S_cta(name))]
     if name in ("말띠", "돼지띠"): pass
     SC2 = [(d, autofit(fn, d)) if (i < 4 or name not in ("말띠", "돼지띠")) else (d, fn) for i, (d, fn) in enumerate(SC)]   # 정월이 아래에 붙는 마무리(말띠·돼지띠)만 자동 맞춤에서 뺀다
-    p, dur = render(name, SC2, outdir); mi = MP.choose("data", f"zodiac-{name}"); MP.mux(p, [x for x, _ in SC2], mi, 700 + len(name))
+    p, dur = render(name, SC2, outdir); mi = MP.choose("fun", f"zodiac-{name}"); MP.mux(p, [x for x, _ in SC2], mi, 700 + MUSIC_SEED[name])
     still(SC2, 0, 2.6, os.path.join(outdir, name + "_cover.jpg"))
     print("완료", name, round(dur, 1), "초 · 음악", mi["style"], mi["bpm"]); return p
 if __name__ == "__main__":

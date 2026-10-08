@@ -408,75 +408,75 @@
   "key": "C"
  },
  {
-  "name": "zodiac-말띠",
-  "kind": "data",
-  "style": "맑은 팝",
-  "mode": "slow",
-  "bpm": 105,
-  "key": "F"
- },
- {
-  "name": "zodiac-양띠",
-  "kind": "data",
-  "style": "통통 마림바",
-  "mode": "up",
-  "bpm": 104,
-  "key": "G"
- },
- {
-  "name": "zodiac-닭띠",
-  "kind": "data",
-  "style": "경쾌 신스팝",
-  "mode": "up",
-  "bpm": 108,
-  "key": "A"
- },
- {
-  "name": "zodiac-돼지띠",
-  "kind": "data",
-  "style": "별빛 오르골",
-  "mode": "slow",
-  "bpm": 93,
-  "key": "C"
- },
- {
-  "name": "zodiac-쥐띠",
-  "kind": "data",
-  "style": "맑은 팝",
-  "mode": "slow",
-  "bpm": 105,
-  "key": "D"
- },
- {
   "name": "zodiac-원숭이띠",
-  "kind": "data",
-  "style": "통통 마림바",
+  "kind": "fun",
+  "style": "발랄 우쿨렐레",
   "mode": "up",
-  "bpm": 104,
+  "bpm": 114,
   "key": "E"
  },
  {
   "name": "zodiac-개띠",
-  "kind": "data",
+  "kind": "fun",
   "style": "경쾌 신스팝",
   "mode": "up",
-  "bpm": 108,
+  "bpm": 120,
   "key": "F"
  },
  {
   "name": "zodiac-용띠",
-  "kind": "data",
-  "style": "별빛 오르골",
-  "mode": "slow",
-  "bpm": 93,
+  "kind": "fun",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 118,
   "key": "G"
  },
  {
   "name": "zodiac-뱀띠",
-  "kind": "data",
-  "style": "맑은 팝",
-  "mode": "slow",
-  "bpm": 105,
+  "kind": "fun",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 124,
+  "key": "A"
+ },
+ {
+  "name": "zodiac-말띠",
+  "kind": "fun",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 114,
+  "key": "C"
+ },
+ {
+  "name": "zodiac-양띠",
+  "kind": "fun",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "E"
+ },
+ {
+  "name": "zodiac-닭띠",
+  "kind": "fun",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 118,
+  "key": "F"
+ },
+ {
+  "name": "zodiac-돼지띠",
+  "kind": "fun",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 124,
+  "key": "G"
+ },
+ {
+  "name": "zodiac-쥐띠",
+  "kind": "fun",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 114,
   "key": "A"
  }
 ]

@@ -6,9 +6,9 @@ import os, sys, json, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 import reel_music as RM
 LOG = os.path.join(HERE, "..", "content", "music_log.json")
-CAT = {   # 분위기별 후보: (곡, 방식, 템포)  방식 slow=compose, up=compose_up
-    "love": [("피아노 로파이", "slow", None), ("따뜻한 기타", "slow", None), ("별빛 오르골", "slow", None), ("발랄 우쿨렐레", "up", 98)],
-    "data": [("맑은 팝", "slow", None), ("경쾌 신스팝", "up", 108), ("별빛 오르골", "slow", None), ("통통 마림바", "up", 104)],
+CAT = {   # 분위기별 후보: (곡, 방식, 템포). 10/8 대표: 사운드는 경쾌하고 발랄하고 상큼하게 -> 전부 up(밝은 장조, 템포 114 이상)만 쓴다. 느린 곡(오르골·피아노 로파이 등)은 쓰지 않는다(R33)
+    "love": [("발랄 우쿨렐레", "up", 116), ("통통 마림바", "up", 118), ("상큼 팝", "up", 122), ("경쾌 신스팝", "up", 120)],
+    "data": [("상큼 팝", "up", 120), ("경쾌 신스팝", "up", 118), ("발랄 우쿨렐레", "up", 114), ("통통 마림바", "up", 116)],
     "fun":  [("상큼 팝", "up", 124), ("통통 마림바", "up", 118), ("발랄 우쿨렐레", "up", 114), ("경쾌 신스팝", "up", 120)],
 }
 KEYS = ["C", "D", "E", "F", "G", "A"]
