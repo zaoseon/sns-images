@@ -14,6 +14,8 @@ def text_checks():
     out["자연스러운 한국어(어색한 의문형·번역투)"] = len(NA.scan())
     import trendy_audit as TA
     out["트렌디 표현 사용 규칙"] = len(TA.run()[0])
+    import clips_motion_zodiac as ZL
+    out["영상 장면 배치(박스 글·간격·묶음 위치, R27~R29)"] = len(ZL.zodiac_lint())
     return out
 def video_checks():
     out = {}
