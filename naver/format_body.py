@@ -50,6 +50,8 @@ def bpen(tok, k=0):                              # 이 낱말(k번째) 뒤에서
     q = tok["p"].rstrip()
     if q.endswith((",", "，")): return 0
     q = q.rstrip(".!?)")
+    if len(q) == 1 and re.match(r"[가-힣]$", q): return 40       # 10/8 대표: 한 글자 낱말(몇·안·못·더)을 줄 끝에 홀로 두지 않는다("몇 / 개인지")
+    if re.search(r"(와|과|의)$", q) and len(q) >= 2: return 14      # 10/8: "산과 / 비", "별자리와 / 사주로"처럼 뒤 낱말과 한 덩어리인 말을 줄 끝에 두지 않는다
     if re.search(r"(은|는)$", q) and len(q) >= 2 and k <= 2 and not re.search(ADNOM, q): return .5      # 주어·화제 뒤
     if re.search(r"(면서|으면|이면|라면|다면|는데|한데|지만|라서|니까|해서|어서|아서|서도|이며|으며|으니|하며|함께|만큼|동안|마다|무렵|뒤에)$", q) or (re.search(r"(면|고|며)$", q) and len(q) >= 3): return 1.5
     if re.search(r"(이|가|도|만|께서)$", q) and len(q) >= 3: return 3
