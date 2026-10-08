@@ -16,6 +16,15 @@ def circ(d, x, y, r, hj, fill, outline=None, fg=(255, 255, 255, 255), fs=None, o
     d.ellipse((x - r, y - r, x + r, y + r), fill=fill, outline=outline, width=ow if outline else 0); d.text((x, y - 3), hj, font=hj_font(fs or int(r * 1.1)), fill=fg, anchor="mm")
 def title(c, s, t0=.05, size=96): return text(c, s, 500, t0, size, maxw=840, lh=1.2, stagger=0)
 
+
+def text_in_box(c, s_, cx, cy, t0, size, maxw, color=WHITE, lh=1.3):
+    """박스 안 글은 가로·세로 정중앙(R18): 글 높이를 재서 박스 가운데에 맞춘다"""
+    H = text_h(s_, size, maxw, lh); return text(c, s_, cy - H / 2, t0, size, color=color, maxw=maxw, cx=cx, lh=lh, stagger=0)
+def group_in_box(c, parts, cx, cy, t0, maxw, gap=22):
+    """박스 안에 제목+본문처럼 여러 덩어리가 있으면 덩어리 전체를 정중앙에. parts=[(글, 크기, 색, 줄간격)]"""
+    hs = [text_h(t_, sz, maxw, lh) for t_, sz, col, lh in parts]; y = cy - (sum(hs) + gap * (len(parts) - 1)) / 2
+    for (t_, sz, col, lh), h_ in zip(parts, hs): text(c, t_, y, t0, sz, color=col, maxw=maxw, cx=cx, lh=lh, stagger=0); y += h_ + gap
+
 def S_hook(name):
     t = T[name]
     def f(c):
@@ -134,7 +143,7 @@ def S_work(name):
                 yy = 640 + i * 190; g = e_back(cl((tt - (.3 + i * .7)) / .4))
                 if g > 0:
                     im, d = lay(140); d.ellipse((60, 20, 60 + 100 * min(g, 1.05), 20 + 100 * min(g, 1.05)), fill=GOLD); d.line([(82, 72), (104, 94), (140, 46)], fill=(30, 24, 40, 255), width=14, joint="curve"); blit(c.fr, im, 0, yy, 1.0)
-                text(c, f"{a}  {b}", yy + 6, .35 + i * .7, 52, maxw=700, cx=CX + 100, lh=1.25, stagger=0)
+                text_in_box(c, f"{a}  {b}", CX + 100, yy + 70, .35 + i * .7, 52, 700, lh=1.25)
         elif name == "양띠":  # 카드 뒤집기
             for i, (a, b) in enumerate(s):
                 yy = 640 + i * 230; p = cl((tt - (.3 + i * 1.3)) / .55); w = int(780 * abs(math.cos((1 - e_out(p)) * math.pi / 2)))
@@ -142,14 +151,12 @@ def S_work(name):
                 if p < .5: d.rounded_rectangle((CX - w // 2, 10, CX + w // 2, 190), 30, fill=(255, 255, 255, 28), outline=(255, 255, 255, 120), width=4)
                 else: d.rounded_rectangle((CX - w // 2, 10, CX + w // 2, 190), 30, fill=GOLD if i == 0 else (255, 255, 255, 40), outline=GOLD, width=4)
                 blit(c.fr, im, 0, yy, 1.0)
-                if p > .85: text(c, f"{a}  {b}", yy + 48, 0, 46, color=INK if i == 0 else WHITE, maxw=700, stagger=0, lh=1.2)
+                if p > .85: text_in_box(c, f"{a}  {b}", CX, yy + 100, 0, 46, 700, color=INK if i == 0 else WHITE, lh=1.2)
         elif name == "닭띠":  # 좌우 비교
             g = e_back(cl((tt - .3) / .5)); im, d = lay(520)
             d.rounded_rectangle((70, 20, 520, 500), 30, fill=GOLD); d.rounded_rectangle((560, 20, 1010, 500), 30, outline=CORAL, width=7); blit(c.fr, im, 0, 620, c.alpha(cl(g * 2)))
-            text(c, "좋은 신호", 650, .5, 52, color=INK, maxw=400, cx=295, stagger=0)
-            text(c, f"{s[0][1]}\n{s[1][1]}", 740, .9, 44, color=INK, maxw=390, cx=295, lh=1.35, stagger=.3)
-            text(c, "조심", 650, 1.6, 52, color=CORAL, maxw=400, cx=785, stagger=0)
-            text(c, s[2][1], 740, 2.0, 44, maxw=390, cx=785, lh=1.35, stagger=0)
+            group_in_box(c, [("좋은 신호", 52, INK, 1.2), (f"{s[0][1]}\n{s[1][1]}", 44, INK, 1.35)], 295, 880, .5, 390)
+            group_in_box(c, [("조심", 52, CORAL, 1.2), (s[2][1], 44, WHITE, 1.35)], 785, 880, 1.6, 390)
         elif name == "돼지띠":  # 나무
             im, d = lay(720); g = e_out(cl((tt - .3) / .9))
             d.rounded_rectangle((165, 260, 235, 260 + int(380 * g)), 20, fill=BROWN)
@@ -291,7 +298,7 @@ def S_work2(name):
                 if g > 0:
                     im, d = lay(210); d.rounded_rectangle((x0, 10, x1, 190), 44, fill=GOLD if i == 1 else (255, 255, 255, 40), outline=GOLD, width=4)
                     tx = (x0 + 70) if left else (x1 - 70); d.polygon([(tx - 20, 188), (tx + 20, 188), (tx + (-30 if left else 30), 235)], fill=GOLD if i == 1 else (255, 255, 255, 60)); blit(c.fr, im, 0, yy, c.alpha(cl(g * 2)))
-                text(c, f"{a}  {b}", yy + 50, .35 + i * 1.1, 44, color=INK if i == 1 else WHITE, maxw=700, cx=(x0 + x1) // 2, lh=1.25, stagger=0)
+                text_in_box(c, f"{a}  {b}", (x0 + x1) // 2, yy + 100, .35 + i * 1.1, 44, 660, color=INK if i == 1 else WHITE, lh=1.25)
         elif name == "용띠":    # 계단
             im, d = lay(700)
             for i, (a, b) in enumerate(s):
@@ -300,7 +307,7 @@ def S_work2(name):
             blit(c.fr, im, 0, 640, 1.0)
             for i, (a, b) in enumerate(s):
                 h = 280 + i * 120; x0 = 100 + i * 290; ytop = 640 + 640 - h
-                text(c, a, ytop + 14, .6 + i * .8, 52, color=GOLD if i != 2 else INK, maxw=260, cx=x0 + 135, stagger=0); text(c, b, ytop + 84, .8 + i * .8, 44, color=WHITE if i != 2 else INK, maxw=250, cx=x0 + 135, lh=1.25, stagger=0)
+                group_in_box(c, [(a, 52, GOLD if i != 2 else INK, 1.2), (b, 44, WHITE if i != 2 else INK, 1.25)], x0 + 135, (ytop + 1280) / 2, .6 + i * .8, 236, gap=14)
         else:                   # 뱀띠: 색 막대 목록
             for i, (a, b) in enumerate(s):
                 yy = 650 + i * 190; g = e_out(cl((tt - (.3 + i * .7)) / .4))
