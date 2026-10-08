@@ -183,6 +183,148 @@ def S_cta(name):
         else:                   # ⑤ 숫자 반복 + 팔로우
             text(c, "내 행운의 숫자는 몇 번일까요?", 505, .1, 50, maxw=840, stagger=0); g = e_back(cl((c.t - .5) / .5)); text(c, "4 · 9 · 4 · 9", 660, .5, 160, color=GOLD, maxw=900, stagger=0); pill(c, 1.6, 930); prof(c, 1110, 2.2)
     return f
+
+# ───────── 두 번째 묶음: 원숭이·개·용·뱀띠 (10/7 대표 "권장안대로", 앞서 만든 5편과 도형·장면·마무리가 겹치지 않게)
+NEW4 = ("원숭이띠", "개띠", "용띠", "뱀띠")
+SHORT2 = {"원숭이띠": [("돈", "노력한 만큼 평가가 따라와요"), ("일", "무거운 일은 나눠서 맡아요"), ("사람", "윗사람께 보고와 확인을 자주 해요")],
+          "개띠": [("돈", "계약과 서류를 꼼꼼히 봐요"), ("일", "변화에 먼저 맞추는 사람이 유리해요"), ("사람", "가까운 사이의 약속이 엇갈리기 쉬워요")],
+          "용띠": [("돈", "새는 곳을 막고 쌓아요"), ("일", "자격·공부·기록이 무기예요"), ("사람", "비교보다 내 속도를 지켜요")],
+          "뱀띠": [("돈", "큰 지출은 하루 자고 정해요"), ("일", "벌인 일은 끝까지 마무리해요"), ("사람", "말이 세게 나가지 않게 한 박자 쉬어요")]}
+def arrow(d, x0, x1, y, col=(255, 255, 255, 255), w=10):
+    d.line([(x0, y), (x1, y)], fill=col, width=w); s_ = 1 if x1 > x0 else -1; d.polygon([(x1, y), (x1 - 28 * s_, y - 20), (x1 - 28 * s_, y + 20)], fill=col)
+def S_why2(name):
+    t = T[name]
+    def f(c):
+        tt = c.t; y = title(c, "왜 그럴까"); im, d = lay(700); Y0 = 640
+        g = lambda t0: e_back(cl((tt - t0) / .45))
+        if name == "원숭이띠":
+            r = 170 * min(g(.4), 1.05); pulse = 1 + .05 * math.sin(tt * 5)
+            for k, w_ in enumerate((46, 30, 16)):
+                rr_ = (r + 40 + k * 34) * pulse; d.ellipse((CX - rr_, 260 - rr_, CX + rr_, 260 + rr_), outline=(CORAL[0], CORAL[1], CORAL[2], 200 - k * 55), width=w_ // 4 + 2)
+            circ(d, CX, 260, int(r), "申", GOLD, fg=(30, 24, 40, 255), fs=190)
+            blit(c.fr, im, 0, Y0 - 20, 1.0); text(c, "불에 다듬어지는 쇠", y + 520, 1.6, 62, color=GOLD, maxw=840, stagger=0); text(c, "丁은 불, 申은 쇠 같은 글자", y + 610, 2.2, 46, color=DIM, maxw=840, stagger=0)
+        elif name == "개띠":
+            a, b = g(.4), g(.9); circ(d, CX - 260, 230, int(135 * min(a, 1.05)), "戌", (255, 255, 255, 30), GOLD, fs=125); circ(d, CX + 260, 230, int(135 * min(b, 1.05)), "未", (255, 255, 255, 30), GOLD, fs=125)
+            ar = e_out(cl((tt - 1.2) / .5))
+            if ar > 0: arrow(d, CX - 95, CX + 95 * ar, 190, GOLD); arrow(d, CX + 95, CX - 95 * ar, 280, CORAL)
+            blit(c.fr, im, 0, Y0, 1.0); text(c, "서로 조율이 필요한 사이", y + 450, 1.9, 60, color=GOLD, maxw=840, stagger=0); text(c, "戌와 未는 맞춰 가야 하는 글자", y + 540, 2.5, 46, color=DIM, maxw=840, stagger=0)
+        elif name == "용띠":
+            a, b = g(.4), g(1.0); circ(d, CX, 110, int(100 * min(a, 1.05)), "辰", (206, 168, 84, 120), GOLD, fs=96); circ(d, CX, 440, int(100 * min(b, 1.05)), "未", (206, 168, 84, 120), GOLD, fs=96)
+            ln = e_out(cl((tt - 1.4) / .5)); d.line([(CX, 215), (CX, 215 + 120 * ln)], fill=GOLD, width=8)
+            blit(c.fr, im, 0, Y0, 1.0); text(c, "같은 흙끼리 만나요", y + 650, 2.0, 60, color=GOLD, maxw=840, stagger=0)
+        else:  # 뱀띠
+            d.rounded_rectangle((150, 215, 930, 245), 15, fill=(255, 138, 115, int(255 * e_out(cl((tt - 1.3) / .6))))) if tt > 1.3 else None
+            for k, (x, hj) in enumerate(((CX - 300, "巳"), (CX, "午"), (CX + 300, "未"))):
+                gg = g(.3 + k * .45)
+                if gg > 0: circ(d, x, 230, int(115 * min(gg, 1.05)), hj, CORAL if hj == "午" else (255, 255, 255, 30), CORAL, fs=110, fg=(255, 255, 255, 255))
+            blit(c.fr, im, 0, Y0, 1.0); text(c, "여름의 불로 함께 모여요", y + 450, 2.0, 60, color=CORAL, maxw=840, stagger=0); text(c, "巳午未는 여름을 이루는 세 글자", y + 540, 2.6, 46, color=DIM, maxw=840, stagger=0)
+    return f
+def S_cal2(name):
+    t = T[name]; good, save = t["good"], t["save"]
+    def f(c):
+        tt = c.t; y = title(c, "힘 쓸 달 · 아낄 달", size=88); im, d = lay(900); Y0 = 600; fm = font(BLACK, 44)
+        if name == "원숭이띠":   # 원형 시계: 2월이 맨 위, 시계 방향
+            R = 300; cx_, cy_ = CX, 330
+            d.ellipse((cx_ - R, cy_ - R, cx_ + R, cy_ + R), outline=(255, 255, 255, 70), width=4)
+            for i, m in enumerate(MONTHS):
+                g = e_back(cl((tt - (.25 + i * .15)) / .35)); ang = -math.pi / 2 + i * math.pi / 6; x = cx_ + R * math.cos(ang); yy = cy_ + R * math.sin(ang)
+                if g <= 0: continue
+                if m in good: rr_ = 56 * min(g, 1.05); d.ellipse((x - rr_, yy - rr_, x + rr_, yy + rr_), fill=GOLD); d.text((x, yy - 2), ML(m), font=fm, fill=(30, 24, 40, 255), anchor="mm")
+                elif m in save: rr_ = 56; d.ellipse((x - rr_, yy - rr_, x + rr_, yy + rr_), outline=CORAL, width=7); d.text((x, yy - 2), ML(m), font=fm, fill=CORAL, anchor="mm")
+                else: d.ellipse((x - 16, yy - 16, x + 16, yy + 16), fill=(255, 255, 255, 120))
+            d.text((cx_, cy_ - 12), "2027", font=font(BLACK, 80), fill=(255, 255, 255, 200), anchor="mm"); d.text((cx_, cy_ + 56), "2월부터 한 바퀴", font=font(BLACK, 40), fill=(255, 255, 255, 150), anchor="mm")
+            blit(c.fr, im, 0, Y0, 1.0); text(c, "금색은 힘 쓸 달 · 붉은 테두리는 아낄 달", Y0 + 700, 4.6, 44, color=DIM, maxw=840, stagger=0)
+        elif name == "개띠":    # 칩 두 열
+            for col, (label, ms, colr, cx_) in enumerate((("힘 쓸 달", good, GOLD, 290), ("아낄 달", save, CORAL, 790))):
+                g0 = e_out(cl((tt - (.3 + col * 2.0)) / .4)); d.text((cx_, 40), label, font=font(BLACK, 60), fill=(colr[0], colr[1], colr[2], int(255 * g0)), anchor="mm")
+                for i, m in enumerate(ms):
+                    g = e_back(cl((tt - (.7 + col * 2.0 + i * .5)) / .4))
+                    if g <= 0: continue
+                    w, h = int(300 * min(g, 1.0)), 150; x0 = cx_ - 150; y0 = 110 + i * 190
+                    if colr == GOLD: d.rounded_rectangle((x0, y0, x0 + w, y0 + h), 75, fill=GOLD); fc = (30, 24, 40, 255)
+                    else: d.rounded_rectangle((x0, y0, x0 + w, y0 + h), 75, outline=CORAL, width=8); fc = CORAL
+                    if g > .8: d.text((cx_, y0 + 75), ML(m), font=font(BLACK, 64), fill=fc, anchor="mm")
+            blit(c.fr, im, 0, Y0 + 80, 1.0)
+        elif name == "용띠":    # 세로 타임라인
+            RH = 56; X0 = 250; tlt = 590
+            im, d = lay(RH * 12 + 20)
+            for i, m in enumerate(MONTHS):
+                g = e_out(cl((tt - (.2 + i * .18)) / .3)); a = int(255 * g); yy = i * RH + RH // 2 + 10
+                d.text((110, yy), ML(m), font=font(BLACK, 44), fill=(255, 255, 255, int(a * (1 if m in good + save else .6))), anchor="lm")
+                d.rounded_rectangle((250, yy - 3, 900, yy + 3), 3, fill=(255, 255, 255, int(a * .2)))
+                if m in good or m in save:
+                    gg = e_out(cl((tt - (.5 + i * .18)) / .5)); colr = GOLD if m in good else CORAL
+                    d.rounded_rectangle((250, yy - 20, 250 + 650 * gg, yy + 20), 20, fill=colr)
+            blit(c.fr, im, 0, tlt, 1.0); text(c, "금색 힘 쓸 달 · 붉은색 아낄 달", tlt + RH * 12 + 20, 4.2, 44, color=DIM, maxw=840, stagger=0)
+        else:  # 뱀띠: 물결선
+            n = 12; xs = [110 + i * (860 / 11) for i in range(n)]
+            def yv(m): return 90 if m in good else (430 if m in save else 260)
+            pts = []
+            for i in range(n - 1):
+                for k in range(20):
+                    u = k / 20; ease = (1 - math.cos(u * math.pi)) / 2; pts.append((xs[i] + (xs[i + 1] - xs[i]) * u, yv(MONTHS[i]) + (yv(MONTHS[i + 1]) - yv(MONTHS[i])) * ease))
+            pts.append((xs[-1], yv(MONTHS[-1]))); prog = e_out(cl((tt - .3) / 2.8)); k = int(len(pts) * prog)
+            if k > 1: d.line(pts[:k], fill=(255, 255, 255, 220), width=8, joint="curve")
+            for i, m in enumerate(MONTHS):
+                if tt < .3 + 2.8 * (i / 11): continue
+                x, yy = xs[i], yv(m)
+                if m in good: d.ellipse((x - 34, yy - 34, x + 34, yy + 34), fill=GOLD)
+                elif m in save: d.ellipse((x - 34, yy - 34, x + 34, yy + 34), outline=CORAL, width=7)
+                else: d.ellipse((x - 12, yy - 12, x + 12, yy + 12), fill=(255, 255, 255, 140))
+                d.text((x, 560), ML(m).replace("월", ""), font=font(BLACK, 36), fill=(255, 255, 255, 190 if (m in good or m in save) else 120), anchor="mm")
+            blit(c.fr, im, 0, Y0, 1.0); text(c, "파도의 높은 곳은 힘 쓸 달 · 낮은 곳은 아낄 달", Y0 + 640, 4.0, 44, color=DIM, maxw=840, stagger=0)
+    return f
+def S_work2(name):
+    s = SHORT2[name]
+    def f(c):
+        tt = c.t; y = title(c, "돈 · 일 · 사람", size=88)
+        if name == "원숭이띠":   # 큰 동그라미 세 개
+            im, d = lay(260)
+            for i, (a, b) in enumerate(s):
+                g = e_back(cl((tt - (.3 + i * .7)) / .45)); x = 190 + i * 350
+                if g > 0: d.ellipse((x - 105 * min(g, 1.05), 130 - 105 * min(g, 1.05), x + 105 * min(g, 1.05), 130 + 105 * min(g, 1.05)), fill=GOLD); d.text((x, 128), a, font=font(BLACK, 58), fill=(30, 24, 40, 255), anchor="mm")
+                text(c, b, 900, .5 + i * .7, 44, maxw=310, cx=x, lh=1.3, stagger=0)
+            blit(c.fr, im, 0, 650, 1.0)
+        elif name == "개띠":    # 말풍선
+            for i, (a, b) in enumerate(s):
+                yy = 640 + i * 240; g = e_back(cl((tt - (.3 + i * 1.1)) / .45)); left = i % 2 == 0; x0, x1 = (90, 830) if left else (250, 990)
+                if g > 0:
+                    im, d = lay(210); d.rounded_rectangle((x0, 10, x1, 190), 44, fill=GOLD if i == 1 else (255, 255, 255, 40), outline=GOLD, width=4)
+                    tx = (x0 + 70) if left else (x1 - 70); d.polygon([(tx - 20, 188), (tx + 20, 188), (tx + (-30 if left else 30), 235)], fill=GOLD if i == 1 else (255, 255, 255, 60)); blit(c.fr, im, 0, yy, c.alpha(cl(g * 2)))
+                text(c, f"{a}  {b}", yy + 50, .35 + i * 1.1, 44, color=INK if i == 1 else WHITE, maxw=700, cx=(x0 + x1) // 2, lh=1.25, stagger=0)
+        elif name == "용띠":    # 계단
+            im, d = lay(700)
+            for i, (a, b) in enumerate(s):
+                g = e_out(cl((tt - (.3 + i * .8)) / .5)); h = int((280 + i * 120) * g); x0 = 100 + i * 290
+                d.rounded_rectangle((x0, 640 - h, x0 + 270, 640), 24, fill=GOLD if i == 2 else (255, 255, 255, 50), outline=GOLD, width=4)
+            blit(c.fr, im, 0, 640, 1.0)
+            for i, (a, b) in enumerate(s):
+                h = 280 + i * 120; x0 = 100 + i * 290; ytop = 640 + 640 - h
+                text(c, a, ytop + 14, .6 + i * .8, 52, color=GOLD if i != 2 else INK, maxw=260, cx=x0 + 135, stagger=0); text(c, b, ytop + 84, .8 + i * .8, 44, color=WHITE if i != 2 else INK, maxw=250, cx=x0 + 135, lh=1.25, stagger=0)
+        else:                   # 뱀띠: 색 막대 목록
+            for i, (a, b) in enumerate(s):
+                yy = 650 + i * 190; g = e_out(cl((tt - (.3 + i * .7)) / .4))
+                if g > 0:
+                    im, d = lay(150); d.rounded_rectangle((90, 20, 108, 130), 9, fill=CORAL if i == 0 else (GOLD if i == 1 else (127, 214, 200, 255))); blit(c.fr, im, (1 - g) * 120, yy, c.alpha(g))
+                text(c, f"{a}  {b}", yy + 14, .35 + i * .7, 48, maxw=720, cx=CX + 70, lh=1.25, stagger=0)
+    return f
+def S_cta2(name):
+    def f(c):
+        if name == "원숭이띠":    # ⑤ 숫자 반복
+            text(c, "내 행운의 숫자, 5와 10은 어떤가요?", 505, .1, 48, maxw=840, stagger=0); text(c, "5 · 10 · 5 · 10", 660, .5, 150, color=GOLD, maxw=900, stagger=0); pill(c, 1.6, 930); prof(c, 1110, 2.2)
+        elif name == "개띠":      # ② 댓글 질문 크게
+            y = text(c, "올해 다시 읽어 볼\n약속은 무엇인가요?", 520, .1, 100, color=GOLD, maxw=840, lh=1.25); pill(c, 1.5, y + 50); prof(c, y + 220, 2.1)
+        elif name == "용띠":      # ④ 한 줄 정리 + 팔로우
+            text(c, "댓글로 올해 쌓을 것을 알려 주세요", 500, .1, 48, maxw=840, stagger=0); y = text(c, "단단하게\n쌓는 해", 620, .6, 92, color=GOLD, maxw=840, lh=1.25); pill(c, 1.4, y + 50); prof(c, y + 220, 2.0)
+        else:                     # 뱀띠 ① 팔로우 카드(정월 없이)
+            y = text(c, "올해 시작하고 끝낼 일은\n무엇인가요?", 540, .1, 64, maxw=840, lh=1.25); pill(c, 1.0, y + 70); prof(c, y + 250, 1.8)
+    return f
+_W, _C, _K, _T = S_why, S_cal, S_work, S_cta
+def S_why(name): return S_why2(name) if name in NEW4 else _W(name)
+def S_cal(name): return S_cal2(name) if name in NEW4 else _C(name)
+def S_work(name): return S_work2(name) if name in NEW4 else _K(name)
+def S_cta(name): return S_cta2(name) if name in NEW4 else _T(name)
+
 def build(name, outdir):
     SC = [(2.8, S_hook(name)), (4.2, S_why(name)), (5.4, S_cal(name)), (5.2, S_work(name)), (4.4, S_cta(name))]
     if name in ("말띠", "돼지띠"): pass

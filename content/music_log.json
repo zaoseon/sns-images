@@ -446,5 +446,37 @@
   "mode": "slow",
   "bpm": 105,
   "key": "D"
+ },
+ {
+  "name": "zodiac-원숭이띠",
+  "kind": "data",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 104,
+  "key": "E"
+ },
+ {
+  "name": "zodiac-개띠",
+  "kind": "data",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 108,
+  "key": "F"
+ },
+ {
+  "name": "zodiac-용띠",
+  "kind": "data",
+  "style": "별빛 오르골",
+  "mode": "slow",
+  "bpm": 93,
+  "key": "G"
+ },
+ {
+  "name": "zodiac-뱀띠",
+  "kind": "data",
+  "style": "맑은 팝",
+  "mode": "slow",
+  "bpm": 105,
+  "key": "A"
  }
 ]
