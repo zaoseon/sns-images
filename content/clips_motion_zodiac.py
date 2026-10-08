@@ -443,6 +443,10 @@ CFG["쥐띠"]["hook"] = "2027년에 쥐띠가\\n돈은 들어오는데 마음이
 # 단정을 줄인 문구(R20·표현가이드 10번): '분명해요' 같은 확신 표현을 쓰지 않는다
 OVER = {"쥐띠": {"money": ("돈이 들어올 기회가 보이는 해예요.", "가까운 사람과 돈이 섞이면 마음이 먼저 상해요.")}}
 SUB = {n: p["sub"] for n, p in PLAN.items() if p.get("sub")}
+# 배경 돌려 쓰기(R34, 대표 10/8): 날짜 순서대로 5가지를 돌려 이웃 영상은 다른 배경. 브랜드 소재(별빛·달·해) 변주, 항상 어두운 톤, 황도 차트(R22)는 그대로
+BG_ORDER = ("burgundy-sun", "violet-moon", "forest", "teal", "navy")
+BG_KO = {"navy": "별빛 남색", "violet-moon": "달빛 보라", "burgundy-sun": "노을 버건디", "forest": "숲 딥그린", "teal": "청록 바다"}
+for _i, _n in enumerate(("원숭이띠", "개띠", "용띠", "뱀띠", "말띠", "양띠", "닭띠", "돼지띠", "쥐띠")): PLAN[_n]["bg"] = BG_ORDER[_i % 5]
 def two(sent): a = sent.split(". "); return (a[0] + ("." if not a[0].endswith(".") else ""), (a[1] if len(a) > 1 else ""))
 def G_kw(name):
     """표지(1번 장면, 첫 프레임): 트렌디 표현은 큰 제목이 아니라 배지(작은 글)로 맨 위에 눈에 띄게(R25, 대표 10/8 '표지에 배치해 후킹'). 큰 제목은 평이한 키워드"""
@@ -594,6 +598,7 @@ def scenes_of(name):
     """대표 10/8 지정 순서: 1 키워드 / 2 출생연도 / 3 문장 / 4 왜 그럴까 / 5 힘 쓸 달·아낄 달 / 6 돈 / 7 일 / 8 사람 / 9 행운의 숫자 / 10 마무리. 길이는 R13(문장 2초·낱말 1초 이상): 마지막 글이 나온 뒤 2초 이상 남게"""
     return [(2.6, G_kw(name)), (2.4, G_years(name)), (2.8, G_hook(name)), (4.3, G_why(name)), (5.0, G_cal(name)), (3.2, G_one(name, "money", "돈")), (3.2, G_one(name, "work", "일")), (3.2, G_one(name, "people", "사람")), (3.6, G_lucky(name)), (CTA_DUR[CFG[name]["cta"]], G_cta(name))]
 def build_generic(name, outdir):
+    _CM.BG_VARIANT = PLAN[name]["bg"]   # 이 영상의 배경(R34)
     probs = zodiac_lint([name])
     if probs: raise Lint("레이아웃 검사에서 멈춤: " + " / ".join(probs))
     SC2 = scenes_of(name); p, dur = render(name, SC2, outdir); mi = MP.choose("fun", f"zodiac-{name}"); MP.mux(p, [x for x, _ in SC2], mi, 700 + MUSIC_SEED[name])

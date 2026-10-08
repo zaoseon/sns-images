@@ -34,7 +34,8 @@ json.dump(TL, open(R + "/content/trendy_lines.json", "w", encoding="utf-8"), ens
 import trendy_audit as TA
 o, nu, m, t = TA.run(); print("TRENDY", nu, m, o)
 os.makedirs("/home/claude/covers", exist_ok=True)
-for n in Z.GEN: CM.still(Z.scenes_of(n), 0, 2.4, f"/home/claude/covers/{n}.png")
+for n in Z.GEN:
+    CM.BG_VARIANT = Z.PLAN[n]["bg"]; CM.still(Z.scenes_of(n), 0, 2.4, f"/home/claude/covers/{n}.png")
 def b64(n):
     im = Image.open(f"/home/claude/covers/{n}.png").convert("RGB").resize((216, 384)); b = io.BytesIO(); im.save(b, "JPEG", quality=84); return base64.b64encode(b.getvalue()).decode()
 CSS = '''<style>
@@ -65,8 +66,8 @@ for k, n in enumerate(Z.GEN):
     pol = POL[n]; st = sum(1 for x in pol if x == "강점"); ca = 3 - st
     tr = f"트렌디: <b>{P['term']}</b>({TREND[n][1]})를 표지 배지로 맨 위에, 캡션 첫 줄에도 씀" if n in TREND else "트렌디 표현: 쓰지 않음(맥락이 맞는 말이 없어 평이한 말)"
     scenes = "".join(f'<li class="sn"><b>{i + 1}</b><div><strong>{E(a)}</strong> <small>{sc[i][0]}초</small><br>{E(b)}</div></li>' for i, (a, b) in enumerate(rows))
-    cards += f'''<details class="g"><summary><h3>{n} <small>{E(P['date'])} · 연결 글 {E(P['blog'])} · {dur:.1f}초</small></h3><span class="tg t1">강점 {st} : 주의 {ca}</span><span class="tg {'t2' if n in TREND else 't4'}">{'트렌디 표지' if n in TREND else '트렌디 안 씀'}</span><span class="tg t3">마무리 {E(cf['cta'])}</span></summary><div class="in"><p class="lead" style="margin:0 0 6px">{tr}</p><ul>{scenes}</ul><p class="lead" style="margin:10px 0 2px"><b>캡션 초안</b>(첫 125자에 '2027년 {n} 운세' 키워드, 유입 한 줄 + 팔로우 한 줄, 월 단위 행동은 캡션에 담음)</p><pre>{E(caps[n])}</pre><p class="lead" style="margin:0"><small>해시태그 검색량: #{n}운세 {vol(n + '운세')} · #정미년 {vol('정미년')} · #2027년운세 {vol('2027년운세')}</small></p></div></details>'''
-covers = "".join(f'<figure><img src="data:image/jpeg;base64,{b64(n)}" alt="{n} 표지"><figcaption>{n}{" · # " + Z.PLAN[n]["term"] if n in TREND else ""}</figcaption></figure>' for n in Z.GEN)
+    cards += f'''<details class="g"><summary><h3>{n} <small>{E(P['date'])} · 연결 글 {E(P['blog'])} · {dur:.1f}초</small></h3><span class="tg t1">강점 {st} : 주의 {ca}</span><span class="tg {'t2' if n in TREND else 't4'}">{'트렌디 표지' if n in TREND else '트렌디 안 씀'}</span><span class="tg t3">마무리 {E(cf['cta'])}</span><span class="tg t1" style="background:#6b5b95">배경 {E(Z.BG_KO[P['bg']])}</span></summary><div class="in"><p class="lead" style="margin:0 0 6px">{tr}</p><ul>{scenes}</ul><p class="lead" style="margin:10px 0 2px"><b>캡션 초안</b>(첫 125자에 '2027년 {n} 운세' 키워드, 유입 한 줄 + 팔로우 한 줄, 월 단위 행동은 캡션에 담음)</p><pre>{E(caps[n])}</pre><p class="lead" style="margin:0"><small>해시태그 검색량: #{n}운세 {vol(n + '운세')} · #정미년 {vol('정미년')} · #2027년운세 {vol('2027년운세')}</small></p></div></details>'''
+covers = "".join(f'<figure><img src="data:image/jpeg;base64,{b64(n)}" alt="{n} 표지"><figcaption>{n} · {Z.BG_KO[Z.PLAN[n]["bg"]]}{" · # " + Z.PLAN[n]["term"] if n in TREND else ""}</figcaption></figure>' for n in Z.GEN)
 guides = [("감정서 표현가이드 12가지", "그 사람만의 문장(띠 관계로 시작) · 행동 처방(돈·일·사람마다 행동 한 줄) · 강점 2 : 주의 1 표시 · 단정 완화('분명해요' → '기회가 보이는 해예요') · 존중하는 말투 · 시기는 월 단위+행동 하나(달력 장면은 지정하신 그림 그대로, 월별 행동은 캡션) · 반복 금지"), ("릴스 플레이북", "첫 프레임이 곧 제목 · 자막 필수 · 캡션 첫 125자에 '2027년 ○○띠 운세' · 해시태그 5개 · CTA 프로필 링크 1회"), ("통합 운영 매뉴얼", "확신·불안 문구 금지, 면책 1회(캡션 하단 현행 문구), 영상에 가격을 넣지 않음"), ("세계관·캐릭터 설정서", "담백한 존댓말, 약점은 짚되 대안과 함께, 1인칭 인간 서사 없음"), ("확정 규칙 R01~R33", "R33 사운드(경쾌·발랄·상큼, 템포 114 이상) · R13 문장 2초 · R17 캡션 · R19 양산형 방지 · R20 문구 안전 · R24·R25 트렌디(큰 제목은 평이하게, 트렌디는 작은 글, 한 영상 하나, 이웃 연속 금지, 한 주 40% 이하) · R26 자연스러운 한국어 · R27~R29 줄바꿈·박스·간격 · R30 한 장면 한 정보 · R31 강조 전환")]
 snd = json.load(open('/home/claude/snd/info.json', encoding='utf-8'))
 def a64(n): return base64.b64encode(open(f'/home/claude/snd/{n}.mp3','rb').read()).decode()
@@ -77,8 +78,8 @@ page = f'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">{CSS}</head><body><div class="w">
 <h1>띠 릴스 기획서 (9편)</h1>
 <p class="lead">영상을 만들기 전에 띠마다 장면 10개의 화면 문구, 캡션, 트렌디 표현을 정했어요. 아래 화면 문구가 그대로 영상에 들어가요. 띠를 눌러 펼쳐 보세요. 원숭이띠는 대표님이 지정하신 구성이 기준이에요.</p>
-<h2>표지 미리보기 (첫 프레임이자 썸네일)</h2>
-<div class="box"><p class="lead" style="margin:0 0 8px">트렌디 표현은 표지 맨 위 주황 배지로 올려 눈에 띄게 했어요. 큰 제목은 평이한 키워드를 그대로 두고(R25), 배지 아래에 한 줄 풀이를 달았어요. 용·양·닭띠 3편이에요.</p><div class="cg">{covers}</div></div>
+<h2>표지 미리보기 (첫 프레임이자 썸네일, 배경 5가지 돌려 쓰기)</h2>
+<div class="box"><p class="lead" style="margin:0 0 8px">트렌디 표현은 표지 맨 위 주황 배지로 올려 눈에 띄게 했어요. 큰 제목은 평이한 키워드를 그대로 두고(R25), 배지 아래에 한 줄 풀이를 달았어요. 용·양·닭띠 3편이에요. 배경은 별빛 남색·달빛 보라·노을 버건디·숲 딥그린·청록 바다 5가지를 날짜 순서로 돌려 써서 이웃한 영상은 서로 달라요. 모두 어두운 톤이라 글자 대비는 11배 이상이고, 황도 차트는 그대로예요.</p><div class="cg">{covers}</div></div>
 <h2>사운드 미리듣기 (14초)</h2><div class="box"><p class="lead" style="margin:0 0 8px">전부 경쾌하고 발랄하고 상큼한 곡이에요. 밝은 장조에 템포 114~124이고, 느린 곡(오르골·로파이)은 뺐어요. 이웃한 영상끼리 곡·조가 겹치지 않아요. 앞서 만든 영상 중 느린 곡(별빛 오르골 93 등)을 쓴 것은 다시 만들 때 모두 바뀌어요.</p><ul>{SNDH}</ul></div>
 <div class="box"><b>이번 기획에 반영한 가이드</b><ul>{gh}</ul></div>
 <div class="box dec"><b>정해 주세요 (2건, 모두 권장안이 있어요)</b><ul>

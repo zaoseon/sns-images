@@ -21,8 +21,28 @@ def e_back(x): x = cl(x); c1 = 1.70158; c3 = c1 + 1; return 1 + c3 * (x - 1) ** 
 def font(path, size, idx=0): return ImageFont.truetype(path, size, index=idx) if path.endswith(".ttc") else ImageFont.truetype(path, size)
 def serif(size): return font(SERIF, size, 2)   # KR
 # ---------- 배경 ----------
+BG_VARIANT = "navy"   # 배경 변주(R34, 대표 10/8): navy(기본)·violet-moon·burgundy-sun·forest·teal. 기본값이라 기존 영상은 그대로
+BG_VARIANTS = {   # 채널 곱(밝기 유지, 항상 어두운 톤)·더하기, 해/달 장식(브랜드 소재, 화면 아래 UI 가림 구역에만)
+    "navy": dict(mul=(1, 1, 1), add=(0, 0, 0), deco=None),
+    "violet-moon": dict(mul=(1.12, .70, 1.32), add=(8, 0, 14), deco=("moon.png", (610, 1470), 470)),
+    "burgundy-sun": dict(mul=(1.45, .62, .70), add=(20, 0, 6), deco=("sun.png", (20, 1450), 500)),
+    "forest": dict(mul=(.60, 1.12, .80), add=(0, 14, 6), deco=None),
+    "teal": dict(mul=(.52, 1.00, 1.22), add=(0, 12, 18), deco=("moon.png", (-40, 1470), 430)),
+}
+@functools.lru_cache(maxsize=8)
+def _bg_variant(name):
+    import numpy as np
+    base = _bg_base(); v = BG_VARIANTS.get(name) or BG_VARIANTS["navy"]
+    if name == "navy" or name not in BG_VARIANTS: return base
+    a = np.asarray(base).astype("float32"); a = a * np.array(v["mul"], dtype="float32") + np.array(v["add"], dtype="float32"); im = Image.fromarray(np.clip(a, 0, 255).astype("uint8"))
+    if v["deco"]:   # 해·달 소재: 어두운 바탕은 빼고 밝은 부분만 은은하게(아래 UI 가림 구역)
+        fn, (x, y), size = v["deco"]; src = Image.open(os.path.join(ROOT, "assets", "brand_bg", "derived", fn)).convert("RGB"); src = src.resize((size, int(size * src.height / src.width)))
+        lum = np.asarray(src.convert("L")).astype("float32"); m = np.clip((lum - 55) / 150, 0, 1) * .42; mask = Image.fromarray((m * 255).astype("uint8")).filter(ImageFilter.GaussianBlur(2))
+        im.paste(src, (x, y), mask)
+    return im
+def bg_static(): return _bg_variant(BG_VARIANT)
 @functools.lru_cache(maxsize=1)
-def bg_static():
+def _bg_base():
     im = Image.new("RGB", (W, H), (14, 17, 27)); d = ImageDraw.Draw(im)
     for y in range(H):
         t = abs(y / H - .42); k = max(0, 1 - t * 1.6); d.line((0, y, W, y), fill=(int(14 + 14 * k), int(17 + 18 * k), int(27 + 30 * k)))
