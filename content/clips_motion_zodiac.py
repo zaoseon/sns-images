@@ -449,11 +449,11 @@ BG_KO = {"navy": "별빛 남색", "violet-moon": "달빛 보라", "burgundy-sun"
 for _i, _n in enumerate(("원숭이띠", "개띠", "용띠", "뱀띠", "말띠", "양띠", "닭띠", "돼지띠", "쥐띠")): PLAN[_n]["bg"] = BG_ORDER[_i % 5]
 def two(sent): a = sent.split(". "); return (a[0] + ("." if not a[0].endswith(".") else ""), (a[1] if len(a) > 1 else ""))
 def G_kw(name):
-    """표지(1번 장면, 첫 프레임): 트렌디 표현은 큰 제목이 아니라 배지(작은 글)로 맨 위에 눈에 띄게(R25, 대표 10/8 '표지에 배치해 후킹'). 큰 제목은 평이한 키워드"""
+    """표지(1번 장면, 첫 프레임): 자기 띠가 제일 먼저 보이게 띠 이름을 가장 크게(R35, 대표 10/8). 트렌디 표현은 맨 위 배지(작은 글, R25), 키워드는 그다음 크기"""
     t = T[name]; P = PLAN.get(name, {}); term = P.get("term"); sub = P.get("sub")
     def f(c):
-        BH = 128; parts = [(f"2027 {name}", 58, 1.25), (t["one"], 118, 1.25)] + ([(sub, 44, 1.3)] if sub else [])
-        hs = [th_(a, b, 820, lh) for a, b, lh in parts]; gaps = [GT] * (len(parts) - 1)
+        BH = 124; parts = [("2027년", 54, 1.2), (name, 176, 1.15), (t["one"], 92, 1.2)] + ([(sub, 44, 1.3)] if sub else [])
+        hs = [th_(a, b, 840, lh) for a, b, lh in parts]; gaps = [GT * .6, GT * .8] + [GT] * (len(parts) - 3)
         y0, tot = stack_top(([BH] if term else []) + hs, ([GT] if term else []) + gaps)
         y = y0
         if term:
@@ -461,14 +461,15 @@ def G_kw(name):
             im = Image.new("RGBA", (bw + 20, BH), (0, 0, 0, 0)); d = ImageDraw.Draw(im); d.rounded_rectangle((10, 6, 10 + bw, BH - 6), radius=50, fill=(244, 140, 4, 255)); d.text((10 + bw / 2, BH / 2 - 2), lab, font=fb, fill=(255, 255, 255, 255), anchor="mm")
             sc_ = .85 + .15 * min(g, 1.05); L = im.resize((int(im.width * sc_), int(im.height * sc_))); blit(c.fr, L, CX - L.width / 2, y + (BH - L.height) / 2, c.alpha(cl(g * 2)))
             y += BH + GT
-        y = tblock(c, parts[0][0], y, .25, 58, color=GOLD, lh=1.25); y = tblock(c, parts[1][0], y + GT, .5, 118, lh=1.25)
+        y = tblock(c, parts[0][0], y, .15, 54, color=GOLD, lh=1.2); y = tblock(c, name, y + GT * .6, .25, 176, color=GOLD, lh=1.15, maxw=840)
+        y = tblock(c, t["one"], y + GT * .8, .6, 92, lh=1.2, maxw=840)
         if sub: tblock(c, sub, y + GT, 1.1, 44, color=DIM, lh=1.3)
     return f
 def G_years(name):
     cf = CFG[name]; ys = cf["years"].replace("년생", "").split("·"); big = f"{ys[0]}·{ys[1]}\n{ys[2]}·{ys[3]}년생"
     def f(c):
-        h1 = th_(f"{name} 출생연도", 50, 820, 1.25); h2 = th_(big, 104, 820, 1.25); y0, tot = stack_top([h1, h2], [GT])
-        y = tblock(c, f"{name} 출생연도", y0, .05, 50, color=GOLD, lh=1.25); tblock(c, big, y + GT, .3, 104, lh=1.25)
+        h1 = th_(f"{name} 출생연도", 84, 840, 1.2); h2 = th_(big, 104, 820, 1.25); y0, tot = stack_top([h1, h2], [GT])
+        y = tblock(c, f"{name} 출생연도", y0, .05, 84, color=GOLD, lh=1.2, maxw=840); tblock(c, big, y + GT, .3, 104, lh=1.25)
     return f
 def G_hook(name):
     cf = CFG[name]
