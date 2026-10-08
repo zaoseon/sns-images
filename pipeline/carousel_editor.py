@@ -108,7 +108,7 @@ LAYOUT_JS = r"""
   const t = slides[6]; t.bgColor = '#1a1816'; t.face = 'bg_sunmoon'; t.imgScale = 1.379; t.imgOffX = -90; t.imgOffY = bgOff(1.379, 167);
   t.panelOverride = panel(0,167,1080,993,14,128);
   t.qSize = 89; t.qY = 378.5; t.btn = '팔로우하고 같이 얘기 나눠요'; t.btnSize = 50; t.btnY = 558;
-  t.nextBadgeSize = 39; t.nextY = 785; t.nextTitleSize = 67; t.hint = '프로필 링크에서 내 기운 1초만에 확인'; t.hintSize = 38;
+  t.nextBadgeSize = 39; t.nextY = 785; t.nextTitleSize = 67; t.hint = '프로필 링크에서 내 기운 1초 만에 확인'; t.hintSize = 38;
 
   // ---- 변형 레이아웃 (대표 샘플 병·무에서 잰 값, pipeline/variant_fit.py) ----
   const VAR = def.variant || {};
