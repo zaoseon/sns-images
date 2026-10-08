@@ -4,9 +4,9 @@ import sys, os
 sys.path.insert(0,'pipeline'); sys.path.insert(0,'content')
 import carousel_editor as CE, reel_v2 as RV, reel_plan as RP, new_tri_reels as N
 def clip(face, hook, sub, rows, note, cfg, advice_title="셋 중 두 개 이상\n겹쳤다면"):
-    d, ov = N.tri(face, hook, sub, rows, note, "나는 몇 개 *겹쳐요*?", N.B3, dict(cfg, safe=RP.NAVER_SAFE, silent=False), advice_title=advice_title, nb="다음 편", nt="블로그에서 더 보기")
+    d, ov = N.tri(face, hook, sub, rows, note, "나는 몇 개 *겹치나요*?", N.B3, dict(cfg, safe=RP.NAVER_SAFE, silent=False), advice_title=advice_title, nb="다음 편", nt="블로그에서 더 보기")
     ov["hint"] = "블로그에서 내 기운 확인"; return (d, ov)
-S3 = "사주·별자리·숫자, 셋 중 몇 개 겹쳐요?"
+S3 = "사주·별자리·숫자, 셋 중 몇 개 겹치나요?"
 defs = {
  "first": clip("v1_lowbun", "3초 만에\n사랑에 빠지는 사람", S3, N.defs["first"][0] and [("병화(丙)일생, 도화가 있는 사주","태양처럼 바로 달아오르고, 사람을 끌어요"),("양자리 · 사자자리","직진하는 불의 별자리 (3/21~4/19, 7/23~8/22)"),("3번 · 5번","표현의 3, 새로움에 끌리는 5")],
     "하나도 안 겹친다면, 천천히 스며드는\n사랑을 하는 사람일지도 몰라요.", dict(struct="S1", style="발랄 우쿨렐레", seed=51, key="D")),

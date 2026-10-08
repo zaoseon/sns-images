@@ -67,8 +67,8 @@ def venn_layer(state, k=1.0):
     for (x, nm) in ((cxL, "사주"), (cxR, "별자리")): d.text((x, 310), nm, font=font(BLACK, 56), fill=(255, 255, 255, 235), anchor="mm")   # 각 원의 한가운데(10/7 대표)
     return im, oy, (cxL + cxR) / 2
 def A1(c):
-    H = text_h("사주와 별자리,\n같은 말을 할까요?", 104, 820, 1.3) + 36 + text_h("무작위 3,000명을 계산했어요", 56, 820, 1.4); y0 = MID - H / 2
-    y = fx_wipe(c, "사주와 별자리,\n같은 말을 할까요?", y0, .1, 104, lh=1.3); fx_slide(c, "무작위 3,000명을 계산했어요", y + 36, 1.1, 56, DIM, dirn=1)
+    H = text_h("사주와 별자리,\n같은 말을 할까요?", 104, 820, 1.3) + 36 + text_h("무작위 3,000명의 사주를 계산했어요", 56, 820, 1.4); y0 = MID - H / 2
+    y = fx_wipe(c, "사주와 별자리,\n같은 말을 할까요?", y0, .1, 104, lh=1.3); fx_slide(c, "무작위 3,000명의 사주를 계산했어요", y + 36, 1.1, 56, DIM, dirn=1)
 def A2(c):
     fx_slide(c, "100명 중", 490, .05, 64, DIM, dirn=-1); fx_count(c, 14, 565, .3, 190, GOLD, "명", 1.2)
     p = e_out(cl((c.t - .1) / .9)); im, oy, mx = venn_layer("same", p); blit(c.fr, im, 0, oy, c.alpha(cl(p * 1.5)))
@@ -87,7 +87,7 @@ def A4(c):
         y = 680 + i * 190 - 480; t0 = .5 + i * .5; g = e_out(cl((c.t - t0) / .7)); a = int(255 * cl(g * 1.5))
         d.text((70, y), nm, font=f52, fill=(255, 255, 255, a), anchor="lm"); w = 640 * (v / 23.0) * g
         d.rounded_rectangle((70, y + 36, 70 + max(10, w), y + 100), radius=32, fill=(col[0], col[1], col[2], a)); d.text((70 + max(10, w) + 20, y + 68), f"{v * g:.1f}%", font=f56, fill=(255, 255, 255, a), anchor="lm")
-    blit(c.fr, im, 0, 480, 1.0); fx_slide(c, "무작위 3,000명을 계산했어요", 1295, 2.4, 44, DIM, dirn=1)
+    blit(c.fr, im, 0, 480, 1.0); fx_slide(c, "무작위 3,000명의 사주를 계산했어요", 1295, 2.4, 44, DIM, dirn=1)
 def A5(c):
     H = text_h("다르다고\n틀린 게 아니에요", 100, 820, 1.3) + 40 + text_h("같은 말은 타고난 결이에요.\n다른 말은 내가 고를 수 있는 곳이에요.", 52, 840, 1.4); y0 = MID - H / 2
     y = fx_zoom(c, "다르다고\n틀린 게 아니에요", y0, .1, 100, GOLD); fx_slide(c, "같은 말은 타고난 결이에요.\n다른 말은 내가 고를 수 있는 곳이에요.", y + 40, 1.0, 52, DIM, maxw=840, lh=1.4, dirn=1)
