@@ -332,7 +332,64 @@ def S_cal(name): return S_cal2(name) if name in NEW4 else _C(name)
 def S_work(name): return S_work2(name) if name in NEW4 else _K(name)
 def S_cta(name): return S_cta2(name) if name in NEW4 else _T(name)
 
+
+# ───────── 원숭이띠 재구성 (10/7 대표 지적): 장면 8개 - 표지(키워드·출생연도·문장) / 왜 그럴까 / 힘 쓸 달·아낄 달 / 돈 / 일 / 사람 / 행운의 숫자 / 마무리
+MK = T["원숭이띠"]
+def M_cover(c):
+    t = MK; hook = "2027년에 원숭이띠에게\n무거운 일이 맡겨지는 건\n인정받는다는 뜻"
+    H = 62 + 12 + 118 + 24 + 52 + 34 + text_h(hook, 54, 820, 1.3); y0 = 910 - H / 2
+    y = text(c, "2027 원숭이띠", y0, .05, 58, color=GOLD, maxw=820, stagger=0)
+    y = text(c, "책임과 인정", y + 6, .3, 118, maxw=820, stagger=0)
+    y = text(c, "1980·1992·2004·2016년생", y + 20, 1.0, 50, color=DIM, maxw=820, stagger=0)
+    text(c, hook, y + 36, 1.6, 54, maxw=820, lh=1.3, stagger=.25)
+def M_why(c):
+    tt = c.t; y = title(c, "왜 그럴까"); im, d = lay(520); Y0 = 540
+    r = 125 * min(e_back(cl((tt - .4) / .45)), 1.05); pulse = 1 + .045 * math.sin(tt * 5)
+    for k, w_ in enumerate((46, 30, 16)):
+        rr_ = (r + 30 + k * 26) * pulse; d.ellipse((CX - rr_, 250 - rr_, CX + rr_, 250 + rr_), outline=(CORAL[0], CORAL[1], CORAL[2], 200 - k * 55), width=w_ // 4 + 2)
+    circ(d, CX, 250, int(r), "申", GOLD, fg=(30, 24, 40, 255), fs=140); blit(c.fr, im, 0, Y0, 1.0)
+    text(c, "불(丁)에 다듬어지는 쇠(申)", 1080, 1.5, 58, color=GOLD, maxw=840, stagger=0)
+    text(c, "무거운 일은 나를 단단하게 만드는 일이에요", 1170, 2.0, 46, maxw=800, lh=1.35, stagger=0)
+def M_cal(c):
+    tt = c.t; good, save = MK["good"], MK["save"]; im, d = lay(900); Y0 = 460; R = 300; cx_, cy_ = CX, 450; fm = font(BLACK, 44)
+    up = lambda t0: e_out(cl((tt - t0) / .35))
+    ug, us = up(2.7), up(4.4)                      # 힘 쓸 달 / 아낄 달 글자가 색이 바뀌는 순서
+    def lerp(a, b, u): return tuple(int(a[i] + (b[i] - a[i]) * u) for i in range(4))
+    for i, m in enumerate(MONTHS):
+        g = e_back(cl((tt - (.2 + i * .12)) / .35))
+        if g <= 0: continue
+        ang = -math.pi / 2 + i * math.pi / 6; x = cx_ + R * math.cos(ang); yy = cy_ + R * math.sin(ang); r = 50 * min(g, 1.05)
+        if m in good and ug > 0: r = 50 * (1 + .18 * ug); d.ellipse((x - r, yy - r, x + r, yy + r), fill=lerp((255, 255, 255, 26), GOLD, ug), outline=lerp((255, 255, 255, 190), GOLD, ug), width=5); col = lerp((255, 255, 255, 255), (30, 24, 40, 255), ug)
+        elif m in save and us > 0: r = 50 * (1 + .18 * us); d.ellipse((x - r, yy - r, x + r, yy + r), fill=(255, 255, 255, 26), outline=lerp((255, 255, 255, 190), CORAL, us), width=int(5 + 3 * us)); col = lerp((255, 255, 255, 255), CORAL, us)
+        else: d.ellipse((x - r, yy - r, x + r, yy + r), fill=(255, 255, 255, 26), outline=(255, 255, 255, 190), width=5); col = (255, 255, 255, 255)
+        d.text((x, yy - 2), ML(m), font=font(BLACK, int(44 * r / 50) if r > 50 else 44), fill=col, anchor="mm")
+    g_sz = int(70 * (1 + .12 * ug)); s_sz = int(70 * (1 + .12 * us))
+    d.text((cx_, cy_ - 52), "힘 쓸 달", font=font(BLACK, g_sz), fill=lerp((255, 255, 255, 255), GOLD, ug), anchor="mm")
+    d.text((cx_, cy_ + 52), "아낄 달", font=font(BLACK, s_sz), fill=lerp((255, 255, 255, 255), CORAL, us), anchor="mm")
+    blit(c.fr, im, 0, Y0, 1.0)
+def M_one(key, label, line1, line2):
+    def f(c):
+        im, d = lay(320); g = e_back(cl((c.t - .1) / .45)); r = int(140 * min(g, 1.05))
+        if r > 0: d.ellipse((CX - r, 160 - r, CX + r, 160 + r), fill=GOLD); d.text((CX, 156), label, font=font(BLACK, 110), fill=(30, 24, 40, 255), anchor="mm")
+        blit(c.fr, im, 0, 520, 1.0); y = text(c, line1, 880, .5, 62, maxw=820, lh=1.3, stagger=0); text(c, line2, y + 24, 1.1, 50, color=DIM, maxw=820, lh=1.3, stagger=0)
+    return f
+def M_lucky(c):
+    im, d = lay(360); a = e_back(cl((c.t - .3) / .45)); b = e_back(cl((c.t - .8) / .45))
+    d.text((CX, 40), "행운의 숫자", font=font(BLACK, 62), fill=GOLD, anchor="mm")
+    for x, n_, g in ((CX - 190, "5", a), (CX + 190, "10", b)):
+        r = int(150 * min(g, 1.05))
+        if r > 0: d.ellipse((x - r, 210 - r, x + r, 210 + r), fill=GOLD); d.text((x, 206), n_, font=font(BLACK, 150 if len(n_) == 1 else 130), fill=(30, 24, 40, 255), anchor="mm")
+    blit(c.fr, im, 0, 520, 1.0); text(c, "5와 10은 흙의 숫자예요. 흙이 쇠를 받쳐 줘요", 960, 1.5, 52, maxw=800, lh=1.35, stagger=0)
+def M_cta(c):
+    y = text(c, "올해 가장 무겁게 맡은\n책임은 무엇인가요?", 540, .1, 64, maxw=840, lh=1.25); pill(c, 1.0, y + 70); prof(c, y + 250, 1.8)
+def build_monkey(outdir):
+    name = "원숭이띠"; SC = [(2.6, M_cover), (3.2, M_why), (5.2, M_cal), (2.4, M_one("돈", "돈", MK["money"].split(". ")[0] + ".", MK["money"].split(". ")[1])), (2.4, M_one("일", "일", MK["work"].split(". ")[0] + ".", MK["work"].split(". ")[1])), (2.4, M_one("사람", "사람", MK["people"].split(". ")[0] + ".", MK["people"].split(". ")[1])), (3.0, M_lucky), (3.6, M_cta)]
+    SC2 = [(d, autofit(fn, d)) for d, fn in SC]
+    p, dur = render(name, SC2, outdir); mi = MP.choose("data", f"zodiac-{name}"); MP.mux(p, [x for x, _ in SC2], mi, 700 + len(name))
+    still(SC2, 0, 2.4, os.path.join(outdir, name + "_cover.jpg")); print("완료", name, round(dur, 1), "초 · 장면", len(SC2), "· 음악", mi["style"], mi["bpm"]); return p
+
 def build(name, outdir):
+    if name == "원숭이띠": return build_monkey(outdir)
     SC = [(2.8, S_hook(name)), (4.2, S_why(name)), (5.4, S_cal(name)), (5.2, S_work(name)), (4.4, S_cta(name))]
     if name in ("말띠", "돼지띠"): pass
     SC2 = [(d, autofit(fn, d)) if (i < 4 or name not in ("말띠", "돼지띠")) else (d, fn) for i, (d, fn) in enumerate(SC)]   # 정월이 아래에 붙는 마무리(말띠·돼지띠)만 자동 맞춤에서 뺀다
