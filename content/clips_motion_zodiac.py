@@ -416,16 +416,16 @@ PLAN = {
     lead="무거운 일이 맡겨지는 해, 책임이 인정으로 돌아오는 때가 언제인지 정리했어요."),
  "개띠": dict(rid="zodiac-25", date="10/24 낮", blog="n65 개띠 운세", tags="#개띠운세 #2027년운세 #정미년 #띠별운세 #사주", sub=None,
     lead="말로 한 약속을 한 번 더 확인하는 해, 언제 확인하면 좋은지 정리했어요."),
- "용띠": dict(rid="zodiac-11", date="10/29 낮", blog="n66 용띠 운세", tags="#용띠운세 #2027년운세 #정미년 #무지출챌린지 #사주", sub="무지출 챌린지처럼, 새는 곳부터 막는 해예요",
+ "용띠": dict(rid="zodiac-11", date="10/29 낮", blog="n66 용띠 운세", tags="#용띠운세 #2027년운세 #정미년 #무지출챌린지 #사주", term="무지출 챌린지", sub="새는 곳부터 막고 쌓는 해예요",
     lead="무지출 챌린지처럼 새는 곳부터 막고 쌓는 해, 언제 시작하면 좋은지 정리했어요."),
  "뱀띠": dict(rid="zodiac-13", date="10/31 낮", blog="n67 뱀띠 운세", tags="#뱀띠운세 #2027년운세 #정미년 #띠별운세 #사주", sub=None,
     lead="의욕이 넘칠수록 속도를 줄이는 해, 언제 힘을 쓰고 언제 쉬면 좋은지 정리했어요."),
  "말띠": dict(rid="zodiac-17", date="11/5 낮", blog="n59 말띠 운세", tags="#말띠운세 #2027년운세 #정미년 #띠별운세 #사주", sub=None,
     lead="내년에 좋은 짝을 만날 수 있는 해, 언제 마음을 열면 좋은지 정리했어요."),
- "양띠": dict(rid="zodiac-19", date="11/7 낮", blog="n04 양띠 운세", tags="#양띠운세 #2027년운세 #정미년 #갓생 #사주", sub="갓생은 정리부터, 비우고 나서 다시 서는 해예요",
+ "양띠": dict(rid="zodiac-19", date="11/7 낮", blog="n04 양띠 운세", tags="#양띠운세 #2027년운세 #정미년 #갓생 #사주", term="갓생", sub="정리부터 하면 다시 서는 해예요",
     lead="갓생은 정리부터, 내 띠가 돌아오는 해에 언제 비우고 언제 세우면 좋은지 정리했어요."),
- "닭띠": dict(rid="zodiac-23", date="11/12 낮", blog="n68 닭띠 운세", tags="#닭띠운세 #2027년운세 #정미년 #띠별운세 #사주", sub=None,
-    lead="꼼꼼함이 인정받는 해, 언제 실력을 보여 주면 좋은지 정리했어요."),
+ "닭띠": dict(rid="zodiac-23", date="11/12 낮", blog="n68 닭띠 운세", tags="#닭띠운세 #2027년운세 #정미년 #일잘러 #사주", term="일잘러", sub="꼼꼼함이 일잘러로 인정받는 해예요",
+    lead="일잘러로 인정받는 해, 언제 실력을 보여 주면 좋은지 정리했어요."),
  "돼지띠": dict(rid="zodiac-27", date="11/13 저녁", blog="n49 돼지띠 운세", tags="#돼지띠운세 #2027년운세 #정미년 #띠별운세 #사주", sub=None,
     lead="사람을 통해 돈이 들어오는 해, 언제 사람을 만나면 좋은지 정리했어요."),
  "쥐띠": dict(rid="zodiac-03", date="11/14 낮", blog="n69 쥐띠 운세", tags="#쥐띠운세 #2027년운세 #정미년 #띠별운세 #사주", sub=None,
@@ -442,15 +442,23 @@ CFG["돼지띠"]["hook"] = "2027년에 돼지띠에게\\n돈이 사람을 통해
 CFG["쥐띠"]["hook"] = "2027년에 쥐띠가\\n돈은 들어오는데 마음이 상하기 쉬운 건\\n오해를 줄이라는 뜻"
 # 단정을 줄인 문구(R20·표현가이드 10번): '분명해요' 같은 확신 표현을 쓰지 않는다
 OVER = {"쥐띠": {"money": ("돈이 들어올 기회가 보이는 해예요.", "가까운 사람과 돈이 섞이면 마음이 먼저 상해요.")}}
-SUB = {n: p["sub"] for n, p in PLAN.items() if p["sub"]}
+SUB = {n: p["sub"] for n, p in PLAN.items() if p.get("sub")}
 def two(sent): a = sent.split(". "); return (a[0] + ("." if not a[0].endswith(".") else ""), (a[1] if len(a) > 1 else ""))
 def G_kw(name):
-    t = T[name]; sub = SUB.get(name)
+    """표지(1번 장면, 첫 프레임): 트렌디 표현은 큰 제목이 아니라 배지(작은 글)로 맨 위에 눈에 띄게(R25, 대표 10/8 '표지에 배치해 후킹'). 큰 제목은 평이한 키워드"""
+    t = T[name]; P = PLAN.get(name, {}); term = P.get("term"); sub = P.get("sub")
     def f(c):
-        parts = [(f"2027 {name}", 58), (t["one"], 118)] + ([(sub, 44)] if sub else [])
-        hs = [th_(a, b, 820, 1.25) for a, b in parts]; y0, tot = stack_top(hs, [GT] * (len(parts) - 1))
-        y = tblock(c, parts[0][0], y0, .05, 58, color=GOLD, lh=1.25); y = tblock(c, parts[1][0], y + GT, .5, 118, lh=1.25)
-        if sub: tblock(c, sub, y + GT, 1.2, 44, color=DIM, lh=1.25)
+        BH = 128; parts = [(f"2027 {name}", 58, 1.25), (t["one"], 118, 1.25)] + ([(sub, 44, 1.3)] if sub else [])
+        hs = [th_(a, b, 820, lh) for a, b, lh in parts]; gaps = [GT] * (len(parts) - 1)
+        y0, tot = stack_top(([BH] if term else []) + hs, ([GT] if term else []) + gaps)
+        y = y0
+        if term:
+            g = e_back(cl((c.t - .02) / .4)); fb = font(BLACK, 68); lab = "# " + term; bw = int(fb.getlength(lab)) + 100
+            im = Image.new("RGBA", (bw + 20, BH), (0, 0, 0, 0)); d = ImageDraw.Draw(im); d.rounded_rectangle((10, 6, 10 + bw, BH - 6), radius=50, fill=(244, 140, 4, 255)); d.text((10 + bw / 2, BH / 2 - 2), lab, font=fb, fill=(255, 255, 255, 255), anchor="mm")
+            sc_ = .85 + .15 * min(g, 1.05); L = im.resize((int(im.width * sc_), int(im.height * sc_))); blit(c.fr, L, CX - L.width / 2, y + (BH - L.height) / 2, c.alpha(cl(g * 2)))
+            y += BH + GT
+        y = tblock(c, parts[0][0], y, .25, 58, color=GOLD, lh=1.25); y = tblock(c, parts[1][0], y + GT, .5, 118, lh=1.25)
+        if sub: tblock(c, sub, y + GT, 1.1, 44, color=DIM, lh=1.3)
     return f
 def G_years(name):
     cf = CFG[name]; ys = cf["years"].replace("년생", "").split("·"); big = f"{ys[0]}·{ys[1]}\n{ys[2]}·{ys[3]}년생"
