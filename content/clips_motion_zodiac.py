@@ -410,13 +410,22 @@ CFG.update({
  "쥐띠": dict(hook="2027년 쥐띠는\n돈은 들어오는데\n마음이 상하기 쉬운 해", years="1972·1984·1996·2008년생", shape="cross", l1="서로 서운하게 만드는 사이(해)", l2="子와 未는 해이면서 원진이에요", nums=("4", "9"), lucky="4와 9는 쇠의 숫자예요.\n쇠가 물을 키워 줘요", cta="q", q="서운한 마음을 마지막으로\n말한 건 언제인가요?"),
 })
 def two(sent): a = sent.split(". "); return (a[0] + ("." if not a[0].endswith(".") else ""), (a[1] if len(a) > 1 else ""))
-def G_cover(name):
-    t = T[name]; cf = CFG[name]
+def G_kw(name):
+    t = T[name]
     def f(c):
-        sizes = [(f"2027 {name}", 58), (t["one"], 118), (cf["years"], 50), (cf["hook"], 54)]
-        hs = [th_(sz_[0], sz_[1], 820, 1.25) for sz_ in sizes]; y0, tot = stack_top(hs, [GT] * 3)
-        y = tblock(c, sizes[0][0], y0, .05, 58, color=GOLD, lh=1.25); y = tblock(c, sizes[1][0], y + GT, .3, 118, lh=1.25)
-        y = tblock(c, sizes[2][0], y + GT, 1.0, 50, color=DIM, lh=1.25); tblock(c, sizes[3][0], y + GT, 1.6, 54, lh=1.3, stagger=.25)
+        h1 = th_(f"2027 {name}", 58, 820, 1.25); h2 = th_(t["one"], 118, 820, 1.25); y0, tot = stack_top([h1, h2], [GT])
+        y = tblock(c, f"2027 {name}", y0, .05, 58, color=GOLD, lh=1.25); tblock(c, t["one"], y + GT, .5, 118, lh=1.25)
+    return f
+def G_years(name):
+    cf = CFG[name]; ys = cf["years"].replace("년생", "").split("·"); big = f"{ys[0]}·{ys[1]}\n{ys[2]}·{ys[3]}년생"
+    def f(c):
+        h1 = th_(f"{name} 출생연도", 50, 820, 1.25); h2 = th_(big, 104, 820, 1.25); y0, tot = stack_top([h1, h2], [GT])
+        y = tblock(c, f"{name} 출생연도", y0, .05, 50, color=GOLD, lh=1.25); tblock(c, big, y + GT, .3, 104, lh=1.25)
+    return f
+def G_hook(name):
+    cf = CFG[name]
+    def f(c):
+        h = th_(cf["hook"], 74, 820, 1.3); y0, tot = stack_top([h], []); tblock(c, cf["hook"], y0, .1, 74, lh=1.3, stagger=.3)
     return f
 def G_why(name):
     cf = CFG[name]
@@ -477,7 +486,7 @@ def G_cal(name):
     t = T[name]; good, save = t["good"], t["save"]
     def f(c):
         tt = c.t; im, d = lay(760); R = 290; cx_, cy_ = CX, 380
-        up = lambda t0: e_out(cl((tt - t0) / .35)); ug, us = up(2.7), up(4.4)
+        up = lambda t0: e_out(cl((tt - t0) / .35)); ug, us = up(2.0), up(3.5)
         def lerp(a, b, u): return tuple(int(a[i] + (b[i] - a[i]) * u) for i in range(4))
         for i, m in enumerate(MONTHS):
             g = e_back(cl((tt - (.2 + i * .12)) / .35))
@@ -535,7 +544,10 @@ def zodiac_lint(names=None):
                 if lo < 470 or hi > 1350 or abs(mid - 910) > 15: probs.append(f"{n} 장면{i + 1}: 위 {lo} 아래 {hi} 가운데 {mid:.0f} (R21 범위 470~1350, 910±15)")
             except Lint as e: probs.append(f"{n} 장면{i + 1}: {e}")
     return probs
-def scenes_of(name): return [(2.6, G_cover(name)), (3.2, G_why(name)), (5.2, G_cal(name)), (2.4, G_one(name, "money", "돈")), (2.4, G_one(name, "work", "일")), (2.4, G_one(name, "people", "사람")), (3.0, G_lucky(name)), (3.6, G_cta(name))]
+CTA_DUR = {"q": 3.8, "big": 4.1, "face": 3.9, "line": 4.0}
+def scenes_of(name):
+    """대표 10/8 지정 순서: 1 키워드 / 2 출생연도 / 3 문장 / 4 왜 그럴까 / 5 힘 쓸 달·아낄 달 / 6 돈 / 7 일 / 8 사람 / 9 행운의 숫자 / 10 마무리. 길이는 R13(문장 2초·낱말 1초 이상): 마지막 글이 나온 뒤 2초 이상 남게"""
+    return [(2.6, G_kw(name)), (2.4, G_years(name)), (2.8, G_hook(name)), (4.3, G_why(name)), (5.0, G_cal(name)), (3.2, G_one(name, "money", "돈")), (3.2, G_one(name, "work", "일")), (3.2, G_one(name, "people", "사람")), (3.6, G_lucky(name)), (CTA_DUR[CFG[name]["cta"]], G_cta(name))]
 def build_generic(name, outdir):
     probs = zodiac_lint([name])
     if probs: raise Lint("레이아웃 검사에서 멈춤: " + " / ".join(probs))
