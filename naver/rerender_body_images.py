@@ -7,7 +7,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE); sys
 import naver2 as N
 import imgkit as K
 SCRIPTS = ["build_naver_16_22.py", "build_naver_26_33.py", "build_naver_34_37.py", "build_naver_38_41.py", "build_naver_42_46.py",
-           "build_naver_47_52.py", "build_naver_53_63.py", "build_naver_64_69.py", "build_naver_70.py", "build_naver_71.py", "build_naver_72_74.py"]
+           "build_naver_47_52.py", "build_naver_53_63.py", "build_naver_64_69.py", "build_naver_70.py", "build_naver_71.py", "build_naver_72_74.py", "build_naver_75_79.py"]
 
 def pending_ids():
     p = os.path.join(HERE, "..", "..", "zaoseon-site", "public", "naver", "index.html")
