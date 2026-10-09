@@ -1314,3 +1314,9 @@ README "2주마다 하는 일" 그대로. 요점만:
 - 고침: zaoseon-site `tools/schedule_check.py`(오늘 올라간 릴스 포함, 띠 글+REEL 한 세트) + 시험 3건 추가, 재실행 결과 불일치 0건. 커밋 52fc078.
 - 네이버 대표 이미지: 2:1(960x480) 17편(n08~n19, n21~n25)이 목록 정사각 자르기에서 잘렸다. pages.json cover를 `wide/sq_nXX.jpg`(1200x720 가운데 정사각)로 교체, `qa_posts.py`에 규격 검사 추가. 이미 올린·예약한 글의 대표 이미지는 네이버에서 직접 교체해야 한다(브라우저 도구 연결 전).
 - 일정은 하나도 옮기지 않았다. Metricool 예약 변경 없음.
+
+## 10/9 저녁: 운영앱 요청·승인·제작 현황 (v108)
+- 앱 '요청' 탭·'제작 현황' 탭, 모든 항목의 [💬 요청·수정·승인] 칸. 서버 새 배포 없이 메모 저장 기능에 글을 base64url 조각(`https://r/..`)으로 담는다(public/admin/rq.js, tools/rq_codec.py).
+- 요청은 data.json 의 `requests`(약 30분마다 갱신)로 읽는다. 처리하면 `content/requests_state.json` 에 `{"<rid>": {"st":"작업중|완료|보류","msg":"한 줄"}}` 로 적는다. 앱이 이 상태를 보여 준다.
+- 제작 현황은 달력(`calendar_YYYY-MM.json`)과 `production_log.json` 의 state("제작 중"/"원고 준비됨"/"예약 완료")로 계산한다. 작업하면 production_log 를 갱신할 것.
+- type: new 새 요청, rev 수정 요청, ok 승인(swap/prop/ops 승인은 앱이 확인 표시도 같이 저장).
