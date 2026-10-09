@@ -1,0 +1,141 @@
+# -*- coding: utf-8 -*-
+"""11월 1주차 인스타 캐러셀 6편의 표지 시안(정월 얼굴 없는 칸: 큰 숫자·도형·차트·한자 워터마크·질문 글자)과 7장 문안.
+정본 3 '피드·그리드 배치': 새 표지는 이웃 칸과 함께 보여 승인받은 뒤 7장 전체를 제작한다. 세트 색은 grid_2026-11.json(SETS)의 칸 배정을 그대로 쓴다.
+문장은 짝 원고(naver/pages.json n73~n79)에 있는 내용만 쓴다. 사용: python3 content/calendar/cover_proposals_w1.py"""
+import os, sys, json
+from PIL import Image, ImageDraw, ImageFont
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
+FD = os.path.join(ROOT, "pipeline", "fonts"); OUT = os.path.join(HERE, "w1_covers"); os.makedirs(OUT, exist_ok=True)
+PL = os.path.join(FD, "Paperlogy-9Black.ttf"); PX = os.path.join(FD, "Paperlogy-8ExtraBold.ttf"); PR = os.path.join(FD, "PRETENDARD-EXTRABOLD.OTF")
+SERIF = os.path.join(FD, "serif.otf"); CHART = os.path.join(ROOT, "assets", "brand_bg", "chart.png")
+W, H, M = 1080, 1440, 55
+SETS = json.load(open(os.path.join(HERE, "grid_2026-11.json"), encoding="utf-8"))["SETS"]   # [이름, 톤, 배경, 강조]
+def F(p, s): return ImageFont.truetype(p, s)
+def rgb(h): return tuple(int(h[i:i + 2], 16) for i in (1, 3, 5))
+def mix(a, b, t): return tuple(int(a[i] * (1 - t) + b[i] * t) for i in range(3))
+WHITE = (250, 247, 240)
+
+def base(si, hanja=None):
+    name, tone, bg, ac = SETS[si]; bgc, acc = rgb(bg), rgb(ac)
+    im = Image.new("RGB", (W, H), bgc)
+    if os.path.exists(CHART):
+        ch = Image.open(CHART).convert("RGBA").resize((1180, 1180)); a = ch.split()[3].point(lambda v: int(v * 0.16)); ch.putalpha(a)
+        im.paste(ch, (W // 2 - 590 + 160, H // 2 - 590 + 120), ch)
+    d = ImageDraw.Draw(im)
+    d.text((M, 58), "자오선", font=F(PR, 34), fill=acc, anchor="lm")
+    d.text((W - M, 58), "동서양 6개 운명학 교차분석", font=F(PR, 28), fill=mix(WHITE, bgc, 0.25), anchor="rm")
+    d.text((W - M, H - 58), "zaoseon.com", font=F(PR, 30), fill=acc, anchor="rm")
+    return im, d, bgc, acc
+
+def pill(d, xy, text, acc, bgc, size=40):
+    f = F(PR, size); w = d.textlength(text, font=f) + 64; x, y = xy
+    d.rounded_rectangle([x, y, x + w, y + size + 34], (size + 34) // 2, fill=acc); d.text((x + w / 2, y + (size + 34) / 2), text, font=f, fill=bgc, anchor="mm")
+    return w
+
+def lines(d, cx, y, text, size, fill, font=PL, gap=1.22, anchor="mt"):
+    f = F(font, size); h = int(size * gap)
+    for i, ln in enumerate(text.split("\n")): d.text((cx, y + i * h), ln, font=f, fill=fill, anchor=anchor)
+    return y + h * len(text.split("\n"))
+
+def watermark(im, ch, acc, bgc, size=980, cy=640):
+    ov = Image.new("RGBA", (W, H), (0, 0, 0, 0)); od = ImageDraw.Draw(ov)
+    od.text((W // 2, cy), ch, font=F(SERIF, size), fill=acc + (46,), anchor="mm"); im.paste(ov, (0, 0), ov)
+
+def cover_big_number(si):
+    im, d, bgc, acc = base(si); pill(d, (M, 170), "2027 수성 역행", acc, bgc)
+    d.text((W // 2, 640), "3번", font=F(PL, 470), fill=acc, anchor="mm")
+    lines(d, W // 2, 930, "수성이 거꾸로 가는 날은\n딱 세 번이에요", 92, WHITE)
+    d.text((W // 2, 1230), "2월 · 6월 · 10월", font=F(PR, 54), fill=acc, anchor="mm"); return im
+
+def cover_samjae(si):
+    im, d, bgc, acc = base(si); pill(d, (M, 170), "2027 날삼재", acc, bgc)
+    xs = [210, 540, 870]; y = 600
+    d.line([xs[0], y, xs[2], y], fill=mix(WHITE, bgc, 0.55), width=8)
+    for i, (x, yr, nm) in enumerate(zip(xs, ["2025", "2026", "2027"], ["들삼재", "눌삼재", "날삼재"])):
+        r = 120 if i == 2 else 84
+        d.ellipse([x - r, y - r, x + r, y + r], fill=acc if i == 2 else bgc, outline=acc, width=8)
+        d.text((x, y), yr, font=F(PL, 56 if i == 2 else 44), fill=bgc if i == 2 else acc, anchor="mm")
+        d.text((x, y + 120 + 54), nm, font=F(PR, 50 if i == 2 else 44), fill=acc if i == 2 else WHITE, anchor="mm")
+    lines(d, W // 2, 900, "날삼재라는 말,\n정말 피해야 할까요", 96, WHITE)
+    d.text((W // 2, 1250), "돼지 · 토끼 · 양띠", font=F(PR, 54), fill=acc, anchor="mm"); return im
+
+def cover_clock(si):
+    import math
+    im, d, bgc, acc = base(si); pill(d, (M, 170), "사주 시간 환산표", acc, bgc)
+    br = "子丑寅卯辰巳午未申酉戌亥"; cx, cy, R, r = 540, 640, 300, 170
+    for k in range(12):                        # 자시가 위쪽(12시 방향)에서 시작하도록 시계 방향
+        a0 = -90 - 15 + k * 30; a1 = a0 + 30; on = br[k] == "申"
+        d.pieslice([cx - R, cy - R, cx + R, cy + R], a0 + 1.2, a1 - 1.2, fill=acc if on else mix(bgc, WHITE, 0.14))
+    d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=bgc)
+    for k in range(12):
+        a = math.radians(-90 + k * 30); rr = (R + r) / 2; on = br[k] == "申"
+        d.text((cx + rr * math.cos(a), cy + rr * math.sin(a)), br[k], font=F(SERIF, 56), fill=bgc if on else WHITE, anchor="mm")
+    d.text((cx, cy - 30), "15:52", font=F(PL, 78), fill=WHITE, anchor="mm"); d.text((cx, cy + 50), "신시", font=F(PR, 50), fill=acc, anchor="mm")
+    lines(d, W // 2, 1040, "오후 3시 52분은\n무슨 시일까요", 96, WHITE)
+    d.text((W // 2, 1330), "열두 시 한눈에", font=F(PR, 50), fill=acc, anchor="mm"); return im
+
+def cover_hanja(si, ch, kicker, title, sub):
+    im, d, bgc, acc = base(si); watermark(im, ch, acc, bgc); d = ImageDraw.Draw(im); pill(d, (M, 170), kicker, acc, bgc)
+    lines(d, W // 2, 560, title, 112, WHITE); d.text((W // 2, 1160), sub, font=F(PR, 56), fill=acc, anchor="mm")
+    d.line([W // 2 - 90, 1085, W // 2 + 90, 1085], fill=acc, width=8); return im
+
+def cover_question(si):
+    im, d, bgc, acc = base(si); pill(d, (M, 170), "2027 연애운 신호", acc, bgc)
+    d.text((W // 2, 520), "?", font=F(PL, 620), fill=acc, anchor="mm")
+    lines(d, W // 2, 860, "내년에 좋은 짝을\n만날 수 있을까요", 100, WHITE)
+    d.text((W // 2, 1230), "2027 정미년 신호 읽기", font=F(PR, 52), fill=acc, anchor="mm"); return im
+
+COVERS = [("1103a", "11/3 아침", 2, "도형·차트", "날삼재 뜻", cover_samjae),
+          ("1103b", "11/3 밤", 3, "한자 워터마크", "만세력 보는 법", lambda si: cover_hanja(si, "曆", "정월의 만세력 읽기", "만세력,\n처음 열면\n여기부터", "여덟 글자 · 일간 · 오행")),
+          ("1105b", "11/5 밤", 1, "질문 글자", "2027 연애운 신호", cover_question),
+          ("1106a", "11/6 아침", 2, "큰 숫자", "2027 수성 역행", cover_big_number),
+          ("1106b", "11/6 밤", 3, "도형·차트", "사주 시간 환산표", cover_clock),
+          ("1107b", "11/7 밤", 1, "한자 워터마크", "도화살 뜻", lambda si: cover_hanja(si, "桃", "정월의 도화살 읽기", "도화살이 있으면\n인기가 많을까요", "내 도화 글자 찾기"))]
+
+# 7장 문안: 표지 + 본문 4 + 조언 + 마무리. 줄은 한 줄 18자 안팎(표시 폭 때문), 줄임은 짝 원고 문장에서만.
+TEXT = {
+ "1103a": dict(kicker="2027 날삼재", cover="날삼재라는 말,\n정말 피해야 할까요", sub="돼지 · 토끼 · 양띠", blog="n73",
+   body=[("삼재는 3년이에요", "12년마다 3년씩 돌아오는\n민간 풀이예요.\n들삼재·눌삼재·날삼재 순서예요."),
+         ("2027년은 누구일까요", "돼지·토끼·양띠가\n2025년부터 3년째,\n날삼재를 맞아요."),
+         ("날삼재는 끝나는 해", "삼재가 끝나는 해라서\n서두르기보다 마무리를\n챙기는 해로 읽기도 해요."),
+         ("이사·결혼은 안 될까요", "꼭 피하라는 뜻은 아니에요.\n잔금일, 계약서 같은\n현실 조건이 먼저예요.")],
+   advice=("큰일은 조건부터", "날짜 이야기보다\n조건을 먼저 적어 보세요.\n잔금일·계약서·일정이 먼저예요."), cta=("내 띠는 몇 년째\n*삼재*였나요?", "다음: 수성 역행 2027")),
+ "1103b": dict(kicker="정월의 만세력 읽기", cover="만세력,\n처음 열면 여기부터", sub="여덟 글자 · 일간 · 오행", blog="n75",
+   body=[("표는 네 칸이에요", "보통 왼쪽부터 시·일·월·년이에요.\n위 줄은 하늘 글자,\n아래 줄은 땅 글자예요."),
+         ("먼저 볼 곳은 일간", "일 칸의 위 글자가 일간이에요.\n사주에서 '나'를 가리켜요.\n병(丙)은 태양에 비유해요."),
+         ("오행을 세어 보세요", "여덟 글자를 나무·불·흙·쇠·물로\n나눠 세요.\n가장 많은 것과 없는 것을 적어요."),
+         ("해와 달은 절기에", "해는 입춘, 달은 절입에 바뀌어요.\n생일이 절기 날짜라면\n태어난 시각도 확인하세요.")],
+   advice=("오늘은 두 가지만", "일간 한 글자와\n가장 많은 오행을\n한 줄로 적어 보세요."), cta=("내 일간은\n*무슨 글자*인가요?", "다음: 시간 환산표")),
+ "1105b": dict(kicker="2027 연애운 신호", cover="내년에 좋은 짝을\n만날 수 있을까요", sub="2027 정미년 신호 읽기", blog="n77",
+   body=[("신호는 세 곳에서 읽어요", "일지(일 칸 아래 글자),\n인연의 별, 도화를\n2027년 글자와 겹쳐 읽어요."),
+         ("올해 글자가 별이 되면", "여성은 경·신·임·계 일간,\n남성은 갑·을·임·계 일간이\n정미년에 인연의 별을 만나요."),
+         ("일지와 미(未)의 사이", "오는 육합, 묘·해는 반합이에요.\n축은 충·형, 술은 형,\n자는 원진·해로 읽어요."),
+         ("도화는 달로 들어와요", "올해 미(未)는 누구의 도화도 아니에요.\n묘월·오월·유월·자월에\n도화가 들어와요.")],
+   advice=("신호가 겹치는 달에", "새로운 모임이나 소개 자리\n하나를 잡아 보세요.\n신호는 힌트일 뿐이에요."), cta=("내 일지는\n*무슨 글자*인가요?", "다음: 도화살 뜻")),
+ "1106a": dict(kicker="2027 수성 역행", cover="수성이 거꾸로 가는 날은\n딱 세 번이에요", sub="2월 · 6월 · 10월", blog="n74",
+   body=[("첫 번째, 2월 10일", "2월 10일부터 3월 3일까지예요.\n사주의 인월 안에 들어 있어요."),
+         ("두 번째, 6월 11일", "6월 11일부터 7월 4일까지예요.\n사주의 오월 안에 들어 있어요."),
+         ("세 번째, 10월 8일", "10월 8일부터 10월 28일까지예요.\n사주의 술월 안에 들어 있어요."),
+         ("진짜 거꾸로 도는 건 아니에요", "지구와 수성의 속도 차이 때문에\n그렇게 보이는 현상이에요.\n점성술은 점검의 시기로 읽어요.")],
+   advice=("역행 기간에는", "약속과 결제, 계약 조건을\n한 번 더 확인해요.\n새로 시작은 미루지 않아도 돼요."), cta=("가장 궁금한 달은\n*몇 월*인가요?", "다음: 사주 시간 환산표")),
+ "1106b": dict(kicker="사주 시간 환산표", cover="오후 3시 52분은\n무슨 시일까요", sub="열두 시 한눈에", blog="n78",
+   body=[("하루는 열두 시예요", "두 시간씩 열두 시로 나눠요.\n시마다 땅 글자가\n하나씩 붙어요."),
+         ("3시 52분은 신시예요", "오후 3시부터 5시 전은\n신시(申時)예요.\n원숭이 시라고도 불러요."),
+         ("위 글자는 일간이 정해요", "갑·기일은 임신(壬申),\n을·경일은 갑신(甲申),\n병·신일은 병신(丙申)이에요."),
+         ("경계 시각은 조심해요", "밤 11시부터 자시가 시작돼요.\n밤 11시 이후에 태어나면\n다음 날 일 칸으로 세워요.")],
+   advice=("시각은 기록으로", "정각 전후나 밤 11시 가까이라면\n출생증명서나 산모수첩을\n한 번 더 확인해요."), cta=("내 출생 시각은\n*어느 시*인가요?", "다음: 도화살 뜻")),
+ "1107b": dict(kicker="정월의 도화살 읽기", cover="도화살이 있으면\n인기가 많을까요", sub="내 도화 글자 찾기", blog="n79",
+   body=[("도화는 복숭아꽃이에요", "사람을 끌어당기는 매력과\n표현으로 읽는 글자예요.\n살(殺)이라 나쁜 건 아니에요."),
+         ("내 도화 글자는 띠로", "용띠라면 유(酉)예요.\n묘·오·유·자 네 글자 중\n띠 묶음마다 하나로 정해져요."),
+         ("있으면 인기가 많을까요", "꼭 그렇지는 않아요.\n표현이 서투르면 가려지고,\n없어도 다정함으로 가까워져요."),
+         ("올해는 달로 들어와요", "소·뱀·닭띠는 6월,\n쥐·용·원숭이띠는 9월이\n도화 달이에요.")],
+   advice=("도화 달에는", "첫인상을 가꾸는 일\n하나만 정해 보세요.\n머리나 옷, 프로필 사진이면 충분해요."), cta=("내 도화 글자는\n*무엇*인가요?", "다음: 화개살 뜻")),
+}
+
+def main():
+    ims = {}
+    for key, lab, si, kind, name, fn in COVERS:
+        im = fn(si); im.save(os.path.join(OUT, f"{key}_cover.jpg"), quality=95); ims[key] = im
+    json.dump(TEXT, open(os.path.join(HERE, "carousel_w1_text.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    print("covers", list(ims))
+if __name__ == "__main__": main()
