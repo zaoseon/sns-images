@@ -17,6 +17,54 @@ EL = {"木": (96, 160, 104), "火": (214, 98, 82), "土": (206, 168, 84), "金":
 def cl(x, a=0.0, b=1.0): return max(a, min(b, x))
 def e_out(x): x = cl(x); return 1 - (1 - x) ** 3
 def e_back(x): x = cl(x); c1 = 1.70158; c3 = c1 + 1; return 1 + c3 * (x - 1) ** 3 + c1 * (x - 1) ** 2
+def e_bounce(x):
+    x = cl(x); n, d = 7.5625, 2.75
+    if x < 1 / d: return n * x * x
+    if x < 2 / d: x -= 1.5 / d; return n * x * x + .75
+    if x < 2.5 / d: x -= 2.25 / d; return n * x * x + .9375
+    x -= 2.625 / d; return n * x * x + .984375
+# ---------- 10/9 R36 모션 다양화(대표: 모든 글이 아래에서 위로 떠오르기 하나라 단조롭다) ----------
+FX = None   # [(글 등장 효과, 장면 전환), ...] 장면마다. None이면 예전처럼 전부 "rise"(다른 영상에는 영향 없음)
+SC_T, SC_I = 0.0, 0
+TX_MODES = ("rise", "slide_l", "slide_r", "alt", "pop", "drop", "zoom", "mask", "flip")
+TR_MODES = ("sweep", "zoom", "iris", "flash", "drip")
+TR_DUR = 0.34
+def line_fx(L, q, mode, i):
+    """줄 조각 L의 q(0~1) 진행에서 (그릴 조각, x 이동, y 이동, 투명도)를 돌려준다. 끝(q=1)은 항상 원래 모습."""
+    q = cl(q)
+    if mode == "slide_l": p = e_out(q); return L, -(1 - p) * 640, 0, cl(p * 2)
+    if mode == "slide_r": p = e_out(q); return L, (1 - p) * 640, 0, cl(p * 2)
+    if mode == "alt": p = e_out(q); return L, (-1) ** i * (1 - p) * 640, 0, cl(p * 2)
+    if mode == "drop": p = e_bounce(q); return L, 0, -(1 - p) * 300, cl(q * 4)
+    if mode == "pop":
+        sc = max(.05, e_back(q)); nl = L.resize((max(1, int(L.width * sc)), max(1, int(L.height * sc))))
+        return nl, (L.width - nl.width) / 2, (L.height - nl.height) / 2, cl(q * 3)
+    if mode == "zoom":
+        sc = 1 + (1 - e_out(q)) * .85; nl = L.resize((max(1, int(L.width * sc)), max(1, int(L.height * sc))))
+        return nl, (L.width - nl.width) / 2, (L.height - nl.height) / 2, cl(q * 2.5)
+    if mode == "mask":
+        w_ = max(2, int(L.width * e_out(q))); return L.crop((0, 0, w_, L.height)), 0, 0, 1.0
+    if mode == "flip":
+        sy = max(.04, e_out(q)); nl = L.resize((L.width, max(1, int(L.height * sy))))
+        return nl, 0, (L.height - nl.height) / 2, cl(q * 3)
+    p = e_out(q); return L, 0, (1 - p) * 46, cl(p * 1.4)
+def transition(fr, bgf, kind, p):
+    """장면이 시작하는 첫 TR_DUR초에 화면 전체에 거는 효과. fr=지금 장면 프레임, bgf=배경만 그린 프레임, p=0~1"""
+    p = cl(p)
+    if p >= 1: return fr
+    if kind == "zoom":
+        s_ = 1 + .12 * (1 - e_out(p)); w_, h_ = int(W * s_), int(H * s_); big = fr.resize((w_, h_), Image.BILINEAR)
+        return big.crop(((w_ - W) // 2, (h_ - H) // 2, (w_ - W) // 2 + W, (h_ - H) // 2 + H))
+    if kind == "flash":
+        ov = Image.new("RGB", (W, H), (255, 244, 220)); return Image.blend(fr, ov, .5 * (1 - e_out(p)))
+    m = Image.new("L", (W, H), 0); md = ImageDraw.Draw(m); e = e_out(p)
+    if kind == "iris":
+        r = e * math.hypot(W, H) / 2; md.ellipse((W / 2 - r, H / 2 - r, W / 2 + r, H / 2 + r), fill=255)
+        out = Image.composite(fr, bgf, m); od = ImageDraw.Draw(out, "RGBA"); od.ellipse((W / 2 - r, H / 2 - r, W / 2 + r, H / 2 + r), outline=(224, 184, 102, int(220 * (1 - p))), width=8); return out
+    if kind == "drip":
+        y = int(e * (H + 120)) - 60; md.rectangle((0, 0, W, max(0, y)), fill=255); out = Image.composite(fr, bgf, m); ImageDraw.Draw(out, "RGBA").rectangle((0, y - 6, W, y + 6), fill=(224, 184, 102, int(230 * (1 - p)))); return out
+    x = int(e * (W + 260)) - 130; md.rectangle((0, 0, max(0, x), H), fill=255); out = Image.composite(fr, bgf, m)   # sweep
+    ImageDraw.Draw(out, "RGBA").rectangle((x - 5, 0, x + 5, H), fill=(224, 184, 102, int(230 * (1 - p)))); return out
 @functools.lru_cache(maxsize=None)
 def font(path, size, idx=0): return ImageFont.truetype(path, size, index=idx) if path.endswith(".ttc") else ImageFont.truetype(path, size)
 def serif(size): return font(SERIF, size, 2)   # KR
@@ -67,8 +115,16 @@ def background(fr, t, total_t):
     fr.paste(bg_static())
     d = ImageDraw.Draw(fr, "RGBA")
     for x, y, r, ph, sp in stars():
+        if FX: y = 160 + (y - 160 - t * (6 + r * 5)) % 1300   # 별이 위로 천천히 흐른다(크기마다 속도가 달라 깊이가 생김)
         a = int(90 + 120 * (0.5 + 0.5 * math.sin(t * sp + ph))); d.ellipse((x - r, y - r, x + r, y + r), fill=(255, 236, 190, a))
-    rg = ring_img().rotate(-t * 2.4, resample=Image.BICUBIC); fr.paste(rg, (CX - CHART_S // 2, CHART_CY - CHART_S // 2), rg)
+    rg = ring_img()
+    if FX:
+        sgn = -1 if SC_I % 2 == 0 else 1; pl = 1 + .09 * e_out(1 - cl(SC_T / .8))   # 장면이 바뀔 때마다 고리가 한 번 커졌다 돌아오고, 도는 방향이 번갈아 바뀐다
+        rg = rg.rotate(sgn * t * (3.2 + 2.2 * e_out(1 - cl(SC_T / 1.2))), resample=Image.BICUBIC)
+        if pl > 1.002: nw = int(CHART_S * pl); rg = rg.resize((nw, nw), Image.BILINEAR)
+        fr.paste(rg, (CX - rg.width // 2, CHART_CY - rg.height // 2), rg)
+    else:
+        rg = rg.rotate(-t * 2.4, resample=Image.BICUBIC); fr.paste(rg, (CX - CHART_S // 2, CHART_CY - CHART_S // 2), rg)
     d.rectangle((70, 143, 880, 147), fill=(255, 255, 255, 40)); d.rectangle((70, 143, 70 + int(810 * cl(t / total_t)), 147), fill=GOLD)
 # ---------- 글자 ----------
 def _dep(wd):
@@ -170,9 +226,11 @@ def text(c, s, y, t0, size=104, color=WHITE, path=BLACK, maxw=800, lh=1.3, stagg
     if LOG is not None: LOG.append(('text', y, s[:12]))
     size = eff_size(s, size, maxw, path)
     ls, step = line_layers(s, size, color, path, maxw, lh); y0 = y
+    mode = getattr(c, "tx", "rise") if anim == "rise" else anim
     for i, L in enumerate(ls):
-        p = e_out((c.t - t0 - i * stagger) / 0.42); a = c.alpha(cl(p * 1.4)); dy = (1 - p) * 46 + (1 - c.ex) * -26
-        blit(c.fr, L, cx - L.width / 2, y0 + dy - 20, a); y0 += step
+        q = (c.t - t0 - i * stagger) / (0.55 if mode in ("drop", "pop") else 0.42)
+        nl, ox, oy, a0 = line_fx(L, q, mode, i); a = c.alpha(a0); dy = oy + (1 - c.ex) * -26
+        blit(c.fr, nl, cx - L.width / 2 + ox, y0 + dy - 20, a); y0 += step
     return y0
 def text_h(s, size, maxw=800, lh=1.3, path=BLACK): size = eff_size(s, size, maxw, path); return len(wrap(s, font(path, size), maxw)) * int(size * lh)
 @functools.lru_cache(maxsize=None)
@@ -211,6 +269,15 @@ def character(c, name, t0=0.1, width=900, bottom=1440, dx=0):
 def rr(w, h, fill, outline=None, r=36, ow=3):
     im = Image.new("RGBA", (w + 8, h + 8), (0, 0, 0, 0)); ImageDraw.Draw(im).rounded_rectangle((4, 4, 4 + w, 4 + h), radius=r, fill=fill, outline=outline, width=ow); return im
 def pop(c, layer, cx, cy, t0, dur=0.45, a=1.0):
+    mode = getattr(c, "tx", "rise"); q = cl((c.t - t0) / dur)
+    if mode in ("slide_l", "slide_r", "alt", "drop", "flip", "mask"):   # 도형도 장면의 등장 효과에 맞춰 다르게(R36)
+        if mode == "drop": p = e_bounce(q); cy = cy - (1 - p) * 300
+        elif mode == "flip":
+            p = e_out(q); layer = layer.resize((layer.width, max(1, int(layer.height * max(.04, p)))))
+        elif mode == "mask":
+            p = e_out(q); layer = layer.crop((0, 0, max(2, int(layer.width * p)), layer.height)); cx = cx - (1 - p) * 0
+        else: p = e_out(q); cx = cx + (-640 if mode == "slide_l" else 640 if mode == "slide_r" else -640 * (1 if int(cx) % 2 else -1)) * (1 - p)
+        blit(c.fr, layer, cx - layer.width / 2, cy - layer.height / 2, c.alpha(cl(q * 3) * a)); return
     p = e_back((c.t - t0) / dur); s = max(.02, p)
     if s != 1: layer = layer.resize((max(1, int(layer.width * s)), max(1, int(layer.height * s))))
     blit(c.fr, layer, cx - layer.width / 2, cy - layer.height / 2, c.alpha(cl(p * 2) * a))
@@ -320,12 +387,20 @@ def render(name, scenes, outdir, kicker=None):
     total = sum(d for d, _ in scenes); os.makedirs(outdir, exist_ok=True); out = os.path.join(outdir, name + ".mp4")
     pr = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-", "-vf", "scale=in_range=full:out_range=tv:out_color_matrix=bt709,format=yuv420p", "-c:v", "libx264", "-profile:v", "high", "-crf", "14", "-preset", "medium", "-x264-params", "aq-mode=3:aq-strength=0.9", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-color_range", "tv", "-an", "-movflags", "+faststart", out], stdin=subprocess.PIPE)
     t_acc = 0.0; n = 0; fr = Image.new("RGB", (W, H))
-    for dur, fn in scenes:
+    global SC_T, SC_I
+    for k, (dur, fn) in enumerate(scenes):
+        fx = FX[k] if FX and k < len(FX) else None
         for i in range(int(round(dur * FPS))):
-            t = i / FPS; background(fr, t_acc + t, total); cx_ = Ctx(fr, t, dur); fn(cx_)
+            t = i / FPS; SC_T, SC_I = t, k; background(fr, t_acc + t, total); cx_ = Ctx(fr, t, dur)
+            if fx: cx_.tx = fx[0]
+            tr = bool(fx and k > 0 and t < TR_DUR); bgf = fr.copy() if tr else None
+            fn(cx_)
+            if tr: fr = transition(fr, bgf, fx[1], t / TR_DUR)
             if BRAND: brand_layer(fr, getattr(cx_, 'ai_seen', False))
             pr.stdin.write(fr.tobytes()); n += 1
+            if tr: fr = Image.new("RGB", (W, H))
         t_acc += dur
+    SC_T, SC_I = 0.0, 0
     pr.stdin.close(); pr.wait(); return out, n / FPS
 def still(scenes, idx, t, path, total=None):
     fr = Image.new("RGB", (W, H)); total = total or sum(d for d, _ in scenes); acc = sum(d for d, _ in scenes[:idx]); background(fr, acc + t, total); cx_ = Ctx(fr, t, scenes[idx][0]); _auto(scenes[idx][1], scenes[idx][0])(cx_)

@@ -608,11 +608,34 @@ CTA_DUR = {"q": 3.8, "big": 4.1, "face": 3.9, "line": 4.0}
 def scenes_of(name):
     """대표 10/8 지정 순서: 1 키워드 / 2 출생연도 / 3 문장 / 4 왜 그럴까 / 5 힘 쓸 달·아낄 달 / 6 돈 / 7 일 / 8 사람 / 9 행운의 숫자 / 10 마무리. 길이는 R13(문장 2초·낱말 1초 이상): 마지막 글이 나온 뒤 2초 이상 남게"""
     return [(2.6, G_kw(name)), (2.4, G_years(name)), (2.8, G_hook(name)), (4.3, G_why(name)), (5.0, G_cal(name)), (3.2, G_one(name, "money", "돈")), (3.2, G_one(name, "work", "일")), (3.2, G_one(name, "people", "사람")), (3.6, G_lucky(name)), (CTA_DUR[CFG[name]["cta"]], G_cta(name))]
+# ───────── R36 모션 다양화(대표 10/9: 모션이 단순하고 같은 효과가 반복돼 중간에 이탈할 것 같다)
+# 장면마다 글·도형 등장 효과(9종)와 장면 전환(5종)을 돌려 쓴다. 이웃 장면은 반드시 다르고, 한 편에 효과 6종 이상·전환 4종 이상. 띠마다 시작 위치를 달리해 이웃 영상도 다르게 보이게 한다.
+TX_ORDER = ["zoom", "alt", "mask", "drop", "pop", "slide_l", "flip", "slide_r"]
+TR_ORDER = ["sweep", "zoom", "iris", "flash", "drip"]
+ZNAMES = ["원숭이띠", "개띠", "용띠", "뱀띠", "말띠", "양띠", "닭띠", "돼지띠", "쥐띠", "소띠", "호랑이띠", "토끼띠"]
+def fx_plan(name, n=10):
+    z = ZNAMES.index(name) if name in ZNAMES else 0; off = [0, 3, 4][z % 3] + 2 * (z // 3)   # 첫 장면은 강한 효과(zoom·drop·pop)로 시작
+    off = off if TX_ORDER[off % 8] in ("zoom", "drop", "pop") else [0, 3, 4][z % 3]
+    return [(TX_ORDER[(k + off) % 8], TR_ORDER[(2 * k + z) % 5]) for k in range(n)]
+def fx_lint(fx):
+    out = []
+    if len({a for a, _ in fx}) < 6: out.append("글 등장 효과가 6종 미만")
+    if len({b for _, b in fx[1:]}) < 4: out.append("장면 전환이 4종 미만")
+    for k in range(1, len(fx)):
+        if fx[k][0] == fx[k - 1][0]: out.append(f"{k}·{k + 1}번 장면의 등장 효과가 같음")
+        if fx[k][1] == fx[k - 1][1] and k > 1: out.append(f"{k}·{k + 1}번 장면의 전환이 같음")
+    return out
 def build_generic(name, outdir):
     _CM.BG_VARIANT = PLAN[name]["bg"]   # 이 영상의 배경(R34)
+    _fx = fx_plan(name); _pb = fx_lint(_fx)
+    if _pb: raise Lint("모션 다양성 검사에서 멈춤(R36): " + " / ".join(_pb))
+    _CM.FX = _fx; print("모션", " ".join(f"{a}/{b}" for a, b in _fx))
     probs = zodiac_lint([name])
     if probs: raise Lint("레이아웃 검사에서 멈춤: " + " / ".join(probs))
-    SC2 = scenes_of(name); p, dur = render(name, SC2, outdir); mi = MP.choose("fun", f"zodiac-{name}"); MP.mux(p, [x for x, _ in SC2], mi, 700 + MUSIC_SEED[name])
+    SC2 = scenes_of(name)
+    try: p, dur = render(name, SC2, outdir)
+    finally: _CM.FX = None
+    mi = MP.choose("fun", f"zodiac-{name}"); MP.mux(p, [x for x, _ in SC2], mi, 700 + MUSIC_SEED[name])
     still(SC2, 0, 2.4, os.path.join(outdir, name + "_cover.jpg")); print("완료", name, round(dur, 1), "초 · 장면", len(SC2), "· 음악", mi["style"], mi["bpm"]); return p
 
 def build(name, outdir):
