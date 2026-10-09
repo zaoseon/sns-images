@@ -169,9 +169,12 @@ def box_lines(val):
     """요약 상자 안 줄바꿈: 쉼표로 나열한 항목(산(戊)과 쇠(庚), 전갈·염소자리, 숫자 4와 7)은 한 줄에 하나, 그 밖은 폭 13.5로 의미 단위."""
     out = []
     for piece in re.split(r"<br\s*/?>", val):
-        piece = piece.strip()
-        if piece.count(",") >= 2 and len(plain_of(piece)) < 60: out += [x.strip() for x in re.split(r"(?<=,)\s+", piece) if x.strip()]
-        else: out += sent_lines(piece, BOX_LIMIT)
+        for piece in re.split(r"(?<=[.!?])\s+", piece.strip()):               # 문장마다 따로(앞 문장 뒤에 쉼표 나열이 붙어 한 줄이 길어지는 것 방지, 10/9)
+            piece = piece.strip()
+            if not piece: continue
+            items = [x.strip() for x in re.split(r"(?<=,)\s+", piece) if x.strip()]
+            if piece.count(",") >= 2 and len(plain_of(piece)) < 60 and all(width(plain_of(x)) <= BOX_LIMIT for x in items): out += items      # 항목이 모두 한 줄에 들어갈 때만 한 줄에 하나씩(마지막 항목이 길면 의미 단위로 감는다)
+            else: out += sent_lines(piece, BOX_LIMIT)
     return out
 
 def sent_lines(inner, limit=BODY_LIMIT, soft=None):

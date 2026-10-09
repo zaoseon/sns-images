@@ -114,7 +114,10 @@ def _summary_range(paras):
 def _rewrap_box_p(p):
     m = re.fullmatch(r"(<p[^>]*><span[^>]*>)(.*)(</span></p>)", p, re.S)
     if not m or "<img" in m.group(2) or FB.plain_of(m.group(2)).strip() in ("", "\xa0"): return p
-    joined = " ".join(x.strip() for x in re.split(r"<br\s*/?>", m.group(2)))
+    parts = [x.strip() for x in re.split(r"<br\s*/?>", m.group(2))]
+    if tuple(FB.plain_of(x).strip() for x in parts) in {tuple(v) for v in FB.OVERRIDES.values()}: return p      # 직접 끊어 둔 문장은 그대로
+    if len(parts) > 1 and all(FB.width(FB.plain_of(x)) <= FB.BOX_LIMIT for x in parts): return p      # 이미 상자 폭에 들어간 줄(직접 끊어 둔 문장 포함)은 그대로 둔다(10/9)
+    joined = " ".join(parts)
     if FB.width(FB.plain_of(joined)) <= FB.BOX_LIMIT and "<br" not in m.group(2): return p
     return m.group(1) + "<br>".join(FB.box_lines(joined)) + m.group(3)
 
