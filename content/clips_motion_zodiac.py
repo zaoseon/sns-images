@@ -543,6 +543,7 @@ def G_cal(name):
     t = T[name]; good, save = t["good"], t["save"]
     def f(c):
         tt = c.t; im, d = lay(900); R = 328; cx_, cy_ = CX, 450
+        d.text((cx_, cy_ - 122), "2027", font=font(BLACK, 68), fill=(255, 255, 255, 215), anchor="mm")   # 달이 나오는 장면에 2027 표기(대표 10/9 요청, 모든 띠 공통). 글자와 겹치는 워터마크는 지저분해 가운데 글 위에 작게 둔다
         up = lambda t0: e_out(cl((tt - t0) / .35)); ug, us = up(2.0), up(3.5)
         def lerp(a, b, u): return tuple(int(a[i] + (b[i] - a[i]) * u) for i in range(4))
         for i, m in enumerate(MONTHS):
@@ -553,8 +554,8 @@ def G_cal(name):
             elif m in save and us > 0: r = 58 * (1 + .18 * us); d.ellipse((x - r, yy - r, x + r, yy + r), fill=(255, 255, 255, 26), outline=lerp((255, 255, 255, 190), CORAL, us), width=int(5 + 3 * us)); col = lerp((255, 255, 255, 255), CORAL, us); fs_ = int(52 * (1 + .12 * us))
             else: d.ellipse((x - r, yy - r, x + r, yy + r), fill=(255, 255, 255, 26), outline=(255, 255, 255, 190), width=5); col = (255, 255, 255, 255)
             d.text((x, yy - 2), ML(m), font=font(BLACK, fs_), fill=col, anchor="mm")
-        d.text((cx_, cy_ - 62), "힘 쓸 달", font=font(BLACK, int(86 * (1 + .12 * ug))), fill=lerp((255, 255, 255, 255), GOLD, ug), anchor="mm")
-        d.text((cx_, cy_ + 62), "아낄 달", font=font(BLACK, int(86 * (1 + .12 * us))), fill=lerp((255, 255, 255, 255), CORAL, us), anchor="mm")
+        d.text((cx_, cy_ - 8), "힘 쓸 달", font=font(BLACK, int(86 * (1 + .12 * ug))), fill=lerp((255, 255, 255, 255), GOLD, ug), anchor="mm")
+        d.text((cx_, cy_ + 108), "아낄 달", font=font(BLACK, int(86 * (1 + .12 * us))), fill=lerp((255, 255, 255, 255), CORAL, us), anchor="mm")
         stack_top([810], []); blit(c.fr, im, 0, 910 - 450, 1.0)   # 그림 층 760px, 가운데 y 380이 y 910에 오게
     return f
 def G_one(name, key, label):
