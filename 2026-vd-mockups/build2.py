@@ -26,7 +26,7 @@ S['A2'] = (page(
     T('주변에 꼭<br>한 명 있죠?', 170, 108, lh=1.3) +
     T('사주·별자리·숫자로 보면 이래요.', 1085, 48, color='#fff', body=True, lh=1.5, extra='opacity:.85') + frame(False), 'chart', ACC))
 S['A3'] = (page(
-    T('세 지도가<br><span style="color:'+ACC+'">같은 말</span>을 해요', 170, 100, lh=1.3) +
+    T('사주·별자리·숫자가<br><span style="color:'+ACC+'">같은 말</span>을 해요', 170, 84, lh=1.35) +
     T('바로 달아오르고,<br>먼저 표현하고,<br>새로움에 끌려요.', 940, 52, body=True, lh=1.6, extra='opacity:.9') + frame(False), 'chart', ACC))
 S['A4'] = (page(
     T('여러분은<br>몇 개 겹치나요?', 170, 100, lh=1.3) +
@@ -39,18 +39,18 @@ def row(label, sub, val, top, h=200):
             f'<div style="position:absolute;left:390px;top:{top}px;width:570px;height:{h}px;display:flex;align-items:center;font-size:44px;line-height:1.5;color:#fff;z-index:5;{BODY}">{val}</div>')
 S['B1'] = (page(
     pill('정월의 연애 테스트', 75, 122) +
-    T('사주 · 별자리 · 숫자,<br>세 지도 교차표', 260, 88, lh=1.3) +
+    T('사주 · 별자리 · 숫자,<br>이렇게 말해요', 260, 88, lh=1.3) +
     T('3초 만에 사랑에 빠지는 사람', 560, 52, color=ACC, body=True, lh=1.5) +
     row('사주', '동양', '병화일생, 도화가 있는 사주', 700, 190) + row('별자리', '서양', '양자리 · 사자자리', 920, 190) + row('숫자', '수비학', '3번 · 5번', 1140, 150) + frame(False), 'ink', ACC))
 S['B2'] = (page(
-    pill('세 지도 교차표', 75, 122) +
+    pill('사주 · 별자리 · 숫자', 75, 122) +
     T('태양처럼 바로 달아오르고,<br>사람을 끌어요', 260, 76, lh=1.3) +
     row('사주', '동양', '병화일생,<br>도화가 있는 사주', 600, 210) + row('별자리', '서양', '양자리 · 사자자리<br>직진하는 불의 별자리', 840, 210) + row('숫자', '수비학', '3번 · 5번<br>표현의 3, 새로움에 끌리는 5', 1080, 210) + frame(False), 'ink', ACC))
 S['B3'] = (page(
     pill('몇 개 겹치나요?', 75, 122) +
     T('겹친 개수로<br>읽는 법', 260, 92, lh=1.3) +
     row('1개 이상', '겹침', '첫눈에 빠지는 쪽에<br>가까울 수 있어요', 640, 230) + row('0개', '안 겹침', '천천히 스며드는<br>사랑을 하는 사람일지도 몰라요', 920, 230) +
-    T('세 지도의 결과를 함께 읽어요.', 1220, 44, body=True, extra='opacity:.8') + frame(False), 'ink', ACC))
+    T('사주·별자리·숫자를 함께 읽어요.', 1220, 44, body=True, extra='opacity:.8') + frame(False), 'ink', ACC))
 S['B4'] = (page(
     pill('결과', 75, 122) +
     T('여러분은<br>몇 개 겹치나요?', 260, 96, lh=1.3) +
