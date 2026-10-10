@@ -145,12 +145,12 @@ def SCREEN(p, name, msgs, size=60):
         h.append(f'<div data-deco="1" style="position:absolute;left:{X0+W-PADX-(INP-60)}px;top:{iy:.0f}px;width:{INP-60}px;height:{INP-60}px;border-radius:50%;background:{GOLD}"></div>')
         p.add('메신저 화면', (X0, top, X0 + W, top + BAND), ''.join(h)); p.ai = True
     return dict(h=BAND, kind='box', draw=draw)
-def ROW(p, label, sub, val, name='표 행'):
-    ls = lines_of(val, BP, 50, 540, p, name); inner = max(132, len(ls) * 75); h = inner + 56
+def ROW(p, label, sub, val, name='표 행', size=50, vw=540):
+    ls = lines_of(val, BP, size, vw, p, name); inner = max(132, len(ls) * size * 1.5); h = inner + 56
     def draw(top):
         p.add(name, (X0, top, X0 + W, top + h), f'<div style="position:absolute;left:{X0}px;top:{top:.0f}px;width:{W}px;height:{h:.0f}px;background:#181615;border-radius:28px"></div>'
               f'<div style="position:absolute;left:{X0}px;top:{top:.0f}px;width:270px;height:{h:.0f}px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-family:{K.B};font-weight:800"><div style="font-size:52px;color:{GOLD};line-height:1.3">{label}</div><div style="font-size:40px;color:#fff;opacity:.85;line-height:1.3">{sub}</div></div>'
-              f'<div style="position:absolute;left:{X0+300}px;top:{top:.0f}px;width:600px;height:{h:.0f}px;display:flex;align-items:center;font-family:{K.B};font-weight:800;font-size:50px;line-height:1.5;color:#fff;white-space:pre-line">{chr(10).join(ls)}</div>')
+              f'<div style="position:absolute;left:{X0+300}px;top:{top:.0f}px;width:600px;height:{h:.0f}px;display:flex;align-items:center;font-family:{K.B};font-weight:800;font-size:{size}px;line-height:1.5;color:#fff;white-space:pre-line">{chr(10).join(ls)}</div>')
     return dict(h=h, kind='box', draw=draw)
 def FACE(p, name, h, side='right', flip=False):
     w = h * 0.75; p.ai = True
@@ -172,7 +172,7 @@ def SIDE(p, face, blk, face_side='left'):   # 얼굴 + 옆 글/알약을 한 줄
     return dict(h=h, kind='gfx', draw=draw)
 def place(p, blocks, justify=False):
     gaps = [60 if 'text' not in (a['kind'], b['kind']) or a['kind'] != b['kind'] and 'text' in (a['kind'], b['kind']) and 'gfx' in (a['kind'], b['kind'], ) or a['kind'] != 'text' or b['kind'] != 'text' else 40 for a, b in zip(blocks, blocks[1:])]
-    gaps = [40 if (a['kind'] == 'text' and b['kind'] == 'text') else 60 for a, b in zip(blocks, blocks[1:])]
+    gaps = [40 if (a['kind'] == b['kind'] and a['kind'] in ('text', 'box')) or (a['kind'] == 'box' and b['kind'] == 'box') else 60 for a, b in zip(blocks, blocks[1:])]
     total = sum(b['h'] for b in blocks) + sum(gaps); band = BOT - TOP
     if total > band + 0.5: p.problems.append(f'묶음 높이 {total:.0f}px가 {band}px보다 큼')
     extra = band - total
