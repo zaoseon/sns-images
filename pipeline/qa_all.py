@@ -10,6 +10,8 @@ def text_checks():
     out["줄바꿈(서술어만 남기기 금지)"] = len(LB.scan(files))
     out["문구 안전(확신·불안·단정)"] = len([1 for w, t in CA.corpus() for k, m in CA.scan_text(t)])
     d = json.load(open(os.path.join(R, "content", "reel_swaps.json"), encoding="utf-8")); out["캡션(프로필 링크 1개·팔로우·반복 금지)"] = len([1 for i, p in CR.audit_all(d) if p])
+    import capfix as CF
+    ru = json.load(open(os.path.join(R, "content", "reuse.json"), encoding="utf-8")); out["릴스 캡션 전체 구성(CTA·팔로우·프로필 링크 1·브랜드 문장·면책·태그 5·줄 길이)"] = len([1 for r in ru if CF.check(r.get("caption", ""))])
     import natural_audit as NA
     out["자연스러운 한국어(어색한 의문형·번역투)"] = len(NA.scan())
     import trendy_audit as TA
