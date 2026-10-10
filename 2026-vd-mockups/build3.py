@@ -45,6 +45,35 @@ def BUBBLE(p, txt, w=900, x=X0, size=56, name='말풍선', tail='left', badge=No
             html += f'<div style="position:absolute;left:{x+30}px;top:{top:.0f}px;width:{bw:.0f}px;height:62px;border-radius:62px;background:{GL};color:#17102b;display:flex;align-items:center;justify-content:center;font-family:{K.D};font-weight:900;font-size:44px;line-height:1;z-index:8">{badge}</div>'
         p.add(name, (x, top, x + w, top + bd + h + tail_h), html)
     return dict(h=bd + h + tail_h, kind='box', draw=draw)
+def CHAT(p, msgs, size=60, avatar=None, name=None, name_in=True):
+    """카카오톡식 대화창. msgs=[(글,'l'|'r')]. 왼쪽=정월(반투명 칸), 오른쪽=독자(금색 칸·어두운 글). 연속 메시지는 14px로 붙인 한 묶음(R29의 '덩어리' 하나).
+    avatar: 정월 얼굴 이름(원형 132px, 첫 메시지 옆). name: 첫 왼쪽 메시지 위 이름(44px 금색)."""
+    D = 132; lx = X0 + (D + 24 if avatar else 0); lmax = X0 + W - lx; rmax = 760
+    items = []; y = 0
+    if name: items.append(('name', y, 62)); y += 62 + 10
+    first_l = True
+    for txt, side in msgs:
+        mw = lmax if side == 'l' else rmax; ls = lines_of(txt, BP, size, mw - 72, p, '대화'); f = font(BP, size); w = max(f.getlength(l) for l in ls) + 72; h = len(ls) * size * 1.5 + 56
+        items.append(('msg', y, h, side, w, ls, first_l if side == 'l' else False)); y += h + 14
+        if side == 'l': first_l = False
+    H = y - 14
+    def draw(top):
+        html = ''; first_msg_top = None
+        for it in items:
+            if it[0] == 'name':
+                html += f'<div style="position:absolute;left:{lx}px;top:{top+it[1]:.0f}px;font-family:{K.B};font-weight:800;font-size:44px;line-height:62px;color:{GOLD}">{name}</div>'
+            else:
+                _, yy, h, side, w, ls, first = it; t = top + yy
+                if side == 'l':
+                    if first_msg_top is None: first_msg_top = t
+                    rad = '8px 30px 30px 30px' if first else '30px'; bg = 'rgba(255,255,255,.16)'; col = '#fff'; x = lx
+                else: rad = '30px 8px 30px 30px'; bg = GOLD; col = INK; x = X0 + W - w
+                html += f'<div style="position:absolute;left:{x:.0f}px;top:{t:.0f}px;width:{w:.0f}px;height:{h:.0f}px;box-sizing:border-box;background:{bg};border-radius:{rad};display:flex;align-items:center;justify-content:center;text-align:center;font-family:{K.B};font-weight:800;font-size:{size}px;line-height:1.5;color:{col};white-space:pre-line">{chr(10).join(ls)}</div>'
+        if avatar and first_msg_top is not None:
+            p.ai = True
+            html += f'<div style="position:absolute;left:{X0}px;top:{first_msg_top:.0f}px;width:{D}px;height:{D}px;border-radius:50%;overflow:hidden;background:#27346f"><img src="data:image/png;base64,{CK.face_b64(avatar)}" style="position:absolute;left:{-D*0.62:.0f}px;top:{-D*0.12:.0f}px;height:{D*3.0:.0f}px"></div>'
+        p.add('대화창', (X0, top, X0 + W, top + H), html)
+    return dict(h=H, kind='box', draw=draw)
 def ROW(p, label, sub, val, name='표 행'):
     ls = lines_of(val, BP, 50, 540, p, name); inner = max(132, len(ls) * 75); h = inner + 56
     def draw(top):
@@ -110,15 +139,15 @@ def B4():
     side['draw'] = draw
     place(p, [PILL(p, '결과'), T(p, '여러분은\n몇 개 겹치나요?', 96, name='제목'), side, PILL(p, '내 숫자를 댓글로 남겨 주세요', 52, 900, 'left')]); return p
 def C1():
-    p = new(); place(p, [T(p, '정월의 연애 테스트', 60, GOLD, 'body', 1.3, name='라벨'), BUBBLE(p, '3초 만에 사랑에\n빠지는 사람,\n주변에 꼭 한 명 있죠?', tail='right', badge='정월'), FACE(p, 'v2_straight', 480, 'right')]); return p
+    p = new(); place(p, [T(p, '정월의 연애 테스트', 60, GOLD, 'body', 1.3, name='라벨'), CHAT(p, [('3초 만에 사랑에\n빠지는 사람,\n주변에 꼭 한 명 있죠?', 'l'), ('있어요, 있어요!', 'r')], 64, avatar='v2_straight', name='정월')]); return p
 def C2():
-    p = new(); place(p, [BUBBLE(p, '아까 그 사람,\n계속 생각나요.', 620, X0, tail='left'), PHONE(p), BUBBLE(p, '만난 지\n3분인데요?', 620, X0 + W - 620, tail='right')]); return p
+    p = new(); place(p, [CHAT(p, [('아까 그 사람,\n계속 생각나요.', 'l'), ('만난 지\n3분인데요?', 'r')], 72)]); return p
 def C3():
-    p = new(); place(p, [T(p, '사주 · 별자리 · 숫자로\n보면 이래요', 80, name='제목'), BUBBLE(p, '사주 · 병화일생, 도화가 있어요', size=50), BUBBLE(p, '별자리 · 양자리와 사자자리예요', size=50), BUBBLE(p, '숫자 · 3번과 5번이에요', size=50)], justify=True); return p
+    p = new(); place(p, [T(p, '사주 · 별자리 · 숫자로\n보면 이래요', 80, name='제목'), CHAT(p, [('사주 · 병화일생,\n도화가 있어요', 'l'), ('별자리 · 양자리와\n사자자리예요', 'l'), ('숫자 · 3번과\n5번이에요', 'l')], 60, name='정월')]); return p
 def C4():
-    p = new(); place(p, [T(p, '하나도 안 겹친다면', 76, name='제목'), BUBBLE(p, '천천히 스며드는\n사랑을 하는 사람일지도\n몰라요.', badge='정월'), T(p, '여러분은 몇 개 겹치나요?', 64, GOLD, 'body', 1.5, name='질문')], justify=True); return p
+    p = new(); place(p, [T(p, '하나도 안 겹친다면', 76, name='제목'), CHAT(p, [('천천히 스며드는 사랑을\n하는 사람일지도 몰라요.', 'l')], 60, name='정월'), T(p, '여러분은 몇 개 겹치나요?', 64, GOLD, 'body', 1.5, name='질문')]); return p
 def C5():
-    p = new(); place(p, [BUBBLE(p, '내 숫자를 댓글로\n남겨 주세요.', 700, badge='정월'), FACE(p, 'v4_glasses', 440, 'left'), PILL(p, '프로필 링크에서\n생년월일을 입력해 보세요', 44, 900, 'left')], justify=True); return p
+    p = new(); place(p, [CHAT(p, [('내 숫자를 댓글로\n남겨 주세요.', 'l')], 64, avatar='v4_glasses', name='정월'), PILL(p, '프로필 링크에서\n생년월일을 입력해 보세요', 52, 900, 'left')]); return p
 PAGES = dict(A1=A1, A2=A2, A3=A3, A4=A4, B1=B1, B2=B2, B3=B3, B4=B4, C1=C1, C2=C2, C3=C3, C4=C4, C5=C5)
 def metrics(p):
     r = sorted([(n, *b) for n, b in p.els if n != '정월' and n != '휴대폰' or True], key=lambda e: e[2])
