@@ -151,7 +151,7 @@ def wrap(inner, limit, slack=0.0, soft=None):
         out = _dp(toks, 0, n - 1, LIM)             # 10/8: 한 줄 폭을 늘리지 않고(대표 폰 기준 18.0) 전체를 다시 고르게 나눈다
     if len(out) == 2:                                # 10/10 대표: 두 줄이면 두 줄의 길이가 비슷하게(쉼표 뒤 끊기는 그대로 둔다). 짧은 줄이 긴 줄의 55% 아래이면 줄 폭 차이가 가장 작은 자리(와·과·의·한 글자 낱말·꾸밈말 뒤는 제외)로 다시 끊는다
         (a, b), (c, d) = out; w1, w2 = W(a, b), W(c, d)
-        if not toks[b]["p"].rstrip().endswith((",", "，")) and min(w1, w2) / max(w1, w2) < .55:
+        if not toks[b]["p"].rstrip().endswith((",", "，", "을", "를", "중")) and min(w1, w2) / max(w1, w2) < .55:
             ins2 = _inside(toks); best_k, best_c = None, None
             for k in range(a, d):
                 if ins2[k] or W(a, k) > LIM or W(k + 1, d) > LIM: continue
