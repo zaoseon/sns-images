@@ -149,14 +149,10 @@ def B4():
 def C1():
     p = new(); place(p, [T(p, '정월의 연애 테스트', 60, GOLD, 'body', 1.3, C_, name='라벨'), CHAT(p, [('3초 만에 사랑에\n빠지는 사람,\n주변에 꼭 한 명 있죠?', 'l'), ('있어요, 있어요!', 'r')], 64, avatar='v2_straight', name='정월')]); return p
 def C2():
-    p = new(); place(p, [CHAT(p, [('아까 그 사람,\n계속 생각나요.', 'l'), ('만난 지\n3분인데요?', 'r')], 72)]); return p
-def C3():
-    p = new(); place(p, [T(p, '사주 · 별자리 · 숫자로\n보면 이래요', 80, align=C_, name='제목'), CHAT(p, [('사주 · 병화일생,\n도화가 있어요', 'l'), ('별자리 · 양자리와\n사자자리예요', 'l'), ('숫자 · 3번과\n5번이에요', 'l')], 60, name='정월')]); return p
-def C4():
     p = new(); place(p, [T(p, '하나도 안 겹친다면', 76, align=C_, name='제목'), CHAT(p, [('천천히 스며드는 사랑을\n하는 사람일지도 몰라요.', 'l')], 60, name='정월'), T(p, '여러분은 몇 개 겹치나요?', 64, GOLD, 'body', 1.5, C_, name='질문')]); return p
-def C5():
+def C3():
     p = new(); place(p, [CHAT(p, [('내 숫자를 댓글로\n남겨 주세요.', 'l')], 64, avatar='v4_glasses', name='정월'), PILL(p, '프로필 링크에서\n생년월일을 입력해 보세요', 52, 900, 'center')]); return p
-PAGES = dict(A1=A1, A2=A2, A3=A3, A4=A4, B1=B1, B2=B2, B3=B3, B4=B4, C1=C1, C2=C2, C3=C3, C4=C4, C5=C5)
+PAGES = dict(A1=A1, A2=A2, A3=A3, A4=A4, B1=B1, B2=B2, B3=B3, B4=B4, C1=C1, C2=C2, C3=C3)
 def metrics(p):
     r = sorted([(n, *b) for n, b in p.els if n != '정월' and n != '휴대폰' or True], key=lambda e: e[2])
     t = min(e[2] for e in r); b = max(e[4] for e in r); return t, b, (t + b) / 2
