@@ -31,17 +31,17 @@ def PILL(p, txt, size=44, w=None, align='left', bg=GOLD, fg=INK, name='알약'):
     def draw(top):
         p.add(name, (x, top, x + ww, top + h), f'<div style="position:absolute;left:{x:.0f}px;top:{top:.0f}px;width:{ww:.0f}px;height:{h:.0f}px;box-sizing:border-box;background:{bg};color:{fg};border-radius:{min(h/2,60):.0f}px;display:flex;align-items:center;justify-content:center;text-align:center;font-family:{K.B};font-weight:800;font-size:{size}px;line-height:1.5;white-space:pre-line">{txt}</div>')
     return dict(h=h, kind='box', draw=draw)
-def BUBBLE(p, txt, w=900, x=X0, size=44, name='말풍선'):
+def BUBBLE(p, txt, w=900, x=X0, size=56, name='말풍선'):
     ls = lines_of(txt, BP, size, w - 72, p, name); th = len(ls) * size * 1.5; h = th + 56; tail = 36
     def draw(top):
         p.add(name, (x, top, x + w, top + h + tail), f'<div style="position:absolute;left:{x}px;top:{top:.0f}px;width:{w}px;height:{h:.0f}px;box-sizing:border-box;background:#fff;color:#111;border-radius:36px;display:flex;align-items:center;justify-content:center;text-align:center;font-family:{K.B};font-weight:800;font-size:{size}px;line-height:1.5;white-space:pre-line;z-index:6">{chr(10).join(ls)}</div><div style="position:absolute;left:{x+60}px;top:{top+h-1:.0f}px;width:0;height:0;border-left:26px solid transparent;border-right:26px solid transparent;border-top:36px solid #fff;z-index:6"></div>')
     return dict(h=h + tail, kind='box', draw=draw)
 def ROW(p, label, sub, val, name='표 행'):
-    ls = lines_of(val, BP, 44, 540, p, name); inner = max(132, len(ls) * 66); h = inner + 56
+    ls = lines_of(val, BP, 50, 540, p, name); inner = max(132, len(ls) * 75); h = inner + 56
     def draw(top):
         p.add(name, (X0, top, X0 + W, top + h), f'<div style="position:absolute;left:{X0}px;top:{top:.0f}px;width:{W}px;height:{h:.0f}px;background:rgba(255,255,255,.1);border-radius:28px"></div>'
               f'<div style="position:absolute;left:{X0}px;top:{top:.0f}px;width:270px;height:{h:.0f}px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-family:{K.B};font-weight:800"><div style="font-size:52px;color:{GOLD};line-height:1.3">{label}</div><div style="font-size:40px;color:#fff;opacity:.85;line-height:1.3">{sub}</div></div>'
-              f'<div style="position:absolute;left:{X0+300}px;top:{top:.0f}px;width:600px;height:{h:.0f}px;display:flex;align-items:center;font-family:{K.B};font-weight:800;font-size:44px;line-height:1.5;color:#fff;white-space:pre-line">{chr(10).join(ls)}</div>')
+              f'<div style="position:absolute;left:{X0+300}px;top:{top:.0f}px;width:600px;height:{h:.0f}px;display:flex;align-items:center;font-family:{K.B};font-weight:800;font-size:50px;line-height:1.5;color:#fff;white-space:pre-line">{chr(10).join(ls)}</div>')
     return dict(h=h, kind='box', draw=draw)
 def FACE(p, name, h, side='right', flip=False):
     w = h * 0.75; p.ai = True
@@ -50,7 +50,7 @@ def FACE(p, name, h, side='right', flip=False):
         tf = 'transform:scaleX(-1);' if flip else ''
         p.add('정월', (x, top, x + w, top + h), f'<img src="data:image/png;base64,{CK.face_b64(name)}" style="position:absolute;left:{x:.0f}px;top:{top:.0f}px;height:{h}px;{tf}z-index:2">')
     return dict(h=h, kind='gfx', draw=draw, w=w)
-def PHONE(p, scale=.8):
+def PHONE(p, scale=.6):
     w, h = 330 * scale, 560 * scale
     def draw(top):
         x = X0 + (W - w) / 2
@@ -67,30 +67,30 @@ def place(p, blocks, justify=False):
     total = sum(b['h'] for b in blocks) + sum(gaps); band = BOT - TOP
     if total > band + 0.5: p.problems.append(f'묶음 높이 {total:.0f}px가 {band}px보다 큼')
     extra = band - total
-    if justify and gaps: gaps = [g + extra / len(gaps) for g in gaps]; total = band
+    if justify and gaps: gaps = [min(g + extra / len(gaps), 120) for g in gaps]; total = sum(x['h'] for x in blocks) + sum(gaps)   # R46: 간격은 120px까지만 벌린다(남는 높이는 글자를 키워 메운다)
     y = CEN - total / 2
     for b, g in zip(blocks, gaps + [0]): b['draw'](y); y += b['h'] + g
     return p
 def new(): return Page('carousel')
 S = {}
 def A1():
-    p = new(); place(p, [T(p, '정월의 연애 테스트', 52, GOLD, 'body', 1.3, name='라벨'), T(p, '3초 만에\n사랑에 빠지는\n사람', 112, name='제목'), FACE(p, 'v4_glasses', 440, 'right')]); return p
+    p = new(); place(p, [T(p, '정월의 연애 테스트', 60, GOLD, 'body', 1.3, name='라벨'), T(p, '3초 만에\n사랑에 빠지는\n사람', 112, name='제목'), FACE(p, 'v4_glasses', 440, 'right')]); return p
 def A2():
-    p = new(); place(p, [T(p, '주변에 꼭\n한 명 있죠?', 120, name='제목'), T(p, '사주·별자리·숫자로 보면 이래요.', 48, '#fff', 'body', 1.5, name='설명')], justify=True); return p
+    p = new(); place(p, [T(p, '주변에 꼭\n한 명 있죠?', 130, name='제목'), T(p, '사주·별자리·숫자로\n보면 이래요.', 84, '#fff', 'body', 1.45, name='설명')], justify=True); return p
 def A3():
-    p = new(); place(p, [T(p, '사주·별자리·숫자가\n[[같은 말]]을 해요', 84, lh=1.35, name='제목'), T(p, '바로 달아오르고,\n먼저 표현하고,\n새로움에 끌려요.', 52, '#fff', 'body', 1.6, name='설명')], justify=True); return p
+    p = new(); place(p, [T(p, '사주·별자리·숫자가\n[[같은 말]]을 해요', 84, lh=1.35, name='제목'), T(p, '바로 달아오르고,\n먼저 표현하고,\n새로움에 끌려요.', 80, '#fff', 'body', 1.5, name='설명')], justify=True); return p
 def A4():
-    p = new(); place(p, [T(p, '여러분은\n몇 개 겹치나요?', 100, name='제목'), T(p, '하나도 안 겹친다면,\n천천히 스며드는 사랑을 하는\n사람일지도 몰라요.', 48, '#fff', 'body', 1.6, name='설명'), PILL(p, '내 숫자를 댓글로 남겨 주세요', 44, 900, 'left')], justify=True); return p
+    p = new(); place(p, [T(p, '여러분은\n몇 개 겹치나요?', 100, name='제목'), T(p, '하나도 안 겹친다면,\n천천히 스며드는 사랑을 하는\n사람일지도 몰라요.', 56, '#fff', 'body', 1.5, name='설명'), PILL(p, '내 숫자를 댓글로 남겨 주세요', 52, 900, 'left')], justify=True); return p
 def B1():
-    p = new(); place(p, [T(p, '사주 · 별자리 · 숫자,\n이렇게 말해요', 80, name='제목'), T(p, '3초 만에 사랑에 빠지는 사람', 52, GOLD, 'body', 1.4, name='부제'),
+    p = new(); place(p, [T(p, '사주 · 별자리 · 숫자,\n이렇게 말해요', 76, name='제목'), T(p, '3초 만에 사랑에 빠지는 사람', 56, GOLD, 'body', 1.4, name='부제'),
                          ROW(p, '사주', '동양', '병화일생,\n도화가 있는 사주'), ROW(p, '별자리', '서양', '양자리 · 사자자리'), ROW(p, '숫자', '수비학', '3번 · 5번')]); return p
 def B2():
     p = new(); place(p, [T(p, '태양처럼 바로 달아오르고,\n사람을 끌어요', 76, name='제목'),
                          ROW(p, '사주', '동양', '병화일생,\n도화가 있는 사주'), ROW(p, '별자리', '서양', '양자리 · 사자자리\n직진하는 불의 별자리'), ROW(p, '숫자', '수비학', '3번 · 5번\n표현의 3, 새로움에 끌리는 5')]); return p
 def B3():
-    p = new(); place(p, [PILL(p, '몇 개 겹치나요?'), T(p, '겹친 개수로\n읽는 법', 92, name='제목'), ROW(p, '1개 이상', '겹침', '첫눈에 빠지는 쪽에\n가까울 수 있어요'), ROW(p, '0개', '안 겹침', '천천히 스며드는 사랑을\n하는 사람일지도 몰라요'), T(p, '사주·별자리·숫자를 함께 읽어요.', 44, '#fff', 'body', 1.5, name='설명')]); return p
+    p = new(); place(p, [PILL(p, '몇 개 겹치나요?'), T(p, '겹친 개수로\n읽는 법', 92, name='제목'), ROW(p, '1개 이상', '겹침', '첫눈에 빠지는 쪽에\n가까울 수 있어요'), ROW(p, '0개', '안 겹침', '천천히 스며드는 사랑을\n하는 사람일지도 몰라요'), T(p, '사주·별자리·숫자를 함께 읽어요.', 48, '#fff', 'body', 1.5, name='설명')]); return p
 def B4():
-    p = new(); f = FACE(p, 'v4_glasses', 420, 'left'); t = T(p, '표를 먼저,\n풀이는 그다음에\n읽어요.', 48, '#fff', 'body', 1.6, w=480, name='설명'); t2 = dict(t)
+    p = new(); f = FACE(p, 'v4_glasses', 420, 'left'); t = T(p, '표를 먼저,\n풀이는 그다음에\n읽어요.', 52, '#fff', 'body', 1.5, w=480, name='설명'); t2 = dict(t)
     def dr(top, t=t): pass
     side = dict(h=max(f['h'], t['h']), kind='gfx', draw=None)
     def draw(top):
@@ -99,17 +99,17 @@ def B4():
         ls = lines_of('표를 먼저,\n풀이는 그다음에\n읽어요.', BP, 48, 480, p, '설명'); th = len(ls) * 48 * 1.6; x = X0 + f['w'] + 30; ty = top + (side['h'] - th) / 2
         p.add('설명', (x, ty, x + 480, ty + th), f'<div style="position:absolute;left:{x:.0f}px;top:{ty:.0f}px;width:480px;font-family:{K.B};font-weight:800;font-size:48px;line-height:1.6;color:#fff;white-space:pre-line">{chr(10).join(ls)}</div>')
     side['draw'] = draw
-    place(p, [PILL(p, '결과'), T(p, '여러분은\n몇 개 겹치나요?', 96, name='제목'), side, PILL(p, '내 숫자를 댓글로 남겨 주세요', 44, 900, 'left')]); return p
+    place(p, [PILL(p, '결과'), T(p, '여러분은\n몇 개 겹치나요?', 96, name='제목'), side, PILL(p, '내 숫자를 댓글로 남겨 주세요', 52, 900, 'left')]); return p
 def C1():
-    p = new(); place(p, [T(p, '정월의 연애 테스트', 52, GOLD, 'body', 1.3, name='라벨'), BUBBLE(p, '3초 만에 사랑에 빠지는 사람,\n주변에 꼭 한 명 있죠?'), FACE(p, 'v2_straight', 600, 'right')]); return p
+    p = new(); place(p, [T(p, '정월의 연애 테스트', 60, GOLD, 'body', 1.3, name='라벨'), BUBBLE(p, '3초 만에 사랑에\n빠지는 사람,\n주변에 꼭 한 명 있죠?'), FACE(p, 'v2_straight', 480, 'right')]); return p
 def C2():
-    p = new(); place(p, [BUBBLE(p, '아까 그 사람,\n계속 생각나요.', 560, X0), PHONE(p), BUBBLE(p, '만난 지\n3분인데요?', 560, X0 + W - 560)]); return p
+    p = new(); place(p, [BUBBLE(p, '아까 그 사람,\n계속 생각나요.', 620, X0), PHONE(p), BUBBLE(p, '만난 지\n3분인데요?', 620, X0 + W - 620)]); return p
 def C3():
-    p = new(); place(p, [T(p, '사주 · 별자리 · 숫자로\n보면 이래요', 80, name='제목'), BUBBLE(p, '사주 · 병화일생, 도화가 있어요'), BUBBLE(p, '별자리 · 양자리와 사자자리예요'), BUBBLE(p, '숫자 · 3번과 5번이에요')], justify=True); return p
+    p = new(); place(p, [T(p, '사주 · 별자리 · 숫자로\n보면 이래요', 80, name='제목'), BUBBLE(p, '사주 · 병화일생, 도화가 있어요', size=50), BUBBLE(p, '별자리 · 양자리와 사자자리예요', size=50), BUBBLE(p, '숫자 · 3번과 5번이에요', size=50)], justify=True); return p
 def C4():
-    p = new(); place(p, [T(p, '하나도 안 겹친다면', 76, name='제목'), BUBBLE(p, '천천히 스며드는 사랑을\n하는 사람일지도 몰라요.'), T(p, '여러분은 몇 개 겹치나요?', 56, GOLD, 'body', 1.5, name='질문')], justify=True); return p
+    p = new(); place(p, [T(p, '하나도 안 겹친다면', 76, name='제목'), BUBBLE(p, '천천히 스며드는\n사랑을 하는 사람일지도\n몰라요.'), T(p, '여러분은 몇 개 겹치나요?', 64, GOLD, 'body', 1.5, name='질문')], justify=True); return p
 def C5():
-    p = new(); place(p, [BUBBLE(p, '내 숫자를 댓글로\n남겨 주세요.', 620), FACE(p, 'v4_glasses', 440, 'left'), PILL(p, '프로필 링크에서\n생년월일을 입력해 보세요', 44, 900, 'left')], justify=True); return p
+    p = new(); place(p, [BUBBLE(p, '내 숫자를 댓글로\n남겨 주세요.', 700), FACE(p, 'v4_glasses', 440, 'left'), PILL(p, '프로필 링크에서\n생년월일을 입력해 보세요', 44, 900, 'left')], justify=True); return p
 PAGES = dict(A1=A1, A2=A2, A3=A3, A4=A4, B1=B1, B2=B2, B3=B3, B4=B4, C1=C1, C2=C2, C3=C3, C4=C4, C5=C5)
 def metrics(p):
     r = sorted([(n, *b) for n, b in p.els if n != '정월' and n != '휴대폰' or True], key=lambda e: e[2])
@@ -127,7 +127,7 @@ async def main(out):
             for a, bb in zip(rs, rs[1:]):
                 if bb[1][1] < a[1][3] - 1 and not (bb[1][0] >= a[1][2] or a[1][0] >= bb[1][2]): print('겹침:', k, a[0], bb[0]); bad += 1
             open('/tmp/v3.html', 'w', encoding='utf-8').write(TE.render_html(p).replace('<script>document.title=', '<script>document.title=')); await pg.goto('file:///tmp/v3.html'); await pg.evaluate('document.fonts.ready'); await pg.wait_for_timeout(350)
-            for x in await check_page(pg, k, 'cover' if k.endswith('1') else None): print('검사:', x); bad += 1
+            for x in await check_page(pg, k, 'bundle'): print('검사:', x); bad += 1
             await pg.screenshot(path=f'{out}/{k}.png'); print(k, f'묶음 {t:.0f}~{b:.0f} 가운데 {c:.0f}')
         await br.close()
     print('문제', bad, '건')

@@ -32,8 +32,13 @@ async def check_page(pg, name, kind_hint=None):
     main=[e for e in els if not (e['y']>H-200 and e['w']<520)]
     if main:
         top=min(e['y'] for e in main); bot=max(e['y']+e['h'] for e in main)
-        if top>200: issues.append(f"{name}: 글자가 아래로 치우침(맨 위 글자 y={top:.0f}, 200 이내여야 함)")
-        if bot<H-300 and kind_hint!='cover': issues.append(f"{name}: 글자가 위로 몰림(맨 아래 글자 끝 y={bot:.0f}, 1050 이상이어야 함)")
+        if kind_hint!='bundle':    # 'bundle' = R47 방식(블록 높이 합산으로 가운데 묶음 배치). 이때는 아래 R46·R47 검사를 쓴다
+            if top>200: issues.append(f"{name}: 글자가 아래로 치우침(맨 위 글자 y={top:.0f}, 200 이내여야 함)")
+            if bot<H-300 and kind_hint!='cover': issues.append(f"{name}: 글자가 위로 몰림(맨 아래 글자 끝 y={bot:.0f}, 1050 이상이어야 함)")
+        elif H==1440:
+            body=[e for e in main if e['y']>150 and not e['y']>H-100]; top=min(e['y'] for e in body); bot=max(e['y']+e['h'] for e in body)
+            if top<178: issues.append(f"{name}: R47 맨 위 글자 y={top:.0f}가 상단 문구 아래 75px(y183)보다 위")
+            if bot>1270: issues.append(f"{name}: R47 맨 아래 글자 끝 y={bot:.0f}가 주소 위 75px(y1265)보다 아래")
     # 화면 밖으로 넘침, 글자끼리 겹침
     for e in els:
         if e['y']+e['h']>H-25: issues.append(f"{name} 「{e['t']}」: 아래 여백 부족(끝 y={e['y']+e['h']:.0f}, {H-25} 이내여야 함)")
