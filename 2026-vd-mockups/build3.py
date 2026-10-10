@@ -56,6 +56,12 @@ def CHAT(p, msgs, size=60, avatar=None, name=None, name_in=True):
         mw = lmax if side == 'l' else rmax; ls = lines_of(txt, BP, size, mw - 72, p, '대화'); f = font(BP, size); w = max(f.getlength(l) for l in ls) + 72; h = len(ls) * size * 1.5 + 56
         items.append(('msg', y, h, side, w, ls, first_l if side == 'l' else False)); y += h + 14
         if side == 'l': first_l = False
+    for side_ in ('l', 'r'):
+        ws = [it[4] for it in items if it[0] == 'msg' and it[3] == side_]
+        if ws:
+            mx = max(ws)
+            for k, it in enumerate(items):
+                if it[0] == 'msg' and it[3] == side_: items[k] = it[:4] + (mx,) + it[5:]
     H = y - 14
     def draw(top):
         html = ''; first_msg_top = None
@@ -66,12 +72,12 @@ def CHAT(p, msgs, size=60, avatar=None, name=None, name_in=True):
                 _, yy, h, side, w, ls, first = it; t = top + yy
                 if side == 'l':
                     if first_msg_top is None: first_msg_top = t
-                    rad = '8px 30px 30px 30px' if first else '30px'; bg = 'rgba(255,255,255,.16)'; col = '#fff'; x = lx
+                    rad = '8px 30px 30px 30px' if first else '30px'; bg = '#2b3668'; col = '#fff'; x = lx
                 else: rad = '30px 8px 30px 30px'; bg = GOLD; col = INK; x = X0 + W - w
                 html += f'<div style="position:absolute;left:{x:.0f}px;top:{t:.0f}px;width:{w:.0f}px;height:{h:.0f}px;box-sizing:border-box;background:{bg};border-radius:{rad};display:flex;align-items:center;justify-content:center;text-align:center;font-family:{K.B};font-weight:800;font-size:{size}px;line-height:1.5;color:{col};white-space:pre-line">{chr(10).join(ls)}</div>'
         if avatar and first_msg_top is not None:
             p.ai = True
-            html += f'<div style="position:absolute;left:{X0}px;top:{first_msg_top:.0f}px;width:{D}px;height:{D}px;border-radius:50%;overflow:hidden;background:#27346f"><img src="data:image/png;base64,{CK.face_b64(avatar)}" style="position:absolute;left:{-D*0.62:.0f}px;top:{-D*0.12:.0f}px;height:{D*3.0:.0f}px"></div>'
+            html += f'<div style="position:absolute;left:{X0}px;top:{first_msg_top:.0f}px;width:{D}px;height:{D}px;border-radius:50%;overflow:hidden;background:#27346f"><img src="data:image/png;base64,{CK.face_b64(avatar)}" style="position:absolute;left:{-D*0.27:.0f}px;top:{-D*0.04:.0f}px;height:{D*2.07:.0f}px"></div>'
         p.add('대화창', (X0, top, X0 + W, top + H), html)
     return dict(h=H, kind='box', draw=draw)
 def ROW(p, label, sub, val, name='표 행'):
