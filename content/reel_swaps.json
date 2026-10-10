@@ -2235,17 +2235,16 @@
   "date": "2026-10-16",
   "time": "18:30",
   "images": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1016b_compare.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1016b_1.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1016b_2.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1016b_3.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1016b_4.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1016b_5.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1016b_6.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1016b_7.jpg"
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1016_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1016_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1016_3.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1016_4.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1016_5.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1016_6.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1016_7.jpg"
   ],
   "caption": "약속이 취소됐다는 문자에 반가웠다면, 사람이 싫은 걸까요?\n\n그렇지 않아요. 사주에 화개가 있고, 별자리가 처녀·전갈·염소자리이고, 수비학 숫자가 7이면 혼자 정리하는 시간이 필요한 쪽이에요.\n사람을 싫어하는 게 아니라 충전 방식이 다를 뿐이에요.\n\n넘기면 몇 개가 겹치는지에 따른 풀이와, 약속 사이에 해 볼 한 가지까지 나와요.\n\n금요일 저녁 약속 취소, 나는 어느 쪽인가요?\n1 반가워요\n2 아쉬워요\n\n맞다 싶으면 ♥, 떠오르는 사람이 있으면 공유하거나 태그해 주세요.\n\n사주 하나, 별자리 하나만 보면 한쪽 이야기만 듣게 돼요.\n자오선은 여섯 가지 운명학을 겹쳐서, 같은 답이 나오는 곳을 찾아요.\n이 내용은 재미로, 그리고 나를 돌아보는 계기로 봐 주세요.\n\n#사주 #운세 #인간관계 #내향인 #집순이",
-  "note": "[10/8 교체 완료] 대표 확정에 따라 Metricool 인스타 글 하나만 바꿨어요(새 예약 id 390813087, 같은 시각 스레드 글은 그대로). 되돌리려면 old의 media_source·text로 같은 uuid에 다시 올리면 돼요(수정하면 id가 바뀌어 uuid로 찾아요). [10/8 대표 확정 반영] 맨 위 그림은 지금 예약된 3장(위)과 7장(아래)을 나란히 본 거예요. 대표님이 확정하신 표준(7장, 원고의 단계는 전부 담기, 마무리 하단은 R11 문구 '프로필 링크에서 생년월일 입력')에 맞춰 다시 만들었어요. 1~3장(표지·오해·겹쳐 보면)은 지금 예약 이미지와 똑같고(표지·3장은 픽셀까지 같음), 2장만 R26에 맞게 '사람이 싫은 걸까?'를 '싫은 걸까요?'로 고쳤어요. 4~5장에 원고 n33의 3·2·1·0개 해석을 모두 담았어요(전에 빠졌던 '1개'가 들어갔어요). 6장 조언에는 '취소가 필요하면 미리 솔직하게 알려요'를 넣어 전에 따로 있던 '서운함' 장의 핵심을 남겼어요. 낱말을 줄인 곳은 1곳: 0개 '사람을 만나면서 충전하는'을 '사람을 만나며 충전하는'으로(같은 뜻, 폭 한계). 캡션은 R26에 맞게 '나는 어느 쪽이에요?'를 '어느 쪽인가요?'로 고쳤어요. 교체는 인스타 글 하나(예약 id 387601551)만 하고 같은 시각 스레드 글은 건드리지 않아요.",
+  "note": "[10/8 교체 완료] 대표 확정에 따라 Metricool 인스타 글 하나만 바꿨어요(새 예약 id 390813087, 같은 시각 스레드 글은 그대로). 되돌리려면 old의 media_source·text로 같은 uuid에 다시 올리면 돼요(수정하면 id가 바뀌어 uuid로 찾아요). [10/8 대표 확정 반영] 맨 위 그림은 지금 예약된 3장(위)과 7장(아래)을 나란히 본 거예요. 대표님이 확정하신 표준(7장, 원고의 단계는 전부 담기, 마무리 하단은 R11 문구 '프로필 링크에서 생년월일 입력')에 맞춰 다시 만들었어요. 1~3장(표지·오해·겹쳐 보면)은 지금 예약 이미지와 똑같고(표지·3장은 픽셀까지 같음), 2장만 R26에 맞게 '사람이 싫은 걸까?'를 '싫은 걸까요?'로 고쳤어요. 4~5장에 원고 n33의 3·2·1·0개 해석을 모두 담았어요(전에 빠졌던 '1개'가 들어갔어요). 6장 조언에는 '취소가 필요하면 미리 솔직하게 알려요'를 넣어 전에 따로 있던 '서운함' 장의 핵심을 남겼어요. 낱말을 줄인 곳은 1곳: 0개 '사람을 만나면서 충전하는'을 '사람을 만나며 충전하는'으로(같은 뜻, 폭 한계). 캡션은 R26에 맞게 '나는 어느 쪽이에요?'를 '어느 쪽인가요?'로 고쳤어요. 교체는 인스타 글 하나(예약 id 387601551)만 하고 같은 시각 스레드 글은 건드리지 않아요. (10/10 R32 ④: R46·R47 방식으로 다시 만들어 Metricool 인스타 글 이미지 교체 완료. 빌더 2026-w44night7/build.py, 검사 0건, 글 그대로)",
   "checks": [
    "6장 조언이 '쉬는 시간을 먼저 일정에 넣기'와 '취소가 필요하면 미리 알리기' 두 가지인데 괜찮은지",
    "표지는 안 바꿨어요(예약된 원본 그대로)"
@@ -2286,17 +2285,16 @@
   "date": "2026-10-22",
   "time": "18:30",
   "images": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1022b_compare.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1022b_1.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1022b_2.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1022b_3.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1022b_4.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1022b_5.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1022b_6.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1022b_7.jpg"
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1022_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1022_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1022_3.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1022_4.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1022_5.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1022_6.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1022_7.jpg"
   ],
   "caption": "SNS를 보다 마음이 작아졌다면, 약점일까요?\n\n아니에요. 신금·처녀자리처럼 기준이 섬세한 사람은 남의 빛나는 부분도 선명하게 보여요. 좋은 것을 알아보는 눈이 밝다는 뜻이기도 해요.\n그래서 견주는 대상을 어제의 나로 바꿔 보세요. 남의 하이라이트 대신 어제의 나와 한 가지만 견주면, 같은 눈이 힘이 돼요.\n\n넘기면 몇 개가 겹치는지에 따른 풀이와, 오늘 해 볼 한 가지까지 나와요.\n\n오늘 가장 부러웠던 것 한 줄만 댓글로 적어 주세요.\n부러움은 내가 원하는 것을 알려 주는 신호예요.\n\n맞다 싶으면 ♥, 떠오르는 사람이 있으면 공유하거나 태그해 주세요.\n\n사주 하나, 별자리 하나만 보면 한쪽 이야기만 듣게 돼요.\n자오선은 여섯 가지 운명학을 겹쳐서, 같은 답이 나오는 곳을 찾아요.\n이 내용은 재미로, 그리고 나를 돌아보는 계기로 봐 주세요.\n\n#사주 #운세 #자존감 #비교 #별자리",
-  "note": "[10/8 교체 완료] 대표 확정에 따라 Metricool 인스타 글 하나만 바꿨어요(새 예약 id 390812815, 같은 시각 스레드 글은 그대로). 되돌리려면 old의 media_source·text로 같은 uuid에 다시 올리면 돼요(수정하면 id가 바뀌어 uuid로 찾아요). 맨 위 그림은 지금 예약된 3장(위)과 7장 시안(아래)을 나란히 본 거예요. 아래 7장이 시안 한 장씩이에요. 대표님이 ①에게 확정한 \"밤 캐러셀도 7장\"에 맞춘 거예요. 예약된 3장은 풀이에서 끝나 조언·마무리가 없었어요. 1~3장(표지·오해·겹쳐 보면)은 지금 예약 이미지와 똑같고(표지·3장은 픽셀까지 같음), 2장은 R26에 맞게 '약점일까?'를 '약점일까요?'로 고쳤어요. 4~7장은 짝 글 n37에 있는 내용만 썼어요(낱말 겹침 63%). 10/16에서 빠졌던 '1개' 해석까지 원고의 3·2·1·0개를 4장(3개·2개)과 5장(1개·0개)에 나눠 모두 담았어요. 캡션은 이미 R26에 맞아서 그대로 두고 '넘기면 나오는 것' 한 줄만 넣었어요. 이 카드는 마음이 작아지는 소재라 트렌디 표현은 쓰지 않았어요. **줄이거나 뺀 곳: ①4장 2개의 원문 '비교가 올라오는 건 주변을 잘 살핀다는 뜻이기도 해요'는 그대로 넣었고, 5장 1개의 원문 '한 풀이의 결만 강해요. 상황에 따라 드러나는 모습이에요'도 그대로예요. 줄인 문장은 없어요 ②6장 조언은 원고 5번 3가지 중 '오늘 내가 해낸 일 세 가지'만 썼어요(나머지 둘은 3장 겹쳐 보면과 겹치거나 알림 설정이라 뺐어요).** [10/8 대표 확정 반영] 마무리 하단 문구를 R11대로 '프로필 링크에서 생년월일 입력'으로 바꿨어요(1~6장은 전에 보신 시안과 똑같아요). 승인하기 전에는 예약을 바꾸지 않아요. 승인하시면 인스타 글 하나(예약 id 387605551)만 7장·새 캡션으로 바꾸고, 같은 시각 스레드 글(387564877)은 건드리지 않아요. 스레드 글에는 '약점일까?'(R26 금지 질문 끝)가 있어 ①에게 알렸어요.",
+  "note": "[10/8 교체 완료] 대표 확정에 따라 Metricool 인스타 글 하나만 바꿨어요(새 예약 id 390812815, 같은 시각 스레드 글은 그대로). 되돌리려면 old의 media_source·text로 같은 uuid에 다시 올리면 돼요(수정하면 id가 바뀌어 uuid로 찾아요). 맨 위 그림은 지금 예약된 3장(위)과 7장 시안(아래)을 나란히 본 거예요. 아래 7장이 시안 한 장씩이에요. 대표님이 ①에게 확정한 \"밤 캐러셀도 7장\"에 맞춘 거예요. 예약된 3장은 풀이에서 끝나 조언·마무리가 없었어요. 1~3장(표지·오해·겹쳐 보면)은 지금 예약 이미지와 똑같고(표지·3장은 픽셀까지 같음), 2장은 R26에 맞게 '약점일까?'를 '약점일까요?'로 고쳤어요. 4~7장은 짝 글 n37에 있는 내용만 썼어요(낱말 겹침 63%). 10/16에서 빠졌던 '1개' 해석까지 원고의 3·2·1·0개를 4장(3개·2개)과 5장(1개·0개)에 나눠 모두 담았어요. 캡션은 이미 R26에 맞아서 그대로 두고 '넘기면 나오는 것' 한 줄만 넣었어요. 이 카드는 마음이 작아지는 소재라 트렌디 표현은 쓰지 않았어요. **줄이거나 뺀 곳: ①4장 2개의 원문 '비교가 올라오는 건 주변을 잘 살핀다는 뜻이기도 해요'는 그대로 넣었고, 5장 1개의 원문 '한 풀이의 결만 강해요. 상황에 따라 드러나는 모습이에요'도 그대로예요. 줄인 문장은 없어요 ②6장 조언은 원고 5번 3가지 중 '오늘 내가 해낸 일 세 가지'만 썼어요(나머지 둘은 3장 겹쳐 보면과 겹치거나 알림 설정이라 뺐어요).** [10/8 대표 확정 반영] 마무리 하단 문구를 R11대로 '프로필 링크에서 생년월일 입력'으로 바꿨어요(1~6장은 전에 보신 시안과 똑같아요). 승인하기 전에는 예약을 바꾸지 않아요. 승인하시면 인스타 글 하나(예약 id 387605551)만 7장·새 캡션으로 바꾸고, 같은 시각 스레드 글(387564877)은 건드리지 않아요. 스레드 글에는 '약점일까?'(R26 금지 질문 끝)가 있어 ①에게 알렸어요. (10/10 R32 ④: R46·R47 방식으로 다시 만들어 Metricool 인스타 글 이미지 교체 완료. 빌더 2026-w44night7/build.py, 검사 0건, 글 그대로)",
   "checks": [
    "6장 조언을 '오늘 해낸 일 세 가지'만 쓴 게 괜찮은지",
    "표지 글자가 반투명 띠 가장자리에 걸려 보이는 건 예약된 원본 디자인 그대로예요. 표지는 안 바꿨어요"
@@ -2337,17 +2335,16 @@
   "date": "2026-10-24",
   "time": "19:00",
   "images": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1024b_compare.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1024b_1.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1024b_2.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1024b_3.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1024b_4.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1024b_5.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1024b_6.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1024b_7.jpg"
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1024_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1024_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1024_3.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1024_4.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1024_5.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1024_6.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1024_7.jpg"
   ],
   "caption": "연락을 기다리다 지칠 때, 약해서가 아니에요.\n휴대폰을 자꾸 열어 보다가 어느새 하루가 지난 적이 있나요? 답이 없는 시간이 길어질수록 마음이 먼저 지쳐요.\n\n약해서가 아니라 '언제까지, 무엇을'이 정해지지 않아서일 수 있어요.\n기다릴 기한을 정하고, 그동안 내가 할 일을 한 줄로 적어 보세요.\n\n육효에서도 질문은 사건 하나마다 기한을 정해 적을수록 좋아요. 예를 들면 '이번 주 안에 답이 올까요?'처럼요.\n육효와 사주로 읽은 자세한 글은 블로그에 있어요.\n\n넘기면 내 기다림이 어떤 모양인지, 휴대폰 확인을 줄이는 한 가지까지 나와요.\n나는 어느 쪽에 가까운가요? 댓글로 남겨 주세요.\n\n공감되면 ♥, 떠오르는 사람이 있으면 공유해 주세요.\n이 내용은 재미로, 그리고 나를 돌아보는 계기로 봐 주세요.\n\n#육효 #사주 #연락 #기다림 #마음정리",
-  "note": "[10/8 교체 완료] 대표 승인에 따라 Metricool 인스타 글 하나만 바꿨어요(새 예약 id 390832275, 같은 시각 스레드 글은 그대로, 다시 읽어 확인). 되돌리려면 old의 media_source·text로 같은 uuid에 다시 올리면 돼요(수정하면 id가 바뀌어 uuid로 찾아요). 맨 위 그림은 지금 예약된 3장(위)과 7장(아래)을 나란히 본 거예요. 대표님이 확정하신 표준(7장, 원고 단계는 전부, 마무리 하단 R11 문구)에 맞춰 만들었어요. 짝 글은 n39(낱말 겹침 87%)예요. 1~3장은 지금 예약 이미지와 같고(2·3장은 픽셀까지 같음), 표지만 '약해서일까?'를 '약해서일까요?'로 한 글자(R26) 고쳤어요. 4장은 원고의 세 모양(확인/생각/버팀), 5장은 원고의 '같은 말·다른 말'(육효는 지금 흐름, 사주는 타고난 방식), 6장 조언은 원고 5번의 '확인하는 시간을 하루 두 번으로'예요(원고 5번의 '기한 적기'는 3장과 같은 말이라 뺐어요). **정정: 이 카드는 예약 전이 아니었어요.** 이미 인스타 10/24 19:00에 3장짜리가 예약돼 있었어요(예약 id 387767342). 앞서 '예약 전'이라고 한 건 틀렸어요. 캡션은 실제 예약 캡션 구조를 그대로 두고 3곳만 고쳤어요: 첫 줄 '기다림이 힘든 건 약해서일까요?'는 자책을 여는 질문이라 '연락을 기다리다 지칠 때, 약해서가 아니에요.'로, '하나의 사건에 대해'(번역투)를 '사건 하나마다'로, 카드 내용을 알리는 '넘기면' 줄과 댓글 질문을 넣었어요. 트렌디 표현은 마음이 무거운 소재라 쓰지 않았어요. 교체는 인스타 글 하나(예약 id 387767342)만 하고 같은 시각 스레드 글(387767385, '어떻게 버티세요?')은 건드리지 않아요.",
+  "note": "[10/8 교체 완료] 대표 승인에 따라 Metricool 인스타 글 하나만 바꿨어요(새 예약 id 390832275, 같은 시각 스레드 글은 그대로, 다시 읽어 확인). 되돌리려면 old의 media_source·text로 같은 uuid에 다시 올리면 돼요(수정하면 id가 바뀌어 uuid로 찾아요). 맨 위 그림은 지금 예약된 3장(위)과 7장(아래)을 나란히 본 거예요. 대표님이 확정하신 표준(7장, 원고 단계는 전부, 마무리 하단 R11 문구)에 맞춰 만들었어요. 짝 글은 n39(낱말 겹침 87%)예요. 1~3장은 지금 예약 이미지와 같고(2·3장은 픽셀까지 같음), 표지만 '약해서일까?'를 '약해서일까요?'로 한 글자(R26) 고쳤어요. 4장은 원고의 세 모양(확인/생각/버팀), 5장은 원고의 '같은 말·다른 말'(육효는 지금 흐름, 사주는 타고난 방식), 6장 조언은 원고 5번의 '확인하는 시간을 하루 두 번으로'예요(원고 5번의 '기한 적기'는 3장과 같은 말이라 뺐어요). **정정: 이 카드는 예약 전이 아니었어요.** 이미 인스타 10/24 19:00에 3장짜리가 예약돼 있었어요(예약 id 387767342). 앞서 '예약 전'이라고 한 건 틀렸어요. 캡션은 실제 예약 캡션 구조를 그대로 두고 3곳만 고쳤어요: 첫 줄 '기다림이 힘든 건 약해서일까요?'는 자책을 여는 질문이라 '연락을 기다리다 지칠 때, 약해서가 아니에요.'로, '하나의 사건에 대해'(번역투)를 '사건 하나마다'로, 카드 내용을 알리는 '넘기면' 줄과 댓글 질문을 넣었어요. 트렌디 표현은 마음이 무거운 소재라 쓰지 않았어요. 교체는 인스타 글 하나(예약 id 387767342)만 하고 같은 시각 스레드 글(387767385, '어떻게 버티세요?')은 건드리지 않아요. (10/10 R32 ④: R46·R47 방식으로 다시 만들어 Metricool 인스타 글 이미지 교체 완료. 빌더 2026-w44night7/build.py, 검사 0건, 글 그대로)",
   "checks": [
    "7장 구조와 4장(세 모양)·5장(같은 말·다른 말)·6장(확인 시간 줄이기)이 괜찮은지",
    "캡션 첫 줄을 위로로 시작하도록 바꾼 게 괜찮은지",
@@ -2390,17 +2387,16 @@
   "date": "2026-10-27",
   "time": "21:00",
   "images": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1027b_compare.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1027b_1.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1027b_2.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1027b_3.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1027b_4.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1027b_5.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1027b_6.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1027b_7.jpg"
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1027_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1027_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1027_3.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1027_4.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1027_5.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1027_6.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1027_7.jpg"
   ],
   "caption": "퇴근길 작은 소리까지 크게 들릴 때, 예민한 걸까요, 감각이 큰 걸까요?\n\n별자리로 처녀자리는 작은 어긋남을 먼저 알아채고, 물고기자리는 남의 기분이 내 기분처럼 번져요. 자미두수의 복덕궁은 마음의 여유와 정신적인 쪽을 보는 칸이에요.\n예민함은 받아들이는 정보가 많다는 뜻이기도 해요.\n자극이 많은 시간 사이에 조용한 10분을 넣어 보세요.\n\n넘기면 예민한 피로가 어디서 오는지, 쉬어도 피곤한 날이 있는 이유까지 나와요.\n\n나에게 맞는 쉬는 방식은 뭔가요? 걷기 / 음악 / 낮잠 중에서 댓글로 알려 주세요.\n맞다 싶으면 ♥, 떠오르는 사람이 있으면 공유하거나 태그해 주세요.\n※ 자미두수는 태어난 시각까지 필요해요. 시각을 모르면 사주부터 보세요.\n\n사주 하나, 별자리 하나만 보면 한쪽 이야기만 듣게 돼요.\n자오선은 여섯 가지 운명학을 겹쳐서, 같은 답이 나오는 곳을 찾아요.\n이 내용은 재미로, 그리고 나를 돌아보는 계기로 봐 주세요.\n\n#자미두수 #운세 #예민한사람 #감각 #별자리",
-  "note": "[10/8 교체 완료] 대표 승인에 따라 Metricool 인스타 글 하나만 바꿨어요(새 예약 id 390832350, 같은 시각 스레드 글은 그대로, 다시 읽어 확인). 되돌리려면 old의 media_source·text로 같은 uuid에 다시 올리면 돼요(수정하면 id가 바뀌어 uuid로 찾아요). 맨 위 그림은 지금 예약된 3장(위)과 7장(아래)을 나란히 본 거예요. 대표님이 확정하신 표준(7장, 원고 단계는 전부, 마무리 하단 R11 문구)에 맞춘 거예요. 짝 글은 n42(낱말 겹침 69%)예요. 1~3장(표지·예민 쪽·감각 쪽)은 지금 예약 이미지와 같고(2·3장은 픽셀까지 같음), 표지만 '감각이 큰 걸까?'를 '걸까요?'로 한 글자(R26) 고쳤어요. 4장은 원고 3번의 세 모양(작은 것까지 보여서·남의 기분이 번져서·쉬는 방식이 안 맞아서), 5장은 원고 4번 '다른 말도 있어요', 6장 조언은 원고 5번 3번 '쉬는 방식을 걷기·음악·낮잠 중 하나 정하기'예요(원고 5번의 '조용한 10분'은 2장에 이미 있어 뺐어요). 캡션은 실제 예약 캡션 구조를 두고 R26 위반 '쉬는 방식은 뭐예요?'를 '뭔가요?'로, 이어 붙은 두 질문에 쉼표를, 카드 내용을 알리는 '넘기면' 줄을 넣었어요. 트렌디 표현은 쓰지 않았어요. 교체는 인스타 글 하나(예약 id 387605703)만 하고 같은 시각 스레드 글은 건드리지 않아요. 승인 전에는 예약을 바꾸지 않아요.",
+  "note": "[10/8 교체 완료] 대표 승인에 따라 Metricool 인스타 글 하나만 바꿨어요(새 예약 id 390832350, 같은 시각 스레드 글은 그대로, 다시 읽어 확인). 되돌리려면 old의 media_source·text로 같은 uuid에 다시 올리면 돼요(수정하면 id가 바뀌어 uuid로 찾아요). 맨 위 그림은 지금 예약된 3장(위)과 7장(아래)을 나란히 본 거예요. 대표님이 확정하신 표준(7장, 원고 단계는 전부, 마무리 하단 R11 문구)에 맞춘 거예요. 짝 글은 n42(낱말 겹침 69%)예요. 1~3장(표지·예민 쪽·감각 쪽)은 지금 예약 이미지와 같고(2·3장은 픽셀까지 같음), 표지만 '감각이 큰 걸까?'를 '걸까요?'로 한 글자(R26) 고쳤어요. 4장은 원고 3번의 세 모양(작은 것까지 보여서·남의 기분이 번져서·쉬는 방식이 안 맞아서), 5장은 원고 4번 '다른 말도 있어요', 6장 조언은 원고 5번 3번 '쉬는 방식을 걷기·음악·낮잠 중 하나 정하기'예요(원고 5번의 '조용한 10분'은 2장에 이미 있어 뺐어요). 캡션은 실제 예약 캡션 구조를 두고 R26 위반 '쉬는 방식은 뭐예요?'를 '뭔가요?'로, 이어 붙은 두 질문에 쉼표를, 카드 내용을 알리는 '넘기면' 줄을 넣었어요. 트렌디 표현은 쓰지 않았어요. 교체는 인스타 글 하나(예약 id 387605703)만 하고 같은 시각 스레드 글은 건드리지 않아요. 승인 전에는 예약을 바꾸지 않아요. (10/10 R32 ④: R46·R47 방식으로 다시 만들어 Metricool 인스타 글 이미지 교체 완료. 빌더 2026-w44night7/build.py, 검사 0건, 글 그대로)",
   "checks": [
    "7장 구조와 4장(세 모양)·5장(다른 말)·6장(쉬는 방식 정하기)이 괜찮은지",
    "4장 '복덕궁의 결'은 낯선 말인데 5장에서 풀어 줘요. 4장만 봐도 괜찮은지",
@@ -2443,17 +2439,16 @@
   "date": "2026-10-29",
   "time": "21:00",
   "images": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1029b_compare.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1029b_1.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1029b_2.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1029b_3.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1029b_4.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1029b_5.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1029b_6.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1029b_7.jpg"
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1029_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1029_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1029_3.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1029_4.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1029_5.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1029_6.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1029_7.jpg"
   ],
   "caption": "결정을 미루고 있다면, 결정 전에 세 가지만 적어 보세요.\n\n1 고민을 한 사건으로\n2 정할 기한 하나\n3 포기할 것 한 가지\n\n결정을 못 하는 건 정보가 모자라서가 아니라 질문이 아직 흐릿해서일 수 있어요. 육효는 사건 하나에 기한을 정한 질문을 좋아해요. 하락이수는 태어난 순간의 괘로 내 기본 방식을 하나의 이미지로 보여 줘요.\n\n넘기면 못 고르는 또 다른 이유와, 질문과 기한을 먼저 정하는 방법까지 나와요.\n\n지금 미루고 있는 결정 하나만 한 줄로 댓글에 적어 주세요.\n맞다 싶으면 ♥, 떠오르는 사람이 있으면 공유하거나 태그해 주세요.\n\n사주 하나, 별자리 하나만 보면 한쪽 이야기만 듣게 돼요.\n자오선은 여섯 가지 운명학을 겹쳐서, 같은 답이 나오는 곳을 찾아요.\n이 내용은 재미로, 그리고 나를 돌아보는 계기로 봐 주세요.\n\n#육효 #하락이수 #결정장애 #선택 #운세",
-  "note": "[10/8 교체 완료] 대표 승인에 따라 Metricool 인스타 글 하나만 바꿨어요(새 예약 id 390832431, 같은 시각 스레드 글은 그대로, 다시 읽어 확인). 되돌리려면 old의 media_source·text로 같은 uuid에 다시 올리면 돼요(수정하면 id가 바뀌어 uuid로 찾아요). 맨 위 그림은 지금 예약된 3장(위)과 7장(아래)을 나란히 본 거예요. 대표님이 확정하신 표준(7장, 원고 단계는 전부, 마무리 하단 R11 문구)에 맞춘 거예요. 짝 글은 n44(낱말 겹침 60%)예요. 1~3장(표지·질문부터 또렷하게·정보가 아니라 질문이 흐릿해요)은 지금 예약 이미지와 모두 픽셀까지 같아요. 이 카드는 앞 두 장이 원고의 '해 볼 것 3가지'(사건·기한·포기)를 이미 담고 있어서 4~6장은 카드에 아직 없는 원고 문장만 썼어요: 4장은 원고 3번의 셋째 이유 '잃는 것이 보여서'(고르지 않은 쪽이 아쉬워서 못 놓는 경우), 5장은 원고 4번 '다른 말도 있어요'(육효는 지금 질문의 흐름, 하락이수는 태어난 순간의 이미지), 6장 조언은 원고 4번 끝 '질문과 기한을 먼저 정하면 두 풀이를 비교하기 쉬워요'예요. 처음에는 4장을 세 이유의 단어 목록으로 만들었는데 앞 장과 겹치고 뜻이 안 읽혀 셋째 이유만 풀어 썼어요. 캡션은 실제 예약 캡션에서 규칙 위반은 없었고, '하나의 사건에'를 '사건 하나에'로 손질하고 카드 내용을 알리는 '넘기면' 줄을 넣었어요(손질은 제 판단이고 규칙 위반 수정은 아니에요). 트렌디 표현은 쓰지 않았어요. 교체는 인스타 글 하나(예약 id 387605789)만 하고 같은 시각 스레드 글은 건드리지 않아요. 승인 전에는 예약을 바꾸지 않아요.",
+  "note": "[10/8 교체 완료] 대표 승인에 따라 Metricool 인스타 글 하나만 바꿨어요(새 예약 id 390832431, 같은 시각 스레드 글은 그대로, 다시 읽어 확인). 되돌리려면 old의 media_source·text로 같은 uuid에 다시 올리면 돼요(수정하면 id가 바뀌어 uuid로 찾아요). 맨 위 그림은 지금 예약된 3장(위)과 7장(아래)을 나란히 본 거예요. 대표님이 확정하신 표준(7장, 원고 단계는 전부, 마무리 하단 R11 문구)에 맞춘 거예요. 짝 글은 n44(낱말 겹침 60%)예요. 1~3장(표지·질문부터 또렷하게·정보가 아니라 질문이 흐릿해요)은 지금 예약 이미지와 모두 픽셀까지 같아요. 이 카드는 앞 두 장이 원고의 '해 볼 것 3가지'(사건·기한·포기)를 이미 담고 있어서 4~6장은 카드에 아직 없는 원고 문장만 썼어요: 4장은 원고 3번의 셋째 이유 '잃는 것이 보여서'(고르지 않은 쪽이 아쉬워서 못 놓는 경우), 5장은 원고 4번 '다른 말도 있어요'(육효는 지금 질문의 흐름, 하락이수는 태어난 순간의 이미지), 6장 조언은 원고 4번 끝 '질문과 기한을 먼저 정하면 두 풀이를 비교하기 쉬워요'예요. 처음에는 4장을 세 이유의 단어 목록으로 만들었는데 앞 장과 겹치고 뜻이 안 읽혀 셋째 이유만 풀어 썼어요. 캡션은 실제 예약 캡션에서 규칙 위반은 없었고, '하나의 사건에'를 '사건 하나에'로 손질하고 카드 내용을 알리는 '넘기면' 줄을 넣었어요(손질은 제 판단이고 규칙 위반 수정은 아니에요). 트렌디 표현은 쓰지 않았어요. 교체는 인스타 글 하나(예약 id 387605789)만 하고 같은 시각 스레드 글은 건드리지 않아요. 승인 전에는 예약을 바꾸지 않아요. (10/10 R32 ④: R46·R47 방식으로 다시 만들어 Metricool 인스타 글 이미지 교체 완료. 빌더 2026-w44night7/build.py, 검사 0건, 글 그대로)",
   "checks": [
    "7장 구조와 4장(잃는 것이 보여서)·5장(다른 말)·6장(질문과 기한 먼저)이 괜찮은지",
    "4장이 원고의 세 이유 중 하나만 다루는데 괜찮은지(첫째·둘째는 앞 장에 있어요)",
@@ -2496,17 +2491,16 @@
   "date": "2026-10-30",
   "time": "19:00",
   "images": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1030b_compare.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1030b_1.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1030b_2.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1030b_3.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1030b_4.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1030b_5.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1030b_6.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1030b_7.jpg"
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1030_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1030_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1030_3.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1030_4.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1030_5.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1030_6.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1030_7.jpg"
   ],
   "caption": "퇴근하고 현관문을 닫는 순간 의욕이 꺼진다면, 게으른 걸까요, 방전된 걸까요?\n\n방전의 모양은 세 가지예요.\n불은 확 꺼지고\n물은 마음이 소진되고\n흙은 몸이 무거워져요.\n\n확 꺼지면 짧은 휴식, 마음이 소진되면 혼자 있는 시간, 몸이 무거우면 식사와 잠이 먼저예요. 별자리 원소도 같은 방향이에요.\n피로가 오래 가거나 일상이 힘들면 전문가와 상담해 보세요.\n\n넘기면 쉬어도 안 풀리는 피로가 생기는 이유와, 퇴근 뒤 30분을 쓰는 방법까지 나와요.\n\n내 방전은 어떤 모양인가요? 불 / 물 / 흙으로 답해 주세요.\n맞다 싶으면 ♥, 떠오르는 사람이 있으면 공유하거나 태그해 주세요.\n\n사주 하나, 별자리 하나만 보면 한쪽 이야기만 듣게 돼요.\n자오선은 여섯 가지 운명학을 겹쳐서, 같은 답이 나오는 곳을 찾아요.\n이 내용은 재미로, 그리고 나를 돌아보는 계기로 봐 주세요.\n\n#사주 #운세 #퇴근후 #방전 #번아웃",
-  "note": "[10/8 교체 완료] 대표 승인에 따라 Metricool 인스타 글 하나만 바꿨어요(새 예약 id 390832534, 같은 시각 스레드 글은 그대로, 다시 읽어 확인). 되돌리려면 old의 media_source·text로 같은 uuid에 다시 올리면 돼요(수정하면 id가 바뀌어 uuid로 찾아요). 맨 위 그림은 지금 예약된 3장(위)과 7장(아래)을 나란히 본 거예요. 대표님이 확정하신 표준(7장, 원고 단계는 전부, 마무리 하단 R11 문구)에 맞춘 거예요. 짝 글은 n45(낱말 겹침 60%)예요. **시각 정정: 이 카드의 실제 인스타 예약은 10/30 19:00이에요.** 계획 기록(18:30)과 정의 파일(21:00)이 모두 틀렸어요. 10/30 18:30에는 신년 감정서 마감 광고가 있어서 기록만 믿고 18:30 글을 바꿨다면 광고를 덮어쓸 뻔했어요. 그래서 Metricool에서 실제 글을 찾아 확인했어요. 1~3장(표지·방전 모양·충전)은 지금 예약 이미지와 같고(2·3장은 픽셀까지 같음), 표지만 '방전된 걸까?'를 '걸까요?'로 한 글자(R26) 고쳤어요. 앞 두 장이 원고의 세 모양과 충전을 이미 담고 있어서 4~6장은 카드에 아직 없는 원고 문장만 썼어요: 4장은 원고 4번(퇴근 뒤 방전은 열심히 쓴 흔적, 사주는 타고난 방식·별자리는 성향의 방향), 5장은 원고 FAQ의 안전 안내(그렇다고 단정할 수 없어요. 피로가 오래 가거나 일상이 힘들면 전문가와 상담해 보세요 — 한 글자도 안 바꿨어요), 6장 조언은 원고 5번 1번(퇴근 뒤 30분은 아무것도 하지 않는 시간)이에요. 5장 제목은 원고 FAQ의 '우울증인가요?'를 큰 글씨로 띄우면 무거워서 '무기력이 오래 가면 우울증일까요?'로 조건을 붙였어요(마음이 무거운 소재라서 트렌디 표현은 안 썼어요). 캡션은 실제 예약 캡션에서 R26 위반 '어떤 모양이에요?'를 '모양인가요?'로, 이어 붙은 두 질문에 쉼표를, 카드 내용을 알리는 '넘기면' 줄을 넣었고 캡션에 있던 전문가 상담 안내는 그대로 뒀어요. 교체는 인스타 글 하나(예약 id 388117701)만 하고 같은 시각 스레드 글은 건드리지 않아요. 승인 전에는 예약을 바꾸지 않아요.",
+  "note": "[10/8 교체 완료] 대표 승인에 따라 Metricool 인스타 글 하나만 바꿨어요(새 예약 id 390832534, 같은 시각 스레드 글은 그대로, 다시 읽어 확인). 되돌리려면 old의 media_source·text로 같은 uuid에 다시 올리면 돼요(수정하면 id가 바뀌어 uuid로 찾아요). 맨 위 그림은 지금 예약된 3장(위)과 7장(아래)을 나란히 본 거예요. 대표님이 확정하신 표준(7장, 원고 단계는 전부, 마무리 하단 R11 문구)에 맞춘 거예요. 짝 글은 n45(낱말 겹침 60%)예요. **시각 정정: 이 카드의 실제 인스타 예약은 10/30 19:00이에요.** 계획 기록(18:30)과 정의 파일(21:00)이 모두 틀렸어요. 10/30 18:30에는 신년 감정서 마감 광고가 있어서 기록만 믿고 18:30 글을 바꿨다면 광고를 덮어쓸 뻔했어요. 그래서 Metricool에서 실제 글을 찾아 확인했어요. 1~3장(표지·방전 모양·충전)은 지금 예약 이미지와 같고(2·3장은 픽셀까지 같음), 표지만 '방전된 걸까?'를 '걸까요?'로 한 글자(R26) 고쳤어요. 앞 두 장이 원고의 세 모양과 충전을 이미 담고 있어서 4~6장은 카드에 아직 없는 원고 문장만 썼어요: 4장은 원고 4번(퇴근 뒤 방전은 열심히 쓴 흔적, 사주는 타고난 방식·별자리는 성향의 방향), 5장은 원고 FAQ의 안전 안내(그렇다고 단정할 수 없어요. 피로가 오래 가거나 일상이 힘들면 전문가와 상담해 보세요 — 한 글자도 안 바꿨어요), 6장 조언은 원고 5번 1번(퇴근 뒤 30분은 아무것도 하지 않는 시간)이에요. 5장 제목은 원고 FAQ의 '우울증인가요?'를 큰 글씨로 띄우면 무거워서 '무기력이 오래 가면 우울증일까요?'로 조건을 붙였어요(마음이 무거운 소재라서 트렌디 표현은 안 썼어요). 캡션은 실제 예약 캡션에서 R26 위반 '어떤 모양이에요?'를 '모양인가요?'로, 이어 붙은 두 질문에 쉼표를, 카드 내용을 알리는 '넘기면' 줄을 넣었고 캡션에 있던 전문가 상담 안내는 그대로 뒀어요. 교체는 인스타 글 하나(예약 id 388117701)만 하고 같은 시각 스레드 글은 건드리지 않아요. 승인 전에는 예약을 바꾸지 않아요. (10/10 R32 ④: R46·R47 방식으로 다시 만들어 Metricool 인스타 글 이미지 교체 완료. 빌더 2026-w44night7/build.py, 검사 0건, 글 그대로)",
   "checks": [
    "7장 구조와 4장(열심히 쓴 흔적)·5장(우울증 질문과 안전 안내)·6장(퇴근 뒤 30분)이 괜찮은지",
    "5장 제목에 '우울증'이 들어가는 게 괜찮은지(원고 FAQ 질문이에요. 단정하지 않고 전문가 상담을 안내해요)",
@@ -2549,17 +2543,16 @@
   "date": "2026-10-31",
   "time": "21:00",
   "images": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1031b_compare.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1031b_1.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1031b_2.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1031b_3.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1031b_4.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1031b_5.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1031b_6.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-w43night7/final/1031b_7.jpg"
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1031_1.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1031_2.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1031_3.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1031_4.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1031_5.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1031_6.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/61cc6530dfd84bc98a53542fec23af6da9ad26c7/2026-w44night7/cards/1031_7.jpg"
   ],
   "caption": "오늘은 가면을 쓰는 날이지만, 평소에도 웃는 얼굴 뒤에 마음을 숨기나요?\n\n가면은 세 가지 모양이에요.\n1 분위기를 맞추는 가면\n2 속마음을 숨기는 가면\n3 역할 때문에 쓴 가면\n\n가면은 거짓이 아니라 나를 지키는 방식일 수 있어요. 자미두수의 명궁(타고난 바탕)과 신궁(드러나는 모습)의 거리가 크면 가면을 쓴다고 느끼기 쉬워요. 별자리로 쌍둥이자리는 장면에 맞춰 말투를 바꾸고, 전갈자리는 속마음을 안쪽에 오래 품어요.\n속마음은 한 사람에게만 먼저 열어 보세요.\n\n넘기면 가면마다 해 볼 수 있는 것과, 가면이 편한 날과 답답한 날이 있는 이유까지 나와요.\n\n나는 몇 번인가요? 숫자로 답해 주세요.\n맞다 싶으면 ♥, 떠오르는 사람이 있으면 공유하거나 태그해 주세요.\n\n오늘 밤 자정까지, 10월 얼리버드로 2027 신년 감정서를 14,900원부터 만나 보세요 → zaoseon.com/ny\n\n사주 하나, 별자리 하나만 보면 한쪽 이야기만 듣게 돼요.\n자오선은 여섯 가지 운명학을 겹쳐서, 같은 답이 나오는 곳을 찾아요.\n이 내용은 재미로, 그리고 나를 돌아보는 계기로 봐 주세요.\n\n#자미두수 #할로윈 #가면 #별자리 #운세",
-  "note": "[10/8 교체 완료] 대표 승인에 따라 Metricool 인스타 글 하나만 바꿨어요(새 예약 id 390832634, 같은 시각 스레드 글은 그대로, 다시 읽어 확인). 되돌리려면 old의 media_source·text로 같은 uuid에 다시 올리면 돼요(수정하면 id가 바뀌어 uuid로 찾아요). 맨 위 그림은 지금 예약된 3장(위)과 7장(아래)을 나란히 본 거예요. 대표님이 확정하신 표준(7장, 원고 단계는 전부, 마무리 하단 R11 문구)에 맞춘 거예요. 짝 글은 n46(낱말 겹침 84%)예요. 1~3장(표지·가면 모양·겹쳐 보면)은 지금 예약 이미지와 모두 픽셀까지 같아요(표지 질문이 이미 '쓰나요?'라 R26로 고칠 곳이 없었어요). 앞 두 장이 원고의 세 가면 모양과 '거짓이 아니에요·한 사람에게 먼저'를 이미 담고 있어서 4~6장은 카드에 아직 없는 원고 문장만 썼어요: 4장은 원고 3번의 다른 대처 둘(분위기 가면 '편한 자리에선 벗어도 돼요', 역할 가면 '내려놓는 시간을 따로 두세요')과 FAQ '오래 쓰면 지칠 수 있어요', 5장은 원고 4번(자미두수는 바탕과 드러나는 모습의 거리, 별자리는 표현하는 방식 — 폭 한계 때문에 '번갈아 와요'를 '번갈아요'로 줄였어요), 6장 조언은 원고 5번 3번(가면을 쓰는 자리와 벗는 자리 나눠 적기)이에요. 4장은 처음 '벗어요'로 단정형으로 썼다가 원고의 '벗어도 돼요' 어감을 살려 다시 고쳤어요. 가면은 마음이 무거운 소재라 트렌디 표현은 안 썼어요. **캡션에는 '오늘 밤 자정까지 10월 얼리버드… 14,900원부터 → zaoseon.com/ny' 마감 광고 문구가 있어요. 한 글자도 안 바꿨어요.** R26 위반 '나는 몇 번이에요?'만 '몇 번인가요?'로 고치고 카드 내용을 알리는 '넘기면' 줄을 넣었어요. 교체는 인스타 글 하나(예약 id 387605862)만 하고 같은 시각 스레드 글은 건드리지 않아요. 승인 전에는 예약을 바꾸지 않아요.",
+  "note": "[10/8 교체 완료] 대표 승인에 따라 Metricool 인스타 글 하나만 바꿨어요(새 예약 id 390832634, 같은 시각 스레드 글은 그대로, 다시 읽어 확인). 되돌리려면 old의 media_source·text로 같은 uuid에 다시 올리면 돼요(수정하면 id가 바뀌어 uuid로 찾아요). 맨 위 그림은 지금 예약된 3장(위)과 7장(아래)을 나란히 본 거예요. 대표님이 확정하신 표준(7장, 원고 단계는 전부, 마무리 하단 R11 문구)에 맞춘 거예요. 짝 글은 n46(낱말 겹침 84%)예요. 1~3장(표지·가면 모양·겹쳐 보면)은 지금 예약 이미지와 모두 픽셀까지 같아요(표지 질문이 이미 '쓰나요?'라 R26로 고칠 곳이 없었어요). 앞 두 장이 원고의 세 가면 모양과 '거짓이 아니에요·한 사람에게 먼저'를 이미 담고 있어서 4~6장은 카드에 아직 없는 원고 문장만 썼어요: 4장은 원고 3번의 다른 대처 둘(분위기 가면 '편한 자리에선 벗어도 돼요', 역할 가면 '내려놓는 시간을 따로 두세요')과 FAQ '오래 쓰면 지칠 수 있어요', 5장은 원고 4번(자미두수는 바탕과 드러나는 모습의 거리, 별자리는 표현하는 방식 — 폭 한계 때문에 '번갈아 와요'를 '번갈아요'로 줄였어요), 6장 조언은 원고 5번 3번(가면을 쓰는 자리와 벗는 자리 나눠 적기)이에요. 4장은 처음 '벗어요'로 단정형으로 썼다가 원고의 '벗어도 돼요' 어감을 살려 다시 고쳤어요. 가면은 마음이 무거운 소재라 트렌디 표현은 안 썼어요. **캡션에는 '오늘 밤 자정까지 10월 얼리버드… 14,900원부터 → zaoseon.com/ny' 마감 광고 문구가 있어요. 한 글자도 안 바꿨어요.** R26 위반 '나는 몇 번이에요?'만 '몇 번인가요?'로 고치고 카드 내용을 알리는 '넘기면' 줄을 넣었어요. 교체는 인스타 글 하나(예약 id 387605862)만 하고 같은 시각 스레드 글은 건드리지 않아요. 승인 전에는 예약을 바꾸지 않아요. (10/10 R32 ④: R46·R47 방식으로 다시 만들어 Metricool 인스타 글 이미지 교체 완료. 빌더 2026-w44night7/build.py, 검사 0건, 글 그대로)",
   "checks": [
    "7장 구조와 4장(가면마다)·5장(편한 날 답답한 날)·6장(쓰는 자리와 벗는 자리)이 괜찮은지",
    "캡션의 마감 광고 문구를 그대로 둔 게 맞는지(10/31 밤 자정까지)",
