@@ -149,6 +149,18 @@ def wrap(inner, limit, slack=0.0, soft=None):
     if soft and len(out) == 1 and W(0, n - 1) > SING: out = _dp(toks, 0, n - 1, LIM, True)
     if len(out) > 1 and W(*out[-1]) < 4.5:                                      # 끝줄에 두세 글자만 남으면 한 줄 너비를 조금 늘려 다시
         out = _dp(toks, 0, n - 1, LIM)             # 10/8: 한 줄 폭을 늘리지 않고(대표 폰 기준 18.0) 전체를 다시 고르게 나눈다
+    if len(out) == 2:                                # 10/10 대표: 두 줄이면 두 줄의 길이가 비슷하게(쉼표 뒤 끊기는 그대로 둔다). 짧은 줄이 긴 줄의 55% 아래이면 줄 폭 차이가 가장 작은 자리(와·과·의·한 글자 낱말·꾸밈말 뒤는 제외)로 다시 끊는다
+        (a, b), (c, d) = out; w1, w2 = W(a, b), W(c, d)
+        if not toks[b]["p"].rstrip().endswith((",", "，")) and min(w1, w2) / max(w1, w2) < .55:
+            ins2 = _inside(toks); best_k, best_c = None, None
+            for k in range(a, d):
+                if ins2[k] or W(a, k) > LIM or W(k + 1, d) > LIM: continue
+                pk = bpen(toks[k], k)
+                if pk >= 10: continue
+                if pk >= 9 and not re.search(r"(은|는|이|가|을|를|에|로|도|만|서|고|며|면|게|지|요|다|네|데|까|쯤|라)$|\d+(일|분|시|월|년|번|개|명)$|^(모두|함께|먼저|다시|바로|이미|항상|자주|가끔|아직|특히|보통|그래서|하지만|그리고|또는|그런데|가장|많이|조금|훨씬|서로|오히려|조금씩|천천히|빨리)$", toks[k]["p"].rstrip(".!?")): continue     # 낱말 덩어리(태양|별자리, 시간|단위)는 쪼개지 않는다
+                c2 = abs(W(a, k) - W(k + 1, d)) + .6 * pk
+                if best_c is None or c2 < best_c: best_k, best_c = k, c2
+            if best_k is not None and best_k != b and abs(W(a, best_k) - W(best_k + 1, d)) + 2 < abs(w1 - w2): out = [(a, best_k), (best_k + 1, d)]
     return [_line(toks, i, j) for i, j in out]
 
 def _tail(lines):
