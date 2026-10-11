@@ -89,8 +89,8 @@ def A4(c):
         d.rounded_rectangle((70, y + 36, 70 + max(10, w), y + 100), radius=32, fill=(col[0], col[1], col[2], a)); d.text((70 + max(10, w) + 20, y + 68), f"{v * g:.1f}%", font=f56, fill=(255, 255, 255, a), anchor="lm")
     blit(c.fr, im, 0, 480, 1.0); fx_slide(c, "무작위 3,000명의 사주를 계산했어요", 1295, 2.4, 44, DIM, dirn=1)
 def A5(c):
-    H = text_h("다르다고\n틀린 게 아니에요", 100, 820, 1.3) + 40 + text_h("같은 말은 타고난 결이에요.\n다른 말은 내가 고를 수 있는 곳이에요.", 52, 840, 1.4); y0 = MID - H / 2
-    y = fx_zoom(c, "다르다고\n틀린 게 아니에요", y0, .1, 100, GOLD); fx_slide(c, "같은 말은 타고난 결이에요.\n다른 말은 내가 고를 수 있는 곳이에요.", y + 40, 1.0, 52, DIM, maxw=840, lh=1.4, dirn=1)
+    H = text_h("다르다고\n틀린 게 아니에요", 100, 820, 1.3) + 40 + text_h("같은 말은 타고난 성격이에요.\n다른 말은 내가 고를 수 있는 곳이에요.", 52, 840, 1.4); y0 = MID - H / 2
+    y = fx_zoom(c, "다르다고\n틀린 게 아니에요", y0, .1, 100, GOLD); fx_slide(c, "같은 말은 타고난 성격이에요.\n다른 말은 내가 고를 수 있는 곳이에요.", y + 40, 1.0, 52, DIM, maxw=840, lh=1.4, dirn=1)
 def A6(c):
     H = text_h("나는 어느 쪽일까요?", 100, 820, 1.3) + 48 + int(72 * 1.3); y0 = MID - H / 2
     y = fx_slide(c, "나는 어느 쪽일까요?", y0, .1, 100, dirn=-1); fx_slide(c, "댓글로 알려 주세요", y + 48, .6, 72, GOLD, dirn=1)
@@ -137,7 +137,7 @@ def B2(c):
     p = e_out(cl((c.t - .2) / 1.6)); gap = 150 - 280 * p   # 150 → -130 : 두 패널이 만나 겹친다
     fx_wipe(c, "같은 답이 나오면", 490, .05, 60, DIM); panels(c, gap, tint_same=cl((c.t - 1.4) / .6))
     g = e_out(cl((c.t - 1.9) / .5))
-    if g > 0: fx_zoom(c, "타고난 결", PY + PH + 50, 2.0, 96, GOLD)
+    if g > 0: fx_zoom(c, "타고난 성격", PY + PH + 50, 2.0, 96, GOLD)
 def B3(c):
     p = e_out(cl((c.t - .2) / 1.4)); gap = -130 + 280 * p   # 겹침 → 간격 150 : 갈라진다
     fx_wipe(c, "답이 갈리면", 490, .05, 60, DIM); panels(c, gap, tint_same=0.0)
@@ -162,8 +162,8 @@ def B4(c):
         blit(c.fr, im2, 0, 480, 1.0)
     fx_wipe(c, "같은 답과 다른 답을 나눠 봐요", 1215, 2.9, 52, GOLD, maxw=840)
 def B5(c):
-    H = text_h("같은 답은 결,\n다른 답은 선택", 108, 820, 1.3) + 40 + text_h("모순처럼 보여도\n그 사이에 내가 서 있어요", 54, 820, 1.4); y0 = MID - H / 2
-    y = fx_wipe(c, "같은 답은 결,\n다른 답은 선택", y0, .1, 108, GOLD); fx_slide(c, "모순처럼 보여도\n그 사이에 내가 서 있어요", y + 40, 1.1, 54, DIM, dirn=1)
+    H = text_h("같은 답은 성격,\n다른 답은 선택", 108, 820, 1.3) + 40 + text_h("모순처럼 보여도\n그 사이에 내가 서 있어요", 54, 820, 1.4); y0 = MID - H / 2
+    y = fx_wipe(c, "같은 답은 성격,\n다른 답은 선택", y0, .1, 108, GOLD); fx_slide(c, "모순처럼 보여도\n그 사이에 내가 서 있어요", y + 40, 1.1, 54, DIM, dirn=1)
 def B6(c):
     """마무리 ②: 댓글 질문 크게 + 팔로우 한 줄 + 프로필 링크 한 줄 + 하단 선택(동양? 서양?)"""
     Htot = text_h("어느 쪽을\n더 믿으세요?", 118, 830, 1.25) + 44 + int(60 * 1.3) + 26 + int(46 * 1.4) * 2 + 48 + 110; y = MID - 24 - Htot / 2
@@ -226,7 +226,7 @@ def C2(c):
     blit(c.fr, tree_layer(.32 + .68 * e_out(cl((c.t - .2) / 2.8))), 0, 480, 1.0)
 def C3(c):
     watermark(c, "甲")
-    y = fx_zoom(c, "책임지는\n사랑을 해요", 490, .05, 80); fx_slide(c, "표현은 서툴러도 한번 정하면 결을 오래 지켜요.\n마음은 말로 한 번씩 꺼내 주세요", y + 16, 1.0, 44, DIM, maxw=840, lh=1.4, dirn=1)
+    y = fx_zoom(c, "책임지는\n사랑을 해요", 490, .05, 80); fx_slide(c, "표현은 서툴러도 한번 정하면 마음을 오래 지켜요.\n마음은 말로 한 번씩 꺼내 주세요", y + 16, 1.0, 44, DIM, maxw=840, lh=1.4, dirn=1)
     blit(c.fr, tree_layer(1.0, sway=.06 * math.sin(c.t * 2), roots=e_out(cl((c.t - .4) / 1.4))), 0, 480, 1.0)
 def C4(c):
     watermark(c, "甲")

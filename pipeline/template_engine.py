@@ -175,7 +175,7 @@ def t_explain(ch, state, texts=None):
     bx, by, bhh = L["badge"]; bwid = font(K.P["gm_bold"], int(38 * u)).getlength("정월") + 56 * u
     p.add("정월 배지", (bx, by, bx + bwid, by + bhh), f'<div style="position:absolute;left:{bx:.0f}px;top:{by:.0f}px;width:{bwid:.0f}px;height:{bhh:.0f}px;border-radius:{bhh:.0f}px;background:{GOLD};color:#17102b;display:flex;align-items:center;justify-content:center;font-family:{K.D};font-weight:900;font-size:{int(38 * u)}px;line-height:1">정월</div>')
     p.add("꼬리", (bl - 30, bt + bh / 2 - 26, bl, bt + bh / 2 + 26), f'<div style="position:absolute;left:{bl - 30:.0f}px;top:{bt + bh / 2 - 26:.0f}px;width:0;height:0;border:26px solid transparent;border-right:34px solid {GOLD};border-left:0"></div><div style="position:absolute;left:{bl - 26:.0f}px;top:{bt + bh / 2 - 21:.0f}px;width:0;height:0;border:21px solid transparent;border-right:29px solid #151f55;border-left:0"></div>')
-    btop, bfs = L["banner"]; bt_txt = "같은 말 = 타고난 결" if state == "same" else "다른 말 = 내가 고를 곳"; r = fit_line(bt_txt, p.title_path(), 2 * L["half"], bfs * 1.2, bfs, 40)
+    btop, bfs = L["banner"]; bt_txt = "같은 말 = 타고난 성격" if state == "same" else "다른 말 = 내가 고를 곳"; r = fit_line(bt_txt, p.title_path(), 2 * L["half"], bfs * 1.2, bfs, 40)
     p.add("배너", (cx - r["w"] / 2, btop, cx + r["w"] / 2, btop + r["h"]), f'<div style="position:absolute;left:0;top:{btop:.0f}px;width:{p.c["W"]}px;text-align:center;font-family:{K.D};font-weight:900;font-size:{r["size"]}px;line-height:1.1;color:{GOLD};white-space:nowrap">{bt_txt}</div>')
     ttop, td = L["tok"]; c0, c1 = L["tok_c0"], L["tok_c1"]; off = td * .28
     pk = c0 - td / 2 - off + (off if state == "diff" else 0); bk = (c0 - td / 2 + off) if state == "same" else (c1 - td / 2)

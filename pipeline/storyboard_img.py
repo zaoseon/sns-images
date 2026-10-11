@@ -9,7 +9,7 @@ SCENES = [("1 훅", "박자 0~4", "금빛 입자 120~200개가 깊이를 두고 
           ("2 질문", "박자 4~10", "입자가 여섯 무리로 나뉨", "스태거 · 이징", "1 아니다  2 그럴 수도  3 그렇다"),
           ("3 모임", "박자 10~18", "입자가 흘러 차트 고리가 됨", "모핑 · 비트 싱크", "(글자 없음, 음악에 맞춰 합쳐짐)"),
           ("4 숫자", "박자 18~26", "사주 무리만 따로 떨어짐", "카운트업", "100명 중 약 37명은 사주만 혼자 달랐어요"),
-          ("5 결과", "박자 26~30", "차트 완성, 빛이 퍼짐", "홀드", "같은 말은 타고난 결, 다른 말은 내가 고를 곳"),
+          ("5 결과", "박자 26~30", "차트 완성, 빛이 퍼짐", "홀드", "같은 말은 타고난 성격, 다른 말은 내가 고를 곳"),
           ("6 공유", "박자 30~34", "차트가 작아지고 문구 등장", "스태거", "떠오르는 사람에게 보내 보세요")]
 def card(i, s):
     return f'''<div class=card><div class=th id=t{i}><canvas width=300 height=533></canvas></div>
@@ -43,7 +43,7 @@ function draw(i){{const c=document.querySelector('#t'+i+' canvas'),x=c.getContex
  if(i==1){{const cs=[[70,150],[230,150],[70,260],[230,260],[70,370],[230,370]];cs.forEach((p,k)=>{{for(let j=0;j<14;j++)dot(p[0]+(rnd()-.5)*60,p[1]+(rnd()-.5)*60,COL[k],3)}});[['1',90],['2',150],['3',210]].forEach((p,k)=>{{x.fillStyle=GOLD;x.beginPath();x.arc(p[1],480,18,0,7);x.fill();x.fillStyle='#111';x.font='900 20px sans-serif';x.fillText(p[0],p[1],487)}})}}
  if(i==2){{ring(72,150,266,105);ring(48,150,266,60,0.3)}}
  if(i==3){{ring(60,150,230,95);for(let k=0;k<14;k++)dot(240+(rnd()-.5)*40,410+(rnd()-.5)*40,'#ff8a73',3.4);x.fillStyle='#ff8a73';x.font='900 40px sans-serif';x.textAlign='center';x.fillText('약 37명',150,490)}}
- if(i==4){{const g=x.createRadialGradient(150,266,10,150,266,150);g.addColorStop(0,'rgba(231,200,141,.55)');g.addColorStop(1,'rgba(231,200,141,0)');x.fillStyle=g;x.fillRect(0,0,300,533);ring(72,150,230,100);x.fillStyle='#fff';x.font='900 20px sans-serif';x.textAlign='center';x.fillText('같은 말은 타고난 결',150,420);x.fillText('다른 말은 내가 고를 곳',150,452)}}
+ if(i==4){{const g=x.createRadialGradient(150,266,10,150,266,150);g.addColorStop(0,'rgba(231,200,141,.55)');g.addColorStop(1,'rgba(231,200,141,0)');x.fillStyle=g;x.fillRect(0,0,300,533);ring(72,150,230,100);x.fillStyle='#fff';x.font='900 20px sans-serif';x.textAlign='center';x.fillText('같은 말은 타고난 성격',150,420);x.fillText('다른 말은 내가 고를 곳',150,452)}}
  if(i==5){{ring(40,150,150,60);x.fillStyle='#fff';x.font='900 24px sans-serif';x.textAlign='center';x.fillText('떠오르는 사람에게',150,330);x.fillText('보내 보세요',150,366)}}
 }}
 img.onload=()=>{{for(let i=0;i<6;i++)draw(i);document.title='ok'}};

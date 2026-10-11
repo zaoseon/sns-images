@@ -13,7 +13,7 @@ SCENES = [("1 훅", "박자 0~4", "금빛 입자 120~200개가 깊이를 두고 
           ("2 질문", "박자 4~10", "입자가 여섯 무리로 나뉘어요", "무리가 차례로 등장, 강한 ease-out", "1 아니다  2 그럴 수도  3 그렇다"),
           ("3 모임", "박자 10~18", "입자가 흘러 차트 고리가 돼요", "모핑, 음악 박자에 맞춰 합쳐짐", "(글자 없음)"),
           ("4 숫자", "박자 18~26", "사주 무리만 따로 떨어져요", "카운트업: 감속해서 올라가고 끝에서 살짝 팝", "100명 중 약 37명은 사주만 혼자 달랐어요"),
-          ("5 결과", "박자 26~30", "차트가 완성되고 빛이 퍼져요", "한 박 가만히 머물기", "같은 말은 타고난 결, 다른 말은 내가 고를 곳"),
+          ("5 결과", "박자 26~30", "차트가 완성되고 빛이 퍼져요", "한 박 가만히 머물기", "같은 말은 타고난 성격, 다른 말은 내가 고를 곳"),
           ("6 공유", "박자 30~34", "차트가 작아지고 문구가 올라와요", "차례로 등장", "떠오르는 사람에게 보내 보세요")]
 BASE = f'''<!doctype html><meta charset=utf-8><style>{K.css('gm')}
 html,body{{margin:0;width:1080px;height:1350px;background:#0b1020;color:#fff;font-family:{K.B};font-weight:800;word-break:keep-all;line-break:strict;overflow:hidden;position:relative}}
@@ -39,7 +39,7 @@ function draw(i){{const c=document.getElementById('cv'),x=c.getContext('2d');x.s
  if(i==1){{[[70,150],[230,150],[70,260],[230,260],[70,370],[230,370]].forEach((p,k)=>{{for(let j=0;j<14;j++)dot(p[0]+(rnd()-.5)*60,p[1]+(rnd()-.5)*60,COL[k],3)}});[['1',90],['2',150],['3',210]].forEach(p=>{{x.fillStyle=GOLD;x.beginPath();x.arc(p[1],480,18,0,7);x.fill();x.fillStyle='#111';x.font='900 20px sans-serif';x.fillText(p[0],p[1],487)}})}}
  if(i==2){{ring(72,150,266,105);ring(48,150,266,60,0.3)}}
  if(i==3){{ring(60,150,230,95);for(let k=0;k<14;k++)dot(240+(rnd()-.5)*40,410+(rnd()-.5)*40,'#ff8a73',3.4);x.fillStyle='#ff8a73';x.font='900 40px sans-serif';x.fillText('약 37명',150,490)}}
- if(i==4){{const g=x.createRadialGradient(150,266,10,150,266,150);g.addColorStop(0,'rgba(231,200,141,.55)');g.addColorStop(1,'rgba(231,200,141,0)');x.fillStyle=g;x.fillRect(0,0,300,533);ring(72,150,230,100);x.fillStyle='#fff';x.font='900 20px sans-serif';x.fillText('같은 말은 타고난 결',150,420);x.fillText('다른 말은 내가 고를 곳',150,452)}}
+ if(i==4){{const g=x.createRadialGradient(150,266,10,150,266,150);g.addColorStop(0,'rgba(231,200,141,.55)');g.addColorStop(1,'rgba(231,200,141,0)');x.fillStyle=g;x.fillRect(0,0,300,533);ring(72,150,230,100);x.fillStyle='#fff';x.font='900 20px sans-serif';x.fillText('같은 말은 타고난 성격',150,420);x.fillText('다른 말은 내가 고를 곳',150,452)}}
  if(i==5){{ring(40,150,150,60);x.fillStyle='#fff';x.font='900 24px sans-serif';x.fillText('떠오르는 사람에게',150,330);x.fillText('보내 보세요',150,366);
    x.fillStyle='#e7c88d';x.beginPath();x.moveTo(190,420);x.lineTo(250,445);x.lineTo(205,455);x.lineTo(200,480);x.lineTo(185,458);x.lineTo(170,450);x.closePath();x.fill()}}
  if(i==9){{const g=x.createRadialGradient(150,300,10,150,300,220);g.addColorStop(0,'rgba(231,200,141,.35)');g.addColorStop(1,'rgba(231,200,141,0)');x.fillStyle=g;x.fillRect(0,0,300,533);
