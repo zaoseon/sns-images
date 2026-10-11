@@ -78,5 +78,9 @@ def check(t):
     if len(tg) != 5 or "#사주" not in tg or "#운세" not in tg: bad.append("F")
     if t.count("재미와 자기 이해를 위한 참고로") + t.count("재미로, 그리고 나를 돌아보는") > 1: bad.append("I")
     if sum(1 for l in t.split("\n") if "♥" in l) > 1: bad.append("H")
+    body = [l for l in t.split("\n") if l.strip() and not l.startswith("#")]
+    if any(l.rstrip().endswith((",", "을", "를", "은", "는", "과", "와")) for l in body): bad.append("J")      # 문장이 다음 줄로 이어짐(의미 단위 위반)
+    if re.search(r"이라면 이야기예요|안쪽 생각|감각이 큰 사람|한 줄로는 '", t): bad.append("K")                   # 어색한 말(R26)
+    if any(len(l) > 60 for l in body): bad.append("L")
     if any(len(l) > 70 for l in t.split("\n")): bad.append("G")
     return bad
