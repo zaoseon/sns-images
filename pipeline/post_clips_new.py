@@ -4,6 +4,7 @@
 import os, sys, re, ast, glob, json, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, "..")); sys.path.insert(0, HERE)
 from images_to_clip import images_to_clip
+from post_clip_caps import CAPS, SKIP, FIRST
 IMG = os.path.join(ROOT, "naver", "img"); STY = [("상큼 팝", "A"), ("발랄 우쿨렐레", "D"), ("경쾌 신스팝", "G"), ("통통 마림바", "F")]
 def lit(x):
     try: return ast.literal_eval(x)
@@ -32,6 +33,7 @@ def short(s, lim=34):
         else: break
     return cur or s[:lim]
 def captions(no, A, title):
+    if no in CAPS: return list(CAPS[no])
     a = A.get(no)
     if a and a["hook"] and a["summary"]:
         sm = [clean(x) for x in a["summary"]]; one = next((x for x in sm if "한 줄 요약" in x), sm[0]); three = next((x for x in sm if "세 가지" in x), "")
@@ -52,19 +54,19 @@ def build(no, A, pages):
 def sentence(x):
     x = re.sub(r"^[^\w가-힣]*(한 줄 요약|해 볼 것|세 가지)\s*:\s*", "", clean(x)); return x if x.endswith((".", "!", "?")) else x + "."
 def entry(no, A, pages, date):
-    a = A.get(no) or {}; title = pages[f"n{no}"]["title"]; caps = captions(no, A, title); sm = [clean(x) for x in (a.get("summary") or [])]
+    a = A.get(no) or {}; title = pages[f"n{no}"]["title"]; caps = captions(no, A, title); fl = lambda x: x.replace("\n", " "); sm = [clean(x) for x in (a.get("summary") or [])]
     one = next((sentence(x) for x in sm if "한 줄 요약" in x), ""); todo = next((sentence(x) for x in sm if "해 볼 것" in x), "")
     if not one:
-        m = re.match(r"(.+?띠 운세), (.+?) 힘 쓸", title); one = f"{m.group(1)}, {m.group(2)}." if m else sentence(title); todo = "힘 쓸 달과 아낄 달을 표로 정리했어요."
+        m = re.match(r"(.+?띠 운세), (.+?) 힘 쓸", title); one = f"{m.group(1)}, {m.group(2)}." if m else sentence(title); todo = "힘 쓸 달과 아낄 달을 표로 정리했어요. 힘 쓸 달 하나에 표시해 두세요."
     tags = [t.replace(" ", "") for t in (a.get("tags") or [])][:4]
     if not tags:
         mm = re.search(r"(\S+?띠) 운세", title); z = mm.group(1) if mm else "띠"; tags = ["사주", "2027년운세", z + "운세", "띠별운세"]
     tags = (tags + ["자오선"]) if "자오선" not in tags else tags
-    return dict(date=date, id=f"n{no}-p1", post=f"n{no}", type="게시물형(블로그 이미지+캡션)", kicker="글 요약 · " + (a.get("hook") or [caps[0]])[0].rstrip(",").strip(), hook=caps[0], thumbs=[caps[1], caps[2], caps[3].replace("이번에 해 볼 것: ", "")[:26]],
-                scenes={"12": [dict(kind="hook", dur=2.5, text=caps[0])]}, desc=" ".join(x for x in (one, todo, "블로그 스티커를 누르면 전체 풀이 글로 이어져요.") if x), tags=tags)
+    return dict(date=date, id=f"n{no}-p1", post=f"n{no}", type="게시물형(블로그 이미지+캡션)", kicker="글 요약 · " + fl(caps[0]), hook=fl(caps[0]), thumbs=[fl(caps[1]), fl(caps[2]), fl(caps[3])],
+                scenes={"12": [dict(kind="hook", dur=2.5, text=fl(caps[0]))]}, desc=" ".join(x for x in (one, todo, "블로그 스티커를 누르면 전체 풀이 글로 이어져요.") if x), tags=tags)
 def register(nos=None):
-    pages = json.load(open(os.path.join(ROOT, "naver", "pages.json"), encoding="utf-8")); A = art_args(); nos = nos or [n for n in range(47, 80) if f"n{n}" in pages]
-    nos = sorted(nos, key=lambda n: pages[f"n{n}"]["dt"]); d0 = __import__("datetime").date(2026, 11, 1); res = []
+    pages = json.load(open(os.path.join(ROOT, "naver", "pages.json"), encoding="utf-8")); A = art_args(); nos = [n for n in (nos or range(47, 80)) if f"n{n}" in pages and n not in SKIP]
+    rest = sorted([n for n in nos if n not in FIRST], key=lambda n: pages[f"n{n}"]["dt"]); nos = rest[:1] + [n for n in FIRST if n in nos] + rest[1:]; d0 = __import__("datetime").date(2026, 11, 1); res = []
     for k, n in enumerate(nos):
         d = d0 + __import__("datetime").timedelta(days=k); assert d.isoformat() > pages[f"n{n}"]["dt"][:10], n
         res.append(entry(n, A, pages, d.isoformat()))

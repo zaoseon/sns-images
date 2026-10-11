@@ -8,6 +8,8 @@ import reel_music as RM
 W, H = 1080, 1920; FG_W = 1000; TOP = 330; XF = 0.35; FPS = 30
 CAP_FONT = "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc"
 def wrap_cap(d, text, f, maxw):
+    if "\n" in text:   # 의미 단위로 직접 끊은 자막: 줄 그대로 쓰고 너무 긴 줄만 다시 나눈다
+        return [x for ln in text.split("\n") for x in wrap_cap(d, ln, f, maxw)]
     ls, cur = [], ""
     for wd in text.split():
         t = (cur + " " + wd).strip()
