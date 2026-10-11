@@ -29,6 +29,7 @@ def rebuild(text):
         if not ln.strip(): body.append(""); continue
         if BRAND[0][:12] in ln or "자오선은 여섯 가지 운명학을 겹쳐서" in ln: continue
         if "이 내용은 재미로" in ln and "※" not in ln: continue
+        if ln.strip() == "재미와 자기 이해를 위한 참고로 봐 주세요.": continue
         keep = []
         for s in sents(ln):
             m = re.search(r"내일 저녁: ([^.]+)\.", s)
@@ -75,5 +76,7 @@ def check(t):
     if "재미로" not in t: bad.append("E")
     tg = re.findall(r"(?:^|\s)(#[^\s#]+)", t.split("\n")[-1]);
     if len(tg) != 5 or "#사주" not in tg or "#운세" not in tg: bad.append("F")
+    if t.count("재미와 자기 이해를 위한 참고로") + t.count("재미로, 그리고 나를 돌아보는") > 1: bad.append("I")
+    if sum(1 for l in t.split("\n") if "♥" in l) > 1: bad.append("H")
     if any(len(l) > 70 for l in t.split("\n")): bad.append("G")
     return bad
