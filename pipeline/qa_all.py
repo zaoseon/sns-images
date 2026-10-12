@@ -30,6 +30,8 @@ def text_checks():
         if not os.path.exists(mp): bad.append((c["id"], "클립 영상 없음(렌더 필요)"))
         else: bad += [(c["id"], x) for x in CFR.verify(c, mp)[0]]
     out["네이버 클립(릴스 재활용): 설명 300자·태그 5·금지어·소리 없음·1080x1920"] = len(bad)
+    import sub_rules as SR   # 대표 10/13: 릴스 자막 규칙 R60~R67 (소스 장면표에서 수집, 예약본은 완화 기준·STRICT_IDS 영상은 엄격 기준). 걸리면 해당 영상을 고쳐 다시 렌더
+    out["릴스 자막(R60 줄 수·R61 줄 길이·R63 컷 길이·R64 덩어리 수·R65 겹침)"] = sum(len(v) for v in SR.run(gate=True).values())
     import banned_words_audit as BW   # 대표 10/12 23:15: '상담' 계열 금지(예외 심리상담사). 소스 전수(두 저장소)·앱 대기 캡션·네이버 미발행 원고
     out["금지어 '상담'(두 저장소 소스·앱 대기 캡션·네이버 미발행 원고)"] = len(BW.scan())
     if "--images" in sys.argv or "--videos" in sys.argv: out["금지어 '상담' 그림 속 글자(카드 그림 OCR, 느림)"] = len(BW.scan_images())

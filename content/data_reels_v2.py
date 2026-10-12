@@ -192,7 +192,7 @@ def reel_pair():
 def reel_star():
     d, _ = D["star"]; V = lambda foc: (lambda c: v_tiles12(c, .3, foc))
     return [(2.8, hook_scene(d["coverTitle"], d["coverSub"], lambda c: v_tiles12(c, .8, (), cy=1100, a=.6, done=True), "wipe")),
-            (4.2, stat_scene("가장 자주", "염소·황소자리 23%", GOLD, "사주와 같은 방향을 가장 자주 가리켰어요", V(("염소", "황소")), "zoom", "slide")),
+            (4.2, stat_scene("가장 자주", "염소·황소자리 23%", GOLD, "사주와 같은 방향을\n가장 자주 가리켰어요", V(("염소", "황소")), "zoom", "slide")),
             (4.2, stat_scene("가장 드물게", "천칭자리 5.6%", CORAL, "물고기·전갈자리도 6~7%예요", V(("천칭", "물고기", "전갈")), "slide", "wipe")),
             (4.2, stat_scene("별자리마다 크게 달라요", "전체 평균 13.5%", WHITE, "태양 별자리 기준이에요", V(()), "wipe", "slide")),
             (3.4, adv_scene(d["advice"][0], d["advice"][1], "slide")), (2.2, cq_scene(d["ctaQ"])), (3.4, end_char([[("내 ", WHITE), ("별자리", GOLD), ("는", WHITE)], [("어디쯤일까요?", WHITE)]], "v3_ponytail"))]
@@ -224,7 +224,7 @@ def reel_harak():
     d, _ = D["harak"]; G1 = {14: ("坤", GOLD)}; G2 = {14: ("坤", GOLD), 33: ("剝", CORAL)}
     return [(2.8, hook_scene(d["coverTitle"], d["coverSub"], lambda c: v_grid60(c, .6, {}, cy=1100, a=.6, done=True), "zoom")),
             (4.2, stat_scene("가장 자주 나온 괘", "곤괘(坤) 6.2%", GOLD, "고르게 나뉘면 1.7%예요", lambda c: v_grid60(c, .3, G1), "wipe", "slide")),
-            (4.2, stat_scene("곤괘 다음으로 흔했어요", "박괘(剝) 4.3%", CORAL, "곤괘 다음으로 흔했어요", lambda c: v_grid60(c, .2, G2, done=True), "slide", "wipe")),
+            (4.2, stat_scene("두 번째로 자주 나온 괘", "박괘(剝) 4.3%", CORAL, "곤괘 다음으로 흔했어요", lambda c: v_grid60(c, .2, G2, done=True), "slide", "wipe")),
             (4.2, stat_scene("3,000명에게서 나온", "괘 모양 60가지", WHITE, "한 가지도 빠짐없이 나왔어요", lambda c: v_grid60(c, .3, {}, pulse=True), "zoom", "slide")),
             (3.4, adv_scene(d["advice"][0], d["advice"][1], "wipe")), (2.2, cq_scene(d["ctaQ"], "프로필 링크 > 감정서에서 확인")), (3.4, end_char([[("내 ", WHITE), ("하락이수 괘", GOLD), ("는", WHITE)], [("무엇일까요?", WHITE)]], "v7_hanbok"))]
 def reel_alone():
