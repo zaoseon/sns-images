@@ -85,12 +85,54 @@ def apply_psy(pid, title, tags, body):
     """10/12 심리 키워드 반영: psy_map.json에 있는 글이면 제목·태그를 바꾸고 '이번에 해 볼 것' 앞에 '심리학으로 읽으면' 단락을 넣는다(두 번 넣지 않음)."""
     m = _PSY.get(pid)
     if not m: return title, tags, body
-    tags = (m.get("tags_front", []) + [t for t in tags if t not in m.get("tags_front", [])])[:10]
+    tags = _brand_tag((m.get("tags_front", []) + [t for t in tags if t not in m.get("tags_front", [])])[:10])   # 10/12: 앞 태그가 늘어도 '자오선'은 남긴다
     if "심리학으로 읽으면" not in body:
         blk = '<p>&nbsp;</p><p>🧠 <b>심리학으로 읽으면</b></p>' + "".join(f"<p>{l}</p>" for l in m["block"])
         mm = re.search(r'<p>&nbsp;</p><p><b>\d+\. 이번에 해 볼 것</b></p>', body)
         body = body[:mm.start()] + blk + body[mm.start():] if mm else body
     return m.get("title", title), tags, body
+
+def _brand_tag(tags):
+    """10/12: 태그 10개 안에 '자오선'이 꼭 있게 한다(정본: 블로그 태그는 '자오선'만 고정). 없으면 맨 뒤 태그를 '자오선'으로 바꾼다."""
+    tags = list(tags)[:10]
+    if "자오선" not in tags: tags = (tags[:9] + ["자오선"]) if len(tags) >= 10 else tags + ["자오선"]
+    return tags
+
+_AUXSTART = re.compile(r"^(싶|있|않|못|수$|줄$|보|주$|주고|지$|것$|거$)")
+def _mbreak(text, limit=17.6):
+    """코칭 블록 문장을 모바일 의미 단위 줄로 직접 끊는다(<br>로 이은 문자열). format_body의 DP를 쓰되 '하고 | 싶은'·'할 | 수 있는'처럼
+    보조 낱말 앞에서는 끊지 않는다. 문장마다 줄을 새로 시작한다."""
+    out = []
+    for sent in re.split(r"(?<=[.!?])\s+", text.strip()):
+        toks = FB.tokenize(sent)
+        if not toks: continue
+        if FB.width(sent) <= limit: out.append(sent); continue
+        orig = FB.bpen
+        def bp(tok, k, _t=toks, _o=orig):
+            v = _o(tok, k)
+            if k + 1 < len(_t) and _AUXSTART.match(_t[k + 1]["p"].strip()): v += 12
+            return v
+        FB.bpen = bp
+        try: spans = FB._dp(toks, 0, len(toks) - 1, limit)
+        finally: FB.bpen = orig
+        out.append("<br>".join(FB._line(toks, i, j) for i, j in spans))
+    return "<br>".join(out)
+
+def apply_coaching(pid, title, tags, body):
+    """10/12 대표: 아직 안 올린 원고마다 '마음 코치 정월의 질문' 블록(질문 2~3개 + 이번 주에 해 볼 것 하나)을 'N. 자주 묻는 질문' 앞에 넣고,
+    제목 40자·말투 고침(coaching_data.py)을 적용한다. 두 번 넣지 않는다(이미 '이번 주에 해 볼 것 하나'가 있으면 그대로)."""
+    try: import coaching_data as CD
+    except Exception: return title, _brand_tag(tags), body
+    for old, new in CD.REPLACE.get(pid, []):
+        if old in body: body = body.replace(old, new)   # 이미 고쳐진 원고면 건너뜀
+    if pid in CD.COACH and "이번 주에 해 볼 것 하나" not in body:
+        lead, qs, do = CD.COACH[pid]
+        blk = ('<p>&nbsp;</p><p>🌱 <b>마음 코치 정월의 질문</b></p>' + f'<p>{_mbreak(lead)}</p>' + "".join(f'<p>{_mbreak("🔸 " + q)}</p>' for q in qs)
+               + f'<p>&nbsp;</p><p>✔️ <b>이번 주에 해 볼 것 하나</b>: {_mbreak(do, 16.8)}</p>')
+        ms = list(re.finditer(r'<p>&nbsp;</p><p><b>\d+\. (?:자주|궁금)[^<]*</b></p>', body))
+        if not ms: raise ValueError(f"{pid}: FAQ 소제목을 못 찾아 코칭 블록을 넣을 자리가 없어요")
+        body = body[:ms[-1].start()] + blk + body[ms[-1].start():]
+    return CD.TITLES.get(pid, title), _brand_tag(tags), body
 
 def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, category=None, thumbs=None, cid=None, clips=None, reserve=None, v2=True):
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
@@ -170,6 +212,7 @@ def add(pid, dt, title, tags, body_blocks, related=None, category=None, thumbs=N
         body_blocks = body_blocks + [("p", ["<b>👇 " + related["phrase"] + "</b>"])]   # 유도 문구는 굵게
     body_blocks = body_blocks + ctas
     title, tags, _b = apply_psy(pid, title, tags, body_html(body_blocks))
+    title, tags, _b = apply_coaching(pid, title, tags, _b)   # 10/12 코칭 블록·제목 40자·말투 고침
     reg[pid] = {"dt": dt.isoformat(), "title": title, "tags": tags[:10], "body": _b, "cover": cover, "related": rel, "thumbs": thumbs, "cid": cid, "clips": clips, "category": new_cat(pid, category or CATS.get(pid)), "done": False}
     json.dump(reg, open(REG, "w"), ensure_ascii=False, indent=1); render_all()
 def render_all():
