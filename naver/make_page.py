@@ -80,6 +80,18 @@ def new_cat(pid, cat):
     if pid in _CM["by_id"]: return _CM["by_id"][pid]
     return _CM["rename"].get(cat, cat) if cat else cat
 
+_PSY = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "psy_map.json"), encoding="utf-8"))
+def apply_psy(pid, title, tags, body):
+    """10/12 심리 키워드 반영: psy_map.json에 있는 글이면 제목·태그를 바꾸고 '이번에 해 볼 것' 앞에 '심리학으로 읽으면' 단락을 넣는다(두 번 넣지 않음)."""
+    m = _PSY.get(pid)
+    if not m: return title, tags, body
+    tags = (m.get("tags_front", []) + [t for t in tags if t not in m.get("tags_front", [])])[:10]
+    if "심리학으로 읽으면" not in body:
+        blk = '<p>&nbsp;</p><p>🧠 <b>심리학으로 읽으면</b></p>' + "".join(f"<p>{l}</p>" for l in m["block"])
+        mm = re.search(r'<p>&nbsp;</p><p><b>\d+\. 이번에 해 볼 것</b></p>', body)
+        body = body[:mm.start()] + blk + body[mm.start():] if mm else body
+    return m.get("title", title), tags, body
+
 def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, category=None, thumbs=None, cid=None, clips=None, reserve=None, v2=True):
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
     body = body.replace("naver_cta2_", "naver_cta4_").replace("naver_cta3_", "naver_cta4_")   # 10/4: CTA 배너를 2/3 크기로(compact.cta_small)
@@ -157,7 +169,8 @@ def add(pid, dt, title, tags, body_blocks, related=None, category=None, thumbs=N
         rel = {"id": related["id"], "title": related.get("title") or pub.get(related["id"], {}).get("title", ""), "phrase": related["phrase"], "url": pub.get(related["id"], {}).get("url", "")}
         body_blocks = body_blocks + [("p", ["<b>👇 " + related["phrase"] + "</b>"])]   # 유도 문구는 굵게
     body_blocks = body_blocks + ctas
-    reg[pid] = {"dt": dt.isoformat(), "title": title, "tags": tags[:10], "body": body_html(body_blocks), "cover": cover, "related": rel, "thumbs": thumbs, "cid": cid, "clips": clips, "category": new_cat(pid, category or CATS.get(pid)), "done": False}
+    title, tags, _b = apply_psy(pid, title, tags, body_html(body_blocks))
+    reg[pid] = {"dt": dt.isoformat(), "title": title, "tags": tags[:10], "body": _b, "cover": cover, "related": rel, "thumbs": thumbs, "cid": cid, "clips": clips, "category": new_cat(pid, category or CATS.get(pid)), "done": False}
     json.dump(reg, open(REG, "w"), ensure_ascii=False, indent=1); render_all()
 def render_all():
     """목록에 남은 글을 발행일 순으로 다시 그린다(다음 원고 버튼 연결)"""
