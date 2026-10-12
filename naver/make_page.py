@@ -74,6 +74,12 @@ function cpt(b){navigator.clipboard.writeText(b.dataset.t).then(function(){b.cla
 function cpb(b){var el=document.getElementById("body");var h=el.innerHTML,t=el.innerText;function done(){b.textContent="본문 복사됨 · 네이버 본문에 붙여 넣으세요";b.className="big ok"}
  function sel(){var r=document.createRange();r.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(r);document.execCommand("copy");done()}
  if(window.ClipboardItem){navigator.clipboard.write([new ClipboardItem({"text/html":new Blob([h],{type:"text/html"}),"text/plain":new Blob([t],{type:"text/plain"})})]).then(done,sel)}else sel()}'''
+_CM = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "category_map.json"), encoding="utf-8"))
+def new_cat(pid, cat):
+    """10/12 메뉴 개편: 글 번호별 지정 → 옛 이름 바꾸기 순서로 새 메뉴 이름을 준다."""
+    if pid in _CM["by_id"]: return _CM["by_id"][pid]
+    return _CM["rename"].get(cat, cat) if cat else cat
+
 def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, category=None, thumbs=None, cid=None, clips=None, reserve=None, v2=True):
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
     body = body.replace("naver_cta2_", "naver_cta4_").replace("naver_cta3_", "naver_cta4_")   # 10/4: CTA 배너를 2/3 크기로(compact.cta_small)
@@ -151,14 +157,14 @@ def add(pid, dt, title, tags, body_blocks, related=None, category=None, thumbs=N
         rel = {"id": related["id"], "title": related.get("title") or pub.get(related["id"], {}).get("title", ""), "phrase": related["phrase"], "url": pub.get(related["id"], {}).get("url", "")}
         body_blocks = body_blocks + [("p", ["<b>👇 " + related["phrase"] + "</b>"])]   # 유도 문구는 굵게
     body_blocks = body_blocks + ctas
-    reg[pid] = {"dt": dt.isoformat(), "title": title, "tags": tags[:10], "body": body_html(body_blocks), "cover": cover, "related": rel, "thumbs": thumbs, "cid": cid, "clips": clips, "category": category or CATS.get(pid), "done": False}
+    reg[pid] = {"dt": dt.isoformat(), "title": title, "tags": tags[:10], "body": body_html(body_blocks), "cover": cover, "related": rel, "thumbs": thumbs, "cid": cid, "clips": clips, "category": new_cat(pid, category or CATS.get(pid)), "done": False}
     json.dump(reg, open(REG, "w"), ensure_ascii=False, indent=1); render_all()
 def render_all():
     """목록에 남은 글을 발행일 순으로 다시 그린다(다음 원고 버튼 연결)"""
     reg = load(); live = sorted((v["dt"], k) for k, v in reg.items() if not v.get("done") and "body" in v)
     for i, (dt, k) in enumerate(live):
         v = reg[k]; nxt = live[i+1][1] if i+1 < len(live) else None
-        write_page(k, D.datetime.fromisoformat(dt), v["title"], v["tags"], v["body"], nxt, v.get("cover"), v.get("related"), v.get("category") or CATS.get(k), v.get("thumbs"), v.get("cid"), v.get("clips"), v.get("reserve"))
+        write_page(k, D.datetime.fromisoformat(dt), v["title"], v["tags"], v["body"], nxt, v.get("cover"), v.get("related"), new_cat(k, v.get("category") or CATS.get(k)), v.get("thumbs"), v.get("cid"), v.get("clips"), v.get("reserve"))
     write_index()
 def done(pid):
     """대표가 예약을 마친 글: 목록과 파일에서 뺀다"""

@@ -9,13 +9,13 @@
   "dt": "2026-10-03T21:00",
   "title": "띠별 궁합표 총정리, 나랑 찰떡인 띠 vs 자꾸 부딪히는 띠",
   "done": true,
-  "category": "띠별 운세"
+  "category": "관계 읽기"
  },
  "n04": {
   "dt": "2026-11-07T21:00",
   "title": "2027년 양띠 운세, 내 띠가 돌아오는 본명년 월별 총정리",
   "done": true,
-  "category": "띠별 운세",
+  "category": "2027 운세",
   "tags": [
    "2027년양띠운세",
    "양띠운세",
@@ -35,7 +35,7 @@
   "dt": "2026-10-07T21:00",
   "title": "2027년 돈 들어오는 띠 TOP3, 재물운 좋은 띠와 조심할 띠",
   "done": true,
-  "category": "띠별 운세",
+  "category": "2027 운세",
   "tags": [
    "2027년재물운",
    "돈들어오는띠",
@@ -55,7 +55,7 @@
   "dt": "2026-10-10T21:00",
   "title": "2027년 소띠 운세, 양띠와 충 드는 해 이사·이직 월별 총정리",
   "done": true,
-  "category": "띠별 운세",
+  "category": "2027 운세",
   "tags": [
    "2027년소띠운세",
    "소띠운세",
@@ -75,7 +75,7 @@
   "dt": "2026-10-17T21:00",
   "title": "태어난 날로 보는 연애 스타일 10가지, 일간별 연애 성향과 별자리 궁합",
   "done": true,
-  "category": "태어난 날(일주) 이야기",
+  "category": "관계 읽기",
   "tags": [
    "연애스타일",
    "일간별성격",
@@ -113,7 +113,7 @@
    "url": "https://blog.naver.com/zaoseon/224425927427"
   },
   "done": true,
-  "category": "띠별 운세",
+  "category": "2027 운세",
   "cover_old": "naver_r01_2027토끼띠운세.jpg"
  },
  "n09": {
@@ -138,7 +138,7 @@
    "url": "https://blog.naver.com/zaoseon/224425927427"
   },
   "done": true,
-  "category": "띠별 운세",
+  "category": "2027 운세",
   "cover_old": "naver_t01_2027원숭이띠운세.jpg"
  },
  "n10": {
@@ -163,7 +163,7 @@
    "url": "https://blog.naver.com/zaoseon/224425927427"
   },
   "done": true,
-  "category": "띠별 운세",
+  "category": "2027 운세",
   "cover_old": "naver_l11_2027연애운TOP5.jpg"
  },
  "n11": {
@@ -238,7 +238,7 @@
    "url": "https://blog.naver.com/zaoseon/224425927427"
   },
   "done": true,
-  "category": "운명학 입문",
+  "category": "운명학 사전",
   "cover_old": "naver_x01_여섯지도교차.jpg"
  },
  "n14": {
@@ -263,7 +263,7 @@
    "url": "https://blog.naver.com/zaoseon/224425927427"
   },
   "done": true,
-  "category": "2027 신년운세",
+  "category": "2027 운세",
   "cover_old": "naver_x11_2027여섯지도.jpg"
  },
  "n15": {
@@ -288,7 +288,7 @@
    "url": "https://blog.naver.com/zaoseon/224426864022"
   },
   "done": true,
-  "category": "운명학 입문",
+  "category": "운명학 사전",
   "cover_old": "naver_y11_육효소개.jpg"
  },
  "n16": {
@@ -317,7 +317,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "태어난 날(일주) 이야기",
+  "category": "마음 읽기",
   "done": true,
   "cover_old": "naver_z16_a.jpg"
  },
@@ -347,7 +347,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "태어난 날(일주) 이야기",
+  "category": "관계 읽기",
   "done": true,
   "cover_old": "naver_z17_a.jpg"
  },
@@ -377,7 +377,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "태어난 날(일주) 이야기",
+  "category": "마음 읽기",
   "done": true,
   "cover_old": "naver_z18_a.jpg"
  },
@@ -407,7 +407,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "태어난 날(일주) 이야기",
+  "category": "관계 읽기",
   "done": true,
   "cover_old": "naver_z19_a.jpg"
  },
@@ -437,7 +437,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "태어난 날(일주) 이야기",
+  "category": "관계 읽기",
   "done": true,
   "cover_old": "naver_z20_a.jpg"
  },
@@ -467,7 +467,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "태어난 날(일주) 이야기",
+  "category": "마음 읽기",
   "done": true,
   "cover_old": "naver_z21_a.jpg"
  },
@@ -497,7 +497,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "태어난 날(일주) 이야기",
+  "category": "관계 읽기",
   "done": true,
   "cover_old": "naver_z22_a.jpg"
  },
@@ -527,7 +527,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "태어난 날(일주) 이야기",
+  "category": "관계 읽기",
   "done": true,
   "cover_old": "naver_z23_a.jpg"
  },
@@ -557,7 +557,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "태어난 날(일주) 이야기",
+  "category": "마음 읽기",
   "done": true,
   "cover_old": "naver_z24_a.jpg"
  },
@@ -587,7 +587,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "태어난 날(일주) 이야기",
+  "category": "마음 읽기",
   "done": true,
   "cover_old": "naver_z25_a.jpg"
  },
@@ -619,7 +619,7 @@
   "clips": [
    "무(戊)일간 클립 · 듬직해서 다들 기대는 사람"
   ],
-  "category": "태어난 날(일주) 이야기",
+  "category": "관계 읽기",
   "done": false,
   "reserve": {
    "hard": "10/4(일) 21:00",
@@ -657,7 +657,7 @@
    "정(丁)일간 클립 · 조용히 타오르는 은은한 사람",
    "병(丙)일간 클립 · 좋으면 티 나고 식어도 티 나는 사람"
   ],
-  "category": "태어난 날(일주) 이야기",
+  "category": "마음 읽기",
   "done": false,
   "reserve": {
    "hard": "10/8(목) 12:00",
@@ -692,7 +692,7 @@
   "thumbs": null,
   "cid": null,
   "clips": [],
-  "category": "태어난 날(일주) 이야기",
+  "category": "관계 읽기",
   "done": false,
   "reserve": {
    "hard": "10/3(토) 21:00",
@@ -727,7 +727,7 @@
   "thumbs": null,
   "cid": null,
   "clips": [],
-  "category": "태어난 날(일주) 이야기",
+  "category": "마음 읽기",
   "done": false,
   "reserve": {
    "hard": "10/9(금) 12:00",
@@ -764,7 +764,7 @@
   "clips": [
    "병(丙)일간 클립 · 좋으면 티 나고 식어도 티 나는 사람"
   ],
-  "category": "태어난 날(일주) 이야기",
+  "category": "관계 읽기",
   "done": false,
   "reserve": {
    "hard": "10/3(토) 21:00",
@@ -801,7 +801,7 @@
   "clips": [
    "정(丁)일간 클립 · 조용히 타오르는 은은한 사람"
   ],
-  "category": "태어난 날(일주) 이야기",
+  "category": "마음 읽기",
   "done": false,
   "reserve": {
    "hard": "10/13(화) 21:00",
@@ -839,7 +839,7 @@
    "병(丙)일간 클립 · 좋으면 티 나고 식어도 티 나는 사람",
    "갑(甲)일간 클립 · 곧게 뻗어 굽히기 싫은 사람"
   ],
-  "category": "태어난 날(일주) 이야기",
+  "category": "마음 읽기",
   "done": false,
   "reserve": {
    "hard": "10/12(월) 12:00",
@@ -874,7 +874,7 @@
   "thumbs": null,
   "cid": null,
   "clips": [],
-  "category": "태어난 날(일주) 이야기",
+  "category": "관계 읽기",
   "done": false,
   "reserve": {
    "hard": "10/4(일) 12:00",
@@ -911,7 +911,7 @@
   "clips": [
    "임(壬)일간 클립 · 자유로워야 숨 쉬는 사람"
   ],
-  "category": "태어난 날(일주) 이야기",
+  "category": "마음 읽기",
   "done": false,
   "reserve": {
    "hard": "10/3(토) 12:00",
@@ -946,7 +946,7 @@
   "thumbs": null,
   "cid": null,
   "clips": [],
-  "category": "태어난 날(일주) 이야기",
+  "category": "마음 읽기",
   "done": false,
   "reserve": {
    "hard": "10/13(화) 12:00",
@@ -983,7 +983,7 @@
   "clips": [
    "정(丁)일간 클립 · 조용히 타오르는 은은한 사람"
   ],
-  "category": "태어난 날(일주) 이야기",
+  "category": "마음 읽기",
   "done": false,
   "reserve": {
    "hard": "10/15(목) 12:00",
@@ -1020,7 +1020,7 @@
   "clips": [
    "신(辛)일간 클립 · 까다로워 보여도 인정하면 끝까지"
   ],
-  "category": "태어난 날(일주) 이야기",
+  "category": "마음 읽기",
   "done": false,
   "reserve": {
    "hard": "10/20(화) 12:00",
@@ -1057,7 +1057,7 @@
   "clips": [
    "경(庚)일간 클립 · 단호해서 확실한 사람"
   ],
-  "category": "태어난 날(일주) 이야기",
+  "category": "마음 읽기",
   "done": false,
   "reserve": {
    "hard": "10/14(수) 21:00",
@@ -1094,7 +1094,7 @@
   "clips": [
    "계(癸)일간 클립 · 말없이 스며들어 마음을 읽는 사람"
   ],
-  "category": "태어난 날(일주) 이야기",
+  "category": "관계 읽기",
   "done": false,
   "reserve": {
    "hard": "10/7(수) 12:00",
@@ -1131,7 +1131,7 @@
   "clips": [
    "기(己)일간 클립 · 남 챙기다 내 건 못 챙기는 사람"
   ],
-  "category": "태어난 날(일주) 이야기",
+  "category": "관계 읽기",
   "done": false,
   "reserve": {
    "hard": "10/12(월) 21:00",
@@ -1169,7 +1169,7 @@
    "무(戊)일간 클립 · 듬직해서 다들 기대는 사람",
    "신(辛)일간 클립 · 까다로워 보여도 인정하면 끝까지"
   ],
-  "category": "태어난 날(일주) 이야기",
+  "category": "관계 읽기",
   "done": false,
   "reserve": {
    "hard": "10/16(금) 12:00",
@@ -1206,7 +1206,7 @@
   "clips": [
    "임(壬)일간 클립 · 자유로워야 숨 쉬는 사람"
   ],
-  "category": "태어난 날(일주) 이야기",
+  "category": "마음 읽기",
   "done": false,
   "reserve": {
    "hard": "10/18(일) 12:00",
@@ -1243,7 +1243,7 @@
   "clips": [
    "병(丙)일간 클립 · 좋으면 티 나고 식어도 티 나는 사람"
   ],
-  "category": "태어난 날(일주) 이야기",
+  "category": "마음 읽기",
   "done": false,
   "reserve": {
    "hard": "10/6(화) 12:00",
@@ -1278,7 +1278,7 @@
   "thumbs": null,
   "cid": null,
   "clips": [],
-  "category": "태어난 날(일주) 이야기",
+  "category": "마음 읽기",
   "done": false,
   "reserve": {
    "hard": "10/21(수) 12:00",
@@ -1315,7 +1315,7 @@
   "clips": [
    "기(己)일간 클립 · 남 챙기다 내 건 못 챙기는 사람"
   ],
-  "category": "태어난 날(일주) 이야기",
+  "category": "마음 읽기",
   "done": false,
   "reserve": {
    "hard": "10/19(월) 12:00",
@@ -1352,7 +1352,7 @@
   "clips": [
    "무(戊)일간 클립 · 듬직해서 다들 기대는 사람"
   ],
-  "category": "태어난 날(일주) 이야기",
+  "category": "관계 읽기",
   "done": false,
   "reserve": {
    "hard": "10/26(월) 12:00",
@@ -1387,7 +1387,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "운명학 입문",
+  "category": "운명학 사전",
   "done": false,
   "cover_old": "naver_z47_a.jpg",
   "reserve": {
@@ -1422,7 +1422,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "2027 신년운세",
+  "category": "2027 운세",
   "done": false,
   "cover_old": "naver_z48_a.jpg",
   "reserve": {
@@ -1457,7 +1457,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "띠별 운세",
+  "category": "2027 운세",
   "done": false,
   "cover_old": "naver_z49_a.jpg",
   "reserve": {
@@ -1492,7 +1492,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "운명학 입문",
+  "category": "운명학 사전",
   "done": false,
   "cover_old": "naver_z50_a.jpg",
   "reserve": {
@@ -1527,7 +1527,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "운명학 입문",
+  "category": "운명학 사전",
   "done": false,
   "cover_old": "naver_z51_a.jpg",
   "reserve": {
@@ -1597,7 +1597,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "운명학 입문",
+  "category": "운명학 사전",
   "done": false,
   "cover_old": "naver_z53_a.jpg",
   "reserve": {
@@ -1632,7 +1632,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "2027 신년운세",
+  "category": "2027 운세",
   "done": false,
   "cover_old": "naver_z54_a.jpg",
   "reserve": {
@@ -1667,7 +1667,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "운명학 입문",
+  "category": "운명학 사전",
   "done": false,
   "cover_old": "naver_z55_a.jpg",
   "reserve": {
@@ -1702,7 +1702,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "운명학 입문",
+  "category": "운명학 사전",
   "done": false,
   "cover_old": "naver_z56_a.jpg",
   "reserve": {
@@ -1737,7 +1737,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "운명학 입문",
+  "category": "운명학 사전",
   "done": false,
   "cover_old": "naver_z57_a.jpg",
   "reserve": {
@@ -1772,7 +1772,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "운명학 입문",
+  "category": "운명학 사전",
   "done": false,
   "cover_old": "naver_z58_a.jpg",
   "reserve": {
@@ -1807,7 +1807,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "띠별 운세",
+  "category": "2027 운세",
   "done": false,
   "cover_old": "naver_z59_a.jpg",
   "reserve": {
@@ -1877,7 +1877,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "운명학 입문",
+  "category": "운명학 사전",
   "done": false,
   "cover_old": "naver_z61_a.jpg",
   "reserve": {
@@ -1982,7 +1982,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "띠별 운세",
+  "category": "2027 운세",
   "done": false,
   "cover_old": "naver_z64_a.jpg"
  },
@@ -2012,7 +2012,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "띠별 운세",
+  "category": "2027 운세",
   "done": false,
   "cover_old": "naver_z65_a.jpg"
  },
@@ -2042,7 +2042,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "띠별 운세",
+  "category": "2027 운세",
   "done": false,
   "cover_old": "naver_z66_a.jpg"
  },
@@ -2072,7 +2072,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "띠별 운세",
+  "category": "2027 운세",
   "done": false,
   "cover_old": "naver_z67_a.jpg"
  },
@@ -2102,7 +2102,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "띠별 운세",
+  "category": "2027 운세",
   "done": false,
   "cover_old": "naver_z68_a.jpg"
  },
@@ -2132,7 +2132,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "띠별 운세",
+  "category": "2027 운세",
   "done": false,
   "cover_old": "naver_z69_a.jpg"
  },
@@ -2161,7 +2161,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "운명학 입문",
+  "category": "관계 읽기",
   "done": false,
   "cover_old": "naver_z70_a.jpg"
  },
@@ -2190,7 +2190,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "운명학 입문",
+  "category": "운명학 사전",
   "done": false,
   "cover_old": "naver_z71_a.jpg"
  },
@@ -2220,7 +2220,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "띠별 운세",
+  "category": "관계 읽기",
   "done": false,
   "cover_old": "naver_z72_a.jpg"
  },
@@ -2250,7 +2250,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "띠별 운세",
+  "category": "2027 운세",
   "done": false,
   "cover_old": "naver_z73_a.jpg"
  },
@@ -2310,7 +2310,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "운명학 입문",
+  "category": "운명학 사전",
   "done": false,
   "cover_old": "naver_z75_a.jpg"
  },
@@ -2340,7 +2340,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "2027 신년운세",
+  "category": "2027 운세",
   "done": false,
   "cover_old": "naver_z76_a.jpg"
  },
@@ -2370,7 +2370,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "2027 신년운세",
+  "category": "2027 운세",
   "done": false,
   "cover_old": "naver_z77_a.jpg"
  },
@@ -2400,7 +2400,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "운명학 입문",
+  "category": "운명학 사전",
   "done": false,
   "cover_old": "naver_z78_a.jpg"
  },
@@ -2430,7 +2430,7 @@
   "thumbs": null,
   "cid": null,
   "clips": null,
-  "category": "운명학 입문",
+  "category": "운명학 사전",
   "done": false,
   "cover_old": "naver_z79_a.jpg"
  }
