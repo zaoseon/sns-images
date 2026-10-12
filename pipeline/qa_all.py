@@ -1,5 +1,5 @@
 """올리기 전 검사 — 한 번에(10/7 확정 제작 가이드 8장). 하나라도 걸리면 종료 코드 1, 앱에 올리지 않는다.
-사용: python3 pipeline/qa_all.py          (글 검사만, 수 초)  python3 pipeline/qa_all.py --videos   (영상 배치까지, 약 10분)
+사용: python3 pipeline/qa_all.py          (글 검사만, 수 초)  python3 pipeline/qa_all.py --videos   (영상 배치까지, 약 10분)  python3 pipeline/qa_all.py --images   (그림 속 글자 OCR 포함)
 결과: content/audit/qa_all.json"""
 import os, sys, json, re
 HERE = os.path.dirname(os.path.abspath(__file__)); R = os.path.abspath(os.path.join(HERE, "..")); sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(R, "content"))
@@ -30,6 +30,9 @@ def text_checks():
         if not os.path.exists(mp): bad.append((c["id"], "클립 영상 없음(렌더 필요)"))
         else: bad += [(c["id"], x) for x in CFR.verify(c, mp)[0]]
     out["네이버 클립(릴스 재활용): 설명 300자·태그 5·금지어·소리 없음·1080x1920"] = len(bad)
+    import banned_words_audit as BW   # 대표 10/12 23:15: '상담' 계열 금지(예외 심리상담사). 소스 전수(두 저장소)·앱 대기 캡션·네이버 미발행 원고
+    out["금지어 '상담'(두 저장소 소스·앱 대기 캡션·네이버 미발행 원고)"] = len(BW.scan())
+    if "--images" in sys.argv or "--videos" in sys.argv: out["금지어 '상담' 그림 속 글자(카드 그림 OCR, 느림)"] = len(BW.scan_images())
     return out
 def video_checks():
     out = {}
