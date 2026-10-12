@@ -432,7 +432,9 @@ PLAN = {
  "쥐띠": dict(rid="zodiac-03", date="11/14 낮", blog="n69 쥐띠 운세", tags="#쥐띠운세 #2027년운세 #정미년 #띠별운세 #사주", sub=None,
     lead="돈은 들어오는데 마음이 상하기 쉬운 해, 언제 조심하면 좋은지 정리했어요."),
 }
+PLAN["호랑이띠"] = dict(rid="zodiac-07", date="10/15 낮", blog="n64 호랑이띠 운세", tags="#호랑이띠운세 #2027년운세 #정미년 #띠별운세 #사주", sub=None, lead="숨어 있던 실력이 드러나는 해, 언제 나를 보여 주면 좋은지 정리했어요.", bg="forest")
 # 문장 장면(3번): '~는 건 ~라는 뜻' 형식(대표 원숭이띠 지정)
+CFG["호랑이띠"] = dict(hook="2027년에 호랑이띠가\n숨어 있던 실력이 드러나는 건\n나를 보여 주라는 뜻", years="1974·1986·1998·2010년생", shape="feed", l1="나무(寅)가 불(丁)을 키워요", l2="내 힘이 밖으로 드러나는 해예요", nums=("1", "6"), lucky="1과 6은 물의 숫자예요.\n물이 나무를 키워 줘요", cta="big", q="지금 내 마음은\n어디서 가장 지쳐 있나요?")   # 10/13 대표 지시: 호랑이띠 모션 릴스(다른 띠와 같은 10장면 틀). 내용은 /2027/tiger/·T["호랑이띠"]·n64 범위 안. 마무리는 코칭 질문(캡션 코칭 줄과 같은 말)
 CFG["개띠"]["hook"] = "2027년에 개띠에게\n약속이 자꾸 엇갈리는 건\n한 번 더 확인하라는 뜻"
 CFG["용띠"]["hook"] = "2027년에 용띠가\n크게 벌기보다 쌓게 되는 건\n기반을 다지라는 뜻"
 CFG["뱀띠"]["hook"] = "2027년에 뱀띠가\n의욕이 넘치는 건\n속도를 조절하라는 뜻"
@@ -524,6 +526,12 @@ def G_why(name):
             ar = e_out(cl((tt - .8) / .4))
             if ar > 0: arrow(d, CX - ox + rr0 + 14, CX - ox + rr0 + 14 + (2 * ox - 2 * rr0 - 28) * ar, cy, (255, 255, 255, 255))
             if g2 > 0: circ(d, CX + ox, cy, int(rr0 * min(g2, 1.05)), "酉", GOLD, fg=(30, 24, 40, 255), fs=int(112 * k))
+        elif cf["shape"] == "feed":   # 호랑이띠: 나무(寅)가 불(丁)을 키운다
+            ox = int(230 * kx); rr0 = int(118 * k); g1, g2 = g(.4), g(1.2)
+            if g1 > 0: circ(d, CX - ox, cy, int(rr0 * min(g1, 1.05)), "寅", GREEN, fg=(255, 255, 255, 255), fs=int(112 * k))
+            ar = e_out(cl((tt - .8) / .4))
+            if ar > 0: arrow(d, CX - ox + rr0 + 14, CX - ox + rr0 + 14 + (2 * ox - 2 * rr0 - 28) * ar, cy, (255, 255, 255, 255))
+            if g2 > 0: circ(d, CX + ox, cy, int(rr0 * min(g2, 1.05)), "丁", CORAL, fg=(255, 255, 255, 255), fs=int(112 * k))
         elif cf["shape"] == "tri":
             rr0 = int(66 * k); pts = [(CX, rr0 + 4, "亥"), (CX - int(200 * kx), Hg - rr0 - 4, "卯"), (CX + int(200 * kx), Hg - rr0 - 4, "未")]; prog = e_out(cl((tt - 1.3) / 1.2))
             for kk, (a2, b2) in enumerate([(0, 1), (1, 2), (2, 0)]):
@@ -596,7 +604,7 @@ def G_cta(name):
             hc = th_(cf["cm"], 54, 840, 1.25); hb = th_(cf["big"], 92, 840, 1.25); y0, tot = stack_top([hc, hb, hp, hf], [GT, GG, GT]); y = tblock(c, cf["cm"], y0, .1, 54, lh=1.25); y = tblock(c, cf["big"], y + GT, .6, 92, color=GOLD, lh=1.25); pill(c, 1.4, y + GG); tblock(c, prof_t, y + GG + hp + GT, 2.0, 50, color=DIM, lh=1.35, maxw=840)
     return f
 GEN = tuple(CFG)
-MUSIC_SEED = {n: 11 * i + 3 for i, n in enumerate(("원숭이띠", "개띠", "용띠", "뱀띠", "말띠", "양띠", "닭띠", "돼지띠", "쥐띠"))}   # 곡 리프가 겹치지 않게 띠마다 씨앗을 다르게
+MUSIC_SEED = {n: 11 * i + 3 for i, n in enumerate(("원숭이띠", "개띠", "용띠", "뱀띠", "말띠", "양띠", "닭띠", "돼지띠", "쥐띠", "호랑이띠"))}   # 곡 리프가 겹치지 않게 띠마다 씨앗을 다르게
 def zodiac_lint(names=None):
     """R27~R29 자동 검사: 장면마다 끝 상태를 그려 묶음의 위·아래 끝과 가운데를 재고(R21), 박스·줄바꿈·잘림 위반은 그리는 중에 Lint 예외로 잡는다"""
     import numpy as np; probs = []

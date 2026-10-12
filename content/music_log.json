@@ -478,5 +478,13 @@
   "mode": "up",
   "bpm": 114,
   "key": "A"
+ },
+ {
+  "name": "zodiac-호랑이띠",
+  "kind": "fun",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "C"
  }
 ]
