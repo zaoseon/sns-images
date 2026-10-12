@@ -21,6 +21,8 @@ def text_checks():
     _o = ("원숭이띠", "개띠", "용띠", "뱀띠", "말띠", "양띠", "닭띠", "돼지띠", "쥐띠"); out["배경 다양(R34: 이웃 영상 배경이 달라야 함)"] = len([1 for a, b in zip(_o, _o[1:]) if ZL0.PLAN[a]["bg"] == ZL0.PLAN[b]["bg"]])
     import clips_motion_zodiac as ZL
     out["영상 장면 배치(박스 글·간격·묶음 위치, R27~R29)"] = len(ZL.zodiac_lint())
+    import carousel_rules as CRL   # R58(대표 10/12): 예약된 인스타 캐러셀은 7장 이상
+    out["인스타 캐러셀 7장 이상(R58: 표지·본문·해 볼 것·CTA)"] = len(CRL.scan_archive())
     return out
 def video_checks():
     out = {}

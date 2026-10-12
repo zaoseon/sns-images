@@ -19,10 +19,13 @@ def check_dir(folder):
 def scan_archive(now=None):
     p = os.path.join(SITE, 'data', 'sns_archive.json')
     if not os.path.exists(p): return [f'보관본 없음: {p}']
-    arch = json.load(open(p, encoding='utf-8')); now = now or D.datetime.now(D.timezone(D.timedelta(hours=9))).strftime('%Y-%m-%dT%H:%M'); bad = []
+    arch = json.load(open(p, encoding='utf-8'))
+    rp = os.path.join(ROOT, 'content', 'audit', 'carousel_replaced.json')   # 이미 7장 이상으로 바꾼 글(보관본이 새로 읽히기 전 옛 id)
+    done = set(json.load(open(rp, encoding='utf-8')).get('바꾼_글', {})) if os.path.exists(rp) else set()
+    now = now or D.datetime.now(D.timezone(D.timedelta(hours=9))).strftime('%Y-%m-%dT%H:%M'); bad = []
     for v in sorted(arch.values(), key=lambda v: v.get('t', '')):
         if (v.get('t') or '') <= now or v.get('st') not in (None, '', 'PENDING'): continue
-        if 'instagram' not in str(v.get('n')) or v.get('k') != 'POST': continue
+        if 'instagram' not in str(v.get('n')) or v.get('k') != 'POST' or str(v.get('id')) in done: continue
         try: m = int(v.get('m') or 0)
         except ValueError: continue
         if 2 <= m < MIN_SLIDES: bad += check_count(m, f"예약 {v['t']} [{(v.get('x') or '')[:20]}] id {v.get('id')}")

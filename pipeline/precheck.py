@@ -5,6 +5,7 @@
   python3 pipeline/precheck.py schedule                   앱 일정(sns_plan)에서 같은 채널 같은 분 겹침·하루 인스타 4개 초과·자료 나이
   python3 pipeline/precheck.py captions                   앞으로 예약된 모든 글 본문의 내부 용어·슬래시 날짜(다른 세션 글 포함)
   python3 pipeline/precheck.py slot YYYY-MM-DDTHH:MM [net] 그 시각 칸이 비었는지(앱 일정 기준; 최신은 Metricool getScheduledPosts로 한 번 더)
+  python3 pipeline/precheck.py carousel [폴더...]          인스타 캐러셀 7장 이상(R58). 폴더를 주면 {키}_{번호}.jpg 묶음, 없으면 예약 보관본(sns_archive)
   python3 pipeline/precheck.py all                         reel_swaps.json의 영상 전부 + 일정 점검
 종료 코드 0=통과, 1=걸림. 샘플 서체 대조와 최종 눈 확인은 사람이 한다(QA_CHECKLIST.md)."""
 import os, re, sys, json, subprocess, datetime as D, collections
@@ -74,6 +75,8 @@ def main():
         t = rest[0]; t = open(t, encoding="utf-8").read() if os.path.exists(t) else t; bad = check_text(t)
     elif cmd == "schedule": bad = check_schedule()
     elif cmd == "captions": bad = check_captions()
+    elif cmd == "carousel":   # R58: 인스타 캐러셀 7장 이상. 폴더를 주면 그 폴더의 {키}_{번호}.jpg 묶음, 없으면 예약 보관본
+        import carousel_rules as CRL; bad = [e for d in rest for e in CRL.check_dir(d)] if rest else CRL.scan_archive()
     elif cmd == "slot":
         t = rest[0]; net = rest[1] if len(rest) > 1 else None; d, plan = load_plan()
         hit = [(r["n"], (r["x"] or "")[:24]) for r in plan if r["t"][:16] == t[:16] and (net is None or net in r["n"])]
@@ -85,6 +88,7 @@ def main():
             if v.startswith(prefix) and e.get("status") != "skip":
                 bad += check_video(os.path.join(ROOT, v[len(prefix):].split("?")[0]))
         bad += check_schedule(); bad += check_captions()
+        import carousel_rules as CRL; bad += CRL.scan_archive()
     else: print(__doc__); return 1
     for b in bad: print("걸림:", b)
     print("통과" if not bad else f"{len(bad)}건 걸림"); return 1 if bad else 0
