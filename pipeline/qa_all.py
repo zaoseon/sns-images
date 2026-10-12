@@ -23,6 +23,13 @@ def text_checks():
     out["영상 장면 배치(박스 글·간격·묶음 위치, R27~R29)"] = len(ZL.zodiac_lint())
     import carousel_rules as CRL   # R58(대표 10/12): 예약된 인스타 캐러셀은 7장 이상
     out["인스타 캐러셀 7장 이상(R58: 표지·본문·해 볼 것·CTA)"] = len(CRL.scan_archive())
+    import clip_from_reel as CFR   # D-190(대표 10/12): 릴스 재활용 네이버 클립 — 설명글·문구·소리 없음·규격
+    bad = CFR.audit(CFR.spec())
+    for c in CFR.spec()["clips"]:
+        mp = os.path.join(CFR.OUT, c["id"] + ".mp4")
+        if not os.path.exists(mp): bad.append((c["id"], "클립 영상 없음(렌더 필요)"))
+        else: bad += [(c["id"], x) for x in CFR.verify(c, mp)[0]]
+    out["네이버 클립(릴스 재활용): 설명 300자·태그 5·금지어·소리 없음·1080x1920"] = len(bad)
     return out
 def video_checks():
     out = {}

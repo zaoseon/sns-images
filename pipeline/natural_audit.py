@@ -57,6 +57,10 @@ def corpus():
     if os.path.exists(t):
         for k, v in json.load(open(t, encoding="utf-8")).items():
             if v["opener"]: out.append((f"트렌디 {k}", v["opener"]))
+    cf = os.path.join(R, "content", "clips_from_reels.json")   # 릴스 재활용 네이버 클립(D-190)
+    if os.path.exists(cf):
+        for c in json.load(open(cf, encoding="utf-8"))["clips"]:
+            for k in ("kicker", "hook", "thumb", "desc"): out.append((f"릴스클립 {c['id']} {k}", c[k].replace("*", "")))
     return out
 def scan(texts=None):
     texts = texts or corpus(); hits = []
