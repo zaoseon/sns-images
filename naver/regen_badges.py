@@ -26,8 +26,9 @@ def edge_color(im):
         for y in (2, h - 3): px.append(im.getpixel((x, y)))
     for y in (h // 2,): px += [im.getpixel((2, y)), im.getpixel((w - 3, y))]
     return tuple(int(statistics.median(p[i] for p in px)) for i in range(3))
-def wide(src, name):                                   # 10/12: 얼굴 쪽 끝에 붙이는 가로 판(wide_cover.py, 목록 썸네일이 얼굴 기준으로 잘림)
-    import wide_cover as WC; WC.make(src, os.path.join(WIDE, name))
+def wide(src, name):                                   # make_wide_covers.py 와 같은 방식(가운데 720x720, 양옆은 가장자리 색)
+    im = Image.open(src).convert("RGB"); can = Image.new("RGB", (1200, 720), edge_color(im))
+    can.paste(im.resize((720, 720), Image.LANCZOS), (240, 0)); can.save(os.path.join(WIDE, name), quality=95)
 
 def summary_maps(b):
     m1 = re.search(r"<b>한 줄 요약</b>:\s*(.*?)</p>", b)
