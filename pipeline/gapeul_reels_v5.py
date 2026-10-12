@@ -2,6 +2,7 @@ import sys, os
 sys.path.insert(0,'pipeline'); sys.path.insert(0,'content')
 import carousel_sets as CS, carousel_editor as CE, reel_v2 as RV, reel_plan as RP
 g=dict(CS.SPARE['갑'], variant={'cover':'C3','advice':'A1','cta':'T1'})
+g['personality']=[g['personality'][0],'큰 나무 같은 기운이라, 정한 방향으로\n곧게 자라려는 힘이 강해요.']   # 10/13 R61: 한 줄 18자 -> 16자(릴스 글만 바꿈, 카드 세트 원문은 그대로)
 g['advice']=['곧음은 무기,\n휘는 법도 알아요','센 바람엔 가지도 흔들려야\n부러지지 않아요.\n한 번쯤은 먼저 끄덕여 보세요.']
 e=dict(CS.SPARE['을'], variant={'cover':'C1','advice':'A2','cta':'T2'})
 e['advice']=['유연함은 무기,\n내 마음도 챙겨요','맞추는 건 강점이지만 늘 내가 맞추면 지쳐요.\n하고 싶은 말 하나는 꼭 꺼내 보세요.']
@@ -11,7 +12,7 @@ def mk(S,nxt):
         personality=S['personality'],love=S['love'],money=S['money'],advice=S['advice'],chartNote=S['chartNote'],values=S['values'],highlight=S['highlight'],
         ctaQ=S['ctaQ'],nextTitle=nxt,variant=S['variant'])
 SRC={'gab':g,'eul':e}
-IG={'gab':dict(struct='S2',style='상큼 팝',seed=31,key='E'),'eul':dict(struct='S3',style='통통 마림바',seed=32,key='G')}
+IG={'gab':dict(struct='S2',style='상큼 팝',seed=31,key='E'),'eul':dict(struct='S1',style='통통 마림바',seed=32,key='G')}   # 10/13 eul: S3(컷 1.8초) -> S1(컷 2.0초 이상, R63)
 NV={'gab':dict(struct='S1',style='발랄 우쿨렐레',seed=33,key='D'),'eul':dict(struct='S2',style='경쾌 신스팝',seed=34,key='F')}
 igd={}; nvd={}
 for k,S in SRC.items():
