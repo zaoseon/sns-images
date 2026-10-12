@@ -46,7 +46,7 @@ REEL_JS = r"""
   c.subSize=66; while (c.subSize>40 && wrapRich(c.sub,W-120,F(900,c.subSize)).length>1) c.subSize-=1; c.subX=88; c.subY=270+TA;
   const tl=def.coverTitle.split('\n').length; c.titleSize=113; while (c.titleSize>70 && wrapRich(c.title,W-120,F(900,c.titleSize)).length>tl) c.titleSize-=1;
   c.titleX=88; c.titleY=416+TA;
-  ctx.font=F(600,22); const ai=['※ 자오선의 상담가 정월은','AI로 생성한 가상 캐릭터입니다'];
+  ctx.font=F(600,22); const ai=['※ 자오선의 마음 코치 정월은','AI로 생성한 가상 캐릭터입니다'];
   c.extraTexts = ai.map((t,i)=>({text:t, x:1052-ctx.measureText(t).width, y:1450+i*24, size:22, color:'#8d8782', bold:false, align:'left', stroke:false}));
   // 본문 3장(성격/연애/돈): 캐러셀 본문 배치를 세로 가운데(+285)로
   const TB = 285;

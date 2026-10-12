@@ -41,7 +41,7 @@ def base(n=None, total=None, idx=None):
     img = Image.new("RGB", (W, H), INK); d = ImageDraw.Draw(img); L, R = 90, W - 90
     d.ellipse([L,80,L+84,164], fill=RED); d.text((L+42,122), "子午線", font=F(SER,24), fill=(245,236,220), anchor="mm")
     d.text((L+104,104), "자오선", font=F(SER,32), fill=GOLD, anchor="lm")
-    d.text((L+104,142), "상담가 정월", font=F(MED,23), fill=DIM, anchor="lm")
+    d.text((L+104,142), "마음 코치 정월", font=F(MED,23), fill=DIM, anchor="lm")
     d.line([(L,H-130),(R,H-130)], fill=LINE, width=1)
     d.text((R,H-88), "동서양 6가지 운명학", font=F(MED,24), fill=DIM, anchor="rm")
     if total:

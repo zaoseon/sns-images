@@ -81,7 +81,7 @@ LAYOUT_JS = r"""
   c.titleSize = 113; while (c.titleSize > 70 && nolines(c.title, W-120, F(900,c.titleSize)) > tl) c.titleSize -= 1;
   c.titleX = 88; c.titleY = 416;
   ctx.font = F(600,22);
-  const ai = ['※ 자오선의 상담가 정월은', 'AI로 생성한 가상 캐릭터입니다'];
+  const ai = ['※ 자오선의 마음 코치 정월은', 'AI로 생성한 가상 캐릭터입니다'];
   c.extraTexts = ai.map((t,i)=>({text:t, x: 1052-ctx.measureText(t).width, y: 1280+i*24, size:22, color:'#8d8782', bold:false, align:'left', stroke:false}));
 
   // ---- 2~4 본문 / 6 조언 ----

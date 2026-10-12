@@ -22,7 +22,7 @@ def handle(d, acc):
     d.ellipse([SAFE_LEFT, H-SAFE_BOTTOM-52, SAFE_LEFT+24, H-SAFE_BOTTOM-28], fill=acc)
     C.draw_line(d, SAFE_LEFT+38, H-SAFE_BOTTOM-30, "zaoseon.com", C.SEMI_F, 30, C.WHITE, C.WHITE)
 def ai_notice(d):
-    for i, t in enumerate(["※ 자오선의 상담가 정월은", "AI로 생성한 가상 캐릭터입니다"]):
+    for i, t in enumerate(["※ 자오선의 마음 코치 정월은", "AI로 생성한 가상 캐릭터입니다"]):
         C.draw_line(d, W-SAFE_RIGHT, H-SAFE_BOTTOM-56+i*28, t, C.MED_F, 22, C.GRAY, C.GRAY, "r")
 def stack_up(d, bottom, items):
     """items: [(kind, text, path, start, lo)] 위→아래 순서. 아래에서 위로 높이를 먼저 재서 FACE_PROTECT보다 올라가면 크기를 줄인다."""

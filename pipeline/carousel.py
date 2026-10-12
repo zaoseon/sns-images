@@ -64,7 +64,7 @@ def page_badge(d, n, m):
     d.rounded_rectangle([W-56-w, 48, W-56, 94], 23, fill=(60, 57, 55))
     draw_line(d, W-56-w//2, 80, t, SEMI_F, 26, DIMW, DIMW, "c")
 def ai_notice(d):
-    for i, t in enumerate(["※ 자오선의 상담가 정월은", "AI로 생성한 가상 캐릭터입니다"]):
+    for i, t in enumerate(["※ 자오선의 마음 코치 정월은", "AI로 생성한 가상 캐릭터입니다"]):
         draw_line(d, W-56, H-84+i*26, t, MED_F, 20, GRAY, GRAY, "r")
 def bg_space(accent=None):
     im = Image.open(CUT + "bg_sunmoon.jpg").convert("RGB"); r = max(W/im.width, H/im.height)

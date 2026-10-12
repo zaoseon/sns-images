@@ -14,7 +14,7 @@ def cover(face,acc,badge,sub,title):
 <div style="position:absolute;left:90px;top:430px;font-size:100px;line-height:1.2;z-index:3">{title}</div>
 <img src="data:image/png;base64,{ch}" style="position:absolute;right:-150px;bottom:0;height:760px;z-index:1">
 {handle(acc)}
-<div style="position:absolute;right:46px;bottom:34px;text-align:right;font-size:23px;color:#fff;line-height:1.3;z-index:4;background:rgba(0,0,0,.62);padding:8px 14px;border-radius:12px">※ 자오선의 상담가 정월은<br>AI로 생성한 가상 캐릭터입니다</div></body>"""
+<div style="position:absolute;right:46px;bottom:34px;text-align:right;font-size:23px;color:#fff;line-height:1.3;z-index:4;background:rgba(0,0,0,.62);padding:8px 14px;border-radius:12px">※ 자오선의 마음 코치 정월은<br>AI로 생성한 가상 캐릭터입니다</div></body>"""
 def band(acc,badge,title,body,foot='',bs=40):
     return f"""<body style="margin:0;width:1080px;height:1350px;background:#181615;position:relative;overflow:hidden;{F};color:#fff">
 <div style="position:absolute;left:0;right:0;top:216px;height:914px;background:url(data:image/jpeg;base64,{BG}) center/cover"></div>
