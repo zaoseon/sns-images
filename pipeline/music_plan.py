@@ -18,7 +18,9 @@ def _load():
 def choose(kind, name, write=True):
     log = _load()
     for x in log:
-        if x["name"] == name: return x          # 같은 이름은 처음 고른 곡을 그대로(다시 만들어도 곡이 바뀌지 않게)
+        if x["name"] == name:
+            if x.get("mode") == "up" and x.get("bpm", 0) >= 114: return x          # 같은 이름은 처음 고른 곡을 그대로(다시 만들어도 곡이 바뀌지 않게)
+            log.remove(x); break                 # 10/13: R33(느린 곡·템포 114 미만 금지)을 어긴 옛 기록은 버리고 새로 고른다
     recent = [x["style"] for x in log[-3:]]; last_key = log[-1]["key"] if log else None; n = len(log)
     cands = [c for c in CAT[kind] if c[0] not in recent] or CAT[kind]
     style, mode, bpm = cands[n % len(cands)]

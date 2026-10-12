@@ -246,7 +246,7 @@ def reel_four():
 REELS.update({"ziwei": (reel_ziwei, "data"), "dang": (reel_dang, "data"), "liuyao": (reel_liuyao, "data"), "harak": (reel_harak, "data"), "alone": (reel_alone, "data"), "four": (reel_four, "data")})
 
 def build(key):
-    fn, mood = REELS[key]; sc = fn(); out = os.path.join(ROOT, "2026-reels-v2"); p, dur = render(key, sc, out); mi = MP.choose(mood, "v2-" + key); MP.mux(p, [x for x, _ in sc], mi, 500 + len(key))
+    fn, mood = REELS[key]; sc = fn(); out = os.path.join(ROOT, "2026-reels-v2"); p, dur = render(key, sc, out); mi = MP.choose(mood, "v2-" + key); MP.mux(p, [x for x, _ in sc], mi, mi.get("seed", 500 + len(key)))
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "1.0", "-i", p, "-frames:v", "1", os.path.join(out, key + "_thumb.png")], check=True); print("완료", key, round(dur, 1), "초 · 음악", mi["style"], mi["bpm"])
 if __name__ == "__main__":
     build(sys.argv[1])

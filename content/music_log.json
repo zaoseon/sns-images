@@ -210,10 +210,11 @@
  {
   "name": "sky-2027",
   "kind": "data",
-  "style": "별빛 오르골",
-  "mode": "slow",
-  "bpm": 93,
-  "key": "E"
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 122,
+  "key": "D",
+  "seed": 817
  },
  {
   "name": "pilot-vs14_venn",
@@ -250,58 +251,65 @@
  {
   "name": "v2-star",
   "kind": "data",
-  "style": "별빛 오르골",
-  "mode": "slow",
-  "bpm": 93,
-  "key": "E"
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 116,
+  "key": "G",
+  "seed": 811
  },
  {
   "name": "v2-ziwei",
   "kind": "data",
-  "style": "경쾌 신스팝",
+  "style": "통통 마림바",
   "mode": "up",
-  "bpm": 108,
-  "key": "F"
+  "bpm": 118,
+  "key": "F",
+  "seed": 812
  },
  {
   "name": "v2-dang",
   "kind": "data",
-  "style": "통통 마림바",
+  "style": "경쾌 신스팝",
   "mode": "up",
-  "bpm": 104,
-  "key": "G"
+  "bpm": 120,
+  "key": "D",
+  "seed": 814
  },
  {
   "name": "v2-liuyao",
   "kind": "data",
-  "style": "맑은 팝",
-  "mode": "slow",
-  "bpm": 105,
-  "key": "A"
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 118,
+  "key": "G",
+  "seed": 816
  },
  {
   "name": "v2-harak",
   "kind": "data",
-  "style": "별빛 오르골",
-  "mode": "slow",
-  "bpm": 93,
-  "key": "C"
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 116,
+  "key": "C",
+  "seed": 818
  },
  {
   "name": "v2-alone",
   "kind": "data",
-  "style": "경쾌 신스팝",
+  "style": "상큼 팝",
   "mode": "up",
-  "bpm": 108,
-  "key": "E"
+  "bpm": 122,
+  "key": "A",
+  "seed": 813
  },
  {
   "name": "v2-four",
   "kind": "data",
-  "style": "통통 마림바",
+  "style": "경쾌 신스팝",
   "mode": "up",
-  "bpm": 104,
-  "key": "F"
+  "bpm": 120,
+  "key": "E",
+  "seed": 815
  },
  {
   "name": "clip2-n34-c1",

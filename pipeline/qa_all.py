@@ -17,6 +17,8 @@ def text_checks():
     import trendy_audit as TA
     out["트렌디 표현 사용 규칙"] = len(TA.run()[0])
     lg = json.load(open(os.path.join(R, "content", "music_log.json"), encoding="utf-8")); out["음악 경쾌(R33: 띠 릴스는 밝은 up 곡·템포 112 이상)"] = len([1 for x in lg if x["name"].startswith("zodiac-") and (x.get("mode") != "up" or x.get("bpm", 0) < 112)])
+    SCHED_MUSIC = ("v2-star", "v2-ziwei", "v2-dang", "v2-liuyao", "v2-harak", "v2-alone", "v2-four", "sky-2027")   # 10/13: 예약된 데이터 릴스·2027 하늘 일정도 R33(up 곡·템포 114 이상)
+    out["음악 경쾌(R33: 예약 데이터 릴스·하늘 일정도 up 곡·템포 114 이상)"] = len([1 for x in lg if x["name"] in SCHED_MUSIC and (x.get("mode") != "up" or x.get("bpm", 0) < 114)])
     import clips_motion_zodiac as ZL0
     _o = ("원숭이띠", "개띠", "용띠", "뱀띠", "말띠", "양띠", "닭띠", "돼지띠", "쥐띠"); out["배경 다양(R34: 이웃 영상 배경이 달라야 함)"] = len([1 for a, b in zip(_o, _o[1:]) if ZL0.PLAN[a]["bg"] == ZL0.PLAN[b]["bg"]])
     import clips_motion_zodiac as ZL
