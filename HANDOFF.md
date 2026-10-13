@@ -1351,3 +1351,9 @@ README "2주마다 하는 일" 그대로. 요점만:
 - 엄격=새 영상, 완화=예약·발행본(대표 08:02). sub_rules.level_of / STRICT_IDS / content/audit/sub_base_1013.json. 새 영상 렌더하면 STRICT_IDS에 키 추가.
 - 음악: pipeline/music_fix_1013.py(log/mux), music_log.json, qa_all R33 줄. 카드형 릴스 점검: pipeline/card_harvest.py --show.
 - 미완: 게시물형 n27-c1·n30-c1 눈 점검, 초안 TRIAL_REEL 2건은 그대로.
+
+## 10/13 오후 (D-196)
+- R64 예외: 일간 릴스 고정 범례 "같은 색 =" 는 덩어리 수에서 뺌(코드·rules.py·가이드 모두 명시).
+- R66 정리: "동전 3개는", 2027 하늘 "딱 3번", n28-c2/c3 알약 "3개". 남은 한글 숫자 소스(미예약 misc/카드고르기-oct31·nov7 "세 장")는 선택.
+- ffmpeg acrossfade 버그: 같은 입력 라벨을 두 번 쓰면 소리가 4.2초만 남음. r11_tail.attach가 입력을 두 번 열도록 고침, r11_audiofix.py로 36편 복구. 예약 영상 약 57건이 짧은 소리였고 모두 교체함(커밋 55ba320 고정).
+- 할로윈 음악은 추정(밝은 D장조 약 124~126 BPM)이며 확정 아님. 미교체.
