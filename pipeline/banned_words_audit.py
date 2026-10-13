@@ -16,7 +16,7 @@ EXT = (".py", ".json", ".html", ".md", ".js", ".css", ".gs", ".txt", ".yaml", ".
 SKIP = ("docs/수정기록.md", "docs/참고문서/", "docs/정본/", "docs/handoff_", "docs/competitors", "docs/벤치마크", "docs/package_compare", "docs/사이트_기획안",
         "ops/", "data/keywords/", "data/kos/", "data/sns_archive.json", "data/sns_live.json", "data/topics/", "public/admin/log.html", "public/admin/data.json",
         "tools/reply_lab/cases.json", "content/audit/", "content/reel_swaps.json", "highlights_1009/", "HANDOFF.md", "HANDOFF_SUPPORT.md",
-        "pipeline/banned_words_audit.py", "pipeline/qa_all.py", "pipeline/claims_audit.py", "pipeline/clip_from_reel.py", "naver/coaching_data.py", "engine/coaching.py", "public/naver/n11.html", "public/naver/n13.html",
+        "pipeline/banned_words_audit.py", "pipeline/qa_all.py", "public/admin/detail.js", "tools/tests/test_detail.js", "pipeline/claims_audit.py", "pipeline/clip_from_reel.py", "naver/coaching_data.py", "engine/coaching.py", "public/naver/n11.html", "public/naver/n13.html",
         "content/clips_from_reels.json", "naver/pages.json",
         "naver/build_naver_42_46.py", "naver/build_naver_75_79.py",   # 원본 문구 — coaching_data.py REPLACE 가 만들 때 고친다(옛 조각이 있어야 REPLACE 가 맞는다). 결과는 pages_unpublished()가 본다
         "docs/감정서_마음코칭_장_설계", "docs/코칭_신청_자료_양식", "docs/자오선_검증보고서_운명학", "tools/seo/psy_research.py",   # 규칙 인용·시장 조사
