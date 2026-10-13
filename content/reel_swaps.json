@@ -1,5 +1,28 @@
 [
   {
+    "id": "n29-cover-v2",
+    "kind": "블로그 대표 이미지 교체 후보(승인 대기)",
+    "title": "혼자 일할 때 더 잘하는 사람(n29, 10/13 발행) 대표 이미지 - 얼굴 가운데 시안",
+    "date": "2026-10-13",
+    "time": "",
+    "status": "new",
+    "channels": [
+      "naver"
+    ],
+    "images": [
+      "https://raw.githubusercontent.com/zaoseon/sns-images/8bdc47d8fdf2e524e6220f9c28617a91c8aa6577/naver/img/candidates/naver_z29_a_v2.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/naver/img/wide/naver_z29_a.jpg"
+    ],
+    "caption": "",
+    "old": "https://raw.githubusercontent.com/zaoseon/sns-images/main/naver/img/wide/naver_z29_a.jpg",
+    "note": "[10/13 앱 요청 mv6dn93m] 앞서 보내신 썸네일 수정 요청은 요청 목록·상태 기록 어디에도 남아 있지 않아 시작되지 않았어요(죄송해요). 원인 추정: 지금 그림은 정월 큰 상반신이 오른쪽 아래에 있어서, 네이버 목록이 얼굴 쪽으로 정사각을 잘라 제목 왼쪽이 잘리는 것 같아요(n20·n26도 얼굴이 오른쪽 위였고, 얼굴이 가운데인 n27·n31은 안 잘림). 추정이라 전체 규칙은 바꾸지 않고 n29 한 장만 얼굴을 가운데 원으로 옮긴 시안(1번째)을 만들었어요. 2번째는 지금 그림. 괜찮으면 승인해 주세요. 이미 발행된 글이라 네이버 글 수정에서 대표 이미지를 1번째 그림으로 바꿔 올려 주셔야 해요(제가 네이버에 직접 못 올려요). 승인하면 원고 페이지(/naver/n29.html) 대표 이미지도 이걸로 바꿔요.",
+    "checks": [
+      "목록 썸네일에서 제목이 다 보이는지",
+      "원래 그림과 같은 글로 보이는지"
+    ],
+    "since": "2026-10-13"
+  },
+  {
     "id": "zodiac-03",
     "kind": "띠 릴스",
     "title": "쥐띠 2027 운세 릴스",
