@@ -1346,3 +1346,8 @@ README "2주마다 하는 일" 그대로. 요점만:
 - 글 `content/min7_sets_1012.py`(밤 1~3장은 기존 세트 그대로, 나머지는 짝 원고 n30·n34·n35·n36·n40·n41·n43, 띠는 build_2026-w42 T + 사이트 2027 띠 페이지, 얼리버드는 캡션·사이트 감정서 페이지). 렌더 `python3 2026-w43min7/build.py [MMDD,…]` → `2026-w43min7/cards/{MMDD}_{n}.jpg`(1080x1440, R46·R47 틀, 끝에서 두 번째 장 '이번 주에 해 볼 것 하나', 마지막 장 프로필 링크 1초 무료 풀이).
 - 검사: `pipeline/carousel_rules.py`(렌더러 check_count, 폴더 check_dir, 예약 보관본 scan_archive). `qa_all.py`에 "인스타 캐러셀 7장 이상" 줄, `precheck.py carousel [폴더]`·`all`에 들어감. 새 캐러셀은 7장 미만이면 만들지도 올리지도 않는다.
 - 남은 것: Metricool draft(초안) 상태 띠 캐러셀 4건(말 387754915·양 387755121·닭 387755377·돼지 11/14 387766170)은 발행되지 않는 초안이라 건드리지 않음. 1장짜리 단일 게시물 7건은 대상 아님(zaoseon-site ops/to-content.md 10/12 알림).
+
+## 10/13 오전: 기준 확정·음악 R33 정리 (D-195)
+- 엄격=새 영상, 완화=예약·발행본(대표 08:02). sub_rules.level_of / STRICT_IDS / content/audit/sub_base_1013.json. 새 영상 렌더하면 STRICT_IDS에 키 추가.
+- 음악: pipeline/music_fix_1013.py(log/mux), music_log.json, qa_all R33 줄. 카드형 릴스 점검: pipeline/card_harvest.py --show.
+- 미완: 게시물형 n27-c1·n30-c1 눈 점검, 초안 TRIAL_REEL 2건은 그대로.
