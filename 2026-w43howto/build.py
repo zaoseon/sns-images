@@ -1,6 +1,7 @@
 # 10/12 대표 앱 요청 mv56yi0u: R55 '만드는 방식 공개' 캐러셀 7장 시안(승인 전 시범).
 # 글은 새로 지어내지 않고 사이트 정본(zaoseon-site public/index.html '여섯 운명학을 겹쳐 읽어요'·'마음 코치, 정월'·FAQ 'AI가 쓴 감정서인가요?')의 문장만 줄여 쓴다.
 # 틀: 2026-w43min7/build.py와 같은 R46·R47 표지·본문·CTA(build3 블록 높이 계산 배치). 6장은 정월 얼굴 + 검수·AI 고지.
+# 10/13 mv6anplt: 6장 제목에 '마음 코칭을 더해요', 7장 마음 코칭(마음·관계) 추가 → 8장.
 # 사용: python3 2026-w43howto/build.py → 2026-w43howto/cards/howto_{n}.jpg (1080x1440)
 import sys, os, asyncio, re
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, '..')
@@ -19,20 +20,23 @@ BODIES = [
  ('3 · 같은 말', '여럿이 같은 말을\n하는 곳부터 봐요', '여럿이 같은 말을 하면\n더 눈여겨볼 이야기예요.\n감정서 첫 장에 결론으로 적어요.'),
  ('4 · 다른 말', '서로 다른 말을\n하는 곳도 있어요', '그곳이 바로\n내가 고를 수 있는 부분이에요.\n선택지와 결과를 함께 풀어요.'),
 ]
-CHECK = ('5 · 직접 읽기', 'AI가 돕고,\n코치가 직접 읽어요',
-         '교차 분석·정리는 AI가 도와요.\n검수는 코치가 직접 해요.\n원국과 풀이를 보완해 완성해요.')
+CHECK = ('5 · 직접 읽기', 'AI가 돕고,\n코치가 직접 읽고\n마음 코칭을 더해요',
+         '교차 분석·정리는 AI가 돕고,\n원국과 풀이는 코치가 검수해요.')
+# 10/13 대표 앱 요청 mv6anplt: 마음·관계 코칭 내용 추가. 사이트 정본 '카카오톡 1:1 마음 코칭' 블록 문장만 줄여 씀.
+COACH = ('6 · 마음 코칭', '읽은 운세로\n마음과 관계를 돌아봐요',
+         '감정서로 읽은 운세를 두고\n지금 마음과 관계를\n같이 돌아봐요.\n마음 코치 정월이\n카카오톡에서 직접 답해요.')
 CTA = ('내 생일로도\n*겹쳐* 볼까요?', '무료 풀이', '내 태어난 날의 기운', '프로필 링크에서\n1초면 볼 수 있어요')
 
 def check_page_(badge, title, text):
-    for fh in (300, 260, 220, 180):
+    for fh, ts in ((300, 84), (260, 84), (220, 84), (180, 84), (220, 76), (180, 76)):
         p = new(); p.bg = 'ink'
-        place(p, [FACE(p, FACE_NAME, fh, 'center'), PILL(p, badge, 52, None, 'center'), T(p, title, 84, '#fff', 'title', 1.3, 'center', 900, '제목'), PANEL(p, [IN(p, text, 52)])])
+        place(p, [FACE(p, FACE_NAME, fh, 'center'), PILL(p, badge, 52, None, 'center'), T(p, title, ts, '#fff', 'title', 1.3, 'center', 900, '제목'), PANEL(p, [IN(p, text, 52)])])
         t, bt, c = B.metrics(p)
         if not p.problems and t >= B.TOP - 1 and bt <= B.BOT + 1: break
     return p
 
 def pages():
-    return [cover_face(COVER)] + [body(*b) for b in BODIES] + [check_page_(*CHECK), cta(*CTA)]
+    return [cover_face(COVER)] + [body(*b) for b in BODIES] + [check_page_(*CHECK), body(*COACH), cta(*CTA)]
 
 async def main(out):
     from playwright.async_api import async_playwright
