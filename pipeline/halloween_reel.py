@@ -46,12 +46,13 @@ def draw(kind, t):
             c = Image.open(os.path.join(ROOT, "characters", "cut", "v9_halloween.png")).convert("RGBA"); s = 1010 / c.width; c = c.resize((1010, int(c.height * s)), Image.LANCZOS); CH = c.crop((0, 0, 1010, 860)); m = Image.new("L", CH.size, 255); md = ImageDraw.Draw(m)
             for yy in range(740, 860): md.line([(0, yy), (1010, yy)], fill=int(255 * (860 - yy) / 120))
             CH.putalpha(Image.composite(CH.getchannel("A"), Image.new("L", CH.size, 0), m))
-        z = 1.0 + 0.04 * (t / 2.6); a = ease(t / 0.5); cc = CH if z == 1.0 else CH.resize((int(CH.width * z), int(CH.height * z)), Image.LANCZOS)
+        z = 1.0 + 0.04 * (t / 2.6); a = 1.0;   # R13 첫 프레임 완성
+        cc = CH if z == 1.0 else CH.resize((int(CH.width * z), int(CH.height * z)), Image.LANCZOS)
         im.paste(cc, (int(W / 2 - cc.width / 2), 330 + int((1 - a) * 40)), cc)
         pill(im, "정월의 할로윈", 380)
         for i, (txt, cy) in enumerate((("할로윈에 보는", 1030), ("나의 숨은 얼굴", 1150))):
-            center_text(im, txt, font(GM, 104), GOLD, cy, a=ease((t - 0.1 * i) / 0.4), stroke=7, sfill=BG)
-        center_text(im, "태어난 날 첫 글자로 알아보는 마녀 유형", font(PR, 50), WHITE, 1290, a=ease((t - 0.5) / 0.4), stroke=4, sfill=BG)
+            center_text(im, txt, font(GM, 104), GOLD, cy, a=1.0, stroke=7, sfill=BG)
+        center_text(im, "태어난 날 첫 글자로 알아보는 마녀 유형", font(PR, 50), WHITE, 1290, a=1.0, stroke=4, sfill=BG)
         center_text(im, "정월은 AI로 생성한 가상 캐릭터예요", font(PR, 32), (200, 195, 215), 1430)
     elif kind in ("t1", "t2"):
         i = 0 if kind == "t1" else 2
