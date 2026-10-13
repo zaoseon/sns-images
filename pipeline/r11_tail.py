@@ -27,8 +27,8 @@ def attach(src, dst, q, cut=None, music=None, fx="zoom", seed=7, labels=None):
     vf = (f"[0:v]trim=0:{cut:.3f},setpts=PTS-STARTPTS,fps=30,format=yuv420p[v0];[1:v]fps=30,format=yuv420p,setpts=PTS-STARTPTS[v1];[v0][v1]concat=n=2:v=1:a=0[v]")
     venc = ["-c:v", "libx264", "-profile:v", "high", "-crf", "15", "-preset", "medium", "-pix_fmt", "yuv420p", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-movflags", "+faststart"]
     if has_audio(src) and not music and _loud(src):
-        af = (f"[0:a]atrim=0:{cut:.3f},asetpts=PTS-STARTPTS[a0];[0:a]atrim=0:{TAIL_SEC + XFADE},asetpts=PTS-STARTPTS[a1];[a0][a1]acrossfade=d={XFADE}:c1=tri:c2=tri,afade=t=out:st={total - 0.7:.2f}:d=0.7[a]")
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", src, "-i", tail, "-filter_complex", vf + ";" + af, "-map", "[v]", "-map", "[a]", *venc, "-c:a", "aac", "-b:a", "192k", dst], check=True)
+        af = (f"[0:a]atrim=0:{cut:.3f},asetpts=PTS-STARTPTS[a0];[2:a]atrim=0:{TAIL_SEC + XFADE},asetpts=PTS-STARTPTS[a1];[a0][a1]acrossfade=d={XFADE}:c1=tri:c2=tri,afade=t=out:st={total - 0.7:.2f}:d=0.7[a]")   # 10/13: 같은 입력(0:a)을 두 번 쓰면 ffmpeg 6.1 acrossfade가 4.2초만 내보내 음악이 4초 뒤 끊겼다 -> 원본을 한 번 더(-i src, 2번 입력) 열어 쓴다
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", src, "-i", tail, "-i", src, "-filter_complex", vf + ";" + af, "-map", "[v]", "-map", "[a]", *venc, "-c:a", "aac", "-b:a", "192k", dst], check=True)
     else:     # 원본이 무음: 경쾌한 음악을 새로 만들어 입힌다(소리 없는 릴스 금지, 운영 규칙 5)
         import reel_music as RM
         style = music or "상큼 팝"; bpm = RM.pick_bpm(style, seed); beats = max(8, int((total - 0.3) * bpm / 60.0)); wav = tempfile.mktemp(suffix=".wav")

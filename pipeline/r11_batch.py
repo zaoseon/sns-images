@@ -15,7 +15,7 @@ M = {
  "2026-w42reel-sched/ig/2026-10-08.mp4": ("나는 자유가 필요한\n사람인가요?", "det"),
  "2026-w42reel-sched/ig/2026-10-09.mp4": ("나는 마음을 읽는\n사람인가요?", "det"),
  "2026-w43swap/ig/harak_pair.mp4": ("내 하락이수는\n누구와 닮았나요?", "det"),
- "2026-w43swap/ig/juyeok_coins.mp4": ("내 동전 세 개는\n어떤 괘일까요?", "det"),
+ "2026-w43swap/ig/juyeok_coins.mp4": ("내 동전 3개는\n어떤 괘일까요?", "det"),
  "2026-w43swap/ig/liuyao_lines.mp4": ("내 바뀌는 선은\n몇 개일까요?", "det"),
  "2026-w43swap/ig/numerology_calc.mp4": ("내 숫자는\n무엇일까요?", "det"),
  "2026-w43swap/ig/numerology_life.mp4": ("내 생명수는\n몇 번일까요?", "det"),
@@ -47,8 +47,8 @@ M = {
 }
 # 끝 장면 모양을 돌려 쓴다(R19): 아래 항목은 ② 질문 크게+선택 알약, 나머지는 ④ 한 줄 정리+팔로우(글 효과만 다르게)
 CH = {"2026-w42reel-sched/ig/2026-10-07.mp4": ("맞아요", "아니에요"), "2026-w40car6-reel/ig/2026-10-11.mp4": ("바로 해요", "생각해요"), "2026-w43swap/ig/liuyao_lines.mp4": ("1개", "2개 이상"),
-      "reuse/n28-c3/reel.mp4": ("한두 개", "세 개"), "2026-w42reel-sched/ig/2026-10-09.mp4": ("맞아요", "아니에요"), "reuse/n39-c1/reel.mp4": ("있어요", "없어요"),
-      "2026-w42reel-sched/gapeul/ig/eul.mp4": ("눕는 쪽", "서는 쪽"), "reuse/n28-c2/reel.mp4": ("한두 개", "세 개"), "reuse/n33-c2/reel.mp4": ("괜찮아요", "어색해요")}
+      "reuse/n28-c3/reel.mp4": ("한두 개", "3개"), "2026-w42reel-sched/ig/2026-10-09.mp4": ("맞아요", "아니에요"), "reuse/n39-c1/reel.mp4": ("있어요", "없어요"),
+      "2026-w42reel-sched/gapeul/ig/eul.mp4": ("눕는 쪽", "서는 쪽"), "reuse/n28-c2/reel.mp4": ("한두 개", "3개"), "reuse/n33-c2/reel.mp4": ("괜찮아요", "어색해요")}
 if __name__ == "__main__":
     flt = sys.argv[1:]
     for n, (k, (q, mode)) in enumerate(M.items()):
