@@ -47,8 +47,8 @@ SETS = {"oct3": dict(hook="10월, 나에게\n*먼저 오는 소식*", sub="세 �
         "oct10": dict(hook="그 사람이\n*곧 보여줄 행동*", sub="마음에 떠오르는 사람을 생각하세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-10-10"),
         "oct17": dict(hook="마음이 복잡한 날,\n*나에게 필요한 것*", sub="카드 3장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-10-17"),
         "oct24": dict(hook="요즘 마음에 걸린 일,\n*풀어 가는 순서*", sub="마음에 걸린 일 하나를 떠올리세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-10-24"),
-        "oct31": dict(hook="읽고도 답장 못 한 날,\n*내 마음이 하는 말*", sub="세 장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-10-31", cta="share", face="v3_ponytail_flip", dx=-80),
-        "nov7": dict(hook="말 걸고 싶은 날,\n*필요한 한 걸음*", sub="세 장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-11-07", cta="share", face="intro", dx=140)}
+        "oct31": dict(hook="읽고도 답장 못 한 날,\n*내 마음이 하는 말*", sub="카드 3장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-10-31", cta="share", face="v3_ponytail_flip", dx=-80),
+        "nov7": dict(hook="말 걸고 싶은 날,\n*필요한 한 걸음*", sub="카드 3장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-11-07", cta="share", face="intro", dx=140)}
 def check_frames(scenes):
     """장면마다 몇 시점의 그림을 배경만 있는 그림과 비교해, 바뀐 부분(글자·카드·정월)이 안전 영역 밖으로 나가는지 검사한다."""
     bad = []; total = sum(d for d, _ in scenes); acc = 0
