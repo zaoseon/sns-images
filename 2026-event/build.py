@@ -7,6 +7,7 @@ sys.path[:0] = [os.path.join(ROOT, '2026-vd-mockups'), os.path.join(ROOT, 'conte
 import build3 as B
 from build3 import T as _T, PILL, PANEL, FACE, place, new, GOLD, C_, X0
 from template_engine import font, wrap
+import card_kit as CK
 import carousel_rules as CR
 
 def T(p, txt, size, color='#fff', role='title', lh=1.3, align='left', w=B.W, name='글', x=None):
@@ -67,12 +68,22 @@ def follow1016():
         end_page('여러분은\n*무슨 띠*인가요?', '댓글로 참여해요', '참여 기간', '10월 16일 ~ 10월 29일', '당첨 소식은 스토리로 알려 드려요'),  # 10/14 대표 재요청 mv7l6sbe: 마지막 장 Instagram 고지 뺌(고지는 캡션에 그대로)
     ]
 def shari1020():   # 스레드 1장(캐러셀 아님): 매주 월 생년월일 한 줄 풀이 글 (10/14 대표 문구 확정, '스하리 데이' 말은 넣지 않음)
-    for fh in (420, 380, 340, 300, 260, 220):
-        p = new(); p.bg = 'ink'
-        place(p, [FACE(p, 'v5_halfup', fh, 'center'), IN(p, '사주·별자리·숫자로 읽는', 52, GOLD, lh=1.3, name='라벨'), T(p, '한 줄 풀이 드려요', 96, '#fff', 'title', 1.3, C_, 900, '제목'),
-                  PANEL(p, [IN(p, '댓글에 양력 생년월일과\n성별을 남겨 주세요', 52, name='안내'), IN(p, '태어난 시간까지 적어 주시면\n조금 더 자세하게 풀어 드려요', 44, '#efe9e4', name='안내2')])])
-        t, bt, c = B.metrics(p)
-        if not p.problems and t >= B.TOP - 1 and bt <= B.BOT + 1: break
+    # 10/14 대표 재요청 mv7s2ww9 "정월 캐릭터 저렇게 쓰는 게 별로": 가운데 작게 떠 있던 잘린 상반신(v5_halfup)을 빼고,
+    # 네이버 대표 이미지처럼 정월(v5_halfup_v2, 콘텐츠_제작_가이드 5-7)을 화면 아래에 붙여 크게 둔다. 뒤에 아치 판. 글 묶음은 위쪽에서 규칙대로.
+    for fh, ts in ((600, 96), (580, 96), (560, 96), (540, 96), (520, 92)):
+        p = new(); p.bg = 'ink'; p.ai = True; p.face_bottom = True
+        blocks = [IN(p, '사주·별자리·숫자로 읽는', 52, GOLD, lh=1.3, name='라벨'), T(p, '한 줄 풀이 드려요', ts, '#fff', 'title', 1.3, C_, 900, '제목'),
+                  PANEL(p, [IN(p, '댓글에 양력 생년월일과\n성별을 남겨 주세요', 52, name='안내'), IN(p, '태어난 시간까지 적어 주시면\n조금 더 자세하게 풀어 드려요', 44, '#efe9e4', name='안내2')])]
+        gaps = [40, 60]; y = B.TOP
+        for b, g in zip(blocks, gaps + [0]): b['draw'](y); y += b['h'] + g
+        text_bottom = y; fw = fh * 0.75; fx = (1080 - fw) / 2; ftop = 1440 - fh
+        aw = fw * 0.92; ax = (1080 - aw) / 2; atop = ftop + fh * 0.10
+        p.html.append(f'<div data-deco="1" style="position:absolute;left:{ax:.0f}px;top:{atop:.0f}px;width:{aw:.0f}px;height:{1440-atop+40:.0f}px;border-radius:{aw/2:.0f}px {aw/2:.0f}px 0 0;background:linear-gradient(180deg,rgba(216,169,92,.30),rgba(216,169,92,.06));z-index:1"></div>')
+        p.html.append(f'<img src="data:image/png;base64,{CK.face_b64("v5_halfup_v2")}" style="position:absolute;left:{fx:.0f}px;top:{ftop:.0f}px;height:{fh}px;z-index:2">')
+        p.face_top = ftop
+        if not p.problems and text_bottom + 40 <= atop: break   # 글 묶음과 아치(정월 머리 위)가 겹치지 않게 40px 띄운다
+    else:
+        p.problems.append(f'글 묶음 아래 {text_bottom:.0f}가 아치 {atop:.0f}와 겹침')
     return [p]
 SINGLE = {'shari1020'}
 SETS = {'trial1015': trial1015, 'follow1016': follow1016, 'shari1020': shari1020}
@@ -90,6 +101,7 @@ async def main(out, only):
             for e in ([] if key in SINGLE else CR.check_count(len(ps), f'{key} 캐러셀')): print('장 수:', e); bad += 1
             for i, p in enumerate(ps, 1):
                 n = f'{key}_{i}'; t, b, c = B.metrics(p)
+                if getattr(p, 'face_bottom', False): t, b, c = B.TOP, B.BOT, B.CEN   # 정월이 화면 아래에 붙는 장은 바닥·가운데 규칙에서 뺀다(제작 가이드 확정판). 글은 위에서부터 TOP 규칙
                 for pr in p.problems: print('엔진:', n, pr); bad += 1
                 if t < B.TOP - 1 or b > B.BOT + 1 or abs(c - B.CEN) > 15: print('배치:', n, f'위 {t:.0f} 아래 {b:.0f} 가운데 {c:.0f}'); bad += 1
                 open('/tmp/ev.html', 'w', encoding='utf-8').write(CK.page(''.join(p.html) + CK.frame(getattr(p, 'ai', False)), getattr(p, 'bg', 'sun'), GOLD))
