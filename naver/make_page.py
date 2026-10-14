@@ -15,12 +15,57 @@ def saved_urls():
         return {x["id"]: x["url"] for x in items if isinstance(x, dict) and x.get("url")}
     except Exception: return {}
 
-def sop_clips_for(pid):
-    """이 글에서 파생된 글 연결 클립 [(제목, 올릴 날 'M/D')]. content/clips_sop.py의 CLIPS(대표가 글 발행 다음 날부터 블로그 앱에서 올리는 클립)."""
-    try:
-        import sys; sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "content")); import clips_sop as CS
-        return [(c["hook"], D.date.fromisoformat(c["date"]).strftime("%-m/%-d") if c.get("date") else "") for c in CS.CLIPS if c.get("post") == pid]
-    except Exception: return []
+_CONTENT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "content")
+_RAW = "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_reel/"
+def _jload(name, default):
+    try: return json.load(open(os.path.join(_CONTENT, name), encoding="utf-8"))
+    except Exception: return default
+def app_clips_for(pid, title, clips):
+    """(10/14 D-241 · 앱 요청 mv7q2y49) 지금 블로그 '내 클립'에서 고를 수 있는 클립 = 블로그 앱으로 올린 클립(content/blog_app_clips.json).
+    일간 클립은 이 글의 clips 목록에 있을 때, 주제 클립은 제목 낱말이 맞거나 그 클립이 나온 글일 때. [(이름, 덧붙임)]"""
+    ba = _jload("blog_app_clips.json", {}); out = []
+    for c in ba.get("clips", []):
+        if c.get("match") == "ilgan" and c["label"] in (clips or []): out.append((c["label"], ""))
+    for c in ba.get("clips", []):
+        if c.get("match") != "keywords": continue
+        if c.get("from_post") == pid: out.append((c["label"], "이 글에서 만든 클립이에요"))
+        elif any(k in (title or "") for k in c.get("keywords", [])): out.append((c["label"], c.get("note", "")))
+    return out
+def new_clips_for(pid):
+    """이 글 릴스를 클립용으로 바꾼 것(content/clips_from_reels.json 의 blog 짝). 이미 블로그 앱으로 올린 것(same_as)은 뺀다."""
+    done = {c.get("same_as") for c in _jload("blog_app_clips.json", {}).get("clips", [])}
+    out = []
+    for c in _jload("clips_from_reels.json", {}).get("clips", []):
+        if c.get("blog") != pid or c["id"] in done: continue
+        try:
+            import subprocess; mp4 = os.path.join(_CONTENT, "..", "clips_reel", c["id"] + ".mp4")
+            dur = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", mp4]))
+        except Exception: dur = None
+        out.append({"id": c["id"], "name": re.sub(r"\s*\n\s*", " ", c["hook"]).replace("*", ""), "date": D.date.fromisoformat(c["upload"]).strftime("%-m/%-d"), "dur": dur})
+    return out
+def clip_box_html(pid, title, clips):
+    """3-1 칸: (가) 지금 '내 클립'에서 고를 수 있는 것 (나) 새로 올릴 클립(블로그 앱으로 올린 뒤 글 수정해서 넣기). 둘 다 없으면 칸을 안 만든다."""
+    have, new = app_clips_for(pid, title, clips), new_clips_for(pid)
+    if not (have or new): return ""
+    ba = _jload("blog_app_clips.json", {}); n = len(ba.get("clips", []))
+    V = '<p class="val" style="font-size:20px;font-weight:700;margin:6px 0">'; S = ' <span style="font-size:16px;font-weight:400;color:#8a6d3b">· '
+    h = ('<div class="box"><p class="lab">3-1. 본문에 클립 넣기 (글쓰기 화면 위쪽 \'클립\' 버튼 → 내 클립)</p>'
+         f'<p class="hint">자리: 결론 요약 박스와 이미지 아래, \'이 글의 순서\' 위. <b>지금 블로그 \'내 클립\'에서 고를 수 있는 것</b>(블로그 앱으로 올린 {n}개: {html.escape(ba.get("summary", ""))}) '
+         + ('중 이 글에 맞는 것:</p>' if have else '중에는 이 글에 맞는 것이 없어요.</p>'))
+    i = 0
+    for name, note in have:
+        i += 1; h += f'{V}{i}. {html.escape(name, quote=False)}' + (f'{S}{html.escape(note, quote=False)}</span>' if note else '') + '</p>'
+    if new:
+        h += ('<p class="hint"><b>새로 올릴 클립(이 글 릴스를 클립용으로 바꾼 것)</b>: 영상을 폰에 저장한 뒤 <b>네이버 블로그 앱</b> → 글쓰기 대신 클립 만들기로 올리세요. '
+              '클립 앱·클립 홈에서 올리면 블로그 \'내 클립\'에 안 보여요. 올린 다음 이 글을 수정해서 위 자리에 넣으면 돼요. 설명 글은 아래 버튼으로 받아 붙여 넣으세요.</p>')
+        for c in new:
+            i += 1; meta = f'올릴 날 {c["date"]}' + (f' · {c["dur"]:.1f}초' if c["dur"] else '') + ' · 소리 없음'
+            h += (f'{V}{i}. {html.escape(c["name"], quote=False)}{S}{meta}</span></p>'
+                  f'<a href="{_RAW}{c["id"]}.mp4" target="_blank" rel="noopener"><button>클립 영상 열기(저장)</button></a> '
+                  f'<a href="{_RAW}desc/{c["id"]}.txt" target="_blank" rel="noopener"><button>설명 글 열기</button></a>')
+    note = ba.get("page_notes", {}).get(pid)
+    if note: h += f'<p class="hint">{html.escape(note, quote=False)}</p>'
+    return h + '</div>'
 SITE = os.environ.get("SITE", "/home/claude/zaoseon-site")
 CTA_LINK = "https://zaoseon.com/?utm_source=naver&utm_medium=cta#free"
 CAT_LIST = ["2027 신년운세", "띠별 운세", "주간 기운", "절기 이야기", "태어난 날(일주) 이야기", "운명학 입문", "자오선 소식"]
@@ -157,12 +202,7 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
                    f'<p class="val" style="font-size:21px;font-weight:700">{html.escape(reserve["hard"])} 이후</p>'
                    '<p class="hint">함께 볼 글이 그때 발행돼 주소가 생겨요. 예약만 걸려 있는 글은 주소가 없어서 링크로 걸 수 없어요.</p>'
                    + (f'<p class="hint">본문에 클립까지 넣으려면 {html.escape(reserve["soft"])} 이후에 걸어요(그 전이면 클립은 건너뛰어도 돼요). 마감: 발행 시각 전까지.</p>' if reserve.get("needsClip") else '') + '</div>')
-    sop = sop_clips_for(pid)
-    clip_box = "" if not (clips or sop) else ('<div class="box"><p class="lab">3-1. 본문에 클립 넣기 (글쓰기 화면 위쪽 \'클립\' 버튼 → 내 클립)</p>'
-        + ('<p class="hint">자리: 결론 요약 박스와 이미지 아래, \'이 글의 순서\' 위. 아래 클립은 이미 올라가 있어요.</p>' + "".join(f'<p class="val" style="font-size:20px;font-weight:700;margin:6px 0">{i+1}. {html.escape(c)}</p>' for i, c in enumerate(clips)) if clips else "")
-        + ('<p class="hint"><b>이 글의 클립은 글을 발행한 다음 날부터 올려요.</b> 클립은 <b>폰의 네이버 블로그 앱에서 만들어 올려야</b> 글쓰기 화면의 \'내 클립\'에서 고를 수 있어요. 클립 홈에서 올린 클립은 블로그에서 안 보여요(블로그 앱에서 올리면 클립 홈에도 같이 올라가요). 올린 뒤 이 글을 수정해서 위 자리에 넣으세요. 클립 주소는 따로 안 적어도 돼요.</p>'
-           + "".join(f'<p class="val" style="font-size:20px;font-weight:700;margin:6px 0">{i+1}. {html.escape(h)}' + (f' <span style="font-size:16px;font-weight:400;color:#8a6d3b">· 올릴 날 {d}</span>' if d else "") + '</p>' for i, (h, d) in enumerate(sop)) if sop else "")
-        + '</div>')
+    clip_box = clip_box_html(pid, title, clips)   # 10/14 D-241: 블로그 앱으로 올린 클립 + 릴스 클립(blog 짝) 기준
     cat_box = (f'<div class="box"><p class="lab">6. 카테고리: 글쓰기 화면 오른쪽 카테고리에서 이 이름을 고르세요</p><p class="val" style="font-size:22px;font-weight:700">{html.escape(category)}</p></div>') if category else '<div class="box"><p class="lab">6. 카테고리</p><p class="val">미정 - 알려 주세요</p></div>'
     thumb_box = (f'<div class="box"><p class="lab">2-1. 대표 이미지 안에 넣을 문구 후보 (제목을 그대로 반복하지 말고, 클릭할 이유를 한 줄로)</p>'
                  + "".join(f'<p class="val" style="font-size:22px;font-weight:700;margin:6px 0">{i+1}. {html.escape(t)}</p>' for i, t in enumerate(thumbs)) + '</div>') if thumbs else ""

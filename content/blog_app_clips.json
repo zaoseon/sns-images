@@ -1,0 +1,15 @@
+{
+ "_note": "네이버 블로그 글쓰기 '내 클립'에서 고를 수 있는 클립 = 폰의 네이버 블로그 앱으로 올린 클립만(대표 기준 10/14, zaoseon-site 수정 기록 D-241). 클립 홈·클립 앱에서 올린 옛 클립은 블로그에 안 붙는다. 원고 페이지 3-1 칸(naver/make_page.py clip_box)이 이 목록을 읽는다. 대표가 블로그 앱으로 클립을 새로 올리면 여기에 한 줄 더한다. match: 'ilgan' = pages.json 글의 clips 목록에 같은 label이 있으면 넣을 수 있는 클립으로 보여 줌 / 'keywords' = 글 제목에 낱말이 있으면 선택으로 보여 줌. from_post = 이 클립이 나온 글(그 글에도 보여 줌). same_as = clips_from_reels.json의 같은 클립 id(이미 올라갔으니 '새로 올릴 클립'에서 뺌).",
+ "summary": "무·기·경·신 일간, 10월 이사 손없는 날, 첫눈에 반하는 사람",
+ "clips": [
+  {"key": "mu", "label": "무(戊)일간 클립 · 듬직해서 다들 기대는 사람", "match": "ilgan", "from_post": "n18", "src": "2026-w42clip-sched/naver/mu.mp4"},
+  {"key": "gi", "label": "기(己)일간 클립 · 남 챙기다 내 건 못 챙기는 사람", "match": "ilgan", "from_post": "n19", "src": "2026-w42clip-sched/naver/gi.mp4"},
+  {"key": "gyeong", "label": "경(庚)일간 클립 · 단호해서 확실한 사람", "match": "ilgan", "from_post": "n20", "src": "2026-w42clip-sched/naver/gyeong.mp4"},
+  {"key": "sin", "label": "신(辛)일간 클립 · 까다로워 보여도 인정하면 끝까지", "match": "ilgan", "from_post": "n29", "src": "2026-w42clip-sched/naver/sin.mp4"},
+  {"key": "s10-p", "label": "10월 이사 손없는 날 클립", "match": "keywords", "keywords": ["손없는", "손 없는", "이사"], "note": "같은 이사 주제라 함께 넣어도 좋아요(선택)", "from_post": "s10"},
+  {"key": "first", "label": "첫눈에 반하는 사람 클립", "match": "keywords", "keywords": ["연애", "사랑", "좋아해", "애착", "짝", "도화", "첫눈"], "note": "같은 연애 주제라 함께 넣어도 좋아요(선택)", "from_post": "n22", "same_as": "rc-1017-first", "same_as_guess": true}
+ ],
+ "page_notes": {
+  "n26": "예전에 적혀 있던 '좋아해도 티가 안 나요(10/11)'는 클립 홈에서 올려 블로그에 연결이 안 되는 것이라 뺐어요."
+ }
+}

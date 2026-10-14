@@ -17,6 +17,7 @@
 > 3. `python3 pipeline/clip_from_reel.py --id <id>` → `clips_reel/<id>.mp4`(첫 장면 2.6초 + 릴스 본문 + 끝 장면 3초 "블로그에서 전체 글 보기 · zaoseon.com")와 `_thumb.png`, `_check.png`. **`_check.png`를 눈으로 본다**(글자 잘림, 빨간 선 = 안전영역, 팔로우 장면이 남지 않았는지).
 > 4. `python3 pipeline/qa_all.py`(자동으로 이 클립 설명·소리 없음·1080x1920 검사)와 `python3 pipeline/natural_audit.py`(0곳). commit·push → `clips_reel/QUEUE.md`(올릴 날·영상 raw 주소·설명 주소·연결 블로그 글 표)가 대표용 큐다.
 > 5. 대표가 하는 일(업로드는 네이버가 이 환경에서 막혀 자동화 불가, PC도 불가·폰 블로그 앱만): 폰에서 QUEUE.md의 영상 주소를 열어 사진첩에 저장 → 설명 글 주소를 열어 전체 복사 → 네이버 블로그 앱 + → 클립 만들기 → 영상 선택 → 설명 붙여넣기 → 블로그 스티커로 표의 글 연결 → 올리기.
+> **원고 3-1 클립 칸 (10/14 대표, D-241·앱 요청 mv7q2y49):** 블로그 '내 클립'에는 폰 블로그 앱으로 올린 클립만 뜬다. `naver/make_page.py`의 3-1 칸은 `content/blog_app_clips.json`(블로그 앱으로 올린 클립 목록, 대표가 새로 올리면 한 줄 추가)과 `clips_from_reels.json`의 `blog` 짝으로 만든다(clips_sop 안 씀). 원고 안내에 '글 연결 클립'이라는 말은 쓰지 않는다.
 > 기존 "글 연결 클립·게시물 클립"(`content/clips_sop.py`, 10/13~12/2 하루 1개씩 배정)과 올리는 날이 겹친다. 어느 쪽을 그날 1개로 할지는 대표 결정 대기(D-190 기록).
 
 ## 세션 구분 (2026-09-29 대표 결정)
