@@ -57,7 +57,12 @@ def mask_png(masks, path):
     """투명 PNG 한 장: masks 의 칸을 단색으로 덮고 text 가 있으면 그 자리에 새 글을 쓴다."""
     im = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     for m in masks:
-        x0, y0, x1, y1 = m["rect"]; d.rectangle((x0, y0, x1, y1), fill=tuple(m["color"]) + (255,))
+        x0, y0, x1, y1 = m["rect"]
+        if m.get("radius"): d.rounded_rectangle((x0, y0, x1, y1), radius=m["radius"], fill=tuple(m["color"]) + (255,))
+        else: d.rectangle((x0, y0, x1, y1), fill=tuple(m["color"]) + (255,))
+        if m.get("ctext"):   # 가운데 정렬 여러 줄(자막 바꿔 쓰기, 10/14 '결' 금지어 수정)
+            f = C.font(os.path.join(HERE, "fonts", m.get("font", "PRETENDARD-SEMIBOLD.OTF")), m.get("size", 50))
+            d.multiline_text(((x0 + x1) / 2, (y0 + y1) / 2), m["ctext"], font=f, fill=tuple(m.get("tcolor", (255, 255, 255))) + (255,), anchor="mm", align="center", spacing=m.get("spacing", 14))
         if m.get("text"):
             f = C.font(os.path.join(HERE, "fonts", "PRETENDARD-REGULAR.OTF"), m.get("size", 25)); d.text((x0 + 7, y0 + 3), m["text"], font=f, fill=tuple(m.get("tcolor", (255, 255, 255))) + (255,))
     im.save(path)
@@ -70,13 +75,13 @@ def body_seg(c, sp, out, tmp):
     groups = []                                      # [(from_sec, [mask...])] — 시작 시각이 같은 칸끼리 한 장으로
     allm = (sp["masks_common_panel"] if c.get("panel") else []) + c.get("masks", [])
     for m in allm:
-        t = m.get("from", 0); g = next((g for g in groups if g[0] == t), None)
+        t = (m.get("from", 0), m.get("to")); g = next((g for g in groups if g[0] == t), None)   # to: 이 시각까지만 덮는다(없으면 끝까지)
         if g: g[1].append(m)
         else: groups.append((t, [m]))
     ins = ["-i", os.path.join(ROOT, c["src"])]; filt = "[0:v]fps=30,scale=1080:1920,setsar=1[v0]"; last = "v0"
     for i, (t, ms) in enumerate(groups):
         p = os.path.join(tmp, f"m{i}.png"); mask_png(ms, p); ins += ["-loop", "1", "-i", p]
-        filt += f";[{last}][{i + 1}:v]overlay=0:0:enable='gte(t,{t})':shortest=1[v{i + 1}]"; last = f"v{i + 1}"
+        filt += f";[{last}][{i + 1}:v]overlay=0:0:enable='{f"between(t,{t[0]},{t[1]})" if t[1] is not None else f"gte(t,{t[0]})"}':shortest=1[v{i + 1}]"; last = f"v{i + 1}"
     run(["ffmpeg", "-y", "-loglevel", "error"] + ins + ["-t", str(c["trim_end"]), "-filter_complex", filt, "-map", f"[{last}]"] + ENC + [out])
 def render(c, sp):
     os.makedirs(OUT, exist_ok=True); tmp = tempfile.mkdtemp(); outp = os.path.join(OUT, c["id"] + ".mp4")
