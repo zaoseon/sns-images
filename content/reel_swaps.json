@@ -2808,5 +2808,61 @@
       "캡션 문구"
     ],
     "since": "2026-10-12"
+  },
+  {
+    "id": "event-trial1015",
+    "kind": "이벤트 캐러셀(체험단 모집 7장, 승인 대기)",
+    "title": "감정서 체험단 모집 (인스타 캐러셀 7장)",
+    "date": "2026-10-15",
+    "time": "18:30",
+    "status": "new",
+    "channels": [
+      "instagram"
+    ],
+    "images": [
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-event/cards/trial1015_1.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-event/cards/trial1015_2.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-event/cards/trial1015_3.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-event/cards/trial1015_4.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-event/cards/trial1015_5.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-event/cards/trial1015_6.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-event/cards/trial1015_7.jpg"
+    ],
+    "caption": "2027 신년 감정서, 먼저 받아 보실 다섯 분을 찾아요.\n\n자오선 감정서 체험단이에요. 여섯 가지 운명학을 겹쳐 읽은 감정서(STANDARD)를 무료로 보내 드려요.\n신년 2 · 연애·궁합 2 · 재물·사업 1, 모두 다섯 분이에요.\n\n신청은 프로필 링크에서 해요.\n생년월일을 넣고 무료 풀이를 보시면 결과 아래에 '감정서 체험단' 칸이 있어요. 지금 고민을 40자 이상 적어 주시면 돼요.\n\n받으신 뒤 7일 안에 사이트 후기 한 개와 공개 계정 게시물 한 개를 부탁드려요. 게시물에는 \"자오선 체험단으로 감정서를 무료로 받았어요\"를 꼭 적어 주세요. 별점과 내용은 느끼신 그대로면 돼요.\n\n모집 10월 19일까지 · 발표 10월 20일\n아쉽게 안 되신 분 중 수신 동의하신 분께는 얼리버드 3,000원 추가 할인 코드를 보내 드려요.\n\n이 내용은 재미로, 그리고 나를 돌아보는 계기로 봐 주세요.\n\n#사주 #운세 #2027년운세 #신년운세 #체험단모집",
+    "note": "[10/14 ① 자동 실행] 10/13 대표 승인 이벤트 설계 B안. 같은 날 19:00 스레드 모집 글(글만)은 예약했어요. 승인하면 10/15 18:30 빈 칸에 예약해요. 기존 예약은 그대로예요.",
+    "checks": [
+      "모집 기간·발표일",
+      "신청 경로(프로필 링크 → 결과 아래 체험단 칸)",
+      "체험단 표시 문구"
+    ],
+    "since": "2026-10-14"
+  },
+  {
+    "id": "event-follow1016",
+    "kind": "이벤트 캐러셀(팔로우 이벤트 7장, 승인 대기)",
+    "title": "2027 신년 감정서, 매주 한 분께 (팔로우 이벤트 7장)",
+    "date": "2026-10-16",
+    "time": "10:00",
+    "status": "new",
+    "channels": [
+      "instagram"
+    ],
+    "images": [
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-event/cards/follow1016_1.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-event/cards/follow1016_2.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-event/cards/follow1016_3.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-event/cards/follow1016_4.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-event/cards/follow1016_5.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-event/cards/follow1016_6.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-event/cards/follow1016_7.jpg"
+    ],
+    "caption": "2027 신년 감정서, 매주 한 분께 드려요.\n\n참여 방법\n1. @zaoseon.jeongwol 팔로우\n2. 이 게시물에 \"내 띠 + 2027년에 가장 궁금한 것 한 단어\" 댓글 (예: 토끼띠 · 이직)\n3. 친구 1명 태그\n\n경품: 2027 신년 감정서 STANDARD, 매주 한 분 (10월 22일 · 29일 두 번)\n발표: 스토리로 알려 드리고, 당첨되신 분께 DM을 드려요. DM 받은 날부터 3일 안에 답해 주세요.\n\n당첨 조건: 공개 계정 · 이벤트 외 게시물 3개 이상 · 개설 30일 이상. 같은 분이 두 번 당첨되지는 않아요.\n태어난 정보는 감정서를 쓰는 데에만 쓰고, 보내 드린 뒤 바로 지워요.\n\n본 이벤트는 Instagram과 관련이 없으며 Instagram이 후원·보증·관리하지 않습니다.\n\n이 내용은 재미로, 그리고 나를 돌아보는 계기로 봐 주세요.\n\n#사주 #운세 #2027년운세 #신년운세 #팔로우이벤트",
+    "note": "[10/14 ① 자동 실행] 설계 C안. 필수 문구(Instagram 무관 고지·스토리+DM 발표·3일 안 답장·출생 정보 폐기) 모두 카드와 캡션에 있어요. 승인하면 10/16 10:00 빈 칸에 예약해요. 고정 댓글은 게시 뒤 대표가 달아 주세요.",
+    "checks": [
+      "필수 문구 4가지",
+      "경품·발표일(10/22·10/29)",
+      "당첨 조건"
+    ],
+    "since": "2026-10-14"
   }
 ]
