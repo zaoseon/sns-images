@@ -66,7 +66,16 @@ def follow1016():
         panel_page('꼭 읽어 주세요', '당첨 조건', [('공개 계정\n이벤트 외 게시물 3개 이상\n계정 개설 30일 이상', 52, '#fff'), ('같은 분이 두 번 당첨되지는 않아요', 44, GOLD), ('태어난 정보는 감정서를 쓰는 데에만 쓰고\n보내 드린 뒤 바로 지워요', 40, '#efe9e4')]),
         end_page('여러분은\n*무슨 띠*인가요?', '댓글로 참여해요', '참여 기간', '10월 16일 ~ 10월 29일', '당첨 소식은 스토리로 알려 드려요'),  # 10/14 대표 재요청 mv7l6sbe: 마지막 장 Instagram 고지 뺌(고지는 캡션에 그대로)
     ]
-SETS = {'trial1015': trial1015, 'follow1016': follow1016}
+def shari1020():   # 스레드 1장(캐러셀 아님): 매주 월 생년월일 한 줄 풀이 글 (10/14 대표 문구 확정, '스하리 데이' 말은 넣지 않음)
+    for fh in (420, 380, 340, 300, 260, 220):
+        p = new(); p.bg = 'ink'
+        place(p, [FACE(p, 'v5_halfup', fh, 'center'), IN(p, '사주·별자리·숫자로 읽는', 52, GOLD, lh=1.3, name='라벨'), T(p, '한 줄 풀이 드려요', 96, '#fff', 'title', 1.3, C_, 900, '제목'),
+                  PANEL(p, [IN(p, '댓글에 양력 생년월일과\n성별을 남겨 주세요', 52, name='안내'), IN(p, '태어난 시간까지 적어 주시면\n조금 더 자세하게 풀어 드려요', 44, '#efe9e4', name='안내2')])])
+        t, bt, c = B.metrics(p)
+        if not p.problems and t >= B.TOP - 1 and bt <= B.BOT + 1: break
+    return [p]
+SINGLE = {'shari1020'}
+SETS = {'trial1015': trial1015, 'follow1016': follow1016, 'shari1020': shari1020}
 
 async def main(out, only):
     from playwright.async_api import async_playwright
@@ -78,7 +87,7 @@ async def main(out, only):
         for key, fn in SETS.items():
             if only and key not in only: continue
             ps = fn()
-            for e in CR.check_count(len(ps), f'{key} 캐러셀'): print('장 수:', e); bad += 1
+            for e in ([] if key in SINGLE else CR.check_count(len(ps), f'{key} 캐러셀')): print('장 수:', e); bad += 1
             for i, p in enumerate(ps, 1):
                 n = f'{key}_{i}'; t, b, c = B.metrics(p)
                 for pr in p.problems: print('엔진:', n, pr); bad += 1
