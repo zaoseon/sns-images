@@ -95,7 +95,7 @@ def pick1020():
 def draw1022():
     return [cover('팔로우 이벤트 1차', '당첨자를\n알려 드려요', '조건을 확인한 댓글 중\n무작위로 뽑았어요\nDM을 확인해 주세요', '2차 발표 10월 29일')]
 def draw1029():
-    return [cover('팔로우 이벤트 2차', '마지막 당첨자를\n알려 드려요', '조건을 확인한 댓글 중\n무작위로 뽑았어요\nDM을 확인해 주세요', '참여해 주셔서 고마워요')]
+    return [cover('팔로우 이벤트 2차', '마지막 당첨자를\n알려 드려요', '조건을 확인한 댓글 중\n무작위로 뽑았어요\nDM을 확인해 주세요', '참여해 주셔서 감사합니다')]   # 10/15 대표 요청 mv8ztrew: '고마워요' 어색 → '감사합니다'
 SINGLE = {'shari1020', 'close1019', 'pick1020', 'draw1022', 'draw1029'}
 SETS = {'trial1015': trial1015, 'follow1016': follow1016, 'shari1020': shari1020, 'close1019': close1019, 'pick1020': pick1020, 'draw1022': draw1022, 'draw1029': draw1029}
 
