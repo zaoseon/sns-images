@@ -190,6 +190,7 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
                  f'<img src="/naver/img/{cover}?v=b4" style="width:100%;border-radius:8px" alt=""><a href="/naver/img/{cover}?v=b4" download="{os.path.basename(cover)}"><button>대표 이미지 저장</button></a></div>') if cover else ""
     _ru = (saved_urls().get((related or {}).get("id")) or (related or {}).get("url") or "") if related else ""   # 앱에 저장된 주소가 우선, 없으면 발행 기록의 주소
     if v2 and _ru: body = V2.link_guide(body, _ru)   # 본문의 연결 글 제목 줄에 링크(복사하면 같이 감)
+    body = FB.fit_mobile(body)   # 10/15 대표 폰 캡처: 실제 한 줄 폭(본문 약 15.7자·소제목 약 13.4자)을 넘는 줄을 다시 나눈다
     if related and (related.get("url") or related.get("title") or _ru):
         _u = _ru
         rel_box = (f'<div class="box"><p class="lab">4. 함께 볼 글(내부 링크): 글 주소가 앱에 저장돼 있으면 본문 맨 아래 제목 줄에 링크가 자동으로 걸려요. 링크 카드도 원하면 제목 줄 다음 줄에 주소를 붙여 넣고 엔터</p>'
