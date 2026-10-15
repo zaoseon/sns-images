@@ -41,7 +41,7 @@ def text_checks():
     sp3 = json.load(open(os.path.join(R, "content", "clips_v3.json"), encoding="utf-8"))["clips"]; bad3 = []
     for k, c in sp3.items():
         d = c["desc"]
-        if not os.path.exists(os.path.join(R, "clips_v3", k + ".mp4")): bad3.append((k, "영상 없음(python3 content/clips_v3.py)"))
+        if not os.path.exists(os.path.join(R, "clips_v3s", k + ".mp4")): bad3.append((k, "영상 없음(python3 content/clips_v3.py)"))
         if "http" in d or "상" + "담" in d: bad3.append((k, "주소·금지어"))
         if any(len(x) > 60 for x in d.split("\n")): bad3.append((k, "한 줄 60자 넘음"))
         if not any(w in d for w in ("마음", "관계")): bad3.append((k, "마음·관계 줄 없음"))

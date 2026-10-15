@@ -20,6 +20,33 @@ GM = FK.P["gm_bold"]; CORAL = (255, 138, 115, 255); TEAL = (127, 214, 200, 255);
 OUT = os.path.join(ROOT, "clips_v3")
 BGS = ["navy", "violet-moon", "burgundy-sun", "forest", "teal"]
 
+# ───────── 단색 판(10/15 대표 재요청 mv9gs1t9: "저 배경에 저 내용과 구성이 어울린다고 생각하냐?") ─────────
+# 약속 문자·노트·영수증·배터리 같은 생활 장면 뒤에 황도 차트·별·해달·색 그라데이션을 깔아 내용과 배경이 따로 놀았다.
+# K-041(그라데이션·빛 방울 금지, 바탕 단색 #121214) · K-042(장식 그림 빼고 단색 면+선) · K-043(강조색 하나 #FFD640 + 누른 톤 #B09646 + 흰색, 면·선 무채색)을 따른다.
+# 결과는 새 폴더 clips_v3s/(같은 이름 덮어쓰기 금지). 옛 판으로 다시 그리려면 SOLID=0 환경 변수.
+SOLID = os.environ.get("SOLID", "1") != "0"
+if SOLID:
+    import numpy as _np
+    OUT = os.path.join(ROOT, "clips_v3s")
+    BG_SOLID = (18, 18, 20); YEL = (255, 214, 64, 255); YEL_D = (176, 150, 70, 255)
+    GOLD = M.GOLD = YEL; CORAL = YEL_D; TEAL = WHITE; PANEL = (34, 34, 38, 255); PANEL2 = (44, 44, 48, 255); DIM = M.DIM = (200, 200, 204, 255)
+    _YU = _np.array([1.0, (214 - 64) / (255 - 64), 0.0], dtype="float32")   # 노랑 #FFD640의 색 방향(최솟값 위에 얹는 비율)
+    def _bg_solid(fr, t, total_t):
+        fr.paste(BG_SOLID, (0, 0, M.W, M.H)); d = ImageDraw.Draw(fr, "RGBA")
+        d.rectangle((70, 143, 880, 147), fill=(255, 255, 255, 40)); d.rectangle((70, 143, 70 + int(810 * cl(t / total_t)), 147), fill=YEL)
+    def _palette(fr):
+        """K-043: 색 있는 픽셀은 밝기·채도는 두고 색만 노랑 계열로, 거의 무채색인 픽셀은 회색으로. 장면 안 남은 색(얼굴·병·오행 원·빨간 줄)도 한 계열로 묶인다."""
+        a = _np.asarray(fr).astype("float32"); mx = a.max(axis=2); mn = a.min(axis=2); ch = mx - mn
+        col = mn[..., None] + ch[..., None] * _YU; gray = a.mean(axis=2, keepdims=True).repeat(3, axis=2)
+        out = _np.where((ch > 24)[..., None], col, gray)
+        fr.paste(Image.fromarray(_np.clip(out, 0, 255).astype("uint8")))
+    def _brand_solid(fr, ai=False):
+        _palette(fr); d = ImageDraw.Draw(fr, "RGBA"); R = 900
+        d.text((60, 340), M._BF.TAG1, font=font(FK.P["gm_bold"], 42), fill=YEL, anchor="la")
+        d.text((R, 346), M._BF.TAG2, font=font(FK.P["pr_xb"], 34), fill=(255, 255, 255, 242), anchor="ra")
+        d.text((R, 1465), M._BF.URL, font=font(FK.P["gm_bold"], 40), fill=YEL_D, anchor="rd")
+    M.background = _bg_solid; M.brand_layer = _brand_solid
+
 # ───────── 공용 조각 (모두 엔진 text/line_layers를 거친다 → 자막 검사 대상) ─────────
 def kick(c, s, y, t0=.05): return text(c, s, y, t0, 52, color=GOLD, maxw=820, stagger=0)
 def title(c, s, y, t0=.2, size=100, color=WHITE): return text(c, s, y, t0, size, color=color, path=GM, maxw=820, lh=1.25, stagger=.22)
@@ -193,7 +220,7 @@ def n38():
 
 def n39():
     def screen(c, msgs, t0):
-        x0, x1, y0 = 110, 830, 600; box(c, x0, y0, x1, y0 + 560, t0, fill=(24, 22, 21, 255), r=40)
+        x0, x1, y0 = 110, 830, 600; box(c, x0, y0, x1, y0 + 560, t0, fill=(PANEL2 if SOLID else (24, 22, 21, 255)), outline=((90, 90, 96, 255) if SOLID else None), ow=2, r=40)
         d = ImageDraw.Draw(c.fr, "RGBA"); y = y0 + 40 + M.DY
         for k, (who, s) in enumerate(msgs):
             a = e_out((c.t - t0 - .3 - k * .45) / .35)
