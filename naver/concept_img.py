@@ -76,7 +76,9 @@ def deep(c, k=.55): return tuple(int(v * k) for v in c)
 NAVY = (41, 51, 92)
 # v4(10/15 대표 "검정도 괜찮다, 칙칙해서 그런 것. 검정에 노랑·민트·핫핑크 강조가 예쁘다"): 어두운 판은 순검정 대신 #121214(다크 모드 권장),
 # 칸은 한 단 밝은 면 + 칸마다 다른 쨍한 강조색(노랑·민트·핫핑크·하늘), 글자는 흰색, 강조색은 화면 일부에만(띠·화살표·이름표)
-NEON = [(255, 216, 77), (62, 230, 193), (255, 61, 139), (77, 184, 255)]          # 노랑·민트·핫핑크·하늘
+NEON = [(255, 216, 77), (62, 230, 193), (255, 61, 139), (77, 184, 255)]          # 노랑·민트·핫핑크·하늘 (v7부터 어두운 판에서는 쓰지 않음)
+# v7(10/15 대표 "강조색 하나, 강조색 계열의 약간 누른 톤 하나, 나머지는 흰색", K-043): 색은 딱 셋 — 강조(노랑)·누른 노랑·흰색. 면·선은 무채색
+ACC, ACC_MUTE = (255, 214, 64), (176, 150, 70)
 def mix(a, b, k): return tuple(int(a[i] * (1 - k) + b[i] * k) for i in range(3))
 KEY = {"dark": dict(bg=(18, 18, 20), card=(30, 30, 34), ink=(250, 250, 250), sub=(161, 161, 170), acc=(255, 216, 77), quiet=(58, 58, 62)),
        "light": dict(bg=(245, 245, 247), card=(255, 255, 255), ink=(29, 29, 31), sub=(81, 81, 86), acc=NAVY, quiet=(200, 200, 206))}
@@ -84,22 +86,46 @@ def k_head(cv, head, st):
     cv.text(L + 10, 118, head, PX, cv.fit(head, PX, 64, RT - L - 210, 50), st["ink"], "ls")
     cv.text(RT - 10, 114, "子午線 자오선", K.SER, 28, st["sub"], "rs")
 
+# v8(10/15 대표 "검은 바탕만 고집할 필요 없다. 대표 이미지 색조와 배경색을 맞추는 것도 방법. 글자는 가급적 흰색, 강조색 한두 개. 화살표가 얇아 옹졸해 보이지 않게", K-044)
+AW, AH = 14, 46                      # 도식 화살표 굵기·머리 크기(이전 3/18 → 굵게, 10/15 대표 '얇아서 옹졸해 보인다')
+KEY["dark"].update(line=(52, 52, 58), acc2=ACC_MUTE, frame=(0, 0, 0))
+def cover_colors(path):
+    """대표 이미지에서 바탕색(가장자리)과 강조색(채도 높은 색 중 가장 많은 것)을 뽑는다."""
+    from PIL import Image
+    import colorsys, collections
+    im = Image.open(path).convert("RGB"); bg = im.getpixel((5, 5)); sm = im.resize((300, 180))
+    px = [sm.getpixel((x, y)) for y in range(180) for x in range(300)]
+    sat = [p for p in px if colorsys.rgb_to_hsv(*[v / 255 for v in p])[1] > .45 and sum(p) > 120] or px
+    q = collections.Counter((p[0] // 8, p[1] // 8, p[2] // 8) for p in sat).most_common(1)[0][0]
+    grp = [p for p in sat if (p[0] // 8, p[1] // 8, p[2] // 8) == q]
+    return bg, tuple(sum(c[i] for c in grp) // len(grp) for i in range(3))
+def cover_theme(path, kind="tone"):
+    """tone: 대표 이미지의 강조색을 바탕으로(글자 흰색, 강조 = 밝은 노랑 한 가지 + 그 누른 톤).
+    same: 대표 이미지 바탕색 그대로(밝은 바탕이라 글자는 진한 색, 강조 = 대표 이미지 강조색)."""
+    bg, ac = cover_colors(path)
+    if kind == "tone":
+        b = mix(ac, (0, 0, 0), .18)
+        return dict(bg=b, card=mix(b, (0, 0, 0), .16), line=mix(b, (255, 255, 255), .16), ink=(255, 255, 255), sub=mix((255, 255, 255), b, .32),
+                    acc=(255, 220, 120), acc2=mix((255, 220, 120), b, .22), frame=mix(b, (0, 0, 0), .45), quiet=mix(b, (0, 0, 0), .3))
+    ink = mix(ac, (0, 0, 0), .72)
+    return dict(bg=bg, card=(255, 255, 255), line=mix(bg, ac, .3), ink=ink, sub=mix(ink, bg, .45), acc=ac, acc2=mix(ac, bg, .18), frame=ink, quiet=mix(bg, ac, .3))
+
 ICONS = []
 def loop_k(name, head, nodes, exit_label, exit_text, mode="dark", icons=()):
     global ICONS; ICONS = list(icons)
-    st = KEY[mode]; H = 1060; cv = Cv(H, st["bg"])
-    if mode == "dark": glow(cv, H, [(NEON[3], (L + 120, 260), 260, .55), (NEON[2], (RT - 80, 620), 280, .45), (NEON[1], ((L + RT) / 2, 980), 240, .30)])
+    st = KEY[mode]; H = 1145; cv = Cv(H, st["bg"])
+    # 10/15 대표 "그라데이션 진짜...": 빛 방울·그라데이션 배경 쓰지 않는다(K-041). 바탕은 단색
     k_head(cv, head, st)
-    cx, cy, r = (L + RT) / 2, 500, 252; bw, bh = 370, 132
+    cx, cy, r = (L + RT) / 2, 545, 262; bw, bh = 340, 190
     pos = [(cx, cy - r), (cx + r, cy), (cx, cy + r), (cx - r, cy)]
     for i in range(4):
         a0 = -90 + i * 90 + 27; a1 = -90 + (i + 1) * 90 - 27; pts = []
         for k in range(13):
             t = math.radians(a0 + (a1 - a0) * k / 12); pts.append((cx + r * math.cos(t), cy + r * math.sin(t)))
-        ac = (POP if mode == "light" else NEON)[(i + 1) % 4]
-        for p_, q in zip(pts, pts[1:]): cv.line(p_[0], p_[1], q[0], q[1], ac, 6)
-        arrow(cv, pts[-2][0], pts[-2][1], pts[-1][0], pts[-1][1], ac, 6, 24)
-    if mode == "dark": put_icon(cv, "repeat", st["sub"], cx, cy - 26, 46); cv.text(cx, cy + 30, "되풀이", PX, 36, st["sub"], "mm")
+        ac = POP[(i + 1) % 4] if mode == "light" else st["acc2"]
+        for p_, q in zip(pts, pts[1:]): cv.line(p_[0], p_[1], q[0], q[1], ac, 6 if mode == "light" else AW)
+        arrow(cv, pts[-2][0], pts[-2][1], pts[-1][0], pts[-1][1], ac, 6 if mode == "light" else AW, 24 if mode == "light" else AH)
+    if mode != "light": cv.text(cx, cy, "되풀이", PX, 34, st["sub"], "mm")
     else: cv.text(cx, cy, "되풀이", PX, 42, st["sub"], "mm")
     for i, ((x, y), t) in enumerate(zip(pos, nodes)):
         c = POP[i]
@@ -109,17 +135,17 @@ def loop_k(name, head, nodes, exit_label, exit_text, mode="dark", icons=()):
             box_text(cv, x + 6, y, t, 42, deep(c, .38) if i != 1 else (110, 70, 10), PX)
         else:
             c = NEON[i]
-            cv.rr([x - bw / 2, y - bh / 2, x + bw / 2, y + bh / 2], 34, fill=(28, 28, 33), outline=mix((28, 28, 33), c, .5), w=2)
-            put_icon(cv, ICONS[i] if i < len(ICONS) else "circle", (18, 18, 20), x - bw / 2 + 58, y, 40, chip=c)
-            box_text(cv, x + 40, y, t, 40, st["ink"], PX)
-    by0, by1 = 880, 1000
-    band, lab_c, txt_c = (NAVY, POP[1], WHITE) if mode == "light" else (NEON[0], (18, 18, 20), (18, 18, 20))
+            # 10/15 대표 "AI 특유의 아이콘 빼고 깔끔하게"(K-042): 아이콘 없음. 번호(01~04)만 강조색, 칸은 단색 면 + 1px 선
+            cv.rr([x - bw / 2, y - bh / 2, x + bw / 2, y + bh / 2], 28, fill=st["card"], outline=st["line"], w=1.5)
+            cv.text(x - bw / 2 + 32, y - bh / 2 + 40, f"0{i + 1}", PX, 30, st["acc2"], "lm")
+            for k2, l2 in enumerate(t): cv.text(x - bw / 2 + 32, y - bh / 2 + 96 + k2 * 52, l2, PX, 40, st["ink"], "lm")
+    by0, by1 = 965, 1085
+    band, lab_c, txt_c = (NAVY, POP[1], WHITE) if mode == "light" else (st["acc"], st["bg"], st["bg"])
     cv.rr([L, by0, RT, by1], 32, fill=band)
-    if mode == "dark": put_icon(cv, "notebook-pen", (18, 18, 20), L + 70, (by0 + by1) / 2, 46); L0 = L + 60
-    else: L0 = L
+    L0 = L
     lw = cv.tw(exit_label, PX, 46); cv.text(L0 + 44, (by0 + by1) / 2, exit_label, PX, 46, lab_c, "lm")
     cv.text(L0 + 44 + lw + 34, (by0 + by1) / 2, exit_text, PX, cv.fit(exit_text, PX, 46, RT - L - lw - 120, 42), txt_c, "lm")
-    arrow(cv, cx + r + bw / 2 - 34, cy + bh / 2 + 8, cx + r + bw / 2 - 34, by0 - 12, NAVY if mode == "light" else NEON[0], 6, 24)
+    arrow(cv, cx + r + bw / 2 - 34, cy + bh / 2 + 8, cx + r + bw / 2 - 34, by0 - 12, NAVY if mode == "light" else st["acc"], 6 if mode == "light" else AW, 24 if mode == "light" else AH)
     cv.save(name)
 
 def screen_k(name, head, shot, crop_h, notes, mode="dark"):
@@ -129,21 +155,19 @@ def screen_k(name, head, shot, crop_h, notes, mode="dark"):
     pw = 420; ph = int(im.height * pw / im.width); H = ph + 260; cv = Cv(H, st["bg"])
     x0, y0, pad = L + 34, 186, 22                              # 폰 틀: 화면 둘레에 검은 테두리 여백
     if mode == "dark":
-        glow(cv, H, [(NEON[2], (x0 + pw / 2 - 40, y0 + 120), 300, .55), (NEON[3], (x0 + pw / 2 + 120, y0 + ph), 300, .5), (NEON[0], (RT - 60, 180), 200, .25)])
-        soft_shadow(cv, [x0 - pad, y0 - pad, x0 + pw + pad, y0 + ph + pad], 48)
+        pass   # 그라데이션·빛 배경 금지(K-041)
     k_head(cv, head, st)
-    cv.rr([x0 - pad, y0 - pad, x0 + pw + pad, y0 + ph + pad], 48, fill=(0, 0, 0) if mode == "dark" else (29, 29, 31), outline=(70, 70, 78) if mode == "dark" else None, w=2)
+    cv.rr([x0 - pad, y0 - pad, x0 + pw + pad, y0 + ph + pad], 48, fill=st["frame"] if mode != "light" else (29, 29, 31), outline=st["line"] if mode != "light" else None, w=1.5)
     cv.img.paste(im.resize((pw * K.S, ph * K.S)), (x0 * K.S, y0 * K.S))
     tx = x0 + pw + pad + 40; n = len(notes); gap = 20; ch = (ph - gap * (n - 1)) / n; y = y0
     for j, (lab, txt) in enumerate(notes):                    # 벤토 카드: 칸마다 다른 강조색 띠 + 이름표 + 큰 값
-        c = POP[j % 4] if mode == "light" else NEON[[0, 1, 2][j % 3]]
-        cv.rr([tx, y, RT, y + ch], 30, fill=st["card"] if mode == "dark" else tint(c, .2))
-        if mode == "dark":
-            cv.rr([tx, y, RT, y + ch], 30, fill=(28, 28, 33), outline=mix((28, 28, 33), c, .45), w=2)
-            put_icon(cv, ["calendar-days", "sparkles", "list-checks"][j % 3], (18, 18, 20), RT - 62, y + 50, 34, chip=c)
+        c = POP[j % 4] if mode == "light" else st["acc2"]
+        cv.rr([tx, y, RT, y + ch], 30, fill=st["card"] if mode != "light" else tint(c, .2))
+        if mode != "light":                                     # 아이콘 없음(K-042): 단색 면 + 1px 선, 이름표만 강조색
+            cv.rr([tx, y, RT, y + ch], 28, fill=st["card"], outline=st["line"], w=1.5)
         else: cv.rr([tx, y + 22, tx + 10, y + ch - 22], 5, fill=c)
-        cv.text(tx + 36, y + 44, lab, PB, 34, c if mode == "dark" else deep(c, .45) if j != 1 else (120, 76, 10), "lm")
-        cv.text(tx + 36, y + ch - 34, txt, PB if not any('\u4e00' <= c <= '\u9fff' for c in txt) else PB, cv.fit(txt, PX, 50, RT - tx - 140, 38), st["ink"], "ls")
+        cv.text(tx + 36, y + 44, lab, PB, 34, c if mode != "light" else deep(c, .45) if j != 1 else (120, 76, 10), "lm")
+        cv.text(tx + 36, y + ch - 34, txt, PB if not any('\u4e00' <= c <= '\u9fff' for c in txt) else PB, cv.fit(txt, PX, 52, RT - tx - 72, 40), st["ink"], "ls")
         y += ch + gap
     cv.save(name)
 
@@ -158,7 +182,7 @@ def icon(name, color, px, stroke=2.2):
 def put_icon(cv, name, color, cx, cy, px, chip=None):
     if chip: cv.rr([cx - px * .9, cy - px * .9, cx + px * .9, cy + px * .9], px * .45, fill=chip)
     im = icon(name, color, px); cv.img.paste(im, (int((cx - px / 2) * K.S), int((cy - px / 2) * K.S)), im)
-def glow(cv, H, spots):
+def glow(cv, H, spots):   # 쓰지 않음(대표 10/15 그라데이션 금지, K-041). 남겨 두되 호출하지 않는다
     """어두운 판 위에 흐린 빛 방울(색, 중심, 반지름, 세기). 바탕 판 안에서만."""
     from PIL import Image, ImageDraw, ImageFilter
     W = K.BW * K.S; layer = Image.new("RGB", (W, H * K.S), (0, 0, 0)); d = ImageDraw.Draw(layer)
@@ -174,17 +198,110 @@ def soft_shadow(cv, box, r, blur=40, alpha=170):
     ImageDraw.Draw(sh).rounded_rectangle([v * K.S for v in (box[0], box[1] + 24, box[2], box[3] + 24)], r * K.S, fill=alpha)
     sh = sh.filter(ImageFilter.GaussianBlur(blur * K.S)); black = Image.new("RGB", (W, Hh), (0, 0, 0)); cv.img.paste(black, (0, 0), sh); cv.d = ImageDraw.Draw(cv.img)
 
+def calc_k(name, head, digits, steps, result_big, result_label, result_line, mode="dark"):
+    """계산 과정(비실사 이미지 1순위 '계산 과정', 10/15 조사 보고서): 생년월일 숫자 칸 → 더하기 → 한 자리로 → 결과. 색은 K-043(강조 하나·누른 톤·흰색)."""
+    st = KEY[mode]; H = 900; cv = Cv(H, st["bg"]); k_head(cv, head, st)
+    n = len(digits); g = 14; cw = (RT - L - 20 - g * (n - 1)) / n; y0 = 200; ch = 120
+    for i, d_ in enumerate(digits):                          # 1행: 숫자 칸
+        x = L + 10 + i * (cw + g)
+        cv.rr([x, y0, x + cw, y0 + ch], 22, fill=st["card"], outline=st["line"], w=1.5)
+        cv.text(x + cw / 2, y0 + ch / 2, d_, PX, 64, st["ink"], "mm")
+    for k, (lab, expr) in enumerate(steps):                 # 2~3행: 단계(누른 노랑 이름표 + 흰 식)
+        y = y0 + ch + 70 + k * 110
+        cv.text(L + 14, y, lab, PB, 42, st["acc2"], "lm")
+        cv.text(L + 240, y, expr, PX, 52, st["ink"], "lm")
+        cv.line(L + 14, y + 52, RT - 14, y + 52, st["line"], 1.5)
+    yb = y0 + ch + 70 + len(steps) * 110 + 20               # 결과: 강조색은 여기 한 곳
+    cv.rr([L + 10, yb, RT - 10, yb + 200], 30, fill=st["card"], outline=st["line"], w=1.5)
+    cv.text(L + 60, yb + 100, result_big, PX, 150, st["acc"], "lm")
+    cv.text(L + 230, yb + 68, result_label, PB, 42, st["acc2"], "lm")
+    cv.text(L + 230, yb + 130, result_line, PX, 50, st["ink"], "lm")
+    cv.save(name)
+
+def compare_k(name, head, cols, rows, same_rows=(), mode="dark"):
+    """비교·대조(조사 보고서 2순위): 두 사람·두 풀이를 나란히. 같은 말인 줄은 값만 강조색(K-043), 다른 말은 흰색."""
+    st = KEY[mode]; rh = 176; H = 220 + 110 + rh * len(rows) + 70; cv = Cv(H, st["bg"]); k_head(cv, head, st)
+    lw = 250; cw = (RT - L - 20 - lw - 20) / 2; x1 = L + 10 + lw; x2 = x1 + cw + 20; y = 200
+    for j, c_ in enumerate(cols):                            # 머리 칸
+        x = x1 if j == 0 else x2
+        cv.text(x + cw / 2, y + 40, c_, PX, 44, st["ink"], "mm")
+    cv.line(L + 10, y + 90, RT - 10, y + 90, st["line"], 1.5); y += 110
+    for i, (lab, a, b) in enumerate(rows):
+        same = i in same_rows; col = st["acc"] if same else st["ink"]
+        cv.text(L + 20, y + rh / 2, lab, PB, 42, st["acc2"], "lm")
+        for x, v in ((x1, a), (x2, b)):
+            cv.rr([x, y + 14, x + cw, y + rh - 14], 24, fill=st["card"], outline=st["line"], w=1.5)
+            vs = v if isinstance(v, (list, tuple)) else [v]
+            if len(vs) == 1: cv.text(x + cw / 2, y + rh / 2, vs[0], PX, cv.fit(vs[0], PX, 52, cw - 40, 38), col, "mm")
+            else:
+                cv.text(x + cw / 2, y + rh / 2 - 26, vs[0], PX, cv.fit(vs[0], PX, 48, cw - 40, 36), col, "mm")
+                cv.text(x + cw / 2, y + rh / 2 + 36, vs[1], PB, 40, st["sub"], "mm")
+        y += rh
+    cv.save(name)
+
+def calc_kb(name, head, digits, steps, result_big, result_label, result_line, mode="dark", char="v11_mug"):
+    """B안(조사 보고서 A/B 검증): calc_k와 같고 결과 칸 오른쪽에 정월 컷 + AI 표기(오른쪽 아래)."""
+    from PIL import Image
+    st = KEY[mode]; H = 980; cv = Cv(H, st["bg"]); k_head(cv, head, st)
+    n = len(digits); g = 14; cw = (RT - L - 20 - g * (n - 1)) / n; y0 = 200; ch = 120
+    for i, d_ in enumerate(digits):
+        x = L + 10 + i * (cw + g)
+        cv.rr([x, y0, x + cw, y0 + ch], 22, fill=st["card"], outline=st["line"], w=1.5)
+        cv.text(x + cw / 2, y0 + ch / 2, d_, PX, 64, st["ink"], "mm")
+    for k, (lab, expr) in enumerate(steps):
+        y = y0 + ch + 70 + k * 110
+        cv.text(L + 14, y, lab, PB, 42, st["acc2"], "lm"); cv.text(L + 260, y, expr, PX, 52, st["ink"], "lm")
+        cv.line(L + 14, y + 52, RT - 14, y + 52, st["line"], 1.5)
+    yb = y0 + ch + 70 + len(steps) * 110 + 20; xr = RT - 330
+    cv.rr([L + 10, yb, xr, yb + 220], 30, fill=st["card"], outline=st["line"], w=1.5)
+    cv.text(L + 50, yb + 110, result_big, PX, 150, st["acc"], "lm")
+    cv.text(L + 200, yb + 76, result_label, PB, 40, st["acc2"], "lm")
+    cv.text(L + 200, yb + 146, result_line, PX, cv.fit(result_line, PX, 50, xr - L - 230, 40), st["ink"], "lm")
+    im = Image.open(os.path.join(HERE, "..", "characters", "cut", char + ".png")).convert("RGBA"); im = im.crop(im.getbbox())
+    hh = H - 64 - (yb - 60); ww = int(im.width * hh / im.height); im = im.resize((int(ww * K.S), int(hh * K.S)))
+    cx = (xr + RT) / 2 + 10; cv.img.paste(im, (int((cx - ww / 2) * K.S), int((yb - 60) * K.S)), im)
+    cv.text(RT - 14, H - 22, "AI로 생성한 가상의 캐릭터입니다", PB, 24, st["sub"], "rs")
+    cv.save(name)
+
+def screen_wide_k(name, head, shot, crop_h, mode="dark"):
+    """실제 화면(가로로 넓은 부분): 캡처를 내용 폭 그대로, 얇은 테두리 틀만. 설명 문구는 본문에(K-036)."""
+    from PIL import Image
+    st = KEY[mode]; im = Image.open(shot).convert("RGB"); im = im.crop((0, 0, im.width, min(crop_h, im.height)))
+    w = RT - L - 120; h = int(im.height * w / im.width); H = h + 260; cv = Cv(H, st["bg"]); k_head(cv, head, st)
+    x0, y0, pad = L + 60, 180, 18
+    cv.rr([x0 - pad, y0 - pad, x0 + w + pad, y0 + h + pad], 40, fill=st["frame"], outline=st["line"], w=1.5)
+    cv.img.paste(im.resize((int(w * K.S), int(h * K.S))), (int(x0 * K.S), int(y0 * K.S)))
+    cv.save(name)
+
 BODY_LINE = {   # 이미지 바로 위에 넣을 본문 문장(이미지에 박지 않는 설명)
  "n47": "아래는 1995년 3월 19일(예시 생일)로 자오선 무료 풀이를 직접 열어 본 화면이에요.",
  "n34": "같은 생각이 되풀이되는 모양을 그림으로 그려 보면 이래요.",
 }
 SPEC = {
- "n47": lambda m="dark": screen_k("naver_z47_s.jpg" if m == "dark" else "naver_z47_s_light.jpg", "무료 풀이를 직접 열어 봤어요", os.environ.get("SHOT", "free.png"), 1365,
+ "n53v": lambda m="dark": compare_k("naver_z53_v.jpg", "같은 3번, 다른 두 사람", ["1990년 5월 15일", "1991년 3월 7일"],
+                       [("생일 숫자", "3번", "3번"), ("사주 일간", ["경(庚)", "다듬기 전의 쇠"], ["병(丙)", "한낮의 태양"]), ("별자리", "황소자리", "물고기자리")], same_rows=(0,), mode=m),
+ "n53s": lambda m="dark": screen_wide_k("naver_z53_s.jpg", "무료 풀이에서 확인한 내 숫자", os.environ.get("SHOT53", "free_map.png"), 760, m),
+ "n53b": lambda m="dark": calc_kb("naver_z53_kb.jpg", "생일 숫자, 이렇게 더해요", list("19900515"),
+                       [("모두 더하기", "1+9+9+0+0+5+1+5 = 30"), ("한 자리로", "3+0 = 3")], "3", "1990년 5월 15일생", "표현이 풍부한 3번", m),
+ "n53": lambda m="dark": calc_k("naver_z53_k.jpg", "생일 숫자, 이렇게 더해요", list("19900515"),
+                       [("모두 더하기", "1+9+9+0+0+5+1+5 = 30"), ("한 자리로", "3+0 = 3")], "3", "1990년 5월 15일생", "표현이 풍부한 3번", m),
+ "n47": lambda m="dark": screen_k("naver_z47_s7.jpg" if m == "dark" else "naver_z47_s_light.jpg", "무료 풀이를 직접 열어 봤어요", os.environ.get("SHOT", "free.png"), 1365,
                        [("생년월일", "1995년 3월 19일"), ("태어난 날 첫 글자", "기(己) · 기름진 논밭"), ("이어서 나오는 것", "성격 · 사랑 · 일 · 돈")], m),
- "n34": lambda m="dark": loop_k("naver_z34_p.jpg" if m == "dark" else "naver_z34_p_light.jpg", "생각이 같은 자리를 도는 고리",
+ "n34": lambda m="dark": loop_k("naver_z34_p7.jpg" if m == "dark" else "naver_z34_p_light.jpg", "생각이 같은 자리를 도는 고리",
                        [["같은 걱정이", "떠올라요"], ["그 장면을", "되짚어요"], ["기분이 더", "가라앉아요"], ["잠이 줄고", "월요일이 무겁죠"]],
-                       "끊는 법", "종이에 다 적고, 내일 할 일 하나만 정해요", m, ["brain", "history", "cloud-rain", "moon"]),
+                       "끊는 법", "종이에 다 적고, 내일 할 일 하나만 정해요", m),
 }
 if __name__ == "__main__":
     m = os.environ.get("MODE", "dark")
+    if os.environ.get("COVER"):                                  # COVER=대표이미지경로 MODE=tone|same → 대표 이미지 색조에 맞춘 판
+        KEY[m] = cover_theme(os.environ["COVER"], m)
+    if os.environ.get("SUFX"):                                   # 색조 판은 새 이름으로(naver_z53_k.jpg → naver_z53_kt.jpg). 덮어쓰기 금지 규칙
+        _sv = K.Cv.save
+        K.Cv.save = lambda s_, name: _sv(s_, name.replace(".jpg", os.environ["SUFX"] + ".jpg"))
+    if os.environ.get("PREVIEW"):                                # 시안: img/에 넣지 않고 지정 폴더에만 저장(새 이름 규칙 보호)
+        from PIL import Image as _I
+        def _pv(s_, name, _d=os.environ["PREVIEW"]):
+            s_.d.rectangle([0, 0, K.OX * K.S - 1, s_.h * K.S], fill=WHITE); s_.d.rectangle([(K.OX + K.CW) * K.S, 0, K.BW * K.S, s_.h * K.S], fill=WHITE)
+            s_.img.resize((K.BW, s_.h), _I.LANCZOS).save(os.path.join(_d, m + "_" + name), quality=93)
+        K.Cv.save = _pv
     for k in sys.argv[1:]: SPEC[k](m); print(k, m, "만듦", K.WARN or "")
