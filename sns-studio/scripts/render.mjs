@@ -34,14 +34,54 @@ function cardHtml(c) {
     c.scrimTop ? "topscrim" : "", c.cta ? "has-cta" : "",
     spec.guides ? "guides" : ""].filter(Boolean).join(" ");
 
-  const stage = c.layout === "L5"
-    ? (c.lines || []).map((t, i) =>
-        `<div class="t ln${i + 1} ${i === 1 ? "accent" : ""}">${esc(t)}</div>`).join("")
-    : [
-        c.label ? `<div class="label">${esc(c.label)}</div>` : "",
-        c.title ? `<div class="t title">${esc(c.title)}</div>` : "",
-        c.sub ? `<div class="t sub">${esc(c.sub)}</div>` : "",
-      ].join("");
+  const head = [
+    c.label ? `<div class="label">${esc(c.label)}</div>` : "",
+    c.title ? `<div class="t title">${esc(c.title)}</div>` : "",
+  ].join("");
+  const foot = c.sub ? `<div class="t sub">${esc(c.sub)}</div>` : "";
+
+  let stage;
+  switch (c.layout) {
+    case "L5":
+      stage = (c.lines || []).map((t, i) =>
+        `<div class="t ln${i + 1} ${i === 1 ? "accent" : ""}">${esc(t)}</div>`).join("");
+      break;
+    case "L6": // 표 비교형: rows=[{k,v,same?}]
+      stage = head + (c.rows || []).map((r) =>
+        `<div class="row ${r.same ? "same" : ""}"><div class="k">${esc(r.k)}</div>
+         <div class="v">${esc(r.v)}</div></div>`).join("") + foot;
+      break;
+    case "L7": // 랭킹형: ranks=[{n,who,why}]
+      stage = head + (c.ranks || []).map((r, i, a) =>
+        `<div class="rank ${i === a.length - 1 ? "top" : ""}"><div class="n">${esc(r.n)}</div>
+         <div><div class="who">${esc(r.who)}</div>
+         ${r.why ? `<div class="why">${esc(r.why)}</div>` : ""}</div></div>`).join("");
+      break;
+    case "L8": // 번호 리스트형: items=["...","..."]
+      stage = head + (c.items || []).map((t, i) =>
+        `<div class="item"><div class="n">${i + 1}</div>
+         <div class="tx">${esc(t)}</div></div>`).join("");
+      break;
+    case "L9": // 말풍선형: bubbles=[{who:"ask"|"ans", text}]
+      stage = head + (c.bubbles || []).map((b) =>
+        `<div class="bubble ${b.who === "ans" ? "ans" : "ask"}">${esc(b.text)}</div>`).join("");
+      break;
+    case "L10": // 2단 분할형: halves=[{cap,big,pick?}]
+      stage = (c.halves || []).map((h) =>
+        `<div class="half ${h.pick ? "pick" : ""}"><div class="cap">${esc(h.cap)}</div>
+         <div class="big">${esc(h.big)}</div></div>`).join("");
+      break;
+    case "L11": // 숫자 강조형
+      stage = head + `<div class="num">${esc(c.num)}</div>` +
+        (c.unit ? `<div class="unit">${esc(c.unit)}</div>` : "") + foot;
+      break;
+    case "L12": // 인용구형
+      stage = `<div class="quote">“</div><div class="t say">${esc(c.title)}</div>` +
+        (c.by ? `<div class="by">${esc(c.by)}</div>` : "");
+      break;
+    default:
+      stage = head + foot;
+  }
 
   return `<div class="canvas ${cls}">
   <div class="layer tint"></div>
@@ -90,16 +130,18 @@ for (const c of spec.cards) {
   writeFileSync(tmp, page1(c), "utf8");
   await page.goto(pathToFileURL(tmp).href, { waitUntil: "load" });
   await page.evaluate(() => document.fonts.ready);
-  // 글이 자리를 넘치면 자동으로 줄인다. 넘친 채로 잘리는 일을 막는다.
+  // 글이 자리를 넘치면 글자 크기만 줄인다. 상자 크기는 건드리지 않는다.
+  // (zoom 으로 통째로 늘리면 가로까지 늘어나 줄바꿈이 깨진다)
   await page.evaluate(() => {
     const stage = document.querySelector(".stage");
     if (!stage) return;
-    const els = [...stage.querySelectorAll(".t, .label")];
+    const els = [...stage.querySelectorAll("*")].filter(
+      (e) => e.children.length === 0 && e.textContent.trim());
     let guard = 0;
-    while (stage.scrollHeight > stage.clientHeight + 1 && guard++ < 60) {
+    while (stage.scrollHeight > stage.clientHeight + 1 && guard++ < 80) {
       els.forEach((e) => {
         const fs = parseFloat(getComputedStyle(e).fontSize);
-        e.style.fontSize = fs * 0.96 + "px";
+        e.style.fontSize = fs * 0.97 + "px";
       });
     }
   });

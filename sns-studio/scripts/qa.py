@@ -88,7 +88,14 @@ def main():
         layouts = [c.get("layout") for c in cards]
         top = max(set(layouts), key=layouts.count)
         if layouts.count(top) > max(2, len(layouts) // 2):
-            warns.append(f"레이아웃 {top}이 {layouts.count(top)}장이다. 돌려 쓰라고 만든 것이다")
+            errors.append(f"레이아웃 {top}이 {len(layouts)}장 중 {layouts.count(top)}장이다. "
+                          "한 묶음에서 절반을 넘기면 안 된다")
+        if len(set(layouts)) < min(3, len(layouts)):
+            warns.append(f"레이아웃이 {len(set(layouts))}종뿐이다. 유형에 맞춰 섞는다")
+
+        techs = [tuple(sorted(c.get("tech") or [])) for c in cards]
+        if len(set(techs)) == 1 and len(cards) >= 4:
+            warns.append("가독성 기법이 전부 같다. 배경·기법도 같이 바꾼다")
 
     for e in errors:
         print("오류 :", e)
