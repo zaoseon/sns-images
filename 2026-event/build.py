@@ -96,8 +96,26 @@ def draw1022():
     return [cover('팔로우 이벤트 1차', '당첨자를\n알려 드려요', '조건을 확인한 댓글 중\n무작위로 뽑았어요\nDM을 확인해 주세요', '2차 발표 10월 29일')]
 def draw1029():
     return [cover('팔로우 이벤트 2차', '마지막 당첨자를\n알려 드려요', '조건을 확인한 댓글 중\n무작위로 뽑았어요\nDM을 확인해 주세요', '참여해 주셔서 감사합니다')]   # 10/15 대표 요청 mv8ztrew: '고마워요' 어색 → '감사합니다'
-SINGLE = {'shari1020', 'close1019', 'pick1020', 'draw1022', 'draw1029'}
-SETS = {'trial1015': trial1015, 'follow1016': follow1016, 'shari1020': shari1020, 'close1019': close1019, 'pick1020': pick1020, 'draw1022': draw1022, 'draw1029': draw1029}
+# 10/15 대표 "스하리 이벤트 같이 걸었어야. 스하리 후 무료풀이하고 체험단 신청" + "스하리 관심사 쪽에 이미지에 스하리 이벤트 넣어 한 번 더 발행, 스하리 글 이미지 참고"(D-286, K-039)
+# shari1020 틀 그대로(정월 아래 아치, 글 묶음 위), 글만 스하리 → 무료 풀이 → 체험단 신청
+def sharitrial():
+    for fh, ts in ((560, 96), (540, 96), (520, 92), (500, 92), (480, 88), (460, 88)):
+        p = new(); p.bg = 'ink'; p.ai = True; p.face_bottom = True
+        blocks = [IN(p, '스하리 하고 받아 가세요', 52, GOLD, lh=1.3, name='라벨'), T(p, '무료 감정서 체험단', ts, '#fff', 'title', 1.3, C_, 900, '제목'),
+                  PANEL(p, [IN(p, '① 이 글에 스하리\n② 프로필 링크에서 무료 풀이\n③ 결과 아래 체험단 신청', 52, name='안내'), IN(p, '다섯 분께 · 10월 19일 밤까지', 44, '#efe9e4', name='안내2')])]
+        gaps = [40, 60]; y = B.TOP
+        for b, g in zip(blocks, gaps + [0]): b['draw'](y); y += b['h'] + g
+        text_bottom = y; fw = fh * 0.75; fx = (1080 - fw) / 2; ftop = 1440 - fh
+        aw = fw * 0.92; ax = (1080 - aw) / 2; atop = ftop + fh * 0.10
+        p.html.append(f'<div data-deco="1" style="position:absolute;left:{ax:.0f}px;top:{atop:.0f}px;width:{aw:.0f}px;height:{1440-atop+40:.0f}px;border-radius:{aw/2:.0f}px {aw/2:.0f}px 0 0;background:linear-gradient(180deg,rgba(216,169,92,.30),rgba(216,169,92,.06));z-index:1"></div>')
+        p.html.append(f'<img src="data:image/png;base64,{CK.face_b64("v5_halfup_v2")}" style="position:absolute;left:{fx:.0f}px;top:{ftop:.0f}px;height:{fh}px;z-index:2">')
+        p.face_top = ftop
+        if not p.problems and text_bottom + 40 <= atop: break
+    else:
+        p.problems.append(f'글 묶음 아래 {text_bottom:.0f}가 아치 {atop:.0f}와 겹침')
+    return [p]
+SINGLE = {'shari1020', 'close1019', 'pick1020', 'draw1022', 'draw1029', 'sharitrial'}
+SETS = {'sharitrial': sharitrial,'trial1015': trial1015, 'follow1016': follow1016, 'shari1020': shari1020, 'close1019': close1019, 'pick1020': pick1020, 'draw1022': draw1022, 'draw1029': draw1029}
 
 async def main(out, only):
     from playwright.async_api import async_playwright
