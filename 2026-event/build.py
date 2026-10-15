@@ -86,8 +86,18 @@ def shari1020():   # 스레드 1장(캐러셀 아님): 매주 월 생년월일 �
     else:
         p.problems.append(f'글 묶음 아래 {text_bottom:.0f}가 아치 {atop:.0f}와 겹침')
     return [p]
-SINGLE = {'shari1020'}
-SETS = {'trial1015': trial1015, 'follow1016': follow1016, 'shari1020': shari1020}
+
+# 10/15 ① 자동 실행: 체험단 마감 알림(10/19)·선정 발표(10/20) 스레드 카드 1장씩, 팔로우 이벤트 1·2차 당첨 발표 스토리 배경(10/22·10/29, 대표가 아이디를 글자로 얹어 올림)
+def close1019():
+    return [cover('감정서 체험단', '오늘 밤\n마감해요', '10월 19일 밤 11시 59분까지\n프로필 링크에서 신청해요', '다섯 분께 무료 감정서')]
+def pick1020():
+    return [cover('감정서 체험단', '다섯 분을\n골랐어요', '뽑힌 분께 오늘 메일을 보냈어요\n메일함과 스팸함을 확인해 주세요', '감정서 발송 10/22 ~ 23')]
+def draw1022():
+    return [cover('팔로우 이벤트 1차', '당첨자를\n알려 드려요', '조건을 확인한 댓글 중\n무작위로 뽑았어요\nDM을 확인해 주세요', '2차 발표 10월 29일')]
+def draw1029():
+    return [cover('팔로우 이벤트 2차', '마지막 당첨자를\n알려 드려요', '조건을 확인한 댓글 중\n무작위로 뽑았어요\nDM을 확인해 주세요', '참여해 주셔서 고마워요')]
+SINGLE = {'shari1020', 'close1019', 'pick1020', 'draw1022', 'draw1029'}
+SETS = {'trial1015': trial1015, 'follow1016': follow1016, 'shari1020': shari1020, 'close1019': close1019, 'pick1020': pick1020, 'draw1022': draw1022, 'draw1029': draw1029}
 
 async def main(out, only):
     from playwright.async_api import async_playwright
