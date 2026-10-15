@@ -114,8 +114,14 @@ def sharitrial():
     else:
         p.problems.append(f'글 묶음 아래 {text_bottom:.0f}가 아치 {atop:.0f}와 겹침')
     return [p]
-SINGLE = {'shari1020', 'close1019', 'pick1020', 'draw1022', 'draw1029', 'sharitrial'}
-SETS = {'sharitrial': sharitrial,'trial1015': trial1015, 'follow1016': follow1016, 'shari1020': shari1020, 'close1019': close1019, 'pick1020': pick1020, 'draw1022': draw1022, 'draw1029': draw1029}
+# 10/15 대표 재요청 mv9itixb "저 캐릭터 쓰지 말라고.. 완전 별로라고": 정월 사진·아치·AI 캐릭터 표기를 모두 빼고 글만으로 만든 판(close1019 cover 틀).
+# 같은 이름 덮어쓰기를 피해 새 이름 sharitrial2_1.jpg로 낸다.
+def sharitrial2():
+    p = cover('스하리 하고 받아 가세요', '무료 감정서\n체험단', '① 이 글에 스하리\n② 프로필 링크에서 무료 풀이\n③ 결과 아래 체험단 신청', '다섯 분께 · 10월 19일 밤까지')
+    p.ai = False
+    return [p]
+SINGLE = {'sharitrial2', 'shari1020', 'close1019', 'pick1020', 'draw1022', 'draw1029', 'sharitrial'}
+SETS = {'sharitrial2': sharitrial2, 'sharitrial': sharitrial,'trial1015': trial1015, 'follow1016': follow1016, 'shari1020': shari1020, 'close1019': close1019, 'pick1020': pick1020, 'draw1022': draw1022, 'draw1029': draw1029}
 
 async def main(out, only):
     from playwright.async_api import async_playwright
