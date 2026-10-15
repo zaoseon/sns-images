@@ -81,6 +81,16 @@ def q_center(d, img, T, c, face):
     pill(d, c, 0, 90, T["kick"], center=True); badge(img, d, face, c, S // 2, 345, 115)
     s = fit(d, T["hook"], 900, 150); y = lines_at(d, T["hook"], 0, 462, s, c.fg, center=True); accent(d, c, 0, y + 30, center=True)
     d.text((S // 2, y + 74), T["sub"], font=F(SEMI, 56), fill=c.acc, anchor="ma")
+def q_center_safe(d, img, T, c, face):
+    """(10/15 대표 재지적: 상강 대표 이미지가 블로그 목록에서 또 잘림) 정월 얼굴을 가운데 위에 두는 글자형 구도.
+    네이버 목록은 1200x720 가로 판을 정사각으로 자를 때 얼굴 쪽으로 자른다(n20·n26·n29·n12 잘림, 모두 얼굴이 오른쪽).
+    얼굴이 가운데면 어느 쪽으로 잘라도 가운데가 남는다. 글자는 사방 10% 안(폭 864), 부제 아래 끝이 로고 줄(980)보다 40px 위."""
+    d.text((S // 2, 600), T.get("glyph", ""), font=F(SER, 760), fill=c.tint, anchor="mm")
+    pill(d, c, 0, 90, T["kick"], center=True); badge(img, d, face, c, S // 2, 330, 105)
+    s = fit(d, T["hook"], 864, 140); sub = F(SEMI, 52)
+    while s > 90 and 450 + int(s * 1.2) * len(T["hook"]) + 30 + 22 + 44 + 60 > 940: s -= 4
+    y = lines_at(d, T["hook"], 0, 450, s, c.fg, center=True); accent(d, c, 0, y + 30, center=True)
+    d.text((S // 2, y + 74), T["sub"], font=sub, fill=c.acc, anchor="ma")
 def q_card(d, img, T, c, face):
     d.text((S - 230, S - 260), T["glyph"], font=F(SER, 600), fill=c.tint, anchor="mm")
     pill(d, c, 90, 90, T["kick"]); card_rect(d, c, [70, 240, S - 70, 890])
@@ -151,7 +161,7 @@ def s_cal(d, img, T, c, face):
         day = k + 1; pos = k + T.get("off", 4); x = 90 + (pos % 7) * (cw + g); yy = y0 + (pos // 7) * (chh + g); on = day in hot
         d.rounded_rectangle([x, yy, x + cw, yy + chh], 16, fill=c.acc if on else c.card, outline=c.acc if on else c.line, width=3)
         d.text((x + cw // 2, yy + chh // 2), str(day), font=F(SEMI, 34), fill=(c.bg if c.dark else (255, 255, 255)) if on else c.fg, anchor="mm")
-DRAW = {"QL": q_left, "QC": q_center, "QK": q_card, "BIG": big, "CH": char_top, "N": n_chips, "gua": s_gua, "ring": s_ring, "trio": s_trio, "cal": s_cal}
+DRAW = {"QL": q_left, "QC": q_center, "QCS": q_center_safe, "QK": q_card, "BIG": big, "CH": char_top, "N": n_chips, "gua": s_gua, "ring": s_ring, "trio": s_trio, "cal": s_cal}
 SUB3 = "사주 · 별자리 · 숫자를 겹쳐 읽었어요"; K3 = "정월의 풀이 읽기"; SIX = ["사주", "자미두수", "당사주", "하락이수", "점성술", "수비학"]
 T = {
  "s10": dict(d="cal", el="흙", kick="10월 손없는날", hook=["이사 날짜,", "이 날만 피해요"], hot=[9, 10, 19, 20, 29, 30]),
