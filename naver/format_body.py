@@ -7,6 +7,10 @@ import html as H, re
 
 BODY_PX, TITLE_PX = 16, 19
 BODY_LIMIT, TITLE_LIMIT = 22.0, 16.8          # 한 줄 최대 너비(한글 1자 = 1.0). 폰 네이버 앱은 16px 기준 약 20~22자
+# 10/15 대표 폰 캡처(n31 발행 글, 네이버 앱)로 잰 실제 한 줄 폭(이 파일의 width 단위): 본문 16px은 17.4까지 들어가고 17.6부터 꺾였다,
+# 소제목 19px은 13.9까지 들어가고 15.2에서 꺾였다(네이버는 한 글자 단위로 꺾어 '요?'·'쪽'만 다음 줄에 남는다).
+# 그래서 줄 폭은 아래 값으로 막는다(약 6% 여유). 예전에는 본문 18.0에 문단마다 +2.5(20.5), 소제목 16.8을 허용해 폰에서 넘쳤다.
+MOBILE_BODY, MOBILE_TITLE = 16.4, 13.8
 
 def cw(c):
     o = ord(c)
@@ -43,7 +47,14 @@ def tokenize(inner):
             else:
                 if not cur: bs = bold
                 cur += ch
-    flush(); return toks
+    flush()
+    # 10/15: 의존 명사(것·수·줄·뿐 등)는 앞 낱말과 붙여 한 덩어리로 둔다('확인할 / 것 하나를'처럼 갈라지지 않게)
+    out = []
+    for t in toks:
+        if out and re.fullmatch(r"(것|것을|것이|것은|것도|것만|거|거예요|거죠|수|수도|줄|뿐|뿐이에요|따름)[.,!?]?", t["p"]) and not re.search(r"[.!?,]$", out[-1]["p"]):
+            pv = out[-1]; out[-1] = {"h": pv["h"] + " " + t["h"], "p": pv["p"] + " " + t["p"], "bs": pv["bs"], "be": t["be"]}
+        else: out.append(t)
+    return out
 
 ADNOM = r"(하는|되는|있는|없는|같은|좋은|쉬운|어려운|많은|높은|낮은|깊은|가까운|다른|큰|작은|아픈|힘든|먼|젊은|바쁜|이런|그런)$"
 def bpen(tok, k=0):                              # 이 낱말(k번째) 뒤에서 끊을 때 얼마나 어색한가(작을수록 좋음)
@@ -53,10 +64,11 @@ def bpen(tok, k=0):                              # 이 낱말(k번째) 뒤에서
     q = q.rstrip(".!?)")
     if re.fullmatch(r"[^\w가-힣]{1,4}|\d+\.|[QA]\.", q): return 100                    # 🔹·🧭·1.·Q. 같은 표시 낱말 뒤는 끊지 않는다
     if re.fullmatch(r"(오전|오후)|\d+시", q): return 30                                        # 10/8: 시각은 끊지 않는다("오후 3시 / 29분")
-    if len(q) == 1 and q in "몇안못더잘꼭또큰한두세네그이저새각첫온모든": return 40       # 10/8 대표: 한 글자 낱말(몇·안·못·더)을 줄 끝에 홀로 두지 않는다("몇 / 개인지")
+    if len(q) == 1 and q in "몇안못더잘꼭또큰한두세네그이저새각첫온모든제내": return 40       # 10/8 대표: 한 글자 낱말(몇·안·못·더)을 줄 끝에 홀로 두지 않는다("몇 / 개인지")
     if re.search(r"(와|과|의)$", q) and len(q) >= 2: return 14      # 10/8: "산과 / 비", "별자리와 / 사주로"처럼 뒤 낱말과 한 덩어리인 말을 줄 끝에 두지 않는다
     if re.search(r"(은|는)$", q) and len(q) >= 2 and k <= 2 and not re.search(ADNOM, q): return .5      # 주어·화제 뒤
     if re.search(r"(면서|으면|이면|라면|다면|는데|한데|지만|라서|니까|해서|어서|아서|서도|이며|으며|으니|하며|함께|만큼|동안|마다|무렵|뒤에)$", q) or (re.search(r"(면|고|며)$", q) and len(q) >= 3): return 1.5
+    if q in ("없고", "있고", "같고", "않고", "많고", "적고"): return 2.0      # 10/15: "틀린 사람은 없고 / 속도가 달라요"처럼 두 글자 연결 어미 뒤도 끊을 수 있다
     if re.search(r"(이|가|도|만|께서)$", q) and len(q) >= 3: return 2.5
     if not re.search(r"[가-힣]", q): return 2.0                                   # zaoseon.com 같은 로마자·숫자 낱말
     if q in ("중", "뒤", "때", "후", "전", "사이"): return 1.0                       # "세 지도 중 / 몇 개가"처럼 짧은 때·범위 낱말 뒤
@@ -108,6 +120,7 @@ def _dp(toks, i0, j0, limit, force=False, tailpen=True):
             last = j == n
             c = 6 + (0 if last else 3 * bpen(toks[i0 + j - 1], i0 + j - 1) + (300 if ins[i0 + j - 1] else 0)) + ((0.12 * (ideal - w) ** 2) if not last else ((0.12 * max(0, 9 - w) ** 2 + (45 if w < 5 else 0)) if tailpen else 0))
             if w > limit: c += 50
+            if not last and w < 4.5 and n > 2: c += 60   # 10/15: 첫·가운데 줄에 두세 글자만 두지 않는다('화나면 / 말을 안 하는…')
             if force and i == 0 and j == n and n > 1: c += 1000
             if best[i] + c < best[j]: best[j] = best[i] + c; back[j] = i
     out = []; j = n
@@ -124,7 +137,8 @@ def wrap(inner, limit, slack=0.0, soft=None):
     if n == 0: return [inner]
     ws = [width(t["p"]) for t in toks]
     def W(i, j): return sum(ws[i:j + 1]) + .32 * (j - i)
-    LIM = (limit if limit < 18 else 18.0) + slack   # 본문은 한 줄 19.8(한글 약 19자, 폰 폭 여유). 제목(19px)은 16.8(10/8 대표: 모바일 줄 길이 정리)
+    LIM = MOBILE_TITLE if limit <= TITLE_LIMIT else MOBILE_BODY   # 10/15: 실제 폰 폭(위 MOBILE_*)을 넘지 않는다. slack으로 늘리지 않는다
+    if limit < LIM: LIM = limit
     SING = min(soft, LIM) if soft else LIM          # soft가 있으면 이 너비를 넘는 문장은 두 줄 이상으로 나눈다
     if W(0, n - 1) <= SING: return [_line(toks, 0, n - 1)]
     chunks = []; s0 = 0                              # 1) 쉼표·연결 어미·주어 뒤에서 낱덩이로 자른다
@@ -161,6 +175,13 @@ def wrap(inner, limit, slack=0.0, soft=None):
                 c2 = abs(W(a, k) - W(k + 1, d)) + .6 * pk
                 if best_c is None or c2 < best_c: best_k, best_c = k, c2
             if best_k is not None and best_k != b and abs(W(a, best_k) - W(best_k + 1, d)) + 2 < abs(w1 - w2): out = [(a, best_k), (best_k + 1, d)]
+    for _ in range(4):                               # 10/15 대표 폰 캡처: 두세 글자짜리 줄('중년,' '정해')이 혼자 남지 않게 옆 줄과 합치고, 안 되면 전체를 다시 고르게 나눈다
+        k = next((x for x, (i, j) in enumerate(out) if len(out) > 1 and W(i, j) < 3.4), None)
+        if k is None: break
+        i, j = out[k]
+        if k > 0 and W(out[k - 1][0], j) <= LIM: out[k - 1:k + 1] = [(out[k - 1][0], j)]
+        elif k + 1 < len(out) and W(i, out[k + 1][1]) <= LIM: out[k:k + 2] = [(i, out[k + 1][1])]
+        else: out = _dp(toks, 0, n - 1, LIM, True); break
     return [_line(toks, i, j) for i, j in out]
 
 def _tail(lines):
@@ -260,3 +281,40 @@ def format_body(body):
         else: in_order = False
         out.append(P("<br>".join(sent_lines(inner)))); k += 1
     return "".join(out)
+
+_SPAN = re.compile(r'(<span style="font-size:(\d+)px">)(.*?)(</span>)', re.S)
+def fit_mobile(body):
+    """10/15: 서식이 끝난 본문에서 폰 한 줄 폭(MOBILE_*)을 넘는 줄을 다시 의미 단위로 나눈다(미리 <br>로 끊어 둔 코칭 블록·요약 박스 포함).
+    글자는 바꾸지 않는다(띄어쓰기와 줄바꿈만)."""
+    def fix(m):
+        px = int(m.group(2)); lim = TITLE_LIMIT if px >= 19 else BODY_LIMIT; cap = MOBILE_TITLE if px >= 19 else MOBILE_BODY
+        inner = re.sub(r"^(\s*(?:<b>)?\s*\d+\.)\s*(?:</b>)?\s*<br\s*/?>\s*(?:<b>)?", r"\1 ", m.group(3))   # 번호('4.')만 한 줄에 있으면 다음 줄과 붙인다
+        parts = re.split(r"(<br\s*/?>)", inner); out = []
+        for seg in parts:
+            if re.fullmatch(r"<br\s*/?>", seg or ""): out.append(seg); continue
+            if width(plain_of(seg).replace("\xa0", " ").strip()) > cap and "<img" not in seg and "<a " not in seg:
+                ls = []
+                for l in wrap(seg.strip(), lim):
+                    mm = re.fullmatch(r"(<b>)?([^<]*)(</b>)?", l)
+                    if width(plain_of(l)) > cap and "·" in l and mm:   # 띄어쓰기 없는 긴 낱말('황소자리·사자자리·…')은 가운데에 가까운 '·' 뒤에서 나눈다
+                        a_, t_, z_ = mm.group(1) or "", mm.group(2), mm.group(3) or ""
+                        cut = min((i for i, ch in enumerate(t_) if ch == "·"), key=lambda i: abs(width(t_[:i + 1]) - width(t_[i + 1:])))
+                        ls += [a_ + t_[:cut + 1] + z_, a_ + t_[cut + 1:] + z_]
+                    else: ls.append(l)
+                if len(ls) > 1 and re.fullmatch(r"(<b>)?\s*\d+\.\s*(</b>)?", ls[0]) and "·" in ls[1]:   # '4.'만 한 줄에 남으면 번호를 다음 줄과 붙이고 '·'에서 나눈다
+                    mm = re.fullmatch(r"(<b>)?([^<]*)(</b>)?", plain_of(ls[0]).strip() + " " + plain_of(ls[1]).strip()); t_ = mm.group(2); b_ = "<b>" if "<b>" in seg else ""
+                    cut = min((i for i, ch in enumerate(t_) if ch == "·"), key=lambda i: abs(width(t_[:i + 1]) - width(t_[i + 1:])))
+                    ls = [b_ + t_[:cut + 1] + ("</b>" if b_ else ""), b_ + t_[cut + 1:] + ("</b>" if b_ else "")] + ls[2:]
+                out.append("<br>".join(ls))
+            else: out.append(seg)
+        return m.group(1) + "".join(out) + m.group(4)
+    return _SPAN.sub(fix, body)
+def over_lines(body):
+    """폰 한 줄 폭을 넘는 줄 목록(검사용): [(px, 줄 글자, 너비)]"""
+    bad = []
+    for m in _SPAN.finditer(body):
+        px = int(m.group(2)); cap = MOBILE_TITLE if px >= 19 else MOBILE_BODY
+        for seg in re.split(r"<br\s*/?>", m.group(3)):
+            t = plain_of(seg).replace("\xa0", " ").strip()
+            if t and width(t) > cap + 1e-6 and "<img" not in seg: bad.append((px, t, round(width(t), 1)))
+    return bad

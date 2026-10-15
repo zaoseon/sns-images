@@ -9,12 +9,15 @@ def ours(it):
     return [FB.plain_of(l).strip() for l in FB.sent_lines(it["s"], lim)] if not it["s"].startswith(("1.", "3.")) else [FB.plain_of(l).strip() for l in FB.sent_lines(it["s"], lim)]
 def main(verbose=False):
     ok = 0; bad = []
+    wide = []   # 10/15: 정답 줄이 폰 한 줄 폭(FB.MOBILE_*)보다 길면 폰에서 한두 글자가 넘어간다. 이런 정답은 비교에서 빼고 따로 센다
     for it in G:
+        cap = FB.MOBILE_BODY
+        if max(FB.width(l) for l in it["l"]) > cap: wide.append(it); continue
         got = ours(it)
         if got == it["l"]: ok += 1
         else: bad.append((it, got))
-    print(f"정답과 같은 문장 {ok}/{len(G)}")
+    print(f"정답과 같은 문장 {ok}/{len(G) - len(wide)} (폰 폭보다 긴 옛 정답 {len(wide)}개는 제외)")
     if verbose:
         for it, got in bad: print("-", it["s"][:36], "\n   정답:", " / ".join(it["l"]), "\n   현재:", " / ".join(got))
-    return ok, len(G)
+    return ok, len(G) - len(wide)
 if __name__ == "__main__": main("-v" in sys.argv)

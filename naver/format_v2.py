@@ -185,7 +185,7 @@ def _engage_emoji(paras):
                 m = re.match(r"(<p[^>]*><span[^>]*>)(.*)(</span></p>)$", p, re.S)
                 if m:
                     lines = m.group(2).split("<br>")
-                    if FB.width(FB.plain_of(lines[0])) + 2.0 <= 18.0: lines[0] = "👇 " + lines[0]
+                    if FB.width(FB.plain_of(lines[0])) + 2.0 <= FB.MOBILE_BODY: lines[0] = "👇 " + lines[0]
                     else: lines.insert(0, "👇")
                     p = m.group(1) + "<br>".join(lines) + m.group(3)
         out.append(p)
