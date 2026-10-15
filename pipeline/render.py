@@ -9,8 +9,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 FD = HERE + "/fonts/"
 SER, MED, SEMI = FD + "serif.otf", FD + "PRETENDARD-MEDIUM.OTF", FD + "PRETENDARD-SEMIBOLD.OTF"
 BLACKF = FD + "PRETENDARD-BLACK.OTF"  # 9/30: 훅 제목용 굵은 고딕(피드 가독성)
-DOHYEON = FD + "BM-DOHYEON.ttf"; HANNA = FD + "BM-HANNAPRO.ttf"; JUA = FD + "BM-JUA.ttf"  # 9/30: 배달의민족 무료 폰트(OFL), 눈누 계열
-NEXON = FD + "NEXON-LV2-BOLD.ttf"; MAPLE = FD + "MAPLESTORY-BOLD.ttf"; NANUMR = FD + "NANUMSQUARE-ROUND-EB.ttf"; EULJIRO = FD + "BM-EULJIRO.ttf"; LINESEED = FD + "LINE-SEED-SANS-BOLD.otf"
+# 10/15 미사용 폰트 8개 삭제(D-264): 이름만 정의돼 있었음
+# 10/15 미사용 폰트 8개 삭제(D-264): 이름만 정의돼 있었음
 W, H = 1080, 1350
 INK, PAPER, GOLD, DIM, RED, LINE = (18,16,14), (236,227,208), (196,160,98), (160,150,132), (150,40,34), (70,62,52)
 EL = {"나무":(92,150,92),"불":(196,72,56),"흙":(184,140,72),"쇠":(210,206,196),"물":(70,110,170)}
