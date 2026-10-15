@@ -1,0 +1,29 @@
+{
+  "id": "브랜드영문아이디",
+  "name": "브랜드 이름",
+  "tagline": "한 줄 설명 - 모든 화면 오른쪽 위에 들어간다",
+  "link": "example.com",
+  "color": {
+    "accent": "#000000",
+    "ink": "#FFFFFF",
+    "inkDark": "#141414",
+    "paper": "#000000",
+    "paperAlt": "#111111",
+    "dim": "rgba(255,255,255,0.62)"
+  },
+  "font": { "body": "Pretendard", "title": "Pretendard", "serif": "Noto Serif KR" },
+  "character": null,
+  "fixed": {
+    "topLeft": "브랜드 이름",
+    "topRight": "한 줄 설명",
+    "rule": "모든 영상·카드에 넣는다. 안전영역 안에 둔다."
+  },
+  "voice": {
+    "endings": [],
+    "suggest": [],
+    "banned": [],
+    "disclaimer": ""
+  },
+  "positioning": "",
+  "_안내": "이 파일만 복사해 값을 바꾸면 같은 템플릿으로 다른 브랜드 콘텐츠가 나온다. 템플릿과 규격은 건드리지 않는다."
+}

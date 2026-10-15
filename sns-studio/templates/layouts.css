@@ -1,0 +1,127 @@
+/* SNS STUDIO - 공용 레이아웃 5종 + 가독성 기법 4종
+   근거: 1만 팔로워 이상 50개 계정 썸네일 레이아웃 분석(5종으로 압축)
+   브랜드에 상관없이 그대로 쓴다. 색·글꼴·문구는 브랜드 파라미터가 넣는다. */
+
+:root {
+  /* 브랜드가 덮어쓰는 값 */
+  --accent: #f2994a;
+  --ink: #ffffff;
+  --ink-dark: #141414;
+  --paper: #0b1026;
+  --paper-alt: #121a3c;
+  --dim: rgba(255, 255, 255, 0.62);
+
+  /* 안전영역 - 규격별로 덮어쓴다 */
+  --safe-top: 285px;
+  --safe-bottom: 320px;
+  --safe-side: 90px;
+
+  --lh: 1.4;
+}
+
+/* 규격 */
+.canvas { position: relative; overflow: hidden; background: var(--paper);
+  font-family: Pretendard, sans-serif; -webkit-font-smoothing: antialiased; }
+.canvas.reel   { width: 1080px; height: 1920px; --safe-top: 285px; --safe-bottom: 320px; }
+.canvas.card   { width: 1080px; height: 1440px; --safe-top: 60px;  --safe-bottom: 60px; }
+.canvas.square { width: 1080px; height: 1080px; --safe-top: 60px;  --safe-bottom: 60px; }
+
+/* 배경 레이어 */
+.layer { position: absolute; inset: 0; }
+.layer.photo { background-size: cover; background-position: center; }
+.layer.tint { background:
+  radial-gradient(900px 900px at 22% 24%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 62%),
+  radial-gradient(1100px 1100px at 82% 84%, rgba(90,120,220,0.34), transparent 64%),
+  linear-gradient(170deg, var(--paper-alt) 0%, var(--paper) 52%, #080b1b 100%); }
+
+/* 고정 요소 - 브랜드 이름과 한 줄 설명 */
+.fixedbar { position: absolute; top: calc(var(--safe-top) + 34px);
+  left: var(--safe-side); right: var(--safe-side);
+  display: flex; align-items: center; justify-content: space-between; z-index: 5; }
+.fixedbar .b-name { font-size: 44px; font-weight: 800; color: var(--ink); letter-spacing: .02em; }
+.fixedbar .b-tag  { font-size: 27px; font-weight: 600; color: var(--dim); }
+
+/* AI 고지 - 캐릭터가 보일 때만 */
+.ai-notice { position: absolute; left: var(--safe-side);
+  bottom: calc(var(--safe-bottom) + 16px); font-size: 24px; color: var(--dim); z-index: 5; }
+
+/* 글 공통 - 줄간격 1.4, 단색, 그림자 없음
+   word-break:keep-all 이 단어 중간 줄바꿈을 막는다. 한국어는 띄어쓰기에서만 끊긴다. */
+.t { line-height: var(--lh); color: var(--ink); white-space: pre-line;
+  word-break: keep-all; overflow-wrap: normal; }
+.t.accent { color: var(--accent); }
+.t.dark { color: var(--ink-dark); }
+.label { font-size: 34px; font-weight: 700; letter-spacing: .04em; color: var(--accent); }
+.title { font-size: 86px; font-weight: 800; }
+.sub   { font-size: 40px; font-weight: 500; color: var(--dim); }
+
+/* 글이 놓이는 자리 - 안전영역 안 */
+.stage { position: absolute; left: var(--safe-side); right: var(--safe-side);
+  top: calc(var(--safe-top) + 150px); bottom: calc(var(--safe-bottom) + 40px);
+  display: flex; z-index: 4; }
+/* CTA 알약이 있으면 글이 알약을 덮지 않게 바닥을 올린다 */
+.has-cta .stage { bottom: calc(var(--safe-bottom) + 190px); }
+
+/* ───── 레이아웃 5종 ───── */
+
+/* L1 좌상단 제목형 - 글은 위, 아래는 그림에 내준다 */
+.L1 .stage { flex-direction: column; align-items: flex-start; justify-content: flex-start; text-align: left; }
+.L1 .title { font-size: 92px; }
+.L1 .sub { margin-top: 28px; }
+
+/* L2 중앙 집중형 - 라벨 → 제목 → 보조 */
+.L2 .stage { flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 30px; }
+
+/* L3 상단 띠형 - 위쪽 띠에 글, 아래는 그림 */
+.L3 .band { position: absolute; left: 0; right: 0; top: 0;
+  height: calc(var(--safe-top) + 620px); background: var(--paper); z-index: 2; }
+.L3 .stage { top: calc(var(--safe-top) + 150px); bottom: auto; height: 420px;
+  flex-direction: column; align-items: flex-start; justify-content: flex-start; text-align: left; }
+
+/* L4 하단 띠형 - 위는 그림, 아래 띠에 글 */
+.L4 .band { position: absolute; left: 0; right: 0; bottom: 0;
+  height: calc(var(--safe-bottom) + 680px); background: var(--paper); z-index: 2; }
+.L4.has-cta .stage { bottom: calc(var(--safe-bottom) + 210px); }
+.L4 .stage { top: auto; bottom: calc(var(--safe-bottom) + 90px); height: 440px;
+  flex-direction: column; align-items: flex-start; justify-content: flex-end; text-align: left; }
+
+/* L5 좌측 3줄형 - 줄 길이를 일부러 다르게 */
+.L5 .stage { flex-direction: column; align-items: flex-start; justify-content: center; text-align: left; gap: 18px; }
+.L5 .ln1 { font-size: 52px; font-weight: 700; color: var(--dim); }
+.L5 .ln2 { font-size: 82px; font-weight: 800; }
+.L5 .ln3 { font-size: 46px; font-weight: 600; color: var(--dim); }
+
+/* ───── 가독성 기법 4종 ───── */
+
+/* T1 배경에 이미지 */
+.T1 .layer.photo { filter: saturate(1.02); }
+
+/* T2 글자 밑 그라데이션 - 밝은 사진에서도 글이 읽히게 */
+.T2 .scrim { position: absolute; left: 0; right: 0; bottom: 0; height: 68%;
+  background: linear-gradient(to top, rgba(0,0,0,.88) 0%, rgba(0,0,0,.55) 42%, transparent 100%); z-index: 3; }
+.T2.topscrim .scrim { top: 0; bottom: auto;
+  background: linear-gradient(to bottom, rgba(0,0,0,.88) 0%, rgba(0,0,0,.5) 46%, transparent 100%); }
+
+/* T3 연재 배지 - 같은 시리즈를 쌓아 보이게 */
+.T3 .serial { position: absolute; left: var(--safe-side);
+  top: calc(var(--safe-top) + 108px); display: flex; align-items: center; gap: 18px; z-index: 5; }
+.T3 .serial .chip { background: var(--accent); color: var(--ink-dark);
+  font-size: 28px; font-weight: 800; padding: 12px 24px; border-radius: 8px; line-height: 1; }
+.T3 .serial .rule { flex: 1; height: 2px; background: var(--dim); opacity: .5; }
+.T3 .serial .no { font-size: 32px; font-weight: 700; color: var(--dim); }
+.T3 .stage { top: calc(var(--safe-top) + 210px); }
+
+/* T4 글자 크기 폭발 - 한 화면 한 메시지일 때만 */
+.T4 .title { font-size: 128px; font-weight: 800; letter-spacing: -0.02em; }
+.T4 .sub { font-size: 36px; }
+
+/* CTA 알약 - 데드존 바로 위에서 마감 */
+.cta-pill { position: absolute; left: 50%; transform: translateX(-50%);
+  bottom: calc(var(--safe-bottom) + 40px); padding: 30px 66px; border-radius: 999px;
+  background: var(--accent); color: var(--ink-dark); font-size: 46px; font-weight: 800;
+  line-height: 1; display: flex; align-items: center; justify-content: center; z-index: 5; }
+
+/* 안전영역 눈금 - 확인용. 산출물에는 끄고 쓴다 */
+.guides .g { position: absolute; left: 0; right: 0; background: rgba(255,0,0,.16); z-index: 9; }
+.guides .g.top { top: 0; height: var(--safe-top); }
+.guides .g.bottom { bottom: 0; height: var(--safe-bottom); }

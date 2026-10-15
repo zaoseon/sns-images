@@ -1,0 +1,55 @@
+{
+  "brand": "zaoseon",
+  "size": "card",
+  "guides": false,
+  "cards": [
+    {
+      "id": "L1_좌상단제목형",
+      "layout": "L1",
+      "tech": ["T1", "T2"],
+      "scrimTop": true,
+      "photo": "assets/brand_bg/derived/bg_cosmos.jpg",
+      "character": "characters/cut_light/v5_halfup_v2.png",
+      "label": "정월의 상담실",
+      "title": "사주는 정해진 운명이\n아니에요",
+      "sub": "앞일을 맞히는 게 아니라\n지금 어떤 때를 지나는지 보는 거예요"
+    },
+    {
+      "id": "L2_중앙집중형",
+      "layout": "L2",
+      "tech": ["T4"],
+      "label": "오늘의 마음",
+      "title": "오늘 잘 안 풀렸다면\n내 탓부터 하지 마세요",
+      "sub": "때가 바뀌면 같은 일도 다르게 흘러가요"
+    },
+    {
+      "id": "L3_상단띠형",
+      "layout": "L3",
+      "tech": ["T1"],
+      "photo": "assets/brand_bg/derived/bg_cosmos.jpg",
+      "label": "여섯 운명학 교차",
+      "title": "같은 말을 하는 곳이\n세 군데 있어요",
+      "sub": "겹치는 자리가 그 사람 이야기예요"
+    },
+    {
+      "id": "L4_하단띠형",
+      "layout": "L4",
+      "tech": ["T1"],
+      "photo": "assets/brand_bg/derived/bg_cosmos.jpg",
+      "title": "마음이 자꾸\n한쪽으로 기운다면",
+      "sub": "성격이 아니라 지금 지나는 때일 수 있어요",
+      "cta": "zaoseon.com/ig"
+    },
+    {
+      "id": "L5_좌측3줄형",
+      "layout": "L5",
+      "tech": ["T3"],
+      "serial": { "chip": "마음 코칭", "no": "07" },
+      "lines": [
+        "사람들이 자주 묻는 것",
+        "저는 왜 늘 같은 사람한테\n끌릴까요?",
+        "답은 성격이 아니라 때에 있어요"
+      ]
+    }
+  ]
+}
