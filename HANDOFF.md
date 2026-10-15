@@ -1,3 +1,4 @@
+> **네이버 원고 고칠 때(10/15): 사이트 HTML(zaoseon-site public/naver)만 고치지 말고 원본 `naver/pages.json`을 고친 뒤 `make_page.render_all()`로 다시 만든다.** HTML만 고친 것(patch_alt·add_sources·기준일)은 다시 만들 때 사라졌다. AI 브리핑 N2(질문형 소제목)=`naver/n2_apply.py`+`n2_edits.json`, N3·N7·N8=`naver/aibrief_src.py`, N10(렌즈, 계산 값만)=`naver/n10_lens.py`, 줄 정리=`naver/fix_lines.py`(→`line_overrides.json`). 본문 개념 도식·실제 화면 시안=`naver/concept_img.py`(새 이름 `_p`·`_s`만 추가).
 > **[필독] 언어 규칙(대표 10/14·10/15 거듭 지시, 모든 세션·예약 작업 공통):** 대표에게 하는 답변·결과 보고·휴대폰 알림·상태 메시지·기록은 **전부 한국어**로 쓴다. 영어로 쓰지 않는다(코드·파일 이름·고유명사만 예외).
 
 > **먼저 `docs/콘텐츠_제작_인계_2026-10-04.md`를 읽는다**(무엇을 언제 만들었는지·일정표·대표가 할 일·열린 일). 아래는 시간순 작업 일지다.
