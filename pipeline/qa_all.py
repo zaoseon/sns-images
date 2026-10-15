@@ -37,6 +37,15 @@ def text_checks():
     for c in sp2["clips"]:
         if not os.path.exists(os.path.join(CV2.OUT, c["id"] + ".mp4")): bad2.append((c["id"], "클립 영상 없음(python3 pipeline/clip_v2.py)"))
     out["네이버 클립 v2: 하루 1개·같은 틀 반복·금지어·마음과 관계·설명 300자"] = len(bad2)
+    # 10/15 대표 2차 지적: v2는 제작 가이드 확정판 규칙을 안 따름 -> v3(content/clips_v3.py, 규칙 엔진). 자막·배치 엄격 검사는 렌더할 때 clips_v3.py가 한다(느려서 여기선 설명 글·영상 파일만)
+    sp3 = json.load(open(os.path.join(R, "content", "clips_v3.json"), encoding="utf-8"))["clips"]; bad3 = []
+    for k, c in sp3.items():
+        d = c["desc"]
+        if not os.path.exists(os.path.join(R, "clips_v3", k + ".mp4")): bad3.append((k, "영상 없음(python3 content/clips_v3.py)"))
+        if "http" in d or "상" + "담" in d: bad3.append((k, "주소·금지어"))
+        if any(len(x) > 60 for x in d.split("\n")): bad3.append((k, "한 줄 60자 넘음"))
+        if not any(w in d for w in ("마음", "관계")): bad3.append((k, "마음·관계 줄 없음"))
+    out["네이버 클립 v3: 영상 있음·설명 한 줄 60자·금지어·마음과 관계"] = len(bad3)
     import sub_rules as SR   # 대표 10/13: 릴스 자막 규칙 R60~R67 (소스 장면표에서 수집, 예약본은 완화 기준·STRICT_IDS 영상은 엄격 기준). 걸리면 해당 영상을 고쳐 다시 렌더
     out["릴스 자막(R60 줄 수·R61 줄 길이·R63 컷 길이·R64 덩어리 수·R65 겹침)"] = sum(len(v) for v in SR.run(gate=True).values())
     import banned_words_audit as BW   # 대표 10/12 23:15: '상담' 계열 금지(예외 심리상담사). 소스 전수(두 저장소)·앱 대기 캡션·네이버 미발행 원고

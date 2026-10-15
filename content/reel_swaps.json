@@ -3000,7 +3000,7 @@
     "title": "네이버 클립 10/16~10/31 16개 · 같은 틀 반복 없앰",
     "date": "2026-10-16",
     "time": "20:00",
-    "status": "new",
+    "status": "cancel",
     "channels": [
       "naver"
     ],
@@ -3023,11 +3023,49 @@
       "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1030-n45_thumb.jpg",
       "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1031-n46_thumb.jpg"
     ],
-    "note": "[10/15 대표: 클립이 같은 틀 반복으로 보임 → 하루 1개로 합쳐 새로] 옛 일간·글 연결·릴스 재활용 클립(하루 2개 겹침)은 앱 할 일에서 내렸어요(zaoseon-site data/clip_hold.json). 새 클립은 날마다 그날 12:00 발행 글과 짝이고, 첫 장면(=썸네일)이 그 글의 실제 내용(찾는 표·노트·고르기·연대표·말풍선·일정표·영수증·배터리·가면…)이라 모양과 색이 모두 달라요. 고정 첫 장면·끝 장면, 정월 얼굴, 고정 문장·고정 태그 자리를 없앴어요. 10/17·10/20은 인스타 릴스 본문만 줄여 네이버 버튼에 안 가리게 썼어요. 승인하면 앱 할 일에 날마다 하나씩(20:00) 떠요. 하나만 고치고 싶으면 [다시 수정 요청]에 날짜와 할 말을 적어 주세요. 영상: 10/16 n33 약속 취소가 반가운 마음, 혼자 충전형  · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1016-n33.mp4 / 10/17 n49 2027년 돼지띠 운세, 삼합이 되는 해 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1017-n49.mp4 / 10/18 n34 반추사고일까요? 일요일 밤마다 생각이 많 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1018-n34.mp4 / 10/19 n35 월요병이 유독 심한 이유, 출근길 마음이 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1019-n35.mp4 / 10/20 n51 별자리 운세 제대로 보는 법, 내 별자리 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1020-n51.mp4 / 10/21 n36 작심삼일, 시작만 하고 끝을 못 내는 사 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1021-n36.mp4 / 10/22 n37 자존감이 흔들릴 때, 남과 비교하면 작아 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1022-n37.mp4 / 10/23 n38 가을 탈 때 마음이 허해지는 이유, 상강 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1023-n38.mp4 / 10/24 n39 불안형 애착일까요? 연락을 기다리다 지칠 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1024-n39.mp4 / 10/25 n40 가족 모임 뒤 유독 지칠 때, 가족과 거 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1025-n40.mp4 / 10/26 n41 낯가림이 심한 편이라면, 낯선 자리에서  · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1026-n41.mp4 / 10/27 n42 예민해서 쉽게 피곤한 사람, 감각이 큰  · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1027-n42.mp4 / 10/28 n43 소비심리, 돈 쓰고 나서 후회하는 마음  · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1028-n43.mp4 / 10/29 n44 결정장애일까요? 결정을 자꾸 미루는 마음 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1029-n44.mp4 / 10/30 n45 퇴근 후 무기력, 아무것도 하기 싫은 사 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1030-n45.mp4 / 10/31 n46 웃는 얼굴 뒤에 속마음을 숨기는 사람,  · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1031-n46.mp4 설명 글 예시(10/16): 약속 취소 문자에 속으로 웃은 적 있나요? 사주에서는 혼자 있는 시간에 힘을 채우는 기운을 화개라고 불러요. 띠마다 찾는 글자가 달라요. 원숭이·쥐·용띠는 辰, 호랑이·말·개띠는 戌이에요. 뱀·닭·소띠는 丑, 돼지·토끼·양띠는 未예요. 쉬고 싶은 마음을 미리 말해 두면 약속도 관계도 덜 다쳐요.  #화개살 #혼자충전 #내향인 #사주",
+    "note": "[10/15 취소] 대표 2차 지적(제작 가이드 확정판 규칙 미적용·입말)으로 clips-v3-1016-1031로 바꿈. [10/15 대표: 클립이 같은 틀 반복으로 보임 → 하루 1개로 합쳐 새로] 옛 일간·글 연결·릴스 재활용 클립(하루 2개 겹침)은 앱 할 일에서 내렸어요(zaoseon-site data/clip_hold.json). 새 클립은 날마다 그날 12:00 발행 글과 짝이고, 첫 장면(=썸네일)이 그 글의 실제 내용(찾는 표·노트·고르기·연대표·말풍선·일정표·영수증·배터리·가면…)이라 모양과 색이 모두 달라요. 고정 첫 장면·끝 장면, 정월 얼굴, 고정 문장·고정 태그 자리를 없앴어요. 10/17·10/20은 인스타 릴스 본문만 줄여 네이버 버튼에 안 가리게 썼어요. 승인하면 앱 할 일에 날마다 하나씩(20:00) 떠요. 하나만 고치고 싶으면 [다시 수정 요청]에 날짜와 할 말을 적어 주세요. 영상: 10/16 n33 약속 취소가 반가운 마음, 혼자 충전형  · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1016-n33.mp4 / 10/17 n49 2027년 돼지띠 운세, 삼합이 되는 해 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1017-n49.mp4 / 10/18 n34 반추사고일까요? 일요일 밤마다 생각이 많 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1018-n34.mp4 / 10/19 n35 월요병이 유독 심한 이유, 출근길 마음이 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1019-n35.mp4 / 10/20 n51 별자리 운세 제대로 보는 법, 내 별자리 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1020-n51.mp4 / 10/21 n36 작심삼일, 시작만 하고 끝을 못 내는 사 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1021-n36.mp4 / 10/22 n37 자존감이 흔들릴 때, 남과 비교하면 작아 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1022-n37.mp4 / 10/23 n38 가을 탈 때 마음이 허해지는 이유, 상강 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1023-n38.mp4 / 10/24 n39 불안형 애착일까요? 연락을 기다리다 지칠 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1024-n39.mp4 / 10/25 n40 가족 모임 뒤 유독 지칠 때, 가족과 거 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1025-n40.mp4 / 10/26 n41 낯가림이 심한 편이라면, 낯선 자리에서  · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1026-n41.mp4 / 10/27 n42 예민해서 쉽게 피곤한 사람, 감각이 큰  · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1027-n42.mp4 / 10/28 n43 소비심리, 돈 쓰고 나서 후회하는 마음  · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1028-n43.mp4 / 10/29 n44 결정장애일까요? 결정을 자꾸 미루는 마음 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1029-n44.mp4 / 10/30 n45 퇴근 후 무기력, 아무것도 하기 싫은 사 · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1030-n45.mp4 / 10/31 n46 웃는 얼굴 뒤에 속마음을 숨기는 사람,  · 영상 https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v2/v2-1031-n46.mp4 설명 글 예시(10/16): 약속 취소 문자에 속으로 웃은 적 있나요? 사주에서는 혼자 있는 시간에 힘을 채우는 기운을 화개라고 불러요. 띠마다 찾는 글자가 달라요. 원숭이·쥐·용띠는 辰, 호랑이·말·개띠는 戌이에요. 뱀·닭·소띠는 丑, 돼지·토끼·양띠는 未예요. 쉬고 싶은 마음을 미리 말해 두면 약속도 관계도 덜 다쳐요.  #화개살 #혼자충전 #내향인 #사주",
     "checks": [
       "썸네일 16장이 서로 다르게 보이는지",
       "글 내용이 그날 블로그 글과 맞는지",
       "설명 글 말투"
+    ],
+    "since": "2026-10-15"
+  },
+  {
+    "id": "clips-v3-1016-1031",
+    "kind": "네이버 클립 다시 만듦(확정판 규칙, 하루 1개, 승인 대기)",
+    "title": "네이버 클립 10/16~10/31 16개 · 제작 가이드 확정판 규칙으로 다시",
+    "date": "2026-10-16",
+    "time": "20:00",
+    "status": "new",
+    "channels": [
+      "naver"
+    ],
+    "images": [
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/_thumbs_all.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1016-n33_thumb.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1017-n49_thumb.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1018-n34_thumb.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1019-n35_thumb.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1020-n51_thumb.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1021-n36_thumb.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1022-n37_thumb.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1023-n38_thumb.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1024-n39_thumb.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1025-n40_thumb.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1026-n41_thumb.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1027-n42_thumb.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1028-n43_thumb.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1029-n44_thumb.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1030-n45_thumb.jpg",
+      "https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1031-n46_thumb.jpg"
+    ],
+    "note": "[10/15 대표 2차 지적: 배지 글 가운데·박스 아래 글이 하단 핸들에 붙음·글자 작음·여백 불균형·입말] 이번에는 규칙 엔진(clip_motion)으로만 그렸어요. 상단 띠·하단 주소·안전 영역(x 50~900, y 330~1470), 묶음 가운데 910, 제목 G마켓 산스 84~104px·본문 54px 이상, 알약·상자 안 글 정중앙, 자막 한 덩어리 2줄·한 줄 14자·장면 글 덩어리 3개 이하, 장면마다 다른 효과, 배경은 날마다 남색·보라·버건디·숲·청록 차례. 끝 장면은 그 글에 맞춘 질문과 '블로그에서 전체 글 보기'. 자막 규칙·배치·가로 안전 영역 자동 검사 16편 모두 통과. 10/17·10/20은 인스타 릴스 본문에 클립용 첫·끝 장면을 붙였어요. 승인하면 앱 할 일에 날마다 하나씩(20:00) 떠요. 영상: 10/16 n33 · https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1016-n33.mp4 / 10/17 n49 · https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1017-n49.mp4 / 10/18 n34 · https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1018-n34.mp4 / 10/19 n35 · https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1019-n35.mp4 / 10/20 n51 · https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1020-n51.mp4 / 10/21 n36 · https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1021-n36.mp4 / 10/22 n37 · https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1022-n37.mp4 / 10/23 n38 · https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1023-n38.mp4 / 10/24 n39 · https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1024-n39.mp4 / 10/25 n40 · https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1025-n40.mp4 / 10/26 n41 · https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1026-n41.mp4 / 10/27 n42 · https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1027-n42.mp4 / 10/28 n43 · https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1028-n43.mp4 / 10/29 n44 · https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1029-n44.mp4 / 10/30 n45 · https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1030-n45.mp4 / 10/31 n46 · https://raw.githubusercontent.com/zaoseon/sns-images/main/clips_v3/v3-1031-n46.mp4",
+    "checks": [
+      "배지·상자 글이 가운데인지",
+      "글자 크기·여백",
+      "말이 자연스러운지",
+      "그날 블로그 글과 맞는지"
     ],
     "since": "2026-10-15"
   }
