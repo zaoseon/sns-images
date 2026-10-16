@@ -32,6 +32,26 @@
    "src": "대표 10/16 전달 노션 색조합 가이드 캡처 (zaoseon-site samples/design_refs_2026-10-16/color_combos/)"
   },
   {
+   "id": "y_black_inv",
+   "name": "옐로우 & 블랙(옐로우 바탕)",
+   "feel": "강렬함·밝음",
+   "colors": {
+    "옐로우": "#FFD600",
+    "블랙": "#111111"
+   },
+   "how": "옐로우 바탕, 검정 글자·배지. 옐로우&블랙 판과 번갈아",
+   "theme": {
+    "bg": "#FFD600",
+    "card": "#FFFFFF",
+    "line": "#E6C200",
+    "ink": "#111111",
+    "sub": "#4A4A4A",
+    "acc": "#111111",
+    "acc2": "#4A4A4A"
+   },
+   "src": "자오선(y_black 반전)"
+  },
+  {
    "id": "y_blue",
    "name": "옐로우 & 블루",
    "feel": "싱그러움·청량함·신뢰감·활기",
@@ -53,7 +73,8 @@
     "hl": "#FFD93D",
     "hl_ink": "#0F172A"
    },
-   "src": "대표 10/16 전달 노션 색조합 가이드 캡처 (zaoseon-site samples/design_refs_2026-10-16/color_combos/)"
+   "src": "대표 10/16 전달 노션 색조합 가이드 캡처 (zaoseon-site samples/design_refs_2026-10-16/color_combos/)",
+   "쓰지 않음": "대표 10/16: 파란색(원색·로열 블루) 쓰지 않기"
   },
   {
    "id": "y_pink",
@@ -148,7 +169,8 @@
     "hl": "#2563EB",
     "hl_ink": "#FFFFFF"
    },
-   "src": "대표 10/16 전달 노션 색조합 가이드 캡처 (zaoseon-site samples/design_refs_2026-10-16/color_combos/)"
+   "src": "대표 10/16 전달 노션 색조합 가이드 캡처 (zaoseon-site samples/design_refs_2026-10-16/color_combos/)",
+   "쓰지 않음": "대표 10/16: 파란색(원색·로열 블루) 쓰지 않기"
   },
   {
    "id": "b_mint",
@@ -171,7 +193,8 @@
     "hl": "#50D5C8",
     "hl_ink": "#0B2A66"
    },
-   "src": "대표 10/16 전달 노션 색조합 가이드 캡처 (zaoseon-site samples/design_refs_2026-10-16/color_combos/)"
+   "src": "대표 10/16 전달 노션 색조합 가이드 캡처 (zaoseon-site samples/design_refs_2026-10-16/color_combos/)",
+   "쓰지 않음": "대표 10/16: 파란색(원색·로열 블루) 쓰지 않기"
   },
   {
    "id": "b_orange",
@@ -194,7 +217,8 @@
     "hl": "#FF8A34",
     "hl_ink": "#111827"
    },
-   "src": "대표 10/16 전달 노션 색조합 가이드 캡처 (zaoseon-site samples/design_refs_2026-10-16/color_combos/)"
+   "src": "대표 10/16 전달 노션 색조합 가이드 캡처 (zaoseon-site samples/design_refs_2026-10-16/color_combos/)",
+   "쓰지 않음": "대표 10/16: 파란색(원색·로열 블루) 쓰지 않기"
   },
   {
    "id": "p_red",
@@ -520,7 +544,8 @@
     "#0A46B3",
     "#FFEAD2"
    ],
-   "src": "대표 10/16 카톡 영상(designer_kel… '조회수 폭발하는 색조합')"
+   "src": "대표 10/16 카톡 영상(designer_kel… '조회수 폭발하는 색조합')",
+   "쓰지 않음": "대표 10/16: 파란색(원색·로열 블루) 쓰지 않기"
   },
   {
    "id": "v_navy",

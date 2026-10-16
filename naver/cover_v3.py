@@ -15,7 +15,7 @@ from thumb_sq import S, F, SER, SEMI, MED, BLK, badge, pill, lines_at, accent, f
 PAL = json.load(open(os.path.join(HERE, "..", "assets", "palettes", "color_combos.json"), encoding="utf-8"))["palettes"]
 EL_PAL = {"나무": "g_ivory", "불": "p_red", "흙": "y_olive", "쇠": "k_white", "물": "b_white"}
 # v3b(10/16 대표 "칙칙한 베이지, 탁한 블루, 어중간한 그린 — 캡처해 준 조합을 써라"): 캡처·영상의 선명한 두 색 조합으로
-EL_PAL_B = {"나무": "v_emerald", "물": "v_royal", "흙": "v_navy_inv", "불": "y_pink", "쇠": "k_white"}
+EL_PAL_B = {"나무": "v_emerald", "물": "v_navy", "흙": "y_black_inv", "불": "y_pink", "쇠": "k_white"}   # 10/16 대표 "파란색 쓰지 마라": 물=네이비&버터, 흙=옐로우&블랙
 DARK_PAL = "v_violet"
 h2 = lambda c: tuple(int(c[i:i + 2], 16) for i in (1, 3, 5))
 mix = lambda a, b, k: tuple(int(a[i] * (1 - k) + b[i] * k) for i in range(3))
@@ -143,8 +143,10 @@ def pick(order, T, every_dark=6):
     for i, k in enumerate(order):
         el = T[k]["el"]; base = EL_PAL_B[el]; n = seen.get(el, 0); seen[el] = n + 1
         if i % every_dark == every_dark - 1: out[k] = DARK_PAL; continue
+        alt = {"y_black_inv": "y_black", "y_black": "y_black_inv"}
         is_pair = any(x["id"] == base.replace("_inv", "") and "pair" in x for x in PAL)
-        out[k] = (base[:-4] if base.endswith("_inv") else base + "_inv") if is_pair and n % 2 == 1 else base
+        if n % 2 == 1 and base in alt: out[k] = alt[base]
+        else: out[k] = (base[:-4] if base.endswith("_inv") else base + "_inv") if is_pair and n % 2 == 1 else base
     return out
 def render(pid, T, out, pal=None, wide=True, face_on=False):
     c = Ctx(pal or EL_PAL[T["el"]]); face = T.get("face") or TQ.FACES[sum(map(ord, pid)) % len(TQ.FACES)]
