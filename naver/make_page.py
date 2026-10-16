@@ -185,6 +185,8 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
         if os.path.exists(src) and not os.path.exists(dst): os.makedirs(os.path.dirname(dst), exist_ok=True); shutil.copy(src, dst)
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
     body = body.replace("naver_cta2_", "naver_cta4_").replace("naver_cta3_", "naver_cta4_")   # 10/4: CTA 배너를 2/3 크기로(compact.cta_small)
+    _mids = []   # 10/16 K-017 글 중간 입력칸 모양 상자(<table>): 서식 단계들이 <p>만 다루므로 자리표로 비켜 두었다가 끝에 되돌린다
+    body = re.sub(r"<table\b.*?</table>", lambda m_: (_mids.append(m_.group(0)), f"<p>MIDBOX{len(_mids) - 1}</p>")[1], body, flags=re.S)
     body = FB.format_body(body)   # 10/4: 가운데 정렬 · 본문 16px · 제목 19px · 짧은 줄바꿈(네이버에 붙이면 바로 이 모양)
     if v2: body = V2.apply(body)   # 10/5 서식 2판(대표 요청 6가지): 인사말 줄 나눔·요약 박스·순서 위치·구분선·항목 빈 줄·작은 이미지. 10/5 대표 확인 뒤 기본으로 켬(v2=False를 주면 옛 서식)
     chips = "".join(f'<button class="tag" data-t="{html.escape(t)}" onclick="cpt(this)">{html.escape(t)}</button>' for t in tags)
@@ -194,6 +196,7 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
     _ru = (saved_urls().get((related or {}).get("id")) or (related or {}).get("url") or "") if related else ""   # 앱에 저장된 주소가 우선, 없으면 발행 기록의 주소
     if v2 and _ru: body = V2.link_guide(body, _ru)   # 본문의 연결 글 제목 줄에 링크(복사하면 같이 감)
     body = FB.fit_mobile(body)   # 10/15 대표 폰 캡처: 실제 한 줄 폭(본문 약 15.7자·소제목 약 13.4자)을 넘는 줄을 다시 나눈다
+    body = re.sub(r"<p[^>]*>(?:<span[^>]*>)?MIDBOX(\d+)(?:</span>)?</p>", lambda m_: _mids[int(m_.group(1))] + "<p>&nbsp;</p>", body)
     if related and (related.get("url") or related.get("title") or _ru):
         _u = _ru
         rel_box = (f'<div class="box"><p class="lab">4. 함께 볼 글(내부 링크): 글 주소가 앱에 저장돼 있으면 본문 맨 아래 제목 줄에 링크가 자동으로 걸려요. 링크 카드도 원하면 제목 줄 다음 줄에 주소를 붙여 넣고 엔터</p>'

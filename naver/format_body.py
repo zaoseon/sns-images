@@ -234,9 +234,14 @@ def _next_nonblank(paras, k):
     return k
 
 def format_body(body):
+    tables = []      # 10/16 K-017: 글 중간 '무료 풀이 입력칸 모양' 상자(<table>)는 손대지 않고 그 자리에 그대로 둔다
+    def _keep(m): tables.append(m.group(0)); return f"<p>\x00T{len(tables) - 1}\x00</p>"
+    body = re.sub(r"<table\b.*?</table>", _keep, body, flags=re.S)
     paras = _prep(re.findall(r"<p>(.*?)</p>", body, re.S)); out = []; k = 0; after_conc = False; in_order = False
     while k < len(paras):
         inner = paras[k].strip(); pl = plain_of(inner).replace("\xa0", " ").strip()
+        mt = re.fullmatch(r"\x00T(\d+)\x00", inner)
+        if mt: out.append(tables[int(mt.group(1))]); k += 1; continue
         if inner == "&nbsp;" or not pl and "<img" not in inner:
             out.append(BLANK()); k += 1; continue
         if "<img" in inner or "<a " in inner:
