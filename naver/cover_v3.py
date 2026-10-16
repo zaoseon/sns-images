@@ -38,7 +38,10 @@ class Ctx:
             s.acc = t.get("head", t["acc"]); s.dark = sum(t["bg"]) < 300
             s.md = t["card"] if sum(t["card"]) < 760 else mix(t["bg"], (255, 255, 255), .5)   # 얼굴 원 바탕은 판의 옅은 색 하나로(10/16 "배지 배경색 제각각")
             s.pillfg = t["bg"] if sum(s.acc) < 400 or s.dark else t["ink"]
-        s.tint = mix(s.bg, s.acc, .045); s.ring_bg = s.card
+        s.tint = mix(s.bg, s.acc, .045); s.ring_bg = s.card; s.pill = s.acc
+        if "pair" not in e:                        # _s 판(메인 색 꽉 찬 판): 배지 색·배지 글자색을 따로 준다
+            if "pill" in e["theme"]: s.pill = h2(e["theme"]["pill"])
+            if "pillfg" in e["theme"]: s.pillfg = h2(e["theme"]["pillfg"])
 
 def head(d, img, T, c, face, y_face=290, r=95):
     pill(d, c, 0, 80, T["kick"], center=True); badge(img, d, face, c, S // 2, y_face, r)
@@ -76,7 +79,7 @@ def cal_c(d, img, T, c, face):
     hot = T["hot"]; cw, chh, g = 112, 58, 10; x0 = (S - (7 * cw + 6 * g)) // 2; y0 = y + 24
     for k in range(T.get("days", 31)):
         day = k + 1; pos = k + T.get("off", 4); x = x0 + (pos % 7) * (cw + g); yy = y0 + (pos // 7) * (chh + g); on = day in hot
-        d.rounded_rectangle([x, yy, x + cw, yy + chh], 14, fill=c.acc if on else c.card, outline=c.acc if on else c.line, width=3)
+        d.rounded_rectangle([x, yy, x + cw, yy + chh], 14, fill=c.pill if on else c.card, outline=c.pill if on else c.line, width=3)
         d.text((x + cw // 2, yy + chh // 2), str(day), font=F(SEMI, 32), fill=c.pillfg if on else c.fg, anchor="mm")
 DRAW = {"QL": q_center_safe, "QC": q_center_safe, "QCS": q_center_safe, "QK": q_center_safe, "CH": q_center_safe, "ring": q_center_safe, "gua": q_center_safe,
         "BIG": big_c, "N": n_c, "trio": trio_c, "cal": cal_c}
@@ -87,7 +90,7 @@ DRAW = {"QL": q_center_safe, "QC": q_center_safe, "QCS": q_center_safe, "QK": q_
 XB = TQ.FD + "PRETENDARD-EXTRABOLD.OTF"
 def kick(d, c, y=110):
     f = F(SEMI, 44); t = T_KICK[0]; w = d.textlength(t, font=f) + 64; x = (S - w) / 2
-    d.rounded_rectangle([x, y, x + w, y + 82], 41, fill=c.acc); d.text((S / 2, y + 41), t, font=f, fill=c.pillfg, anchor="mm")
+    d.rounded_rectangle([x, y, x + w, y + 82], 41, fill=c.pill); d.text((S / 2, y + 41), t, font=f, fill=c.pillfg, anchor="mm")
 T_KICK = [""]
 def hook_block(d, c, lines, y_top, y_bot, maxsize=150):
     s = fit(d, lines, 900, maxsize, 70, XB); lh = int(s * 1.22); h = lh * len(lines)
@@ -100,7 +103,7 @@ def nf_text(d, img, T, c, face):
     d.text((S // 2, y + 62), T.get("sub", ""), font=F(SEMI, 54), fill=c.acc if not c.dark else c.fg, anchor="ma")
 def nf_ring(d, img, T, c, face):
     kick(d, c); g = T.get("glyph", ""); r = 112
-    d.ellipse([S // 2 - r, 245, S // 2 + r, 245 + 2 * r], fill=c.acc); d.text((S // 2, 245 + r - 4), g, font=F(SER, 140), fill=c.pillfg, anchor="mm")
+    d.ellipse([S // 2 - r, 245, S // 2 + r, 245 + 2 * r], fill=c.pill); d.text((S // 2, 245 + r - 4), g, font=F(SER, 140), fill=c.pillfg, anchor="mm")
     y = hook_block(d, c, T["hook"], 500, 800, 128)
     d.text((S // 2, y + 30), T.get("sub", ""), font=F(SEMI, 52), fill=c.acc if not c.dark else c.fg, anchor="ma")
 def nf_big(d, img, T, c, face):
@@ -124,19 +127,36 @@ def nf_trio(d, img, T, c, face):
     kick(d, c); y = hook_block(d, c, T["hook"], 240, 560, 140)
     n = len(T["glyph"]); r = 96; g = 44; x0 = (S - (n * 2 * r + (n - 1) * g)) // 2 + r
     for i, ch in enumerate(T["glyph"]):
-        cx = x0 + i * (2 * r + g); d.ellipse([cx - r, y + 40, cx + r, y + 40 + 2 * r], fill=c.acc); d.text((cx, y + 40 + r - 4), ch, font=F(SER, 116), fill=c.pillfg, anchor="mm")
+        cx = x0 + i * (2 * r + g); d.ellipse([cx - r, y + 40, cx + r, y + 40 + 2 * r], fill=c.pill); d.text((cx, y + 40 + r - 4), ch, font=F(SER, 116), fill=c.pillfg, anchor="mm")
     d.text((S // 2, y + 40 + 2 * r + 40), T["sub"], font=F(SEMI, 50), fill=c.acc if not c.dark else c.fg, anchor="ma")
 def nf_cal(d, img, T, c, face):
     kick(d, c); y = hook_block(d, c, T["hook"], 230, 430, 100)
     hot = T["hot"]; cw, chh, g = 116, 66, 10; x0 = (S - (7 * cw + 6 * g)) // 2; y0 = y + 30
     for k in range(T.get("days", 31)):
         day = k + 1; pos = k + T.get("off", 4); x = x0 + (pos % 7) * (cw + g); yy = y0 + (pos // 7) * (chh + g); on = day in hot
-        d.rounded_rectangle([x, yy, x + cw, yy + chh], 14, fill=c.acc if on else c.card, outline=c.acc if on else c.line, width=3)
+        d.rounded_rectangle([x, yy, x + cw, yy + chh], 14, fill=c.pill if on else c.card, outline=c.pill if on else c.line, width=3)
         d.text((x + cw // 2, yy + chh // 2), str(day), font=F(SEMI, 34), fill=c.pillfg if on else c.fg, anchor="mm")
 DRAW_NF = {"QL": nf_text, "QC": nf_text, "QCS": nf_text, "QK": nf_text, "CH": nf_text, "gua": nf_text, "ring": nf_ring,
            "BIG": nf_big, "N": nf_n, "trio": nf_trio, "cal": nf_cal}
 def logo_nf(d, c): d.text((S // 2, S - 82), "子午線 자오선", font=F(SER, 40), fill=c.fg if c.dark else c.acc, anchor="mm")
 
+# v5(10/16 대표 "캡처로 준 컬러별 메인 + 다른 색 조합 예시가 더 좋다, 같은 색 배합을 연달아 쓰지 마라"):
+# 캡처 조합을 메인 색 꽉 찬 판(_s)으로. 오행마다 어울리는 판 몇 개를 두고, 앞 5편과 같은 판은 금지, 밝기(밝은/어두운)는 앞 글과 번갈아.
+EL_SET = {"나무": ["g_ivory_s", "dg_gold_s", "k_neon_s", "y_olive_s"], "불": ["y_pink_s", "p_red_s", "p_black_s", "m_soft_s"],
+          "흙": ["y_black_s", "y_olive_s", "y_gray_s", "y_black_d"], "쇠": ["k_white_s", "y_gray_s", "y_black_d", "dg_gold_s"],
+          "물": ["p_purple_s", "m_young_s", "k_white_s", "p_black_s"]}
+ALL_S = ["y_black_s", "y_black_d", "y_pink_s", "y_olive_s", "y_gray_s", "p_red_s", "p_purple_s", "p_black_s", "g_ivory_s", "dg_gold_s", "k_white_s", "k_neon_s", "m_young_s", "m_soft_s"]
+def is_dark(p): return Ctx(p).dark
+def pick5(order, T, gap=5):
+    out = {}; recent = []; use = {}
+    for k in order:
+        prev_dark = is_dark(recent[-1]) if recent else None
+        cand = EL_SET.get(T[k]["el"], ALL_S) + [p for p in ALL_S if p not in EL_SET.get(T[k]["el"], [])]
+        ok = [p for p in cand if p not in recent[-gap:]]
+        ok2 = [p for p in ok if prev_dark is None or is_dark(p) != prev_dark] or ok or cand
+        best = min(ok2[:6] if len(ok2) > 6 else ok2, key=lambda p: (use.get(p, 0), cand.index(p)))   # 오행 판을 먼저, 많이 쓴 판은 뒤로
+        out[k] = best; recent.append(best); use[best] = use.get(best, 0) + 1
+    return out
 def pick(order, T, every_dark=6):
     """발행 순서대로 판을 정한다: 오행 판(EL_PAL_B), 두 색 조합 판은 같은 오행이 이어 나오면 반전(_inv)을 번갈아, 6편에 1편 어두운 보라 판."""
     seen = {}; out = {}
