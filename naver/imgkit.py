@@ -74,7 +74,12 @@ def guard_overwrite(name):
     import os as _os
     if _os.environ.get("ZS_ALLOW_OVERWRITE") == "1":
         return
-    있는곳 = [d for d in (MASTER, DELIV, IMG) if _os.path.exists(_os.path.join(d, name))]
+    # K-025 는 naver/img/ 아래 모든 하위 폴더(master·m1280·m640·m480·wide 등)를 덮는다.
+    # save() 는 세 곳에만 쓰지만, 표지(wide/)를 만드는 다른 스크립트도 이 함수를 부른다.
+    있는곳 = []
+    for 뿌리, _하위, 파일들 in _os.walk(IMG):
+        if name in 파일들:
+            있는곳.append(_os.path.relpath(뿌리, _os.path.dirname(IMG)))
     if 있는곳:
         raise SystemExit(
             f"\n[막음] 같은 이름 사진을 덮어쓰려고 합니다: {name}\n"
