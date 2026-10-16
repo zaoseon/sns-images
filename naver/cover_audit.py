@@ -7,6 +7,7 @@
  1) 대표 이미지가 wide/ 1200x720 이고 양옆 240px 띠가 한 색(내용이 가운데 720 안에만 있음)
  2) 글자형 구도이면 cover_layout 이 QC 또는 QCS (얼굴 가운데)
  3) naver/img 에 이미 올라간 이름을 덮어쓰지 않았는지는 git 이 본다(새 이름 *_c.jpg 로만 추가).
+10/16 추가: 띠(ring)·큰 숫자(BIG) 구도도 얼굴이 옆이라 n64 호랑이띠가 잘렸다 → 10/16 12시 이후 글은 cover_v3 *_a3.jpg 만 통과.
 사용: python3 naver/cover_audit.py   (걸리면 종료 코드 1, qa_all 에서도 부른다)"""
 import json, os, sys
 import numpy as np
@@ -30,6 +31,9 @@ def run():
         a = np.asarray(im.convert("L"), float)
         if max(a[:, :236].std(), a[:, 964:].std()) > 3: bad.append((pid, cov, "양옆 240px 띠에 글자·그림이 있음(가운데 720 밖)"))
         d = v.get("cover_layout") or lay.get(pid)
+        if cov.endswith("_a3.jpg"): continue          # v3c(10/16, K-061): 정월 없는 글자형 표지 — 얼굴이 없어 가운데로 잘린다
+        if v.get("dt", "") >= "2026-10-16T12:00":
+            bad.append((pid, cov, "10/16부터 올릴 글 표지는 cover_v3(정월 없는 글자형, *_a3.jpg)이어야 함(K-061). 띠·큰 숫자·달력 구도도 얼굴이 옆이라 잘림(10/16 n64)")); continue
         if d in TEXT_TYPES: bad.append((pid, cov, f"글자형 구도 {d}: 정월 얼굴이 옆에 있어 목록에서 얼굴 쪽으로 잘림. thumb_sq 의 QCS(얼굴 가운데)로 새 이름 *_c.jpg 를 만들고 cover_layout='QCS'"))
     return bad
 

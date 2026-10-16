@@ -155,3 +155,29 @@ def render(pid, T, out, pal=None, wide=True, face_on=False):
     sq = img.resize((720, 720), Image.LANCZOS)
     if not wide: sq.save(out, quality=94); return out
     can = Image.new("RGB", (1200, 720), c.bg); can.paste(sq, (240, 0)); can.save(out, quality=94); return out
+
+
+def all_configs():
+    """모든 글의 표지 설정: n01~n46(thumb_sq.T), art(...) 호출(build_naver_47_52·53_63·70·71·72_74·75_79), mk(...) 호출(build_naver_64_69 띠)."""
+    import ast, regen_badges as R
+    R.load_47_63(); T = dict(TQ.T)
+    for fn in ("build_naver_70.py", "build_naver_71.py", "build_naver_72_74.py", "build_naver_75_79.py"):
+        tree = ast.parse(open(os.path.join(HERE, fn), encoding="utf-8").read())
+        for n in ast.walk(tree):
+            if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == "art" and len(n.args) >= 7:
+                try:
+                    no, face, el, cfg = (ast.literal_eval(n.args[i]) for i in (0, 3, 4)), None, None, None
+                except Exception: pass
+                vals = []
+                for i in (0, 3, 4, 6):
+                    try: vals.append(eval(compile(ast.Expression(n.args[i]), "x", "eval"), dict(vars(TQ))))
+                    except Exception: vals.append(None)
+                if vals[3]: t = dict(vals[3]); t.update(el=vals[2], face=vals[1]); T[f"n{vals[0]}"] = t
+    tree = ast.parse(open(os.path.join(HERE, "build_naver_64_69.py"), encoding="utf-8").read())
+    for n in ast.walk(tree):
+        if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == "mk" and len(n.args) >= 12:
+            try:
+                no, name, glyph, el, face, hook = (ast.literal_eval(n.args[i]) for i in (0, 2, 3, 4, 5, 11))
+                T[f"n{no}"] = dict(d="ring", el=el, face=face, kick=f"2027 {name}", hook=hook, sub="힘 쓸 달 · 아낄 달", glyph=glyph)
+            except Exception: pass
+    return T
