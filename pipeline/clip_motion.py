@@ -11,8 +11,57 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageChops
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, "..")
 BLACK = os.path.join(HERE, "fonts", "PRETENDARD-BLACK.OTF"); MED = os.path.join(HERE, "fonts", "PRETENDARD-MEDIUM.OTF")
 SERIF = "/usr/share/fonts/opentype/noto/NotoSerifCJK-Bold.ttc"
-W, H, FPS = 1080, 1920, 30; CX = 470
-GOLD, WHITE, DIM, INK = (224, 184, 102, 255), (255, 255, 255, 255), (214, 218, 228, 255), (23, 20, 15, 255)
+import channel_specs as _CS
+_CH = _CS.CH["reel"]
+W, H, FPS = _CH["w"], _CH["h"], 30            # 규격은 channel_specs 가 준다. 여기서 숫자를 만들지 않는다
+_Z = {z[0]: z[1:5] for z in _CH["zones"]}
+CX = (_CH["safe"][0] + _CH["safe"][2]) // 2   # 470 — 안전 영역 가로 가운데
+def _판(pid=None):
+    """릴스마다 승인된 판(assets/palettes/color_combos.json)에서 색을 고른다.
+    10/16까지 모든 릴스가 같은 금색·남색이라 아무리 바꿔도 양산형으로 읽혔다(K-071).
+    ZS_PAL 로 판을 지정하고, 없으면 영상 이름으로 고르게 돌아간다."""
+    import json as _j
+    d = _j.load(open(os.path.join(ROOT, "assets", "palettes", "color_combos.json"), encoding="utf-8"))
+    def 밝기(h):
+        h = h.lstrip("#"); r, g, b = (int(h[i:i+2], 16) / 255 for i in (0, 2, 4))
+        f = lambda c: c / 12.92 if c <= .04045 else ((c + .055) / 1.055) ** 2.4
+        return .2126 * f(r) + .7152 * f(g) + .0722 * f(b)
+    P = {}
+    for x in d["palettes"]:
+        th = x.get("theme") or {}
+        if not th.get("acc"):
+            continue
+        if x.get("쓰지 않음"):                      # 대표 10/16 "파란색(원색·로열 블루) 쓰지 않기" 등
+            continue
+        if 밝기(th["acc"]) < 0.22:                 # 릴스는 어두운 바탕 위에 그린다 — 어두운 강조색은 안 보인다
+            continue
+        P[x["id"]] = x
+    pid = pid or os.environ.get("ZS_PAL") or ""
+    return P.get(pid) or P
+
+def _rgba(h, a=255):
+    h = h.lstrip("#"); return (int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16), a)
+
+_PALS = _판()
+_CUR = {"id": None, "th": None}
+
+def set_pal(pid):
+    """영상 하나를 그리기 전에 판을 고른다. render() 가 영상 이름으로 돌려 가며 부른다(K-068 연속 금지)."""
+    global GOLD, WHITE, DIM, INK, CARD
+    th = (_PALS.get(pid) or list(_PALS.values())[0])["theme"] if isinstance(_PALS, dict) else _PALS["theme"]
+    _CUR["id"], _CUR["th"] = pid, th
+    GOLD = _rgba(th["acc"])                       # 강조색 — 판마다 다르다
+    WHITE = _rgba(th.get("ink", "#FFFFFF"))
+    DIM = _rgba(th.get("sub", "#D6DAE4"))
+    INK = _rgba(th.get("bg", "#17140F"))
+    CARD = _rgba(th.get("card", "#1A2136"))
+    return th
+
+def ACC(a=255):  return GOLD[:3] + (a,)          # 강조색에 투명도만 바꿔 쓴다
+def CARDC(a=255): return CARD[:3] + (a,)         # 카드·상자 바탕
+
+GOLD = WHITE = DIM = INK = CARD = (255, 255, 255, 255)   # set_pal() 이 바로 아래에서 채운다
+set_pal(sorted(_PALS)[0] if isinstance(_PALS, dict) and _PALS else None)
 EL = {"木": (96, 160, 104), "火": (214, 98, 82), "土": (206, 168, 84), "金": (200, 204, 214), "水": (92, 142, 214)}
 def cl(x, a=0.0, b=1.0): return max(a, min(b, x))
 def e_out(x): x = cl(x); return 1 - (1 - x) ** 3
@@ -60,11 +109,11 @@ def transition(fr, bgf, kind, p):
     m = Image.new("L", (W, H), 0); md = ImageDraw.Draw(m); e = e_out(p)
     if kind == "iris":
         r = e * math.hypot(W, H) / 2; md.ellipse((W / 2 - r, H / 2 - r, W / 2 + r, H / 2 + r), fill=255)
-        out = Image.composite(fr, bgf, m); od = ImageDraw.Draw(out, "RGBA"); od.ellipse((W / 2 - r, H / 2 - r, W / 2 + r, H / 2 + r), outline=(224, 184, 102, int(220 * (1 - p))), width=8); return out
+        out = Image.composite(fr, bgf, m); od = ImageDraw.Draw(out, "RGBA"); od.ellipse((W / 2 - r, H / 2 - r, W / 2 + r, H / 2 + r), outline=ACC(int(220 * (1 - p))), width=8); return out
     if kind == "drip":
-        y = int(e * (H + 120)) - 60; md.rectangle((0, 0, W, max(0, y)), fill=255); out = Image.composite(fr, bgf, m); ImageDraw.Draw(out, "RGBA").rectangle((0, y - 6, W, y + 6), fill=(224, 184, 102, int(230 * (1 - p)))); return out
+        y = int(e * (H + 120)) - 60; md.rectangle((0, 0, W, max(0, y)), fill=255); out = Image.composite(fr, bgf, m); ImageDraw.Draw(out, "RGBA").rectangle((0, y - 6, W, y + 6), fill=ACC(int(230 * (1 - p)))); return out
     x = int(e * (W + 260)) - 130; md.rectangle((0, 0, max(0, x), H), fill=255); out = Image.composite(fr, bgf, m)   # sweep
-    ImageDraw.Draw(out, "RGBA").rectangle((x - 5, 0, x + 5, H), fill=(224, 184, 102, int(230 * (1 - p)))); return out
+    ImageDraw.Draw(out, "RGBA").rectangle((x - 5, 0, x + 5, H), fill=ACC(int(230 * (1 - p)))); return out
 @functools.lru_cache(maxsize=None)
 def font(path, size, idx=0): return ImageFont.truetype(path, size, index=idx) if path.endswith(".ttc") else ImageFont.truetype(path, size)
 def serif(size): return font(SERIF, size, 2)   # KR
@@ -202,7 +251,7 @@ def brand_layer(fr, ai=False):
 BRAND = True   # False로 두면 규칙 층을 끈다(시험용)
 AVOID = True   # 글자·배지가 고정 문구 띠를 피한다(그리기와 따로 켜고 끈다)
 LOG = None     # 리스트를 넣으면 배지·글자를 놓은 위치를 기록한다(engine_conflicts 검사용)
-SAFE_TOP = 415 # 안전 영역 안에서 쓸 수 있는 맨 위(상단 문구 띠 아래) — R04: 이보다 위(UI에 가려지는 곳)에는 글자·배지를 두지 않는다
+SAFE_TOP = _Z["상단 라벨"][1] - 75  # 안전 영역 안에서 쓸 수 있는 맨 위(상단 문구 띠 아래) — R04: 이보다 위(UI에 가려지는 곳)에는 글자·배지를 두지 않는다
 HDR_TOP, HDR_BOTTOM = 335, 395   # 상단 왼쪽·오른쪽 고정 문구 띠
 class Ctx:
     def __init__(s, fr, t, dur): s.fr, s.t, s.dur = fr, t, dur; s.ex = e_out(cl((dur - t) / 0.24))   # 장면 끝 0.24초: 위로 사라짐
@@ -236,7 +285,7 @@ def text_h(s, size, maxw=800, lh=1.3, path=BLACK): size = eff_size(s, size, maxw
 @functools.lru_cache(maxsize=None)
 def chip_layer(label, size):
     fnt = font(BLACK, size); w = int(fnt.getlength(label)) + 60; h = size + 30; im = Image.new("RGBA", (w + 8, h + 8), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
-    d.rounded_rectangle((4, 4, 4 + w, 4 + h), radius=h // 2, fill=(224, 184, 102, 28), outline=GOLD, width=3); d.text((4 + w / 2, 4 + h / 2 + 1), label, font=fnt, fill=GOLD, anchor="mm"); return im
+    d.rounded_rectangle((4, 4, 4 + w, 4 + h), radius=h // 2, fill=ACC(28), outline=GOLD, width=3); d.text((4 + w / 2, 4 + h / 2 + 1), label, font=fnt, fill=GOLD, anchor="mm"); return im
 def chip(c, label, y, t0, size=44):
     if AVOID: return y   # R04: 작은 배지는 y 250 안팎(인스타 상단 버튼에 가려지는 곳)에 놓였으므로 그리지 않는다. 분류 글이 필요하면 hook()처럼 제목 위 작은 글로 쓴다
     L = chip_layer(label, size)
@@ -258,7 +307,7 @@ def char_layer(name, width=900, crop=0.66):
 @functools.lru_cache(maxsize=1)
 def glow(): 
     im = Image.new("RGBA", (800, 800), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
-    for r in range(380, 0, -8): d.ellipse((400 - r, 400 - r, 400 + r, 400 + r), fill=(224, 184, 102, int(46 * (1 - r / 380) ** 1.5)))
+    for r in range(380, 0, -8): d.ellipse((400 - r, 400 - r, 400 + r, 400 + r), fill=ACC(int(46 * (1 - r / 380) ** 1.5)))
     return im
 def character(c, name, t0=0.1, width=900, bottom=1440, dx=0):
     L = char_layer(name, width); p = e_out((c.t - t0) / 0.55); br = 5 * math.sin(c.t * 2.2)
@@ -283,9 +332,9 @@ def pop(c, layer, cx, cy, t0, dur=0.45, a=1.0):
     blit(c.fr, layer, cx - layer.width / 2, cy - layer.height / 2, c.alpha(cl(p * 2) * a))
 @functools.lru_cache(maxsize=None)
 def map_card(kind, filled=True):
-    w, h = 250, 330; im = rr(w, h, (26, 33, 54, 235) if filled else (26, 33, 54, 70), GOLD if filled else (224, 184, 102, 90), ow=3 if filled else 2); d = ImageDraw.Draw(im)
+    w, h = 250, 330; im = rr(w, h, CARDC(235) if filled else CARDC(70), GOLD if filled else ACC(90), ow=3 if filled else 2); d = ImageDraw.Draw(im)
     if not filled:
-        d.text((w / 2 + 4, h / 2 + 4), "?", font=font(BLACK, 120), fill=(224, 184, 102, 110), anchor="mm"); return im
+        d.text((w / 2 + 4, h / 2 + 4), "?", font=font(BLACK, 120), fill=ACC(110), anchor="mm"); return im
     names = {"saju": "사주", "star": "별자리", "num": "숫자"}; d.text((w / 2 + 4, 52), names[kind], font=font(BLACK, 44), fill=GOLD, anchor="mm")
     if kind == "saju":
         for i, ch in enumerate("木火土金水"):
@@ -331,7 +380,7 @@ def pairs(c, y, t0):
         p = e_out((c.t - t) / .5); blit(c.fr, im, CX - 430, y + i * 240 + (1 - p) * 40, c.alpha(cl(p * 1.5)))
 def groups(c, y, t0):
     for i, g in enumerate(("1 · 5 · 7", "2 · 4 · 8", "3 · 6 · 9")):
-        im = rr(640, 130, (26, 33, 54, 235), GOLD); ImageDraw.Draw(im).text((324, 70), g, font=font(BLACK, 82), fill=WHITE, anchor="mm")
+        im = rr(640, 130, CARDC(235), GOLD); ImageDraw.Draw(im).text((324, 70), g, font=font(BLACK, 82), fill=WHITE, anchor="mm")
         p = e_out((c.t - t0 - i * .35) / .5); blit(c.fr, im, CX - 324 + (1 - p) * -120, y + i * 160, c.alpha(cl(p * 1.5)))
 def battery(c, cx, cy, t0, frm=.12, to=1.0, dur=2.0, label=None):
     p = e_out((c.t - t0) / dur); lv = frm + (to - frm) * p; w, h = 640, 290; im = Image.new("RGBA", (w + 70, h + 20), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
@@ -343,8 +392,8 @@ def battery(c, cx, cy, t0, frm=.12, to=1.0, dur=2.0, label=None):
     pc = f"{int(lv * 100)}%"; L = line_layers(pc, 110, GOLD, BLACK, 400, 1.2)[0][0]; blit(c.fr, L, cx - L.width / 2, cy + h / 2 + 10, c.alpha(1))
 def check_row(c, y, label, t0, size=64):
     p = e_out((c.t - t0) / .45); im = Image.new("RGBA", (860, 150), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
-    d.rounded_rectangle((0, 8, 840, 138), radius=40, fill=(26, 33, 54, 235), outline=(224, 184, 102, 120), width=2)
-    cp = cl((c.t - t0 - .25) / .35); d.ellipse((24, 33, 104, 113), fill=(224, 184, 102, 255 if cp > 0 else 60))
+    d.rounded_rectangle((0, 8, 840, 138), radius=40, fill=CARDC(235), outline=ACC(120), width=2)
+    cp = cl((c.t - t0 - .25) / .35); d.ellipse((24, 33, 104, 113), fill=ACC(255 if cp > 0 else 60))
     if cp > 0:
         pts = [(44, 74), (60, 92), (86, 56)]; seg = cp * 2
         d.line([pts[0], (pts[0][0] + (pts[1][0] - pts[0][0]) * cl(seg), pts[0][1] + (pts[1][1] - pts[0][1]) * cl(seg))], fill=INK, width=10)
@@ -360,13 +409,13 @@ def strike(c, label, y, t0, size=96, color=WHITE):
     d.line((CX - wd / 2 - 10, y + size * .62, CX - wd / 2 - 10 + (wd + 20) * p, y + size * .62), fill=(214, 98, 82, int(255 * c.ex)), width=12)
 def notice(c, t0, label="약속 취소할게 ㅠㅠ"):
     p = e_out((c.t - t0) / .55); im = rr(760, 170, (245, 245, 250, 255), None, r=44); d = ImageDraw.Draw(im)
-    d.ellipse((30, 40, 118, 128), fill=(224, 184, 102, 255)); d.text((74, 86), "💬"[0] if False else "!", font=font(BLACK, 56), fill=INK, anchor="mm")
+    d.ellipse((30, 40, 118, 128), fill=ACC(255)); d.text((74, 86), "💬"[0] if False else "!", font=font(BLACK, 56), fill=INK, anchor="mm")
     d.text((140, 68), "친구", font=font(BLACK, 38), fill=(30, 30, 40, 255), anchor="lm"); d.text((140, 116), label, font=font(MED, 46), fill=(60, 60, 72, 255), anchor="lm")
     blit(c.fr, im, CX - im.width / 2, 300 + (1 - p) * -240, c.alpha(cl(p * 2)))
 def score_rows(c, y, t0, rows, step=172):
     for i, (lab, txt_) in enumerate(rows):
-        p = e_out((c.t - t0 - i * .5) / .45); im = rr(840, 150, (26, 33, 54, 235), GOLD if i == 0 else (224, 184, 102, 120)); d = ImageDraw.Draw(im)
-        d.ellipse((24, 36, 112, 124), fill=(224, 184, 102, 255)); d.text((68, 82), lab, font=font(BLACK, 54), fill=INK, anchor="mm")
+        p = e_out((c.t - t0 - i * .5) / .45); im = rr(840, 150, CARDC(235), GOLD if i == 0 else ACC(120)); d = ImageDraw.Draw(im)
+        d.ellipse((24, 36, 112, 124), fill=ACC(255)); d.text((68, 82), lab, font=font(BLACK, 54), fill=INK, anchor="mm")
         fnt = font(BLACK, 56)
         for sz in range(56, 36, -2):
             fnt = font(BLACK, sz)
@@ -381,8 +430,15 @@ def cta(c, lines, t0=0.2, pill="블로그 스티커 눌러 보기", face="v8_ges
     blit(c.fr, L, CX - L.width / 2, y + 60 + (1 - e_out(p)) * 60, c.alpha(cl(p * 2)))
     bob = 12 * math.sin(c.t * 7); ar = Image.new("RGBA", (90, 70), (0, 0, 0, 0)); ImageDraw.Draw(ar).polygon([(10, 8), (80, 8), (45, 62)], fill=GOLD); blit(c.fr, ar, CX - 45, y + 215 + bob, c.alpha(cl(p * 2)))
 # ---------- 장면 목록과 렌더 ----------
+def pal_for(name):
+    """영상 이름으로 판을 고른다 — 같은 이름은 늘 같은 판, 이웃한 영상은 다른 판(K-068)."""
+    ids = sorted(_PALS) if isinstance(_PALS, dict) else []
+    return ids[sum(ord(ch) for ch in str(name)) % len(ids)] if ids else None
+
+
 def render(name, scenes, outdir, kicker=None):
     """scenes: [(길이(초), 함수(c))]. 프레임을 ffmpeg로 바로 흘려 보낸다."""
+    set_pal(os.environ.get("ZS_PAL") or pal_for(name))   # 이 영상의 판을 먼저 고른다(K-068)
     scenes = [(d_, _auto(f_, d_)) for d_, f_ in scenes]   # 모든 장면에 위·아래 여백 자동 맞춤(R21)
     total = sum(d for d, _ in scenes); os.makedirs(outdir, exist_ok=True); out = os.path.join(outdir, name + ".mp4")
     pr = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-", "-vf", "scale=in_range=full:out_range=tv:out_color_matrix=bt709,format=yuv420p", "-c:v", "libx264", "-profile:v", "high", "-crf", "14", "-preset", "medium", "-x264-params", "aq-mode=3:aq-strength=0.9", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-color_range", "tv", "-an", "-movflags", "+faststart", out], stdin=subprocess.PIPE)

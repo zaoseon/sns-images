@@ -278,7 +278,7 @@ def spec_lint(root=None):
     import glob as _g
     R = root or ROOT
     bad = [f"[규격] {x}" for x in (CS.check() if hasattr(CS, "check") else [])]
-    박힌 = re.compile(r"^\s*W\s*,\s*H\s*=\s*\d{3,4}\s*,\s*\d{3,4}", re.M)      # W, H = 1080, 1920
+    박힌 = re.compile(r"^\s*W\s*,\s*H\b[^=\n]*=\s*\d{3,4}\s*,\s*\d{3,4}", re.M)  # W,H= 또는 W,H,FPS= 둘 다
     안전박힘 = re.compile(r"=\s*\(\s*5[05]\s*,\s*(?:55|330)\s*,\s*(?:900|1025)\s*,")  # safe 를 손으로 적음
     본다 = []
     for pat in ("2026-*/*.py", "pipeline/*.py", "naver/*.py", "clips*/*.py"):
