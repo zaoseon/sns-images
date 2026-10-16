@@ -14,6 +14,8 @@ import thumb_sq as TQ
 from thumb_sq import S, F, SER, SEMI, MED, BLK, badge, pill, lines_at, accent, fit, ring, logo, ailabel, q_center_safe
 PAL = json.load(open(os.path.join(HERE, "..", "assets", "palettes", "color_combos.json"), encoding="utf-8"))["palettes"]
 EL_PAL = {"나무": "g_ivory", "불": "p_red", "흙": "y_olive", "쇠": "k_white", "물": "b_white"}
+# v3b(10/16 대표 "칙칙한 베이지, 탁한 블루, 어중간한 그린 — 캡처해 준 조합을 써라"): 캡처·영상의 선명한 두 색 조합으로
+EL_PAL_B = {"나무": "v_emerald", "물": "v_royal", "흙": "v_navy_inv", "불": "y_pink", "쇠": "k_white"}
 DARK_PAL = "v_violet"
 h2 = lambda c: tuple(int(c[i:i + 2], 16) for i in (1, 3, 5))
 mix = lambda a, b, k: tuple(int(a[i] * (1 - k) + b[i] * k) for i in range(3))
@@ -21,8 +23,12 @@ mix = lambda a, b, k: tuple(int(a[i] * (1 - k) + b[i] * k) for i in range(3))
 class Ctx:
     """thumb_sq 그리기 함수가 쓰는 색 이름(bg·fg·acc·md·card·line·gray·pillfg·tint·ring_bg·dark)을 색 조합 판에서 만든다."""
     def __init__(s, pid):
-        e = next(x for x in PAL if x["id"] == pid)
-        if "pair" in e:
+        inv = pid.endswith("_inv"); e = next(x for x in PAL if x["id"] == (pid[:-4] if inv else pid))
+        if "pair" in e and inv:      # 옅은 색 바탕 + 진한 색 글자·배지
+            d, l = (h2(c) for c in e["pair"])
+            s.bg, s.fg, s.acc, s.card, s.line, s.gray = l, d, d, (255, 255, 255), mix(l, d, .18), mix(d, l, .35)
+            s.md, s.pillfg, s.dark = (255, 255, 255), l, False
+        elif "pair" in e:
             d, l = (h2(c) for c in e["pair"])
             s.bg, s.fg, s.acc, s.card, s.line, s.gray = d, (255, 255, 255), l, mix(d, (255, 255, 255), .10), mix(d, (255, 255, 255), .22), mix((255, 255, 255), d, .3)
             s.md, s.pillfg, s.dark = l, d, True
@@ -61,7 +67,8 @@ def trio_c(d, img, T, c, face):
     head(d, img, T, c, face, 280, 88)
     s = fit(d, T["hook"], 864, 120); y = lines_at(d, T["hook"], 0, 400, s, c.fg, center=True)
     n = len(T["glyph"]); r = 84; g = 40; x0 = (S - (n * 2 * r + (n - 1) * g)) // 2 + r
-    for i, ch in enumerate(T["glyph"]): ring(d, c, x0 + i * (2 * r + g), y + 110, r, ch, 104)
+    rc = c if sum(c.acc) < 700 else type("C", (), dict(vars(c), acc=c.fg))   # 강조색이 흰색인 판(핑크)에서는 고리를 글자색으로
+    for i, ch in enumerate(T["glyph"]): ring(d, rc, x0 + i * (2 * r + g), y + 110, r, ch, 104)
     d.text((S // 2, y + 230), T["sub"], font=F(SEMI, 46), fill=c.acc, anchor="ma")
 def cal_c(d, img, T, c, face):
     head(d, img, T, c, face, 250, 74)
@@ -74,6 +81,15 @@ def cal_c(d, img, T, c, face):
 DRAW = {"QL": q_center_safe, "QC": q_center_safe, "QCS": q_center_safe, "QK": q_center_safe, "CH": q_center_safe, "ring": q_center_safe, "gua": q_center_safe,
         "BIG": big_c, "N": n_c, "trio": trio_c, "cal": cal_c}
 
+def pick(order, T, every_dark=6):
+    """발행 순서대로 판을 정한다: 오행 판(EL_PAL_B), 두 색 조합 판은 같은 오행이 이어 나오면 반전(_inv)을 번갈아, 6편에 1편 어두운 보라 판."""
+    seen = {}; out = {}
+    for i, k in enumerate(order):
+        el = T[k]["el"]; base = EL_PAL_B[el]; n = seen.get(el, 0); seen[el] = n + 1
+        if i % every_dark == every_dark - 1: out[k] = DARK_PAL; continue
+        is_pair = any(x["id"] == base.replace("_inv", "") and "pair" in x for x in PAL)
+        out[k] = (base[:-4] if base.endswith("_inv") else base + "_inv") if is_pair and n % 2 == 1 else base
+    return out
 def render(pid, T, out, pal=None, wide=True):
     c = Ctx(pal or EL_PAL[T["el"]]); face = T.get("face") or TQ.FACES[sum(map(ord, pid)) % len(TQ.FACES)]
     if T["d"] in ("ring",) and "glyph" in T and "sub" not in T: T = dict(T, sub="")
