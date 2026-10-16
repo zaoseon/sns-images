@@ -23,6 +23,7 @@ def cw(c):
     if c.isascii() and c.isalpha(): return .62
     if 0x1F000 <= o <= 0x1FAFF or 0x2600 <= o <= 0x27BF or 0x2B00 <= o <= 0x2BFF: return 1.2
     return 1.0
+SRC_PX = 11   # 출처 줄 글자 크기(대표 10/16: 11~12px). 네이버 글자 크기 단계에 12가 없어 11(15·16·19와 같은 단계 값)
 def width(plain): return sum(cw(c) for c in plain)
 
 TAG = re.compile(r"(<[^>]+>)")
@@ -244,6 +245,8 @@ def format_body(body):
         if mt: out.append(tables[int(mt.group(1))]); k += 1; continue
         if inner == "&nbsp;" or not pl and "<img" not in inner:
             out.append(BLANK()); k += 1; continue
+        if pl.startswith("📚"):                                       # 10/16 대표(n64): 출처 줄은 본문보다 작게(12px)
+            out.append(f'<p style="text-align:center"><span style="font-size:{SRC_PX}px">{inner}</span></p>'); k += 1; continue
         if "<img" in inner or "<a " in inner:
             out.append(f'<p style="text-align:center">{inner}</p>'); k += 1; continue
         if after_conc and SUM.match(inner):                          # 결론 요약 블록: 이름 줄 + 내용 줄(이름 뒤 ':' 없이), 항목 사이 빈 줄
