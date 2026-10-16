@@ -3191,5 +3191,70 @@
   ],
   "note": "M1+M2. 정월을 누끼로 붙이지 않고 배경에 깔았습니다 — 가장자리 지저분함과 K-046(잘라 붙이지 말고 장면으로)이 같이 풀립니다. 와인 원피스 컷은 금지 목록에 넣고 손짓 컷으로 바꿨습니다.",
   "메모": "대표 10/16 밤 지적 여섯 가지 반영본 — '세 지도' 삭제 · 배지 38->68px · CTA 46->58px · 칩에 운명학 이름 · 큰 숫자 위로 · 정월은 오른쪽 기둥(얼굴 안 가림)"
+ },
+ {
+  "id": "pick-1017-v2",
+  "kind": "예약 릴스 교체(반영 완료)",
+  "title": "정월의 카드 고르기 10/17 18:00 — 판·배경 새 규칙으로 다시 만듦",
+  "date": "2026-10-17",
+  "time": "18:00",
+  "status": "done",
+  "channels": [
+   "instagram",
+   "threads"
+  ],
+  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/9006d38c7989f85e56b28a47b43fbc4b1eedc8fa/2026-pick/v3/2026-10-17.mp4",
+  "note": "평균 시청시간 1위 형식(4.71/2.47초)이라 먼저 손봤어요. 판 p_black_s(핑크&블랙)·배경 동심원. 금색 하나로 박혀 있던 색을 판에서 읽게 고쳤어요. 메트리쿨 10/17 18:00(인스타)·19:00(스레드) 두 건 영상 교체 끝. 글은 그대로예요."
+ },
+ {
+  "id": "th-1018-2000",
+  "kind": "예약 릴스 표지 교체(반영 완료)",
+  "title": "궁합 릴스 10/18 20:00 — 표지만 새 규칙",
+  "date": "2026-10-18",
+  "time": "20:00",
+  "status": "done",
+  "channels": [
+   "instagram"
+  ],
+  "cover": "https://raw.githubusercontent.com/zaoseon/sns-images/d81ace8be367bd0188412a7b6f2c37bb13533c74/2026-igthumb/cards_reel/th1018-2000-gunghap.jpg",
+  "note": "영상은 그대로 두고 표지만 바꿨어요(K-072 '재고는 썸네일만'). 옛 엔진으로 만든 영상이라 48시간 안에 나가는 걸 다시 그리다 깨뜨릴 위험이 더 컸어요. 판 딥그린&골드, 레이아웃 L2."
+ },
+ {
+  "id": "th-1018-2130",
+  "kind": "예약 릴스 표지 교체(반영 완료)",
+  "title": "혼자 충전하는 사람 릴스 10/18 21:30 — 표지만 새 규칙",
+  "date": "2026-10-18",
+  "time": "21:30",
+  "status": "done",
+  "channels": [
+   "instagram"
+  ],
+  "cover": "https://raw.githubusercontent.com/zaoseon/sns-images/d81ace8be367bd0188412a7b6f2c37bb13533c74/2026-igthumb/cards_reel/th1018-2130-hwagae.jpg",
+  "note": "판 그린&아이보리, 레이아웃 L1. 화개·처녀 전갈 염소·숫자 7 을 받침 줄 한 줄로 넣었어요."
+ },
+ {
+  "id": "th-1019-2000",
+  "kind": "예약 릴스 표지 교체(반영 완료)",
+  "title": "쉬는 밤 릴스 10/19 20:00 — 표지만 새 규칙",
+  "date": "2026-10-19",
+  "time": "20:00",
+  "status": "done",
+  "channels": [
+   "instagram"
+  ],
+  "cover": "https://raw.githubusercontent.com/zaoseon/sns-images/d81ace8be367bd0188412a7b6f2c37bb13533c74/2026-igthumb/cards_reel/th1019-2000-night.jpg",
+  "note": "판 네이비&화이트(밝은 판), 레이아웃 L12. 앞 두 편이 어두운 판이라 밝은 판으로 갈랐어요."
+ },
+ {
+  "id": "clipmusic-1016",
+  "kind": "네이버 일일 클립 소리 붙임(반영 완료)",
+  "title": "네이버 일일 클립 16편(10/16~10/31) 음악",
+  "date": "2026-10-16",
+  "time": "19:00",
+  "status": "done",
+  "channels": [
+   "naver"
+  ],
+  "note": "v2-1016~v2-1031 열여섯 편이 전부 무음이었어요(K-070). clips_v2m/ 에 소리를 붙여 새로 만들었고 원본은 안 건드렸어요. 16편 다 소리 확인, 길이 그대로. 네이버 올릴 때 clips_v2m/ 것을 쓰면 돼요."
  }
 ]
