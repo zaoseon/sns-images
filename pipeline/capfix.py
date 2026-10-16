@@ -3,7 +3,10 @@ ACTION = "맞으면 ♥, 떠오르는 사람이 있으면 공유하거나 태그
 FOLLOW = "매일 저녁, 나를 알아보는 테스트가 올라와요. 팔로우해 두면 다음 편을 놓치지 않아요."
 PROFILE = "내 태어난 날의 기운은 프로필 링크에서 생년월일만 넣으면 1초면 볼 수 있어요."
 BRAND = ["사주 하나, 별자리 하나만 보면 한쪽 이야기만 듣게 돼요.", "자오선은 여섯 가지 운명학을 겹쳐서, 같은 답이 나오는 곳을 찾아요."]
-DISC = "이 내용은 재미로, 그리고 나를 돌아보는 계기로 봐 주세요."
+# 면책 문구는 2026-10-16 대표 지시로 **뺀다**("면책문구는 빼"). 캡션 끝에 붙이지 않고, 들어 있으면 지운다.
+# 다섯 가지로 떠돌던 문구다(이 내용은 재미로… / 재미로 즐기는 운세 콘텐츠입니다 / ※ 재미로… / 재미로 참고해 주세요 / 재미와 자기 이해를 위한 참고로…).
+# 그림 안의 AI 고지("정월은 가상의 AI 캐릭터입니다")는 **그대로 둔다** — 그건 면책이 아니라 AI 표기다.
+DISC_RE = re.compile(r"^\s*※?\s*(이 내용은 재미로|재미로 즐기는|재미로 참고|재미와 자기 이해를|재미로, 그리고)")
 CTA_RE = re.compile(r"프로필 링크|팔로우|저장해|♥|하트|공유|태그|매일 저녁, 나를")
 def sents(line):
     return [s for s in re.split(r"(?<=[.?!])\s+", line.strip()) if s]
@@ -28,8 +31,7 @@ def rebuild(text):
     for ln in raw:
         if not ln.strip(): body.append(""); continue
         if BRAND[0][:12] in ln or "자오선은 여섯 가지 운명학을 겹쳐서" in ln: continue
-        if "이 내용은 재미로" in ln and "※" not in ln: continue
-        if ln.strip() == "재미와 자기 이해를 위한 참고로 봐 주세요.": continue
+        if DISC_RE.match(ln): continue          # 면책 문구는 어느 꼴이든 지운다(10/16 대표)
         keep = []
         for s in sents(ln):
             m = re.search(r"내일 저녁: ([^.]+)\.", s)
@@ -64,7 +66,6 @@ def rebuild(text):
     act.append(FOLLOW); act.append(profile or PROFILE)
     blocks.append("\n".join(act))
     blocks.append("\n".join(BRAND))
-    blocks.append(DISC)
     blocks.append(" ".join(final_tags))
     return "\n\n".join(b for b in blocks if b.strip())
 def check(t):
@@ -73,10 +74,9 @@ def check(t):
     if "팔로우" not in t: bad.append("B")
     if not (("♥" in t or "하트" in t) and ("태그" in t or "공유" in t)): bad.append("C")
     if "사주 하나, 별자리 하나만 보면" not in t: bad.append("D")
-    if "재미로" not in t: bad.append("E")
+    if DISC_RE.search(t) or re.search(r"재미로 즐기는|이 내용은 재미로", t): bad.append("E")   # 면책 문구가 남아 있으면 걸림(10/16 대표 "면책문구는 빼")
     tg = re.findall(r"(?:^|\s)(#[^\s#]+)", t.split("\n")[-1]);
     if len(tg) != 5 or "#사주" not in tg or "#운세" not in tg: bad.append("F")
-    if t.count("재미와 자기 이해를 위한 참고로") + t.count("재미로, 그리고 나를 돌아보는") > 1: bad.append("I")
     if sum(1 for l in t.split("\n") if "♥" in l) > 1: bad.append("H")
     body = [l for l in t.split("\n") if l.strip() and not l.startswith("#")]
     if any(l.rstrip().endswith((",", "을", "를", "은", "는", "과", "와")) for l in body): bad.append("J")      # 문장이 다음 줄로 이어짐(의미 단위 위반)
@@ -89,7 +89,7 @@ def check(t):
 
 FEED_CUT = 125        # 피드에서 '... 더 보기' 앞에 보이는 글자 수(대표 10/16 레퍼런스 instagram-agent-skill)
 _고정 = ("사주 하나, 별자리 하나만 보면", "자오선은 여섯 가지 운명학을 겹쳐서",
-         "재미로", "재미와 자기 이해를", "팔로우하고 더 많은", "팔로우해 두면",
+         "팔로우하고 더 많은", "팔로우해 두면",
          "맞으면 ♥", "맞다 싶으면 ♥", "프로필 링크")
 
 
@@ -97,7 +97,7 @@ def 앞부분(t):
     """피드에 보이는 앞 125자만 따로 검사한다.
 
     사람들은 캡션 전체를 안 본다 — '... 더 보기' 앞의 앞부분만 보고 누를지 만다.
-    그 자리에 고정 문구(브랜드 두 줄·재미로·팔로우·프로필 링크)가 들어가면 훅 자리를 잡아먹는다.
+    그 자리에 고정 문구(브랜드 두 줄·팔로우·프로필 링크)가 들어가면 훅 자리를 잡아먹는다.
     M: 앞 125자에 고정 문구가 있다
     N: 앞 125자 안에서 문장이 하나도 안 끝난다 — 보이는 자리가 토막이라 무슨 말인지 모른다
 
