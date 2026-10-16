@@ -57,13 +57,13 @@ def b64(p):
 
 def page(c, pal):
     """단색 판 한 장. 글자는 모두 안전 영역 안, 구역을 따른다."""
-    cols = list(pal["colors"].values())
-    bg = c.get("bg") or cols[0]                       # 메인 색을 꽉 찬 판으로 (K-068 _s 판)
-    acc = c.get("acc") or cols[1]
-    dark = lum(bg) < 0.38
-    fg = "#ffffff" if dark else "#141414"             # 대표: 가독성 되면 흰 글자. 밝은 판에서는 흰 글자가 안 읽힌다
-    if contrast(fg, bg) < 4.5:                        # 안 되면 반대로
-        fg = "#141414" if fg == "#ffffff" else "#ffffff"
+    import sys as _s2
+    _s2.path.insert(0, os.path.join(ROOT, "naver"))
+    import cover_v3 as V                              # 대표가 캡처로 준 _s 판(K-068). 색을 직접 고르지 않는다
+    X = V.Ctx(c["pal"])
+    hx = lambda v: v if isinstance(v, str) else "#%02X%02X%02X" % tuple(v)   # Ctx 는 RGB 튜플을 준다
+    bg, fg, acc = hx(X.bg), hx(X.fg), hx(X.acc)
+    pill_bg, pill_fg = hx(X.pill), hx(X.pillfg)
     sub_c = acc if contrast(acc, bg) >= 3.0 else fg
 
     tz = Z["제목"]; bz = Z["본문·선택지"]
@@ -72,7 +72,7 @@ def page(c, pal):
     band = ""
     if LY0 == "L4":                                   # 하단 띠형 — 위는 그림, 아래 띠에 글
         bh = c.get("band_h", 700)
-        band_bg = c.get("band_bg") or acc
+        band_bg = c.get("band_bg") or X.card if hasattr(X, "card") else (c.get("band_bg") or acc)
         band = (f'<div style="position:absolute;left:0;right:0;bottom:0;height:{bh}px;'
                 f'background:{band_bg};z-index:3"></div>')
         tz = (tz[0], H - bh + 56, tz[2], H - bh + 56 + 230)
@@ -85,7 +85,7 @@ def page(c, pal):
 
     # 정월이 있으면 그림이 차지하는 네모를 먼저 잡는다. 글은 그 안으로 들어가지 않는다.
     face_left, face_top = W, H
-    if c.get("face"):
+    if c.get("face") and "M1" not in c.get("method", ""):   # M1 은 글이 그림 위로 간다(그래서 M2 그라데이션을 깐다)
         fh = int(H * c.get("face_h", 0.52))
         fw = int(fh * 1086 / 1448)                    # 컷 비율
         face_left = W - c.get("face_right", 55) - fw
@@ -106,7 +106,7 @@ def page(c, pal):
     ts = c.get("title_size", 104)
     parts.append(
         f'<div style="position:absolute;left:{tz[0]}px;top:{tz[1]}px;width:{tz[2]-tz[0]}px;'
-        f'font-family:{K.D};font-weight:900;font-size:{ts}px;line-height:1.32;color:{fg};text-align:{align}">'
+        f'font-family:{K.D};font-weight:900;font-size:{ts}px;line-height:1.28;color:{fg};text-align:{align}">'
         + "<br>".join(c["hook"]) + "</div>")
 
     LY = LY0
@@ -129,9 +129,10 @@ def page(c, pal):
         블록.append(("big", c["big"], bs, int(bs * 1.05), 30))
     if c.get("items"):
         블록.append(("items" if LY != "L8" else "numlist", c["items"], 0,
-                     118 if LY != "L8" else 96 * len(c["items"]) + 30 * (len(c["items"]) - 1), 30))
+                     118 if LY != "L8" else 90 * len(c["items"]) + 26 * (len(c["items"]) - 1), 30))
+    ss0 = c.get("sub_size", 56)
     for l in c.get("subs", []):
-        블록.append(("sub", l, 46, 69, 0))
+        블록.append(("sub", l, ss0, int(ss0 * 1.5), 0))
     총높이 = sum(b[3] + b[4] for b in 블록) - (블록[-1][4] if 블록 else 0)
     y = bz[1] + max(0, ((bz[3] - bz[1]) - 총높이) // 3)   # 위쪽으로 조금 치우치게(1/3 지점)
 
@@ -139,20 +140,20 @@ def page(c, pal):
         wmax = 폭(y, y + hgt)
         if kind == "big":
             s = size
-            while s * 0.62 * len(val) > wmax and s > 110: s -= 6    # 그림 위로 넘지 않게
+            while s * 0.70 * len(val) > wmax and s > 110: s -= 6    # 그림 위로 넘지 않게
             parts.append(f'<div style="position:absolute;left:{bz[0]}px;top:{y}px;width:{wmax}px;'
                          f'font-family:{K.D};font-weight:900;font-size:{s}px;line-height:1.05;'
                          f'color:{sub_c};white-space:nowrap;text-align:{align}">{val}</div>')
         elif kind == "numlist":                       # L8 번호 리스트형 — 저장을 부른다
             rows = "".join(
-                f'<div style="display:flex;gap:26px;align-items:center;height:96px">'
+                f'<div style="display:flex;gap:26px;align-items:center;height:90px">'
                 f'<div style="flex:0 0 72px;height:72px;border-radius:999px;background:{sub_c};'
                 f'color:{"#141414" if lum(sub_c)>.38 else "#fff"};font-family:{K.D};font-weight:900;'
                 f'font-size:44px;display:flex;align-items:center;justify-content:center">{i+1}</div>'
                 f'<div style="font-family:{K.B};font-weight:800;font-size:54px;color:{fg};'
                 f'line-height:1.3;white-space:nowrap">{t}</div></div>' for i, t in enumerate(val))
             parts.append(f'<div style="position:absolute;left:{bz[0]}px;top:{y}px;width:{wmax}px;'
-                         f'display:flex;flex-direction:column;gap:30px">{rows}</div>')
+                         f'display:flex;flex-direction:column;gap:26px">{rows}</div>')
         elif kind == "items":
             n = len(val); g = 18
             cw = (wmax - g * (n - 1)) // n
@@ -166,25 +167,50 @@ def page(c, pal):
                          f'display:flex;gap:{g}px">{row}</div>')
         else:
             s = size
-            while s * 0.52 * len(val) > wmax and s > 36: s -= 2     # 본문도 기둥 안에서 한 줄로
+            while s * 0.52 * len(val) > wmax and s > 44: s -= 2     # 본문도 기둥 안에서 한 줄로
             if s * 0.52 * len(val) > wmax:                           # 더 줄이면 안 읽힌다 — 멈추고 알린다
-                raise SystemExit(f"\n[막음] {c['id']}: 본문 \"{val}\" 이 기둥({wmax}px)에 36px 로도 안 들어가요.\n"
+                raise SystemExit(f"\n[막음] {c['id']}: 본문 \"{val}\" 이 기둥({wmax}px)에 36px 로도 안 들어가요(44px 아래로 줄이지 않습니다).\n"
                                  f"  글을 줄이거나, 정월을 작게 하거나, 레이아웃을 바꾸세요.\n")
             parts.append(f'<div style="position:absolute;left:{bz[0]}px;top:{y}px;width:{wmax}px;'
                          f'font-family:{K.B};font-weight:800;font-size:{s}px;line-height:1.5;'
                          f'color:{fg};opacity:.92;white-space:nowrap;text-align:{align}">{val}</div>')
         y += hgt + gap
 
+    if "M3" in c.get("method", "") and c.get("serial"):   # M3 연재 방식 하이라이트
+        sz = Z["상단 라벨"]
+        parts.append(f'<div style="position:absolute;left:{sz[0]}px;right:{sz[0]}px;top:{sz[1]-74}px;'
+                     f'display:flex;align-items:center;gap:18px;z-index:6">'
+                     f'<span style="background:{acc};color:{pill_fg};font-family:{K.B};font-weight:800;'
+                     f'font-size:30px;padding:12px 24px;border-radius:8px;line-height:1">{c["serial"][0]}</span>'
+                     f'<span style="flex:1;height:2px;background:{fg};opacity:.4"></span>'
+                     f'<span style="font-family:{K.B};font-weight:700;font-size:34px;color:{fg};opacity:.7">{c["serial"][1]}</span></div>')
+
     if c.get("cta"):                                  # 규격의 '버튼·마무리' 구역 — 행동 한 줄
         cz = Z["버튼·마무리"]
         if LY0 == "L4": cz = (cz[0], H - 190, cz[2], H - 110)
         parts.append(f'<div style="position:absolute;left:{cz[0]}px;top:{cz[1]}px;width:{폭(cz[1], cz[3])}px;'
                      f'height:{cz[3]-cz[1]}px;display:flex;align-items:center;'
-                     f'font-family:{K.B};font-weight:800;font-size:42px;color:{fg};opacity:.75;white-space:nowrap;'
+                     f'font-family:{K.B};font-weight:800;font-size:46px;color:{fg};opacity:.8;white-space:nowrap;'
                      f'justify-content:{"center" if align=="center" else "flex-start"}">{c["cta"]}</div>')
 
     face = ""
-    if c.get("face"):                                 # 정월 — 어두운 판에만(밝은 판에서 누끼 가장자리가 보인다)
+    M = c.get("method", "")
+    if "M1" in M and c.get("face"):            # M1 배경에 이미지 넣기 — 누끼를 붙이지 않고 배경으로 깐다
+        fp = os.path.join(ROOT, "characters", "cut", c["face"] + ".png")
+        bgimg = os.path.join(ROOT, "assets", "brand_bg", c.get("scene", "bg_cosmos.jpg"))
+        if not os.path.exists(bgimg):
+            bgimg = os.path.join(ROOT, "assets", "brand_bg", "derived", c.get("scene", "bg_cosmos.jpg"))
+        layers = ""
+        if os.path.exists(bgimg):
+            layers += (f'<div style="position:absolute;inset:0;background:#0b0806 url(data:image/jpeg;base64,'
+                       f'{b64(bgimg)}) center/cover;z-index:1"></div>')
+        layers += (f'<img src="data:image/png;base64,{b64(fp)}" style="position:absolute;'
+                   f'right:{c.get("face_right",0)}px;bottom:0;height:{int(H*c.get("face_h",.86))}px;z-index:2">')
+        # M2 텍스트 밑 그라데이션 — 사진 위 글자를 읽히게 한다(K-041 은 '배경 전체 흐린 빛 방울'만 금지)
+        layers += ('<div style="position:absolute;left:0;right:0;bottom:0;height:68%;z-index:3;'
+                   'background:linear-gradient(to top,rgba(0,0,0,.90) 0%,rgba(0,0,0,.58) 44%,transparent 100%)"></div>')
+        face = layers
+    elif c.get("face"):                                 # 정월 — 어두운 판에만(밝은 판에서 누끼 가장자리가 보인다)
         if not dark:
             raise SystemExit(f"[막음] {c['id']}: 밝은 판({bg})에 정월을 놓으려 합니다. 누끼 가장자리가 지저분해집니다. 어두운 판을 쓰세요.")
         fp = os.path.join(ROOT, "characters", "cut_light", c["face"] + ".png")

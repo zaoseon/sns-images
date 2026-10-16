@@ -124,8 +124,8 @@ def before(c, channel="insta_carousel", prev=None, prev_faces=None, prev_layouts
     필요 = 0
     if c.get("big"): 필요 += int(c.get("big_size", 240) * 1.05) + 30
     if c.get("items"):
-        필요 += (96 * len(c["items"]) + 30 * (len(c["items"]) - 1) + 30) if LY == "L8" else 148
-    필요 += 69 * len(c.get("subs", []))
+        필요 += (90 * len(c["items"]) + 26 * (len(c["items"]) - 1) + 30) if LY == "L8" else 148
+    필요 += int(c.get("sub_size", 56) * 1.5) * len(c.get("subs", []))
     if 필요 > 쓸높이:
         bad.append(f"본문이 {필요}px 인데 들어갈 자리는 {쓸높이}px 이에요. 글끼리 겹칩니다 — "
                    f"줄을 줄이거나 큰 숫자를 작게 하거나 띠를 키우세요.")
@@ -188,8 +188,8 @@ def after(path, c, channel="insta_carousel"):
     if len(ys):
         t, b, l, r = int(ys[0]), H - 1 - int(ys[-1]), int(xs[0]), W - 1 - int(xs[-1])
         LY = c.get("layout", "L1")
-        가장자리허용 = LY in ("L3", "L4")      # 띠형은 띠가 일부러 가장자리까지 간다
-        if (not 가장자리허용 and (l < sx0 - 2 or r < (W - sx1) - 2)) or t < sy0 - 2:
+        가장자리허용 = LY in ("L3", "L4") or "M1" in c.get("method", "")   # 띠형·배경 이미지형(M1)은 일부러 가장자리까지 간다
+        if not 가장자리허용 and (l < sx0 - 2 or r < (W - sx1) - 2 or t < sy0 - 2):
             bad.append(f"내용이 안전 영역을 벗어났어요(위{t} 왼{l} 오{r} / 안전 영역 위{sy0} 옆{sx0}).")
         if abs(l - r) > W * 0.06 and not c.get("face"):
             bad.append(f"좌우 여백이 {l} 대 {r} 로 치우쳤어요.")
@@ -209,7 +209,7 @@ def after(path, c, channel="insta_carousel"):
 
     # 세로 배치 — 구역에서 계산한다. 옛 R47 의 "묶음 y183~1265"는 '버튼·마무리' 구역(1240~1340)이
     # 생기기 전 값이라 서로 부딪혔다. 단일 출처는 channel_specs 이므로 구역으로 잰다(가이드라인 0절).
-    if len(ys):
+    if len(ys) and "M1" not in c.get("method", ""):
         z = {x[0]: x[1:5] for x in CH["zones"]}
         위 = min(v[1] for k, v in z.items() if "고정" not in k)
         아래 = max(v[3] for k, v in z.items() if "고정" not in k)
