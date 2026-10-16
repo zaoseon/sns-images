@@ -1,5 +1,33 @@
 [
  {
+  "id": "igad-1016",
+  "kind": "인스타 광고용 캐러셀 7장(승인 대기)",
+  "title": "광고 소재 · 사주만 봤다면 반쪽만 들은 거예요 (여섯 운명학 교차 + 마음 코칭 + 무료 풀이)",
+  "date": "2026-10-17",
+  "time": "20:00",
+  "status": "new",
+  "channels": [
+   "instagram"
+  ],
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/0124f92fb4810e4f07c65c01f918173150d9d8eb/2026-igad/cards/igad-01.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/0124f92fb4810e4f07c65c01f918173150d9d8eb/2026-igad/cards/igad-02.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/0124f92fb4810e4f07c65c01f918173150d9d8eb/2026-igad/cards/igad-03.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/0124f92fb4810e4f07c65c01f918173150d9d8eb/2026-igad/cards/igad-04.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/0124f92fb4810e4f07c65c01f918173150d9d8eb/2026-igad/cards/igad-05.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/0124f92fb4810e4f07c65c01f918173150d9d8eb/2026-igad/cards/igad-06.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/0124f92fb4810e4f07c65c01f918173150d9d8eb/2026-igad/cards/igad-07.jpg"
+  ],
+  "caption": "사주만 봤다면, 반쪽만 들은 거예요.\n\n한 가지 운명학만 보면 한쪽 이야기만 듣게 돼요.\n자오선은 동양의 사주·자미두수, 서양의 별자리·수비학, 옛 셈법인 하락이수·당사주를 겹쳐 읽어요.\n\n무작위 3,000명을 하나하나 계산해 봤어요.\n사주와 하락이수가 같은 말을 한 사람은 100명 중 24명이었어요.\n별자리는 17명, 숫자는 14명이었어요.\n\n여섯이 같게 말하는 곳이 타고난 자리예요.\n다르게 말하는 곳은 내가 고를 수 있는 자리고요.\n\n성격만 말하고 끝내지 않아요.\n타고난 성격을 읽고, 요즘 마음을 묻고, 오늘 해 볼 일 하나까지 같이 써요.\n심리학을 공부한 마음 코치 정월이 씁니다.\n\n맞으면 ♥, 떠오르는 사람이 있으면 공유하거나 태그해 주세요.\n매일 저녁, 나를 알아보는 테스트가 올라와요. 팔로우해 두면 다음 편을 놓치지 않아요.\n내 여섯 가지는 프로필 링크에서 생년월일만 넣으면 1초면 볼 수 있어요.\n\n사주 하나, 별자리 하나만 보면 한쪽 이야기만 듣게 돼요.\n자오선은 여섯 가지 운명학을 겹쳐서, 같은 답이 나오는 곳을 찾아요.\n\n이 내용은 재미로, 그리고 나를 돌아보는 계기로 봐 주세요.\n\n#사주 #운세 #교차분석 #무료사주 #자오선",
+  "note": "대표 10/16 '인스타도 광고 돌릴 수준은 되게'. 메트리쿨에 10/17 20:00 초안으로 넣어 뒀어요 — 여기서 승인해 주시면 초안을 풀어 예약으로 바꾸고, 발행된 글을 그대로 광고로 돌리면 돼요. 흐름: 훅 → 24.4% 숫자 근거 → 무엇을 겹치나 → 마음 코칭 → 한 문장 → 무료로 해 보기 → 프로필 링크 단추.",
+  "checks": [
+   "카드 관문 통과(판·대비·글꼴·입말·균형)",
+   "결과물 픽셀 검사 통과",
+   "캡션 capfix 통과",
+   "숫자 근거는 10/16 릴스에 공개한 3,000명 계산값"
+  ]
+ },
+ {
   "id": "n29-cover-v2",
   "kind": "블로그 대표 이미지 교체 후보(승인 대기)",
   "title": "혼자 일할 때 더 잘하는 사람(n29, 10/13 발행) 대표 이미지 - 얼굴 가운데 시안",
