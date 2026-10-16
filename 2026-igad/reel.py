@@ -38,15 +38,19 @@ BY = Z["버튼·마무리"][3]                        # 1380 — 하단 고정 �
 TH_ = BY - TY                                 # 890 — 글이 쓸 수 있는 세로
 _나쁨 = CS.check("reel")                       # 규격표가 스스로 어긋나 있으면 그리기 전에 멈춘다
 if _나쁨: raise SystemExit("[막음] 릴스 규격이 어긋나 있어요 —\n  · " + "\n  · ".join(_나쁨))
-FPS, SEC = 24, 14.0
-NF = int(FPS * SEC)
-OUT = os.path.join(HERE, "reel")
-VID = os.path.join(OUT, "igad-reel.mp4")
+FPS = 24
+
+SET = os.environ.get("ZS_SET", "2026-igad")   # 릴스 한 편을 따로 만들 때: ZS_SET=2026-igevent
+BASE = os.path.join(ROOT, SET)
+SPEC = json.load(open(os.path.join(BASE, "reel.json"), encoding="utf-8"))
+OUT = os.path.join(BASE, "reel")
+VID = os.path.join(OUT, SPEC.get("이름", SET) + ".mp4")
 
 PAL = {p["id"]: p for p in json.load(open(
     os.path.join(ROOT, "assets", "palettes", "color_combos.json"), encoding="utf-8"))["palettes"]}
-TH = PAL["p_black_s"]["theme"]
-BG, INK, ACC = TH["bg"], TH["ink"], TH["acc"]      # #171717 / #F5F5F5 / #FF4F9A
+TH = PAL[SPEC.get("판", "p_black_s")]["theme"]
+BG, INK, ACC = TH["bg"], TH["ink"], TH["acc"]
+SEC = float(SPEC["길이"]); NF = int(FPS * SEC)
 
 TITLE_MIN = 100      # 채널 규격: G마켓 산스 100~118px
 BODY_MIN = 52        # 프리텐다드 52~58px
@@ -75,48 +79,95 @@ def 알약(id_, txt, size, top, bg, fg):
             f'font-size:{size}px;line-height:1;white-space:nowrap">{txt}</span></div>')
 
 
+def 행(id_, n, t, top):
+    return (f'<div id="{id_}" class="an" style="position:absolute;left:0;top:{top}px;'
+            f'display:flex;gap:26px;align-items:center;width:{CW}px">'
+            f'<div style="flex:0 0 72px;height:72px;border-radius:999px;background:{ACC};color:{BG};'
+            f'font-family:{K.D};font-weight:900;font-size:40px;display:flex;align-items:center;'
+            f'justify-content:center">{n}</div>'
+            f'<div data-fit=1 data-min="{BODY_MIN}" data-room="{CW-110}" style="font-family:{K.B};'
+            f'font-weight:800;font-size:58px;color:{INK};white-space:nowrap">{t}</div></div>')
+
+
+def 숫자(id_, 글, 단위, 크기, top):
+    return (f'<div id="{id_}" class="an" style="position:absolute;left:0;top:{top}px;width:{CW}px;'
+            f'font-family:{K.D};font-weight:900;font-size:{크기}px;line-height:1;color:{ACC};'
+            f'white-space:nowrap"><span id="{id_}n">0</span>{단위}</div>')
+
+
+def 단추(id_, 글, 크기, top):
+    return (f'<div id="{id_}" class="an" style="position:absolute;left:0;top:{top}px">'
+            f'<span data-fit=1 data-min="{LABEL_MIN}" data-room="{CW-120}" '
+            f'style="display:inline-flex;align-items:center;background:{ACC};color:{BG};'
+            f'border-radius:999px;padding:22px 52px;font-family:{K.B};font-weight:800;'
+            f'font-size:{크기}px;line-height:1;white-space:nowrap">{글}</span></div>')
+
+
+def 조각():
+    """사양(reel.json)에서 장면 HTML 과 그리기 명령을 함께 만든다."""
+    속, 명령, t0 = [], [], 0.0
+    for si, sc in enumerate(SPEC["장면"], 1):
+        안 = []
+        for ei, e in enumerate(sc["요소"], 1):
+            id_ = f"s{si}e{ei}"
+            형, 글, 위 = e["형"], e.get("글", ""), e["위"]
+            색 = ACC if e.get("색") == "acc" else INK
+            if 형 == "배지":
+                안.append(알약(id_, 글, e.get("크기", 44), 위, ACC, BG))
+                명령.append(("pop" if e.get("튐") else "inn", id_, e["at"]))
+            elif 형 in ("제목", "본문"):
+                안.append(줄(id_, 글, e.get("크기", 110 if 형 == "제목" else 56), 색, 위,
+                            "D" if 형 == "제목" else "B"))
+                명령.append(("inn", id_, e["at"]))
+            elif 형 == "행":
+                안.append(행(id_, e["번호"], 글, 위))
+                명령.append(("inn", id_, e["at"]))
+            elif 형 == "숫자":
+                안.append(숫자(id_, 글, e.get("단위", ""), e.get("크기", 230), 위))
+                명령.append(("inn", id_, e["at"]))
+                명령.append(("count", id_, e["at"] + 0.15, e["값"], e.get("셈", 1.9), e.get("소수", 0)))
+            elif 형 == "단추":
+                안.append(단추(id_, 글, e.get("크기", 54), 위))
+                명령.append(("pop", id_, e["at"]))
+        속.append(장면(si, t0, sc["끝"], "".join(안)))
+        t0 = sc["끝"]
+    return "".join(속), 명령
+
+
 def html():
-    s1 = (알약("a1", "여섯 운명학 교차", 44, 0, ACC, "#171717")
-          + 줄("a2", "사주만 봤다면", 110, INK, 170)
-          + 줄("a3", "반쪽만", 110, ACC, 316)
-          + 줄("a4", "들은 거예요", 110, ACC, 462)
-          + 줄("a5", "동서양 여섯 가지를", 58, INK, 700, "B")
-          + 줄("a6", "겹쳐서 읽어요", 58, INK, 776, "B"))
-    s2 = (알약("b1", "직접 세어 봤어요", 44, 0, ACC, "#171717")
-          + 줄("b2", "사주와 하락이수,", 104, INK, 170)
-          + 줄("b3", "얼마나 같을까요?", 104, INK, 308)
-          + f'<div id="b4" class="an" style="position:absolute;left:0;top:450px;width:{CW}px;'
-            f'font-family:{K.D};font-weight:900;font-size:230px;line-height:1;color:{ACC};'
-            f'white-space:nowrap"><span id="bnum">0.0</span>%</div>'
-          + 줄("b5", "무작위 3,000명을", 56, INK, 730, "B")
-          + 줄("b6", "하나하나 계산했어요", 56, INK, 802, "B"))
-    행 = lambda i, n, t: (
-        f'<div id="c{i}" class="an" style="position:absolute;left:0;top:{290 + (i - 1) * 124}px;'
-        f'display:flex;gap:26px;align-items:center;width:{CW}px">'
-        f'<div style="flex:0 0 72px;height:72px;border-radius:999px;background:{ACC};color:#171717;'
-        f'font-family:{K.D};font-weight:900;font-size:40px;display:flex;align-items:center;'
-        f'justify-content:center">{n}</div>'
-        f'<div data-fit=1 data-min="{BODY_MIN}" data-room="{CW-110}" style="font-family:{K.B};'
-        f'font-weight:800;font-size:58px;color:{INK};white-space:nowrap">{t}</div></div>')
-    s3 = (알약("c0", "겹쳐 읽는 여섯", 44, 0, ACC, "#171717")
-          + 줄("cT", "한 가지만 보면", 104, INK, 140)
-          + 행(1, 1, "동양 사주·자미두수") + 행(2, 2, "서양 별자리·수비학")
-          + 행(3, 3, "옛 셈법 하락이수·당사주")
-          + 줄("c4", "여섯이 같게 말하는 곳이", 54, ACC, 706, "B")
-          + 줄("c5", "타고난 자리예요", 54, ACC, 778, "B"))
-    s4 = (알약("d1", "마음 코칭까지", 44, 0, ACC, "#171717")
-          + 줄("d2", "성격만 말하고", 110, INK, 170)
-          + 줄("d3", "끝내지 않아요", 110, INK, 316)
-          + 줄("d4", "타고난 성격을 읽고,", 56, INK, 510, "B")
-          + 줄("d5", "요즘 마음을 묻고,", 56, INK, 582, "B")
-          + 줄("d6", "오늘 해 볼 일 하나까지", 56, INK, 654, "B")
-          + 알약("d7", "프로필 링크에서 무료로 보기", 54, 790, ACC, "#171717"))
-    body = (장면(1, 0.0, 3.3, s1) + 장면(2, 3.3, 7.1, s2)
-            + 장면(3, 7.1, 10.7, s3) + 장면(4, 10.7, 14.0, s4))
+    body, _ = 조각()
     return (f'<html><head><meta charset="utf-8"><style>{K.css_inline("gm")}{BF.css("dark")}'
             f'.an{{opacity:0}}.sc{{display:none}}</style></head>'
             f'<body style="margin:0;width:{W}px;height:{H}px;position:relative;overflow:hidden;'
             f'background:{BG};word-break:keep-all">{body}{BF.html("reel", ai=False)}</body></html>')
+
+
+def draw_js():
+    _, 명령 = 조각()
+    줄들 = []
+    for m in 명령:
+        if m[0] == "count":
+            _, id_, at, 값, 셈, 소수 = m
+            줄들.append(f"{{const q=clamp((t-{at})/{셈}); "
+                       f"E('{id_}n').textContent=({값}*ease(q)).toFixed({소수});}}")
+        else:
+            줄들.append(f"{m[0]}('{m[1]}', {m[2]});")
+    return """(t) => {
+  const E = id => document.getElementById(id);
+  const ease = x => 1 - Math.pow(1 - x, 3);
+  const clamp = x => Math.max(0, Math.min(1, x));
+  document.querySelectorAll('.sc').forEach(sc => {
+    const a = +sc.dataset.a, b = +sc.dataset.b;
+    sc.style.display = (t >= a && t < b) ? 'block' : 'none';
+  });
+  const inn = (id, t0) => { const e = E(id); if (!e) return;
+    const k = ease(clamp((t - t0) / 0.45));
+    e.style.opacity = k; e.style.transform = `translateY(${(1 - k) * 34}px)`; };
+  const pop = (id, t0) => { const e = E(id); if (!e) return;
+    const p = clamp((t - t0) / 0.5), k = ease(p);
+    e.style.opacity = k; e.style.transform = `scale(${0.82 + 0.18 * k + 0.05 * Math.sin(Math.PI * p)})`;
+    e.style.transformOrigin = 'left center'; };
+""" + "\n  ".join(줄들) + "\n}"
 
 
 FIT_JS = """() => {                      // 글자 폭을 짐작하지 않고 브라우저에서 잰다
@@ -186,8 +237,9 @@ async def shoot():
             raise SystemExit("\n[막음] 다음 글이 기둥(810px) 안에 규격 바닥 크기로도 안 들어가요 —\n  "
                              + "\n  ".join(f'"{a}" ({b}px 자리에 {c}px 필요, 바닥 {d}px)' for a, b, c, d in 넘침)
                              + "\n  글을 줄이세요.\n")
+        DJ = draw_js()
         for i in range(NF):
-            await pg.evaluate(DRAW_JS, i / FPS)
+            await pg.evaluate(DJ, i / FPS)
             await pg.screenshot(path=os.path.join(OUT, f"f{i:04d}.jpg"), quality=92, type="jpeg")
             if i % 48 == 0:
                 print(f"  {i}/{NF}")
@@ -203,7 +255,7 @@ def 영상():
 def 소리():
     """K-070: 소리 없이 내보내지 않는다. clip_v3_music 과 같은 엔진(reel_music)으로 직접 작곡한다."""
     import reel_music as RM
-    style, key, seed = "경쾌 신스팝", "D", 2610
+    style = SPEC.get("음악", "경쾌 신스팝"); key = SPEC.get("조성", "D"); seed = SPEC.get("씨앗", 2610)
     bpm = RM.pick_bpm(style, seed)
     beats = max(8, (SEC - 0.3) / (60.0 / bpm))
     wav = "/tmp/igad_reel.wav"
