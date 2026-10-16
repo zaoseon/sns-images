@@ -57,10 +57,16 @@ def run(ids, write=False):
     want = set()
     K._skip = lambda path: urllib.parse.unquote(os.path.basename(path)) not in want   # 글 번호가 없는 옛 이름(naver_y03_양띠할일 등)도 본문에 있으면 그린다
     T = V.all_configs()
-    for pid in ids:
+    PG = os.path.join(HERE, "pages.json"); keep = open(PG, encoding="utf-8").read()
+    # 한눈에 보기·점수 카드는 본문에 옛 이름(_i.jpg)이 있어야 다시 그린다 → 그리는 동안만 *3.jpg를 옛 이름으로 돌려 둔다(끝나면 원래대로)
+    open(PG, "w", encoding="utf-8").write(re.sub(r"(naver_z(?!53_[kvs])\d+_[a-z]+)3\.jpg", r"\1.jpg", keep))
+    try:
+      for pid in ids:
         cur["pal"] = body_pal(pid, pick); cur["face"] = T[pid].get("face") or "v1_lowbun"; want.clear(); want.update(want_of(pid))
         c0 = V.Ctx(cur["pal"]); R.INK, R.GOLD, R.PAPER, R.LINE = c0.bg, c0.acc, c0.fg, c0.line   # theme()를 부르지 않는 옛 스크립트(n04~n07)도 그 글 판으로
         RB.main([pid])
+    finally:
+        open(PG, "w", encoding="utf-8").write(keep)
     if write:
         reg = json.load(open(os.path.join(HERE, "pages.json"), encoding="utf-8"))
         for pid in ids:
