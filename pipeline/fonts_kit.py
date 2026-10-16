@@ -25,6 +25,31 @@ def css(display="gm"):
     b = f"@font-face{{font-family:JW-B;font-weight:800;src:url('{url('pr_xb')}')}}@font-face{{font-family:JW-B;font-weight:900;src:url('{url('pr_blk')}')}}"
     s = f"@font-face{{font-family:JW-S;font-weight:400 900;src:url('{url('serif')}')}}"
     return d + b + s
+
+
+def _b64(k):
+    import base64
+    return base64.b64encode(open(P[k], "rb").read()).decode()
+
+
+def css_inline(display="gm"):
+    """글꼴을 base64 로 박아 넣은 CSS.
+
+    set_content() 로 띄운 문서는 origin 이 about:blank 라 file:// 글꼴을 못 읽는다
+    (document.fonts 가 'error' 로 남고 브라우저 기본 고딕으로 조용히 떨어진다, 10/16 확인).
+    헤드리스 크롬으로 HTML 을 그리는 생성기는 css() 대신 이것을 쓴다."""
+    def ff(fam, key, weight):
+        return (f"@font-face{{font-family:{fam};font-weight:{weight};"
+                f"src:url(data:font/opentype;base64,{_b64(key)})}}")
+    if display == "pl":
+        d = ff("JW-D", "pl_xb", 800) + ff("JW-D", "pl_blk", 900)
+    else:
+        d = ff("JW-D", "gm_bold", "700 900")
+    b = ff("JW-B", "pr_xb", 800) + ff("JW-B", "pr_blk", 900)
+    s_ = ff("JW-S", "serif", "400 900")
+    return d + b + s_
+
+
 D = "'JW-D','Noto Sans CJK KR',sans-serif"; B = "'JW-B','Noto Sans CJK KR',sans-serif"
 def pick_display(texts, pref="pl"):
     """pref 글꼴에 없는 글자가 있으면 G마켓 산스로 바꾼다."""

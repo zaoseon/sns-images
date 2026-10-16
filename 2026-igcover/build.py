@@ -192,7 +192,7 @@ def page(c, pal):
                 f'bottom:{H-face_bottom}px;height:{fh}px;z-index:2">')
 
     inner = face + band + "".join(f'<div style="z-index:5;position:absolute;inset:0">{p}</div>' for p in parts)
-    return (f'<html><head><meta charset="utf-8"><style>{K.css(c.get("display","pl"))}{BF.css(tone)}</style></head>'
+    return (f'<html><head><meta charset="utf-8"><style>{K.css_inline(c.get("display","pl"))}{BF.css(tone)}</style></head>'
             f'<body style="margin:0;width:{W}px;height:{H}px;position:relative;overflow:hidden;background:{bg};'
             f'color:{fg};word-break:keep-all;line-break:strict">'
             + inner + BF.html("card", ai=bool(c.get("face")), tone=tone) + "</body></html>")
