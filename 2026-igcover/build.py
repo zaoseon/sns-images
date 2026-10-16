@@ -304,7 +304,7 @@ def page(c, pal):
     return (f'<html><head><meta charset="utf-8"><style>{K.css_inline(c.get("display","pl"))}{BF.css(tone)}</style></head>'
             f'<body style="margin:0;width:{W}px;height:{H}px;position:relative;overflow:hidden;background:{bg};'
             f'color:{fg};word-break:keep-all;line-break:strict">'
-            + inner + BF.html(KIND, ai=bool(c.get("face")), tone=tone) + "</body></html>")
+            + inner + BF.html(KIND, ai=bool(c.get("face")), tone=tone, page=c.get("_쪽")) + "</body></html>")
 
 
 FIT_JS = """() => {
@@ -353,6 +353,10 @@ def main():
         if not c.get("바탕"):
             c["바탕"], c["바탕 고른 까닭"] = AL.바탕(c.get("내용유형"))
     한편 = bool(spec.get("한 편"))
+    if 한편 and spec.get("쪽번호", True) and len(spec["cards"]) > 1:
+        # 캐러셀에만 '03 / 08' 쪽번호를 붙인다(대표 10/16 레퍼런스). 낱장 글에는 안 붙는다.
+        for i, c in enumerate(spec["cards"], 1):
+            c["_쪽"] = (i, len(spec["cards"]))
     세트나쁨 = G.세트(spec["cards"], channel=CHAN, 한편=한편, 이름=os.path.basename(BASE))
     if 세트나쁨:                                      # 세트를 통째로 먼저 본다(장 수·CTA·속 빈 장)
         raise SystemExit("[관문에 걸렸어요 — 세트]\n  · " + "\n  · ".join(세트나쁨) +

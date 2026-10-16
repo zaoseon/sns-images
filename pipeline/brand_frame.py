@@ -15,9 +15,15 @@ def css(tone="dark"):
             + (".bf-l{font-family:'JW-D',sans-serif;font-weight:900;font-size:42px;line-height:1.2;color:" + ("#6b5420" if L else "#e7c88d") + "}")
             + (".bf-r{font-family:'JW-B',sans-serif;font-weight:800;font-size:34px;opacity:.95;line-height:1.2;text-align:right;color:" + ("#2b2b2b" if L else "#fff") + "}")
             + (".bf-url{font-family:'JW-D',sans-serif;font-weight:900;letter-spacing:.5px;color:" + ("#6b5420" if L else "#e7c88d") + "}")
-            + (".bf-ai{font-family:'JW-B',sans-serif;font-weight:800;padding:5px 16px;border-radius:24px;line-height:1.2;color:" + ("rgba(0,0,0,.6);background:rgba(255,255,255,.5)" if L else "rgba(255,255,255,.55);background:rgba(0,0,0,.28)") + "}"))
-def html(kind="reel", ai=False, ai_id="bfAI", stacked=False, tone="dark"):
-    """상단 왼쪽 '자오선' · 상단 오른쪽 '동서양 6개 운명학 교차분석'(10/6 대표 지정). stacked는 옛 호출 호환용으로 무시한다."""
+            + (".bf-ai{font-family:'JW-B',sans-serif;font-weight:800;padding:5px 16px;border-radius:24px;line-height:1.2;color:" + ("rgba(0,0,0,.6);background:rgba(255,255,255,.5)" if L else "rgba(255,255,255,.55);background:rgba(0,0,0,.28)") + "}")
+            + (".bf-pg{font-family:'JW-D',sans-serif;font-weight:900;font-size:30px;letter-spacing:1px;line-height:1.2;text-align:right;color:" + ("#6b5420" if L else "#e7c88d") + "}"))
+def html(kind="reel", ai=False, ai_id="bfAI", stacked=False, tone="dark", page=None):
+    """상단 왼쪽 '자오선' · 상단 오른쪽 '동서양 6개 운명학 교차분석'(10/6 대표 지정). stacked는 옛 호출 호환용으로 무시한다.
+
+    page=(이 장, 전체 장수) 를 주면 상단 오른쪽 교차분석 줄 **아래**에 '03 / 08' 을 붙인다(캐러셀만).
+    대표 10/16 레퍼런스(@ai_mst.mirr 8장)에서 가져온 것 — 매 장에 쪽번호가 있어 '몇 장짜리인지'와
+    '얼마나 남았는지'가 보인다. 끝까지 넘기게 만드는 장치다. 낱장 글에는 안 붙는다.
+    고정 요소를 건드리는 것이라 기본은 캐러셀에만 켜고, 사양에 "쪽번호": false 로 끌 수 있다."""
     P = REEL if kind == "reel" else CARD
     left = 60 if kind == "reel" else 55
     url_fs, ai_fs = (40, 28) if kind == "reel" else (36, 26)
@@ -26,4 +32,9 @@ def html(kind="reel", ai=False, ai_id="bfAI", stacked=False, tone="dark"):
     pill = ((";background:rgba(255,255,255,.55)" if tone == "light" else ";background:rgba(0,0,0,.45)") + ";padding:6px 20px;border-radius:24px") if kind != "reel" else ""
     url = f'<div class="bf bf-url" id=bfUrl style="right:{P["right"]}px;bottom:{P["bottom"]}px;font-size:{url_fs}px{pill}">{URL}</div>'
     a = f'<div class="bf bf-ai" id={ai_id} style="left:{left}px;bottom:{P["bottom"]}px;font-size:{ai_fs}px">{AI}</div>' if ai else ""
-    return tl + tr + url + a
+    pg = ""
+    if page and kind != "reel":
+        이장, 전체 = page
+        pg = (f'<div class="bf bf-pg" id=bfPg style="right:{P["right"]}px;top:{P["tag_top"] + 52}px">'
+              f'{이장:02d} <span style="opacity:.5">/ {전체:02d}</span></div>')
+    return tl + tr + url + a + pg
