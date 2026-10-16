@@ -45,7 +45,7 @@ def contrast(a, b):
     return (max(la, lb) + .05) / (min(la, lb) + .05)
 
 
-def before(c, channel="insta_carousel", prev=None, prev_faces=None):
+def before(c, channel="insta_carousel", prev=None, prev_faces=None, prev_layouts=None):
     """그리기 전 검사. 하나라도 걸리면 멈춘다."""
     if os.environ.get("ZS_SKIP_GATE") == "1":
         return []
@@ -130,7 +130,18 @@ def before(c, channel="insta_carousel", prev=None, prev_faces=None):
         bad.append(f"본문이 {필요}px 인데 들어갈 자리는 {쓸높이}px 이에요. 글끼리 겹칩니다 — "
                    f"줄을 줄이거나 큰 숫자를 작게 하거나 띠를 키우세요.")
 
-    # 8. 연속 금지 (K-068) — 앞 5편과 같은 판 금지
+    # 8. 본문 글자 크기 — 채널 규격 아래로 못 내려간다(가이드라인 2절)
+    body_lo = 범위(fonts["body"])[0]
+    if c.get("subs") and c.get("sub_size", 46) < body_lo:
+        bad.append(f"본문 {c.get('sub_size', 46)}px 가 채널 규격({fonts['body']}) 아래예요.")
+
+    # 9. 레이아웃 — 주제표에서 고르고, 앞 5편과 다르게 (K-077)
+    if not c.get("layout"):
+        bad.append("레이아웃을 사양에 적으세요(L1~L12). sns-studio/SKILL.md 의 주제·유형 표에서 고릅니다.")
+    elif prev_layouts and c["layout"] in list(prev_layouts)[-3:]:
+        bad.append(f"레이아웃 '{c['layout']}' 을 앞 3편 안에서 이미 썼어요(K-077). 주제표에서 다른 것을 고르세요.")
+
+    # 10. 연속 금지 (K-068) — 앞 5편과 같은 판 금지
     if prev:
         if c.get("pal") in list(prev)[-5:]:
             bad.append(f"판 '{c['pal']}' 을 앞 5편 안에서 이미 썼어요(K-068). 다른 판을 고르세요.")
@@ -179,6 +190,21 @@ def after(path, c, channel="insta_carousel"):
 
     # 글과 그림 겹침은 픽셀로 짐작하지 않는다 — 정월 얼굴 하이라이트를 글자로 오인했다(10/16).
     # 그리는 쪽이 글 기둥을 face_left - 간격 으로 자르고, 줄일 수 있는 한계에 닿으면 스스로 멈춘다.
+
+    # 세로 배치 — 구역에서 계산한다. 옛 R47 의 "묶음 y183~1265"는 '버튼·마무리' 구역(1240~1340)이
+    # 생기기 전 값이라 서로 부딪혔다. 단일 출처는 channel_specs 이므로 구역으로 잰다(가이드라인 0절).
+    if len(ys):
+        z = {x[0]: x[1:5] for x in CH["zones"]}
+        위 = min(v[1] for k, v in z.items() if "고정" not in k)
+        아래 = max(v[3] for k, v in z.items() if "고정" not in k)
+        b2 = diff[위:아래, :]; yy = np.where(b2.any(1))[0]
+        if len(yy):
+            t2, b3 = 위 + int(yy[0]), 위 + int(yy[-1])
+            가, 목표 = (t2 + b3) // 2, (위 + 아래) // 2
+            if b3 > 아래 + 8:
+                bad.append(f"묶음 맨 아래가 {b3} 예요(구역 끝 {아래}).")
+            if abs(가 - 목표) > 24:
+                bad.append(f"묶음 세로 가운데가 {가} 예요(구역 가운데 {목표} ±24). 위아래가 치우쳤어요.")
 
     if bad:
         raise SystemExit("\n[결과물 검사에 걸렸어요] " + c.get("id", path) + "\n"

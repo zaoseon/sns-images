@@ -216,11 +216,12 @@ def main():
     PAL = palettes()
     spec = json.load(open(SPEC, encoding="utf-8"))
     want = sys.argv[1:]
-    pages, 쓴판, 쓴컷 = [], [], []
+    pages, 쓴판, 쓴컷, 쓴틀 = [], [], [], []
     for c in spec["cards"]:                           # 관문이 먼저다 — 한 장이라도 걸리면 아무것도 안 그린다
-        G.before(c, channel="insta_carousel", prev=쓴판, prev_faces=쓴컷)
+        G.before(c, channel="insta_carousel", prev=쓴판, prev_faces=쓴컷, prev_layouts=쓴틀)
         쓴판.append(c["pal"])
         if c.get("face"): 쓴컷.append(c["face"])
+        쓴틀.append(c.get("layout"))
     print("관문 통과 ✓ (판·대비·정월·글꼴 크기·입말·훅 유형·연속 금지)\n")
     for c in spec["cards"]:
         if want and c["id"] not in want:
