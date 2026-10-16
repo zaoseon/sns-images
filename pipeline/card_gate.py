@@ -258,3 +258,47 @@ def after(path, c, channel="insta_carousel"):
 
 if __name__ == "__main__":
     print(__doc__)
+
+
+def spec_lint(root=None):
+    """제작 코드가 규격을 '읽고' 있는지 잰다 (대표 10/16 "저 플랫폼별 변형 코드 규칙으로
+    박아놓고 제작에 꼭 반영해야한다").
+
+    규칙 둘:
+      ① channel_specs.check() 가 모든 채널에서 통과해야 한다 (구역끼리 겹치거나 안전 영역을 벗어나면 안 된다)
+      ② 그림·영상을 그리는 파일은 화면 크기·안전 영역을 **숫자로 박지 않고** channel_specs 에서 읽는다
+         — 같은 내용을 3:4 와 9:16 으로 내보내려면 비율이 한 곳에서 와야 한다.
+
+    10/16 처음 돌렸을 때 이미 16곳이 숫자를 박고 있었다. 전부 한 번에 고치면 다른 작업이
+    깨지므로, 그때의 목록을 content/audit/spec_lint_baseline.json 에 '빚'으로 적어 두고
+    **새로 생기는 것만 막는다.** 빚은 건드리는 김에 하나씩 갚는다(갚으면 목록에서 빠진다).
+
+    돌려주는 값: (새로 걸린 곳, 남은 빚 수). 새로 걸린 곳이 비어 있으면 통과.
+    """
+    import glob as _g
+    R = root or ROOT
+    bad = [f"[규격] {x}" for x in (CS.check() if hasattr(CS, "check") else [])]
+    박힌 = re.compile(r"^\s*W\s*,\s*H\s*=\s*\d{3,4}\s*,\s*\d{3,4}", re.M)      # W, H = 1080, 1920
+    안전박힘 = re.compile(r"=\s*\(\s*5[05]\s*,\s*(?:55|330)\s*,\s*(?:900|1025)\s*,")  # safe 를 손으로 적음
+    본다 = []
+    for pat in ("2026-*/*.py", "pipeline/*.py", "naver/*.py", "clips*/*.py"):
+        본다 += _g.glob(os.path.join(R, pat))
+    for f in sorted(set(본다)):
+        이름 = os.path.relpath(f, R)
+        try:
+            t = open(f, encoding="utf-8").read()
+        except Exception:
+            continue
+        그리나 = ("set_content(" in t or "ImageDraw" in t) and "def " in t
+        if not 그리나:
+            continue
+        if 박힌.search(t) and "channel_specs" not in t:
+            bad.append(f"[제작] {이름}: 화면 크기를 숫자로 박았어요. channel_specs 에서 읽으세요 "
+                       f"(CH = CS.CH[채널]; W, H = CH['w'], CH['h']).")
+        if 안전박힘.search(t) and "channel_specs" not in t:
+            bad.append(f"[제작] {이름}: 안전 영역을 손으로 적었어요. channel_specs 의 safe 를 읽으세요.")
+        기준 = os.path.join(R, "content", "audit", "spec_lint_baseline.json")
+    옛 = set(json.load(open(기준, encoding="utf-8"))) if os.path.exists(기준) else set()
+    새 = [b for b in bad if b not in 옛]
+    남은빚 = len([b for b in bad if b in 옛])
+    return 새, 남은빚

@@ -1,0 +1,18 @@
+[
+ "[제작] naver/add_intro_image.py: 화면 크기를 숫자로 박았어요. channel_specs 에서 읽으세요 (CH = CS.CH[채널]; W, H = CH['w'], CH['h']).",
+ "[제작] pipeline/brand2.py: 화면 크기를 숫자로 박았어요. channel_specs 에서 읽으세요 (CH = CS.CH[채널]; W, H = CH['w'], CH['h']).",
+ "[제작] pipeline/carousel.py: 화면 크기를 숫자로 박았어요. channel_specs 에서 읽으세요 (CH = CS.CH[채널]; W, H = CH['w'], CH['h']).",
+ "[제작] pipeline/clip_from_reel.py: 화면 크기를 숫자로 박았어요. channel_specs 에서 읽으세요 (CH = CS.CH[채널]; W, H = CH['w'], CH['h']).",
+ "[제작] pipeline/clip_sop.py: 화면 크기를 숫자로 박았어요. channel_specs 에서 읽으세요 (CH = CS.CH[채널]; W, H = CH['w'], CH['h']).",
+ "[제작] pipeline/clip_v2.py: 화면 크기를 숫자로 박았어요. channel_specs 에서 읽으세요 (CH = CS.CH[채널]; W, H = CH['w'], CH['h']).",
+ "[제작] pipeline/hook_reels.py: 화면 크기를 숫자로 박았어요. channel_specs 에서 읽으세요 (CH = CS.CH[채널]; W, H = CH['w'], CH['h']).",
+ "[제작] pipeline/images_to_clip.py: 화면 크기를 숫자로 박았어요. channel_specs 에서 읽으세요 (CH = CS.CH[채널]; W, H = CH['w'], CH['h']).",
+ "[제작] pipeline/naver.py: 화면 크기를 숫자로 박았어요. channel_specs 에서 읽으세요 (CH = CS.CH[채널]; W, H = CH['w'], CH['h']).",
+ "[제작] pipeline/naver2.py: 화면 크기를 숫자로 박았어요. channel_specs 에서 읽으세요 (CH = CS.CH[채널]; W, H = CH['w'], CH['h']).",
+ "[제작] pipeline/page_overlay.py: 안전 영역을 손으로 적었어요. channel_specs 의 safe 를 읽으세요.",
+ "[제작] pipeline/post_clip.py: 화면 크기를 숫자로 박았어요. channel_specs 에서 읽으세요 (CH = CS.CH[채널]; W, H = CH['w'], CH['h']).",
+ "[제작] pipeline/reel2.py: 화면 크기를 숫자로 박았어요. channel_specs 에서 읽으세요 (CH = CS.CH[채널]; W, H = CH['w'], CH['h']).",
+ "[제작] pipeline/reel3.py: 화면 크기를 숫자로 박았어요. channel_specs 에서 읽으세요 (CH = CS.CH[채널]; W, H = CH['w'], CH['h']).",
+ "[제작] pipeline/render.py: 화면 크기를 숫자로 박았어요. channel_specs 에서 읽으세요 (CH = CS.CH[채널]; W, H = CH['w'], CH['h']).",
+ "[제작] pipeline/vote_card.py: 화면 크기를 숫자로 박았어요. channel_specs 에서 읽으세요 (CH = CS.CH[채널]; W, H = CH['w'], CH['h'])."
+]

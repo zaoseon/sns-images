@@ -54,6 +54,18 @@ def text_checks():
     out["네이버 대표 이미지(가운데 720 안·글자형은 얼굴 가운데)"] = len(CVA.run())
     if "--images" in sys.argv or "--videos" in sys.argv: out["금지어 '상담' 그림 속 글자(카드 그림 OCR, 느림)"] = len(BW.scan_images())
     return out
+def spec_checks():
+    """제작 코드가 규격을 읽고 있는지(대표 10/16 "코드 규칙으로 박아놓고 제작에 꼭 반영").
+    기존 16곳은 빚으로 적어 두고 새로 생기는 것만 막는다."""
+    import card_gate as G
+    새, 빚 = G.spec_lint()
+    for x in 새:
+        print("   ", x)
+    if 빚:
+        print(f"    (규격을 안 읽는 옛 파일 {빚}곳이 남아 있어요 — content/audit/spec_lint_baseline.json, 건드리는 김에 갚으세요)")
+    return {"제작 코드가 채널 규격을 읽는가(새로 생긴 것만)": len(새)}
+
+
 def video_checks():
     out = {}
     import audit_assets as AU, layout_audit as LA
@@ -65,6 +77,7 @@ def video_checks():
     return out
 if __name__ == "__main__":
     res = text_checks()
+    res.update(spec_checks())
     if "--videos" in sys.argv: res.update(video_checks())
     fail = {k: v for k, v in res.items() if v}
     for k, v in res.items(): print(("통과 " if not v else f"걸림 {v}개 ") + "· " + k)
