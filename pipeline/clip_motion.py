@@ -45,6 +45,17 @@ def _rgba(h, a=255):
 _PALS = _판()
 _CUR = {"id": None, "th": None}
 
+def set_bg(name):
+    """배경 변주를 고른다(navy·violet-moon·burgundy-sun·forest·teal).
+    10/16까지 "navy" 로 고정돼 모든 릴스 배경이 같았다 — K-071 이 말하는 '큰 층'이 안 바뀌고 있었다."""
+    global BG_VARIANT
+    if name and name in BG_VARIANTS:
+        BG_VARIANT = name
+        bg_static.cache_clear() if hasattr(bg_static, "cache_clear") else None
+        _bg_variant.cache_clear() if hasattr(_bg_variant, "cache_clear") else None
+    return BG_VARIANT
+
+
 def set_pal(pid):
     """영상 하나를 그리기 전에 판을 고른다. render() 가 영상 이름으로 돌려 가며 부른다(K-068 연속 금지)."""
     global GOLD, WHITE, DIM, INK, CARD
@@ -436,9 +447,16 @@ def pal_for(name):
     return ids[sum(ord(ch) for ch in str(name)) % len(ids)] if ids else None
 
 
+def bg_for(name):
+    """영상 이름으로 배경 변주를 고른다. 판과 다른 수로 나눠 두 층이 같은 주기로 돌지 않게 한다."""
+    ids = sorted(BG_VARIANTS)
+    return ids[(sum(ord(ch) for ch in str(name)) // 7) % len(ids)]
+
+
 def render(name, scenes, outdir, kicker=None):
     """scenes: [(길이(초), 함수(c))]. 프레임을 ffmpeg로 바로 흘려 보낸다."""
-    set_pal(os.environ.get("ZS_PAL") or pal_for(name))   # 이 영상의 판을 먼저 고른다(K-068)
+    set_pal(os.environ.get("ZS_PAL") or pal_for(name))   # 이 영상의 판(K-068)
+    set_bg(os.environ.get("ZS_BG") or bg_for(name))      # 이 영상의 배경(K-071 큰 층)
     scenes = [(d_, _auto(f_, d_)) for d_, f_ in scenes]   # 모든 장면에 위·아래 여백 자동 맞춤(R21)
     total = sum(d for d, _ in scenes); os.makedirs(outdir, exist_ok=True); out = os.path.join(outdir, name + ".mp4")
     pr = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-", "-vf", "scale=in_range=full:out_range=tv:out_color_matrix=bt709,format=yuv420p", "-c:v", "libx264", "-profile:v", "high", "-crf", "14", "-preset", "medium", "-x264-params", "aq-mode=3:aq-strength=0.9", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-color_range", "tv", "-an", "-movflags", "+faststart", out], stdin=subprocess.PIPE)
