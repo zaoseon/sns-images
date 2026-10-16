@@ -64,7 +64,17 @@ def page(c, pal):
     hx = lambda v: v if isinstance(v, str) else "#%02X%02X%02X" % tuple(v)   # Ctx 는 RGB 튜플을 준다
     bg, fg, acc = hx(X.bg), hx(X.fg), hx(X.acc)
     pill_bg, pill_fg = hx(X.pill), hx(X.pillfg)
-    sub_c = acc if contrast(acc, bg) >= 3.0 else fg
+    # 하단 zaoseon.com 배지 색을 계산해서 내준다 — 눈대중으로 비슷한 색을 쓰지 않는다.
+    # brand_frame 이 어두운 판에 rgba(0,0,0,.45), 밝은 판에 rgba(255,255,255,.55) 를 얹는다.
+    def 하단배지색():
+        r, g, b = (int(bg[i:i+2], 16) for i in (1, 3, 5))
+        a, 위 = (.45, 0) if lum(bg) < .38 else (.55, 255)
+        return "#%02X%02X%02X" % tuple(round(v * (1 - a) + 위 * a) for v in (r, g, b))
+    if c.get("accent") == "하단배지": acc = 하단배지색()   # 하단 zaoseon.com 배지와 같은 색
+    elif c.get("accent"): acc = c["accent"]
+    if c.get("강조글자") == "하단배지": sub_c = 하단배지색()
+    elif c.get("강조글자"): sub_c = hx(c["강조글자"])
+    else: sub_c = acc if contrast(acc, bg) >= 3.0 else fg
 
     tz = Z["제목"]; bz = Z["본문·선택지"]
     LY0 = c.get("layout", "L1")
@@ -136,8 +146,10 @@ def page(c, pal):
         for l in c.get("subs", []):
             블록.append(("sub", l, ss0, int(ss0 * 1.5), 30))
     if c.get("items"):
-        블록.append(("items" if LY != "L8" else "numlist", c["items"], 0,
-                     118 if LY != "L8" else 90 * len(c["items"]) + 26 * (len(c["items"]) - 1), 30))
+        n_ = len(c["items"])
+        종류 = {"L8": "numlist", "L5": "steplist"}.get(LY, "items")
+        높이 = {"numlist": 90 * n_ + 26 * (n_ - 1), "steplist": 86 * n_ + 20 * (n_ - 1)}.get(종류, 118)
+        블록.append((종류, c["items"], 0, 높이, 30))
     if not c.get("subs_first"):
         for l in c.get("subs", []):
             블록.append(("sub", l, ss0, int(ss0 * 1.5), 0))
@@ -154,7 +166,9 @@ def page(c, pal):
         if kind == "big":
             parts.append(f'<div data-fit="1" data-min="110" style="position:absolute;left:{bz[0]}px;top:{y}px;'
                          f'width:{wmax}px;font-family:{K.D};font-weight:900;font-size:{size}px;line-height:1.05;'
-                         f'color:{sub_c};white-space:nowrap;text-align:{align}">{val}</div>')
+                         f'color:{sub_c};white-space:nowrap;text-align:{align}">'
+                         + (val.replace(c["big_hl"], f'<span style="color:{c["big_color"]}">{c["big_hl"]}</span>', 1)
+                            if c.get("big_hl") else val) + '</div>')
         elif kind == "numlist":                       # L8 번호 리스트형 — 저장을 부른다
             ns = 54
             rows = "".join(
@@ -166,6 +180,17 @@ def page(c, pal):
                 f'line-height:1.3;white-space:nowrap" data-fit="1" data-min="44" data-room="{wmax-98}">{t}</div></div>' for i, t in enumerate(val))
             parts.append(f'<div style="position:absolute;left:{bz[0]}px;top:{y}px;width:{wmax}px;'
                          f'display:flex;flex-direction:column;gap:26px">{rows}</div>')
+        elif kind == "steplist":                      # L5 좌측 3줄형 — 차례가 있는 안내
+            rows = "".join(
+                f'<div style="display:flex;gap:22px;align-items:center;height:86px">'
+                f'<div style="flex:0 0 6px;height:62px;border-radius:3px;background:{sub_c}"></div>'
+                f'<div style="flex:0 0 auto;font-family:{K.D};font-weight:900;font-size:40px;color:{sub_c};'
+                f'line-height:1">{i+1}</div>'
+                f'<div data-fit="1" data-min="44" data-room="{wmax-96}" style="font-family:{K.B};'
+                f'font-weight:800;font-size:56px;color:{fg};line-height:1.3;white-space:nowrap">{t}</div></div>'
+                for i, t in enumerate(val))
+            parts.append(f'<div style="position:absolute;left:{bz[0]}px;top:{y}px;width:{wmax}px;'
+                         f'display:flex;flex-direction:column;gap:20px">{rows}</div>')
         elif kind == "items":
             n = len(val); g = 18
             cw = (wmax - g * (n - 1)) // n
@@ -185,10 +210,11 @@ def page(c, pal):
 
     if "M3" in c.get("method", "") and c.get("serial"):   # M3 연재 방식 하이라이트
         sz = Z["상단 라벨"]
-        parts.append(f'<div style="position:absolute;left:{sz[0]}px;right:{sz[0]}px;top:{sz[1]-74}px;'
+        parts.append(f'<div style="position:absolute;left:{sz[0]}px;right:{sz[0]}px;top:{sz[1]-100}px;'
                      f'display:flex;align-items:center;gap:18px;z-index:6">'
-                     f'<span style="background:{acc};color:{pill_fg};font-family:{K.B};font-weight:800;'
-                     f'font-size:30px;padding:12px 24px;border-radius:8px;line-height:1">{c["serial"][0]}</span>'
+                     f'<span style="background:{acc};color:{"#141414" if lum(acc)>.38 else "#fff"};'
+                     f'font-family:{K.B};font-weight:800;'
+                     f'font-size:34px;padding:13px 26px;border-radius:8px;line-height:1">{c["serial"][0]}</span>'
                      f'<span style="flex:1;height:2px;background:{fg};opacity:.4"></span>'
                      f'<span style="font-family:{K.B};font-weight:700;font-size:34px;color:{fg};opacity:.7">{c["serial"][1]}</span></div>')
 

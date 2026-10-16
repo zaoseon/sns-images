@@ -60,11 +60,23 @@ def before(c, channel="insta_carousel", prev=None, prev_faces=None, prev_layouts
         bad.append(f"판 '{c.get('pal')}' 이 assets/palettes/color_combos.json 에 없어요. 목록에서 고르세요.")
     else:
         쓸수있는색 = {v.upper() for v in P[c["pal"]]["colors"].values()}
+        if c.get("accent") and c["accent"] != "하단배지":
+            모든색 = {v.upper() for q in P.values() for v in (q.get("colors") or {}).values()}
+            모든색 |= {v.upper() for q in P.values() for v in (q.get("theme") or {}).values() if isinstance(v, str) and v.startswith("#")}
+            if c["accent"].upper() not in 모든색:
+                bad.append(f"강조색 {c['accent']} 가 승인된 판 어디에도 없어요. color_combos.json 에서 고르세요.")
+            elif c["accent"].upper() not in 쓸수있는색 and not c.get("강조색 까닭"):
+                bad.append(f"강조색 {c['accent']} 는 판 '{c['pal']}' 밖의 색이에요. 섞는 까닭을 \"강조색 까닭\" 에 적으세요.")
         for k in ("bg", "acc"):
             if c.get(k) and c[k].upper() not in 쓸수있는색:
                 bad.append(f"{k} {c[k]} 가 판 '{c['pal']}' 의 색이 아니에요. 판 안의 색만 쓰세요(섞지 않기).")
 
     # 2. 글자 색 대비 — 단색 판 + 흰 글자가 기본(대표 10/16), 안 되면 멈춘다
+    for _k, _sz in (("accent", c.get("kick_size", 68)), ("big_color", c.get("big_size", 240))):
+        if c.get(_k) and c[_k].startswith("#") and c.get("bg"):
+            _need = 3.0 if _sz >= 60 else 4.5      # WCAG: 큰 글자는 3.0
+            if contrast(c[_k], c["bg"]) < _need:
+                bad.append(f"{_k} {c[_k]} 가 바탕 {c['bg']} 에서 대비 {contrast(c[_k], c['bg']):.1f}:1 이라 안 보여요({_need} 이상).")
     if c.get("bg"):
         fg = "#FFFFFF" if lum(c["bg"]) < .38 else "#141414"
         if contrast(fg, c["bg"]) < 4.5:
