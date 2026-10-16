@@ -1,110 +1,199 @@
-"""인스타·스레드 표지를 네이버 표지와 같은 문법으로 만든다 (K-061·K-068·K-072, 대표 10/16 승인).
+"""인스타·스레드 표지를 '단색 판 + 흰 글자'로 만든다 (대표 10/16).
 
-왜 따로 만드나: 지금 인스타 빌더(2026-w44night7/build.py 등)는 bg='ink' 와 FACE() 가
-코드에 박혀 있고 assets/palettes/color_combos.json 을 아예 안 읽는다. 그래서 K-058~062 가
-10/16 새벽에 적혔는데도 같은 날 밤 캐러셀이 어겼다. 네이버 쪽이 이미 쓰는
-naver/cover_v3.py 의 '정월 없는 표지' 틀 여섯 가지를 그대로 불러 쓴다.
-그쪽 파일은 고치지 않는다(세션 담당: naver/ 는 네이버 세션).
+10/16 1판을 버리고 다시 짠 것. 1판은 네이버 표지 틀(naver/cover_v3.py)을 인스타에
+가져다 써서 채널 규격을 통째로 어겼다 — 상단·하단 고정 요소 없음, 글꼴 프리텐다드(카드 제목은
+페이퍼로지), 여백 임의값, 색은 문서 안 읽고 id 만 보고 고름, 밝은 단색 위 정월 누끼가 지저분.
 
-틀: nf_text(QL·QC) · nf_ring(ring) · nf_big(BIG) · nf_n(N) · nf_trio(trio) · nf_cal(cal)
-판: cover_v3.ALL_S (대표가 캡처로 준 '메인 색 + 다른 색' 조합, K-068)
-크기: wide=False -> 720x720. 인스타 4:5(1080x1350)로 늘려 저장한다(격자에서 더 큼).
+이 판이 읽는 곳 (전부 이미 있던 것):
+  pipeline/channel_specs.py  안전 영역·구역·글꼴 크기 (insta_carousel: safe 55,55,1025,1385)
+  pipeline/brand_frame.py    상단 좌 자오선 · 상단 우 동서양 6개 운명학 교차분석 ·
+                             하단 우 zaoseon.com · 하단 좌 AI 고지(정월이 나올 때만)
+  pipeline/fonts_kit.py      JW-D 제목(페이퍼로지 ExtraBold·Black) · JW-B 본문(프리텐다드 800)
+  assets/palettes/color_combos.json   판(K-059 역할·비율, K-068 연속 금지)
 
-사용: python3 2026-igcover/build.py           # cards.json 전부
-      python3 2026-igcover/build.py ig1016a   # 하나만
+대표가 정한 것 (10/16):
+  - 단색 판에 흰 글자. 검정 글자는 칙칙해 보인다.
+  - 정월 누끼는 밝은 판 위에 놓지 않는다. 가장자리가 지저분하다. 어두운 판에만.
+  - 정월은 '말하는 글'(모집·공지·인사)에만 전면. 정보 글 표지에는 없다. (K-061)
+  - 어두운 판은 6편에 1편 이하. (K-060)
+
+사용: python3 2026-igcover/build.py [id ...]
 """
-import os, sys, json
-from PIL import Image
+import os, sys, json, base64, asyncio
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, ".."))
-sys.path.insert(0, os.path.join(ROOT, "naver"))
-import cover_v3 as V
+sys.path.insert(0, os.path.join(ROOT, "pipeline"))
+import fonts_kit as K, brand_frame as BF, channel_specs as CS, card_gate as G
 
 OUT = os.path.join(HERE, "cards")
 SPEC = os.path.join(HERE, "cards.json")
+CH = CS.CH["insta_carousel"]
+SX0, SY0, SX1, SY1 = CH["safe"]                      # 55, 55, 1025, 1385
+W, H = CH["w"], CH["h"]                              # 1080 x 1440
+Z = {z[0]: z[1:5] for z in CH["zones"]}              # 구역 이름 -> (x0,y0,x1,y1)
 
 
-def to_tall(sq_path, out_path, bg, H=1440):
-    """정사각 표지를 캐러셀과 같은 1080x1440 으로. 빈 띠가 크게 남지 않게 정사각을 키워 넣고
-    위아래를 조금씩 잘라 낸다(글자는 가운데 모여 있어 잘리지 않는다). 남는 띠는 판 바탕색."""
-    sq = Image.open(sq_path).convert("RGB")
-    # 틀 안에서 글자·칸이 쓰는 폭은 1080 중 900 쯤이다. 1240 까지 키워야 900*1.148=1033 로
-    # 1080 안에 남는다. 더 키우면 N 틀의 칩 양 끝이 잘린다(10/16 확인).
-    side = int(H * 0.861)                      # 1239
-    big = sq.resize((side, side), Image.LANCZOS)
-    can = Image.new("RGB", (1080, H), bg)
-    can.paste(big, ((1080 - side) // 2, (H - side) // 2))
-    can.save(out_path, quality=94, subsampling=0)
+def palettes():
+    d = json.load(open(os.path.join(ROOT, "assets", "palettes", "color_combos.json"), encoding="utf-8"))
+    return {p["id"]: p for p in d["palettes"]}
 
 
-def face_big(cid, c, T, out, H=1440, W=1080):
-    """정월이 '말하는 사람'인 표지(모집·공지·인사)용 — K-061 의 '전면, 크게'.
-    기존 틀의 작은 원형 배지는 대표 10/16 지적대로 얼굴도 안 보이고 글자 자리만 뺏는다.
-    그래서 컷을 오른쪽 아래에 거의 원래 크기로 두고, 글자는 왼쪽 위에 왼쪽 정렬로 쌓는다.
-    정월이 보이므로 AI 고지를 반드시 넣는다."""
-    from PIL import ImageDraw
-    import thumb_sq as TQ
-    F, SER, SEMI, BLK, XB = TQ.F, TQ.SER, TQ.SEMI, TQ.BLK, getattr(TQ, "XB", TQ.BLK)
-    img = Image.new("RGB", (W, H), c.bg)
+def lum(hx):
+    r, g, b = (int(hx[i:i + 2], 16) / 255 for i in (1, 3, 5))
+    f = lambda c: c / 12.92 if c <= .04045 else ((c + .055) / 1.055) ** 2.4
+    return .2126 * f(r) + .7152 * f(g) + .0722 * f(b)
 
-    cut = Image.open(os.path.join(ROOT, "characters", "cut", T.get("face", "v5_halfup_v2") + ".png")).convert("RGBA")
-    fh = int(H * T.get("face_h", 0.62))
-    cut = cut.resize((int(cut.width * fh / cut.height), fh), Image.LANCZOS)
-    img.paste(cut, (W - cut.width + T.get("face_dx", 40), H - cut.height), cut)
 
-    d = ImageDraw.Draw(img)
-    x, y = 72, 96
-    kt = T["kick"]; kf = F(SEMI, 46); kw = d.textlength(kt, font=kf)
-    d.rounded_rectangle([x, y, x + kw + 56, y + 76], 38, fill=c.pill)
-    d.text((x + 28, y + 38), kt, font=kf, fill=c.pillfg, anchor="lm"); y += 118
+def contrast(a, b):
+    la, lb = lum(a), lum(b)
+    hi, lo = max(la, lb), min(la, lb)
+    return (hi + .05) / (lo + .05)
 
-    for l in T["hook"]:
-        d.text((x, y), l, font=F(SEMI, 62), fill=c.fg, anchor="la"); y += 78
-    y += 18
 
-    # 글자는 왼쪽 기둥 안에만 둔다. 정월 위로 넘어가면 둘 다 안 읽힌다(10/16 첫 판에서 '명'이 머리에 겹쳤다).
-    tw = int(W * T.get("text_w", 0.58)) - x
-    bs = 300
-    while d.textlength(T["big"], font=F(BLK, bs)) > tw and bs > 110: bs -= 6
-    d.text((x, y), T["big"], font=F(BLK, bs), fill=c.acc, anchor="la"); y += int(bs * 1.06) + 16
+def b64(p):
+    return base64.b64encode(open(p, "rb").read()).decode()
 
-    subs = T.get("subs", [])
-    ss = 46                                   # 부제도 기둥 안에 넣는다. 넘치면 머리카락 위로 올라가 안 읽힌다
-    while subs and max(d.textlength(l, font=F(SEMI, ss)) for l in subs) > tw and ss > 30: ss -= 2
-    for l in subs:
-        d.text((x, y), l, font=F(SEMI, ss), fill=c.fg, anchor="la"); y += int(ss * 1.35)
 
-    d.text((x, H - 62), "정월은 AI로 생성한 가상 캐릭터입니다", font=F(SEMI, 28), fill=c.fg, anchor="ls")
-    d.text((x, H - 112), "子午線 자오선", font=F(SER, 42), fill=c.acc, anchor="ls")
-    img.save(out, quality=94, subsampling=0)
-    return out
+def page(c, pal):
+    """단색 판 한 장. 글자는 모두 안전 영역 안, 구역을 따른다."""
+    cols = list(pal["colors"].values())
+    bg = c.get("bg") or cols[0]                       # 메인 색을 꽉 찬 판으로 (K-068 _s 판)
+    acc = c.get("acc") or cols[1]
+    dark = lum(bg) < 0.38
+    fg = "#ffffff" if dark else "#141414"             # 대표: 가독성 되면 흰 글자. 밝은 판에서는 흰 글자가 안 읽힌다
+    if contrast(fg, bg) < 4.5:                        # 안 되면 반대로
+        fg = "#141414" if fg == "#ffffff" else "#ffffff"
+    sub_c = acc if contrast(acc, bg) >= 3.0 else fg
+
+    tz = Z["제목"]; bz = Z["본문·선택지"]
+    parts = []
+
+    # 정월이 있으면 그림이 차지하는 네모를 먼저 잡는다. 글은 그 안으로 들어가지 않는다.
+    face_left, face_top = W, H
+    if c.get("face"):
+        fh = int(H * c.get("face_h", 0.52))
+        fw = int(fh * 1086 / 1448)                    # 컷 비율
+        face_left = W - c.get("face_right", 55) - fw
+        face_top = H - fh
+    GUT = 36                                          # 글과 그림 사이 최소 간격
+
+    # 라벨(배지) — 글자는 배지 안에서 가운데. 34px 이상(채널 규격)
+    lz = Z["상단 라벨"]
+    parts.append(
+        f'<div style="position:absolute;left:{lz[0]}px;top:{lz[1]}px;height:{lz[3]-lz[1]}px;'
+        f'display:inline-flex;align-items:center;justify-content:center;padding:0 34px;'
+        f'border-radius:999px;background:{acc};color:{"#141414" if lum(acc)>.38 else "#fff"};'
+        f'font-family:{K.B};font-weight:800;font-size:38px;line-height:1">{c["kick"]}</div>')
+
+    # 제목 — 페이퍼로지 84~112px, 의미 단위로 미리 끊어 둔 줄을 그대로 쓴다
+    ts = c.get("title_size", 104)
+    parts.append(
+        f'<div style="position:absolute;left:{tz[0]}px;top:{tz[1]}px;width:{tz[2]-tz[0]}px;'
+        f'font-family:{K.D};font-weight:900;font-size:{ts}px;line-height:1.32;color:{fg}">'
+        + "<br>".join(c["hook"]) + "</div>")
+
+    def 폭(y_top, y_bot):
+        """그 높이에서 글이 쓸 수 있는 폭. 정월과 겹치는 높이면 그림 왼쪽까지만."""
+        right = bz[2]
+        if y_bot > face_top:
+            right = min(right, face_left - GUT)
+        return max(200, right - bz[0])
+
+    # 본문 덩어리를 먼저 쌓아 높이를 재고, 본문 구역 안에서 세로 가운데에 놓는다(아래가 휑하지 않게)
+    블록 = []
+    if c.get("big"):
+        bs = c.get("big_size", 240)
+        블록.append(("big", c["big"], bs, int(bs * 1.05), 30))
+    if c.get("items"):
+        블록.append(("items", c["items"], 0, 118, 30))
+    for l in c.get("subs", []):
+        블록.append(("sub", l, 46, 69, 0))
+    총높이 = sum(b[3] + b[4] for b in 블록) - (블록[-1][4] if 블록 else 0)
+    y = bz[1] + max(0, ((bz[3] - bz[1]) - 총높이) // 3)   # 위쪽으로 조금 치우치게(1/3 지점)
+
+    for kind, val, size, hgt, gap in 블록:
+        wmax = 폭(y, y + hgt)
+        if kind == "big":
+            s = size
+            while s * 0.62 * len(val) > wmax and s > 110: s -= 6    # 그림 위로 넘지 않게
+            parts.append(f'<div style="position:absolute;left:{bz[0]}px;top:{y}px;width:{wmax}px;'
+                         f'font-family:{K.D};font-weight:900;font-size:{s}px;line-height:1.05;'
+                         f'color:{sub_c};white-space:nowrap">{val}</div>')
+        elif kind == "items":
+            n = len(val); g = 18
+            cw = (wmax - g * (n - 1)) // n
+            mx = max(len(t) for t in val)
+            fs = max(34, min(46, int(cw * 0.90 / mx)))              # 칩 글자는 상자 안에 한 줄로(터지면 두 줄이 된다)
+            row = "".join(
+                f'<div style="width:{cw}px;height:112px;display:flex;align-items:center;justify-content:center;'
+                f'border:4px solid {sub_c};border-radius:26px;font-family:{K.B};font-weight:800;'
+                f'font-size:{fs}px;color:{fg};box-sizing:border-box;white-space:nowrap">{t}</div>' for t in val)
+            parts.append(f'<div style="position:absolute;left:{bz[0]}px;top:{y}px;width:{wmax}px;'
+                         f'display:flex;gap:{g}px">{row}</div>')
+        else:
+            s = size
+            while s * 0.52 * len(val) > wmax and s > 36: s -= 2     # 본문도 기둥 안에서 한 줄로
+            parts.append(f'<div style="position:absolute;left:{bz[0]}px;top:{y}px;width:{wmax}px;'
+                         f'font-family:{K.B};font-weight:800;font-size:{s}px;line-height:1.5;'
+                         f'color:{fg};opacity:.92;white-space:nowrap">{val}</div>')
+        y += hgt + gap
+
+    if c.get("cta"):                                  # 규격의 '버튼·마무리' 구역 — 행동 한 줄
+        cz = Z["버튼·마무리"]
+        parts.append(f'<div style="position:absolute;left:{cz[0]}px;top:{cz[1]}px;width:{폭(cz[1], cz[3])}px;'
+                     f'height:{cz[3]-cz[1]}px;display:flex;align-items:center;'
+                     f'font-family:{K.B};font-weight:800;font-size:42px;color:{sub_c};white-space:nowrap">{c["cta"]}</div>')
+
+    face = ""
+    if c.get("face"):                                 # 정월 — 어두운 판에만(밝은 판에서 누끼 가장자리가 보인다)
+        if not dark:
+            raise SystemExit(f"[막음] {c['id']}: 밝은 판({bg})에 정월을 놓으려 합니다. 누끼 가장자리가 지저분해집니다. 어두운 판을 쓰세요.")
+        fp = os.path.join(ROOT, "characters", "cut_light", c["face"] + ".png")
+        face = (f'<img src="data:image/png;base64,{b64(fp)}" style="position:absolute;right:{c.get("face_right",-60)}px;'
+                f'bottom:0;height:{int(H*c.get("face_h",0.66))}px;z-index:2">')
+
+    inner = face + "".join(f'<div style="z-index:5;position:absolute;inset:0">{p}</div>' for p in parts)
+    return (f'<html><head><meta charset="utf-8"><style>{K.css(c.get("display","pl"))}{BF.css()}</style></head>'
+            f'<body style="margin:0;width:{W}px;height:{H}px;position:relative;overflow:hidden;background:{bg};'
+            f'color:{fg};word-break:keep-all;line-break:strict">'
+            + inner + BF.html("card", ai=bool(c.get("face"))) + "</body></html>")
+
+
+async def shoot(pages):
+    from playwright.async_api import async_playwright
+    async with async_playwright() as p:
+        br = await p.chromium.launch(args=["--allow-file-access-from-files", "--font-render-hinting=none"])
+        pg = await br.new_page(viewport={"width": W, "height": H}, device_scale_factor=1)
+        for cid, html in pages:
+            await pg.set_content(html, wait_until="load")
+            await pg.evaluate("document.fonts.ready")
+            await pg.screenshot(path=os.path.join(OUT, cid + ".jpg"), quality=94, type="jpeg")
+            print(f"  {cid}")
+        await br.close()
 
 
 def main():
     os.makedirs(OUT, exist_ok=True)
+    PAL = palettes()
     spec = json.load(open(SPEC, encoding="utf-8"))
     want = sys.argv[1:]
-    made = []
-    for i, c in enumerate(spec["cards"]):
-        cid = c["id"]
-        if want and cid not in want:
+    pages, 쓴판 = [], []
+    for c in spec["cards"]:                           # 관문이 먼저다 — 한 장이라도 걸리면 아무것도 안 그린다
+        G.before(c, channel="insta_carousel", prev=쓴판)
+        쓴판.append(c["pal"])
+    print("관문 통과 ✓ (판·대비·정월·글꼴 크기·입말·훅 유형·연속 금지)\n")
+    for c in spec["cards"]:
+        if want and c["id"] not in want:
             continue
-        pal = c.get("pal") or V.ALL_S[i % len(V.ALL_S)]
-        T = {k: v for k, v in c.items() if k not in ("id", "pal", "note")}
-        if c["d"] == "face_big":                       # 정월 전면(모집·공지·인사) — 정사각을 거치지 않는다
-            p = os.path.join(OUT, cid + ".jpg")
-            face_big(cid, V.Ctx(pal), T, p)
-            made.append((cid, pal, c["d"])); print(f"  {cid:12s} {pal:12s} {c['d']:9s} -> {os.path.relpath(p, ROOT)}")
+        pages.append((c["id"], page(c, PAL[c["pal"]])))
+    asyncio.run(shoot(pages))
+    print()
+    for c in spec["cards"]:                           # 그린 뒤 결과물을 숫자로
+        if want and c["id"] not in want:
             continue
-        sqp = os.path.join(OUT, cid + "_sq.jpg")
-        V.render(cid, T, sqp, pal=pal, wide=False, face_on=bool(c.get("face_on")))
-        ctx = V.Ctx(pal)
-        p45 = os.path.join(OUT, cid + ".jpg")
-        to_tall(sqp, p45, ctx.bg)
-        made.append((cid, pal, c["d"]))
-        print(f"  {cid:12s} {pal:12s} {c['d']:5s} -> {os.path.relpath(p45, ROOT)}")
-    print(f"\n{len(made)}장 만들었어요.")
+        G.after(os.path.join(OUT, c["id"] + ".jpg"), c, channel="insta_carousel")
+    print(f"결과물 검사 통과 ✓ · {len(pages)}장")
 
 
 if __name__ == "__main__":
