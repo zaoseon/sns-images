@@ -81,6 +81,62 @@ def cal_c(d, img, T, c, face):
 DRAW = {"QL": q_center_safe, "QC": q_center_safe, "QCS": q_center_safe, "QK": q_center_safe, "CH": q_center_safe, "ring": q_center_safe, "gua": q_center_safe,
         "BIG": big_c, "N": n_c, "trio": trio_c, "cal": cal_c}
 
+# v3c(10/16 대표 "정월이 표지에 꼭 나오지 않아도 된다. 동그란 배지 배경색이 제각각이라 지저분하고, 글자도 정월 얼굴도 잘 안 보인다"):
+# 얼굴·배지·한자 워터마크를 빼고 글자만 크게. 굵은 고딕(Pretendard ExtraBold), 가운데 정렬 → 정사각으로 어디를 잘라도 글자가 남는다.
+# 캐릭터가 없으니 AI 표기도 넣지 않는다(캐릭터 이미지에만 표기).
+XB = TQ.FD + "PRETENDARD-EXTRABOLD.OTF"
+def kick(d, c, y=110):
+    f = F(SEMI, 44); t = T_KICK[0]; w = d.textlength(t, font=f) + 64; x = (S - w) / 2
+    d.rounded_rectangle([x, y, x + w, y + 82], 41, fill=c.acc); d.text((S / 2, y + 41), t, font=f, fill=c.pillfg, anchor="mm")
+T_KICK = [""]
+def hook_block(d, c, lines, y_top, y_bot, maxsize=150):
+    s = fit(d, lines, 900, maxsize, 70, XB); lh = int(s * 1.22); h = lh * len(lines)
+    y = y_top + max(0, (y_bot - y_top - h) // 2)
+    for l in lines: d.text((S // 2, y), l, font=F(XB, s), fill=c.fg, anchor="ma"); y += lh
+    return y
+def nf_text(d, img, T, c, face):
+    kick(d, c); y = hook_block(d, c, T["hook"], 250, 760)
+    d.line([(S // 2 - 70, y + 24), (S // 2 + 70, y + 24)], fill=c.acc, width=10)
+    d.text((S // 2, y + 62), T.get("sub", ""), font=F(SEMI, 54), fill=c.acc if not c.dark else c.fg, anchor="ma")
+def nf_ring(d, img, T, c, face):
+    kick(d, c); g = T.get("glyph", ""); r = 112
+    d.ellipse([S // 2 - r, 245, S // 2 + r, 245 + 2 * r], fill=c.acc); d.text((S // 2, 245 + r - 4), g, font=F(SER, 140), fill=c.pillfg, anchor="mm")
+    y = hook_block(d, c, T["hook"], 500, 800, 128)
+    d.text((S // 2, y + 30), T.get("sub", ""), font=F(SEMI, 52), fill=c.acc if not c.dark else c.fg, anchor="ma")
+def nf_big(d, img, T, c, face):
+    kick(d, c); hk = T["hook"]; s1 = fit(d, hk, 900, 84, 56, XB); y = 250
+    for l in hk: d.text((S // 2, y), l, font=F(XB, s1), fill=c.fg, anchor="ma"); y += int(s1 * 1.22)
+    bs = fit(d, [T["big"]], 820, 360, 160, BLK)
+    while y + 10 + int(bs * 1.05) + 80 > 960 and bs > 160: bs -= 8
+    d.text((S // 2, y + 10), T["big"], font=F(BLK, bs), fill=c.acc, anchor="ma")
+    d.text((S // 2, y + 10 + int(bs * 1.05) + 14), T["sub"], font=F(SEMI, 50), fill=c.fg, anchor="ma")
+def nf_n(d, img, T, c, face):
+    kick(d, c); rows = (len(T["items"]) + 2) // 3
+    y = hook_block(d, c, T["hook"], 240, 900 - rows * 112 - 90, 140)
+    d.text((S // 2, y + 10), T["sub"], font=F(SEMI, 50), fill=c.acc if not c.dark else c.fg, anchor="ma")
+    it = T["items"]; cw, ch, g = 280, 92, 20; y0 = y + 96
+    for r_ in range(rows):
+        row = it[r_ * 3:(r_ + 1) * 3]; x0 = (S - (len(row) * cw + (len(row) - 1) * g)) // 2; yy = y0 + r_ * (ch + g)
+        for i, t in enumerate(row):
+            x = x0 + i * (cw + g); d.rounded_rectangle([x, yy, x + cw, yy + ch], 24, fill=c.card, outline=c.line, width=4)
+            d.text((x + cw // 2, yy + ch // 2), t, font=F(SEMI, 50), fill=c.fg, anchor="mm")
+def nf_trio(d, img, T, c, face):
+    kick(d, c); y = hook_block(d, c, T["hook"], 240, 560, 140)
+    n = len(T["glyph"]); r = 96; g = 44; x0 = (S - (n * 2 * r + (n - 1) * g)) // 2 + r
+    for i, ch in enumerate(T["glyph"]):
+        cx = x0 + i * (2 * r + g); d.ellipse([cx - r, y + 40, cx + r, y + 40 + 2 * r], fill=c.acc); d.text((cx, y + 40 + r - 4), ch, font=F(SER, 116), fill=c.pillfg, anchor="mm")
+    d.text((S // 2, y + 40 + 2 * r + 40), T["sub"], font=F(SEMI, 50), fill=c.acc if not c.dark else c.fg, anchor="ma")
+def nf_cal(d, img, T, c, face):
+    kick(d, c); y = hook_block(d, c, T["hook"], 230, 430, 100)
+    hot = T["hot"]; cw, chh, g = 116, 66, 10; x0 = (S - (7 * cw + 6 * g)) // 2; y0 = y + 30
+    for k in range(T.get("days", 31)):
+        day = k + 1; pos = k + T.get("off", 4); x = x0 + (pos % 7) * (cw + g); yy = y0 + (pos // 7) * (chh + g); on = day in hot
+        d.rounded_rectangle([x, yy, x + cw, yy + chh], 14, fill=c.acc if on else c.card, outline=c.acc if on else c.line, width=3)
+        d.text((x + cw // 2, yy + chh // 2), str(day), font=F(SEMI, 34), fill=c.pillfg if on else c.fg, anchor="mm")
+DRAW_NF = {"QL": nf_text, "QC": nf_text, "QCS": nf_text, "QK": nf_text, "CH": nf_text, "gua": nf_text, "ring": nf_ring,
+           "BIG": nf_big, "N": nf_n, "trio": nf_trio, "cal": nf_cal}
+def logo_nf(d, c): d.text((S // 2, S - 82), "子午線 자오선", font=F(SER, 40), fill=c.fg if c.dark else c.acc, anchor="mm")
+
 def pick(order, T, every_dark=6):
     """발행 순서대로 판을 정한다: 오행 판(EL_PAL_B), 두 색 조합 판은 같은 오행이 이어 나오면 반전(_inv)을 번갈아, 6편에 1편 어두운 보라 판."""
     seen = {}; out = {}
@@ -90,10 +146,12 @@ def pick(order, T, every_dark=6):
         is_pair = any(x["id"] == base.replace("_inv", "") and "pair" in x for x in PAL)
         out[k] = (base[:-4] if base.endswith("_inv") else base + "_inv") if is_pair and n % 2 == 1 else base
     return out
-def render(pid, T, out, pal=None, wide=True):
+def render(pid, T, out, pal=None, wide=True, face_on=False):
     c = Ctx(pal or EL_PAL[T["el"]]); face = T.get("face") or TQ.FACES[sum(map(ord, pid)) % len(TQ.FACES)]
     if T["d"] in ("ring",) and "glyph" in T and "sub" not in T: T = dict(T, sub="")
-    img = Image.new("RGB", (S, S), c.bg); d = ImageDraw.Draw(img); DRAW[T["d"]](d, img, T, c, face); logo(d, c); ailabel(d, c)
+    img = Image.new("RGB", (S, S), c.bg); d = ImageDraw.Draw(img)
+    if face_on: DRAW[T["d"]](d, img, T, c, face); logo(d, c); ailabel(d, c)
+    else: T_KICK[0] = T["kick"]; DRAW_NF[T["d"]](d, img, T, c, face); logo_nf(d, c)
     sq = img.resize((720, 720), Image.LANCZOS)
     if not wide: sq.save(out, quality=94); return out
     can = Image.new("RGB", (1200, 720), c.bg); can.paste(sq, (240, 0)); can.save(out, quality=94); return out
