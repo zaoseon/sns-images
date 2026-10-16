@@ -52,6 +52,7 @@ def 장면(c):
     제목y, 본문y, 끝y = Z["제목"][1], Z["본문·그림"][1], Z["버튼·마무리"][1]
     hook = "\n".join(c["hook"])
     설명, 까닭, 할것 = 본문[c["id"]]
+    간 = c["kick"].split(" · ")[0]          # "을(乙) · 덩굴" -> "을(乙)"
 
     def s1(x):
         M.chip(x, c["kick"], Z["상단 라벨"][1], .05)
@@ -59,8 +60,11 @@ def 장면(c):
         M.text(x, c["subs"][0], 본문y, .9, 48, color=M.ACC(), path=PR, maxw=820, lh=1.5)
 
     def s2(x):
+        # 릴스는 배지를 안 그린다(R04 — 인스타 상단 버튼에 가려지는 자리). 코드 주석대로
+        # 분류 글은 본문에 넣는다. 안 넣으면 **어느 천간 이야기인지 영상 어디에도 안 나온다**(10/16 실제로 그랬다).
         M.text(x, 설명, 제목y, .05, 84, path=GM, maxw=820, lh=1.35)
-        M.text(x, 까닭, 본문y, .6, 52, color=M.DIM, path=PR, maxw=820, lh=1.55)
+        M.text(x, f"태어난 날 첫 글자가 {간}이에요", 본문y, .5, 48, color=M.ACC(), path=PR, maxw=820, lh=1.5)
+        M.text(x, 까닭, 본문y + 86, .9, 46, color=M.DIM, path=PR, maxw=820, lh=1.5)
 
     def s3(x):
         M.text(x, "오늘 해 볼 것", 제목y, .05, 72, color=M.ACC(), path=GM, maxw=820)
