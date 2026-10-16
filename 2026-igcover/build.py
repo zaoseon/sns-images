@@ -352,8 +352,12 @@ def main():
             c["pal"], c["판 고른 까닭"] = AL.판(c.get("내용유형"), None, c.get("id", ""), 쓴판)
         if not c.get("바탕"):
             c["바탕"], c["바탕 고른 까닭"] = AL.바탕(c.get("내용유형"))
+    한편 = bool(spec.get("한 편"))
+    세트나쁨 = G.세트(spec["cards"], channel=CHAN, 한편=한편, 이름=os.path.basename(BASE))
+    if 세트나쁨:                                      # 세트를 통째로 먼저 본다(장 수·CTA·속 빈 장)
+        raise SystemExit("[관문에 걸렸어요 — 세트]\n  · " + "\n  · ".join(세트나쁨) +
+                         "\n  고친 뒤 다시 돌리세요. 정말 넘겨야 하면 ZS_SKIP_GATE=1 을 붙이고 커밋에 이유를 적으세요.")
     for c in spec["cards"]:                           # 관문이 먼저다 — 한 장이라도 걸리면 아무것도 안 그린다
-        한편 = bool(spec.get("한 편"))
         G.before(c, channel=CHAN,
                  prev=[] if 한편 else 쓴판, prev_faces=[] if 한편 else 쓴컷,
                  prev_layouts=[] if 한편 else 쓴틀)

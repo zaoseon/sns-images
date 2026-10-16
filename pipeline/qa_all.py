@@ -66,6 +66,26 @@ def spec_checks():
     return {"제작 코드가 채널 규격을 읽는가(새로 생긴 것만)": len(새)}
 
 
+def set_checks():
+    """세트를 통째로 — 캐러셀 장 수(최소 7장, R58)·CTA·속 빈 장.
+    대표 10/16 "CTA도 없고 내용도 부실하게 총 3장짜리 캐러셀 만들어지는 그런건 안된다."
+    7장 규칙은 가이드라인에만 글로 있었고 코드가 보지 않았다. 빌더 하나가 아니라
+    저장소 안의 모든 사양(*/cards.json)을 여기서 센다."""
+    import glob, card_gate as G
+    나쁨 = []
+    for p in sorted(glob.glob(os.path.join(R, "*", "cards.json"))):
+        try:
+            d = json.load(open(p, encoding="utf-8"))
+        except Exception as e:
+            나쁨.append(f"{os.path.relpath(p, R)} 를 못 읽어요: {e}")
+            continue
+        나쁨 += G.세트(d.get("cards") or [], channel="insta_carousel",
+                      한편=bool(d.get("한 편")), 이름=os.path.basename(os.path.dirname(p)))
+    for x in 나쁨:
+        print("   ", x)
+    return {"캐러셀 세트(최소 7장·CTA·속 빈 장)": len(나쁨)}
+
+
 def video_checks():
     out = {}
     import audit_assets as AU, layout_audit as LA
@@ -78,6 +98,7 @@ def video_checks():
 if __name__ == "__main__":
     res = text_checks()
     res.update(spec_checks())
+    res.update(set_checks())
     if "--videos" in sys.argv: res.update(video_checks())
     fail = {k: v for k, v in res.items() if v}
     for k, v in res.items(): print(("통과 " if not v else f"걸림 {v}개 ") + "· " + k)

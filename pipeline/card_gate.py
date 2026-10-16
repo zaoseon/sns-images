@@ -46,6 +46,40 @@ def contrast(a, b):
     return (max(la, lb) + .05) / (min(la, lb) + .05)
 
 
+def 세트(cards, channel="insta_carousel", 한편=False, 이름=""):
+    """한 세트를 통째로 본다 — 장 수와 CTA와 속이 빈 장. 낱장 검사(before)가 못 잡는 것들이다.
+
+    대표 10/16: "예전처럼 CTA도 없고 내용도 부실하게 총 3장짜리 캐러셀 만들어지는 그런건 안된다."
+    7장 규칙(R58)은 가이드라인 8-9절에 **글로만** 있었고 코드가 보지 않았다. 그래서 3장짜리가 나왔다.
+    돌려주는 값: 막는 까닭 목록(비면 통과).
+    """
+    if os.environ.get("ZS_SKIP_GATE") == "1":
+        return []
+    bad = []
+    꼬리 = f" [{이름}]" if 이름 else ""
+
+    def 속(c):
+        """이 장이 할 말을 담고 있나 — 제목만 있고 비면 '부실'이다."""
+        return bool(c.get("subs") or c.get("items") or c.get("big") or c.get("steps") or c.get("rows"))
+
+    if 한편:                                   # 캐러셀 한 편(여러 장이 이어지는 글)
+        if channel == "insta_carousel" and len(cards) < 7:
+            bad.append(f"캐러셀이 {len(cards)}장이에요{꼬리}. 최소 7장입니다(R58, 가이드라인 8-9절) — "
+                       "표지 1 · 본문 2~4 · 근거 5 · 해 볼 것 6 · CTA 7. 7장 미만이면 만들지도 올리지도 않아요.")
+        if cards and not cards[-1].get("cta"):
+            bad.append(f"마지막 장에 CTA가 없어요{꼬리}. 끝 장은 '행동 한 줄 + 프로필 링크'입니다(R11, 8-10절).")
+        빈 = [c.get("id", "?") for c in cards[1:-1] if not 속(c)]   # 표지와 CTA 장은 뺀다
+        if 빈:
+            bad.append(f"본문인데 제목만 있고 속이 빈 장: {', '.join(빈)}{꼬리}. "
+                       "장마다 한 메시지를 담습니다 — 본문 두 문장(현상 1 + 행동·위로 1, 가이드라인 8-4절).")
+    else:                                      # 낱장 글(한 장이 한 게시물)
+        for c in cards:
+            if not c.get("cta"):
+                bad.append(f"{c.get('id','?')}: 한 장짜리 글인데 CTA가 없어요{꼬리}. "
+                           "한 장이면 그 한 장이 행동까지 맡습니다(R11).")
+    return bad
+
+
 def before(c, channel="insta_carousel", prev=None, prev_faces=None, prev_layouts=None):
     """그리기 전 검사. 하나라도 걸리면 멈춘다."""
     if os.environ.get("ZS_SKIP_GATE") == "1":
