@@ -68,7 +68,7 @@ def page(c, pal):
 
     tz = Z["제목"]; bz = Z["본문·선택지"]
     LY0 = c.get("layout", "L1")
-    align = "left" if LY0 in ("L8", "L5", "L9") else "center"   # 승인본(_a4)은 가운데가 기본, 목록형만 왼쪽
+    align = "left" if (LY0 in ("L8", "L5", "L9") or c.get("face_col")) else "center"   # 승인본(_a4)은 가운데가 기본, 목록형만 왼쪽
     band = ""
     if LY0 == "L4":                                   # 하단 띠형 — 위는 그림, 아래 띠에 글
         bh = c.get("band_h", 700)
@@ -85,7 +85,9 @@ def page(c, pal):
 
     # 정월이 있으면 그림이 차지하는 네모를 먼저 잡는다. 글은 그 안으로 들어가지 않는다.
     face_left, face_top = W, H
-    if c.get("face") and "M1" not in c.get("method", ""):   # M1 은 글이 그림 위로 간다(그래서 M2 그라데이션을 깐다)
+    if c.get("face") and ("M1" not in c.get("method", "") or c.get("face_col")):
+        # face_col=true 면 M1 에서도 정월이 자기 기둥을 갖는다. 글은 그 기둥 밖에만 놓인다 —
+        # 글을 얼굴 위에 얹지 않는다(대표 10/16 "얼굴을 가리지 말아야지").
         fh = int(H * c.get("face_h", 0.52))
         fw = int(fh * 1086 / 1448)                    # 컷 비율
         face_left = W - c.get("face_right", 55) - fw
@@ -96,11 +98,13 @@ def page(c, pal):
     # 라벨(배지) — 글자는 배지 안에서 가운데. 34px 이상(채널 규격)
     lz = Z["상단 라벨"]
     parts.append(
-        f'<div style="position:absolute;left:0;right:0;top:{lz[1]}px;height:{lz[3]-lz[1]}px;'
-        f'display:flex;align-items:center;justify-content:center;'
+        f'<div style="position:absolute;left:{lz[0]}px;width:{lz[2]-lz[0]}px;top:{lz[1]}px;height:{lz[3]-lz[1]}px;'
+        f'display:flex;align-items:center;justify-content:{"flex-start" if align=="left" else "center"};'
         f'"><span style="display:inline-flex;align-items:center;justify-content:center;height:100%;'
-        f'padding:0 34px;border-radius:999px;background:{acc};color:{"#141414" if lum(acc)>.38 else "#fff"};'
-        f'font-family:{K.B};font-weight:800;font-size:38px;line-height:1">{c["kick"]}</span></div>')
+        f'padding:0 40px;border-radius:999px;background:{acc};color:{"#141414" if lum(acc)>.38 else "#fff"};'
+        f'font-family:{K.B};font-weight:800;font-size:{c.get("kick_size",68)}px;line-height:1" '
+        f'data-fit="1" data-min="52" data-room="{lz[2]-lz[0]-80}">'
+        f'{c["kick"]}</span></div>')
 
     # 제목 — 페이퍼로지 84~112px, 의미 단위로 미리 끊어 둔 줄을 그대로 쓴다
     ts = c.get("title_size", 104)
@@ -127,31 +131,39 @@ def page(c, pal):
     if c.get("big"):
         bs = c.get("big_size", 240)
         블록.append(("big", c["big"], bs, int(bs * 1.05), 30))
+    ss0 = c.get("sub_size", 56)
+    if c.get("subs_first"):
+        for l in c.get("subs", []):
+            블록.append(("sub", l, ss0, int(ss0 * 1.5), 30))
     if c.get("items"):
         블록.append(("items" if LY != "L8" else "numlist", c["items"], 0,
                      118 if LY != "L8" else 90 * len(c["items"]) + 26 * (len(c["items"]) - 1), 30))
-    ss0 = c.get("sub_size", 56)
-    for l in c.get("subs", []):
-        블록.append(("sub", l, ss0, int(ss0 * 1.5), 0))
+    if not c.get("subs_first"):
+        for l in c.get("subs", []):
+            블록.append(("sub", l, ss0, int(ss0 * 1.5), 0))
     총높이 = sum(b[3] + b[4] for b in 블록) - (블록[-1][4] if 블록 else 0)
-    y = bz[1] + max(0, ((bz[3] - bz[1]) - 총높이) // 3)   # 위쪽으로 조금 치우치게(1/3 지점)
+    # 제목이 짧으면 구역 사이에 죽은 공간이 생기고 큰 숫자가 아래로 밀린다(10/16 대표 지적).
+    # 제목의 실제 아랫선을 재서 그 바로 아래부터 쌓는다.
+    제목아래 = tz[1] + int(ts * 1.28 * len(c["hook"]))
+    y0 = max(bz[1] - 60, 제목아래 + 52)
+    남은 = (bz[3] - y0) - 총높이
+    y = y0 + max(0, 남은 // (5 if c.get("big") else 3))   # 큰 숫자는 위에 붙인다
 
     for kind, val, size, hgt, gap in 블록:
         wmax = 폭(y, y + hgt)
         if kind == "big":
-            s = size
-            while s * 0.70 * len(val) > wmax and s > 110: s -= 6    # 그림 위로 넘지 않게
-            parts.append(f'<div style="position:absolute;left:{bz[0]}px;top:{y}px;width:{wmax}px;'
-                         f'font-family:{K.D};font-weight:900;font-size:{s}px;line-height:1.05;'
+            parts.append(f'<div data-fit="1" data-min="110" style="position:absolute;left:{bz[0]}px;top:{y}px;'
+                         f'width:{wmax}px;font-family:{K.D};font-weight:900;font-size:{size}px;line-height:1.05;'
                          f'color:{sub_c};white-space:nowrap;text-align:{align}">{val}</div>')
         elif kind == "numlist":                       # L8 번호 리스트형 — 저장을 부른다
+            ns = 54
             rows = "".join(
                 f'<div style="display:flex;gap:26px;align-items:center;height:90px">'
                 f'<div style="flex:0 0 72px;height:72px;border-radius:999px;background:{sub_c};'
                 f'color:{"#141414" if lum(sub_c)>.38 else "#fff"};font-family:{K.D};font-weight:900;'
                 f'font-size:44px;display:flex;align-items:center;justify-content:center">{i+1}</div>'
                 f'<div style="font-family:{K.B};font-weight:800;font-size:54px;color:{fg};'
-                f'line-height:1.3;white-space:nowrap">{t}</div></div>' for i, t in enumerate(val))
+                f'line-height:1.3;white-space:nowrap" data-fit="1" data-min="44" data-room="{wmax-98}">{t}</div></div>' for i, t in enumerate(val))
             parts.append(f'<div style="position:absolute;left:{bz[0]}px;top:{y}px;width:{wmax}px;'
                          f'display:flex;flex-direction:column;gap:26px">{rows}</div>')
         elif kind == "items":
@@ -166,13 +178,8 @@ def page(c, pal):
             parts.append(f'<div style="position:absolute;left:{bz[0]}px;top:{y}px;width:{wmax}px;'
                          f'display:flex;gap:{g}px">{row}</div>')
         else:
-            s = size
-            while s * 0.52 * len(val) > wmax and s > 44: s -= 2     # 본문도 기둥 안에서 한 줄로
-            if s * 0.52 * len(val) > wmax:                           # 더 줄이면 안 읽힌다 — 멈추고 알린다
-                raise SystemExit(f"\n[막음] {c['id']}: 본문 \"{val}\" 이 기둥({wmax}px)에 36px 로도 안 들어가요(44px 아래로 줄이지 않습니다).\n"
-                                 f"  글을 줄이거나, 정월을 작게 하거나, 레이아웃을 바꾸세요.\n")
-            parts.append(f'<div style="position:absolute;left:{bz[0]}px;top:{y}px;width:{wmax}px;'
-                         f'font-family:{K.B};font-weight:800;font-size:{s}px;line-height:1.5;'
+            parts.append(f'<div data-fit="1" data-min="46" style="position:absolute;left:{bz[0]}px;top:{y}px;'
+                         f'width:{wmax}px;font-family:{K.B};font-weight:800;font-size:{size}px;line-height:1.5;'
                          f'color:{fg};opacity:.92;white-space:nowrap;text-align:{align}">{val}</div>')
         y += hgt + gap
 
@@ -188,9 +195,11 @@ def page(c, pal):
     if c.get("cta"):                                  # 규격의 '버튼·마무리' 구역 — 행동 한 줄
         cz = Z["버튼·마무리"]
         if LY0 == "L4": cz = (cz[0], H - 190, cz[2], H - 110)
-        parts.append(f'<div style="position:absolute;left:{cz[0]}px;top:{cz[1]}px;width:{폭(cz[1], cz[3])}px;'
+        cw = 폭(cz[1], cz[3]); cs = c.get("cta_size", 58)
+        parts.append(f'<div data-fit="1" data-min="52" data-room="{cw}"'
+                     f' style="position:absolute;left:{cz[0]}px;top:{cz[1]}px;width:{cw}px;'
                      f'height:{cz[3]-cz[1]}px;display:flex;align-items:center;'
-                     f'font-family:{K.B};font-weight:800;font-size:46px;color:{fg};opacity:.8;white-space:nowrap;'
+                     f'font-family:{K.B};font-weight:800;font-size:{cs}px;color:{fg};opacity:.88;white-space:nowrap;'
                      f'justify-content:{"center" if align=="center" else "flex-start"}">{c["cta"]}</div>')
 
     face = ""
@@ -204,14 +213,20 @@ def page(c, pal):
         if os.path.exists(bgimg):
             layers += (f'<div style="position:absolute;inset:0;background:#0b0806 url(data:image/jpeg;base64,'
                        f'{b64(bgimg)}) center/cover;z-index:1"></div>')
+        # M2 텍스트 밑 그라데이션 — 사진 위 글자를 읽히게 한다(K-041 은 '배경 전체 흐린 빛 방울'만 금지).
+        # 정월이 자기 기둥을 가지면 글 쪽(왼쪽)만 덮는다. 아래 전체를 덮으면 얼굴도 같이 어두워진다(10/16).
+        if c.get("face_col"):
+            layers += ('<div style="position:absolute;inset:0;z-index:2;background:'
+                       'linear-gradient(to right,rgba(8,6,4,.93) 0%,rgba(8,6,4,.88) 46%,'
+                       'rgba(8,6,4,.30) 78%,rgba(8,6,4,.10) 100%)"></div>')
+        else:
+            layers += ('<div style="position:absolute;left:0;right:0;bottom:0;height:68%;z-index:2;'
+                       'background:linear-gradient(to top,rgba(0,0,0,.90) 0%,rgba(0,0,0,.58) 44%,transparent 100%)"></div>')
         layers += (f'<img src="data:image/png;base64,{b64(fp)}" style="position:absolute;'
-                   f'right:{c.get("face_right",0)}px;bottom:0;height:{int(H*c.get("face_h",.86))}px;z-index:2">')
-        # M2 텍스트 밑 그라데이션 — 사진 위 글자를 읽히게 한다(K-041 은 '배경 전체 흐린 빛 방울'만 금지)
-        layers += ('<div style="position:absolute;left:0;right:0;bottom:0;height:68%;z-index:3;'
-                   'background:linear-gradient(to top,rgba(0,0,0,.90) 0%,rgba(0,0,0,.58) 44%,transparent 100%)"></div>')
+                   f'right:{c.get("face_right",0)}px;bottom:0;height:{int(H*c.get("face_h",.86))}px;z-index:3">')
         face = layers
     elif c.get("face"):                                 # 정월 — 어두운 판에만(밝은 판에서 누끼 가장자리가 보인다)
-        if not dark:
+        if tone != "dark":
             raise SystemExit(f"[막음] {c['id']}: 밝은 판({bg})에 정월을 놓으려 합니다. 누끼 가장자리가 지저분해집니다. 어두운 판을 쓰세요.")
         fp = os.path.join(ROOT, "characters", "cut_light", c["face"] + ".png")
         face = (f'<img src="data:image/png;base64,{b64(fp)}" style="position:absolute;right:{c.get("face_right",-60)}px;'
@@ -224,6 +239,22 @@ def page(c, pal):
             + inner + BF.html("card", ai=bool(c.get("face")), tone=tone) + "</body></html>")
 
 
+FIT_JS = """() => {
+  const over = [];
+  const 잰다 = el => {                     // flex 상자는 scrollWidth 가 안 늘어난다. 글 자체를 잰다.
+    const r = document.createRange(); r.selectNodeContents(el);
+    return Math.max(el.scrollWidth, Math.ceil(r.getBoundingClientRect().width));
+  };
+  for (const el of document.querySelectorAll('[data-fit]')) {
+    const min = +el.dataset.min, room = +el.dataset.room || el.clientWidth;
+    let s = parseFloat(getComputedStyle(el).fontSize);
+    while (잰다(el) > room && s > min) { s -= 2; el.style.fontSize = s + 'px'; }
+    if (잰다(el) > room) over.push([el.textContent.trim(), room, 잰다(el)]);
+  }
+  return over;
+}"""
+
+
 async def shoot(pages):
     from playwright.async_api import async_playwright
     async with async_playwright() as p:
@@ -232,6 +263,11 @@ async def shoot(pages):
         for cid, html in pages:
             await pg.set_content(html, wait_until="load")
             await pg.evaluate("document.fonts.ready")
+            넘침 = await pg.evaluate(FIT_JS)          # 글자 폭을 짐작하지 않고 브라우저에서 잰다
+            if 넘침:
+                raise SystemExit("\n[막음] " + cid + ": 다음 글이 기둥 안에 바닥 크기로도 안 들어가요 —\n  "
+                                 + "\n  ".join(f'"{t}" ({w}px 자리에 {need}px 필요)' for t, w, need in 넘침)
+                                 + "\n  글을 줄이거나, 정월을 작게 하거나, 레이아웃을 바꾸세요.\n")
             await pg.screenshot(path=os.path.join(OUT, cid + ".jpg"), quality=94, type="jpeg")
             print(f"  {cid}")
         await br.close()

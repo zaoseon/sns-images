@@ -23,7 +23,8 @@ import channel_specs as CS
 COMBOS = os.path.join(ROOT, "assets", "palettes", "color_combos.json")
 
 # 대표가 거듭 지적한 글말·번역투. 표지 글자에 쓰지 않는다.
-글말 = ["타고난 결", "~하는 결", "결이 맞", "두 겹으로", "~에 대해", "~을 통해", "~에 있어"]
+글말 = ["타고난 결", "~하는 결", "결이 맞", "두 겹으로", "~에 대해", "~을 통해", "~에 있어",
+        "세 지도", "세 가지 지도"]   # 세 지도 -> 사주·별자리·숫자 (대표 10/16)
 # 문장이 끊긴 꼴(서술어 없이 끝남). 표지 제목에서 특히 자주 났다.
 끊김 = re.compile(r"(을|를|이|가|은|는|와|과|의|에|로|으로)\s*[?!.]?$")
 
@@ -96,7 +97,8 @@ def before(c, channel="insta_carousel", prev=None, prev_faces=None, prev_layouts
         bad.append(f"본문 {c['body_size']}px 는 너무 작아요({fonts['body']}).")
 
     # 5. 글 — 자연어·입말·의미 단위 줄바꿈
-    줄 = list(c.get("hook", [])) + list(c.get("subs", []))
+    줄 = (list(c.get("hook", [])) + list(c.get("subs", [])) + [c.get("kick", ""), c.get("cta", "")]
+         + list(c.get("serial", [])) + list(c.get("items", [])))
     for t in 줄:
         for w in 글말:
             if w.replace("~", "") in t:
@@ -134,7 +136,7 @@ def before(c, channel="insta_carousel", prev=None, prev_faces=None, prev_layouts
     #      배지를 넣을지는 글에 따라 가변이다. 넣을 때 안을 어떻게 채우느냐가 규칙이다.
     if c.get("kick"):
         lab_lo = 범위(fonts["label"])[0]
-        ks = c.get("kick_size", 38)
+        ks = c.get("kick_size", 68)
         if ks < lab_lo:
             bad.append(f"배지 글자 {ks}px 가 라벨 규격({fonts['label']}) 아래예요. "
                        f"작게 줄이지 말고 배지를 키우거나 글자 수를 줄이세요.")
@@ -148,6 +150,9 @@ def before(c, channel="insta_carousel", prev=None, prev_faces=None, prev_layouts
 
     # 8-2. 본문 글자 크기 — 채널 규격 아래로 못 내려간다(가이드라인 2절)
     body_lo = 범위(fonts["body"])[0]
+    if c.get("cta"):                                  # CTA 도 '너무 작은 글자 금지' 를 받는다(대표 10/16)
+        if c.get("cta_size", 58) < 52:
+            bad.append(f"CTA 글자 {c.get('cta_size')}px 는 작아요(52px 이상). 글을 줄이고 크기를 지키세요.")
     if c.get("subs") and c.get("sub_size", 46) < body_lo:
         bad.append(f"본문 {c.get('sub_size', 46)}px 가 채널 규격({fonts['body']}) 아래예요.")
 
