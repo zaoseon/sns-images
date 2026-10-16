@@ -130,7 +130,23 @@ def before(c, channel="insta_carousel", prev=None, prev_faces=None, prev_layouts
         bad.append(f"본문이 {필요}px 인데 들어갈 자리는 {쓸높이}px 이에요. 글끼리 겹칩니다 — "
                    f"줄을 줄이거나 큰 숫자를 작게 하거나 띠를 키우세요.")
 
-    # 8. 본문 글자 크기 — 채널 규격 아래로 못 내려간다(가이드라인 2절)
+    # 8-1. 배지 (가이드라인 6-1절, 대표 10/16 "배지 안에 텍스트 배치와 텍스트 크기")
+    #      배지를 넣을지는 글에 따라 가변이다. 넣을 때 안을 어떻게 채우느냐가 규칙이다.
+    if c.get("kick"):
+        lab_lo = 범위(fonts["label"])[0]
+        ks = c.get("kick_size", 38)
+        if ks < lab_lo:
+            bad.append(f"배지 글자 {ks}px 가 라벨 규격({fonts['label']}) 아래예요. "
+                       f"작게 줄이지 말고 배지를 키우거나 글자 수를 줄이세요.")
+        lz = {z[0]: z[1:5] for z in CS.CH[channel]["zones"]}.get("상단 라벨")
+        위고정 = max((z[4] for z in CS.CH[channel]["zones"] if "상단" in z[0] and "고정" in z[0]), default=0)  # z=(이름,x0,y0,x1,y1)
+        if lz and lz[1] < 위고정 + 60:
+            bad.append(f"배지가 상단 고정 문구와 {lz[1]-위고정}px 밖에 안 떨어졌어요(60px 이상). "
+                       f"channel_specs 의 '상단 라벨' 구역을 내리세요.")
+        if len(str(c["kick"])) > 12:
+            bad.append(f"배지 글자가 {len(str(c['kick']))}자예요. 한 줄에 안 들어가면 두 줄로 터집니다(12자 이내).")
+
+    # 8-2. 본문 글자 크기 — 채널 규격 아래로 못 내려간다(가이드라인 2절)
     body_lo = 범위(fonts["body"])[0]
     if c.get("subs") and c.get("sub_size", 46) < body_lo:
         bad.append(f"본문 {c.get('sub_size', 46)}px 가 채널 규격({fonts['body']}) 아래예요.")
