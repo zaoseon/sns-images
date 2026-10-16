@@ -32,7 +32,7 @@ class Ctx:
             s.acc = t.get("head", t["acc"]); s.dark = sum(t["bg"]) < 300
             s.md = t.get("hl", t["card"]) if not s.dark else t["card"]
             s.pillfg = t["bg"] if sum(s.acc) < 400 or s.dark else t["ink"]
-        s.tint = mix(s.bg, s.acc, .06); s.ring_bg = s.card
+        s.tint = mix(s.bg, s.acc, .045); s.ring_bg = s.card
 
 def head(d, img, T, c, face, y_face=290, r=95):
     pill(d, c, 0, 80, T["kick"], center=True); badge(img, d, face, c, S // 2, y_face, r)

@@ -429,6 +429,70 @@
    "src": "대표 10/16 전달 노션 색조합 가이드 캡처 2차 (zaoseon-site samples/design_refs_2026-10-16/color_combos/4x·5x)"
   },
   {
+   "id": "w_navy",
+   "name": "네이비 & 페일 그레이",
+   "feel": "차분함·신뢰·세련",
+   "colors": {
+    "네이비": "#1F2A44",
+    "페일 블루그레이": "#EEF2F6",
+    "슬레이트": "#5B6B82"
+   },
+   "how": "원색 파랑 대신 채도 낮은 네이비. 바탕은 옅은 회청색, 배지·제목·강조 모두 네이비 한 색",
+   "theme": {
+    "bg": "#EEF2F6",
+    "card": "#FFFFFF",
+    "line": "#D5DCE6",
+    "ink": "#1F2A44",
+    "sub": "#5B6B82",
+    "acc": "#1F2A44",
+    "acc2": "#5B6B82",
+    "head": "#1F2A44"
+   },
+   "src": "10/16 대표 '파란색 배지 촌스럽다'(b_white #2563EB) → 물(水) 대체 후보, 자오선 자체"
+  },
+  {
+   "id": "w_navy_butter",
+   "name": "네이비 & 소프트 버터",
+   "feel": "따뜻함·선명함",
+   "colors": {
+    "네이비": "#102A43",
+    "소프트 버터": "#FFF3C4"
+   },
+   "how": "두 색 조합 영상 Midnight Navy+Soft Butter 반전: 버터 바탕, 네이비 글자·배지",
+   "theme": {
+    "bg": "#FFF3C4",
+    "card": "#FFFFFF",
+    "line": "#EADFB0",
+    "ink": "#102A43",
+    "sub": "#4A5A6E",
+    "acc": "#102A43",
+    "acc2": "#4A5A6E",
+    "head": "#102A43"
+   },
+   "src": "10/16 대표 '파란색 배지 촌스럽다'(b_white #2563EB) → 물(水) 대체 후보, 자오선 자체"
+  },
+  {
+   "id": "w_ink",
+   "name": "딥 인디고 & 아이보리",
+   "feel": "고급·차분",
+   "colors": {
+    "딥 인디고": "#27306B",
+    "아이보리": "#F7F4EC"
+   },
+   "how": "아이보리 바탕, 인디고 한 색",
+   "theme": {
+    "bg": "#F7F4EC",
+    "card": "#FFFFFF",
+    "line": "#E4DFD2",
+    "ink": "#1E2550",
+    "sub": "#5A5F80",
+    "acc": "#27306B",
+    "acc2": "#5A5F80",
+    "head": "#27306B"
+   },
+   "src": "10/16 대표 '파란색 배지 촌스럽다'(b_white #2563EB) → 물(水) 대체 후보, 자오선 자체"
+  },
+  {
    "id": "v_violet",
    "name": "Violet Purple + Tangerine Cream",
    "feel": "",
