@@ -84,8 +84,13 @@ def main():
         M.set_backdrop(유형, "단색", c["id"])
         sc = 장면(c)
         p, dur = M.render(c["id"], sc, OUT, 내용유형=유형, 판=c["pal"])
-        mi = MP.choose("fun", c["id"])            # 영상마다 다른 곡(K-070). 갈래는 love·data·fun 셋뿐 — 성격 글은 fun
-        MP.mux(p, [d for d, _ in sc], mi, 300 + i)
+        # 음악은 **짝끼리 똑같이** 쓴다. 영상마다 고르게 했더니 갈래가 번갈아 나가는 탓에
+        # 행동 갈래는 상큼 팝·신스팝, 형용사 갈래는 우쿨렐레·마림바로 **곡이 완전히 갈려 버렸다**.
+        # 그러면 결과가 첫 줄 때문인지 음악 때문인지 못 가린다(K-103). 짝(갑·을 / 병·정 …) 안에서는
+        # 곡이 같고 첫 줄만 다르게 둔다.
+        짝 = i // 2
+        mi = MP.choose("fun", f"ilgan2-pair{짝}")
+        MP.mux(p, [d for d, _ in sc], mi, 300 + 짝)
         print(f"  {c['id']:16} {c['첫줄 갈래']:4} {dur:.1f}초 · {c['pal']:12} · 음악 {mi['style']} {mi['bpm']}", flush=True)
 
 
