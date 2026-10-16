@@ -26,8 +26,10 @@ ROOT = os.path.abspath(os.path.join(HERE, ".."))
 sys.path.insert(0, os.path.join(ROOT, "pipeline"))
 import fonts_kit as K, brand_frame as BF, channel_specs as CS, card_gate as G
 
-OUT = os.path.join(HERE, "cards")
-SPEC = os.path.join(HERE, "cards.json")
+SET = os.environ.get("ZS_SET", "")            # 캐러셀 한 편을 따로 만들 때: ZS_SET=2026-igad
+BASE = os.path.join(ROOT, SET) if SET else HERE
+OUT = os.path.join(BASE, "cards")
+SPEC = os.path.join(BASE, "cards.json")
 CH = CS.CH["insta_carousel"]
 SX0, SY0, SX1, SY1 = CH["safe"]                      # 55, 55, 1025, 1385
 W, H = CH["w"], CH["h"]                              # 1080 x 1440
@@ -82,7 +84,7 @@ def page(c, pal):
     band = ""
     if LY0 == "L4":                                   # 하단 띠형 — 위는 그림, 아래 띠에 글
         bh = c.get("band_h", 700)
-        band_bg = c.get("band_bg") or X.card if hasattr(X, "card") else (c.get("band_bg") or acc)
+        band_bg = hx(c.get("band_bg") or (X.card if hasattr(X, "card") else acc))   # Ctx 는 RGB 튜플을 준다
         band = (f'<div style="position:absolute;left:0;right:0;bottom:0;height:{bh}px;'
                 f'background:{band_bg};z-index:3"></div>')
         tz = (tz[0], H - bh + 56, tz[2], H - bh + 56 + 230)
@@ -159,7 +161,7 @@ def page(c, pal):
     제목아래 = tz[1] + int(ts * 1.28 * len(c["hook"]))
     y0 = max(bz[1] - 60, 제목아래 + 52)
     남은 = (bz[3] - y0) - 총높이
-    y = y0 + max(0, 남은 // (5 if c.get("big") else 3))   # 큰 숫자는 위에 붙인다
+    y = y0 + max(0, 남은 // (5 if c.get("big") else 2))   # 큰 숫자는 위에, 나머지는 제목과 CTA 사이 가운데
 
     for kind, val, size, hgt, gap in 블록:
         wmax = 폭(y, y + hgt)
@@ -222,11 +224,16 @@ def page(c, pal):
         cz = Z["버튼·마무리"]
         if LY0 == "L4": cz = (cz[0], H - 190, cz[2], H - 110)
         cw = 폭(cz[1], cz[3]); cs = c.get("cta_size", 58)
-        parts.append(f'<div data-fit="1" data-min="52" data-room="{cw}"'
-                     f' style="position:absolute;left:{cz[0]}px;top:{cz[1]}px;width:{cw}px;'
+        단추 = c.get("cta_button")                     # 광고는 누를 곳이 보여야 한다
+        칠 = (f'background:{acc};color:{"#141414" if lum(acc) > .38 else "#fff"};'
+              f'border-radius:999px;padding:0 48px;' if 단추 else f'color:{fg};opacity:.88;')
+        parts.append(f'<div style="position:absolute;left:{cz[0]}px;top:{cz[1]}px;width:{cw}px;'
                      f'height:{cz[3]-cz[1]}px;display:flex;align-items:center;'
-                     f'font-family:{K.B};font-weight:800;font-size:{cs}px;color:{fg};opacity:.88;white-space:nowrap;'
-                     f'justify-content:{"center" if align=="center" else "flex-start"}">{c["cta"]}</div>')
+                     f'justify-content:{"center" if align=="center" else "flex-start"}">'
+                     f'<span data-fit="1" data-min="52" data-room="{cw - (96 if 단추 else 0)}" '
+                     f'style="display:inline-flex;align-items:center;height:100%;{칠}'
+                     f'font-family:{K.B};font-weight:800;font-size:{cs}px;white-space:nowrap">'
+                     f'{c["cta"]}</span></div>')
 
     face = ""
     M = c.get("method", "")
@@ -306,7 +313,10 @@ def main():
     want = sys.argv[1:]
     pages, 쓴판, 쓴컷, 쓴틀 = [], [], [], []
     for c in spec["cards"]:                           # 관문이 먼저다 — 한 장이라도 걸리면 아무것도 안 그린다
-        G.before(c, channel="insta_carousel", prev=쓴판, prev_faces=쓴컷, prev_layouts=쓴틀)
+        한편 = bool(spec.get("한 편"))
+        G.before(c, channel="insta_carousel",
+                 prev=[] if 한편 else 쓴판, prev_faces=[] if 한편 else 쓴컷,
+                 prev_layouts=[] if 한편 else 쓴틀)
         쓴판.append(c["pal"])
         if c.get("face"): 쓴컷.append(c["face"])
         쓴틀.append(c.get("layout"))
