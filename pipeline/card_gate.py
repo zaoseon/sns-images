@@ -45,7 +45,7 @@ def contrast(a, b):
     return (max(la, lb) + .05) / (min(la, lb) + .05)
 
 
-def before(c, channel="insta_carousel", prev=None):
+def before(c, channel="insta_carousel", prev=None, prev_faces=None):
     """그리기 전 검사. 하나라도 걸리면 멈춘다."""
     if os.environ.get("ZS_SKIP_GATE") == "1":
         return []
@@ -69,8 +69,17 @@ def before(c, channel="insta_carousel", prev=None):
         if contrast(fg, c["bg"]) < 4.5:
             bad.append(f"바탕 {c['bg']} 에서는 글자 대비가 {contrast(fg, c['bg']):.1f}:1 이라 안 읽혀요(4.5 이상 필요).")
 
-    # 3. 정월 (K-061) — '말하는 글'에만, 어두운 판에만
+    # 3. 정월 (K-061) — '말하는 글'에만, 어두운 판에만, 같은 컷을 돌려쓰지 않기
     if c.get("face"):
+        try:
+            B = json.load(open(os.path.join(ROOT, "sns-studio", "brands", "zaoseon.json"), encoding="utf-8"))
+            ch = B.get("character", {})
+            if c["face"] + ".png" in ch.get("forbidden", []):
+                bad.append(f"컷 '{c['face']}' 은 쓰지 않기로 했어요 — {ch.get('금지 까닭','')}")
+            if prev_faces and c["face"] in list(prev_faces)[-5:]:
+                bad.append(f"컷 '{c['face']}' 을 앞 5편 안에서 이미 썼어요. {ch.get('rotate',[])[:4]} 중에서 고르세요.")
+        except Exception:
+            pass
         if c.get("bg") and lum(c["bg"]) >= .38:
             bad.append("밝은 판에 정월을 놓으려 해요. 누끼 가장자리가 지저분하게 보여요. 어두운 판에만 씁니다(대표 10/16).")
         if not c.get("말하는글"):
@@ -103,7 +112,25 @@ def before(c, channel="insta_carousel", prev=None):
     if not c.get("훅"):
         bad.append("훅 유형을 사양에 적으세요(K-064 열한 가지 중 하나). 안 적으면 같은 유형만 쓰게 돼요.")
 
-    # 7. 연속 금지 (K-068) — 앞 5편과 같은 판 금지
+    # 7. 쌓은 높이가 구역을 넘는가 — 넘치면 글끼리 겹친다(10/16 L4 띠에서 났다)
+    CH2 = CS.CH[channel]
+    ZZ = {z[0]: z[1:5] for z in CH2["zones"]}
+    LY = c.get("layout", "L1")
+    if LY == "L4":
+        bh = c.get("band_h", 700)
+        쓸높이 = bh - 56 - 230 - 6 - 210               # 띠 - 윗여백 - 제목 - 사이 - 마무리·고정
+    else:
+        쓸높이 = ZZ["본문·선택지"][3] - ZZ["본문·선택지"][1]
+    필요 = 0
+    if c.get("big"): 필요 += int(c.get("big_size", 240) * 1.05) + 30
+    if c.get("items"):
+        필요 += (96 * len(c["items"]) + 30 * (len(c["items"]) - 1) + 30) if LY == "L8" else 148
+    필요 += 69 * len(c.get("subs", []))
+    if 필요 > 쓸높이:
+        bad.append(f"본문이 {필요}px 인데 들어갈 자리는 {쓸높이}px 이에요. 글끼리 겹칩니다 — "
+                   f"줄을 줄이거나 큰 숫자를 작게 하거나 띠를 키우세요.")
+
+    # 8. 연속 금지 (K-068) — 앞 5편과 같은 판 금지
     if prev:
         if c.get("pal") in list(prev)[-5:]:
             bad.append(f"판 '{c['pal']}' 을 앞 5편 안에서 이미 썼어요(K-068). 다른 판을 고르세요.")
@@ -133,7 +160,9 @@ def after(path, c, channel="insta_carousel"):
     ys, xs = np.where(diff.any(1))[0], np.where(diff.any(0))[0]
     if len(ys):
         t, b, l, r = int(ys[0]), H - 1 - int(ys[-1]), int(xs[0]), W - 1 - int(xs[-1])
-        if l < sx0 - 2 or r < (W - sx1) - 2 or t < sy0 - 2:
+        LY = c.get("layout", "L1")
+        가장자리허용 = LY in ("L3", "L4")      # 띠형은 띠가 일부러 가장자리까지 간다
+        if (not 가장자리허용 and (l < sx0 - 2 or r < (W - sx1) - 2)) or t < sy0 - 2:
             bad.append(f"내용이 안전 영역을 벗어났어요(위{t} 왼{l} 오{r} / 안전 영역 위{sy0} 옆{sx0}).")
         if abs(l - r) > W * 0.06 and not c.get("face"):
             bad.append(f"좌우 여백이 {l} 대 {r} 로 치우쳤어요.")
@@ -148,14 +177,9 @@ def after(path, c, channel="insta_carousel"):
             bad.append(f"내용이 위로 쏠렸어요(위 {top}, 아래 {bot} 비어 있음). "
                        f"규격의 '버튼·마무리' 구역에 행동 한 줄을 넣거나 내용을 고르게 펴세요.")
 
-    # 글이 정월 위로 올라갔는지 — 그림 네모 안에서 밝은 글자 픽셀이 뭉쳐 있으면 겹친 것
-    if c.get("face"):
-        fh = int(H * c.get("face_h", .52)); fw = int(fh * 1086 / 1448)
-        fx0, fy0 = W - c.get("face_right", 55) - fw, H - fh
-        sub = a[fy0:fy0 + int(fh * .55), fx0:fx0 + fw]              # 그림 위쪽 절반(머리·얼굴)
-        near_white = ((sub > 225).all(2)).sum()
-        if near_white > sub.shape[0] * sub.shape[1] * 0.012:
-            bad.append("글자가 정월 위로 올라간 것 같아요(그림 영역에 흰 글자 덩어리). 글 기둥을 그림 왼쪽까지로 줄이세요.")
+    # 글과 그림 겹침은 픽셀로 짐작하지 않는다 — 정월 얼굴 하이라이트를 글자로 오인했다(10/16).
+    # 그리는 쪽이 글 기둥을 face_left - 간격 으로 자르고, 줄일 수 있는 한계에 닿으면 스스로 멈춘다.
+
     if bad:
         raise SystemExit("\n[결과물 검사에 걸렸어요] " + c.get("id", path) + "\n"
                          + "\n".join("  · " + x for x in bad) + "\n")
