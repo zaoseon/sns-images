@@ -10,7 +10,8 @@ HERE = os.path.dirname(os.path.abspath(__file__)); R = os.path.abspath(os.path.j
 ZR = os.path.abspath(os.path.join(R, "..", "zaoseon-site"))
 BAN = re.compile(r"상담")
 ALLOW = re.compile(r"심리\s?상담사|심리상담\s자격|상담전화")   # 이 말 속의 '상담'은 걸지 않는다
-RULE = re.compile(r"금지|쓰지 않|않는다|않는 말|소개하지 않")
+RULE = re.compile(r"금지|쓰지 않|않는다|않는 말|소개하지 않|대신|막음|O4 ")   # "'상담' 대신 '코칭'" 처럼 금지를 적은 줄
+MARK = re.compile(r"^\s*(#|//|/\*|\*|<!--)")                                  # 주석 줄 — 손님에게 안 보인다
 EXT = (".py", ".json", ".html", ".md", ".js", ".css", ".gs", ".txt", ".yaml", ".yml", ".csv", ".tsv")
 # 경로 조각이 들어 있으면 건너뛴다(과거 기록·경쟁사·규칙 인용·보관)
 SKIP = ("docs/수정기록.md", "docs/참고문서/", "docs/정본/", "docs/handoff_", "docs/competitors", "docs/벤치마크", "docs/package_compare", "docs/사이트_기획안",
@@ -20,7 +21,21 @@ SKIP = ("docs/수정기록.md", "docs/참고문서/", "docs/정본/", "docs/hand
         "content/clips_from_reels.json", "naver/pages.json",
         "naver/build_naver_42_46.py", "naver/build_naver_75_79.py",   # 원본 문구 — coaching_data.py REPLACE 가 만들 때 고친다(옛 조각이 있어야 REPLACE 가 맞는다). 결과는 pages_unpublished()가 본다
         "docs/감정서_마음코칭_장_설계", "docs/코칭_신청_자료_양식", "docs/자오선_검증보고서_운명학", "tools/seo/psy_research.py",   # 규칙 인용·시장 조사
-        "docs/모션_스토리보드_양식_2026-10-05", "docs/인스타_2건_줄이기안_2026-10-05", "docs/콘텐츠_개편안_2026-10-05", "docs/콘텐츠_기획안_모션그래픽_2026-10-05", "docs/템플릿_목록_돌려쓰기_2026-10-05")   # 10/5 기획 기록('정월의 상담실' 코너는 쓰지 않음)   # pages.json: 발행 끝난 글은 건드리지 않는다. 미발행 글은 아래 pages_unpublished()가 따로 본다
+        "docs/모션_스토리보드_양식_2026-10-05", "docs/인스타_2건_줄이기안_2026-10-05", "docs/콘텐츠_개편안_2026-10-05", "docs/콘텐츠_기획안_모션그래픽_2026-10-05", "docs/템플릿_목록_돌려쓰기_2026-10-05",   # 10/5 기획 기록(그 코너 이름은 쓰지 않음)
+        # 10/16: 손님에게 안 나가는 글인데 걸려서 검사가 늘 빨간불이었다(66건 중 진짜 위반은 8곳뿐).
+        # 늘 실패하는 검사는 없는 검사와 같다 — 아무도 안 본다. 그래서 아래를 뺀다.
+        "data/기준대장.json",                      # 기준 본문이 금지어를 인용한다
+        "data/previews.json",                      # 검사 결과 보관
+        "tools/tests/",                            # 시험 코드가 '상담 없음'을 확인한다
+        "docs/심리근거카드_",                       # 임상 참고(위기 기관 연결 안내 — 손님 글 아님)
+        "docs/유료코칭_조사노트",                   # 바깥 법·시장 조사
+        "docs/브랜드_일관성_마음과관계.md",          # 금지어 규칙 원본
+        "docs/결과화면_순서_", "docs/경쟁사_",      # 경쟁사 화면 기록
+        "docs/감정서_해석근거_조사결과",             # 조사 기록
+        "docs/SNS_STUDIO_라이브러리_",                # SKILL.md 사본 — 머리에 '대체됨'이라 적혀 있다
+        "docs/인스타에이전트스킬_훅26판정",          # 바깥 계정 조사 기록
+        "tools/osmu_psych_check.py")               # 이 금지어를 찾는 검사 코드 자신             # SKILL.md 사본 — 머리에 '대체됨'이라 적혀 있다
+        # pages.json: 발행 끝난 글은 건드리지 않는다. 미발행 글은 아래 pages_unpublished()가 따로 본다
 def tracked(repo):
     out = subprocess.run(["git", "-C", repo, "ls-files", "-z"], capture_output=True, text=True).stdout.split("\0")
     return [f for f in out if f.endswith(EXT)]
@@ -35,7 +50,8 @@ def scan_sources():
             except OSError: continue
             for n, line in enumerate(lines, 1):
                 t = ALLOW.sub("", line)
-                if f.endswith((".md", ".json")) and RULE.search(line): continue   # '상담은 쓰지 않는다'처럼 금지를 적은 규칙 문장
+                if RULE.search(line): continue        # '상담은 쓰지 않는다'·"'상담' 대신 '코칭'"처럼 금지를 적은 줄
+                if MARK.match(line): continue         # 주석 — 손님 글이 아니다(조사 기록이 주석으로 남아 있다)
                 m = BAN.search(t)
                 if m: hits.append(("소스", f"{name}/{f}:{n}", t[max(0, m.start() - 20):m.end() + 20]))
     return hits
