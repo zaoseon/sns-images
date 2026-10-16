@@ -55,6 +55,11 @@ def before(c, channel="insta_carousel", prev=None, prev_faces=None, prev_layouts
     P = _pal()
     cid = c.get("id", "?")
 
+    # 0. 규격표가 스스로 어긋나 있지 않은지 먼저 잰다 — 10/16 릴스 배지가 '자오선' 워드마크를
+    #    덮은 것은 channel_specs 의 구역이 겹쳐 있었던 탓인데, 규격을 재 보는 곳이 없었다.
+    if hasattr(CS, "check"):
+        bad += [f"[규격] {x}" for x in CS.check(channel)]
+
     # 1. 판은 색 조합 목록에서 고른다 (K-059·K-068). 눈대중 HEX 금지.
     if c.get("pal") not in P:
         bad.append(f"판 '{c.get('pal')}' 이 assets/palettes/color_combos.json 에 없어요. 목록에서 고르세요.")
@@ -102,11 +107,11 @@ def before(c, channel="insta_carousel", prev=None, prev_faces=None, prev_layouts
     def 범위(s):
         n = [int(x) for x in re.findall(r"\d+", s)]
         return (n[0], n[-1]) if n else (0, 9999)
-    lo, hi = 범위(fonts["title"])
-    if c.get("title_size") and not (lo <= c["title_size"] <= hi):
-        bad.append(f"제목 {c['title_size']}px 가 채널 규격({fonts['title']}) 밖이에요.")
-    if c.get("body_size") and c["body_size"] < 범위(fonts["body"])[0]:
-        bad.append(f"본문 {c['body_size']}px 는 너무 작아요({fonts['body']}).")
+    # 사양에 적은 글자 크기는 '바람'이다. 마지막 크기는 channel_specs 의 채널 범위가 정하고
+    # 빌더가 그 안으로 당긴다(같은 cards.json 을 캐러셀 3:4 와 릴스 9:16 에 그대로 쓰기 위함,
+    # 대표 10/16 "플랫폼이냐에 따라 해당 비율이 적용된 상태로 안전영역에 맞추든지").
+    # 그래서 범위 밖이라고 막지 않는다. 너무 작아지는 것은 채널 최소값과 실측 줄이기가 막는다.
+
 
     # 5. 글 — 자연어·입말·의미 단위 줄바꿈
     줄 = (list(c.get("hook", [])) + list(c.get("subs", [])) + [c.get("kick", ""), c.get("cta", "")]
@@ -130,15 +135,21 @@ def before(c, channel="insta_carousel", prev=None, prev_faces=None, prev_layouts
     CH2 = CS.CH[channel]
     ZZ = {z[0]: z[1:5] for z in CH2["zones"]}
     LY = c.get("layout", "L1")
+    _본문 = "본문·선택지" if "본문·선택지" in ZZ else "본문·그림"
     if LY == "L4":
         bh = c.get("band_h", 700)
         쓸높이 = bh - 56 - 230 - 6 - 210               # 띠 - 윗여백 - 제목 - 사이 - 마무리·고정
     else:
-        쓸높이 = ZZ["본문·선택지"][3] - ZZ["본문·선택지"][1]
+        쓸높이 = ZZ[_본문][3] - ZZ[_본문][1]
     필요 = 0
-    if c.get("big"): 필요 += int(c.get("big_size", 240) * 1.05) + 30
-    if c.get("items"):
-        필요 += (90 * len(c["items"]) + 26 * (len(c["items"]) - 1) + 30) if LY == "L8" else 148
+    # 큰 숫자는 채널 칸에 맞춰 빌더가 110px까지 줄인다(캐러셀 3:4 와 릴스 9:16 의 본문 칸이 다르다).
+    # 그래서 '줄일 수 있는 만큼 줄여도 안 들어가는가' 로 잰다.
+    if c.get("big"): 필요 += int(110 * 1.05) + (30 if (c.get("items") or c.get("subs")) else 0)
+    if c.get("items"):                                # 빌더(2026-igcover/build.py)와 같은 식으로 센다
+        n_ = len(c["items"])
+        필요 += {"L8": 90 * n_ + 26 * (n_ - 1), "L5": 86 * n_ + 20 * (n_ - 1)}.get(LY, 118)
+        if c.get("subs") and not c.get("subs_first"):
+            필요 += 30                                 # 목록 뒤에 본문 줄이 오면 사이값
     필요 += int(c.get("sub_size", 56) * 1.5) * len(c.get("subs", []))
     if 필요 > 쓸높이:
         bad.append(f"본문이 {필요}px 인데 들어갈 자리는 {쓸높이}px 이에요. 글끼리 겹칩니다 — "
@@ -148,7 +159,7 @@ def before(c, channel="insta_carousel", prev=None, prev_faces=None, prev_layouts
     #      배지를 넣을지는 글에 따라 가변이다. 넣을 때 안을 어떻게 채우느냐가 규칙이다.
     if c.get("kick"):
         lab_lo = 범위(fonts["label"])[0]
-        ks = c.get("kick_size", 68)
+        ks = max(lab_lo, c.get("kick_size", 68))      # 빌더가 채널 범위로 당긴 뒤의 크기로 잰다
         if ks < lab_lo:
             bad.append(f"배지 글자 {ks}px 가 라벨 규격({fonts['label']}) 아래예요. "
                        f"작게 줄이지 말고 배지를 키우거나 글자 수를 줄이세요.")
@@ -163,10 +174,9 @@ def before(c, channel="insta_carousel", prev=None, prev_faces=None, prev_layouts
     # 8-2. 본문 글자 크기 — 채널 규격 아래로 못 내려간다(가이드라인 2절)
     body_lo = 범위(fonts["body"])[0]
     if c.get("cta"):                                  # CTA 도 '너무 작은 글자 금지' 를 받는다(대표 10/16)
-        if c.get("cta_size", 58) < 52:
-            bad.append(f"CTA 글자 {c.get('cta_size')}px 는 작아요(52px 이상). 글을 줄이고 크기를 지키세요.")
-    if c.get("subs") and c.get("sub_size", 46) < body_lo:
-        bad.append(f"본문 {c.get('sub_size', 46)}px 가 채널 규격({fonts['body']}) 아래예요.")
+        if max(범위(fonts["body"])[0], c.get("cta_size", 58)) < 52:
+            bad.append("CTA 글자가 52px 아래예요. 글을 줄이고 크기를 지키세요.")
+
 
     # 9. 레이아웃 — 주제표에서 고르고, 앞 5편과 다르게 (K-077)
     if not c.get("layout"):
@@ -208,8 +218,9 @@ def after(path, c, channel="insta_carousel"):
         가장자리허용 = LY in ("L3", "L4") or "M1" in c.get("method", "")   # 띠형·배경 이미지형(M1)은 일부러 가장자리까지 간다
         if not 가장자리허용 and (l < sx0 - 2 or r < (W - sx1) - 2 or t < sy0 - 2):
             bad.append(f"내용이 안전 영역을 벗어났어요(위{t} 왼{l} 오{r} / 안전 영역 위{sy0} 옆{sx0}).")
-        if abs(l - r) > W * 0.06 and not c.get("face"):
-            bad.append(f"좌우 여백이 {l} 대 {r} 로 치우쳤어요.")
+        안왼, 안오 = int(xs[0]) - sx0, sx1 - int(xs[-1])          # 안전 영역 안쪽 여백
+        if abs(안왼 - 안오) > (sx1 - sx0) * 0.07 and not c.get("face"):
+            bad.append(f"안전 영역 안에서 좌우 여백이 {안왼} 대 {안오} 로 치우쳤어요.")
 
     # 위 쏠림 — 고정 요소(상단 띠·하단 주소)를 빼고 '내용'만 보고 잰다.
     # 10/16 1판은 고정 요소가 아래에 있어서 균형 검사를 그냥 통과했지만, 실제로는 아래 1/4 가 비어 있었다.

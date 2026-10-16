@@ -28,12 +28,38 @@ import fonts_kit as K, brand_frame as BF, channel_specs as CS, card_gate as G
 
 SET = os.environ.get("ZS_SET", "")            # 캐러셀 한 편을 따로 만들 때: ZS_SET=2026-igad
 BASE = os.path.join(ROOT, SET) if SET else HERE
-OUT = os.path.join(BASE, "cards")
 SPEC = os.path.join(BASE, "cards.json")
-CH = CS.CH["insta_carousel"]
-SX0, SY0, SX1, SY1 = CH["safe"]                      # 55, 55, 1025, 1385
-W, H = CH["w"], CH["h"]                              # 1080 x 1440
+# 같은 내용(cards.json)을 채널만 바꿔 다시 앉힌다. 대표 10/16:
+#   "캐러셀로 만든 이미지와 릴스나 클립은 비율이 다르니 ... 원본 이미지를 템플릿에 넣으면
+#    어떤 플랫폼이냐에 따라 해당 비율이 적용된 상태로 안전영역에 맞추든지"
+# 비율·안전 영역·구역·글꼴 크기는 전부 channel_specs 가 준다. 여기서 숫자를 만들지 않는다.
+CHAN = os.environ.get("ZS_CH", "insta_carousel")     # insta_carousel | reel | naver_clip
+CH = CS.CH[CHAN]
+SX0, SY0, SX1, SY1 = CH["safe"]
+W, H = CH["w"], CH["h"]
 Z = {z[0]: z[1:5] for z in CH["zones"]}              # 구역 이름 -> (x0,y0,x1,y1)
+BODY = "본문·선택지" if "본문·선택지" in Z else "본문·그림"   # 구역 이름은 채널마다 다르다
+KIND = "card" if CH["h"] <= 1500 else "reel"         # brand_frame 고정 요소 자리
+_나쁨 = CS.check(CHAN)                                # 규격표가 스스로 어긋나 있으면 그리기 전에 멈춘다
+if _나쁨: raise SystemExit("[막음] " + CHAN + " 규격이 어긋나 있어요 —\n  · " + "\n  · ".join(_나쁨))
+
+
+def 범위(t):
+    import re as _re
+    n = [int(x) for x in _re.findall(r"\d+", t)]
+    return (n[0], n[-1]) if n else (0, 9999)
+
+
+FT = {k: 범위(v) for k, v in CH["fonts"].items()}     # title/body/label 의 (최소, 최대)
+OUT = os.path.join(BASE, "cards" if CHAN == "insta_carousel" else "cards_" + CHAN)
+
+
+def 맞춤(값, 어디, 기본비=1.0):
+    """사양에 적힌 크기를 이 채널의 글꼴 범위 안으로 당긴다.
+    캐러셀에 쓴 96px 제목을 릴스(100~118)로 보내면 100 으로 올라가고, 거꾸로도 같다.
+    채널마다 글자 크기를 손으로 다시 적지 않아도 된다."""
+    lo, hi = FT[어디]
+    return max(lo, min(hi, int(값 if 값 else lo + (hi - lo) * 기본비)))
 
 
 def palettes():
@@ -78,7 +104,7 @@ def page(c, pal):
     elif c.get("강조글자"): sub_c = hx(c["강조글자"])
     else: sub_c = acc if contrast(acc, bg) >= 3.0 else fg
 
-    tz = Z["제목"]; bz = Z["본문·선택지"]
+    tz = Z["제목"]; bz = Z[BODY]
     LY0 = c.get("layout", "L1")
     align = "left" if (LY0 in ("L8", "L5", "L9") or c.get("face_col")) else "center"   # 승인본(_a4)은 가운데가 기본, 목록형만 왼쪽
     band = ""
@@ -114,12 +140,12 @@ def page(c, pal):
         f'display:flex;align-items:center;justify-content:{"flex-start" if align=="left" else "center"};'
         f'"><span style="display:inline-flex;align-items:center;justify-content:center;height:100%;'
         f'padding:0 40px;border-radius:999px;background:{acc};color:{"#141414" if lum(acc)>.38 else "#fff"};'
-        f'font-family:{K.B};font-weight:800;font-size:{c.get("kick_size",68)}px;line-height:1" '
-        f'data-fit="1" data-min="52" data-room="{lz[2]-lz[0]-80}">'
+        f'font-family:{K.B};font-weight:800;font-size:{맞춤(c.get("kick_size"), "label", .9)}px;line-height:1" '
+        f'data-fit="1" data-min="{FT["label"][0]}" data-room="{lz[2]-lz[0]-80}">'
         f'{c["kick"]}</span></div>')
 
     # 제목 — 페이퍼로지 84~112px, 의미 단위로 미리 끊어 둔 줄을 그대로 쓴다
-    ts = c.get("title_size", 104)
+    ts = 맞춤(c.get("title_size"), "title", .55)
     parts.append(
         f'<div style="position:absolute;left:{tz[0]}px;top:{tz[1]}px;width:{tz[2]-tz[0]}px;'
         f'font-family:{K.D};font-weight:900;font-size:{ts}px;line-height:1.28;color:{fg};text-align:{align}">'
@@ -143,7 +169,7 @@ def page(c, pal):
     if c.get("big"):
         bs = c.get("big_size", 240)
         블록.append(("big", c["big"], bs, int(bs * 1.05), 30))
-    ss0 = c.get("sub_size", 56)
+    ss0 = 맞춤(c.get("sub_size"), "body", .6)
     if c.get("subs_first"):
         for l in c.get("subs", []):
             블록.append(("sub", l, ss0, int(ss0 * 1.5), 30))
@@ -156,6 +182,15 @@ def page(c, pal):
         for l in c.get("subs", []):
             블록.append(("sub", l, ss0, int(ss0 * 1.5), 0))
     총높이 = sum(b[3] + b[4] for b in 블록) - (블록[-1][4] if 블록 else 0)
+    칸 = bz[3] - bz[1]
+    if 총높이 > 칸 and c.get("big"):            # 큰 숫자를 줄여 이 채널의 본문 칸에 맞춘다
+        for i, b in enumerate(블록):
+            if b[0] != "big":
+                continue
+            남 = 칸 - (총높이 - b[3] - b[4]) - b[4]
+            새 = max(110, int(남 / 1.05))
+            블록[i] = ("big", b[1], 새, int(새 * 1.05), b[4])
+        총높이 = sum(b[3] + b[4] for b in 블록) - (블록[-1][4] if 블록 else 0)
     # 제목이 짧으면 구역 사이에 죽은 공간이 생기고 큰 숫자가 아래로 밀린다(10/16 대표 지적).
     # 제목의 실제 아랫선을 재서 그 바로 아래부터 쌓는다.
     제목아래 = tz[1] + int(ts * 1.28 * len(c["hook"]))
@@ -172,14 +207,14 @@ def page(c, pal):
                          + (val.replace(c["big_hl"], f'<span style="color:{c["big_color"]}">{c["big_hl"]}</span>', 1)
                             if c.get("big_hl") else val) + '</div>')
         elif kind == "numlist":                       # L8 번호 리스트형 — 저장을 부른다
-            ns = 54
+            ns = 맞춤(None, "body", 1.0)
             rows = "".join(
                 f'<div style="display:flex;gap:26px;align-items:center;height:90px">'
                 f'<div style="flex:0 0 72px;height:72px;border-radius:999px;background:{sub_c};'
                 f'color:{"#141414" if lum(sub_c)>.38 else "#fff"};font-family:{K.D};font-weight:900;'
                 f'font-size:44px;display:flex;align-items:center;justify-content:center">{i+1}</div>'
                 f'<div style="font-family:{K.B};font-weight:800;font-size:54px;color:{fg};'
-                f'line-height:1.3;white-space:nowrap" data-fit="1" data-min="44" data-room="{wmax-98}">{t}</div></div>' for i, t in enumerate(val))
+                f'line-height:1.3;white-space:nowrap" data-fit="1" data-min="{FT["body"][0]}" data-room="{wmax-98}">{t}</div></div>' for i, t in enumerate(val))
             parts.append(f'<div style="position:absolute;left:{bz[0]}px;top:{y}px;width:{wmax}px;'
                          f'display:flex;flex-direction:column;gap:26px">{rows}</div>')
         elif kind == "steplist":                      # L5 좌측 3줄형 — 차례가 있는 안내
@@ -205,7 +240,7 @@ def page(c, pal):
             parts.append(f'<div style="position:absolute;left:{bz[0]}px;top:{y}px;width:{wmax}px;'
                          f'display:flex;gap:{g}px">{row}</div>')
         else:
-            parts.append(f'<div data-fit="1" data-min="46" style="position:absolute;left:{bz[0]}px;top:{y}px;'
+            parts.append(f'<div data-fit="1" data-min="{FT["body"][0]}" style="position:absolute;left:{bz[0]}px;top:{y}px;'
                          f'width:{wmax}px;font-family:{K.B};font-weight:800;font-size:{size}px;line-height:1.5;'
                          f'color:{fg};opacity:.92;white-space:nowrap;text-align:{align}">{val}</div>')
         y += hgt + gap
@@ -223,7 +258,7 @@ def page(c, pal):
     if c.get("cta"):                                  # 규격의 '버튼·마무리' 구역 — 행동 한 줄
         cz = Z["버튼·마무리"]
         if LY0 == "L4": cz = (cz[0], H - 190, cz[2], H - 110)
-        cw = 폭(cz[1], cz[3]); cs = c.get("cta_size", 58)
+        cw = 폭(cz[1], cz[3]); cs = 맞춤(c.get("cta_size"), "body", .7)
         단추 = c.get("cta_button")                     # 광고는 누를 곳이 보여야 한다
         칠 = (f'background:{acc};color:{"#141414" if lum(acc) > .38 else "#fff"};'
               f'border-radius:999px;padding:0 48px;' if 단추 else f'color:{fg};opacity:.88;')
@@ -269,7 +304,7 @@ def page(c, pal):
     return (f'<html><head><meta charset="utf-8"><style>{K.css_inline(c.get("display","pl"))}{BF.css(tone)}</style></head>'
             f'<body style="margin:0;width:{W}px;height:{H}px;position:relative;overflow:hidden;background:{bg};'
             f'color:{fg};word-break:keep-all;line-break:strict">'
-            + inner + BF.html("card", ai=bool(c.get("face")), tone=tone) + "</body></html>")
+            + inner + BF.html(KIND, ai=bool(c.get("face")), tone=tone) + "</body></html>")
 
 
 FIT_JS = """() => {
@@ -314,7 +349,7 @@ def main():
     pages, 쓴판, 쓴컷, 쓴틀 = [], [], [], []
     for c in spec["cards"]:                           # 관문이 먼저다 — 한 장이라도 걸리면 아무것도 안 그린다
         한편 = bool(spec.get("한 편"))
-        G.before(c, channel="insta_carousel",
+        G.before(c, channel=CHAN,
                  prev=[] if 한편 else 쓴판, prev_faces=[] if 한편 else 쓴컷,
                  prev_layouts=[] if 한편 else 쓴틀)
         쓴판.append(c["pal"])
@@ -330,7 +365,7 @@ def main():
     for c in spec["cards"]:                           # 그린 뒤 결과물을 숫자로
         if want and c["id"] not in want:
             continue
-        G.after(os.path.join(OUT, c["id"] + ".jpg"), c, channel="insta_carousel")
+        G.after(os.path.join(OUT, c["id"] + ".jpg"), c, channel=CHAN)
     print(f"결과물 검사 통과 ✓ · {len(pages)}장")
 
 

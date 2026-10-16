@@ -647,5 +647,131 @@
   "bpm": 118,
   "key": "G",
   "seed": 1615
+ },
+ {
+  "name": "rc-1013-pair",
+  "kind": "clip-rc",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "D",
+  "seed": 1600
+ },
+ {
+  "name": "rc-1014-rabbit",
+  "kind": "clip-rc",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 117,
+  "key": "F",
+  "seed": 1601
+ },
+ {
+  "name": "rc-1015-pick",
+  "kind": "clip-rc",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 126,
+  "key": "C",
+  "seed": 1602
+ },
+ {
+  "name": "rc-1016-ox",
+  "kind": "clip-rc",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 120,
+  "key": "G",
+  "seed": 1603
+ },
+ {
+  "name": "rc-1017-first",
+  "kind": "clip-rc",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "A",
+  "seed": 1604
+ },
+ {
+  "name": "rc-1018-slow",
+  "kind": "clip-rc",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 115,
+  "key": "E",
+  "seed": 1605
+ },
+ {
+  "name": "rc-1019-talk",
+  "kind": "clip-rc",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 128,
+  "key": "D",
+  "seed": 1606
+ },
+ {
+  "name": "rc-1020-star",
+  "kind": "clip-rc",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 116,
+  "key": "F",
+  "seed": 1607
+ },
+ {
+  "name": "rc-1021-speed",
+  "kind": "clip-rc",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 122,
+  "key": "C",
+  "seed": 1608
+ },
+ {
+  "name": "rc-1022-ziwei",
+  "kind": "clip-rc",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 117,
+  "key": "G",
+  "seed": 1609
+ },
+ {
+  "name": "rc-1023-tiger",
+  "kind": "clip-rc",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 126,
+  "key": "A",
+  "seed": 1610
+ },
+ {
+  "name": "rc-1024-im",
+  "kind": "clip-rc",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 118,
+  "key": "E",
+  "seed": 1611
+ },
+ {
+  "name": "rc-1025-pig",
+  "kind": "clip-rc",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 122,
+  "key": "D",
+  "seed": 1612
+ },
+ {
+  "name": "rc-1026-match",
+  "kind": "clip-rc",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 116,
+  "key": "F",
+  "seed": 1613
  }
 ]

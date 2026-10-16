@@ -32,9 +32,12 @@ CH = CS.CH["reel"]
 W, H = CH["w"], CH["h"]                       # 1080 x 1920
 SX0, SY0, SX1, SY1 = CH["safe"]               # 50, 330, 900, 1470
 L, CW = 70, 810                               # 글 기둥: 안전 영역 안
-TY = BF.REEL["tag_top"] + 90                  # 430 — 상단 고정 줄(자오선·교차분석) 아래부터
-BY = H - BF.REEL["bottom"] - 65               # 1400 — 하단 고정 줄(zaoseon.com) 위까지
-TH_ = BY - TY                                 # 970 — 글이 쓸 수 있는 세로
+Z = {z[0]: z[1:5] for z in CH["zones"]}       # 구역은 channel_specs 가 정한다. 여기서 숫자를 만들지 않는다
+TY = Z["상단 라벨"][1]                         # 490 — 상단 고정 줄에서 100px 아래(대표 10/16)
+BY = Z["버튼·마무리"][3]                        # 1380 — 하단 고정 줄 위까지
+TH_ = BY - TY                                 # 890 — 글이 쓸 수 있는 세로
+_나쁨 = CS.check("reel")                       # 규격표가 스스로 어긋나 있으면 그리기 전에 멈춘다
+if _나쁨: raise SystemExit("[막음] 릴스 규격이 어긋나 있어요 —\n  · " + "\n  · ".join(_나쁨))
 FPS, SEC = 24, 14.0
 NF = int(FPS * SEC)
 OUT = os.path.join(HERE, "reel")
@@ -77,18 +80,18 @@ def html():
           + 줄("a2", "사주만 봤다면", 110, INK, 170)
           + 줄("a3", "반쪽만", 110, ACC, 316)
           + 줄("a4", "들은 거예요", 110, ACC, 462)
-          + 줄("a5", "동서양 여섯 가지를", 58, INK, 740, "B")
-          + 줄("a6", "겹쳐서 읽어요", 58, INK, 816, "B"))
+          + 줄("a5", "동서양 여섯 가지를", 58, INK, 700, "B")
+          + 줄("a6", "겹쳐서 읽어요", 58, INK, 776, "B"))
     s2 = (알약("b1", "직접 세어 봤어요", 44, 0, ACC, "#171717")
           + 줄("b2", "사주와 하락이수,", 104, INK, 170)
           + 줄("b3", "얼마나 같을까요?", 104, INK, 308)
-          + f'<div id="b4" class="an" style="position:absolute;left:0;top:500px;width:{CW}px;'
+          + f'<div id="b4" class="an" style="position:absolute;left:0;top:450px;width:{CW}px;'
             f'font-family:{K.D};font-weight:900;font-size:230px;line-height:1;color:{ACC};'
             f'white-space:nowrap"><span id="bnum">0.0</span>%</div>'
-          + 줄("b5", "무작위 3,000명을", 56, INK, 810, "B")
-          + 줄("b6", "하나하나 계산했어요", 56, INK, 882, "B"))
+          + 줄("b5", "무작위 3,000명을", 56, INK, 730, "B")
+          + 줄("b6", "하나하나 계산했어요", 56, INK, 802, "B"))
     행 = lambda i, n, t: (
-        f'<div id="c{i}" class="an" style="position:absolute;left:0;top:{300 + (i - 1) * 128}px;'
+        f'<div id="c{i}" class="an" style="position:absolute;left:0;top:{290 + (i - 1) * 124}px;'
         f'display:flex;gap:26px;align-items:center;width:{CW}px">'
         f'<div style="flex:0 0 72px;height:72px;border-radius:999px;background:{ACC};color:#171717;'
         f'font-family:{K.D};font-weight:900;font-size:40px;display:flex;align-items:center;'
@@ -99,15 +102,15 @@ def html():
           + 줄("cT", "한 가지만 보면", 104, INK, 140)
           + 행(1, 1, "동양 사주·자미두수") + 행(2, 2, "서양 별자리·수비학")
           + 행(3, 3, "옛 셈법 하락이수·당사주")
-          + 줄("c4", "여섯이 같게 말하는 곳이", 54, ACC, 740, "B")
-          + 줄("c5", "타고난 자리예요", 54, ACC, 812, "B"))
+          + 줄("c4", "여섯이 같게 말하는 곳이", 54, ACC, 706, "B")
+          + 줄("c5", "타고난 자리예요", 54, ACC, 778, "B"))
     s4 = (알약("d1", "마음 코칭까지", 44, 0, ACC, "#171717")
           + 줄("d2", "성격만 말하고", 110, INK, 170)
           + 줄("d3", "끝내지 않아요", 110, INK, 316)
-          + 줄("d4", "타고난 성격을 읽고,", 56, INK, 540, "B")
-          + 줄("d5", "요즘 마음을 묻고,", 56, INK, 612, "B")
-          + 줄("d6", "오늘 해 볼 일 하나까지", 56, INK, 684, "B")
-          + 알약("d7", "프로필 링크에서 무료로 보기", 54, 840, ACC, "#171717"))
+          + 줄("d4", "타고난 성격을 읽고,", 56, INK, 510, "B")
+          + 줄("d5", "요즘 마음을 묻고,", 56, INK, 582, "B")
+          + 줄("d6", "오늘 해 볼 일 하나까지", 56, INK, 654, "B")
+          + 알약("d7", "프로필 링크에서 무료로 보기", 54, 790, ACC, "#171717"))
     body = (장면(1, 0.0, 3.3, s1) + 장면(2, 3.3, 7.1, s2)
             + 장면(3, 7.1, 10.7, s3) + 장면(4, 10.7, 14.0, s4))
     return (f'<html><head><meta charset="utf-8"><style>{K.css_inline("gm")}{BF.css("dark")}'

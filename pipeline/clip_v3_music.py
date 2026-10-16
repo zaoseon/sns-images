@@ -7,7 +7,12 @@ clips_v3.py가 소리 없이 렌더했다(clip_music.py는 옛 clips_sop만 다�
 import os, sys, glob, json, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, "..")); sys.path.insert(0, HERE)
 import reel_music as RM
-SRC = os.path.join(ROOT, "clips_v3s"); OUT = os.path.join(ROOT, "clips_v3m")
+# 10/16: clips_reel 14편에도 같은 엔진·같은 음색으로 붙이려고 폴더를 바꿔 끼울 수 있게 했다
+# (K-070 의 남은 숙제였다 — 이 컨테이너에 fluidsynth 가 없어서 미뤄져 있었다).
+# 보기: ZS_SRC=clips_reel ZS_OUT=clips_reelm ZS_PRE=rc- python3 pipeline/clip_v3_music.py
+SRC = os.path.join(ROOT, os.environ.get("ZS_SRC", "clips_v3s"))
+OUT = os.path.join(ROOT, os.environ.get("ZS_OUT", "clips_v3m"))
+PRE = os.environ.get("ZS_PRE", "v3-")
 STYLES = ["상큼 팝", "발랄 우쿨렐레", "경쾌 신스팝", "통통 마림바"]; KEYS = ["D", "F", "C", "G", "A", "E"]
 
 def dur(p):
@@ -17,16 +22,16 @@ def add(cid, i):
     src = os.path.join(SRC, cid + ".mp4"); dst = os.path.join(OUT, cid + ".mp4")
     style = STYLES[i % 4]; key = KEYS[i % len(KEYS)]; seed = 1600 + i; total = dur(src)
     bpm = RM.pick_bpm(style, seed); beats = max(8, (total - 0.3) / (60.0 / bpm))
-    wav = f"/tmp/clipv3m_{cid}.wav"; RM.compose_up(style, beats, seed, wav, key=key, bpm=bpm, tail=0.3)
+    wav = f"/tmp/clipmusic_{cid}.wav"; RM.compose_up(style, beats, seed, wav, key=key, bpm=bpm, tail=0.3)
     fo = max(0.0, total - 0.5)
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", src, "-i", wav, "-map", "0:v", "-map", "1:a", "-c:v", "copy",
                     "-af", f"afade=t=out:st={fo:.2f}:d=0.5", "-c:a", "aac", "-b:a", "128k", "-t", f"{total:.3f}", "-movflags", "+faststart", dst], check=True)
-    return dict(name=cid, kind="clip-v3", style=style, mode="up", bpm=bpm, key=key, seed=seed)
+    return dict(name=cid, kind="clip-v3" if PRE == "v3-" else "clip-" + PRE.strip("-"), style=style, mode="up", bpm=bpm, key=key, seed=seed)
 
 if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)
-    ids = sys.argv[1:] or sorted(os.path.basename(p)[:-4] for p in glob.glob(os.path.join(SRC, "v3-*.mp4")))
-    allids = sorted(os.path.basename(p)[:-4] for p in glob.glob(os.path.join(SRC, "v3-*.mp4")))
+    ids = sys.argv[1:] or sorted(os.path.basename(p)[:-4] for p in glob.glob(os.path.join(SRC, PRE + "*.mp4")))
+    allids = sorted(os.path.basename(p)[:-4] for p in glob.glob(os.path.join(SRC, PRE + "*.mp4")))
     logp = os.path.join(ROOT, "content", "music_log.json"); log = json.load(open(logp))
     for cid in ids:
         e = add(cid, allids.index(cid)); print(cid, e["style"], e["bpm"], e["key"])
