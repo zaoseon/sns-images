@@ -206,13 +206,20 @@ def related_cards(pid, body, ru):
             m = re.search(r'<p[^>]*>(?:(?!</p>).)*href="' + re.escape(_h.escape(ru, quote=True)) + r'"(?:(?!</p>).)*</p>', body, re.S) or \
                 re.search(r'<p[^>]*>(?:(?!</p>).)*href="' + re.escape(ru) + r'"(?:(?!</p>).)*</p>', body, re.S)
             if m: body = body[:m.end()] + "<!--LINKCARD-->" + body[m.end():]; at = m.end() + len("<!--LINKCARD-->"); continue
-        extra.append((c.get("url").strip(), (c.get("title") or titles.get(u) or "").strip()))
+        extra.append((c.get("url").strip(), (c.get("title") or titles.get(u) or "").strip(), c.get("kind") or "글"))
     if extra:
         blk = ""
-        for u, t in extra:
-            t = t.split(", ")[0].strip() or "함께 볼 글"
+        for u, t, kind in extra:   # 클립 카드(kind=클립)는 블로그 글이 아니다: 그 주소 그대로 카드 자리만(서브 노트북 10/16)
+            t = t.split(", ")[0].strip() or ("자오선 클립" if kind == "클립" else "함께 볼 글")
+            if kind == "클립":   # 클립 제목 칸은 설명 전체가 들어 있다 → 앞 몇 낱말(한 줄)만 + ' 클립'
+                w_, out_ = t.split(), ""
+                for x_ in w_:
+                    if len(out_) + len(x_) > 11: break
+                    out_ = (out_ + " " + x_).strip()
+                t = (out_ or t[:11]) + " 클립"
             lines = FB.wrap(_h.escape(t), FB.BODY_LIMIT, 0.0, 17.0)
-            blk += FB.BLANK() + FB.P("👇 이 글도 같이 읽어 보세요.") + FB.P('<a href="' + _h.escape(u, quote=True) + '">' + "<br>".join(lines) + "</a>") + "<!--LINKCARD-->"
+            lead = "👇 영상으로도 볼 수 있어요." if kind == "클립" else "👇 이 글도 같이 읽어 보세요."
+            blk += FB.BLANK() + FB.P(lead) + FB.P('<a href="' + _h.escape(u, quote=True) + '">' + "<br>".join(lines) + "</a>") + "<!--LINKCARD-->"
         if at is None:   # 기본 연결글 카드가 없으면 CTA 배너 앞(없으면 끝)
             m = re.search(r'<p[^>]*>(?:(?!</p>).)*naver_cta\d', body, re.S); at = m.start() if m else len(body)
         body = body[:at] + blk + body[at:]
