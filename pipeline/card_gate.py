@@ -57,6 +57,17 @@ def 세트(cards, channel="insta_carousel", 한편=False, 이름=""):
         return []
     bad = []
     꼬리 = f" [{이름}]" if 이름 else ""
+    import copy_rules as CR
+
+    def 첫줄(c):
+        h = c.get("hook")
+        return (h[0] if isinstance(h, list) and h else (h or ""))
+
+    # 첫 1초에 체계 이름을 넣지 않는다 — K-102. 표지(한 편의 첫 장, 낱장은 그 장)에만 건다.
+    표지 = [cards[0]] if (한편 and cards) else list(cards)
+    for c in 표지:
+        for x in CR.첫줄검사(첫줄(c)):
+            bad.append(f"{c.get('id','?')} 표지: {x}")
 
     def 속(c):
         """이 장이 할 말을 담고 있나 — 제목만 있고 비면 '부실'이다."""
@@ -161,9 +172,12 @@ def before(c, channel="insta_carousel", prev=None, prev_faces=None, prev_layouts
         if len(c["hook"]) > 1 and any(len(l.strip()) <= 2 for l in c["hook"]):
             bad.append("제목에 두 글자 이하 줄이 있어요. 의미 단위로 고르게 나누세요.")
 
-    # 6. 훅 유형 (K-064) — 열한 가지에서 돌려 쓴다
-    if not c.get("훅"):
-        bad.append("훅 유형을 사양에 적으세요(K-064 열한 가지 중 하나). 안 적으면 같은 유형만 쓰게 돼요.")
+    # 6. 훅 유형 (K-064) — 열한 가지에서 돌려 쓴다.
+    #    10/16까지는 '적었는지'만 봤다. 값이 목록 안인지는 아무도 안 봐서 아무 말이나 적어도 지나갔다.
+    import copy_rules as CR
+    bad += CR.훅검사(c.get("훅"))
+    # 체계 이름 금지(K-102)는 **표지에만** 건다 — 세트() 가 첫 장에 대고 부른다.
+    # 본문 장에서 하락이수를 설명하는 것은 정상이다. 여기서 모든 장에 걸면 본문을 못 쓴다.
 
     # 7. 쌓은 높이가 구역을 넘는가 — 넘치면 글끼리 겹친다(10/16 L4 띠에서 났다)
     CH2 = CS.CH[channel]
