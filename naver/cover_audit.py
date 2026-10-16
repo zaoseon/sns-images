@@ -31,9 +31,9 @@ def run():
         a = np.asarray(im.convert("L"), float)
         if max(a[:, :236].std(), a[:, 964:].std()) > 3: bad.append((pid, cov, "양옆 240px 띠에 글자·그림이 있음(가운데 720 밖)"))
         d = v.get("cover_layout") or lay.get(pid)
-        if cov.endswith("_a3.jpg"): continue          # v3c(10/16, K-061): 정월 없는 글자형 표지 — 얼굴이 없어 가운데로 잘린다
+        if cov.endswith(("_a3.jpg", "_a4.jpg")): continue          # v3c(10/16, K-061): 정월 없는 글자형 표지 — 얼굴이 없어 가운데로 잘린다
         if v.get("dt", "") >= "2026-10-16T12:00":
-            bad.append((pid, cov, "10/16부터 올릴 글 표지는 cover_v3(정월 없는 글자형, *_a3.jpg)이어야 함(K-061). 띠·큰 숫자·달력 구도도 얼굴이 옆이라 잘림(10/16 n64)")); continue
+            bad.append((pid, cov, "10/16부터 올릴 글 표지는 cover_v3(정월 없는 글자형, *_a3·_a4.jpg)이어야 함(K-061). 띠·큰 숫자·달력 구도도 얼굴이 옆이라 잘림(10/16 n64)")); continue
         if d in TEXT_TYPES: bad.append((pid, cov, f"글자형 구도 {d}: 정월 얼굴이 옆에 있어 목록에서 얼굴 쪽으로 잘림. thumb_sq 의 QCS(얼굴 가운데)로 새 이름 *_c.jpg 를 만들고 cover_layout='QCS'"))
     return bad
 

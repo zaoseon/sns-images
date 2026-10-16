@@ -78,12 +78,14 @@ def run(pid):
     a4 = f"wide/naver_z{n}_a4.jpg"; V.render(pid, T[pid], os.path.join(HERE, "img", a4), pick[pid]); made["cover"] = a4
     # 본문 정보 이미지
     cap = capture(pid)
+    bodyu = urllib.parse.unquote(v["body"])
     for base, d in cap.items():
-        m = re.match(r"naver_z(\d+)_([a-z]+)\.jpg$", base)
-        if not m or int(m.group(1)) != n: continue
+        if not any(base[:-4] + s_ in bodyu for s_ in (".jpg", "3.jpg", "4.jpg")): continue   # 이 글 본문에 있는 사진만(옛 이름 naver_y03_… 포함)
         new = base.replace(".jpg", "4.jpg")
         if d[0] == "table": B.table_v3(new, c, d[1], d[2], d[3])
-        elif d[0] == "rows": B.rows_v3(new, c, d[1], d[2])
+        elif d[0] == "rows":   # 해 볼 것은 번호 원, 나머지(날짜·띠·이름이 열쇠인 목록)는 이름표가 앞에 오는 표 모양(10/16: 손없는날 날짜가 작은 줄로 밀린 것 고침)
+            if "해 볼" in d[1] or "할 일" in d[1]: B.rows_v3(new, c, d[1], d[2])
+            else: B.table_v3(new, c, d[1], [], [[it[0], it[1], (it[2] if len(it) > 2 and it[2] else "")] for it in d[2]])
         elif d[0] == "intro": B.intro_v3(new, c, d[1], d[2], d[3], T[pid].get("face") or "v1_lowbun")
         elif d[0] == "bars": B.table_v3(new, c, d[1], [], [[a, b] for a, b in d[2]])
         made[base] = new
@@ -98,7 +100,8 @@ def run(pid):
     for old, new in made.items():
         if old == "cover": continue
         stem = old[:-4]
-        b = re.sub(rf"(/naver/img/)(?:m1280/)?{re.escape(stem)}3?\.jpg", rf"\g<1>{new}", b)
+        for st in (stem, urllib.parse.quote(stem)):
+            b = re.sub(rf"(/naver/img/)(?:m1280/)?{re.escape(st)}3?\.jpg", lambda m_: m_.group(1) + urllib.parse.quote(new) if st != stem else m_.group(1) + new, b)
     if q and q not in b:
         i = b.find("심리학으로 읽으면"); j = b.find("<p>📚", i); k = b.find("</p>", j) + 4 if j > 0 else -1
         if k > 3:
@@ -115,4 +118,7 @@ def run(pid):
     return files
 
 if __name__ == "__main__":
-    for p in [a for a in sys.argv[1:] if a.startswith("n")]: print(p, run(p))
+    LOCK = {"n51"}   # 10/16 13:20 먼저 확정해 서브 노트북이 예약을 다시 건 글 — 같은 이름으로 다시 만들지 않는다
+    for p in [a for a in sys.argv[1:] if a.startswith("n")]:
+        if p in LOCK: print(p, "확정된 글이라 건너뜀"); continue
+        print(p, run(p))

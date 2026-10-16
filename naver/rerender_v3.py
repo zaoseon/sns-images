@@ -9,8 +9,10 @@ HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE); sys
 import imgkit as K, render as R
 import cover_v3 as V
 
+SUF = os.environ.get("RV_SUF", "3"); PICKF = os.environ.get("RV_PICK", "cover_v3_pick.json")   # 10/16 v5: RV_SUF=4 RV_PICK=cover_v5_pick.json
 def body_pal(pid, pick):
     p = pick.get(pid) or V.EL_PAL_B[V.all_configs()[pid]["el"]]
+    if p.endswith("_s") or p.endswith("_d"): return p      # v5 꽉 찬 판은 그대로
     e = next(x for x in V.PAL if x["id"] == p.replace("_inv", ""))
     if "pair" in e and not p.endswith("_inv"): p += "_inv"
     if p == "y_pink": return "p_red"        # 핑크 판은 강조색이 흰색이라 흰 칸 위 글자가 안 보인다 → 본문은 같은 계열 핑크&레드(옅은 핑크 바탕)
@@ -18,12 +20,12 @@ def body_pal(pid, pick):
     return p
 
 def run(ids, write=False):
-    pick = json.load(open(os.path.join(HERE, "cover_v3_pick.json"), encoding="utf-8"))
+    pick = json.load(open(os.path.join(HERE, PICKF), encoding="utf-8"))
     made = []
     K.Cv.watermark = lambda *a, **k: None
     _save = K.Cv.save
     def save(s_, name):
-        nn = re.sub(r"\.jpg$", "3.jpg", name); made.append((name, nn)); _save(s_, nn)
+        nn = re.sub(r"\.jpg$", SUF + ".jpg", name); made.append((name, nn)); _save(s_, nn)
     K.Cv.save = save
     import add_extra_images as AX
     cur = {}
@@ -53,13 +55,14 @@ def run(ids, write=False):
     reg0 = json.load(open(os.path.join(HERE, "pages.json"), encoding="utf-8"))
     def want_of(pid):   # 그 글 본문에 있는 사진 이름만 그린다(글마다 판 색이 달라서 글 하나씩)
         w = {urllib.parse.unquote(os.path.basename(u)) for u in re.findall(r'naver/img/(?:m1280/)?([^"]+?\.jpg)', reg0[pid]["body"])}
-        return w | {re.sub(r"3\.jpg$", ".jpg", x) for x in w}                  # 이미 *3.jpg로 바뀐 본문도 다시 그릴 수 있게
+        if os.environ.get("RV_ONLY3"): w = {x for x in w if x.endswith("3.jpg") and not x.endswith("_a3.jpg")}   # 아직 옛 판(*3)으로 남은 사진만
+        return w | {re.sub(r"[34]\.jpg$", ".jpg", x) for x in w}                  # 이미 *3.jpg로 바뀐 본문도 다시 그릴 수 있게
     want = set()
     K._skip = lambda path: urllib.parse.unquote(os.path.basename(path)) not in want   # 글 번호가 없는 옛 이름(naver_y03_양띠할일 등)도 본문에 있으면 그린다
     T = V.all_configs()
     PG = os.path.join(HERE, "pages.json"); keep = open(PG, encoding="utf-8").read()
     # 한눈에 보기·점수 카드는 본문에 옛 이름(_i.jpg)이 있어야 다시 그린다 → 그리는 동안만 *3.jpg를 옛 이름으로 돌려 둔다(끝나면 원래대로)
-    open(PG, "w", encoding="utf-8").write(re.sub(r"(naver_z(?!53_[kvs])\d+_[a-z]+)3\.jpg", r"\1.jpg", keep))
+    open(PG, "w", encoding="utf-8").write(re.sub(r"(naver_z(?!53_[kvs])\d+_[a-z]+)[34]\.jpg", r"\1.jpg", keep))
     try:
       for pid in ids:
         cur["pal"] = body_pal(pid, pick); cur["face"] = T[pid].get("face") or "v1_lowbun"; want.clear(); want.update(want_of(pid))

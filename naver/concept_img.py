@@ -307,7 +307,7 @@ def screen_wide_k(name, head, shot, crop_h, mode="dark"):
     st = KEY[mode]; im = Image.open(shot).convert("RGB"); im = im.crop((0, 0, im.width, min(crop_h, im.height)))
     w = RT - L - 120; h = int(im.height * w / im.width); H = h + 260; cv = Cv(H, st["bg"]); k_head(cv, head, st)
     x0, y0, pad = L + 60, 180, 18
-    cv.rr([x0 - pad, y0 - pad, x0 + w + pad, y0 + h + pad], 40, fill=st["frame"], outline=st["line"], w=1.5)
+    cv.rr([x0 - pad, y0 - pad, x0 + w + pad, y0 + h + pad], 40, fill=st.get("frame", st["ink"]), outline=st["line"], w=1.5)
     cv.img.paste(im.resize((int(w * K.S), int(h * K.S))), (int(x0 * K.S), int(y0 * K.S)))
     cv.save(name)
 
