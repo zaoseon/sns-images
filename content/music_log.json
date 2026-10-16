@@ -773,5 +773,149 @@
   "bpm": 116,
   "key": "F",
   "seed": 1613
+ },
+ {
+  "name": "v2-1016-n33",
+  "kind": "clip-v2",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "D",
+  "seed": 1600
+ },
+ {
+  "name": "v2-1017-n49",
+  "kind": "clip-v2",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 117,
+  "key": "F",
+  "seed": 1601
+ },
+ {
+  "name": "v2-1018-n34",
+  "kind": "clip-v2",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 126,
+  "key": "C",
+  "seed": 1602
+ },
+ {
+  "name": "v2-1019-n35",
+  "kind": "clip-v2",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 120,
+  "key": "G",
+  "seed": 1603
+ },
+ {
+  "name": "v2-1020-n51",
+  "kind": "clip-v2",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "A",
+  "seed": 1604
+ },
+ {
+  "name": "v2-1021-n36",
+  "kind": "clip-v2",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 115,
+  "key": "E",
+  "seed": 1605
+ },
+ {
+  "name": "v2-1022-n37",
+  "kind": "clip-v2",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 128,
+  "key": "D",
+  "seed": 1606
+ },
+ {
+  "name": "v2-1023-n38",
+  "kind": "clip-v2",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 116,
+  "key": "F",
+  "seed": 1607
+ },
+ {
+  "name": "v2-1024-n39",
+  "kind": "clip-v2",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 122,
+  "key": "C",
+  "seed": 1608
+ },
+ {
+  "name": "v2-1025-n40",
+  "kind": "clip-v2",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 117,
+  "key": "G",
+  "seed": 1609
+ },
+ {
+  "name": "v2-1026-n41",
+  "kind": "clip-v2",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 126,
+  "key": "A",
+  "seed": 1610
+ },
+ {
+  "name": "v2-1027-n42",
+  "kind": "clip-v2",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 118,
+  "key": "E",
+  "seed": 1611
+ },
+ {
+  "name": "v2-1028-n43",
+  "kind": "clip-v2",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 122,
+  "key": "D",
+  "seed": 1612
+ },
+ {
+  "name": "v2-1029-n44",
+  "kind": "clip-v2",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 116,
+  "key": "F",
+  "seed": 1613
+ },
+ {
+  "name": "v2-1030-n45",
+  "kind": "clip-v2",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 125,
+  "key": "C",
+  "seed": 1614
+ },
+ {
+  "name": "v2-1031-n46",
+  "kind": "clip-v2",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 118,
+  "key": "G",
+  "seed": 1615
  }
 ]

@@ -7,40 +7,54 @@ import os, sys, math, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, ".."); sys.path.insert(0, HERE)
 import fonts_kit as K, clip_motion as M, safezone as Z, reel_music as RM, palette as P, music_plan as MP, face_plan as FP
 from PIL import Image, ImageDraw, ImageFilter
-P.apply_to_engine(M); M.BLACK = K.P["pr_xb"]; SER = os.path.join(HERE, "fonts", "serif.otf"); GM = K.P["gm_bold"]; PR = K.P["pr_xb"]; BOLD = GM; GOLD = P.C2["hi"]; GOLDA = GOLD + (255,); CX = M.CX
-CARDS = [("東", P.C2["pt"], "1"), ("西", P.C2["hi"], "2"), ("數", (255, 255, 255), "3")]
+P.apply_to_engine(M); M.BLACK = K.P["pr_xb"]; SER = os.path.join(HERE, "fonts", "serif.otf"); GM = K.P["gm_bold"]; PR = K.P["pr_xb"]; BOLD = GM; CX = M.CX
+유형 = "훅·질문 표지"      # 10/16 기획 표(asset_lib.바탕표·판표)에서 이 글이 어디에 드는지 — 바탕과 판을 이 이름으로 고른다
+
+# 색은 그릴 때 판에서 읽는다(10/16). 예전에는 금색 하나로 박혀 있어서 판을 돌려도 색이 안 바뀌었다 — K-071 의 '작은 층'만 바뀌는 꼴.
+def 강조(a=255): return M.ACC(a)
+def 밝은(a=255): return M.WHITE[:3] + (a,)
+def _밝기(c): return (0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]) / 255
+def CARDS():
+    """카드 세 장의 색 — 판의 강조색·글색·보조색에서 가져온다. 서로 또렷하게 달라야 번호를 가리킬 수 있다."""
+    acc, ink, sub = M.GOLD[:3], M.WHITE[:3], M.DIM[:3]
+    if abs(_밝기(sub) - _밝기(ink)) < 0.18:      # 보조색이 글색과 닮았으면 강조색을 어둡게 돌려 쓴다
+        sub = tuple(int(v * 0.55) for v in acc)
+    return [("東", acc, "1"), ("西", ink, "2"), ("數", sub, "3")]
 _c = {}
-def card_layer(h, col):
-    k = (h, col)
+def card_layer(h, col, body_col, acc):
+    k = (h, col, body_col, acc)
     if k in _c: return _c[k]
     w, hh = 258, 398; im = Image.new("RGBA", (w + 24, hh + 24), (0, 0, 0, 0)); g = Image.new("RGBA", (w + 24, hh + 24), (0, 0, 0, 0))
     ImageDraw.Draw(g).rounded_rectangle((12, 12, 12 + w, 12 + hh), radius=34, fill=col + (110,)); g = g.filter(ImageFilter.GaussianBlur(18)); im.alpha_composite(g)
     body = Image.new("RGBA", (w, hh)); bd = ImageDraw.Draw(body)
-    for y in range(hh): t = y / hh; bd.line((0, y, w, y), fill=(int(30 + 14 * t), int(38 + 16 * t), int(74 + 26 * t), 255))
+    for y in range(hh):   # 카드 바탕은 판의 카드색에서 위는 밝게 아래는 어둡게
+        t = y / hh; bd.line((0, y, w, y), fill=tuple(min(255, int(v * (1.0 + 0.45 * t))) for v in body_col) + (255,))
     m = Image.new("L", (w, hh), 0); ImageDraw.Draw(m).rounded_rectangle((0, 0, w - 1, hh - 1), radius=32, fill=255); body.putalpha(m); im.alpha_composite(body, (12, 12))
-    d = ImageDraw.Draw(im); d.rounded_rectangle((12, 12, 12 + w, 12 + hh), radius=34, outline=GOLD + (255,), width=6); d.rounded_rectangle((30, 30, 12 + w - 18, 12 + hh - 18), radius=24, outline=GOLD + (110,), width=2)
+    d = ImageDraw.Draw(im); d.rounded_rectangle((12, 12, 12 + w, 12 + hh), radius=34, outline=acc + (255,), width=6); d.rounded_rectangle((30, 30, 12 + w - 18, 12 + hh - 18), radius=24, outline=acc + (110,), width=2)
     cx, cy = 12 + w // 2, 12 + hh // 2 - 8
     for r, a in ((96, 40), (84, 80)): d.ellipse((cx - r, cy - r, cx + r, cy + r), outline=col + (a,), width=3)
-    d.ellipse((cx - 72, cy - 72, cx + 72, cy + 72), fill=col + (255,)); d.text((cx, cy - 4), h, font=M.font(SER, 92), fill=((41, 51, 92, 255) if col == (255, 255, 255) else (255, 255, 255, 255)), anchor="mm")
-    for (sx, sy) in ((46, 52), (w - 22, 52), (46, hh - 28), (w - 22, hh - 28)): d.text((sx, sy), "✦", font=M.font(M.MED, 26), fill=GOLD + (170,), anchor="mm")
+    글색 = (26, 26, 30, 255) if _밝기(col) > 0.55 else (255, 255, 255, 255)   # 동그라미 색에 맞춰 글자색을 고른다(대비)
+    d.ellipse((cx - 72, cy - 72, cx + 72, cy + 72), fill=col + (255,)); d.text((cx, cy - 4), h, font=M.font(SER, 92), fill=글색, anchor="mm")
+    for (sx, sy) in ((46, 52), (w - 22, 52), (46, hh - 28), (w - 22, hh - 28)): d.text((sx, sy), "✦", font=M.font(M.MED, 26), fill=acc + (170,), anchor="mm")
     _c[k] = im; return im
-def title(c, s, y, t0, size, color=M.WHITE, lh=1.4): return M.text(c, s, y, t0, size, color=(color + (255,) if len(color) == 3 else color), path=GM, maxw=820, lh=lh, stagger=0.2)
-def small(c, s, y, t0, size, color=M.WHITE): return M.text(c, s, y, t0, size, color=(color + (255,) if len(color) == 3 else color), path=PR, maxw=820, lh=1.5, stagger=0.15)
+def title(c, s, y, t0, size, color=None, lh=1.4): color = color or M.WHITE; return M.text(c, s, y, t0, size, color=(color + (255,) if len(color) == 3 else color), path=GM, maxw=820, lh=lh, stagger=0.2)
+def small(c, s, y, t0, size, color=None): color = color or M.WHITE; return M.text(c, s, y, t0, size, color=(color + (255,) if len(color) == 3 else color), path=PR, maxw=820, lh=1.5, stagger=0.15)
 def build(hook, sub, instr, note, face="v1_lowbun", cta="follow", dx=0):
     def s1(c):
         M.chip(c, "정월의 카드 고르기", 345, .05); y = title(c, hook, 445, .2, 108)
-        small(c, sub, y + 10, .8, 48, GOLDA); M.character(c, face, t0=.3, width=730, bottom=1455, dx=dx)
+        small(c, sub, y + 10, .8, 48, 강조()); M.character(c, face, t0=.3, width=730, bottom=1455, dx=dx)
     def s2(c):
         title(c, "끌리는 카드를\n하나 고르세요", 400, .05, 96)
-        for i, (hj, col, no) in enumerate(CARDS):
-            cx = CX + (i - 1) * 290; fl = 8 * math.sin(c.t * 2.4 + i * 1.3); M.pop(c, card_layer(hj, col), cx, 870 + fl, .25 + i * .18)
-            M.text(c, no, 1120, .7 + i * .12, 84, color=GOLDA, path=BOLD, maxw=300, cx=cx, stagger=0)
-        title(c, instr, 1240, 1.3, 62, color=GOLDA); small(c, note, 1334, 1.7, 44)   # 하단 고정 줄(y 1425~1465) 위에서 끝나게(10/7 규칙 층)
+        몸, 테 = M.CARD[:3], M.GOLD[:3]
+        for i, (hj, col, no) in enumerate(CARDS()):
+            cx = CX + (i - 1) * 290; fl = 8 * math.sin(c.t * 2.4 + i * 1.3); M.pop(c, card_layer(hj, col, 몸, 테), cx, 870 + fl, .25 + i * .18)
+            M.text(c, no, 1120, .7 + i * .12, 84, color=강조(), path=BOLD, maxw=300, cx=cx, stagger=0)
+        title(c, instr, 1240, 1.3, 62, color=강조()); small(c, note, 1334, 1.7, 44)   # 하단 고정 줄(y 1425~1465) 위에서 끝나게(10/7 규칙 층)
     def s3(c):
         if cta == "share":
-            title(c, "떠오르는 사람에게\n보내 보세요", 480, .1, 112, color=GOLDA); small(c, "고른 번호와 함께 보내도 좋아요\n다음 편은 매주 올라와요", 900, .8, 56)
+            title(c, "떠오르는 사람에게\n보내 보세요", 480, .1, 112, color=강조()); small(c, "고른 번호와 함께 보내도 좋아요\n다음 편은 매주 올라와요", 900, .8, 56)
         else:
-            title(c, "매일 저녁\n사주·별자리·숫자 테스트", 480, .1, 112, color=GOLDA); small(c, "팔로우하면 다음 편을\n놓치지 않아요", 900, .8, 56)
+            title(c, "매일 저녁\n사주·별자리·숫자 테스트", 480, .1, 112, color=강조()); small(c, "팔로우하면 다음 편을\n놓치지 않아요", 900, .8, 56)
         small(c, "내 태어난 날 기운은 프로필 링크에서 1초", 1160, 1.3, 44, (255, 255, 255))
     return [(3.0, s1), (5.4, s2), (2.8, s3)]
 SETS = {"oct3": dict(hook="10월, 나에게\n*먼저 오는 소식*", sub="세 장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-10-03"),
@@ -71,10 +85,30 @@ if __name__ == "__main__":
     key = sys.argv[1] if len(sys.argv) > 1 else "oct3"; cfg = dict(SETS[key])
     if key in ("oct31", "nov7"):      # 새 편은 얼굴·음악을 돌려 쓰기 계획에서 고른다(계절 사진 포함)
         fi = FP.pick("ask", "pick-" + key, md=cfg["date"][5:]); cfg["face"] = fi["face"] + ("_flip" if fi["flip"] else ""); cfg["dx"] = -80 if fi["flip"] else 80
+    # 그리기 전에 기획 표에서 판과 바탕을 고른다(대표 10/16 "배경이나 에셋 라이브러리처럼 만들어놓고 골라서", "컬러 조합도 마찬가지").
+    # 검사도 렌더와 같은 판·바탕으로 해야 뜻이 있으니 여기서 먼저 정해 두고, 같은 값을 render 에 넘긴다.
+    import asset_lib as A
+    # 편마다 따로 돌려도 '앞 편과 같은 판·배경'이 안 나오게, 날짜 순서대로 한 번 쭉 정해 보고 이 편 것만 쓴다(K-068).
+    쓴판, 쓴배경, 몫 = [], [], {}
+    for k2 in sorted(SETS, key=lambda x: SETS[x]["date"]):
+        d2 = SETS[k2]["date"]
+        p2, 왜2 = A.판(유형, None, d2, 쓴판)
+        m2 = 1
+        while A.pick("bg", d2, 몫=m2) in 쓴배경[-2:] and m2 < 9:   # 배경도 앞 두 편과 겹치지 않게 다음 것을 뽑는다
+            m2 += 1
+        쓴판.append(p2); 쓴배경.append(A.pick("bg", d2, 몫=m2)); 몫[k2] = (p2, m2, 왜2)
+    판번호, 배경몫, 판까닭 = 몫[key]
+    if os.environ.get("ZS_PAL"): 판번호, 판까닭 = os.environ["ZS_PAL"], "사양에 직접 적음"
+    M.set_pal(판번호); M.set_bg(M.bg_for(cfg["date"]))
+    바탕종류, 배경이름, 바탕까닭 = M.set_backdrop(유형, os.environ.get("ZS_BACKDROP"), cfg["date"])
+    if 바탕종류 == "배경" and 배경몫 > 1:       # 앞 편과 겹쳐서 다음 것을 뽑기로 한 편
+        M.BACKDROP_IMG = 배경이름 = A.pick("bg", cfg["date"], 몫=배경몫)
+        M.bg_static.cache_clear() if hasattr(M.bg_static, "cache_clear") else None
+    print(f"판 {판번호} ({판까닭}) · 바탕 {바탕종류}" + (f" — {배경이름}" if 배경이름 else "") + f" ({바탕까닭})")
     sc = build(cfg["hook"], cfg["sub"], cfg["instr"], cfg["note"], cta=cfg.get("cta", "follow"), face=cfg.get("face", "v1_lowbun"), dx=cfg.get("dx", 0))
     bad = check_frames(sc); print("안전 영역 검사:", "통과" if not bad else bad)
     if bad and "--force" not in sys.argv: sys.exit(1)
-    out, secs = M.render(cfg["date"], sc, os.path.join(ROOT, "2026-pick", "v3"))
+    out, secs = M.render(cfg["date"], sc, os.path.join(ROOT, "2026-pick", "v3"), 내용유형=유형, 판=판번호)
     if key in ("oct31", "nov7"): mi = MP.choose("love", "pick-" + key); MP.mux(out, [d for d, _ in sc], mi, {"oct31": 75, "nov7": 76}[key]); print("음악:", mi["style"], mi["bpm"], mi["key"], "| 얼굴:", cfg["face"])
     else: music(out, sc, {"oct3": 71, "oct10": 72, "oct17": 73, "oct24": 74}[key])
     print(out, secs, "초")

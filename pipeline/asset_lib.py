@@ -129,7 +129,9 @@ def 판(내용유형=None, 적은것=None, 이름="", 쓴판=()):
     if 적은것:
         return 적은것, "사양에 직접 적음"
     후보, 왜 = 판표.get(내용유형 or "", 판기본)
-    남은 = [x for x in 후보 if x not in tuple(쓴판)[-5:]] or 후보
+    # 최근 쓴 것을 건너뛰되, 후보 수보다 적게 건너뛴다. 5개를 통째로 건너뛰면 후보가 4개인 종류에서
+    # 남는 것이 없어 후보 전체로 되돌아가고, 그때 해시가 같은 판을 세 편 내리 고르는 일이 생겼다(10/16).
+    남은 = [x for x in 후보 if x not in tuple(쓴판)[-max(1, len(후보) - 1):]] or 후보
     h = sum(ord(c) * (i + 3) for i, c in enumerate(str(이름 or 내용유형 or "자오선")))
     return 남은[h % len(남은)], 왜
 

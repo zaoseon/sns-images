@@ -210,6 +210,12 @@ CHART_S = 1040; CHART_ALPHA = .30; CHART_CY = 910   # 차트 중심 = 상단 문
 def background(fr, t, total_t):
     fr.paste(bg_static())
     d = ImageDraw.Draw(fr, "RGBA")
+    if BACKDROP != "사진":
+        # 바탕을 따로 고른 영상(배경 라이브러리·단색 판)에는 별과 황도 고리를 덧그리지 않는다(대표 10/16, K-071).
+        # 덧그리면 어떤 배경을 골라도 화면 한가운데에 늘 같은 고리가 앉아 '큰 층'이 안 바뀐다 — 골라 쓰는 뜻이 없어진다.
+        # 브랜드는 고정 요소(자오선·교차분석·zaoseon.com)가 이어 간다. 옛 우주 장면("사진")은 그대로 둔다.
+        d.rectangle((70, 143, 880, 147), fill=(255, 255, 255, 40)); d.rectangle((70, 143, 70 + int(810 * cl(t / total_t)), 147), fill=GOLD)
+        return
     for x, y, r, ph, sp in stars():
         if FX: y = 160 + (y - 160 - t * (6 + r * 5)) % 1300   # 별이 위로 천천히 흐른다(크기마다 속도가 달라 깊이가 생김)
         a = int(90 + 120 * (0.5 + 0.5 * math.sin(t * sp + ph))); d.ellipse((x - r, y - r, x + r, y + r), fill=(255, 236, 190, a))
