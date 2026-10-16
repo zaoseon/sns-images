@@ -179,6 +179,45 @@ def apply_coaching(pid, title, tags, body):
         body = body[:ms[-1].start()] + blk + body[ms[-1].start():]
     return CD.TITLES.get(pid, title), _brand_tag(tags), body
 
+_CARDS = None
+def _cards():
+    """zaoseon-site data/naver_related_cards.json: 발행 글에 지금 달린 링크 카드(서브 노트북 card_list.mjs가 공개 글을 읽어 만든다).
+    {"items": {"n20": [{"url": "...", "title": "..."}, ...]}}"""
+    global _CARDS
+    if _CARDS is None:
+        try: _CARDS = json.load(open(f"{SITE}/data/naver_related_cards.json", encoding="utf-8")).get("items", {})
+        except Exception: _CARDS = {}
+    return _CARDS
+def _nu(u): return re.sub(r"[?#].*$", "", (u or "").strip()).rstrip("/").replace("m.blog.naver.com", "blog.naver.com")
+def related_cards(pid, body, ru):
+    """10/16 서브 노트북 보고: 발행 글 수정은 본문을 통째로 바꾸므로, 원고에 카드 자리가 모자라면 이미 달린 카드가 사라진다(n12·n13).
+    지금 달린 카드마다 원고에 <!--LINKCARD--> 자리를 둔다. 기본 연결글(ru) 카드는 그 제목 줄 바로 뒤, 나머지는 '👇 안내 + 제목 링크 줄' 다음.
+    발행 키트(get_post.mjs)는 자리마다 바로 앞 제목 줄의 주소로 카드를 넣는다."""
+    cards = _cards().get(pid) or []
+    if not cards or "<!--LINKCARD-->" in body: return body
+    import html as _h
+    try: titles = {_nu(x.get("url")): x.get("title", "") for x in json.load(open(f"{SITE}/data/naver_urls.json", encoding="utf-8"))["items"] if x.get("url")}
+    except Exception: titles = {}
+    nru = _nu(ru); extra = []; at = None
+    for c in cards:
+        u = _nu(c.get("url"))
+        if not u: continue
+        if u == nru and at is None:
+            m = re.search(r'<p[^>]*>(?:(?!</p>).)*href="' + re.escape(_h.escape(ru, quote=True)) + r'"(?:(?!</p>).)*</p>', body, re.S) or \
+                re.search(r'<p[^>]*>(?:(?!</p>).)*href="' + re.escape(ru) + r'"(?:(?!</p>).)*</p>', body, re.S)
+            if m: body = body[:m.end()] + "<!--LINKCARD-->" + body[m.end():]; at = m.end() + len("<!--LINKCARD-->"); continue
+        extra.append((c.get("url").strip(), (c.get("title") or titles.get(u) or "").strip()))
+    if extra:
+        blk = ""
+        for u, t in extra:
+            t = t.split(", ")[0].strip() or "함께 볼 글"
+            lines = FB.wrap(_h.escape(t), FB.BODY_LIMIT, 0.0, 17.0)
+            blk += FB.BLANK() + FB.P("👇 이 글도 같이 읽어 보세요.") + FB.P('<a href="' + _h.escape(u, quote=True) + '">' + "<br>".join(lines) + "</a>") + "<!--LINKCARD-->"
+        if at is None:   # 기본 연결글 카드가 없으면 CTA 배너 앞(없으면 끝)
+            m = re.search(r'<p[^>]*>(?:(?!</p>).)*naver_cta\d', body, re.S); at = m.start() if m else len(body)
+        body = body[:at] + blk + body[at:]
+    return body
+
 def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, category=None, thumbs=None, cid=None, clips=None, reserve=None, v2=True):
     if cover:   # 10/16: 원고 페이지는 대표 이미지를 사이트 사본(/naver/img/...)에서 읽는다 — 새 표지(_a3)를 만들고 사본을 안 둬서 안 보였다
         import shutil; dst = f"{SITE}/public/naver/img/{cover}"; src = os.path.join(IMG_DIR, cover)
@@ -197,6 +236,7 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
     if v2 and _ru: body = V2.link_guide(body, _ru)   # 본문의 연결 글 제목 줄에 링크(복사하면 같이 감)
     body = FB.fit_mobile(body)   # 10/15 대표 폰 캡처: 실제 한 줄 폭(본문 약 15.7자·소제목 약 13.4자)을 넘는 줄을 다시 나눈다
     body = re.sub(r"<p[^>]*>(?:<span[^>]*>)?MIDBOX(\d+)(?:</span>)?</p>", lambda m_: _mids[int(m_.group(1))] + "<p>&nbsp;</p>", body)
+    body = related_cards(pid, body, _ru)   # 10/16 발행 글에 달린 링크 카드 수만큼 원고에도(카드를 잃지 않게)
     if related and (related.get("url") or related.get("title") or _ru):
         _u = _ru
         rel_box = (f'<div class="box"><p class="lab">4. 함께 볼 글(내부 링크): 글 주소가 앱에 저장돼 있으면 본문 맨 아래 제목 줄에 링크가 자동으로 걸려요. 링크 카드도 원하면 제목 줄 다음 줄에 주소를 붙여 넣고 엔터</p>'
