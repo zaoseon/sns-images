@@ -917,5 +917,53 @@
   "bpm": 118,
   "key": "G",
   "seed": 1615
+ },
+ {
+  "name": "ilgan2-gab",
+  "kind": "fun",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 124,
+  "key": "F"
+ },
+ {
+  "name": "ilgan2-eul",
+  "kind": "fun",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 114,
+  "key": "A"
+ },
+ {
+  "name": "ilgan2-byeong",
+  "kind": "fun",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "C"
+ },
+ {
+  "name": "ilgan2-jeong",
+  "kind": "fun",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 118,
+  "key": "E"
+ },
+ {
+  "name": "ilgan2-mu",
+  "kind": "fun",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 124,
+  "key": "F"
+ },
+ {
+  "name": "ilgan2-gi",
+  "kind": "fun",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 114,
+  "key": "G"
  }
 ]
