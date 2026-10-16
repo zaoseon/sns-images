@@ -36,7 +36,7 @@ class Ctx:
             t = {k: h2(v) for k, v in e["theme"].items()}
             s.bg, s.fg, s.card, s.line, s.gray = t["bg"], t["ink"], t["card"], t["line"], t["sub"]
             s.acc = t.get("head", t["acc"]); s.dark = sum(t["bg"]) < 300
-            s.md = t.get("hl", t["card"]) if not s.dark else t["card"]
+            s.md = t["card"] if sum(t["card"]) < 760 else mix(t["bg"], (255, 255, 255), .5)   # 얼굴 원 바탕은 판의 옅은 색 하나로(10/16 "배지 배경색 제각각")
             s.pillfg = t["bg"] if sum(s.acc) < 400 or s.dark else t["ink"]
         s.tint = mix(s.bg, s.acc, .045); s.ring_bg = s.card
 

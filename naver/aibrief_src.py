@@ -12,7 +12,7 @@ SRC = {  # Crossref 확인(10/14 add_sources.py와 같은 값): 글 → (저자�
     "n44": ("Iyengar & Lepper (2000)", "J. Personality & Social Psych.", "10.1037/0022-3514.79.6.995"),
     "n71": ("Forer (1949)", "J. Abnormal & Social Psych.", "10.1037/h0059240"),
 }
-BASE_DATE = {"n48": "2026년 10월 15일", "n55": "2026년 10월 15일"}   # N7: 시기 글 첫머리 기준일
+BASE_DATE = {"n48": "2026년 10월 15일", "n55": "2026년 10월 15일", **{k: "2026년 10월 16일" for k in ("n04", "n05", "n06", "n08", "n09", "n10")}}   # 10/16 발행·예약 글도(대표 지시)   # N7: 시기 글 첫머리 기준일
 GREET = "<p>안녕하세요, 자오선의 정월이에요.</p>"
 
 def fix_alt(title, body):
@@ -42,13 +42,19 @@ def add_source(pid, body):
 
 def add_base_date(pid, body):
     if pid not in BASE_DATE or "기준으로 정리한" in body: return body, 0
-    if GREET not in body: print(pid, "인사 줄 못 찾음"); return body, 0
-    return body.replace(GREET, GREET + f"<p>{BASE_DATE[pid]} 기준으로 정리한 내용이에요.</p>", 1), 1
+    line = f"<p>{BASE_DATE[pid]} 기준으로 정리한 내용이에요.</p>"
+    if GREET in body: return body.replace(GREET, GREET + line, 1), 1
+    m = re.search(r"<p>(?:(?!</p>).)*자오선의 정월(?:(?!</p>).)*</p>", body)          # 옛 글은 인사 문장이 조금 다르다
+    if not m:
+        k = body.find("<p>결론부터 말씀드릴게요.</p>")        # 인사 없이 시작하는 옛 글(n05·n06)
+        if k < 0: print(pid, "인사 줄 못 찾음"); return body, 0
+        return body[:k] + line + body[k:], 1
+    return body[:m.end()] + line + body[m.end():], 1
 
 if __name__ == "__main__":
     reg = json.load(open(REG, encoding="utf-8")); tot = [0, 0, 0]
     for pid, v in reg.items():
-        if v.get("done") or "body" not in v: continue
+        if (v.get("done") and "--all" not in sys.argv) or "body" not in v: continue   # --all: 발행·예약 글까지(10/16 대표 지시, 서브 노트북 키트가 네이버에서 고침)
         b = v["body"]; b, a = fix_alt(v["title"], b); b, s = add_source(pid, b); b, d = add_base_date(pid, b)
         tot[0] += a; tot[1] += s; tot[2] += d; v["body"] = b
     print(f"대체텍스트 {tot[0]}장 · 출처 {tot[1]}편 · 기준일 {tot[2]}편")

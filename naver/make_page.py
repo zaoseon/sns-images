@@ -262,7 +262,11 @@ def render_all():
     for i, (dt, k) in enumerate(live):
         v = reg[k]; nxt = live[i+1][1] if i+1 < len(live) else None
         write_page(k, D.datetime.fromisoformat(dt), v["title"], v["tags"], v["body"], nxt, v.get("cover"), v.get("related"), new_cat(k, v.get("category") or CATS.get(k)), v.get("thumbs"), v.get("cid"), v.get("clips"), v.get("reserve"))
-    write_index()
+    # 10/16 대표: 이미 발행·예약한 글도 AI 브리핑 기준·새 이미지로 고쳐서 서브 노트북 키트가 네이버에서 수정한다 → 고친 원고 페이지도 만든다(목록은 fix.html 따로)
+    for dt, k in sorted((v["dt"], k) for k, v in reg.items() if v.get("done") and "body" in v):
+        v = reg[k]
+        write_page(k, D.datetime.fromisoformat(dt), v["title"], v["tags"], v["body"], None, v.get("cover"), v.get("related"), new_cat(k, v.get("category") or CATS.get(k)), v.get("thumbs"), v.get("cid"), v.get("clips"), v.get("reserve"))
+    write_index(); write_fix_index()
 def done(pid):
     """대표가 예약을 마친 글: 목록과 파일에서 뺀다"""
     reg = load(); reg.setdefault(pid, {})["done"] = True; json.dump(reg, open(REG, "w"), ensure_ascii=False, indent=1)
@@ -273,7 +277,16 @@ def write_index():
     reg = load(); items = sorted((v["dt"], k, v["title"]) for k, v in reg.items() if not v.get("done"))
     rows = "".join(f'<div class="box"><p class="lab">{when_text(D.datetime.fromisoformat(dt))}</p><p class="val"><a href="/naver/{k}.html">{html.escape(t)}</a></p></div>' for dt, k, t in items) \
         or '<div class="box"><p class="val">지금 올릴 원고가 없어요. 예약을 마친 글은 목록에서 빠져요.</p></div>'
-    open(f"{SITE}/public/naver/index.html", "w").write(f'<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>네이버 원고 목록</title><style>{CSS}</style><link rel="stylesheet" href="/naver/m.css?v=3"></head><body><div class="wrap"><h1>네이버 블로그 원고</h1><p class="hint">예약 발행일 순서예요.</p>{rows}</div></body></html>')
+    open(f"{SITE}/public/naver/index.html", "w").write(f'<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>네이버 원고 목록</title><style>{CSS}</style><link rel="stylesheet" href="/naver/m.css?v=3"></head><body><div class="wrap"><h1>네이버 블로그 원고</h1><p class="hint">예약 발행일 순서예요. <a href="/naver/fix.html">이미 올린 글 · 고친 원고 보기 →</a></p>{rows}</div></body></html>')
+
+def write_fix_index():
+    """이미 네이버에 발행·예약한 글의 고친 원고 목록(10/16). 주소가 있는 글(발행)과 예약 글을 함께 보여 준다."""
+    reg = load()
+    try: urls = {x["id"]: x["url"] for x in json.load(open(f"{SITE}/data/naver_urls.json", encoding="utf-8"))["items"] if x.get("url")}
+    except Exception: urls = {}
+    items = sorted((v["dt"], k, v["title"]) for k, v in reg.items() if "body" in v and (v.get("done") or k in urls))
+    rows = "".join(f'<div class="box"><p class="lab">{"발행됨" if k in urls else "예약됨"} · {when_text(D.datetime.fromisoformat(dt))}</p><p class="val"><a href="/naver/{k}.html">{html.escape(t)}</a></p></div>' for dt, k, t in items)
+    open(f"{SITE}/public/naver/fix.html", "w").write(f'<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>고친 원고(발행·예약 글)</title><style>{CSS}</style><link rel="stylesheet" href="/naver/m.css?v=3"></head><body><div class="wrap"><h1>이미 올린 글 · 고친 원고</h1><p class="hint">이미 네이버에 발행·예약한 글을 AI 브리핑 기준과 새 이미지로 고친 원고예요. 서브 노트북 키트가 네이버에서 이 내용으로 수정해요. <a href="/naver/">올릴 원고 목록으로</a></p>{rows}</div></body></html>')
 
 def alert_text(pids):
     """원고를 목록에 올린 뒤 캘린더 알림 설명문. ①이 Google Calendar create_event로 만든다(9/30 대표 요청)."""
