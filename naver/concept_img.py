@@ -83,7 +83,7 @@ def mix(a, b, k): return tuple(int(a[i] * (1 - k) + b[i] * k) for i in range(3))
 KEY = {"dark": dict(bg=(18, 18, 20), card=(30, 30, 34), ink=(250, 250, 250), sub=(161, 161, 170), acc=(255, 216, 77), quiet=(58, 58, 62)),
        "light": dict(bg=(245, 245, 247), card=(255, 255, 255), ink=(29, 29, 31), sub=(81, 81, 86), acc=NAVY, quiet=(200, 200, 206))}
 def k_head(cv, head, st):
-    cv.text(L + 10, 118, head, PX, cv.fit(head, PX, 64, RT - L - 210, 50), st["ink"], "ls")
+    cv.text(L + 10, 118, head, PX, cv.fit(head, PX, 64, RT - L - 210, 50), st.get("head", st["ink"]), "ls")
     cv.text(RT - 10, 114, "子午線 자오선", K.SER, 28, st["sub"], "rs")
 
 # v8(10/15 대표 "검은 바탕만 고집할 필요 없다. 대표 이미지 색조와 배경색을 맞추는 것도 방법. 글자는 가급적 흰색, 강조색 한두 개. 화살표가 얇아 옹졸해 보이지 않게", K-044)
@@ -107,8 +107,45 @@ def cover_theme(path, kind="tone"):
         b = mix(ac, (0, 0, 0), .18)
         return dict(bg=b, card=mix(b, (0, 0, 0), .16), line=mix(b, (255, 255, 255), .16), ink=(255, 255, 255), sub=mix((255, 255, 255), b, .32),
                     acc=(255, 220, 120), acc2=mix((255, 220, 120), b, .22), frame=mix(b, (0, 0, 0), .45), quiet=mix(b, (0, 0, 0), .3))
+    import colorsys
+    hh = colorsys.rgb_to_hls(*[v / 255 for v in ac])[0]
+    def hls(l, s_): return tuple(int(v * 255) for v in colorsys.hls_to_rgb(hh, l, s_))
+    vivid, vivid2 = hls(.46, .88), hls(.70, .70)              # 대표 이미지 색상(色相)만 따고 채도를 올려 맑게(10/16 대표 "똥색깔, 지저분": 탁한 중간 톤 금지)
+    if kind == "cream":                                       # 대표 이미지 바탕 그대로 + 흰 칸 + 검정 글자 + 맑은 강조색 하나
+        return dict(bg=bg, card=(255, 255, 255), line=mix(bg, (0, 0, 0), .10), ink=(20, 20, 22), sub=(96, 96, 102), acc=vivid, acc2=hls(.38, .60), frame=(20, 20, 22), quiet=mix(bg, (0, 0, 0), .1))
+    if kind == "white":                                       # 흰 바탕 + 아주 옅은 회색 칸 + 검정 글자 + 맑은 강조색 하나
+        return dict(bg=(255, 255, 255), card=(245, 245, 247), line=(226, 226, 230), ink=(17, 17, 19), sub=(96, 96, 102), acc=vivid, acc2=hls(.38, .60), frame=(17, 17, 19), quiet=(226, 226, 230))
+    if kind == "vivid":                                       # 맑은 강조색 바탕 + 흰 칸 + 검정 글자(흰 글자는 노랑·주황 위에서 안 읽힘)
+        b = hls(.56, .92)
+        return dict(bg=b, card=(255, 255, 255), line=mix(b, (0, 0, 0), .12), ink=(17, 17, 19), sub=(70, 60, 50), acc=(17, 17, 19), acc2=hls(.20, .80), frame=(17, 17, 19), quiet=mix(b, (0, 0, 0), .12))
     ink = mix(ac, (0, 0, 0), .72)
     return dict(bg=bg, card=(255, 255, 255), line=mix(bg, ac, .3), ink=ink, sub=mix(ink, bg, .45), acc=ac, acc2=mix(ac, bg, .18), frame=ink, quiet=mix(bg, ac, .3))
+
+# v9(10/16 대표 참고 영상 '조회수 폭발하는 색조합'): 진한 맑은 색 하나 + 옅은 반대 계열 색 하나, 두 색만. 진한 바탕엔 흰 글자·옅은 색 강조, 옅은 바탕엔 진한 색 글자
+PAIRS = {"violet": ((0x31, 0x1B, 0x92), (0xFF, 0xE0, 0xB2)),   # Violet Purple + Tangerine Cream
+         "royal": ((0x0A, 0x46, 0xB3), (0xFF, 0xEA, 0xD2)),    # Royal Blue + Apricot Peach
+         "navy": ((0x10, 0x2A, 0x43), (0xFF, 0xF3, 0xC4)),     # Midnight Navy + Soft Butter
+         "emerald": ((0x00, 0x4D, 0x40), (0xEF, 0xE5, 0xFD)),  # Deep Emerald + Dusty Lilac
+         "olive": ((0x4A, 0x53, 0x3C), (0xFF, 0xD3, 0xE8)),    # Olive Khaki + Refreshing Pink
+         "charcoal": ((0x24, 0x27, 0x29), (0xD2, 0xFF, 0x28)), # Matte Charcoal + Neon Lime
+         "choco": ((0x3E, 0x27, 0x23), (0xE1, 0xF5, 0xFE))}    # Deep Chocolate + Powder Blue
+def pair_theme(name, inverse=False):
+    d, l = PAIRS[name]
+    if not inverse:   # 진한 바탕: 칸은 한 단 밝은 같은 색, 글자 흰색, 강조 = 옅은 색
+        return dict(bg=d, card=mix(d, (255, 255, 255), .09), line=mix(d, (255, 255, 255), .2), ink=(255, 255, 255), sub=mix((255, 255, 255), d, .3),
+                    acc=l, acc2=mix(l, d, .25), frame=mix(d, (0, 0, 0), .4), quiet=mix(d, (255, 255, 255), .2))
+    return dict(bg=l, card=(255, 255, 255), line=mix(l, d, .18), ink=d, sub=mix(d, l, .35), acc=d, acc2=mix(d, l, .3), frame=d, quiet=mix(l, d, .18))
+
+PAL_JSON = os.path.join(HERE, "..", "assets", "palettes", "color_combos.json")
+def palette_theme(pid):
+    """색 조합 목록(대표 참고 자료 모음)에서 판을 만든다. 두 색 조합(pair)은 pair_theme 규칙, 나머지는 목록에 적힌 theme 그대로."""
+    import json
+    inv = pid.endswith("_inv"); key = pid[:-4] if inv else pid
+    e = next(x for x in json.load(open(PAL_JSON, encoding="utf-8"))["palettes"] if x["id"] == key)
+    h2 = lambda c: tuple(int(c[i:i + 2], 16) for i in (1, 3, 5))
+    if "pair" in e:
+        PAIRS[key] = tuple(h2(c) for c in e["pair"]); return pair_theme(key, inv)
+    return {k: h2(v) for k, v in e["theme"].items()}
 
 ICONS = []
 def loop_k(name, head, nodes, exit_label, exit_text, mode="dark", icons=()):
@@ -140,7 +177,7 @@ def loop_k(name, head, nodes, exit_label, exit_text, mode="dark", icons=()):
             cv.text(x - bw / 2 + 32, y - bh / 2 + 40, f"0{i + 1}", PX, 30, st["acc2"], "lm")
             for k2, l2 in enumerate(t): cv.text(x - bw / 2 + 32, y - bh / 2 + 96 + k2 * 52, l2, PX, 40, st["ink"], "lm")
     by0, by1 = 965, 1085
-    band, lab_c, txt_c = (NAVY, POP[1], WHITE) if mode == "light" else (st["acc"], st["bg"], st["bg"])
+    band, lab_c, txt_c = (NAVY, POP[1], WHITE) if mode == "light" else (st.get("hl", st["acc"]), st.get("hl_ink", st["bg"]), st.get("hl_ink", st["bg"]))
     cv.rr([L, by0, RT, by1], 32, fill=band)
     L0 = L
     lw = cv.tw(exit_label, PX, 46); cv.text(L0 + 44, (by0 + by1) / 2, exit_label, PX, 46, lab_c, "lm")
@@ -212,10 +249,11 @@ def calc_k(name, head, digits, steps, result_big, result_label, result_line, mod
         cv.text(L + 240, y, expr, PX, 52, st["ink"], "lm")
         cv.line(L + 14, y + 52, RT - 14, y + 52, st["line"], 1.5)
     yb = y0 + ch + 70 + len(steps) * 110 + 20               # 결과: 강조색은 여기 한 곳
-    cv.rr([L + 10, yb, RT - 10, yb + 200], 30, fill=st["card"], outline=st["line"], w=1.5)
-    cv.text(L + 60, yb + 100, result_big, PX, 150, st["acc"], "lm")
-    cv.text(L + 230, yb + 68, result_label, PB, 42, st["acc2"], "lm")
-    cv.text(L + 230, yb + 130, result_line, PX, 50, st["ink"], "lm")
+    hl = st.get("hl"); hi = st.get("hl_ink", st["ink"])          # 색 조합에 '강조 면'(hl)이 있으면 결과 칸을 그 색으로 채운다
+    cv.rr([L + 10, yb, RT - 10, yb + 200], 30, fill=hl or st["card"], outline=None if hl else st["line"], w=1.5)
+    cv.text(L + 60, yb + 100, result_big, PX, 150, hi if hl else st["acc"], "lm")
+    cv.text(L + 230, yb + 68, result_label, PB, 42, hi if hl else st["acc2"], "lm")
+    cv.text(L + 230, yb + 130, result_line, PX, 50, hi if hl else st["ink"], "lm")
     cv.save(name)
 
 def compare_k(name, head, cols, rows, same_rows=(), mode="dark"):
@@ -227,10 +265,10 @@ def compare_k(name, head, cols, rows, same_rows=(), mode="dark"):
         cv.text(x + cw / 2, y + 40, c_, PX, 44, st["ink"], "mm")
     cv.line(L + 10, y + 90, RT - 10, y + 90, st["line"], 1.5); y += 110
     for i, (lab, a, b) in enumerate(rows):
-        same = i in same_rows; col = st["acc"] if same else st["ink"]
+        same = i in same_rows; hlr = same and st.get("hl"); col = st.get("hl_ink", st["ink"]) if hlr else st["acc"] if same else st["ink"]
         cv.text(L + 20, y + rh / 2, lab, PB, 42, st["acc2"], "lm")
         for x, v in ((x1, a), (x2, b)):
-            cv.rr([x, y + 14, x + cw, y + rh - 14], 24, fill=st["card"], outline=st["line"], w=1.5)
+            cv.rr([x, y + 14, x + cw, y + rh - 14], 24, fill=st["hl"] if hlr else st["card"], outline=None if hlr else st["line"], w=1.5)
             vs = v if isinstance(v, (list, tuple)) else [v]
             if len(vs) == 1: cv.text(x + cw / 2, y + rh / 2, vs[0], PX, cv.fit(vs[0], PX, 52, cw - 40, 38), col, "mm")
             else:
@@ -293,7 +331,11 @@ SPEC = {
 }
 if __name__ == "__main__":
     m = os.environ.get("MODE", "dark")
-    if os.environ.get("COVER"):                                  # COVER=대표이미지경로 MODE=tone|same → 대표 이미지 색조에 맞춘 판
+    if m.startswith("pal:"):                                     # MODE=pal:y_blue — sns-images assets/palettes/color_combos.json
+        KEY[m] = palette_theme(m[4:])
+    elif m.startswith("pair"):                                     # MODE=pair:violet / pairinv:violet
+        KEY[m] = pair_theme(m.split(":")[1], m.startswith("pairinv"))
+    elif os.environ.get("COVER"):                                  # COVER=대표이미지경로 MODE=tone|same → 대표 이미지 색조에 맞춘 판
         KEY[m] = cover_theme(os.environ["COVER"], m)
     if os.environ.get("SUFX"):                                   # 색조 판은 새 이름으로(naver_z53_k.jpg → naver_z53_kt.jpg). 덮어쓰기 금지 규칙
         _sv = K.Cv.save
