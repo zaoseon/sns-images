@@ -32,7 +32,7 @@ CH = CS.CH["reel"]
 OUT = os.path.join(ROOT, "2026-motion", "html")
 
 
-async def _shoot(html, 초, fps, w, h, tmp, 한계):
+async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역):
     from playwright.async_api import async_playwright
     n = int(round(초 * fps))
     async with async_playwright() as pw:
@@ -40,7 +40,7 @@ async def _shoot(html, 초, fps, w, h, tmp, 한계):
         pg = await b.new_page(viewport={"width": w, "height": h}, device_scale_factor=1)
         await pg.goto("file://" + os.path.abspath(html))
         await pg.wait_for_function("typeof window.seek === 'function'", timeout=15000)
-        # 글이 아래 고정 줄(zaoseon.com)을 넘는지 **브라우저로 재서** 막는다.
+        # 글이 아래 고정 줄을 넘는지 **브라우저로 재서** 막는다.
         # 눈대중으로 여백을 맞추다 두 번 겹쳤다(10/16). 끝 시각에서 제일 아래 글의 바닥을 잰다.
         await pg.evaluate("t => window.seek(t)", 초 - 0.01)
         바닥 = await pg.evaluate("""() => {
@@ -49,8 +49,24 @@ async def _shoot(html, 초, fps, w, h, tmp, 한계):
         if 바닥 > 한계:
             await b.close()
             raise SystemExit(f"[막음] 글이 아래 고정 줄을 넘어요 — 맨 아래 글 바닥 {바닥:.0f}px, "
-                             f"넘으면 안 되는 선 {한계}px (zaoseon.com 줄 위 24px). "
+                             f"넘으면 안 되는 선 {한계}px (하단 고정 줄 위 24px). "
                              f"{바닥 - 한계:.0f}px 줄이세요.")
+        # 구역을 넘는지도 잰다. 아래 고정 줄만 보면 **구역끼리 겹치는 것**을 놓친다 —
+        # 10/16 막대 세 줄이 '본문·그림' 구역을 166px 넘어 AI 고지 위로 올라갔는데 통과했다.
+        if 구역:
+            # 바깥 상자만 재면 안 된다 — 자식이 넘쳐도 부모 rect 는 그대로라서 놓친다(10/16).
+            # 상자와 **그 안 모든 자손**의 바닥 중 제일 아래를 쓴다.
+            잰것 = await pg.evaluate("""() => [...document.querySelectorAll('.mk[data-z]')]
+              .map(e => {
+                const all = [e, ...e.querySelectorAll('*')].filter(x => x.offsetHeight);
+                return [e.dataset.z, all.length ? Math.max(...all.map(x => x.getBoundingClientRect().bottom)) : 0];
+              }).filter(r => r[1] > 0)""")
+            넘침 = [(z, b_, 구역[z]) for z, b_ in 잰것 if z in 구역 and b_ > 구역[z] + 1]
+            if 넘침:
+                await b.close()
+                raise SystemExit("[막음] 구역을 넘었어요 — " + " / ".join(
+                    f"'{z}' 바닥 {b_:.0f}px, 구역 끝 {끝}px ({b_ - 끝:.0f}px 넘침)"
+                    for z, b_, 끝 in 넘침) + ". 글을 줄이거나 더 넓은 구역('마무리 카드')으로 옮기세요.")
         for i in range(n):
             await pg.evaluate("t => window.seek(t)", i / fps)
             await pg.screenshot(path=os.path.join(tmp, f"f{i:05d}.png"))
@@ -58,14 +74,19 @@ async def _shoot(html, 초, fps, w, h, tmp, 한계):
     return n
 
 
-def render(html, 이름, 초=15.0, fps=30):
-    w, h = CH["w"], CH["h"]          # 크기는 channel_specs 에서 — 여기 숫자를 박지 않는다
+def render(html, 이름, 초=15.0, fps=30, ch="reel"):
+    C = CS.CH[ch]
+    w, h = C["w"], C["h"]            # 크기는 channel_specs 에서 — 여기 숫자를 박지 않는다
     os.makedirs(OUT, exist_ok=True)
     tmp = tempfile.mkdtemp(prefix="htmlmo_")
     try:
-        import brand_frame as BF
-        한계 = h - BF.REEL["bottom"] - 24      # 아래 고정 줄 위로 24px 은 비운다
-        n = asyncio.run(_shoot(html, 초, fps, w, h, tmp, 한계))
+        구역 = {z[0]: z[4] for z in C["zones"]}          # 구역 이름 → 아래 끝 y
+        고정top = {z[0]: z[2] for z in C["zones"]}.get("하단 고정", h - 495)
+        # 넘으면 안 되는 선은 **하단 고정 구역이 시작하는 자리**다. 전에는 brand_frame 의
+        # bottom(=zaoseon.com 글자 줄, y1465)을 썼는데 고지 칸은 y1425 에서 시작해
+        # 1441 까지 글이 내려와도 통과했다 — 실제로는 이미 겹친 상태였다(10/16).
+        한계 = 고정top - 24
+        n = asyncio.run(_shoot(html, 초, fps, w, h, tmp, 한계, 구역))
         out = os.path.join(OUT, 이름 + ".mp4")
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-framerate", str(fps),
                         "-i", os.path.join(tmp, "f%05d.png"),
