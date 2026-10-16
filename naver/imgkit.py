@@ -60,10 +60,28 @@ class Cv:
     def save(s, name):
         s.d.rectangle([0, 0, OX * S - 1, s.h * S], fill=WHITE); s.d.rectangle([(OX + CW) * S, 0, BW * S, s.h * S], fill=WHITE)   # 워터마크가 여백으로 번지지 않게 마지막에 다시 흰색
         os.makedirs(MASTER, exist_ok=True); os.makedirs(DELIV, exist_ok=True)
+        guard_overwrite(name)
         s.img.save(os.path.join(MASTER, name), quality=95, subsampling=0, optimize=True)
         d = s.img.resize((BW, s.h), Image.LANCZOS)
         d.save(os.path.join(DELIV, name), quality=93, subsampling=0, optimize=True); d.save(os.path.join(IMG, name), quality=93, subsampling=0, optimize=True)
 
+
+def guard_overwrite(name):
+    """K-025(대표 10/15): 이미 발행·예약한 글이 이 사진을 링크로 쓰고 있다.
+    같은 이름으로 내용만 바꿔 덮어쓰면 올라간 글의 사진이 바뀐다. 그래서 막는다.
+    새 사진은 새 이름으로 추가한다(예: _a -> _a3).
+    되살릴 때만 ZS_ALLOW_OVERWRITE=1 을 붙이고, 왜 덮어쓰는지 커밋에 적는다."""
+    import os as _os
+    if _os.environ.get("ZS_ALLOW_OVERWRITE") == "1":
+        return
+    있는곳 = [d for d in (MASTER, DELIV, IMG) if _os.path.exists(_os.path.join(d, name))]
+    if 있는곳:
+        raise SystemExit(
+            f"\n[막음] 같은 이름 사진을 덮어쓰려고 합니다: {name}\n"
+            f"  이미 있는 곳: {', '.join(있는곳)}\n"
+            f"  이미 올라간 글이 이 주소를 링크로 쓰고 있어서, 덮어쓰면 그 글의 사진이 바뀝니다(K-025).\n"
+            f"  새 이름으로 저장하세요. 예: {name.rsplit('.',1)[0]}3.{name.rsplit('.',1)[-1]}\n"
+            f"  정말 되살리는 경우에만 ZS_ALLOW_OVERWRITE=1 을 붙이고 커밋에 이유를 적으세요.\n")
 
 CONN = re.compile(r"(,|고|며|서|면|는데|지만|니까|다가|도록|라서|아서|어서|으며|으면|거나|든지)$")
 BIND = re.compile(r"(와|과|의)$")          # 다음 말과 한 덩어리(산과|비, 해의|달): 줄 끝에 두지 않는다
