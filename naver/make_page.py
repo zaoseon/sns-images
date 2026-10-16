@@ -180,9 +180,6 @@ def apply_coaching(pid, title, tags, body):
     return CD.TITLES.get(pid, title), _brand_tag(tags), body
 
 def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, category=None, thumbs=None, cid=None, clips=None, reserve=None, v2=True):
-    if cover:   # 10/16: 원고 페이지는 대표 이미지를 사이트 사본(/naver/img/...)에서 읽는다 — 새 표지(_a3)를 만들고 사본을 안 둬서 안 보였다
-        import shutil; dst = f"{SITE}/public/naver/img/{cover}"; src = os.path.join(IMG_DIR, cover)
-        if os.path.exists(src) and not os.path.exists(dst): os.makedirs(os.path.dirname(dst), exist_ok=True); shutil.copy(src, dst)
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
     body = body.replace("naver_cta2_", "naver_cta4_").replace("naver_cta3_", "naver_cta4_")   # 10/4: CTA 배너를 2/3 크기로(compact.cta_small)
     body = FB.format_body(body)   # 10/4: 가운데 정렬 · 본문 16px · 제목 19px · 짧은 줄바꿈(네이버에 붙이면 바로 이 모양)
