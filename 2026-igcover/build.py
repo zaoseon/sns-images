@@ -24,7 +24,7 @@ import os, sys, json, base64, asyncio
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, ".."))
 sys.path.insert(0, os.path.join(ROOT, "pipeline"))
-import fonts_kit as K, brand_frame as BF, channel_specs as CS, card_gate as G
+import fonts_kit as K, brand_frame as BF, channel_specs as CS, card_gate as G, asset_lib as AL
 
 SET = os.environ.get("ZS_SET", "")            # 캐러셀 한 편을 따로 만들 때: ZS_SET=2026-igad
 BASE = os.path.join(ROOT, SET) if SET else HERE
@@ -347,6 +347,11 @@ def main():
     spec = json.load(open(SPEC, encoding="utf-8"))
     want = sys.argv[1:]
     pages, 쓴판, 쓴컷, 쓴틀 = [], [], [], []
+    for c in spec["cards"]:   # 판·바탕을 안 적었으면 글 종류가 정한다(대표 10/16 "구성안에 따라")
+        if not c.get("pal"):
+            c["pal"], c["판 고른 까닭"] = AL.판(c.get("내용유형"), None, c.get("id", ""), 쓴판)
+        if not c.get("바탕"):
+            c["바탕"], c["바탕 고른 까닭"] = AL.바탕(c.get("내용유형"))
     for c in spec["cards"]:                           # 관문이 먼저다 — 한 장이라도 걸리면 아무것도 안 그린다
         한편 = bool(spec.get("한 편"))
         G.before(c, channel=CHAN,

@@ -45,6 +45,24 @@ def _rgba(h, a=255):
 _PALS = _판()
 _CUR = {"id": None, "th": None}
 
+def set_backdrop(내용유형=None, 적은것=None, 이름=""):
+    """바탕을 무엇으로 할지 기획이 정한다(대표 10/16). asset_lib 의 '바탕 고르는 표'를 따른다.
+      단색 — 글·숫자를 읽혀야 하는 글. 판 색으로 꽉 채운다
+      배경 — 분위기로 멈춰 세우는 글. 라이브러리에서 배경 한 장을 고른다
+      사진 — 정월이 말하는 글. 지금까지 쓰던 우주 장면을 그대로 쓴다
+    돌려주는 값: (바탕 종류, 고른 배경 이름 또는 None, 까닭)"""
+    global BACKDROP, BACKDROP_IMG
+    import asset_lib as A
+    종류, 왜 = A.바탕(내용유형, 적은것)
+    BACKDROP = 종류
+    BACKDROP_IMG = A.pick("bg", 이름 or 내용유형 or "자오선") if 종류 == "배경" else None
+    bg_static.cache_clear() if hasattr(bg_static, "cache_clear") else None
+    return 종류, BACKDROP_IMG, 왜
+
+
+BACKDROP, BACKDROP_IMG = "사진", None     # 기본은 지금까지 쓰던 우주 장면(옛 영상이 그대로 나오게)
+
+
 def set_bg(name):
     """배경 변주를 고른다(navy·violet-moon·burgundy-sun·forest·teal).
     10/16까지 "navy" 로 고정돼 모든 릴스 배경이 같았다 — K-071 이 말하는 '큰 층'이 안 바뀌고 있었다."""
@@ -148,7 +166,25 @@ def _bg_variant(name):
         lum = np.asarray(src.convert("L")).astype("float32"); m = np.clip((lum - 55) / 150, 0, 1) * .42; mask = Image.fromarray((m * 255).astype("uint8")).filter(ImageFilter.GaussianBlur(2))
         im.paste(src, (x, y), mask)
     return im
-def bg_static(): return _bg_variant(BG_VARIANT)
+@functools.lru_cache(maxsize=4)
+def _bg_plate(col):
+    return Image.new("RGB", (W, H), col)
+
+
+@functools.lru_cache(maxsize=8)
+def _bg_scene(name):
+    import asset_lib as A
+    im = Image.open(A.path("bg", name)).convert("RGB")
+    return im if im.size == (W, H) else im.resize((W, H))
+
+
+def bg_static():
+    """바탕 종류에 따라 (단색 판 / 라이브러리 배경 / 우주 장면)."""
+    if BACKDROP == "단색":
+        return _bg_plate(INK[:3])                 # 판의 바탕색으로 꽉
+    if BACKDROP == "배경" and BACKDROP_IMG:
+        return _bg_scene(BACKDROP_IMG)
+    return _bg_variant(BG_VARIANT)
 @functools.lru_cache(maxsize=1)
 def _bg_base():
     im = Image.new("RGB", (W, H), (14, 17, 27)); d = ImageDraw.Draw(im)
@@ -453,10 +489,13 @@ def bg_for(name):
     return ids[(sum(ord(ch) for ch in str(name)) // 7) % len(ids)]
 
 
-def render(name, scenes, outdir, kicker=None):
+def render(name, scenes, outdir, kicker=None, 내용유형=None, 바탕=None, 판=None, 쓴판=()):
     """scenes: [(길이(초), 함수(c))]. 프레임을 ffmpeg로 바로 흘려 보낸다."""
-    set_pal(os.environ.get("ZS_PAL") or pal_for(name))   # 이 영상의 판(K-068)
-    set_bg(os.environ.get("ZS_BG") or bg_for(name))      # 이 영상의 배경(K-071 큰 층)
+    import asset_lib as _A
+    _pid, _why = _A.판(내용유형, 판 or os.environ.get("ZS_PAL"), name, 쓴판)   # 기획이 판을 정한다
+    set_pal(_pid)
+    set_bg(os.environ.get("ZS_BG") or bg_for(name))      # 우주 장면일 때의 색 변주
+    set_backdrop(내용유형, 바탕 or os.environ.get("ZS_BACKDROP"), name)   # 기획이 바탕을 정한다
     scenes = [(d_, _auto(f_, d_)) for d_, f_ in scenes]   # 모든 장면에 위·아래 여백 자동 맞춤(R21)
     total = sum(d for d, _ in scenes); os.makedirs(outdir, exist_ok=True); out = os.path.join(outdir, name + ".mp4")
     pr = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-", "-vf", "scale=in_range=full:out_range=tv:out_color_matrix=bt709,format=yuv420p", "-c:v", "libx264", "-profile:v", "high", "-crf", "14", "-preset", "medium", "-x264-params", "aq-mode=3:aq-strength=0.9", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-color_range", "tv", "-an", "-movflags", "+faststart", out], stdin=subprocess.PIPE)
