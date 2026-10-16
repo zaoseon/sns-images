@@ -1,0 +1,47 @@
+{
+  "id": "zaoseon",
+  "name": "자오선",
+  "tagline": "동서양 6개 운명학 교차분석",
+  "link": "zaoseon.com/ig",
+  "color": {
+    "accent": "#F2994A",
+    "ink": "#FFFFFF",
+    "inkDark": "#141414",
+    "paper": "#0B1026",
+    "paperAlt": "#121A3C",
+    "dim": "rgba(255,255,255,0.62)"
+  },
+  "accentNote": "주황 강조색은 임시값. 확정 HEX를 받으면 이 한 줄만 바꾼다.",
+  "font": {
+    "body": "Pretendard",
+    "title": "Pretendard",
+    "serif": "Noto Serif KR"
+  },
+  "character": {
+    "name": "정월",
+    "dir": "characters/cut_light",
+    "default": "v5_halfup_v2.png",
+    "forbidden": ["v5_halfup.png"],
+    "notice": "정월은 가상의 AI 캐릭터입니다",
+    "noticePosition": "bottom-left",
+    "noticeRule": "정월이 보이는 화면에만 넣는다. 그 밖의 화면에는 넣지 않는다."
+  },
+  "fixed": {
+    "topLeft": "자오선",
+    "topRight": "동서양 6개 운명학 교차분석",
+    "rule": "모든 영상·카드에 넣는다. 안전영역 안에 둔다."
+  },
+  "voice": {
+    "endings": ["~해요", "~거든요", "~드릴게요"],
+    "suggest": ["~해 보세요", "~두세요", "~해 보시면 좋을 것 같아요"],
+    "banned": [
+      "타고난 결", "겹으로 되어 있", "세 지도", "두 지도",
+      "엔진", "데이터 릴스", "의미축", "초안",
+      "반드시", "무조건", "확실합니다", "100%", "적중률"
+    ],
+    "bannedNote": "단정·보장 표현과 내부 용어는 고객이 보는 글에 쓰지 않는다.",
+    "disclaimer": "재미로 즐기는 운세 콘텐츠입니다."
+  },
+  "positioning": "운명학 베이스 관계·마음 코칭",
+  "positioningRule": "'상담·상담가' 대신 '코칭·코치'로 쓴다. 모든 채널 모든 콘텐츠에 마음·관계 코칭 내용이 들어간다."
+}
