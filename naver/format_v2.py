@@ -241,18 +241,20 @@ def _small_images(body):
     return re.sub(r"<img[^>]*>", sub, body)
 
 def link_guide(body, url):
-    """👇 유도 문구 바로 아래 제목 줄에 연결 글 주소로 링크를 건다(이미 걸려 있으면 그대로). 주소는 앱에 저장된 값(data/naver_urls.json)."""
+    """👇 함께 볼 글 유도 문구 줄에 연결 글 주소로 링크를 건다(이미 걸려 있으면 그대로). 주소는 앱에 저장된 값(data/naver_urls.json).
+    10/17 대표: 연결글은 유도 문구 한 줄만 쓰고 글 제목 줄은 쓰지 않는다 → 전에는 👇 다음 '제목 줄'에 걸었지만 이제 👇 줄 자체에 건다.
+    발행 키트(get_post.mjs)는 카드 자리 바로 앞에 걸린 주소로 카드를 만든다."""
     if not url: return body
     import html as _h
-    ms = list(re.finditer(r"<p[^>]*>.*?</p>", body, re.S)); g = max((i for i, m in enumerate(ms) if "👇" in FB.plain_of(m.group(0))), default=None)   # 함께 볼 글 안내는 본문 끝(CTA 앞)의 마지막 👇 줄. 앞쪽 댓글·공유 유도 문구의 👇와 헷갈리지 않게
+    ms = list(re.finditer(r"<p[^>]*>.*?</p>", body, re.S))
+    g = max((i for i, m in enumerate(ms) if "👇" in FB.plain_of(m.group(0)) and not ENGAGE.search(FB.plain_of(m.group(0)))), default=None)   # 본문 끝(CTA 앞)의 마지막 👇 줄. 댓글·공유 유도 문구의 👇는 건너뛴다(10/17: CTA 뒤 공유 문단에 링크가 걸려 카드가 엉뚱한 곳에 들어갔다)
     if g is None: return body
-    for m in ms[g + 1:]:
-        t = FB.plain_of(m.group(0)).replace("\xa0", " ").strip()
-        if not t: continue
-        if "<img" in m.group(0) or "<a " in m.group(0): return body
-        new = re.sub(r"(<span[^>]*>)(.*)(</span>)", lambda k: k.group(1) + '<a href="' + _h.escape(url, quote=True) + '">' + k.group(2) + "</a>" + k.group(3), m.group(0), count=1, flags=re.S)
-        return body[:m.start()] + new + body[m.end():]
-    return body
+    m = ms[g]
+    if "<a " in m.group(0): return body
+    a = '<a href="' + _h.escape(url, quote=True) + '">'
+    new = re.sub(r"(<span[^>]*>)(.*)(</span>)", lambda k: k.group(1) + a + k.group(2) + "</a>" + k.group(3), m.group(0), count=1, flags=re.S)
+    if new == m.group(0): new = re.sub(r"(<p[^>]*>)(.*)(</p>)", lambda k: k.group(1) + a + k.group(2) + "</a>" + k.group(3), m.group(0), count=1, flags=re.S)
+    return body[:m.start()] + new + body[m.end():]
 
 
 # ---- 10/8 대표 캡처 반영: 문단 사이 줄띄움·도입부 간격·이미지 앞뒤 ----

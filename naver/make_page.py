@@ -217,20 +217,26 @@ def related_cards(pid, body, ru):
                     if len(out_) + len(x_) > 11: break
                     out_ = (out_ + " " + x_).strip()
                 t = (out_ or t[:11]) + " 클립"
-            lines = FB.wrap(_h.escape(t), FB.BODY_LIMIT, 0.0, 17.0)
             lead = "👇 영상으로도 볼 수 있어요." if kind == "클립" else "👇 이 글도 같이 읽어 보세요."
-            blk += FB.BLANK() + FB.P(lead) + FB.P('<a href="' + _h.escape(u, quote=True) + '">' + "<br>".join(lines) + "</a>") + "<!--LINKCARD-->"
+            # 10/17 대표: 유도 문구 한 줄만, 글 제목 줄은 쓰지 않는다(카드에 제목이 나온다). 주소는 유도 문구 줄의 링크로(키트가 이 주소로 카드를 만든다)
+            blk += FB.BLANK() + FB.P('<a href="' + _h.escape(u, quote=True) + '">' + lead + "</a>") + "<!--LINKCARD-->"
         if at is None:   # 기본 연결글 카드가 없으면 CTA 배너 앞(없으면 끝)
             m = re.search(r'<p[^>]*>(?:(?!</p>).)*naver_cta\d', body, re.S); at = m.start() if m else len(body)
         body = body[:at] + blk + body[at:]
     return body
+
+def cta_last(body):
+    """CTA 배너 문단 뒤에 링크 카드 자리가 있으면 배너를 본문 맨 끝으로 옮긴다(맞은 꼴: … 카드 > CTA)."""
+    m = re.search(r'<p[^>]*>(?:(?!</p>).)*naver_cta\d(?:(?!</p>).)*</p>', body, re.S)
+    if not m or "<!--LINKCARD-->" not in body[m.end():]: return body
+    return body[:m.start()] + body[m.end():] + m.group(0)
 
 def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, category=None, thumbs=None, cid=None, clips=None, reserve=None, v2=True):
     if cover:   # 10/16: 원고 페이지는 대표 이미지를 사이트 사본(/naver/img/...)에서 읽는다 — 새 표지(_a3)를 만들고 사본을 안 둬서 안 보였다
         import shutil; dst = f"{SITE}/public/naver/img/{cover}"; src = os.path.join(IMG_DIR, cover)
         if os.path.exists(src) and not os.path.exists(dst): os.makedirs(os.path.dirname(dst), exist_ok=True); shutil.copy(src, dst)
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
-    body = body.replace("naver_cta2_", "naver_cta4_").replace("naver_cta3_", "naver_cta4_")   # 10/4: CTA 배너를 2/3 크기로(compact.cta_small)
+    body = re.sub(r"naver_cta[234]_", "naver_cta5_", body)   # 10/17 대표: 1280x400 배너(naver/cta_banner.py, 제목 57px·부제 50px 이상). 옛 cta4(10/4 2/3 크기)는 폰에서 글자 8px라 바꿈. 옛 파일은 발행 글이 쓰므로 그대로 둔다
     _mids = []   # 10/16 K-017 글 중간 입력칸 모양 상자(<table>): 서식 단계들이 <p>만 다루므로 자리표로 비켜 두었다가 끝에 되돌린다
     body = re.sub(r"<table\b.*?</table>", lambda m_: (_mids.append(m_.group(0)), f"<p>MIDBOX{len(_mids) - 1}</p>")[1], body, flags=re.S)
     body = FB.format_body(body)   # 10/4: 가운데 정렬 · 본문 16px · 제목 19px · 짧은 줄바꿈(네이버에 붙이면 바로 이 모양)
@@ -244,9 +250,10 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
     body = FB.fit_mobile(body)   # 10/15 대표 폰 캡처: 실제 한 줄 폭(본문 약 15.7자·소제목 약 13.4자)을 넘는 줄을 다시 나눈다
     body = re.sub(r"<p[^>]*>(?:<span[^>]*>)?MIDBOX(\d+)(?:</span>)?</p>", lambda m_: _mids[int(m_.group(1))] + "<p>&nbsp;</p>", body)
     body = related_cards(pid, body, _ru)   # 10/16 발행 글에 달린 링크 카드 수만큼 원고에도(카드를 잃지 않게)
+    body = cta_last(body)   # 10/17 서브 노트북 점검: CTA 배너는 링크 카드 뒤, 본문 맨 끝(원본은 naver/tail_order.py 로 고침, 여기는 안전장치)
     if related and (related.get("url") or related.get("title") or _ru):
         _u = _ru
-        rel_box = (f'<div class="box"><p class="lab">4. 함께 볼 글(내부 링크): 글 주소가 앱에 저장돼 있으면 본문 맨 아래 제목 줄에 링크가 자동으로 걸려요. 링크 카드도 원하면 제목 줄 다음 줄에 주소를 붙여 넣고 엔터</p>'
+        rel_box = (f'<div class="box"><p class="lab">4. 함께 볼 글(내부 링크): 글 주소가 앱에 저장돼 있으면 본문 맨 아래 👇 유도 문구 줄에 링크가 자동으로 걸려요. 글 제목 줄은 쓰지 않아요. 링크 카드는 유도 문구 다음 줄에 주소를 붙여 넣고 엔터 → 카드가 생기면 주소 줄은 지워요</p>'
                    f'<p class="val" style="font-size:20px;font-weight:700" id="rt">{html.escape(related.get("title") or "")}</p><button onclick="cp(\'rt\',this)">글 제목 복사</button>'
                    + (f'<p class="val" id="rl" style="margin-top:10px">{html.escape(_u)}</p><button onclick="cp(\'rl\',this)">글 주소 복사</button>' if _u else
                       '<p class="hint">주소는 네이버 블로그 글 관리에서 이 제목의 글 → 공유 → URL 복사. 상황판 원고 카드에 발행 주소를 적어 두면 다음부터 여기에 자동으로 나와요.</p>')

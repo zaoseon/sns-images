@@ -8,7 +8,7 @@ def ok(c, m):
     print(("OK   " if c else "FAIL ") + m)
     if not c: bad += 1
 pg = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "pages.json"), encoding="utf-8"))
-prep = lambda b: b.replace("naver_cta2_", "naver_cta4_").replace("naver_cta3_", "naver_cta4_")
+prep = lambda b: re.sub(r"naver_cta[234]_", "naver_cta5_", b)
 text = lambda h: re.sub(r"\s+", "", re.sub(r"<[^>]+>", "", h).replace("&nbsp;", "").replace("👇", ""))   # 댓글·공유 유도 문구에 👇가 붙는 것은 허용
 EL = re.compile(r"<table.*?</table>|<hr[^>]*>|<p[^>]*>.*?</p>", re.S)
 posts = {k: v for k, v in pg.items() if not v.get("done") and "body" in v}
@@ -78,15 +78,18 @@ for t in small + cta:
 ok(not miss, "작은 판 이미지 파일이 모두 있음" + (f" 없음: {miss[:3]}" if miss else ""))
 body = res[next(iter(res))][1]
 lk = V2.link_guide(body, "https://blog.naver.com/zaoseon/1234?a=1&b=2")
-ok(lk.count('<a href="https://blog.naver.com/zaoseon/1234?a=1&amp;b=2">') == 1 and re.sub(r"<[^>]+>", "", lk) == re.sub(r"<[^>]+>", "", body), "연결 글 링크: 👇 아래 제목 줄에 한 번, 글자는 그대로, 주소의 &는 &amp;로")
+ok(lk.count('<a href="https://blog.naver.com/zaoseon/1234?a=1&amp;b=2">') == 1 and re.sub(r"<[^>]+>", "", lk) == re.sub(r"<[^>]+>", "", body), "연결 글 링크: 👇 유도 문구 줄에 한 번, 글자는 그대로, 주소의 &는 &amp;로")
 ok(V2.link_guide(lk, "https://x.com/y") == lk and V2.link_guide(body, "") == body, "이미 링크가 있거나 주소가 없으면 바꾸지 않음")
 eng = [(k, p) for k, (_, n, _) in res.items() for p in re.findall(r"<p[^>]*>.*?</p>", n, re.S) if V2.ENGAGE.search(re.sub(r"<[^>]+>", "", p)) and len(V2.pl(p).strip()) < 160 and not re.match(r"^(📌|✔|🔹|🔸|\d+\.|Q\.|A\.)", V2.pl(p).strip())]
 ok(eng and all(re.search(r"<span[^>]*>👇( |<br>)", p) for _, p in eng), f"댓글·공유 유도 문구 {len(eng)}곳은 모두 👇로 시작")
 ok(all(FB.width(FB.plain_of(l)) <= FB.BODY_LIMIT + 0.5 for _, p in eng for l in re.sub(r"</?p[^>]*>|</?span[^>]*>", "", p).split("<br>")), "👇를 붙인 뒤에도 유도 문구 줄이 한 줄 최대 폭을 넘지 않음")
 bad_link = []
 for k, (_, n, _) in res.items():
-    lk = V2.link_guide(n, "https://blog.naver.com/zaoseon/999"); ps = re.findall(r"<p[^>]*>.*?</p>", lk, re.S); g = max(i for i, q in enumerate(ps) if "👇" in re.sub(r"<[^>]+>", "", q))
+    # 10/17 대표: 연결글은 유도 문구 한 줄만(제목 줄 없음) → 링크는 마지막 '함께 볼 글' 👇 줄 자체에. 댓글·공유 유도 👇에는 안 건다
+    lk = V2.link_guide(n, "https://blog.naver.com/zaoseon/999"); ps = re.findall(r"<p[^>]*>.*?</p>", lk, re.S)
+    g = max(i for i, q in enumerate(ps) if "👇" in re.sub(r"<[^>]+>", "", q) and not V2.ENGAGE.search(re.sub(r"<[^>]+>", "", q)))
     linked = [i for i, q in enumerate(ps) if "<a " in q and "blog.naver.com/zaoseon/999" in q]
-    if linked != [g + 1] or "👇" in ps[g + 1]: bad_link.append((k, linked, g))
-ok(not bad_link, "연결 글 링크: 마지막 👇 줄 바로 아래 제목 줄에만 걸리고 댓글·공유 유도 문구에는 안 걸림 " + str(bad_link[:4]))
+    nxt = next((q for q in ps[g + 1:] if re.sub(r"<[^>]+>|&nbsp;|\s", "", q) or "<img" in q), "")
+    if linked != [g] or ("<img" not in nxt and "naver_cta" not in nxt and nxt): bad_link.append((k, linked, g))
+ok(not bad_link, "연결 글 링크: 마지막 함께 볼 글 👇 줄에만 걸리고(제목 줄 없음, 다음은 CTA 배너) 댓글·공유 유도 문구에는 안 걸림 " + str(bad_link[:4]))
 print("모두 통과" if not bad else f"실패 {bad}"); sys.exit(1 if bad else 0)
