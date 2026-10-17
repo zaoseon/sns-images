@@ -121,7 +121,9 @@ def k131_checks():
     """K-131(대표 10/17): 네이버 본문 그림 — 다시 그린 글은 도식 2종 이상·옛 틀 2장 이하·이웃 글 첫 도식 다르게. 옛 글은 빚으로 센다."""
     sys.path.insert(0, os.path.join(R, "naver")); import k131_check as KC
     reg_p = os.path.join(R, "naver", "diagrams.json")
-    bad, debt = KC.check(json.load(open(os.path.join(R, "naver", "pages.json"), encoding="utf-8")), json.load(open(reg_p, encoding="utf-8")) if os.path.exists(reg_p) else {})
+    pages = json.load(open(os.path.join(R, "naver", "pages.json"), encoding="utf-8")); reg = json.load(open(reg_p, encoding="utf-8")) if os.path.exists(reg_p) else {}
+    bad, debt = KC.check(pages, reg)
+    for k, v in KC.k135_check(pages, reg).items(): bad.setdefault(k, []).extend(v)   # K-135 그림 거리(3판 이후 글)
     for k, v in bad.items(): print("   ", k, "; ".join(v))
     if debt: print(f"    (아직 옛 틀인 네이버 글 {len(debt)}편 — data/naver_redraw_plan.json 배치대로 줄인다)")
     return {"네이버 본문 도식(K-131, 다시 그린 글)": len(bad)}

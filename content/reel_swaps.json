@@ -3499,7 +3499,7 @@
   "title": "발행 글 16편 본문 도식 다시(K-131 B2 2판): 글마다 그 글의 장면·순서·시간을 그린 그림 33장",
   "date": "2026-10-17",
   "time": "",
-  "status": "new",
+  "status": "cancel",
   "channels": [
    "naver"
   ],
@@ -3563,6 +3563,79 @@
    "같은 모양이 이웃 글에 반복돼 보이지 않는지",
    "선·화살표 굵기가 폰에서 보이는지"
   ],
-  "since": "2026-10-17 18:50"
+  "since": "2026-10-17 18:50",
+  "decided": "3판으로 대체(대표 18:16 요청 mvc6m8lr — 2판도 상자·화살표·저울·배터리 묶음 돌려쓰기) → naver-b2v3-1017"
+ },
+ {
+  "id": "naver-b2v3-1017",
+  "kind": "네이버 발행글 본문 그림(K-131 B2 3판 · K-135, 승인 대기)",
+  "title": "발행 글 16편 본문 그림 3판: 차트·학자·실험·고전·우화로 32장(도형 돌려쓰기 대신)",
+  "date": "2026-10-17",
+  "time": "",
+  "status": "new",
+  "channels": [
+   "naver"
+  ],
+  "images": [
+   "/naver/img/naver_b2v3_sheet.jpg",
+   "/naver/img/naver_z17_s7.jpg",
+   "/naver/img/naver_z17_e7.jpg",
+   "/naver/img/naver_z16_c7.jpg",
+   "/naver/img/naver_z16_e7.jpg",
+   "/naver/img/naver_z23_c7.jpg",
+   "/naver/img/naver_z23_e7.jpg",
+   "/naver/img/naver_z18_s7.jpg",
+   "/naver/img/naver_z18_e7.jpg",
+   "/naver/img/naver_z19_c7.jpg",
+   "/naver/img/naver_z19_e7.jpg",
+   "/naver/img/naver_z20_c7.jpg",
+   "/naver/img/naver_z20_e7.jpg",
+   "/naver/img/naver_z21_c7.jpg",
+   "/naver/img/naver_z21_e7.jpg",
+   "/naver/img/naver_z22_c7.jpg",
+   "/naver/img/naver_z22_e7.jpg",
+   "/naver/img/naver_z26_c7.jpg",
+   "/naver/img/naver_z26_e7.jpg",
+   "/naver/img/naver_z27_c7.jpg",
+   "/naver/img/naver_z27_e7.jpg",
+   "/naver/img/naver_z28_t7.jpg",
+   "/naver/img/naver_z28_h7.jpg",
+   "/naver/img/naver_z29_a7.jpg",
+   "/naver/img/naver_z29_e7.jpg",
+   "/naver/img/naver_z24_y7.jpg",
+   "/naver/img/naver_z24_e7.jpg",
+   "/naver/img/naver_z30_c7.jpg",
+   "/naver/img/naver_z30_e7.jpg",
+   "/naver/img/naver_z31_c7.jpg",
+   "/naver/img/naver_z31_e7.jpg",
+   "/naver/img/naver_z33_c7.jpg",
+   "/naver/img/naver_z33_e7.jpg"
+  ],
+  "links": [
+   "/naver/n17.html",
+   "/naver/n16.html",
+   "/naver/n23.html",
+   "/naver/n18.html",
+   "/naver/n19.html",
+   "/naver/n20.html",
+   "/naver/n21.html",
+   "/naver/n22.html",
+   "/naver/n26.html",
+   "/naver/n27.html",
+   "/naver/n28.html",
+   "/naver/n29.html",
+   "/naver/n24.html",
+   "/naver/n30.html",
+   "/naver/n31.html",
+   "/naver/n33.html"
+  ],
+  "caption": "",
+  "note": "대표 18:16 요청(mvc6m8lr)대로 B2 16편 그림을 '도형 돌려쓰기'에서 '그림 거리'로 바꿨어요. 맨 앞은 16편 32장 한눈에 보기 시트예요. 글마다 두 장: ① 심리학 단락 자리 = 그 단락이 말한 연구를 진짜 숫자·실험으로(뉴턴 두드리기 50%→2.5% · 손실 회피 곡선 2.25배 · 브릭먼 복권 4.00/3.82/3.33 · 흰곰 실험 · 2·4·6 실험 · 그로스·존 비교표 · 감정 다섯 자리 · 쉼의 네 신호 · 과잉 확신 셋 · 미루는 마음의 식 · 길로비치·최인철 학자 카드 · 던바 5·15·50·150 · 고트먼 20분) ② 4절(n28·n29·n24는 1~2절) = 고전·우화·신화·속담·책(오르페우스 · 아리스토텔레스 카타르시스 · 개미와 베짱이 · 논어 '고치기를 꺼리지 말라' · 침묵은 금 · 드 메스트르 방 안 42일 · 로미오와 줄리엣 · 시라노 · 북풍과 해 · 네 원소와 오행 연도 · 백지장도 맞들면 낫다 · 여키스·도슨 산 모양 · 스턴버그 세 꼭짓점 · 카너먼 빠른·느린 생각 · 소로의 의자 셋 · 고트먼 5:1). 원고 본문에도 그 거리를 한두 문장으로 넣었어요(예: '1987년 심리학자 웨그너는…'). 숫자·연도·작가는 확인한 것만 썼고, 출처를 그림 아래에 적었어요. 영화 스틸컷·포스터·대사 인용은 쓰지 않았고 장면은 우리 말 설명만 했어요. 모양 22가지, 같은 모양은 16편 안에서 두 번까지, 상자+화살표는 4장(검사 k131_check K-135가 막아요). 명화는 이 실행 환경에서 위키미디어 접속이 막혀 이번 판에는 못 넣었어요. 승인하시면 B2 배치를 준비 완료로 바꾸고 서브 노트북이 16편을 한 번에 수정 발행해요. 사진은 sns-images 묶음이 올라가야 열려요.",
+  "checks": [
+   "글마다 두 장이 그 글 이야기로 읽히는지(틀처럼 보이지 않는지)",
+   "숫자·연도·작가가 맞는지(출처는 그림 아래)",
+   "폰에서 글자·선이 읽히는지"
+  ],
+  "since": "2026-10-17 19:15"
  }
 ]

@@ -49,7 +49,26 @@ def check(pages, reg, enforce=None, strict=False):
                 for pid in ids: bad.setdefault(pid, []).append(f"{tag} 배치 안 같은 모양 {t} {len(ids)}번(2번까지)")
     return bad, debt
 
-BATCH_DEBT = {"B1"}   # B1(띠·시기 7편)은 관계도·열두 달 칸이 글 내용 그대로라 대표가 그림 내용 승인(10/17 17:42) — 빚으로 둔다
+BATCH_DEBT = {"B1"}
+
+
+def k135_check(pages, reg):
+    """K-135(대표 10/17 18:16 "도형 돌려쓰기 말고 인포그래픽·차트·학자·고전·영화"): 3판 이후 글(k131 꼬리표에 'K-135')은
+    도식이 모두 '그림 거리' 모양(diagrams_k131c.KIND: 가 차트·다 학자/실험·라 고전/우화)이어야 하고, 한 배치 안 상자+화살표 모양(ARROWY)은 4장까지."""
+    import diagrams_k131c as D3
+    bad, arrow = {}, {}
+    for pid, v in pages.items():
+        tag = v.get("k131") or ""
+        if "K-135" not in tag: continue
+        dg = [t for k, t in kinds(v.get("body", ""), reg) if k == "도식"]
+        off = [t for t in dg if t not in D3.KIND]
+        if off: bad.setdefault(pid, []).append("그림 거리 아닌 도형: " + ",".join(off))
+        if len(dg) < 2: bad.setdefault(pid, []).append(f"그림 거리 {len(dg)}장(2장 이상)")
+        b = tag.split(" ")[0]
+        arrow[b] = arrow.get(b, 0) + sum(t in D3.ARROWY for t in dg)
+    for b, n in arrow.items():
+        if n > 4: bad.setdefault(f"{b} 배치", []).append(f"상자+화살표 {n}장(4장까지)")
+    return bad   # B1(띠·시기 7편)은 관계도·열두 달 칸이 글 내용 그대로라 대표가 그림 내용 승인(10/17 17:42) — 빚으로 둔다
 
 def line_check():
     """K-133(대표 10/17 17:42 '화살표·차트 얇게 말고 두껍게'): 도식 선 굵기 상수가 기준 밑으로 내려가지 않게."""
@@ -68,6 +87,7 @@ if __name__ == "__main__":
     sys.path.insert(0, HERE)
     bad, debt = check(pages, reg, ids, "--all" in sys.argv)
     for t in line_check(): bad.setdefault("선 굵기(K-133)", []).append(t)
+    for k, v in k135_check(pages, reg).items(): bad.setdefault(k, []).extend(v)
     for k, v in bad.items(): print("✗", k, "; ".join(v))
     print(f"K-131: 막힌 글 {len(bad)} · 아직 옛 틀인 글(빚) {len(debt)}편")
     sys.exit(1 if bad else 0)
