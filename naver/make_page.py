@@ -236,7 +236,7 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
         import shutil; dst = f"{SITE}/public/naver/img/{cover}"; src = os.path.join(IMG_DIR, cover)
         if os.path.exists(src) and not os.path.exists(dst): os.makedirs(os.path.dirname(dst), exist_ok=True); shutil.copy(src, dst)
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
-    body = re.sub(r"naver_cta[234]_", "naver_cta5_", body)
+    body = re.sub(r"naver_cta[2345]_", "naver_cta6_", body)   # 10/17 14:58 대표 "배너가 그냥 봐도 크다" → 6판 1280x240(글줄 옆 단추, naver/cta_banner6.py). 옛 파일은 발행 글이 쓰므로 그대로 둔다
     body = re.sub(r"<p>\s*(?:&nbsp;\s*)?이 글은 재미로[^<]*</p>", "", body)   # 10/17 K-128 대표: '재미로' 면책 문장은 넣지 않는다. 발행글은 다른 이유로 고칠 때 같이 뺀다(지금 서브 노트북 수정 발행 중)   # 10/17 대표: 1280x400 배너(naver/cta_banner.py, 제목 57px·부제 50px 이상). 옛 cta4(10/4 2/3 크기)는 폰에서 글자 8px라 바꿈. 옛 파일은 발행 글이 쓰므로 그대로 둔다
     _mids = []   # 10/16 K-017 글 중간 입력칸 모양 상자(<table>): 서식 단계들이 <p>만 다루므로 자리표로 비켜 두었다가 끝에 되돌린다
     body = re.sub(r"<table\b.*?</table>", lambda m_: (_mids.append(m_.group(0)), f"<p>MIDBOX{len(_mids) - 1}</p>")[1], body, flags=re.S)

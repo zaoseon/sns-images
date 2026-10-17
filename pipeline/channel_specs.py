@@ -63,6 +63,17 @@ CH = {
     min_px=dict(title=57, body=50, label=52),
     cover="표지가 아니다.", cta="누르면 무료 풀이(zaoseon.com/?utm_source=naver&utm_medium=cta#free). 링크는 키트가 그림에 건다.",
     body="링크 카드 뒤, 본문 맨 끝에 하나. 새 판은 새 이름으로만 추가한다(naver/img 덮어쓰기 금지)."),
+ "naver_cta_banner6": dict(
+    name="네이버 글 맨 아래 CTA 배너 낮은 판(6)", w=1280, h=240, ratio="5.3:1", length="글 1편 1장(같은 그림을 모든 글에 쓴다)",
+    conf="10/17 14:58 대표 '배너가 그냥 봐도 크다'. 5판(1280x400)은 본문 폭 886px에서 886x276으로 글줄보다 크게 도드라짐(서브 노트북 실측 n07·n12·n64·n31). 높이만 낮추면 키트 변경 없음(서브 노트북 권장 1280x240~260). 360px 폰에서 약 0.28배",
+    ui=dict(top=0, bottom=0, right=0), safe=(40, 24, 1240, 216),
+    crops={},
+    zones=[("제목", 60, 40, 840, 122, "한 줄, 페이퍼로지 56px 이상"), ("본문·그림", 60, 128, 840, 196, "부제 한 줄, 프리텐다드 42px 이상"),
+           ("버튼(오른쪽)", 868, 62, 1222, 178, "알약 단추 하나, 프리텐다드 46px 이상 — 글줄과 옆으로 나란히(높이를 낮추려고)")],
+    fonts=dict(title="페이퍼로지 56px 이상", body="프리텐다드 42px 이상", label="프리텐다드 46px 이상"),
+    min_px=dict(title=56, body=42, label=46),
+    cover="표지가 아니다.", cta="누르면 무료 풀이(zaoseon.com/?utm_source=naver&utm_medium=cta#free). 링크는 키트가 그림에 건다.",
+    body="링크 카드 뒤, 본문 맨 끝에 하나. 새 판은 새 이름으로만 추가한다(naver/img 덮어쓰기 금지)."),
  "site_blog_thumb": dict(
     name="사이트 블로그 썸네일(zaoseon.com)", w=1200, h=630, ratio="1.91:1", length="글 1편 1장(자동 생성)", conf="ok(공유 미리보기 표준 크기)",
     ui=dict(top=0, bottom=0, right=0), safe=(60, 50, 1140, 580),
