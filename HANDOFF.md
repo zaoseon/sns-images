@@ -9,6 +9,8 @@
 
 > **① 자동 실행 10/14 19:49:** 앱 승인된 event-trial1015-threads(10/15 19:00 스레드 모집 글에 표지 1장, 새 id 395757023)·shari-1020(10/20 20:00 스레드, 395757103) Metricool 예약 완료. 체험단 카드·캡션 요일 표기 없음 확인. 다음: 10/19 마감 알림·10/20 선정 발표·10/22·10/29 추첨 발표 콘텐츠, cover-1103a·b 7장.
 
+> **① 자동 실행 10/17 15시 (D-368~371):** ① 옛 발행글 4편(n01·n02·n03·s10) 새 원고 `naver/build_naver_old4.py`(지금 공개 본문 zaoseon-site data/naver_live 바탕, 제목·검색어·표 유지 + AI 브리핑 기준). 이 넷은 done=True(발행 글)라 fix.html 쪽에 그려진다. 카드 자리는 `naver/planned_cards.json` → make_page.related_cards(지금 달린 카드에 없는 것만 더함). **render_all을 이 환경(영상 sparse)에서 돌리면 다른 원고의 클립 칸 길이가 빠진다 — 새 원고만 남기고 나머지 public/naver/*.html은 되돌릴 것.** ② K-128 검사 `pipeline/disclaimer_audit.py`(qa_all 연결, 빚 `content/audit/disclaimer_baseline.json`). ③ 스레드 아침 스하리 `2026-shari-am/`(ZS_SET 빌더) 10/19~25 6편 승인 대기 — 승인되면 07:30 예약, 10/20은 20:00 글과 합침. 다음 주(10/26~) 6~7편도 같은 사양에 날짜만 바꿔 만든다(일진·육합·삼합 계산, 충 띠 금지). sns-images push 403 → zaoseon-site ops/pending_sns-images/20261017d_1.bundle.
+
 > **① 자동 실행 10/17 11:45 (D-350~352):** 앱 승인된 광고 소재 릴스 igad-reel-1016을 10/17 20:00 인스타 릴스 빈 칸에 예약(Metricool 398277071, 승인 판 e3e51e3 영상, K-128로 '재미로' 문장만 뺌 — 뒤 커밋 fea993c가 같은 파일을 바꿨으니 주소를 바꾸지 말 것). 캐러셀 igad-1016은 예비(skip). natural_audit에 K-029 고객 감사 '고마워요' 검사(인사 꼴만). 인스타·스레드 주간 성과 수집 시작(zaoseon-site data/analytics/sns_weekly.json, 매주 월요일 ①). sns-images push는 이번에도 403 → zaoseon-site ops/pending_sns-images/20261017c_1.bundle.
 
 > **① 자동 실행 10/16 19:50 (D-299):** 이벤트 승인 카드 전부 처리 끝 확인. 21:30 팔로우 이벤트 릴스(397530639)에 Instagram 무관 고지가 없는 것은 **대표가 빼라고 지시한 것** — 다시 넣지 않는다(기준 K-110: 대표가 말한 면책 문구가 바로 이 무관 고지 — 앞으로 이벤트 글에 넣지 않는다). cover-1103a·b·1105b·1106a·b·1107b 7장은 K-097(캐러셀 멈춤)로 만들지 않는다. 남은 것: 10/28 후기(동의한 후기 모인 뒤, 캐러셀 아닌 형식으로). sns-images push는 이번에도 403.
