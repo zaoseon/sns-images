@@ -86,6 +86,35 @@ def set_checks():
     return {"캐러셀 세트(최소 7장·CTA·속 빈 장)": len(나쁨)}
 
 
+def naver_state_checks():
+    """네이버 글 상태가 실제와 어긋나 있는지(10/17).
+    10/17 에 드러난 일: 예약 시각이 지나 네이버에서 이미 발행된 글 30편을 published.json 이
+    아직 'scheduled'·'planned' 로 알고 있었다. 그 바람에 세션이 "54편 남았다"처럼
+    사실과 다른 숫자로 보고했다. 파일은 저절로 바뀌지 않으므로 여기서 잰다.
+    주소도 같이 본다 — 발행된 글의 주소가 없으면 연결글 카드·클립 연결을 걸 수 없다
+    (주소는 서브 노트북 `주소채우기.bat` 가 채운다)."""
+    import datetime
+    오늘 = datetime.date.today()
+    d = json.load(open(os.path.join(R, "naver", "published.json"), encoding="utf-8"))
+    지났는데_안바뀜, 발행인데_주소없음 = [], []
+    for k, v in sorted(d.items()):
+        try:
+            날 = datetime.date(*map(int, v["date"].split("-")))
+        except Exception:
+            continue
+        if 날 <= 오늘 and v.get("status") != "published":
+            지났는데_안바뀜.append(k)
+        if v.get("status") == "published" and not (v.get("url") or "").strip():
+            발행인데_주소없음.append(k)
+    if 지났는데_안바뀜:
+        print("    나갈 시각이 지났는데 상태가 그대로인 글:", " ".join(지났는데_안바뀜),
+              "— 네이버에서 확인하고 published 로 고치세요")
+    if 발행인데_주소없음:
+        print(f"    발행됐는데 주소가 없는 글 {len(발행인데_주소없음)}편 —"
+              " 서브 노트북에서 주소채우기.bat 를 돌리세요(연결글 카드·클립 연결이 이 주소를 씁니다)")
+    return {"네이버 글 상태가 실제와 맞는가": len(지났는데_안바뀜)}
+
+
 def video_checks():
     out = {}
     import audit_assets as AU, layout_audit as LA
@@ -99,6 +128,7 @@ if __name__ == "__main__":
     res = text_checks()
     res.update(spec_checks())
     res.update(set_checks())
+    res.update(naver_state_checks())
     if "--videos" in sys.argv: res.update(video_checks())
     fail = {k: v for k, v in res.items() if v}
     for k, v in res.items(): print(("통과 " if not v else f"걸림 {v}개 ") + "· " + k)
