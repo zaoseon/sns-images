@@ -37,8 +37,8 @@ def _legend(cv, c, y, items):
         draw(x + 26, y); cv.text(x + 64, y, t, SB, 42, c.fg, "lm"); x += 64 + cv.tw(t, SB, 42) + 48
 
 # 1. 열두 달 칸 --------------------------------------------------------------
-def months(name, c, head, rows, next_jan=True):
-    """rows = [(띠 이름, 힘 쓸 달 집합, 아낄 달 집합)]. 달 13 = 이듬해 1월."""
+def months(name, c, head, rows, next_jan=True, up_label="힘을 쓸 달", dn_label="아낄 달"):
+    """rows = [(띠 이름, 힘 쓸 달 집합, 아낄 달 집합)]. 달 13 = 이듬해 1월. dn_label=None 이면 둘째 표시는 범례에서 뺀다(그 글에 없는 값)."""
     ncol = 13 if next_jan else 12; lab = 200; top = 150; hh = 66; rh = 80
     gx = L + 10 + lab; cw = (RT - 10 - gx) / ncol
     H = top + hh + rh * len(rows) + 190; cv = Cv(H, c.bg); B._head(cv, c, head)
@@ -56,7 +56,7 @@ def months(name, c, head, rows, next_jan=True):
             elif m in dn: _dot(cv, x, cy, 20, outline=c.fg, w=6)
             else: _dot(cv, x, cy, 5, fill=c.gray)
     y = top + hh + rh * len(rows) + 70
-    _legend(cv, c, y, [(lambda x, y: _dot(cv, x, y, 23, fill=c.acc), "힘을 쓸 달"), (lambda x, y: _dot(cv, x, y, 20, outline=c.fg, w=6), "아낄 달")])
+    _legend(cv, c, y, [(lambda x, y: _dot(cv, x, y, 23, fill=c.acc), up_label)] + ([(lambda x, y: _dot(cv, x, y, 20, outline=c.fg, w=6), dn_label)] if dn_label else []))
     if next_jan: cv.text(RT - 10, y + 70, "맨 오른쪽 칸은 이듬해 1월이에요", SB, 42, c.gray, "rm")
     _done(cv, c, name, "months")
 
@@ -65,7 +65,8 @@ STY = {"pair": lambda cv, c, a, b: None,
        "solid": lambda cv, c, a, b: cv.line(*a, *b, c.acc, 9),
        "thin": lambda cv, c, a, b: cv.line(*a, *b, c.gray, 5),
        "dash": lambda cv, c, a, b: _dash(cv, *a, *b, c.fg, 7, 26, 18),
-       "dot": lambda cv, c, a, b: _dash(cv, *a, *b, c.gray, 7, 8, 14)}
+       "dot": lambda cv, c, a, b: _dash(cv, *a, *b, c.gray, 7, 8, 14),
+       "thick": lambda cv, c, a, b: cv.line(*a, *b, c.acc, 18)}   # 마주 이어진 짝(육합, 이웃하지 않은 두 띠)
 def wheel(name, c, head, edges, hi=(), legend=(), note="", focus=None):
     """edges = [(띠 번호, 띠 번호, 'solid'|'thin'|'dash'|'dot')], hi = 칠할 띠 번호. 쥐가 맨 위, 시계 방향(지지 순서)."""
     R, r = 330, 74; top = 150; cx = (L + RT) / 2; cy = top + 20 + R + r
@@ -76,7 +77,7 @@ def wheel(name, c, head, edges, hi=(), legend=(), note="", focus=None):
         return (a[0] + ux * (r + 8), a[1] + uy * (r + 8)), (b[0] - ux * (r + 8), b[1] - uy * (r + 8))
     for i, j, s in edges:   # 이웃한 두 띠의 짝(육합)은 선이 너무 짧아서 두 원을 굵은 띠로 잇는다
         if s == "pair": cv.line(*pos[i], *pos[j], c.acc, 2 * r * .55)
-    for order in ("thin", "dot", "dash", "solid"):
+    for order in ("thin", "dot", "dash", "solid", "thick"):
         for i, j, s in edges:
             if s == order: STY[s](cv, c, *trim(pos[i], pos[j]))
     for i, (x, y) in enumerate(pos):
@@ -125,8 +126,8 @@ def matrix(name, c, head):
     _done(cv, c, name, "matrix")
 
 # 4. 달력 ---------------------------------------------------------------------
-def calendar(name, c, head, months_, note=""):
-    """months_ = [(년, 월, 칠할 날 집합)] 한 장에 두 달까지 나란히."""
+def calendar(name, c, head, months_, note="", ring=None):
+    """months_ = [(년, 월, 칠할 날 집합)] 한 장에 두 달까지 나란히. ring = {월: 테두리만 칠 날 집합}(절기 같은 기준일)."""
     gap = 40; pw = (RT - L - 20 - gap * (len(months_) - 1)) / len(months_); cw = pw / 7; rh = 76; top = 150
     H = top + 70 + 66 + rh * 6 + (110 if note else 50); cv = Cv(H, c.bg); B._head(cv, c, head)
     for k, (yy, mm, hot) in enumerate(months_):
@@ -139,6 +140,7 @@ def calendar(name, c, head, months_, note=""):
                 if not day: continue
                 x = x0 + (d + .5) * cw; y = top + 70 + 66 + (r_ + .5) * rh
                 if day in hot: _dot(cv, x, y, 32, fill=c.acc)
+                elif day in (ring or {}).get(mm, ()): _dot(cv, x, y, 32, outline=c.fg, w=5)
                 cv.text(x, y, str(day), XB, 42, c.pillfg if day in hot else c.fg, "mm")
     if note: cv.text(L + 10, H - 60, note, SB, cv.fit(note, SB, 42, RT - L - 20, 42), c.gray, "lm")
     _done(cv, c, name, "calendar")
@@ -174,3 +176,67 @@ def timeline(name, c, head, y0, groups, mark=None):
         for k, w in enumerate("들눌날"): cv.text(x + (k + .5) * cw, cy, w, XB, 42, c.pillfg, "mm")
     if mark: cv.text(RT - 10, H - 60, f"칠한 세로 칸이 {mark}년이에요", SB, 42, c.gray, "rm")
     _done(cv, c, name, "timeline")
+
+# 7. 한 띠의 열두 달 칸(사주 해: 2월 입춘 ~ 이듬해 1월) -----------------------------------
+def monthgrid(name, c, head, cells, note="마지막 칸은 이듬해 1월이에요"):
+    """cells = [(월 숫자, 꼬리표 or '', 'up'|'dn'|None)] 12칸(2월부터). 칸 안: 'N월' · 그달의 띠 · 꼬리표(그 글에 적힌 관계만).
+    up = 칠한 칸(힘을 쓸 달), dn = 굵은 테두리(아낄 달). 그달의 띠 = 월 지지(2월 寅 … 12월 子, 1월 丑)."""
+    cols, gap, ch = 4, 16, 210; top = 150; cw = (RT - L - 20 - gap * (cols - 1)) / cols; rows_ = math.ceil(len(cells) / cols)
+    H = int(top + rows_ * (ch + gap) + 170); cv = Cv(H, c.bg); B._head(cv, c, head)
+    for k, (m, tag, st) in enumerate(cells):
+        x = L + 10 + (k % cols) * (cw + gap); y = top + (k // cols) * (ch + gap)
+        if st == "up": cv.rr([x, y, x + cw, y + ch], 26, fill=c.acc); fg = sub = c.pillfg
+        elif st == "dn": cv.rr([x, y, x + cw, y + ch], 26, fill=c.card if c.dark else c.bg, outline=c.fg, w=6); fg, sub = c.fg, c.fg
+        else: cv.rr([x, y, x + cw, y + ch], 26, fill=c.card); fg, sub = c.fg, c.gray
+        cv.text(x + 24, y + 58, f"{m}월", XB, 54, fg, "lm")
+        cv.text(x + 24, y + 122, ZJ[m % 12] + " 달", SB, cv.fit(ZJ[m % 12] + " 달", SB, 42, cw - 40, 42), sub, "lm")
+        if tag: cv.text(x + 24, y + 172, tag, XB, cv.fit(tag, XB, 42, cw - 40, 42), fg, "lm")
+    y = top + rows_ * (ch + gap) + 50
+    _legend(cv, c, y, [(lambda x, y: cv.rr([x - 26, y - 26, x + 26, y + 26], 10, fill=c.acc), "힘을 쓸 달"),
+                       (lambda x, y: cv.rr([x - 26, y - 26, x + 26, y + 26], 10, outline=c.fg, w=6), "아낄 달")])
+    if note: cv.text(L + 10, y + 80, note, SB, cv.fit(note, SB, 42, RT - L - 20, 42), c.gray, "lm")
+    _done(cv, c, name, "monthgrid")
+
+# 8. 여섯 운명학 교차표 ---------------------------------------------------------
+def cross(name, c, head, cols, rows, note=""):
+    """cols = 이 글의 주제(짧게), rows = [(체계, [표시...])] 표시 '●' 같은 방향 · '○' 서로 갈림 · '–' 이 주제는 말하지 않음(계산 안 함)."""
+    lab = 240; top = 150; hh = 80; rh = 96; gx = L + 10 + lab; cw = (RT - 10 - gx) / len(cols)
+    H = int(top + hh + rh * len(rows) + 200 + (80 if note else 0)); cv = Cv(H, c.bg); B._head(cv, c, head)
+    def mk(t, x, y):
+        if t == "●": _dot(cv, x, y, 24, fill=c.acc)
+        elif t == "○": _dot(cv, x, y, 21, outline=c.fg, w=7)
+        else: cv.line(x - 16, y, x + 16, y, c.gray, 6)
+    for j, t in enumerate(cols): cv.text(gx + (j + .5) * cw, top + hh / 2, t, XB, cv.fit(t, XB, 44, cw - 16, 42), c.fg, "mm")
+    for i, (sysname, marks) in enumerate(rows):
+        y = top + hh + i * rh; cy = y + rh / 2; cv.line(L + 10, y, RT - 10, y, c.line, 2)
+        quiet = all(m_ not in "●○" for m_ in marks)
+        cv.text(L + 14, cy, sysname, XB, cv.fit(sysname, XB, 46, lab - 20, 42), c.gray if quiet else c.fg, "lm")
+        for j, m_ in enumerate(marks): mk(m_, gx + (j + .5) * cw, cy)
+    y = top + hh + rh * len(rows) + 70
+    _legend(cv, c, y, [(lambda x, y: mk("●", x, y), "같은 방향"), (lambda x, y: mk("○", x, y), "서로 갈림"), (lambda x, y: mk("–", x, y), "말하지 않음")])
+    if note: cv.text(L + 10, y + 90, note, SB, cv.fit(note, SB, 42, RT - L - 20, 42), c.gray, "lm")
+    _done(cv, c, name, "cross")
+
+# 9. 시기 띠그래프(한 해 흐름·절기와 사주 달) -------------------------------------------
+def band(name, c, head, axis, ticks, rows, marks=()):
+    """axis = (시작, 끝) 숫자 축. ticks = [(위치, 글)]. rows = [(글, 시작, 끝, 'acc'|'out'|'soft')]. marks = [(위치, 글)] 세로 점선 + 아래 설명."""
+    lab_top = 150; th = 70; rh = 120; gx = L + 10; gw = RT - L - 20; a0, a1 = axis
+    X = lambda v: gx + (v - a0) / (a1 - a0) * gw
+    H = int(lab_top + th + rh * len(rows) + 40 + 80 * len(marks) + 40); cv = Cv(H, c.bg); B._head(cv, c, head)
+    for v, t in ticks:
+        cv.line(X(v), lab_top + th - 10, X(v), lab_top + th + rh * len(rows), c.line, 2); cv.text(X(v) + 8, lab_top + th / 2, t, XB, 42, c.fg, "lm")
+    yb = lab_top + th + rh * len(rows) + 10
+    order = sorted(range(len(marks)), key=lambda k: -marks[k][0])   # 오른쪽 표시가 위 줄: 왼쪽 표시의 설명 글이 다른 점선을 가로지르지 않게
+    yk = {k: yb + 40 + 80 * r for r, k in enumerate(order)}
+    for k, (v, t) in enumerate(marks): _dash(cv, X(v), lab_top + th, X(v), yk[k], c.fg, 5, 14, 10)   # 점선을 먼저, 막대가 위에
+    for i, (t, s, e, st) in enumerate(rows):
+        y = lab_top + th + i * rh + 20; box = [X(s) + 3, y, X(e) - 3, y + rh - 40]
+        if st == "acc": cv.rr(box, 40, fill=c.acc); fg = c.pillfg
+        elif st == "out": cv.rr(box, 40, fill=c.card if c.dark else c.bg, outline=c.fg, w=6); fg = c.fg
+        else: cv.rr(box, 40, fill=c.card if not c.dark else c.line); fg = c.fg
+        cv.text((box[0] + box[2]) / 2, y + (rh - 40) / 2, t, XB, cv.fit(t, XB, 46, box[2] - box[0] - 30, 42), fg, "mm")
+    for k, (v, t) in enumerate(marks):
+        _dot(cv, X(v), yk[k], 12, fill=c.fg)
+        right = X(v) + 30 + cv.tw(t, SB, 42) <= RT
+        cv.text(X(v) + (26 if right else -26), yk[k], t, SB, 42, c.fg, "lm" if right else "rm")
+    _done(cv, c, name, "band")
