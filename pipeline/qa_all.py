@@ -117,6 +117,16 @@ def naver_state_checks():
     return {"네이버 글 상태가 실제와 맞는가": len(지났는데_안바뀜)}
 
 
+def k131_checks():
+    """K-131(대표 10/17): 네이버 본문 그림 — 다시 그린 글은 도식 2종 이상·옛 틀 2장 이하·이웃 글 첫 도식 다르게. 옛 글은 빚으로 센다."""
+    sys.path.insert(0, os.path.join(R, "naver")); import k131_check as KC
+    reg_p = os.path.join(R, "naver", "diagrams.json")
+    bad, debt = KC.check(json.load(open(os.path.join(R, "naver", "pages.json"), encoding="utf-8")), json.load(open(reg_p, encoding="utf-8")) if os.path.exists(reg_p) else {})
+    for k, v in bad.items(): print("   ", k, "; ".join(v))
+    if debt: print(f"    (아직 옛 틀인 네이버 글 {len(debt)}편 — data/naver_redraw_plan.json 배치대로 줄인다)")
+    return {"네이버 본문 도식(K-131, 다시 그린 글)": len(bad)}
+
+
 def video_checks():
     out = {}
     import audit_assets as AU, layout_audit as LA
@@ -131,6 +141,7 @@ if __name__ == "__main__":
     res.update(spec_checks())
     res.update(set_checks())
     res.update(naver_state_checks())
+    res.update(k131_checks())
     if "--videos" in sys.argv: res.update(video_checks())
     fail = {k: v for k, v in res.items() if v}
     for k, v in res.items(): print(("통과 " if not v else f"걸림 {v}개 ") + "· " + k)
