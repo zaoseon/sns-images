@@ -135,5 +135,23 @@ def run(only=None):
         open(PG, "w", encoding="utf-8").write(json.dumps(pages, ensure_ascii=False, indent=1) + "\n")
     return made
 
+def thick(only=None):
+    """K-133(대표 10/17 17:42 선·화살표 굵게): 같은 도식을 굵은 선(diagrams_k131 LW·BOX·AH)으로 새 이름 *6.jpg 에 다시 그리고
+    원고 본문의 *5.jpg 주소를 *6.jpg 로 바꾼다. 옛 *5.jpg 는 지우지 않는다(K-025·네이버 사진 보존 규칙)."""
+    P = plan(); pages = json.load(open(PG, encoding="utf-8")); made = []
+    for pid, sp in P.items():
+        if only and pid not in only: continue
+        c = B.pal_of(pid); body = pages[pid]["body"]
+        for k, (fn, alt) in sp["diag"].items():
+            o, n = f"naver_z{sp['key']}_{k.lower()}5.jpg", f"naver_z{sp['key']}_{k.lower()}6.jpg"
+            if B.PREVIEW or not have(n): fn(n, c)
+            made.append(n)
+            if not B.PREVIEW: assert body.count(o) == 1, (pid, o); body = body.replace(o, n)
+        if not B.PREVIEW: pages[pid]["body"] = body; pages[pid]["k131"] = TAG + " · K-133 굵은 선"
+    if not B.PREVIEW:
+        open(PG, "w", encoding="utf-8").write(json.dumps(pages, ensure_ascii=False, indent=1) + "\n")
+    return made
+
 if __name__ == "__main__":
-    print(run({a for a in sys.argv[1:]} or None))
+    if sys.argv[1:2] == ["--thick"]: print(thick({a for a in sys.argv[2:]} or None))
+    else: print(run({a for a in sys.argv[1:]} or None))

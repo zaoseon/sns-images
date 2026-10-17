@@ -12,6 +12,12 @@ from imgkit import Cv, L, RT
 import body_v3 as B
 XB, SB = B.XB, B.SB
 REG = os.path.join(HERE, "diagrams.json")
+# 선 굵기 한 곳(K-133, 대표 10/17 17:42 "화살표나 차트 같은 거 좀 얇게 말고 두껍게, 무식하게 두껍게 말고"). 1280px 기준.
+LW = 9          # 주 선: 관계선·고리 화살표·세 원·저울·점선. 5~7로는 폰(360px)에서 2px 밑이라 차이가 안 보여 9(폰 약 2.5px)
+LW2 = 8         # 둘째 선: 옅은 관계선·점선 표시
+BOX = 7         # 칸·알약·막대·원 테두리 (4 이상)
+GRID = 3        # 표의 가는 가로줄(도식 선이 아니라 칸 나눔)
+AH = 3 * LW     # 화살표 머리 길이(선 굵기의 3배쯤, 채운 삼각형)
 ZJ = "쥐 소 호랑이 토끼 용 뱀 말 양 원숭이 닭 개 돼지".split()
 
 def _reg(name, typ):
@@ -48,25 +54,25 @@ def months(name, c, head, rows, next_jan=True, up_label="힘을 쓸 달", dn_lab
         cv.text(gx + (m + .5) * cw, top + hh / 2, str(m % 12 + 1), XB, 42, c.fg, "mm")
     for i, (t, up, dn) in enumerate(rows):
         y = top + hh + i * rh; cy = y + rh / 2
-        cv.line(L + 10, y, RT - 10, y, c.line, 2)
+        cv.line(L + 10, y, RT - 10, y, c.line, GRID)
         cv.text(L + 14, cy, t, XB, cv.fit(t, XB, 44, lab - 20, 42), c.fg, "lm")
         for m in range(1, ncol + 1):
             x = gx + (m - .5) * cw
             if m in up: _dot(cv, x, cy, 23, fill=c.acc)
-            elif m in dn: _dot(cv, x, cy, 20, outline=c.fg, w=6)
+            elif m in dn: _dot(cv, x, cy, 20, outline=c.fg, w=BOX)
             else: _dot(cv, x, cy, 5, fill=c.gray)
     y = top + hh + rh * len(rows) + 70
-    _legend(cv, c, y, [(lambda x, y: _dot(cv, x, y, 23, fill=c.acc), up_label)] + ([(lambda x, y: _dot(cv, x, y, 20, outline=c.fg, w=6), dn_label)] if dn_label else []))
+    _legend(cv, c, y, [(lambda x, y: _dot(cv, x, y, 23, fill=c.acc), up_label)] + ([(lambda x, y: _dot(cv, x, y, 20, outline=c.fg, w=BOX), dn_label)] if dn_label else []))
     if next_jan: cv.text(RT - 10, y + 70, "맨 오른쪽 칸은 이듬해 1월이에요", SB, 42, c.gray, "rm")
     _done(cv, c, name, "months")
 
 # 2. 12띠 관계도 -------------------------------------------------------------
 STY = {"pair": lambda cv, c, a, b: None,
-       "solid": lambda cv, c, a, b: cv.line(*a, *b, c.acc, 9),
-       "thin": lambda cv, c, a, b: cv.line(*a, *b, c.gray, 5),
-       "dash": lambda cv, c, a, b: _dash(cv, *a, *b, c.fg, 7, 26, 18),
-       "dot": lambda cv, c, a, b: _dash(cv, *a, *b, c.gray, 7, 8, 14),
-       "thick": lambda cv, c, a, b: cv.line(*a, *b, c.acc, 18)}   # 마주 이어진 짝(육합, 이웃하지 않은 두 띠)
+       "solid": lambda cv, c, a, b: cv.line(*a, *b, c.acc, LW + 2),
+       "thin": lambda cv, c, a, b: cv.line(*a, *b, c.gray, LW2),
+       "dash": lambda cv, c, a, b: _dash(cv, *a, *b, c.fg, LW, 32, 20),
+       "dot": lambda cv, c, a, b: _dash(cv, *a, *b, c.gray, LW2, 14, 16),
+       "thick": lambda cv, c, a, b: cv.line(*a, *b, c.acc, 22)}   # 마주 이어진 짝(육합, 이웃하지 않은 두 띠)
 def wheel(name, c, head, edges, hi=(), legend=(), note="", focus=None):
     """edges = [(띠 번호, 띠 번호, 'solid'|'thin'|'dash'|'dot')], hi = 칠할 띠 번호. 쥐가 맨 위, 시계 방향(지지 순서)."""
     R, r = 330, 74; top = 150; cx = (L + RT) / 2; cy = top + 20 + R + r
@@ -82,7 +88,7 @@ def wheel(name, c, head, edges, hi=(), legend=(), note="", focus=None):
             if s == order: STY[s](cv, c, *trim(pos[i], pos[j]))
     for i, (x, y) in enumerate(pos):
         on = i in hi
-        _dot(cv, x, y, r, fill=c.acc if on else c.bg, outline=None if on else c.fg, w=0 if on else 4)
+        _dot(cv, x, y, r, fill=c.acc if on else c.bg, outline=None if on else c.fg, w=0 if on else BOX)
         if i == focus: _dot(cv, x, y, r + 2, outline=c.fg, w=10)
         cv.text(x, y, ZJ[i], XB, 44 if len(ZJ[i]) < 3 else 42, c.pillfg if on else c.fg, "mm")
     y = cy + R + r + 60
@@ -112,7 +118,7 @@ def matrix(name, c, head):
         elif kind == "chung": cv.line(x - 17, y - 17, x + 17, y + 17, c.fg, 7); cv.line(x - 17, y + 17, x + 17, y - 17, c.fg, 7)
         elif kind == "won": cv.line(x - 20, y, x + 20, y, c.gray, 8)
     for i in range(n):
-        y = top + hh + i * rh; cy = y + rh / 2; cv.line(L + 10, y, RT - 10, y, c.line, 2)
+        y = top + hh + i * rh; cy = y + rh / 2; cv.line(L + 10, y, RT - 10, y, c.line, GRID)
         cv.text(L + 14, cy, ZJ[i], XB, 42, c.fg, "lm")
         h, tri, ch, wo = edges_of(i)
         for j in range(n):
@@ -140,7 +146,7 @@ def calendar(name, c, head, months_, note="", ring=None):
                 if not day: continue
                 x = x0 + (d + .5) * cw; y = top + 70 + 66 + (r_ + .5) * rh
                 if day in hot: _dot(cv, x, y, 32, fill=c.acc)
-                elif day in (ring or {}).get(mm, ()): _dot(cv, x, y, 32, outline=c.fg, w=5)
+                elif day in (ring or {}).get(mm, ()): _dot(cv, x, y, 32, outline=c.fg, w=BOX)
                 cv.text(x, y, str(day), XB, 42, c.pillfg if day in hot else c.fg, "mm")
     if note: cv.text(L + 10, H - 60, note, SB, cv.fit(note, SB, 42, RT - L - 20, 42), c.gray, "lm")
     _done(cv, c, name, "calendar")
@@ -153,7 +159,7 @@ def compass(name, c, head, arms, center, example):
     at = {"북": (0, -1), "동": (1, 0), "남": (0, 1), "서": (-1, 0)}
     for k, (dx, dy) in at.items():
         x, y = cx + dx * (D + (90 if dx else 0)), cy + dy * D
-        cv.line(cx + dx * 120, cy + dy * 120, x - dx * bw / 2, y - dy * bh / 2, c.line, 6)
+        cv.line(cx + dx * 120, cy + dy * 120, x - dx * bw / 2, y - dy * bh / 2, c.line, LW)
         cv.rr([x - bw / 2, y - bh / 2, x + bw / 2, y + bh / 2], 30, fill=c.card)
         cv.text(x, y - 30, f"{k}쪽", XB, 52, c.fg, "mm"); cv.text(x, y + 34, arms[k], SB, 42, c.gray, "mm")
     _dot(cv, cx, cy, 120, fill=c.acc)
@@ -169,7 +175,7 @@ def timeline(name, c, head, y0, groups, mark=None):
     if mark: x = gx + (mark - y0) * cw; cv.rr([x + 2, top + hh - 6, x + cw - 2, top + hh + rh * len(groups) + 6], 16, fill=c.card if c.dark else c.line)
     for k in range(0, n, 3): cv.text(gx + k * cw + 4, top + hh / 2, str(y0 + k), XB, 42, c.fg, "lm")
     for i, (t, s) in enumerate(groups):
-        y = top + hh + i * rh; cy = y + rh / 2; cv.line(L + 10, y, RT - 10, y, c.line, 2)
+        y = top + hh + i * rh; cy = y + rh / 2; cv.line(L + 10, y, RT - 10, y, c.line, GRID)
         cv.text(L + 14, cy, t, XB, cv.fit(t, XB, 44, lab - 20, 42), c.fg, "lm")
         x = gx + (s - y0) * cw
         cv.rr([x + 4, cy - 36, x + 3 * cw - 4, cy + 36], 36, fill=c.acc)
@@ -186,14 +192,14 @@ def monthgrid(name, c, head, cells, note="마지막 칸은 이듬해 1월이에�
     for k, (m, tag, st) in enumerate(cells):
         x = L + 10 + (k % cols) * (cw + gap); y = top + (k // cols) * (ch + gap)
         if st == "up": cv.rr([x, y, x + cw, y + ch], 26, fill=c.acc); fg = sub = c.pillfg
-        elif st == "dn": cv.rr([x, y, x + cw, y + ch], 26, fill=c.card if c.dark else c.bg, outline=c.fg, w=6); fg, sub = c.fg, c.fg
+        elif st == "dn": cv.rr([x, y, x + cw, y + ch], 26, fill=c.card if c.dark else c.bg, outline=c.fg, w=BOX); fg, sub = c.fg, c.fg
         else: cv.rr([x, y, x + cw, y + ch], 26, fill=c.card); fg, sub = c.fg, c.gray
         cv.text(x + 24, y + 58, f"{m}월", XB, 54, fg, "lm")
         cv.text(x + 24, y + 122, ZJ[m % 12] + " 달", SB, cv.fit(ZJ[m % 12] + " 달", SB, 42, cw - 40, 42), sub, "lm")
         if tag: cv.text(x + 24, y + 172, tag, XB, cv.fit(tag, XB, 42, cw - 40, 42), fg, "lm")
     y = top + rows_ * (ch + gap) + 50
     _legend(cv, c, y, [(lambda x, y: cv.rr([x - 26, y - 26, x + 26, y + 26], 10, fill=c.acc), "힘을 쓸 달"),
-                       (lambda x, y: cv.rr([x - 26, y - 26, x + 26, y + 26], 10, outline=c.fg, w=6), "아낄 달")])
+                       (lambda x, y: cv.rr([x - 26, y - 26, x + 26, y + 26], 10, outline=c.fg, w=BOX), "아낄 달")])
     if note: cv.text(L + 10, y + 80, note, SB, cv.fit(note, SB, 42, RT - L - 20, 42), c.gray, "lm")
     _done(cv, c, name, "monthgrid")
 
@@ -208,7 +214,7 @@ def cross(name, c, head, cols, rows, note=""):
         else: cv.line(x - 16, y, x + 16, y, c.gray, 6)
     for j, t in enumerate(cols): cv.text(gx + (j + .5) * cw, top + hh / 2, t, XB, cv.fit(t, XB, 44, cw - 16, 42), c.fg, "mm")
     for i, (sysname, marks) in enumerate(rows):
-        y = top + hh + i * rh; cy = y + rh / 2; cv.line(L + 10, y, RT - 10, y, c.line, 2)
+        y = top + hh + i * rh; cy = y + rh / 2; cv.line(L + 10, y, RT - 10, y, c.line, GRID)
         quiet = all(m_ not in "●○" for m_ in marks)
         cv.text(L + 14, cy, sysname, XB, cv.fit(sysname, XB, 46, lab - 20, 42), c.gray if quiet else c.fg, "lm")
         for j, m_ in enumerate(marks): mk(m_, gx + (j + .5) * cw, cy)
@@ -224,15 +230,15 @@ def band(name, c, head, axis, ticks, rows, marks=()):
     X = lambda v: gx + (v - a0) / (a1 - a0) * gw
     H = int(lab_top + th + rh * len(rows) + 40 + 80 * len(marks) + 40); cv = Cv(H, c.bg); B._head(cv, c, head)
     for v, t in ticks:
-        cv.line(X(v), lab_top + th - 10, X(v), lab_top + th + rh * len(rows), c.line, 2); cv.text(X(v) + 8, lab_top + th / 2, t, XB, 42, c.fg, "lm")
+        cv.line(X(v), lab_top + th - 10, X(v), lab_top + th + rh * len(rows), c.line, GRID); cv.text(X(v) + 8, lab_top + th / 2, t, XB, 42, c.fg, "lm")
     yb = lab_top + th + rh * len(rows) + 10
     order = sorted(range(len(marks)), key=lambda k: -marks[k][0])   # 오른쪽 표시가 위 줄: 왼쪽 표시의 설명 글이 다른 점선을 가로지르지 않게
     yk = {k: yb + 40 + 80 * r for r, k in enumerate(order)}
-    for k, (v, t) in enumerate(marks): _dash(cv, X(v), lab_top + th, X(v), yk[k], c.fg, 5, 14, 10)   # 점선을 먼저, 막대가 위에
+    for k, (v, t) in enumerate(marks): _dash(cv, X(v), lab_top + th, X(v), yk[k], c.fg, LW, 20, 13)   # 점선을 먼저, 막대가 위에
     for i, (t, s, e, st) in enumerate(rows):
         y = lab_top + th + i * rh + 20; box = [X(s) + 3, y, X(e) - 3, y + rh - 40]
         if st == "acc": cv.rr(box, 40, fill=c.acc); fg = c.pillfg
-        elif st == "out": cv.rr(box, 40, fill=c.card if c.dark else c.bg, outline=c.fg, w=6); fg = c.fg
+        elif st == "out": cv.rr(box, 40, fill=c.card if c.dark else c.bg, outline=c.fg, w=BOX); fg = c.fg
         else: cv.rr(box, 40, fill=c.card if not c.dark else c.line); fg = c.fg
         cv.text((box[0] + box[2]) / 2, y + (rh - 40) / 2, t, XB, cv.fit(t, XB, 46, box[2] - box[0] - 30, 42), fg, "mm")
     for k, (v, t) in enumerate(marks):
@@ -248,7 +254,7 @@ def venn(name, c, head, sets, center, note=""):
     C = [(cx - d, cy - d * .55), (cx + d, cy - d * .55), (cx, cy + d * .75)]
     lines = K.balanced(Cv(10, c.bg), center, XB, 46, RT - L - 40)
     H = int(cy + d * .75 + R_ + 150 + 66 * len(lines) + (70 if note else 0) + 40); cv = Cv(H, c.bg); B._head(cv, c, head)
-    for (x, y) in C: _dot(cv, x, y, R_, outline=c.fg, w=6)
+    for (x, y) in C: _dot(cv, x, y, R_, outline=c.fg, w=LW)
     # 이름은 원 바깥(왼쪽 위·오른쪽 위·아래)에 두어 선과 겹치지 않게
     spots = [(L + 10, C[0][1] - R_ - 40, "l"), (RT - 10, C[1][1] - R_ - 40, "r"), (cx, C[2][1] + R_ + 40, "m")]
     for (tx, ty, al), (t, sub) in zip(spots, sets):
@@ -270,7 +276,7 @@ def steps(name, c, head, levels):
     y = top
     for n, ls in blocks:
         w = max(150, gw * n / 3) if n else 150
-        cv.rr([gx, y, gx + w, y + 76], 38, fill=c.acc if n == 3 else (c.card if not c.dark else c.line), outline=None if n == 3 else c.fg, w=0 if n == 3 else 4)
+        cv.rr([gx, y, gx + w, y + 76], 38, fill=c.acc if n == 3 else (c.card if not c.dark else c.line), outline=None if n == 3 else c.fg, w=0 if n == 3 else BOX)
         cv.text(gx + 30, y + 38, f"{n}개", XB, 46, c.pillfg if n == 3 else c.fg, "lm")
         for k in range(3):
             if k < n: _dot(cv, gx + w - 40 - 46 * k, y + 38, 13, fill=c.pillfg if n == 3 else c.fg)
@@ -279,19 +285,27 @@ def steps(name, c, head, levels):
         y = yy + 30
     _done(cv, c, name, "steps")
 
-def _arrow(cv, c, a, b, col, w=7, head=26):
-    cv.line(*a, *b, col, w); ang = math.atan2(b[1] - a[1], b[0] - a[0])
-    for s_ in (2.6, -2.6):
-        cv.line(b[0], b[1], b[0] + head * math.cos(ang + s_), b[1] + head * math.sin(ang + s_), col, w)
+def _arrow(cv, c, a, b, col, w=LW, head=AH):
+    """선 + 채운 삼각형 머리(K-133: 머리 길이 = 선 굵기의 3배쯤, 폭은 길이의 0.9배)."""
+    ang = math.atan2(b[1] - a[1], b[0] - a[0]); ux, uy = math.cos(ang), math.sin(ang)
+    bx, by = b[0] - ux * head, b[1] - uy * head
+    cv.line(a[0], a[1], bx + ux * 2, by + uy * 2, col, w)
+    hw = head * .55   # 머리 반폭
+    pts = [(b[0], b[1]), (bx - uy * hw, by + ux * hw), (bx + uy * hw, by - ux * hw)]
+    cv.d.polygon([(x * K.S, y * K.S) for x, y in pts], fill=col)
+
+def _bl(cv, text, font, size, w):
+    """'|' 가 있으면 그 자리에서 줄을 나눈다(의미 단위를 손으로 정할 때), 없으면 고르게 나눈다."""
+    return [t.strip() for t in text.split("|")] if "|" in text else K.balanced(cv, text, font, size, w)
 
 def _exitbox(cv, c, y, text):
-    ls = K.balanced(cv, text, XB, 44, RT - L - 120); h = 60 + 62 * len(ls)
+    ls = _bl(cv, text, XB, 44, RT - L - 120); h = 60 + 62 * len(ls)
     cv.rr([L + 10, y, RT - 10, y + h], 34, fill=c.acc)
     yy = y + 30 + 31
     for ln in ls: cv.text((L + RT) / 2, yy, ln, XB, 44, c.pillfg, "mm"); yy += 62
     return y + h
 
-def _ebh(text, c): return 60 + 62 * len(K.balanced(Cv(10, c.bg), text, XB, 44, RT - L - 120))
+def _ebh(text, c): return 60 + 62 * len(_bl(Cv(10, c.bg), text, XB, 44, RT - L - 120))
 
 def _nodebox(cv, c, x, y, t, w=420):
     ls = K.balanced(cv, t, SB, 42, w - 50); h = 40 + 56 * len(ls)
@@ -303,8 +317,9 @@ def _nodebox(cv, c, x, y, t, w=420):
 # 12. 되풀이 고리(심리 개념) ---------------------------------------------------------
 def loop(name, c, head, nodes, concept, exit_text):
     """nodes = 고리를 도는 마음 2~4개(그 글 심리학 단락의 말). concept = 개념 이름. exit_text = 고리를 끊는 행동(글의 제안)."""
-    top = 150; cx = (L + RT) / 2; R_ = 280 if len(nodes) > 2 else 0; cy = top + 360
-    H = int(cy + 360 + 60 + _ebh("이렇게 끊어요: " + exit_text, c) + 50); cv = Cv(H, c.bg); B._head(cv, c, head)
+    top = 150; cx = (L + RT) / 2; R_ = 280 if len(nodes) > 2 else 0; cy = top + (300 if len(nodes) == 2 else 360)
+    ey = cy + (270 if len(nodes) == 2 else 360) + 40   # 두 칸 고리는 아래가 비지 않게 행동 상자를 바짝(K-133 다시 그릴 때)
+    H = int(ey + _ebh("이렇게 끊어요: " + exit_text, c) + 50); cv = Cv(H, c.bg); B._head(cv, c, head)
     if len(nodes) == 2:
         P_ = [(cx, cy - 190), (cx, cy + 190)]
         _arrow(cv, c, (cx + 250, cy - 110), (cx + 250, cy + 110), c.fg); _arrow(cv, c, (cx - 250, cy + 110), (cx - 250, cy - 110), c.fg)
@@ -318,7 +333,7 @@ def loop(name, c, head, nodes, concept, exit_text):
             _arrow(cv, c, (mx + ox - ux * 45, my + oy - uy * 45), (mx + ox + ux * 45, my + oy + uy * 45), c.fg)
         _dot(cv, cx, cy, 120, fill=c.acc); cv.text(cx, cy, concept, XB, cv.fit(concept, XB, 44, 210, 42), c.pillfg, "mm")
     for (x, y), t in zip(P_, nodes): _nodebox(cv, c, x, y, t, 440 if len(nodes) == 2 else 340)
-    _exitbox(cv, c, cy + 360 + 40, "이렇게 끊어요: " + exit_text)
+    _exitbox(cv, c, ey, "이렇게 끊어요: " + exit_text)
     _done(cv, c, name, "loop")
 
 # 13. 쌓였다 터지는 탑(심리 개념) -------------------------------------------------------
@@ -329,11 +344,11 @@ def stack(name, c, head, layers, burst, concept, exit_text):
     y0 = top + 130 + (bh + 20) * n
     for k, t in enumerate(layers):
         w = 760 - 90 * k; y = y0 - (bh + 20) * (k + 1)
-        cv.rr([cx - w / 2, y, cx + w / 2, y + bh], 24, fill=c.card if not c.dark else c.line, outline=c.fg, w=3)
+        cv.rr([cx - w / 2, y, cx + w / 2, y + bh], 24, fill=c.card if not c.dark else c.line, outline=c.fg, w=BOX)
         cv.text(cx, y + bh / 2, t, SB, cv.fit(t, SB, 44, w - 40, 42), c.fg, "mm")
     yt = y0 - (bh + 20) * n - 20
-    for k in range(-2, 3): _arrow(cv, c, (cx + k * 70, yt), (cx + k * 110, yt - 70), c.acc, 7, 20)
-    cv.text(cx, top + 10, burst, XB, 50, c.fg, "mm")
+    for k in range(-2, 3): _arrow(cv, c, (cx + k * 70, yt), (cx + k * 110, yt - 80), c.acc)
+    cv.text(cx, yt - 125, burst, XB, 50, c.fg, "mm")
     cv.text(RT - 10, y0 + 40, concept, SB, 42, c.gray, "rm")
     _exitbox(cv, c, y0 + 90, "이렇게 풀어요: " + exit_text)
     _done(cv, c, name, "stack")
@@ -344,10 +359,10 @@ def scale(name, c, head, heavy, light, concept, exit_text):
     top = 150; cx = (L + RT) / 2; py = top + 170; arm = 330; tilt = 0.22
     H = int(py + 520 + 40 + _ebh("이렇게 맞춰요: " + exit_text, c) + 50); cv = Cv(H, c.bg); B._head(cv, c, head)
     lx, ly = cx - arm * math.cos(tilt), py + arm * math.sin(tilt); rx, ry = cx + arm * math.cos(tilt), py - arm * math.sin(tilt)
-    cv.line(cx, py, cx, py + 440, c.fg, 10); cv.rr([cx - 120, py + 430, cx + 120, py + 460], 14, fill=c.fg)
-    cv.line(lx, ly, rx, ry, c.fg, 10); _dot(cv, cx, py, 18, fill=c.fg)
+    cv.line(cx, py, cx, py + 440, c.fg, LW + 3); cv.rr([cx - 120, py + 430, cx + 120, py + 460], 14, fill=c.fg)
+    cv.line(lx, ly, rx, ry, c.fg, LW + 3); _dot(cv, cx, py, 18, fill=c.fg)
     for (x, y), t, f in (((lx, ly), heavy, True), ((rx, ry), light, False)):
-        cv.line(x, y, x, y + 120, c.fg, 4)
+        cv.line(x, y, x, y + 120, c.fg, LW)
         h = _nodebox(cv, c, x, y + 120 + 70, t, 330) if not f else None
         if f:
             ls = K.balanced(cv, t, XB, 44, 330); hh = 40 + 60 * len(ls)
@@ -363,11 +378,11 @@ def sides(name, c, head, left, right, rows, note=""):
     top = 150; cx = (L + RT) / 2; rh = 150; pw = 330
     H = int(top + 110 + rh * len(rows) + (90 if note else 30)); cv = Cv(H, c.bg); B._head(cv, c, head)
     cv.text(cx - 260, top + 40, left, XB, 50, c.fg, "mm"); cv.text(cx + 260, top + 40, right, XB, 50, c.fg, "mm")
-    cv.line(cx, top + 90, cx, top + 100 + rh * len(rows), c.line, 4)
+    cv.line(cx, top + 90, cx, top + 100 + rh * len(rows), c.line, LW)
     for i, (sy, a, b) in enumerate(rows):
         y = top + 110 + i * rh + rh / 2
         cv.rr([cx - 70, y - 34, cx + 70, y + 34], 34, fill=c.fg); cv.text(cx, y, sy, XB, cv.fit(sy, XB, 42, 120, 42) if cv.tw(sy, XB, 42) <= 120 else 42, c.bg, "mm")
         cv.rr([cx - 100 - pw, y - 44, cx - 100, y + 44], 44, fill=c.acc); cv.text(cx - 100 - pw / 2, y, a, XB, cv.fit(a, XB, 44, pw - 40, 42), c.pillfg, "mm")
-        cv.rr([cx + 100, y - 44, cx + 100 + pw, y + 44], 44, outline=c.fg, w=5, fill=c.bg); cv.text(cx + 100 + pw / 2, y, b, XB, cv.fit(b, XB, 44, pw - 40, 42), c.fg, "mm")
+        cv.rr([cx + 100, y - 44, cx + 100 + pw, y + 44], 44, outline=c.fg, w=BOX, fill=c.bg); cv.text(cx + 100 + pw / 2, y, b, XB, cv.fit(b, XB, 44, pw - 40, 42), c.fg, "mm")
     if note: cv.text(cx, H - 50, note, SB, cv.fit(note, SB, 42, RT - L - 20, 42), c.gray, "mm")
     _done(cv, c, name, "sides")
