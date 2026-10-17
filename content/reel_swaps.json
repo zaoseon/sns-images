@@ -3377,5 +3377,120 @@
    "2026-10-24": 398372542,
    "2026-10-25": 398372996
   }
+ },
+ {
+  "id": "naver-b1-1017",
+  "kind": "네이버 발행글 본문 도식(K-131 B1, 승인 대기)",
+  "title": "발행 글 7편 본문 도식 14장(K-131 B1): 2027 겹쳐 본 한 해·토끼띠·돈 들어오는 띠·연애운 TOP5·소띠·상강 손없는날·호랑이띠",
+  "date": "2026-10-17",
+  "time": "",
+  "status": "new",
+  "channels": [
+   "naver"
+  ],
+  "images": [
+   "/naver/img/naver_z14_x5.jpg",
+   "/naver/img/naver_z14_n5.jpg",
+   "/naver/img/naver_z08_g5.jpg",
+   "/naver/img/naver_z08_w5.jpg",
+   "/naver/img/naver_z05_w5.jpg",
+   "/naver/img/naver_z05_m5.jpg",
+   "/naver/img/naver_z10_m5.jpg",
+   "/naver/img/naver_z10_w5.jpg",
+   "/naver/img/naver_z06_w5.jpg",
+   "/naver/img/naver_z06_g5.jpg",
+   "/naver/img/naver_z12_k5.jpg",
+   "/naver/img/naver_z12_n5.jpg",
+   "/naver/img/naver_z64_g5.jpg",
+   "/naver/img/naver_z64_w5.jpg"
+  ],
+  "links": [
+   "/naver/n14.html",
+   "/naver/n08.html",
+   "/naver/n05.html",
+   "/naver/n10.html",
+   "/naver/n06.html",
+   "/naver/n12.html",
+   "/naver/n64.html"
+  ],
+  "caption": "",
+  "note": "B0(인기 4편)과 같은 방식으로 발행 글 7편의 본문 그림을 도식으로 바꿨어요. 글마다 도식 2장, 그림 속 값은 그 글 본문에 적힌 값만 썼어요. 새로 생긴 모양 셋: ① 한 띠의 열두 달 칸(2월~이듬해 1월, 칠한 칸=힘 쓸 달, 굵은 테두리=아낄 달, 칸마다 그달의 띠와 사이) ② 여섯 운명학 교차표(같은 방향 ●·서로 갈림 ○·말하지 않음 –) ③ 시기 띠그래프(한 해 쓰는 순서, 상강 앞뒤 절기와 사주 달). 글별: n14 교차표+띠그래프 / n08 토끼띠 열두 달 칸+관계도 / n05 관계도+TOP3 힘 쓸 달 / n10 TOP5 인연의 달+짝 여섯 쌍 / n06 관계도+소띠 열두 달 칸 / n12 손없는날 달력+절기 띠그래프 / n64 호랑이띠 열두 달 칸+관계도. 옛 설명 그림 6장을 도식으로 바꾸고 n64 옛 틀 2장을 뺐어요(옛 틀은 글마다 2장 이하). n10·n12 본문의 '재미로 읽어 주세요' 줄도 정리했어요. 승인하시면(프로젝트 대화 16:58: 배치마다 대표 승인 뒤 ready) B1 배치를 준비 완료로 바꾸고 서브 노트북이 7편을 한 번에 수정 발행해요(7편 모두 오늘 한 번 고친 글이라 그림·배너·밑줄만 바꾸는 가벼운 수정이에요).",
+  "checks": [
+   "도식 14장이 한눈에 읽히는지(열두 달 칸·교차표·띠그래프)",
+   "띠 관계·힘 쓸 달·손없는날 날짜가 글과 같은지",
+   "같은 모양이 이웃 글에 반복돼 보이지 않는지"
+  ],
+  "since": "2026-10-17 17:30"
+ },
+ {
+  "id": "naver-b2-1017",
+  "kind": "네이버 발행글 본문 도식(K-131 B2, 승인 대기)",
+  "title": "발행 글 16편 본문 도식 32장(K-131 B2): 심리·관계 '공통점' 글 — 세 풀이 겹침 그림 + 심리 개념 도식",
+  "date": "2026-10-17",
+  "time": "",
+  "status": "new",
+  "channels": [
+   "naver"
+  ],
+  "images": [
+   "/naver/img/naver_z17_r5.jpg",
+   "/naver/img/naver_z17_v5.jpg",
+   "/naver/img/naver_z16_l5.jpg",
+   "/naver/img/naver_z16_r5.jpg",
+   "/naver/img/naver_z23_u5.jpg",
+   "/naver/img/naver_z23_v5.jpg",
+   "/naver/img/naver_z18_e5.jpg",
+   "/naver/img/naver_z18_l5.jpg",
+   "/naver/img/naver_z19_r5.jpg",
+   "/naver/img/naver_z19_v5.jpg",
+   "/naver/img/naver_z20_l5.jpg",
+   "/naver/img/naver_z20_r5.jpg",
+   "/naver/img/naver_z21_e5.jpg",
+   "/naver/img/naver_z21_v5.jpg",
+   "/naver/img/naver_z22_l5.jpg",
+   "/naver/img/naver_z22_r5.jpg",
+   "/naver/img/naver_z26_e5.jpg",
+   "/naver/img/naver_z26_v5.jpg",
+   "/naver/img/naver_z27_l5.jpg",
+   "/naver/img/naver_z27_r5.jpg",
+   "/naver/img/naver_z28_r5.jpg",
+   "/naver/img/naver_z28_v5.jpg",
+   "/naver/img/naver_z29_e5.jpg",
+   "/naver/img/naver_z29_l5.jpg",
+   "/naver/img/naver_z24_r5.jpg",
+   "/naver/img/naver_z24_v5.jpg",
+   "/naver/img/naver_z30_l5.jpg",
+   "/naver/img/naver_z30_r5.jpg",
+   "/naver/img/naver_z31_e5.jpg",
+   "/naver/img/naver_z31_h5.jpg",
+   "/naver/img/naver_z33_r5.jpg",
+   "/naver/img/naver_z33_v5.jpg"
+  ],
+  "links": [
+   "/naver/n17.html",
+   "/naver/n16.html",
+   "/naver/n23.html",
+   "/naver/n18.html",
+   "/naver/n19.html",
+   "/naver/n20.html",
+   "/naver/n21.html",
+   "/naver/n22.html",
+   "/naver/n26.html",
+   "/naver/n27.html",
+   "/naver/n28.html",
+   "/naver/n29.html",
+   "/naver/n24.html",
+   "/naver/n30.html",
+   "/naver/n31.html",
+   "/naver/n33.html"
+  ],
+  "caption": "",
+  "note": "심리·관계 '공통점' 발행 글 16편(n17 n16 n23 n18 n19 n20 n21 n22 n26 n27 n28 n29 n24 n30 n31 n33)의 본문 그림을 바꿨어요. 이 종류(심리 도식)는 처음이라 한 번 봐 주세요. 글마다 도식 2장: ① '나는 몇 개나 겹칠까' 자리에 세 풀이(사주·별자리·수비학)가 겹치는 원 그림, 또는 겹친 개수 0~3개 풀이를 막대 길이로 보여 주는 계단 그림(이웃한 글끼리 번갈아), 결정 속도 글(n31)은 앞서는 쪽·살피는 쪽 견주기 ② 심리학 단락의 옛 흐름 그림을 그 개념 모양으로: 되풀이 고리(흰곰 효과·표현 억제·요구-철회·확증 편향·과잉 확신·지연 행동·쾌락 적응·소속 욕구), 쌓였다 터지는 탑(투명성 착각), 저울(손실 회피·심리적 분리·투명성 착각·기본적 귀인 오류). 고리·저울 아래에는 글이 권하는 행동 한 줄('이렇게 끊어요'). 옛 '해 볼 것' 그림은 아래 목록과 같은 말이라 뺐어요. 그림 속 말은 모두 그 글 본문에 있는 말이에요. 승인하시면 B2 배치를 준비 완료로 바꾸고 서브 노트북이 16편을 한 번에 수정 발행해요(오늘 이미 한 번 고친 글은 그림·배너·밑줄만 바꾸는 가벼운 수정).",
+  "checks": [
+   "겹침 원·계단·고리·저울이 한눈에 읽히는지",
+   "그림 속 말이 글과 같은지",
+   "16편이 서로 같은 틀로 보이지 않는지"
+  ],
+  "since": "2026-10-17 17:50"
  }
 ]

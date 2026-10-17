@@ -10,6 +10,7 @@ import body_v3 as B, diagrams_k131 as DG
 RAW = "https://raw.githubusercontent.com/zaoseon/sns-images/main/naver/img/"
 BL = "<p>&nbsp;</p>"
 PG = os.path.join(HERE, "pages.json")
+TAG = "B1 10/17"
 
 def IMG(name, alt): return f'<p><img src="{RAW}{name}" alt="{html.escape(alt, quote=True)}"></p>' + BL
 
@@ -129,7 +130,7 @@ def run(only=None):
             elif op[0] == "drop":
                 if len(op) == 3: body, k = re.subn(r'<p>' + re.escape(op[1]) + r'</p>', f"<p>{op[2]}</p>", body); assert k == 1, op
                 else: body = drop_line(body, op[1])
-        pages[pid]["body"] = body; pages[pid].setdefault("k131", "B1 10/17")
+        pages[pid]["body"] = body; pages[pid]["k131"] = TAG
     if not B.PREVIEW:
         open(PG, "w", encoding="utf-8").write(json.dumps(pages, ensure_ascii=False, indent=1) + "\n")
     return made

@@ -240,3 +240,134 @@ def band(name, c, head, axis, ticks, rows, marks=()):
         right = X(v) + 30 + cv.tw(t, SB, 42) <= RT
         cv.text(X(v) + (26 if right else -26), yk[k], t, SB, 42, c.fg, "lm" if right else "rm")
     _done(cv, c, name, "band")
+
+# 10. 세 풀이 겹침(벤 그림) — '나는 몇 개나 겹칠까' 글 ----------------------------------------
+def venn(name, c, head, sets, center, note=""):
+    """sets = [(체계, 해당 글자)] 셋(사주·별자리·수비학). center = 셋 다 겹칠 때 그 글이 말하는 한 줄."""
+    top = 150; R_ = 200; cx = (L + RT) / 2; cy = top + 150 + R_ + 100; d = 140
+    C = [(cx - d, cy - d * .55), (cx + d, cy - d * .55), (cx, cy + d * .75)]
+    lines = K.balanced(Cv(10, c.bg), center, XB, 46, RT - L - 40)
+    H = int(cy + d * .75 + R_ + 150 + 66 * len(lines) + (70 if note else 0) + 40); cv = Cv(H, c.bg); B._head(cv, c, head)
+    for (x, y) in C: _dot(cv, x, y, R_, outline=c.fg, w=6)
+    # 이름은 원 바깥(왼쪽 위·오른쪽 위·아래)에 두어 선과 겹치지 않게
+    spots = [(L + 10, C[0][1] - R_ - 40, "l"), (RT - 10, C[1][1] - R_ - 40, "r"), (cx, C[2][1] + R_ + 40, "m")]
+    for (tx, ty, al), (t, sub) in zip(spots, sets):
+        if al == "m": cv.text(tx, ty, t + "  " + sub, XB, 46, c.fg, "mm"); continue
+        cv.text(tx, ty - 40, t, XB, 50, c.fg, al + "m"); cv.text(tx, ty + 14, sub, SB, 42, c.gray, al + "m")
+    gx, gy = cx, cy - d * .12
+    _dot(cv, gx, gy, 46, fill=c.acc); cv.text(gx, gy, "3", XB, 52, c.pillfg, "mm")
+    y = cy + d * .75 + R_ + 130
+    for ln in lines: cv.text(cx, y, ln, XB, 46, c.fg, "mm"); y += 66
+    if note: cv.text(cx, y + 10, note, SB, cv.fit(note, SB, 42, RT - L - 20, 42), c.gray, "mm")
+    _done(cv, c, name, "venn")
+
+# 11. 겹친 개수 계단 -------------------------------------------------------------
+def steps(name, c, head, levels):
+    """levels = [(개수, 그 글의 풀이 한 줄)] 3개부터. 막대 길이 = 개수/3, 풀이는 막대 아래 줄."""
+    top = 150; gx = L + 10; gw = RT - L - 20; cv0 = Cv(10, c.bg)
+    blocks = [(n, K.balanced(cv0, t, SB, 42, gw - 20)) for n, t in levels]
+    H = int(top + sum(76 + 46 + 58 * len(ls) + 30 for _, ls in blocks) + 40); cv = Cv(H, c.bg); B._head(cv, c, head)
+    y = top
+    for n, ls in blocks:
+        w = max(150, gw * n / 3) if n else 150
+        cv.rr([gx, y, gx + w, y + 76], 38, fill=c.acc if n == 3 else (c.card if not c.dark else c.line), outline=None if n == 3 else c.fg, w=0 if n == 3 else 4)
+        cv.text(gx + 30, y + 38, f"{n}개", XB, 46, c.pillfg if n == 3 else c.fg, "lm")
+        for k in range(3):
+            if k < n: _dot(cv, gx + w - 40 - 46 * k, y + 38, 13, fill=c.pillfg if n == 3 else c.fg)
+        yy = y + 76 + 46
+        for ln in ls: cv.text(gx + 4, yy, ln, SB, 42, c.fg if n == 3 else c.gray, "lm"); yy += 58
+        y = yy + 30
+    _done(cv, c, name, "steps")
+
+def _arrow(cv, c, a, b, col, w=7, head=26):
+    cv.line(*a, *b, col, w); ang = math.atan2(b[1] - a[1], b[0] - a[0])
+    for s_ in (2.6, -2.6):
+        cv.line(b[0], b[1], b[0] + head * math.cos(ang + s_), b[1] + head * math.sin(ang + s_), col, w)
+
+def _exitbox(cv, c, y, text):
+    ls = K.balanced(cv, text, XB, 44, RT - L - 120); h = 60 + 62 * len(ls)
+    cv.rr([L + 10, y, RT - 10, y + h], 34, fill=c.acc)
+    yy = y + 30 + 31
+    for ln in ls: cv.text((L + RT) / 2, yy, ln, XB, 44, c.pillfg, "mm"); yy += 62
+    return y + h
+
+def _ebh(text, c): return 60 + 62 * len(K.balanced(Cv(10, c.bg), text, XB, 44, RT - L - 120))
+
+def _nodebox(cv, c, x, y, t, w=420):
+    ls = K.balanced(cv, t, SB, 42, w - 50); h = 40 + 56 * len(ls)
+    cv.rr([x - w / 2, y - h / 2, x + w / 2, y + h / 2], 30, fill=c.card if not c.dark else c.line)
+    yy = y - h / 2 + 20 + 28
+    for ln in ls: cv.text(x, yy, ln, SB, 42, c.fg, "mm"); yy += 56
+    return h
+
+# 12. 되풀이 고리(심리 개념) ---------------------------------------------------------
+def loop(name, c, head, nodes, concept, exit_text):
+    """nodes = 고리를 도는 마음 2~4개(그 글 심리학 단락의 말). concept = 개념 이름. exit_text = 고리를 끊는 행동(글의 제안)."""
+    top = 150; cx = (L + RT) / 2; R_ = 280 if len(nodes) > 2 else 0; cy = top + 360
+    H = int(cy + 360 + 60 + _ebh("이렇게 끊어요: " + exit_text, c) + 50); cv = Cv(H, c.bg); B._head(cv, c, head)
+    if len(nodes) == 2:
+        P_ = [(cx, cy - 190), (cx, cy + 190)]
+        _arrow(cv, c, (cx + 250, cy - 110), (cx + 250, cy + 110), c.fg); _arrow(cv, c, (cx - 250, cy + 110), (cx - 250, cy - 110), c.fg)
+        cv.text(cx, cy, concept, XB, 48, c.acc if not c.dark else c.fg, "mm")
+    else:
+        P_ = [(cx + R_ * 1.3 * math.sin(2 * math.pi * k / len(nodes)), cy - R_ * math.cos(2 * math.pi * k / len(nodes))) for k in range(len(nodes))]
+        for k in range(len(nodes)):
+            a, b = P_[k], P_[(k + 1) % len(nodes)]; mx, my = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2
+            ux, uy = (b[0] - a[0]), (b[1] - a[1]); n_ = math.hypot(ux, uy); ux, uy = ux / n_, uy / n_
+            ox, oy = (mx - cx) * .18, (my - cy) * .18   # 화살표를 고리 바깥쪽으로 조금 밀어 상자와 안 겹치게
+            _arrow(cv, c, (mx + ox - ux * 45, my + oy - uy * 45), (mx + ox + ux * 45, my + oy + uy * 45), c.fg)
+        _dot(cv, cx, cy, 120, fill=c.acc); cv.text(cx, cy, concept, XB, cv.fit(concept, XB, 44, 210, 42), c.pillfg, "mm")
+    for (x, y), t in zip(P_, nodes): _nodebox(cv, c, x, y, t, 440 if len(nodes) == 2 else 340)
+    _exitbox(cv, c, cy + 360 + 40, "이렇게 끊어요: " + exit_text)
+    _done(cv, c, name, "loop")
+
+# 13. 쌓였다 터지는 탑(심리 개념) -------------------------------------------------------
+def stack(name, c, head, layers, burst, concept, exit_text):
+    """layers = 아래부터 쌓이는 마음, burst = 맨 위에서 터지는 모양 한 줄."""
+    top = 160; cx = (L + RT) / 2; bh = 100; n = len(layers)
+    H = int(top + 130 + bh * n + 20 * n + 110 + 40 + _ebh("이렇게 풀어요: " + exit_text, c) + 50); cv = Cv(H, c.bg); B._head(cv, c, head)
+    y0 = top + 130 + (bh + 20) * n
+    for k, t in enumerate(layers):
+        w = 760 - 90 * k; y = y0 - (bh + 20) * (k + 1)
+        cv.rr([cx - w / 2, y, cx + w / 2, y + bh], 24, fill=c.card if not c.dark else c.line, outline=c.fg, w=3)
+        cv.text(cx, y + bh / 2, t, SB, cv.fit(t, SB, 44, w - 40, 42), c.fg, "mm")
+    yt = y0 - (bh + 20) * n - 20
+    for k in range(-2, 3): _arrow(cv, c, (cx + k * 70, yt), (cx + k * 110, yt - 70), c.acc, 7, 20)
+    cv.text(cx, top + 10, burst, XB, 50, c.fg, "mm")
+    cv.text(RT - 10, y0 + 40, concept, SB, 42, c.gray, "rm")
+    _exitbox(cv, c, y0 + 90, "이렇게 풀어요: " + exit_text)
+    _done(cv, c, name, "stack")
+
+# 14. 저울(심리 개념) ------------------------------------------------------------------
+def scale(name, c, head, heavy, light, concept, exit_text):
+    """heavy = 무겁게 느끼는 쪽(왼쪽, 내려감), light = 가볍게 보는 쪽."""
+    top = 150; cx = (L + RT) / 2; py = top + 170; arm = 330; tilt = 0.22
+    H = int(py + 520 + 40 + _ebh("이렇게 맞춰요: " + exit_text, c) + 50); cv = Cv(H, c.bg); B._head(cv, c, head)
+    lx, ly = cx - arm * math.cos(tilt), py + arm * math.sin(tilt); rx, ry = cx + arm * math.cos(tilt), py - arm * math.sin(tilt)
+    cv.line(cx, py, cx, py + 440, c.fg, 10); cv.rr([cx - 120, py + 430, cx + 120, py + 460], 14, fill=c.fg)
+    cv.line(lx, ly, rx, ry, c.fg, 10); _dot(cv, cx, py, 18, fill=c.fg)
+    for (x, y), t, f in (((lx, ly), heavy, True), ((rx, ry), light, False)):
+        cv.line(x, y, x, y + 120, c.fg, 4)
+        h = _nodebox(cv, c, x, y + 120 + 70, t, 330) if not f else None
+        if f:
+            ls = K.balanced(cv, t, XB, 44, 330); hh = 40 + 60 * len(ls)
+            cv.rr([x - 190, y + 120, x + 190, y + 120 + hh], 30, fill=c.acc); yy = y + 120 + 20 + 30
+            for ln in ls: cv.text(x, yy, ln, XB, 44, c.pillfg, "mm"); yy += 60
+    cv.text(cx, py + 500, concept, SB, 42, c.gray, "mm")
+    _exitbox(cv, c, py + 540, "이렇게 맞춰요: " + exit_text)
+    _done(cv, c, name, "scale")
+
+# 15. 두 쪽 견주기(결정 속도처럼 두 갈래 글) ---------------------------------------------------
+def sides(name, c, head, left, right, rows, note=""):
+    """left/right = 두 쪽 이름, rows = [(체계, 왼쪽 글, 오른쪽 글)]. 가운데 세로 축에 체계, 양쪽에 알약."""
+    top = 150; cx = (L + RT) / 2; rh = 150; pw = 330
+    H = int(top + 110 + rh * len(rows) + (90 if note else 30)); cv = Cv(H, c.bg); B._head(cv, c, head)
+    cv.text(cx - 260, top + 40, left, XB, 50, c.fg, "mm"); cv.text(cx + 260, top + 40, right, XB, 50, c.fg, "mm")
+    cv.line(cx, top + 90, cx, top + 100 + rh * len(rows), c.line, 4)
+    for i, (sy, a, b) in enumerate(rows):
+        y = top + 110 + i * rh + rh / 2
+        cv.rr([cx - 70, y - 34, cx + 70, y + 34], 34, fill=c.fg); cv.text(cx, y, sy, XB, cv.fit(sy, XB, 42, 120, 42) if cv.tw(sy, XB, 42) <= 120 else 42, c.bg, "mm")
+        cv.rr([cx - 100 - pw, y - 44, cx - 100, y + 44], 44, fill=c.acc); cv.text(cx - 100 - pw / 2, y, a, XB, cv.fit(a, XB, 44, pw - 40, 42), c.pillfg, "mm")
+        cv.rr([cx + 100, y - 44, cx + 100 + pw, y + 44], 44, outline=c.fg, w=5, fill=c.bg); cv.text(cx + 100 + pw / 2, y, b, XB, cv.fit(b, XB, 44, pw - 40, 42), c.fg, "mm")
+    if note: cv.text(cx, H - 50, note, SB, cv.fit(note, SB, 42, RT - L - 20, 42), c.gray, "mm")
+    _done(cv, c, name, "sides")
