@@ -3,6 +3,8 @@
 
 > **먼저 `docs/콘텐츠_제작_인계_2026-10-04.md`를 읽는다**(무엇을 언제 만들었는지·일정표·대표가 할 일·열린 일). 아래는 시간순 작업 일지다.
 
+> **연결글 주소 빠진 발행 글 8편 (10/17 서브 노트북):** n64 n16 n18 n48 n21 n24 n30 n33 은 원고 `related.url`이 비고 카드 목록(zaoseon-site `data/naver_related_cards.json`)에 없어 카드 자리가 0개였다. 주소는 zaoseon-site `tools/naver_kit/update-plan.json`의 발행 글 주소로 채움. **발행 글의 연결글 주소를 찾을 때는 `data/naver_urls.json`만 믿지 않는다** — 10/17 10:18 동기화가 34개를 2개로 지웠다(복구함, ③에 알림).
+
 > **네이버 글 끝·CTA 배너 (10/17 대표, 서브 노트북 점검):** 글 끝은 `… > 링크 카드 > CTA 배너`(K-118, 원본은 `naver/tail_order.py`, 생성기 안전장치 `make_page.cta_last`). 연결글은 👇 유도 문구 한 줄만, 제목 줄 없음 — 링크는 그 👇 줄에(K-119, `format_body`·`format_v2.link_guide`·`related_cards`). CTA 배너는 `naver/cta_banner.py`가 그리는 `naver_cta5_`(1280x400, 제목 57px·부제 50px 이상, 규격 `channel_specs.naver_cta_banner`, K-120). 새 판은 번호를 올려 새 이름으로만. 자세히: zaoseon-site `docs/네이버_발행글_차례와배너_2026-10-17.md`.
 
 > **① 자동 실행 10/14 19:49:** 앱 승인된 event-trial1015-threads(10/15 19:00 스레드 모집 글에 표지 1장, 새 id 395757023)·shari-1020(10/20 20:00 스레드, 395757103) Metricool 예약 완료. 체험단 카드·캡션 요일 표기 없음 확인. 다음: 10/19 마감 알림·10/20 선정 발표·10/22·10/29 추첨 발표 콘텐츠, cover-1103a·b 7장.
