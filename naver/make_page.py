@@ -316,8 +316,22 @@ def add(pid, dt, title, tags, body_blocks, related=None, category=None, thumbs=N
     title, tags, _b = apply_coaching(pid, title, tags, _b)   # 10/12 코칭 블록·제목 40자·말투 고침
     reg[pid] = {"dt": dt.isoformat(), "title": title, "tags": tags[:10], "body": _b, "cover": cover, "related": rel, "thumbs": thumbs, "cid": cid, "clips": clips, "category": new_cat(pid, category or CATS.get(pid)), "done": False}
     json.dump(reg, open(REG, "w"), ensure_ascii=False, indent=1); render_all()
+def urls_guard():
+    """원고를 다시 만들기 전에 글 주소 목록(zaoseon-site data/naver_urls.json)이 비지 않았는지 잰다.
+    10/17 10:18 앱 동기화가 34개를 2개로 지웠다 — 그대로 만들면 발행 글 원고의 연결글 주소 칸이 비고,
+    키트는 그 글을 조용히 건너뛰어 아무도 모르게 된다(서브 노트북 10/17). 발행된 글(published.json status=published)의
+    80% 밑이면 멈춘다. 일부러 넘기려면 ZS_URLS_OK=1."""
+    if os.environ.get("ZS_URLS_OK") == "1": return
+    try: pub = sum(1 for v in json.load(open(PUB, encoding="utf-8")).values() if v.get("status") == "published")
+    except Exception: return
+    n = len(saved_urls())
+    if pub and n < pub * 0.8:
+        raise SystemExit(f"[원고 멈춤] 글 주소 목록이 {n}개뿐이에요(발행 글 {pub}편). data/naver_urls.json 이 동기화로 지워졌을 수 있어요. "
+                         f"앞 판(git log -- data/naver_urls.json)에서 되살린 뒤 다시 만드세요. 일부러 넘기려면 ZS_URLS_OK=1.")
+
 def render_all():
     """목록에 남은 글을 발행일 순으로 다시 그린다(다음 원고 버튼 연결)"""
+    urls_guard()
     reg = load(); live = sorted((v["dt"], k) for k, v in reg.items() if not v.get("done") and "body" in v)
     for i, (dt, k) in enumerate(live):
         v = reg[k]; nxt = live[i+1][1] if i+1 < len(live) else None
