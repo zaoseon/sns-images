@@ -19,7 +19,7 @@ def dedup(t):
 def ig_caption(desc, tags=None):
     body, _, tg = desc.partition("\n\n#"); body = dedup(body); body = re.sub(r"\s*블로그 스티커를 (?:누르면|눌러)[^.\n]*\.?", "", body).strip()
     tagline = " ".join("#" + t for t in tags) if tags else ("#" + tg if tg else "")
-    cap = body + "\n\n내 태어난 날의 기운은 프로필 링크에서 1초면 볼 수 있어요. 마음에 남으면 저장해 두세요.\n\n이 내용은 재미로, 그리고 나를 돌아보는 계기로 봐 주세요."
+    cap = body + "\n\n내 태어난 날의 기운은 프로필 링크에서 1초면 볼 수 있어요. 마음에 남으면 저장해 두세요."   # K-128(10/17): 면책 문장 안 넣음
     return cap + ("\n\n" + tagline if tagline else "")
 def ig_cta(): return lambda c: M.cta(c, CTA_LINES, pill=CTA_PILL)
 

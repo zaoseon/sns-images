@@ -35,7 +35,7 @@ def t4():
     d=''.join(f'<div style="position:absolute;left:{70+i*28}px;right:{70+i*28}px;top:{330+i*150}px;height:124px;background:#ffffff14;border:2px solid {C};border-radius:26px;display:flex;align-items:center;gap:22px;padding:0 30px;color:#fff"><span style="font-size:64px;color:#fff;width:56px">{n}</span><span style="background:{C};color:#111;font-size:40px;padding:6px 22px;border-radius:30px">{o}</span><span style="font-size:40px">{t}</span></div>' for i,(n,o,t) in enumerate(rows))
     inner=f'''<div style="position:absolute;left:70px;top:70px;font-size:36px;color:{C}">정월의 순위 · 견본</div>
 <div style="position:absolute;left:70px;top:130px;width:940px;font-family:{K.D};font-weight:900;font-size:72px;line-height:1.4;color:#fff">답장 쓰는 방식<br>오행별로 늘어놓으면?</div>{d}
-<div style="position:absolute;left:70px;right:70px;top:1100px;font-size:40px;color:#fff;text-align:center">재미로 본 순위예요. 리듬의 차이일 뿐이에요</div>
+<div style="position:absolute;left:70px;right:70px;top:1100px;font-size:40px;color:#fff;text-align:center">순위는 리듬의 차이일 뿐이에요</div>
 <div style="position:absolute;left:70px;right:70px;top:1190px;font-size:40px;color:#fff;text-align:center">내 오행은 몇 번에 있나요?</div>{handle(C)}'''
     inner=f'<img src="data:image/svg+xml;base64,{CHARTB}" style="position:absolute;left:-210px;top:140px;width:1500px;opacity:.28">'+inner
     return wrap(inner,"background:#070b16;color:#fff")

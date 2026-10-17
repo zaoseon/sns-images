@@ -1,0 +1,15 @@
+{
+ "note": "K-128 이전에 한 번 쓰고 끝난 옛 빌드 스크립트. 건드리는 김에 지우고 이 목록에서 뺀다.",
+ "files": [
+  "content/build_2026-w40fix.py",
+  "content/build_2026-w40tests.py",
+  "content/build_2026-w42.py",
+  "content/build_2026-w42fix.py",
+  "content/build_2026_w40tests_shim.py",
+  "naver/build_naver_04_07.py",
+  "naver/build_naver_08_12.py",
+  "naver/build_naver_13_15.py",
+  "naver/build_naver_16_22.py",
+  "pipeline/render.py"
+ ]
+}

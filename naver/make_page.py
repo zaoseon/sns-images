@@ -188,12 +188,17 @@ def _cards():
         try: _CARDS = json.load(open(f"{SITE}/data/naver_related_cards.json", encoding="utf-8")).get("items", {})
         except Exception: _CARDS = {}
     return _CARDS
+try: _PLANNED = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "planned_cards.json"), encoding="utf-8")).get("items", {})
+except Exception: _PLANNED = {}
 def _nu(u): return re.sub(r"[?#].*$", "", (u or "").strip()).rstrip("/").replace("m.blog.naver.com", "blog.naver.com")
 def related_cards(pid, body, ru):
     """10/16 서브 노트북 보고: 발행 글 수정은 본문을 통째로 바꾸므로, 원고에 카드 자리가 모자라면 이미 달린 카드가 사라진다(n12·n13).
     지금 달린 카드마다 원고에 <!--LINKCARD--> 자리를 둔다. 기본 연결글(ru) 카드는 그 제목 줄 바로 뒤, 나머지는 '👇 안내 + 제목 링크 줄' 다음.
     발행 키트(get_post.mjs)는 자리마다 바로 앞 제목 줄의 주소로 카드를 넣는다."""
-    cards = _cards().get(pid) or []
+    cards = list(_cards().get(pid) or [])
+    # 10/17 옛 발행글 4편(n01·n02·n03·s10): 새로 쓴 원고에 더할 카드(지금 공개 글엔 아직 없음, naver/planned_cards.json). 수정 발행 뒤 card_list.mjs 가 실제 카드로 적는다
+    for c_ in _PLANNED.get(pid, []):
+        if _nu(c_.get("url")) not in {_nu(x.get("url")) for x in cards}: cards.append(c_)
     if not cards or "<!--LINKCARD-->" in body: return body
     import html as _h
     try: titles = {_nu(x.get("url")): x.get("title", "") for x in json.load(open(f"{SITE}/data/naver_urls.json", encoding="utf-8"))["items"] if x.get("url")}

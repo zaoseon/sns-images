@@ -1,0 +1,9 @@
+{
+ "note": "10/17 옛 발행글 4편(n01·n02·n03·s10)을 새로 쓴 원고에 더할 '함께 볼 글' 카드. make_page.related_cards 가 zaoseon-site data/naver_related_cards.json(지금 달린 카드)에 없는 것만 더한다. 첫 줄이 기본 연결글(원고의 👇 줄). 수정 발행 뒤에는 card_list.mjs 가 실제 카드로 적으니 이 파일은 지워도 된다.",
+ "items": {
+  "n01": [{"url": "https://blog.naver.com/zaoseon/224425963452", "title": "2027년 삼재띠 총정리, 돼지띠 토끼띠 양띠 날삼재 뜻"}, {"url": "https://blog.naver.com/zaoseon/224426919405", "title": "2027년 돈 들어오는 띠 TOP3, 재물운 좋은 띠와 조심할 띠"}],
+  "n02": [{"url": "https://blog.naver.com/zaoseon/224425927427", "title": "2027년 띠별 운세 총정리, 정미년 12띠 중 기운 좋은 띠는?"}],
+  "n03": [{"url": "https://blog.naver.com/zaoseon/224425927427", "title": "2027년 띠별 운세 총정리, 정미년 12띠 중 기운 좋은 띠는?"}, {"url": "https://blog.naver.com/zaoseon/224428420525", "title": "2027년 연애운 좋은 띠 TOP5, 띠별 인연의 달 총정리"}],
+  "s10": [{"url": "https://blog.naver.com/zaoseon/224425927427", "title": "2027년 띠별 운세 총정리, 정미년 12띠 중 기운 좋은 띠는?"}]
+ }
+}

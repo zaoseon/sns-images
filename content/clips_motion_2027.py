@@ -64,7 +64,7 @@ def S_trine(c):
     cen = e_out(cl((t - 2.9) / .5))
     if cen > 0: text(c, "수성 역행", 1035, 2.9, 66, color=GOLD, maxw=600, stagger=0)
 def S_hanmadi(c):
-    body = "불의 해, 불의 달마다\n수성이 돌아와요.\n약속은 한 번 더 확인해 보세요."; note = "재미로 보는 풀이예요"
+    body = "불의 해, 불의 달마다\n수성이 돌아와요.\n약속은 한 번 더 확인해 보세요."; note = "운세를 읽고, 내 마음을 돌아봐요"   # K-128(10/17): 면책 문장 대신 마음 한 줄
     bw = 840; pad = 40; hb = text_h(body, 62, bw - 2 * pad, 1.4); H = pad + 66 + 12 + hb + 18 + int(44 * 1.3) + pad; top = 490
     p = e_back((c.t - .1) / .5); card = rr(bw, H, (26, 33, 54, 238), GOLD, r=44, ow=3); blit(c.fr, card, CX - bw / 2 - 4, top - 4 + (1 - e_out(p)) * 40, c.alpha(cl(p * 2)))
     text(c, "정월의 한마디", top + pad, .5, 54, color=GOLD, maxw=bw - 2 * pad, stagger=0); y = top + pad + 66 + 12

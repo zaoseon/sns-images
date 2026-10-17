@@ -20,7 +20,7 @@ for k, n in enumerate(Z.GEN):
     first = f"2027년 {n} 운세, 한 줄로는 {one}."
     if P.get("sub"): first = f"# {P['term']}, {P['sub']}\n" + first
     body = f"힘 쓸 달은 {mstr(T['good'])}, 아낄 달은 {mstr(T['save'])}이에요.\n힘 쓸 달에는 {ag}. 아낄 달에는 {asv}."
-    cap = first + "\n\n" + body + "\n\n" + P["lead"] + "\n" + tails[k % len(tails)] + "\n" + follows[k % len(follows)] + "\n\n이 내용은 재미로, 그리고 나를 돌아보는 계기로 봐 주세요.\n\n" + P["tags"]
+    cap = first + "\n\n" + body + "\n\n" + P["lead"] + "\n" + tails[k % len(tails)] + "\n" + follows[k % len(follows)] + "\n\n" + P["tags"]   # K-128(10/17): 면책 문장 안 넣음
     caps[n] = cap; assert CR.check(cap) == [], (n, CR.check(cap))
 TL = json.load(open(R + "/content/trendy_lines.json", encoding="utf-8"))
 for n in Z.GEN:

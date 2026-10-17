@@ -95,7 +95,7 @@ def build_s10():
     lines(d, ["방향별 전체 표와", "고르는 순서는", "블로그에 있어요"], 80, y + 30, 50, Dk.acc, path=SEMI, lh=1.4)
     d.rounded_rectangle([80, 1050, 640, 1140], 45, fill=Dk.acc); d.text((360, 1095), "블로그 스티커 눌러 보기", font=F(BLK, 40), fill=Dk.bg, anchor="mm")
     cv = T.head_circle("v1_lowbun", 200, Dk); d.ellipse([786, 950, 996, 1160], fill=T.GOLD); im.paste(cv, (791, 955), cv)
-    d.text((80, 1180), "오래 이어져 온 생활 풍습이에요. 재미로 참고해 주세요", font=F(MED, 28), fill=Dk.gray)
+    d.text((80, 1180), "오래 이어져 온 생활 풍습이에요", font=F(MED, 28), fill=Dk.gray)   # K-128(10/17): 면책 문장 뺌
     ai(d, Dk, 1178); footer(d, Dk); out.append(im)
     return out
 BUILD = {"s10": build_s10}
