@@ -34,6 +34,17 @@ def _pal():
     return {p["id"]: p for p in d["palettes"]}
 
 
+def royal_blue(hx):
+    """K-067: 원색·로열 블루(#0A46B3·#2563EB·#3B82F6 무리). 색상 200~240°, 채도 0.6 이상, 밝기 0.45 이상.
+    승인된 판(쓰지 않음 아닌 것)에는 하나도 걸리지 않고, 쓰지 않음 판 5개의 파랑은 모두 걸린다(10/17 ① 확인)."""
+    import colorsys
+    hx = hx.lstrip("#")
+    if len(hx) != 6: return False
+    r, g, b = (int(hx[i:i + 2], 16) / 255 for i in (0, 2, 4))
+    h, s, v = colorsys.rgb_to_hsv(r, g, b)
+    return 200 <= h * 360 <= 240 and s >= .6 and v >= .45
+
+
 def lum(hx):
     hx = hx.lstrip("#")
     r, g, b = (int(hx[i:i + 2], 16) / 255 for i in (0, 2, 4))
@@ -120,6 +131,14 @@ def before(c, channel="insta_carousel", prev=None, prev_faces=None, prev_layouts
         for k in ("bg", "acc"):
             if c.get(k) and c[k].upper() not in 쓸수있는색:
                 bad.append(f"{k} {c[k]} 가 판 '{c['pal']}' 의 색이 아니에요. 판 안의 색만 쓰세요(섞지 않기).")
+
+    # 1-1. 원색·로열 블루 금지 (K-067, 대표 10/16 "내가 저 파란색은 안 쓰면 좋겠다고 했는데").
+    #      color_combos.json 의 "쓰지 않음" 판과, 판 밖에서 적어 넣은 파란 HEX 둘 다 막는다. 미드나잇 네이비는 통과.
+    if c.get("pal") in P and P[c["pal"]].get("쓰지 않음"):
+        bad.append(f"판 '{c['pal']}' 은 쓰지 않는 판이에요({P[c['pal']]['쓰지 않음']}, K-067). 다른 판을 고르세요.")
+    for k in ("bg", "acc", "accent", "big_color"):
+        if isinstance(c.get(k), str) and c[k].startswith("#") and royal_blue(c[k]):
+            bad.append(f"{k} {c[k]} 는 원색·로열 블루예요(K-067). 물(水) 글은 미드나잇 네이비 판을 쓰세요.")
 
     # 2. 글자 색 대비 — 단색 판 + 흰 글자가 기본(대표 10/16), 안 되면 멈춘다
     for _k, _sz in (("accent", c.get("kick_size", 68)), ("big_color", c.get("big_size", 240))):
