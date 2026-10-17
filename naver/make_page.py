@@ -4,7 +4,7 @@
 - 발행(예약) 끝난 글은 목록과 파일에서 뺀다 (pages.json 의 done)
 사용: from make_page import page_from_html, write_index
 """
-import re, html, json, os, datetime as D
+import re, sys, urllib.parse, html, json, os, datetime as D
 import format_body as FB
 import format_v2 as V2
 
@@ -231,12 +231,37 @@ def cta_last(body):
     if not m or "<!--LINKCARD-->" not in body[m.end():]: return body
     return body[:m.start()] + body[m.end():] + m.group(0)
 
+def cta_pick(pid, cover, body):
+    """10/17 15:05 대표 "색 다른 5세트를 만들어 놓고 원고 내부 이미지 톤에 맞게 바꿔서 적용".
+    본문 이미지(없으면 표지)의 평균 색을 재서, 5세트(naver/cta_banner6.SET) 중 바탕색이 가장 가까운 판의 배너 이름을 돌려준다.
+    pages.json 글에 "cta_pal" 이 있으면 그것을 쓴다(손으로 고를 때)."""
+    import json as _j
+    from PIL import Image as _I
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import cta_banner6 as _C
+    reg = load(); want = (reg.get(pid) or {}).get("cta_pal")
+    if want in _C.SET: return _C.set_name(want)
+    pals = {p["id"]: p["theme"] for p in _j.load(open(os.path.join(os.path.dirname(IMG_DIR), "..", "assets", "palettes", "color_combos.json"), encoding="utf-8"))["palettes"] if p["id"] in _C.SET}
+    hx = lambda h: tuple(int(h.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))
+    files = [m for m in re.findall(r"naver/img/(?:m\d+/)?([^\"'?]+\.(?:jpg|png))", body) if "naver_cta" not in m][:6]
+    if cover: files.append(cover)
+    cols = []
+    for f in files:
+        f = urllib.parse.unquote(f); fp = os.path.join(IMG_DIR, f)
+        if os.path.exists(fp):
+            try: cols.append(_I.open(fp).convert("RGB").resize((1, 1), _I.BOX).getpixel((0, 0)))
+            except Exception: pass
+    if not cols: return _C.set_name(_C.SET[0])
+    avg = tuple(sum(c[i] for c in cols) / len(cols) for i in range(3))
+    best = min(_C.SET, key=lambda k: sum((a - b) ** 2 for a, b in zip(avg, hx(pals[k]["bg"]))))
+    return _C.set_name(best)
+
 def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, category=None, thumbs=None, cid=None, clips=None, reserve=None, v2=True):
     if cover:   # 10/16: 원고 페이지는 대표 이미지를 사이트 사본(/naver/img/...)에서 읽는다 — 새 표지(_a3)를 만들고 사본을 안 둬서 안 보였다
         import shutil; dst = f"{SITE}/public/naver/img/{cover}"; src = os.path.join(IMG_DIR, cover)
         if os.path.exists(src) and not os.path.exists(dst): os.makedirs(os.path.dirname(dst), exist_ok=True); shutil.copy(src, dst)
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
-    body = re.sub(r"naver_cta[23456]_", "naver_cta7_", body)   # 10/17 14:58 대표 "배너가 그냥 봐도 크다" → 6판 1280x240(글줄 옆 단추, naver/cta_banner6.py). 옛 파일은 발행 글이 쓰므로 그대로 둔다
+    body = re.sub(r"naver_cta[234567]_[^\"'<>\s]+?\.jpg", cta_pick(pid, cover, body), body)   # 10/17 15:05 대표: 색 5세트 중 본문 이미지 톤에 맞는 배너(cta_pick). 옛 파일은 발행 글이 쓰므로 그대로 둔다   # 10/17 14:58 대표 "배너가 그냥 봐도 크다" → 6판 1280x240(글줄 옆 단추, naver/cta_banner6.py). 옛 파일은 발행 글이 쓰므로 그대로 둔다
     body = re.sub(r"<p>\s*(?:&nbsp;\s*)?이 글은 재미로[^<]*</p>", "", body)   # 10/17 K-128 대표: '재미로' 면책 문장은 넣지 않는다. 발행글은 다른 이유로 고칠 때 같이 뺀다(지금 서브 노트북 수정 발행 중)   # 10/17 대표: 1280x400 배너(naver/cta_banner.py, 제목 57px·부제 50px 이상). 옛 cta4(10/4 2/3 크기)는 폰에서 글자 8px라 바꿈. 옛 파일은 발행 글이 쓰므로 그대로 둔다
     _mids = []   # 10/16 K-017 글 중간 입력칸 모양 상자(<table>): 서식 단계들이 <p>만 다루므로 자리표로 비켜 두었다가 끝에 되돌린다
     body = re.sub(r"<table\b.*?</table>", lambda m_: (_mids.append(m_.group(0)), f"<p>MIDBOX{len(_mids) - 1}</p>")[1], body, flags=re.S)

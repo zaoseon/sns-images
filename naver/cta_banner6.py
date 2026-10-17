@@ -16,9 +16,9 @@ from PIL import Image, ImageDraw, ImageFont
 
 CHN = "naver_cta_banner6"
 NAME = "naver_cta7_1초무료풀이.jpg"   # 10/17 15:01 대표 "무료가 두 번 겹친다" → 부제에서 무료 뺌. 6판은 이미 올라가 있어 덮지 않고 7판으로
-PAL = "k_gold"
+PAL = os.environ.get("ZS_CTA_PAL", "k_gold")   # 10/17 15:02 대표 "칙칙하다" → 판 비교용
 TITLE = "생년월일만 넣으면 1초"
-SUB = "내 기운과 2027년 한 줄 풀이"
+SUB = "내 첫 글자와 타고난 기운 알아보기"   # 10/17 15:06 대표 문구. 해가 바뀌어도 쓰게 연도 없음
 BTN = "무료로 보기"
 WANT = dict(title=66, body=46, label=50)   # 바람. 실제 크기는 구역 폭에 맞춰 줄이되 min_px 밑으로는 안 내려간다
 
@@ -33,6 +33,11 @@ def _fit(d, text, key, want, low, room):
     if d.textlength(text, font=f) > room:
         raise SystemExit(f"[배너] '{text}' 가 {low}px 로도 {room}px 폭에 안 들어가요. 문구를 줄이세요.")
     return s, f
+
+
+# 10/17 15:05 대표: 색 다른 5세트를 만들어 두고, 원고마다 본문 이미지 톤에 맞는 판을 고른다(make_page.cta_pick).
+SET = ["w_navy_butter", "y_black", "m_young", "dg_gold", "p_purple"]
+def set_name(pal): return f"naver_cta8_{pal}.jpg"
 
 
 def build(out_dirs=("img", "img/m1280")):
