@@ -8,7 +8,7 @@ def ok(c, m):
     print(("OK   " if c else "FAIL ") + m)
     if not c: bad += 1
 pg = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "pages.json"), encoding="utf-8"))
-prep = lambda b: re.sub(r"naver_cta[2345]_", "naver_cta6_", b)
+prep = lambda b: re.sub(r"naver_cta[23456]_", "naver_cta7_", b)
 text = lambda h: re.sub(r"\s+", "", re.sub(r"<[^>]+>", "", h).replace("&nbsp;", "").replace("👇", ""))   # 댓글·공유 유도 문구에 👇가 붙는 것은 허용
 EL = re.compile(r"<table.*?</table>|<hr[^>]*>|<p[^>]*>.*?</p>", re.S)
 posts = {k: v for k, v in pg.items() if not v.get("done") and "body" in v}
