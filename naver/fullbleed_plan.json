@@ -1,0 +1,1712 @@
+{
+ "n01": [
+  {
+   "pos": 1,
+   "old": "naver_z01_w5.jpg",
+   "new": "naver_z01_w5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1592
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z01_m5.jpg",
+   "new": "naver_z01_m5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1590
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z01_b4.jpg",
+   "new": "naver_z01_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    2607
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z01_q4.jpg",
+   "new": "naver_z01_q4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1152
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta5_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "s10": [
+  {
+   "pos": 1,
+   "old": "naver_zs10_k5.jpg",
+   "new": "naver_zs10_k5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    990
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_zs10_d4.jpg",
+   "new": "naver_zs10_d4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    2409
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_zs10_g5.jpg",
+   "new": "naver_zs10_g5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1239
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_zs10_q4.jpg",
+   "new": "naver_zs10_q4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1087
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta5_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n02": [
+  {
+   "pos": 1,
+   "old": "naver_z02_w5.jpg",
+   "new": "naver_z02_w5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1406
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z02_b4.jpg",
+   "new": "naver_z02_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1024
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z02_t5.jpg",
+   "new": "naver_z02_t5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    929
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z02_q4.jpg",
+   "new": "naver_z02_q4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1152
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta5_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n13": [
+  {
+   "pos": 1,
+   "old": "naver_x02_여섯지도결과4.jpg",
+   "new": "naver_x02_여섯지도결과4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1420
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_x03_겹침갈림4.jpg",
+   "new": "naver_x03_겹침갈림4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    826
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z13_q4.jpg",
+   "new": "naver_z13_q4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1217
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n14": [
+  {
+   "pos": 1,
+   "old": "naver_x12_2027지도별4.jpg",
+   "new": "naver_x12_2027지도별4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1220
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z14_x5.jpg",
+   "new": "naver_z14_x5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1264
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z14_q4.jpg",
+   "new": "naver_z14_q4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1150
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z14_n5.jpg",
+   "new": "naver_z14_n5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    861
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n15": [
+  {
+   "pos": 1,
+   "old": "naver_y12_주역과육효4.jpg",
+   "new": "naver_y12_주역과육효4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    826
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_y13_시연괘4.jpg",
+   "new": "naver_y13_시연괘4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1024
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z15_q4.jpg",
+   "new": "naver_z15_q4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1152
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n03": [
+  {
+   "pos": 1,
+   "old": "naver_z03_x5.jpg",
+   "new": "naver_z03_x5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1489
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z03_b4.jpg",
+   "new": "naver_z03_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    2607
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z03_w5.jpg",
+   "new": "naver_z03_w5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1406
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z03_q4.jpg",
+   "new": "naver_z03_q4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1087
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta5_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n17": [
+  {
+   "pos": 1,
+   "old": "naver_z17_b4.jpg",
+   "new": "naver_z17_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    825
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z17_s7.jpg",
+   "new": "naver_z17_s7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1324
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z17_e7.jpg",
+   "new": "naver_z17_e7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1420
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n16": [
+  {
+   "pos": 1,
+   "old": "naver_z16_b4.jpg",
+   "new": "naver_z16_b4f.jpg",
+   "how": "1280판을 잘라 1.28배 늘림",
+   "size": [
+    1280,
+    907
+   ],
+   "scale": 1.28
+  },
+  {
+   "pos": 2,
+   "old": "naver_z16_c7.jpg",
+   "new": "naver_z16_c7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1230
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z16_e7.jpg",
+   "new": "naver_z16_e7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1251
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n23": [
+  {
+   "pos": 1,
+   "old": "naver_z23_b4.jpg",
+   "new": "naver_z23_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    825
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z23_c7.jpg",
+   "new": "naver_z23_c7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1303
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z23_e7.jpg",
+   "new": "naver_z23_e7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1175
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n47": [
+  {
+   "pos": 1,
+   "old": "naver_z47_i4.jpg",
+   "new": "naver_z47_i4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    901
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z47_b4.jpg",
+   "new": "naver_z47_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    826
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z47_q4.jpg",
+   "new": "naver_z47_q4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1217
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z47_c4.jpg",
+   "new": "naver_z47_c4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    808
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n18": [
+  {
+   "pos": 1,
+   "old": "naver_z18_b4.jpg",
+   "new": "naver_z18_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    826
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z18_s7.jpg",
+   "new": "naver_z18_s7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1394
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z18_e7.jpg",
+   "new": "naver_z18_e7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1559
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n48": [
+  {
+   "pos": 1,
+   "old": "naver_z48_i4.jpg",
+   "new": "naver_z48_i4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    901
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z48_b4.jpg",
+   "new": "naver_z48_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1024
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z48_q4.jpg",
+   "new": "naver_z48_q4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1152
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z48_c4.jpg",
+   "new": "naver_z48_c4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    808
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n19": [
+  {
+   "pos": 1,
+   "old": "naver_z19_b4.jpg",
+   "new": "naver_z19_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    826
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z19_c7.jpg",
+   "new": "naver_z19_c7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1139
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z19_e7.jpg",
+   "new": "naver_z19_e7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1603
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n20": [
+  {
+   "pos": 1,
+   "old": "naver_z20_b4.jpg",
+   "new": "naver_z20_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    825
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z20_c7.jpg",
+   "new": "naver_z20_c7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1187
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z20_e7.jpg",
+   "new": "naver_z20_e7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1503
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "m1280/naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n08": [
+  {
+   "pos": 1,
+   "old": "naver_z08_g5.jpg",
+   "new": "naver_z08_g5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1159
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_r03_토끼띠할일4.jpg",
+   "new": "naver_r03_토끼띠할일4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1024
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z08_w5.jpg",
+   "new": "naver_z08_w5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1592
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z8_q4.jpg",
+   "new": "naver_z8_q4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1152
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n21": [
+  {
+   "pos": 1,
+   "old": "naver_z21_b4.jpg",
+   "new": "naver_z21_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    825
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z21_c7.jpg",
+   "new": "naver_z21_c7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1237
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z21_e7.jpg",
+   "new": "naver_z21_e7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1243
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n57": [
+  {
+   "pos": 1,
+   "old": "naver_z57_i4.jpg",
+   "new": "naver_z57_i4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    785
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z57_b4.jpg",
+   "new": "naver_z57_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1022
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z57_q4.jpg",
+   "new": "naver_z57_q4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1150
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z57_c4.jpg",
+   "new": "naver_z57_c4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    806
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n22": [
+  {
+   "pos": 1,
+   "old": "naver_z22_b4.jpg",
+   "new": "naver_z22_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    826
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z22_c7.jpg",
+   "new": "naver_z22_c7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1428
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z22_e7.jpg",
+   "new": "naver_z22_e7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1410
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n05": [
+  {
+   "pos": 1,
+   "old": "naver_m01_돈들어오는띠4.jpg",
+   "new": "naver_m01_돈들어오는띠4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    813
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z05_w5.jpg",
+   "new": "naver_z05_w5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1685
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z05_m5.jpg",
+   "new": "naver_z05_m5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    752
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_m03_돈조심띠4.jpg",
+   "new": "naver_m03_돈조심띠4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    826
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_z5_q4.jpg",
+   "new": "naver_z5_q4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1152
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 6,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n26": [
+  {
+   "pos": 1,
+   "old": "naver_z26_i4.jpg",
+   "new": "naver_z26_i4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    787
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z26_b4.jpg",
+   "new": "naver_z26_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    826
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z26_c7.jpg",
+   "new": "naver_z26_c7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1425
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z26_e7.jpg",
+   "new": "naver_z26_e7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1483
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n10": [
+  {
+   "pos": 1,
+   "old": "naver_z10_m5.jpg",
+   "new": "naver_z10_m5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    938
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_l13_띠별인연의달4.jpg",
+   "new": "naver_l13_띠별인연의달4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1194
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z10_w5.jpg",
+   "new": "naver_z10_w5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1499
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z10_q4.jpg",
+   "new": "naver_z10_q4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1150
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n27": [
+  {
+   "pos": 1,
+   "old": "naver_z27_i4.jpg",
+   "new": "naver_z27_i4f.jpg",
+   "how": "1280판을 잘라 1.21배 늘림",
+   "size": [
+    1280,
+    818
+   ],
+   "scale": 1.21
+  },
+  {
+   "pos": 2,
+   "old": "naver_z27_b4.jpg",
+   "new": "naver_z27_b4f.jpg",
+   "how": "1280판을 잘라 1.21배 늘림",
+   "size": [
+    1280,
+    859
+   ],
+   "scale": 1.21
+  },
+  {
+   "pos": 3,
+   "old": "naver_z27_c7.jpg",
+   "new": "naver_z27_c7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1285
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z27_e7.jpg",
+   "new": "naver_z27_e7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1104
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n28": [
+  {
+   "pos": 1,
+   "old": "naver_z28_i4.jpg",
+   "new": "naver_z28_i4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    785
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z28_t7.jpg",
+   "new": "naver_z28_t7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1102
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z28_h7.jpg",
+   "new": "naver_z28_h7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1770
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z28_b4.jpg",
+   "new": "naver_z28_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    826
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n29": [
+  {
+   "pos": 1,
+   "old": "naver_z29_i4.jpg",
+   "new": "naver_z29_i4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    787
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z29_a7.jpg",
+   "new": "naver_z29_a7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1522
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z29_b4.jpg",
+   "new": "naver_z29_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    826
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z29_e7.jpg",
+   "new": "naver_z29_e7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1118
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n11": [
+  {
+   "pos": 1,
+   "old": "naver_i02_여섯운명학4.jpg",
+   "new": "naver_i02_여섯운명학4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    755
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_i03_읽는순서4.jpg",
+   "new": "naver_i03_읽는순서4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    825
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z11_q4.jpg",
+   "new": "naver_z11_q4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1150
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n24": [
+  {
+   "pos": 1,
+   "old": "naver_z24_y7.jpg",
+   "new": "naver_z24_y7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1562
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z24_b4.jpg",
+   "new": "naver_z24_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    826
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z24_e7.jpg",
+   "new": "naver_z24_e7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1318
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n30": [
+  {
+   "pos": 1,
+   "old": "naver_z30_i4.jpg",
+   "new": "naver_z30_i4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    785
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z30_b4.jpg",
+   "new": "naver_z30_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    825
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z30_c7.jpg",
+   "new": "naver_z30_c7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1534
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z30_e7.jpg",
+   "new": "naver_z30_e7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1643
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n06": [
+  {
+   "pos": 1,
+   "old": "naver_o01_2027소띠운세4.jpg",
+   "new": "naver_o01_2027소띠운세4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    815
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z06_w5.jpg",
+   "new": "naver_z06_w5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1589
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z06_g5.jpg",
+   "new": "naver_z06_g5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1159
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_o03_소띠할일4.jpg",
+   "new": "naver_o03_소띠할일4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1024
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_z6_q4.jpg",
+   "new": "naver_z6_q4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1152
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 6,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n31": [
+  {
+   "pos": 1,
+   "old": "naver_z31_i4.jpg",
+   "new": "naver_z31_i4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    785
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z31_b4.jpg",
+   "new": "naver_z31_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    825
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z31_c7.jpg",
+   "new": "naver_z31_c7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1062
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z31_e7.jpg",
+   "new": "naver_z31_e7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1555
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n12": [
+  {
+   "pos": 1,
+   "old": "naver_z12_k5.jpg",
+   "new": "naver_z12_k5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1087
+   ],
+   "scale": 1.28
+  },
+  {
+   "pos": 2,
+   "old": "naver_z12_n5.jpg",
+   "new": "naver_z12_n5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    999
+   ],
+   "scale": 1.28
+  },
+  {
+   "pos": 3,
+   "old": "naver_z12_q4.jpg",
+   "new": "naver_z12_q4f.jpg",
+   "how": "1280판을 잘라 1.28배 늘림",
+   "size": [
+    1280,
+    1265
+   ],
+   "scale": 1.28
+  },
+  {
+   "pos": 4,
+   "old": "naver_s13_상강입동점검4.jpg",
+   "new": "naver_s13_상강입동점검4f.jpg",
+   "how": "1280판을 잘라 1.28배 늘림",
+   "size": [
+    1280,
+    1124
+   ],
+   "scale": 1.28
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n64": [
+  {
+   "pos": 1,
+   "old": "naver_z64_i4.jpg",
+   "new": "naver_z64_i4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    785
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z64_g5.jpg",
+   "new": "naver_z64_g5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1161
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z64_w5.jpg",
+   "new": "naver_z64_w5f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1592
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z64_q4.jpg",
+   "new": "naver_z64_q4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1152
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta3_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n33": [
+  {
+   "pos": 1,
+   "old": "naver_z33_i4.jpg",
+   "new": "naver_z33_i4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    673
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z33_b4.jpg",
+   "new": "naver_z33_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    826
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z33_c7.jpg",
+   "new": "naver_z33_c7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1466
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z33_e7.jpg",
+   "new": "naver_z33_e7f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "size": [
+    1280,
+    1443
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n51": [
+  {
+   "pos": 1,
+   "old": "naver_z51_i4.jpg",
+   "new": "naver_z51_i4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    785
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_z51_b4.jpg",
+   "new": "naver_z51_b4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1001
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_z51_q4.jpg",
+   "new": "naver_z51_q4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1215
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z51_c4.jpg",
+   "new": "naver_z51_c4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    806
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ],
+ "n07": [
+  {
+   "pos": 1,
+   "old": "naver_l01_연애스타일4.jpg",
+   "new": "naver_l01_연애스타일4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    813
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 2,
+   "old": "naver_l02_일간10가지4.jpg",
+   "new": "naver_l02_일간10가지4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1048
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 3,
+   "old": "naver_l03_원소교차4.jpg",
+   "new": "naver_l03_원소교차4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    825
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 4,
+   "old": "naver_z7_q4.jpg",
+   "new": "naver_z7_q4f.jpg",
+   "how": "1280판을 잘라 1.16배 늘림",
+   "size": [
+    1280,
+    1280
+   ],
+   "scale": 1.16
+  },
+  {
+   "pos": 5,
+   "old": "naver_cta4_1초무료풀이.jpg",
+   "new": null,
+   "why": "표지·배너는 따로"
+  }
+ ]
+}
