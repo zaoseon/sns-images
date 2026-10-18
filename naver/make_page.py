@@ -238,8 +238,8 @@ def cta_last(body):
     return body[:m.start()] + body[m.end():] + m.group(0)
 
 def _own(pid, name):
-    """10/18 대표: 글마다 주제에 맞는 CTA 배너. naver/cta_banner10.py 가 그린 naver_cta10_<글번호>_<판>.jpg 가 있으면 그것을 쓴다."""
-    own = name.replace("naver_cta9_", f"naver_cta10_{pid}_")
+    """10/18 대표: 글마다 주제에 맞는 CTA 배너. naver/cta_banner10.py 가 그린 naver_cta11_<글번호>_<판>.jpg 가 있으면 그것을 쓴다."""
+    own = name.replace("naver_cta9_", f"naver_cta11_{pid}_")
     return own if os.path.exists(os.path.join(IMG_DIR, own)) else name
 
 def cta_pick(pid, cover, body):
