@@ -34,6 +34,7 @@ def audit_all(d):
     seen = {}; res = []
     for r in d:
         if r.get("status") in ("new", "wait", "hold") and r.get("caption"):
+            if (r.get("channels") or []) == ["threads"]: continue   # 스레드만 가는 글은 thread_rules(K-136)가 잰다 — 팔로우 줄 요구 없음
             line = next((s for s in re.split(r"(?<=[.!?])\s+", r["caption"]) if "프로필 링크" in s), ""); prob = check(r["caption"])
             if line and line in seen: prob.append(f"{seen[line]}와 같은 문장 반복")
             seen.setdefault(line, r["id"]); res.append((r["id"], prob))

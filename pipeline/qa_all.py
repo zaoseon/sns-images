@@ -50,6 +50,8 @@ def text_checks():
     out["릴스 자막(R60 줄 수·R61 줄 길이·R63 컷 길이·R64 덩어리 수·R65 겹침)"] = sum(len(v) for v in SR.run(gate=True).values())
     import banned_words_audit as BW   # 대표 10/12 23:15: '상담' 계열 금지(예외 심리상담사). 소스 전수(두 저장소)·앱 대기 캡션·네이버 미발행 원고
     out["금지어 '상담'(두 저장소 소스·앱 대기 캡션·네이버 미발행 원고)"] = len(BW.scan())
+    import thread_rules as TR   # K-136(대표 10/18 07:53): 스레드 글은 인스타 캡션 검사(capfix) 대신 스레드 문법 검사 — 10/18 뒤 앱에 올린 스레드 글
+    out["스레드 글 문법(K-136: 500자·태그 1·반말·인스타 고정 문구 금지·행동 유도 줄·끝 어울림)"] = len(TR.run())
     import disclaimer_audit as DA   # K-128(대표 10/17): '재미로…' 면책 문장은 캡션·스레드·네이버 원고·클립에 넣지 않는다(만드는 코드 + 아직 안 나간 글)
     out["면책 문장 '재미로…'(K-128: 만드는 코드·승인 대기 캡션·안 올린 클립 설명·발행 전 원고)"] = len(DA.run())
     sys.path.insert(0, os.path.join(R, "naver")); import cover_audit as CVA   # 대표 10/15: 상강 대표 이미지 목록에서 또 잘림. 글자형 구도는 얼굴 가운데(QCS)만

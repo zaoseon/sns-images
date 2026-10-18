@@ -36,7 +36,10 @@ def corpus():
     out = []
     d = json.load(open(os.path.join(R, "content", "reel_swaps.json"), encoding="utf-8"))
     for r in d:
-        if r.get("status") in ("new", "wait", "hold") and r.get("caption"): out.append((f"캡션 {r['id']}", r["caption"]))
+        if r.get("status") in ("new", "wait", "hold") and r.get("caption"):
+            # 스레드만 가는 글은 '스레드 캡션'으로 표시 — 스레드는 반말 기본(K-136, 대표 10/18 07:53)이라 인사 '고마워'(K-029)를 막지 않는다
+            out.append((f"{'스레드 캡션' if (r.get('channels') or []) == ['threads'] else '캡션'} {r['id']}", r["caption"]))
+        if r.get("status") in ("new", "wait", "hold") and r.get("caption_threads"): out.append((f"스레드 캡션 {r['id']}", r["caption_threads"]))
     for f in sorted(glob.glob(os.path.join(R, "content", "*.py")) + [os.path.join(R, "pipeline", x) for x in ("data_reels.py", "new_tri_reels.py", "pick_reel.py", "motion_dots.py", "motion_kinetic.py", "card_kit.py", "caption_rules.py", "reels_engine.py")]):
         if not os.path.exists(f): continue
         for ln, line in enumerate(open(f, encoding="utf-8", errors="replace"), 1):
@@ -69,6 +72,7 @@ def scan(texts=None):
     for where, t in texts:
         if any(o in t for o in OK_LINES) and not re.search(r"(예요|이에요)\s?\?", t): continue
         for name, pat, why in PAT:
+            if where.startswith("스레드") and ("K-029" in name or name.startswith("반말")): continue   # 스레드 말투(K-136)는 반말 기본, 인사에 '고마워'를 쓴다
             if pat is None:
                 m = EMO.search(t)
                 if m: hits.append((name, where, t[:70], m.group(0)))
