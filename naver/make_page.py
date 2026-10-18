@@ -67,7 +67,8 @@ def clip_box_html(pid, title, clips):
     if note: h += f'<p class="hint">{html.escape(note, quote=False)}</p>'
     return h + '</div>'
 SITE = os.environ.get("SITE", "/home/claude/zaoseon-site")
-CTA_LINK = "https://zaoseon.com/?utm_source=naver&utm_medium=cta#free"
+CTA_BASE = "https://zaoseon.com/?utm_source=naver&utm_medium=cta"
+CTA_LINK = CTA_BASE + "#free"
 CAT_LIST = ["2027 신년운세", "띠별 운세", "주간 기운", "절기 이야기", "태어난 날(일주) 이야기", "운명학 입문", "자오선 소식"]
 CATS = {"n01": "2027 신년운세", "n02": "띠별 운세", "n03": "띠별 운세", "n04": "띠별 운세", "n05": "띠별 운세", "n06": "띠별 운세", "n07": "태어난 날(일주) 이야기",
         "n08": "띠별 운세", "n09": "띠별 운세", "n10": "띠별 운세", "n11": "자오선 소식", "n12": "절기 이야기", "n13": "운명학 입문", "n14": "2027 신년운세", "n15": "운명학 입문",
@@ -236,6 +237,11 @@ def cta_last(body):
     if not m or "<!--LINKCARD-->" not in body[m.end():]: return body
     return body[:m.start()] + body[m.end():] + m.group(0)
 
+def _own(pid, name):
+    """10/18 대표: 글마다 주제에 맞는 CTA 배너. naver/cta_banner10.py 가 그린 naver_cta10_<글번호>_<판>.jpg 가 있으면 그것을 쓴다."""
+    own = name.replace("naver_cta9_", f"naver_cta10_{pid}_")
+    return own if os.path.exists(os.path.join(IMG_DIR, own)) else name
+
 def cta_pick(pid, cover, body):
     """10/17 15:05 대표 "색 다른 5세트를 만들어 놓고 원고 내부 이미지 톤에 맞게 바꿔서 적용".
     본문 이미지(없으면 표지)의 평균 색을 재서, 5세트(naver/cta_banner6.SET) 중 바탕색이 가장 가까운 판의 배너 이름을 돌려준다.
@@ -245,7 +251,7 @@ def cta_pick(pid, cover, body):
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import cta_banner6 as _C
     reg = load(); want = (reg.get(pid) or {}).get("cta_pal")
-    if want in _C.SET: return _C.set_name(want)
+    if want in _C.SET: return _own(pid, _C.set_name(want))
     pals = {k: {"bg": _C.roles(k)["bg"]} for k in _C.SET}   # 9판: 대표 자료의 실제 색(역할)에서 바탕색
     hx = lambda h: tuple(int(h.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))
     files = [m for m in re.findall(r"naver/img/(?:m\d+/)?([^\"'?]+\.(?:jpg|png))", body) if "naver_cta" not in m][:6]
@@ -256,15 +262,17 @@ def cta_pick(pid, cover, body):
         if os.path.exists(fp):
             try: cols.append(_I.open(fp).convert("RGB").resize((1, 1), _I.BOX).getpixel((0, 0)))
             except Exception: pass
-    if not cols: return _C.set_name(_C.SET[0])
+    if not cols: return _own(pid, _C.set_name(_C.SET[0]))
     avg = tuple(sum(c[i] for c in cols) / len(cols) for i in range(3))
     best = min(_C.SET, key=lambda k: sum((a - b) ** 2 for a, b in zip(avg, hx(pals[k]["bg"]))))
-    return _C.set_name(best)
+    return _own(pid, _C.set_name(best))
 
 def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, category=None, thumbs=None, cid=None, clips=None, reserve=None, v2=True):
     if cover:   # 10/16: 원고 페이지는 대표 이미지를 사이트 사본(/naver/img/...)에서 읽는다 — 새 표지(_a3)를 만들고 사본을 안 둬서 안 보였다
         import shutil; dst = f"{SITE}/public/naver/img/{cover}"; src = os.path.join(IMG_DIR, cover)
         if os.path.exists(src) and not os.path.exists(dst): os.makedirs(os.path.dirname(dst), exist_ok=True); shutil.copy(src, dst)
+    global CTA_LINK
+    CTA_LINK = CTA_BASE + "&utm_campaign=" + pid + "#free"   # 10/18 대표: 글별 사이트 방문 재기(GoatCounter). 보이는 글은 그대로
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
     body = re.sub(r"naver_cta[2-8]_[^\"'<>\s]+?\.jpg", cta_pick(pid, cover, body), body)   # 10/17 15:05 대표: 색 5세트 중 본문 이미지 톤에 맞는 배너(cta_pick). 옛 파일은 발행 글이 쓰므로 그대로 둔다   # 10/17 14:58 대표 "배너가 그냥 봐도 크다" → 6판 1280x240(글줄 옆 단추, naver/cta_banner6.py). 옛 파일은 발행 글이 쓰므로 그대로 둔다
     body = re.sub(r"<p>\s*(?:&nbsp;\s*)?이 글은 재미로[^<]*</p>", "", body)   # 10/17 K-128 대표: '재미로' 면책 문장은 넣지 않는다. 발행글은 다른 이유로 고칠 때 같이 뺀다(지금 서브 노트북 수정 발행 중)   # 10/17 대표: 1280x400 배너(naver/cta_banner.py, 제목 57px·부제 50px 이상). 옛 cta4(10/4 2/3 크기)는 폰에서 글자 8px라 바꿈. 옛 파일은 발행 글이 쓰므로 그대로 둔다
