@@ -12,10 +12,22 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OLD = re.compile(r"^naver_z\w+?_([ibsqcd])\d*\.jpg$")
 PSY = re.compile(r"^naver_z\w+?_p\d*\.jpg$")
 
+def _fullbleed():
+    """K-137 여백 제거판(…f.jpg)은 같은 그림이라 원래 이름으로 잰다(fullbleed_plan.json new → old)."""
+    p = os.path.join(HERE, "fullbleed_plan.json")
+    if not os.path.exists(p): return {}
+    m = {}
+    for items in json.load(open(p, encoding="utf-8")).values():
+        for it in items:
+            if it.get("new"): m[it["new"]] = it["old"]
+    return m
+FB = _fullbleed()
+
 def kinds(body, reg):
     out = []
     for u in re.findall(r'<img[^>]*src="([^"]+)"', body):
         f = unquote(u.split("/")[-1])
+        f = FB.get(f, f)
         if "cta" in f: continue
         if f in reg: out.append(("도식", reg[f]))
         elif PSY.match(f): out.append(("도식", "psych"))
