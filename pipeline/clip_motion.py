@@ -435,14 +435,57 @@ def groups(c, y, t0):
     for i, g in enumerate(("1 · 5 · 7", "2 · 4 · 8", "3 · 6 · 9")):
         im = rr(640, 130, CARDC(235), GOLD); ImageDraw.Draw(im).text((324, 70), g, font=font(BLACK, 82), fill=WHITE, anchor="mm")
         p = e_out((c.t - t0 - i * .35) / .5); blit(c.fr, im, CX - 324 + (1 - p) * -120, y + i * 160, c.alpha(cl(p * 1.5)))
-def battery(c, cx, cy, t0, frm=.12, to=1.0, dur=2.0, label=None):
+def battery(c, cx, cy, t0, frm=.12, to=1.0, dur=2.0, label=None, pct=True):
     p = e_out((c.t - t0) / dur); lv = frm + (to - frm) * p; w, h = 640, 290; im = Image.new("RGBA", (w + 70, h + 20), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     d.rounded_rectangle((6, 10, 6 + w, 10 + h), radius=40, outline=WHITE, width=10); d.rounded_rectangle((w + 14, 10 + h / 2 - 40, w + 46, 10 + h / 2 + 40), radius=12, fill=WHITE)
     col = (214, 98, 82, 255) if lv < .3 else GOLD; bw = int((w - 36) * lv)
     if bw > 10: d.rounded_rectangle((24, 28, 24 + bw, 10 + h - 18), radius=28, fill=col)
     blit(c.fr, im, cx - im.width / 2, cy - im.height / 2, c.alpha(e_out((c.t - t0 + .2) / .3)))
     if label: blit(c.fr, line_layers(label, 64, WHITE, BLACK, 800, 1.2)[0][0], cx - line_layers(label, 64, WHITE, BLACK, 800, 1.2)[0][0].width / 2, cy - h / 2 - 120, c.alpha(e_out((c.t - t0) / .4)))
+    if not pct: return
     pc = f"{int(lv * 100)}%"; L = line_layers(pc, 110, GOLD, BLACK, 400, 1.2)[0][0]; blit(c.fr, L, cx - L.width / 2, cy + h / 2 + 10, c.alpha(1))
+def battery_charge(c, cx, cy, t0, frm=.12, to=1.0, dur=2.0, label=None):
+    """충전 모션판 배터리: 번지는 빛 · 훑고 지나가는 반짝임 · 번개 맥박 · 떠오르는 불꽃 · 가득 찰 때 퍼지는 고리 · 숫자 튀어오름.
+    정보를 나르는 움직임만 쓴다(K-073): 차오르는 양 = 숫자 = 불꽃 수."""
+    x = c.t - t0; p = e_out(x / dur); lv = frm + (to - frm) * p; w, h = 640, 290
+    ox, oy = cx - (w + 70) / 2, cy - (h + 20) / 2; full = x >= dur
+    fx0, fy0, fy1 = ox + 24, oy + 28, oy + 10 + h - 18; bw = int((w - 36) * lv)
+    # 1) 뒤에서 번지는 빛 (차오를수록 세짐)
+    if bw > 10:
+        g = Image.new("RGBA", (w + 300, h + 300), (0, 0, 0, 0)); gd = ImageDraw.Draw(g)
+        pulse = .75 + .25 * math.sin(c.t * 7); gd.rounded_rectangle((150 + 20, 150 + 20, 150 + 24 + bw, 150 + h - 10), radius=40, fill=ACC(int(150 * lv * pulse)))
+        g = g.filter(ImageFilter.GaussianBlur(46)); blit(c.fr, g, ox - 150, oy - 150, c.alpha(e_out((x + .2) / .3)))
+    battery(c, cx, cy, t0, frm, to, dur, label, pct=False)
+    # 2) 채움 막대 위를 훑는 반짝임 (0.7초마다 한 번)
+    if bw > 60:
+        sh = Image.new("RGBA", (w, h), (0, 0, 0, 0)); sd = ImageDraw.Draw(sh); ph = (x * 1.4) % 1.0; sx = int(-120 + (bw + 240) * ph)
+        sd.polygon([(sx, 0), (sx + 70, 0), (sx + 10, h), (sx - 60, h)], fill=(255, 255, 255, 120))
+        mk = Image.new("L", (w, h), 0); ImageDraw.Draw(mk).rounded_rectangle((18, 18, 18 + bw, h - 28), radius=28, fill=255)
+        sh.putalpha(ImageChops.multiply(sh.getchannel("A"), mk)); blit(c.fr, sh, ox + 6, oy + 10, c.alpha(1))
+    # 3) 번개 (배터리 가운데, 맥박처럼 커졌다 줄어듦)
+    if bw > 120:
+        k = 1 + .10 * math.sin(c.t * 9); bs = 150 * k; bx, by = cx - 20 * k, cy - bs / 2 - 6
+        bolt = [(bx + .55 * bs, by), (bx, by + .58 * bs), (bx + .32 * bs, by + .58 * bs), (bx + .18 * bs, by + bs), (bx + .72 * bs, by + .40 * bs), (bx + .40 * bs, by + .40 * bs)]
+        bl = Image.new("RGBA", (int(bs * 1.3), int(bs * 1.3)), (0, 0, 0, 0)); ImageDraw.Draw(bl).polygon([(a - bx + 10, b - by + 10) for a, b in bolt], fill=(30, 24, 48, 235))
+        blit(c.fr, bl, bx - 10, by - 10, c.alpha(e_out((x - .25) / .3)))
+    # 4) 떠오르는 불꽃 (차오르는 동안만, 막대 끝에서 위로)
+    if 0 < x < dur + .5:
+        rnd = random.Random(33); n = int(14 * cl(lv + .1)); fl = Image.new("RGBA", (W, H), (0, 0, 0, 0)); fd = ImageDraw.Draw(fl)
+        for i in range(n):
+            ph = ((x * .9 + rnd.random()) % 1.0); px = fx0 + rnd.random() * max(40, bw); py = fy0 - 6 - ph * 50; r = 5 + rnd.random() * 7
+            fd.ellipse((px - r, py - r, px + r, py + r), fill=ACC(int(230 * (1 - ph) * cl(x / .4))))
+        blit(c.fr, fl, 0, 0, c.alpha(1))
+    # 5) 가득 찼을 때 퍼지는 고리 두 겹
+    if full:
+        for j in range(2):
+            q = cl((x - dur - j * .18) / .7)
+            if 0 < q < 1:
+                r = 40 + 330 * e_out(q); rg = Image.new("RGBA", (int(w * 1.1) + 200, int(h * 1.1) + 200), (0, 0, 0, 0)); gw, gh = rg.size
+                ImageDraw.Draw(rg).rounded_rectangle((100 - r * .35, 100 - r * .2, gw - 100 + r * .35, gh - 100 + r * .2), radius=70, outline=ACC(int(220 * (1 - q))), width=6)
+                blit(c.fr, rg, cx - gw / 2, cy - gh / 2, c.alpha(1))
+    # 6) 숫자는 올라가고, 다 차면 한 번 튄다
+    pc = f"{int(lv * 100)}%"; sc = 1 + .22 * math.sin(cl((x - dur) / .45) * math.pi) if full else 1
+    L = line_layers(pc, int(110 * sc), GOLD, BLACK, 400, 1.2)[0][0]; blit(c.fr, L, cx - L.width / 2, cy + h / 2 + 10 - (L.height - 130) / 2, c.alpha(1))
 def check_row(c, y, label, t0, size=64):
     p = e_out((c.t - t0) / .45); im = Image.new("RGBA", (860, 150), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     d.rounded_rectangle((0, 8, 840, 138), radius=40, fill=CARDC(235), outline=ACC(120), width=2)
