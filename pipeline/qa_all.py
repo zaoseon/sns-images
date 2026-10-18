@@ -140,12 +140,29 @@ def video_checks():
         res, tot, b = LA.run_group(g); bad += b
     out["글·그림 배치(맨 위 475↑·맨 아래 1375↓·가운데 910±35) 기준 밖 장면"] = bad
     return out
+
+def first_frame_checks():
+    """K-139(대표 10/18): 10/19 뒤 올릴 클립(content/post_clips.json)의 0초 프레임에 제목이 보이는지."""
+    import re, datetime
+    sys.path.insert(0, os.path.join(R, "pipeline")); import clip_first_frame as CFF
+    today = datetime.date.today().isoformat(); bad = 0
+    for c in json.load(open(os.path.join(R, "content", "post_clips.json"), encoding="utf-8")):
+        if (c.get("rec") or "") < max(today, "2026-10-19"): continue
+        m = re.search(r"/sns-images/[^/]+/(.+\.mp4)$", c.get("video") or "")
+        if not m: continue
+        f = os.path.join(R, m.group(1))
+        if not os.path.exists(f): continue
+        b = CFF.check(f)
+        if b: bad += 1; print("   ", c["id"], b[0])
+    return {"클립 0초 프레임에 제목(K-139, 올릴 클립)": bad}
+
 if __name__ == "__main__":
     res = text_checks()
     res.update(spec_checks())
     res.update(set_checks())
     res.update(naver_state_checks())
     res.update(k131_checks())
+    res.update(first_frame_checks())
     if "--videos" in sys.argv: res.update(video_checks())
     fail = {k: v for k, v in res.items() if v}
     for k, v in res.items(): print(("통과 " if not v else f"걸림 {v}개 ") + "· " + k)

@@ -276,6 +276,7 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
         if os.path.exists(src) and not os.path.exists(dst): os.makedirs(os.path.dirname(dst), exist_ok=True); shutil.copy(src, dst)
     global CTA_LINK
     CTA_LINK = CTA_BASE + "&utm_campaign=" + pid + "#free"   # 10/18 대표: 글별 사이트 방문 재기(GoatCounter). 보이는 글은 그대로
+    body = re.sub(r"utm_medium=mid(?:&amp;utm_campaign=\w+)?#free", "utm_medium=mid&amp;utm_campaign=" + pid + "#free", body)   # 글 중간 입력칸 링크도 글별로(K-142·CT 10/18 17:00) — 전에는 사이트 페이지만 손으로 고쳐 다시 만들면 빠졌다
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
     body = re.sub(r"(utm_source=naver(?:&amp;|&)utm_medium=(?:cta|mid))#free", lambda m: m.group(1) + ("&amp;" if "&amp;" in m.group(1) else "&") + "utm_campaign=" + pid + "#free", body)   # 10/18 대표: 본문에 이미 박힌 CTA·중간 링크에도 글번호(원본 pages.json 은 그대로 둔다)
     body = re.sub(r"naver_cta[2-8]_[^\"'<>\s]+?\.jpg", cta_pick(pid, cover, body), body)   # 10/17 15:05 대표: 색 5세트 중 본문 이미지 톤에 맞는 배너(cta_pick). 옛 파일은 발행 글이 쓰므로 그대로 둔다   # 10/17 14:58 대표 "배너가 그냥 봐도 크다" → 6판 1280x240(글줄 옆 단추, naver/cta_banner6.py). 옛 파일은 발행 글이 쓰므로 그대로 둔다
