@@ -26,6 +26,23 @@ CHART = os.path.join(HERE, "..", "assets", "brand_bg", "chart.png")
 ONLY = None                 # 다시 만들 글 번호 집합(예: {'n20','n26'}); None이면 전부
 WARN = []
 
+
+def _rl(c):
+    c = [v / 255 for v in c[:3]]; c = [v / 12.92 if v <= .03928 else ((v + .055) / 1.055) ** 2.4 for v in c]
+    return .2126 * c[0] + .7152 * c[1] + .0722 * c[2]
+def _cr(a, b):
+    la, lb = _rl(a), _rl(b); return (max(la, lb) + .05) / (min(la, lb) + .05)
+def ink(col, on, need=4.5):
+    """K-138(대표 10/18): 글자색을 놓일 바탕(on) 기준 대비 need 이상으로. 밝은 바탕이면 어둡게, 어두운 바탕이면 밝게 민다.
+    사고: v5 어두운 판의 글자색(흰색)이 흰 칸 위에 그대로 그려져 대비 1.07(n07·n10·n11)."""
+    col = tuple(int(v) for v in col[:3]); on = tuple(int(v) for v in on[:3])
+    if _cr(col, on) >= need: return col
+    tgt = (0, 0, 0) if _rl(on) > .18 else (255, 255, 255)
+    for k in range(1, 21):
+        c = tuple(int(round(col[i] + (tgt[i] - col[i]) * k / 20)) for i in range(3))
+        if _cr(c, on) >= need: return c
+    return tgt
+
 def F(path, size): return R.F(path, int(round(size * S)))
 def HF(t, path, size):
     f = F(path, size); return R.HF(t, f)
@@ -137,8 +154,8 @@ L = OX + 40; RT = OX + CW - 40          # 내용 안쪽 왼쪽·오른쪽
 def head_block(cv, head, acc, fg):
     bw = cv.tw("子午線 자오선", SER, 34) + 24
     if cv.tw(head, TITLE, 52) > RT - L - bw and cv.tw(head, TITLE, 52) <= RT - L:   # 10/10: 제목이 길면 로고를 위로 올려 겹치지 않게
-        cv.text(L, 62, head, TITLE, cv.fit(head, TITLE, 56, RT - L, 52), fg); cv.text(RT, 22, "子午線 자오선", SER, 28, acc, "ra"); return
-    cv.text(L, 54, head, TITLE, cv.fit(head, TITLE, 72, RT - L - bw, 52), fg)
+        cv.text(L, 62, head, TITLE, cv.fit(head, TITLE, 56, RT - L, 52), ink(fg, cv.bg)); cv.text(RT, 22, "子午線 자오선", SER, 28, acc, "ra"); return
+    cv.text(L, 54, head, TITLE, cv.fit(head, TITLE, 72, RT - L - bw, 52), ink(fg, cv.bg))
     cv.text(RT, 66, "子午線 자오선", SER, 34, acc, "ra")
 
 def rows(path, head, items, note=""):
@@ -159,18 +176,18 @@ def rows(path, head, items, note=""):
     for i, (lab, big, small, col) in enumerate(items):
         y = top + i * (RH + GAP); c = RED if col == "red" else acc
         cv.rr([L, y, RT, y + RH], 28, fill=WHITE, outline=(c if col else line), w=(4 if col else 3))
-        cv.text(L + 32, y + RH / 2, lab, TITLE, cv.fit(lab, TITLE, 50, LW - 16, 42), c, "lm")
+        cv.text(L + 32, y + RH / 2, lab, TITLE, cv.fit(lab, TITLE, 50, LW - 16, 42), ink(c, WHITE), "lm")
         x0 = L + 32 + LW + 14; mw = RT - 32 - x0
         if single:
             sb = cv.fit(big, BODY, 54, mw - ((28 + cv.tw(small, BODY, 40)) if small else 0), 46)
-            cv.text(x0, y + RH / 2 + 19, big, BODY, sb, fg, "ls")
+            cv.text(x0, y + RH / 2 + 19, big, BODY, sb, ink(fg, WHITE), "ls")
             if small: cv.text(x0 + cv.tw(big, BODY, sb) + 28, y + RH / 2 + 19, small, BODY, 40, DIM, "ls")
         elif small:
-            cv.text(x0, y + 66, big, BODY, cv.fit(big, BODY, 56, mw, 44), fg, "ls")
+            cv.text(x0, y + 66, big, BODY, cv.fit(big, BODY, 56, mw, 44), ink(fg, WHITE), "ls")
             cv.text(x0, y + 114, small, BODY, cv.fit(small, BODY, 42, mw, 36), DIM, "ls")
         else:
-            cv.text(x0, y + RH / 2, big, BODY, cv.fit(big, BODY, 56, mw, 44), fg, "lm")
-    if note: cv.text(L, H - 60, note, BODY, cv.fit(note, BODY, 44, RT - L, 36), acc, "lm")
+            cv.text(x0, y + RH / 2, big, BODY, cv.fit(big, BODY, 56, mw, 44), ink(fg, WHITE), "lm")
+    if note: cv.text(L, H - 60, note, BODY, cv.fit(note, BODY, 44, RT - L, 36), ink(acc, bg), "lm")
     cv.save(os.path.basename(path))
 
 def table(path, head, cols, rows_, widths):
@@ -178,12 +195,12 @@ def table(path, head, cols, rows_, widths):
     bg, acc, fg, line = _theme(); n = len(rows_); RH = 112; top = 168; hh = 78
     H = top + hh + n * RH + 60; cv = Cv(H, bg); cv.watermark(acc); head_block(cv, head, acc, fg)
     avail = RT - L; tot = float(sum(widths)); ws = [w * avail / tot for w in widths]; x = L
-    for c, w in zip(cols, ws): cv.text(x + 10, top + hh / 2, c, BODY, 44, acc, "lm"); x += w
+    for c, w in zip(cols, ws): cv.text(x + 10, top + hh / 2, c, BODY, 44, ink(acc, bg), "lm"); x += w
     cv.line(L, top + hh, RT, top + hh, acc, 4)
     for r in range(n):
         y = top + hh + r * RH; x = L
         for i, (c, w) in enumerate(zip(rows_[r], ws)):
-            path_ = TITLE if i == 0 else BODY; size = 54 if i == 0 else 50; mw = w - 24; col = acc if i == 0 else fg
+            path_ = TITLE if i == 0 else BODY; size = 54 if i == 0 else 50; mw = w - 24; col = ink(acc if i == 0 else fg, bg)
             if cv.tw(c, path_, size) <= mw: cv.text(x + 10, y + RH / 2, c, path_, size, col, "lm")
             else:
                 ls = balanced(cv, c, path_, 44, mw)
@@ -273,11 +290,11 @@ def title_card(path, kicker, lines, sub, mark):
     f = HF(mark, SER, 560); cv.d.text(((OX + CW - 40) * S, (H * .56) * S), mark, font=f, fill=tuple(int(bg[i] * .88 + acc[i] * .12) for i in range(3)), anchor="rm")
     cv.text(L, 58, "子午線 자오선", SER, 34, acc)
     y = 64 + 56 + (H - 64 - 56 - 88 - block) / 2 + 20
-    cv.text(L, y, kicker, TITLE, 46, acc); y += kh + 24
-    for l in lines: cv.text(L, y, l, TITLE, tsz, fg); y += lh
+    cv.text(L, y, kicker, TITLE, 46, ink(acc, bg)); y += kh + 24
+    for l in lines: cv.text(L, y, l, TITLE, tsz, ink(fg, bg)); y += lh
     cv.line(L, y + 6, L + 150, y + 6, acc, 10); y += 30
-    cv.text(L, y + 12, sub, BODY, cv.fit(sub, BODY, 46, RT - L, 36), DIM)
-    cv.text(RT, H - 44, "동서양 6가지 운명학 · zaoseon.com", BODY, 34, DIM, "ra")
+    cv.text(L, y + 12, sub, BODY, cv.fit(sub, BODY, 46, RT - L, 36), ink(DIM, bg))
+    cv.text(RT, H - 44, "동서양 6가지 운명학 · zaoseon.com", BODY, 34, ink(DIM, bg), "ra")
     cv.save(os.path.basename(path))
 
 def months(path, head, good, save, lucky):
@@ -287,15 +304,15 @@ def months(path, head, good, save, lucky):
     cv = Cv(H, bg); cv.watermark(acc); head_block(cv, head, acc, fg)
     for m in range(12):
         x = L + (m % 6) * (cw + gap); y = top + (m // 6) * (ch + gap); mm = m + 1
-        if mm in good: cv.rr([x, y, x + cw, y + ch], 26, fill=acc); cv.text(x + cw / 2, y + ch / 2, f"{mm}월", TITLE, 58, WHITE, "mm")
+        if mm in good: cv.rr([x, y, x + cw, y + ch], 26, fill=acc); cv.text(x + cw / 2, y + ch / 2, f"{mm}월", TITLE, 58, ink(WHITE, acc), "mm")
         elif mm in save: cv.rr([x, y, x + cw, y + ch], 26, fill=WHITE, outline=RED_, w=6); cv.text(x + cw / 2, y + ch / 2, f"{mm}월", TITLE, 58, RED_, "mm")
         else: cv.rr([x, y, x + cw, y + ch], 26, fill=WHITE, outline=line, w=3); cv.text(x + cw / 2, y + ch / 2, f"{mm}월", TITLE, 58, DIM, "mm")
     y = top + 2 * ch + gap + 40 + 33
-    cv.rr([L, y - 22, L + 44, y + 22], 10, fill=acc); cv.text(L + 60, y, "힘을 쓸 달", BODY, 44, fg, "lm")
+    cv.rr([L, y - 22, L + 44, y + 22], 10, fill=acc); cv.text(L + 60, y, "힘을 쓸 달", BODY, 44, ink(fg, bg), "lm")
     x2 = L + 60 + cv.tw("힘을 쓸 달", BODY, 44) + 56
-    cv.rr([x2, y - 22, x2 + 44, y + 22], 10, fill=WHITE, outline=RED_, w=5); cv.text(x2 + 60, y, "아낄 달", BODY, 44, fg, "lm")
+    cv.rr([x2, y - 22, x2 + 44, y + 22], 10, fill=WHITE, outline=RED_, w=5); cv.text(x2 + 60, y, "아낄 달", BODY, 44, ink(fg, bg), "lm")
     if any(s_ > 12 for s_ in save): cv.text(RT, y, "+ 이듬해 1월도 아껴요", BODY, 42, RED_, "rm")
-    cv.text(L, y + 84, lucky, BODY, cv.fit(lucky, BODY, 46, RT - L, 36), acc, "lm")
+    cv.text(L, y + 84, lucky, BODY, cv.fit(lucky, BODY, 46, RT - L, 36), ink(acc, bg), "lm")
     cv.save(os.path.basename(path))
 
 def cells2(path, head, cells, note=""):
@@ -307,8 +324,8 @@ def cells2(path, head, cells, note=""):
     for i, (hz, name, kw) in enumerate(cells):
         x = L + (i % 2) * (cw + gap); y = top + (i // 2) * (rh + gap)
         cv.rr([x, y, x + cw, y + rh], 26, fill=WHITE, outline=line, w=3)
-        lab = f"{name}"; cv.text(x + 26, y + rh / 2, hz, SER, 52, acc, "lm"); lx = x + 26 + 64
-        cv.text(lx, y + rh / 2, lab, TITLE, 48, acc, "lm"); tx = lx + cv.tw(lab, TITLE, 48) + 22
-        cv.text(tx, y + rh / 2, kw, BODY, cv.fit(kw, BODY, 46, x + cw - 20 - tx, 36), fg, "lm")
-    if note: cv.text(L, H - 52, note, BODY, cv.fit(note, BODY, 44, RT - L, 36), acc, "lm")
+        lab = f"{name}"; cv.text(x + 26, y + rh / 2, hz, SER, 52, ink(acc, WHITE), "lm"); lx = x + 26 + 64
+        cv.text(lx, y + rh / 2, lab, TITLE, 48, ink(acc, WHITE), "lm"); tx = lx + cv.tw(lab, TITLE, 48) + 22
+        cv.text(tx, y + rh / 2, kw, BODY, cv.fit(kw, BODY, 46, x + cw - 20 - tx, 36), ink(fg, WHITE), "lm")
+    if note: cv.text(L, H - 52, note, BODY, cv.fit(note, BODY, 44, RT - L, 36), ink(acc, bg), "lm")
     cv.save(os.path.basename(path))
