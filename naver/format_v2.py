@@ -174,9 +174,10 @@ def _bold_guide(paras):
         out.append(p)
     return out
 
+ENGAGE_EMOJI = "💬"   # K-141(대표 10/18 14:31): 👇는 연결글 유도 문구 앞에만. 댓글·공유 안내는 다른 이모지(대표가 바꾸면 여기 한 곳)
 ENGAGE = re.compile(r"댓글(?:로|에)[^.!?]{0,30}(?:남겨|알려)|이 글을 공유해 주세요")
 def _engage_emoji(paras):
-    """댓글·공유를 청하는 유도 문구 문단 맨 앞에 👇를 붙인다(10/5 대표 요청). 첫 줄에 자리가 없으면(폰 한 줄 22자 넘음) 이모지만 윗줄에 둔다. 이미 이모지·번호로 시작하는 줄은 건드리지 않는다."""
+    """댓글·공유를 청하는 유도 문구 문단 맨 앞에 이모지(ENGAGE_EMOJI, 10/18부터 💬 — K-141)를 붙인다(10/5 대표 요청). 첫 줄에 자리가 없으면(폰 한 줄 22자 넘음) 이모지만 윗줄에 둔다. 이미 이모지·번호로 시작하는 줄은 건드리지 않는다."""
     out = []
     for p in paras:
         if p != HR and not p.startswith("<table") and "<img" not in p and "<a " not in p:
@@ -185,8 +186,8 @@ def _engage_emoji(paras):
                 m = re.match(r"(<p[^>]*><span[^>]*>)(.*)(</span></p>)$", p, re.S)
                 if m:
                     lines = m.group(2).split("<br>")
-                    if FB.width(FB.plain_of(lines[0])) + 2.0 <= FB.MOBILE_BODY: lines[0] = "👇 " + lines[0]
-                    else: lines.insert(0, "👇")
+                    if FB.width(FB.plain_of(lines[0])) + 2.0 <= FB.MOBILE_BODY: lines[0] = ENGAGE_EMOJI + " " + lines[0]
+                    else: lines.insert(0, ENGAGE_EMOJI)
                     p = m.group(1) + "<br>".join(lines) + m.group(3)
         out.append(p)
     return out
@@ -241,20 +242,20 @@ def _small_images(body):
     return re.sub(r"<img[^>]*>", sub, body)
 
 def link_guide(body, url):
-    """👇 함께 볼 글 유도 문구 줄에 연결 글 주소로 링크를 건다(이미 걸려 있으면 그대로). 주소는 앱에 저장된 값(data/naver_urls.json).
-    10/17 대표: 연결글은 유도 문구 한 줄만 쓰고 글 제목 줄은 쓰지 않는다 → 전에는 👇 다음 '제목 줄'에 걸었지만 이제 👇 줄 자체에 건다.
-    발행 키트(get_post.mjs)는 카드 자리 바로 앞에 걸린 주소로 카드를 만든다."""
+    """K-140(대표 10/18 14:23·14:25): 연결글 유도 문구(👇) 줄에는 링크를 걸지 않는다. 👇 다음 글자는 볼드, 그 아래에는 링크 카드만
+    (주소는 발행 키트 fill_related 가 카드로 만든 뒤 지운다). K-119의 '👇 줄 자체에 링크'를 대체한다.
+    그래서 여기서는 주소를 본문에 넣지 않고, 마지막 '함께 볼 글' 👇 줄이 볼드인지만 맞춘다(url 인자는 호환용 — 비어 있으면 그대로).
+    이미 들어간 옛 링크(<a>)는 벗겨 낸다. 댓글·공유 유도 문구는 건드리지 않는다."""
     if not url: return body
-    import html as _h
     ms = list(re.finditer(r"<p[^>]*>.*?</p>", body, re.S))
-    g = max((i for i, m in enumerate(ms) if "👇" in FB.plain_of(m.group(0)) and not ENGAGE.search(FB.plain_of(m.group(0)))), default=None)   # 본문 끝(CTA 앞)의 마지막 👇 줄. 댓글·공유 유도 문구의 👇는 건너뛴다(10/17: CTA 뒤 공유 문단에 링크가 걸려 카드가 엉뚱한 곳에 들어갔다)
+    g = max((i for i, m in enumerate(ms) if "👇" in FB.plain_of(m.group(0)) and not ENGAGE.search(FB.plain_of(m.group(0)))), default=None)
     if g is None: return body
-    m = ms[g]
-    if "<a " in m.group(0): return body
-    a = '<a href="' + _h.escape(url, quote=True) + '">'
-    new = re.sub(r"(<span[^>]*>)(.*)(</span>)", lambda k: k.group(1) + a + k.group(2) + "</a>" + k.group(3), m.group(0), count=1, flags=re.S)
-    if new == m.group(0): new = re.sub(r"(<p[^>]*>)(.*)(</p>)", lambda k: k.group(1) + a + k.group(2) + "</a>" + k.group(3), m.group(0), count=1, flags=re.S)
-    return body[:m.start()] + new + body[m.end():]
+    m = ms[g]; p = re.sub(r"</?a\b[^>]*>", "", m.group(0))
+    if "<b>" not in p:
+        p2 = re.sub(r"(<span[^>]*>)(.*)(</span>)", r"\1<b>\2</b>\3", p, count=1, flags=re.S)
+        if p2 == p: p2 = re.sub(r"(<p[^>]*>)(.*)(</p>)", r"\1<b>\2</b>\3", p, count=1, flags=re.S)
+        p = p2
+    return body[:m.start()] + p + body[m.end():]
 
 
 # ---- 10/8 대표 캡처 반영: 문단 사이 줄띄움·도입부 간격·이미지 앞뒤 ----

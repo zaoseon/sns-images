@@ -275,6 +275,7 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
         if os.path.exists(src) and not os.path.exists(dst): os.makedirs(os.path.dirname(dst), exist_ok=True); shutil.copy(src, dst)
     global CTA_LINK
     CTA_LINK = CTA_BASE + "&utm_campaign=" + pid + "#free"   # 10/18 대표: 글별 사이트 방문 재기(GoatCounter). 보이는 글은 그대로
+    body = re.sub(r"utm_medium=mid(?:&amp;utm_campaign=\w+)?#free", "utm_medium=mid&amp;utm_campaign=" + pid + "#free", body)   # 글 중간 입력칸 링크도 글별로(K-142·CT 10/18 17:00) — 전에는 사이트 페이지만 손으로 고쳐 다시 만들면 빠졌다
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
     body = re.sub(r"naver_cta[2-8]_[^\"'<>\s]+?\.jpg", cta_pick(pid, cover, body), body)   # 10/17 15:05 대표: 색 5세트 중 본문 이미지 톤에 맞는 배너(cta_pick). 옛 파일은 발행 글이 쓰므로 그대로 둔다   # 10/17 14:58 대표 "배너가 그냥 봐도 크다" → 6판 1280x240(글줄 옆 단추, naver/cta_banner6.py). 옛 파일은 발행 글이 쓰므로 그대로 둔다
     body = re.sub(r"<p>\s*(?:&nbsp;\s*)?이 글은 재미로[^<]*</p>", "", body)   # 10/17 K-128 대표: '재미로' 면책 문장은 넣지 않는다. 발행글은 다른 이유로 고칠 때 같이 뺀다(지금 서브 노트북 수정 발행 중)   # 10/17 대표: 1280x400 배너(naver/cta_banner.py, 제목 57px·부제 50px 이상). 옛 cta4(10/4 2/3 크기)는 폰에서 글자 8px라 바꿈. 옛 파일은 발행 글이 쓰므로 그대로 둔다
