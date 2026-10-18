@@ -239,7 +239,9 @@ def cta_last(body):
 
 def _own(pid, name):
     """10/18 대표: 글마다 주제에 맞는 CTA 배너. naver/cta_banner10.py 가 그린 naver_cta12_<글번호>_<판>.jpg 가 있으면 그것을 쓴다."""
-    own = name.replace("naver_cta9_", f"naver_cta12_{pid}_")
+    try: ver = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "cta_copy.json"), encoding="utf-8"))["posts"].get(pid, {}).get("ver", 12)
+    except Exception: ver = 12
+    own = name.replace("naver_cta9_", f"naver_cta{ver}_{pid}_")
     return own if os.path.exists(os.path.join(IMG_DIR, own)) else name
 
 def cta_pick(pid, cover, body):

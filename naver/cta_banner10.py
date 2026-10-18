@@ -12,14 +12,14 @@ SITE = os.environ.get("ZS_SITE", "/home/claude/zaoseon-site")
 
 def pal_of(pid):
     p = os.path.join(SITE, "public", "naver", pid + ".html")
-    m = re.search(r"naver_cta(?:9|10_n\d+|11_n\d+)_([a-z_]+)\.jpg", open(p, encoding="utf-8").read()) if os.path.exists(p) else None
+    m = re.search(r"naver_cta(?:9|1\d_n\d+)_([a-z_]+)\.jpg", open(p, encoding="utf-8").read()) if os.path.exists(p) else None
     return m.group(1) if m else "v_navy"
 
-def name_of(pid, pal): return f"naver_cta12_{pid}_{pal}.jpg"
+def name_of(pid, pal, ver=12): return f"naver_cta{ver}_{pid}_{pal}.jpg"
 
 def build_one(pid, copy):
     pal = pal_of(pid)
-    C.PAL, C.TITLE, C.SUB, C.NAME = pal, copy["title"], copy["sub"], name_of(pid, pal)
+    C.PAL, C.TITLE, C.SUB, C.NAME = pal, copy["title"], copy["sub"], name_of(pid, pal, copy.get("ver", 12))
     return C.build()
 
 if __name__ == "__main__":
