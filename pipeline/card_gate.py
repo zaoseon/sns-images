@@ -323,6 +323,18 @@ def after(path, c, channel="insta_carousel"):
     return []
 
 
+def after_video(path):
+    """K-139(대표 10/18): 클립·릴스는 0초 프레임(목록 표지)에 제목·핵심 글이 이미 보여야 한다. 걸리면 멈춘다."""
+    if os.environ.get("ZS_SKIP_GATE") == "1":
+        return []
+    import clip_first_frame as CFF
+    bad = CFF.check(path)
+    if bad:
+        raise SystemExit("\n[영상 첫 프레임 검사에 걸렸어요] " + path + "\n" + "\n".join("  · " + x for x in bad)
+                         + "\n  → python3 pipeline/clip_first_frame.py fix 원본.mp4 --out 새폴더\n")
+    return []
+
+
 if __name__ == "__main__":
     print(__doc__)
 
