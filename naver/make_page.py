@@ -241,8 +241,9 @@ def _own(pid, name):
     """10/18 대표: 글마다 주제에 맞는 CTA 배너. naver/cta_banner10.py 가 그린 naver_cta12_<글번호>_<판>.jpg 가 있으면 그것을 쓴다."""
     try: ver = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "cta_copy.json"), encoding="utf-8"))["posts"].get(pid, {}).get("ver", 12)
     except Exception: ver = 12
-    own = name.replace("naver_cta9_", f"naver_cta{ver}_{pid}_")
-    return own if os.path.exists(os.path.join(IMG_DIR, own)) else name
+    import glob   # 10/18 ①가 알려 준 문제: 본문 사진이 바뀌면 cta_pick 이 고르는 판이 달라져 글별 배너를 못 찾고 cta9로 돌아갔다 → 판 이름을 보지 않고 글번호·번호로 찾는다
+    g = sorted(glob.glob(os.path.join(IMG_DIR, f"naver_cta{ver}_{pid}_*.jpg")))
+    return os.path.basename(g[0]) if g else name
 
 def cta_pick(pid, cover, body):
     """10/17 15:05 대표 "색 다른 5세트를 만들어 놓고 원고 내부 이미지 톤에 맞게 바꿔서 적용".
@@ -276,6 +277,7 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
     global CTA_LINK
     CTA_LINK = CTA_BASE + "&utm_campaign=" + pid + "#free"   # 10/18 대표: 글별 사이트 방문 재기(GoatCounter). 보이는 글은 그대로
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
+    body = re.sub(r"(utm_source=naver(?:&amp;|&)utm_medium=(?:cta|mid))#free", lambda m: m.group(1) + ("&amp;" if "&amp;" in m.group(1) else "&") + "utm_campaign=" + pid + "#free", body)   # 10/18 대표: 본문에 이미 박힌 CTA·중간 링크에도 글번호(원본 pages.json 은 그대로 둔다)
     body = re.sub(r"naver_cta[2-8]_[^\"'<>\s]+?\.jpg", cta_pick(pid, cover, body), body)   # 10/17 15:05 대표: 색 5세트 중 본문 이미지 톤에 맞는 배너(cta_pick). 옛 파일은 발행 글이 쓰므로 그대로 둔다   # 10/17 14:58 대표 "배너가 그냥 봐도 크다" → 6판 1280x240(글줄 옆 단추, naver/cta_banner6.py). 옛 파일은 발행 글이 쓰므로 그대로 둔다
     body = re.sub(r"<p>\s*(?:&nbsp;\s*)?이 글은 재미로[^<]*</p>", "", body)   # 10/17 K-128 대표: '재미로' 면책 문장은 넣지 않는다. 발행글은 다른 이유로 고칠 때 같이 뺀다(지금 서브 노트북 수정 발행 중)   # 10/17 대표: 1280x400 배너(naver/cta_banner.py, 제목 57px·부제 50px 이상). 옛 cta4(10/4 2/3 크기)는 폰에서 글자 8px라 바꿈. 옛 파일은 발행 글이 쓰므로 그대로 둔다
     _mids = []   # 10/16 K-017 글 중간 입력칸 모양 상자(<table>): 서식 단계들이 <p>만 다루므로 자리표로 비켜 두었다가 끝에 되돌린다
