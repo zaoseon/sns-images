@@ -84,7 +84,7 @@
    "related": "n31",
    "cta": "n36",
    "experience": [],
-   "applied": false
+   "applied": true
   },
   "n53": {
    "keywords": [
@@ -112,7 +112,7 @@
    "related": "n22",
    "cta": "n53",
    "experience": [],
-   "applied": false
+   "applied": true
   },
   "n37": {
    "keywords": [
@@ -141,7 +141,7 @@
    "related": "n25",
    "cta": "n37",
    "experience": [],
-   "applied": false
+   "applied": true
   }
  }
 }
