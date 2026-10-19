@@ -81,6 +81,14 @@ class Cv:
         s.img.save(os.path.join(MASTER, name), quality=95, subsampling=0, optimize=True)
         d = s.img.resize((BW, s.h), Image.LANCZOS)
         d.save(os.path.join(DELIV, name), quality=93, subsampling=0, optimize=True); d.save(os.path.join(IMG, name), quality=93, subsampling=0, optimize=True)
+        # K-138 관문: 저장한 그림에서 배경에 묻힌 글자를 재고, 걸리면 방금 쓴 세 파일을 지우고 멈춘다(pipeline/faint_gate.py)
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "pipeline")); import faint_gate as _FG
+        try: _FG.guard(os.path.join(DELIV, name), name)
+        except SystemExit:
+            for _d in (MASTER, DELIV, IMG):
+                try: os.remove(os.path.join(_d, name))
+                except OSError: pass
+            raise
 
 
 def guard_overwrite(name):

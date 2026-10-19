@@ -156,6 +156,24 @@ def first_frame_checks():
         if b: bad += 1; print("   ", c["id"], b[0])
     return {"클립 0초 프레임에 제목(K-139, 올릴 클립)": bad}
 
+def faint_checks():
+    """K-138(대표 10/18): 네이버 원고 본문 그림 중 이 환경에 있는 것을 재서 글자가 배경에 묻힌(대비 1.9 밑) 그림을 센다.
+    발행 전(done 아님) 글 + 다시 그린 글(k131 꼬리표)의 그림. 그림 파일이 없는 곳(sparse)은 건너뛴다."""
+    import re as _re
+    from urllib.parse import unquote
+    sys.path.insert(0, os.path.join(R, "pipeline")); import faint_gate as FG
+    pages = json.load(open(os.path.join(R, "naver", "pages.json"), encoding="utf-8")); seen = set(); bad = 0
+    for pid, v in pages.items():
+        if v.get("done") and not v.get("k131"): continue
+        for u in _re.findall(r'naver/img/([^"/]+\.jpg)"', v.get("body", "")):
+            n = unquote(u)
+            if n in seen or "cta" in n: continue
+            seen.add(n); f = os.path.join(R, "naver", "img", "m1280", n)
+            if not os.path.exists(f): continue
+            h = FG.hits(f)
+            if h: bad += 1; print("   ", pid, n, f"대비 {min(x[2] for x in h)}:1")
+    return {"그림 글자 묻힘(K-138, 발행 전·다시 그린 글 본문 그림)": bad}
+
 if __name__ == "__main__":
     res = text_checks()
     res.update(spec_checks())
@@ -163,6 +181,7 @@ if __name__ == "__main__":
     res.update(naver_state_checks())
     res.update(k131_checks())
     res.update(first_frame_checks())
+    res.update(faint_checks())
     if "--videos" in sys.argv: res.update(video_checks())
     fail = {k: v for k, v in res.items() if v}
     for k, v in res.items(): print(("통과 " if not v else f"걸림 {v}개 ") + "· " + k)

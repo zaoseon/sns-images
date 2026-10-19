@@ -317,6 +317,11 @@ def after(path, c, channel="insta_carousel"):
             if abs(가 - 목표) > 24:
                 bad.append(f"묶음 세로 가운데가 {가} 예요(구역 가운데 {목표} ±24). 위아래가 치우쳤어요.")
 
+    # K-138: 그림 속 글자가 배경에 묻혔는지(픽셀 대비, faint_gate → zaoseon-site faint_text_check)
+    import faint_gate as FG
+    for y, n, r in (FG.hits(path) or [])[:3]:
+        bad.append(f"y {y} 근처 글자가 배경에 묻혔어요(대비 {r}:1, 덩어리 {n}개). 칸 위 글은 칸 색 기준 대비 4.5 이상.")
+
     if bad:
         raise SystemExit("\n[결과물 검사에 걸렸어요] " + c.get("id", path) + "\n"
                          + "\n".join("  · " + x for x in bad) + "\n")
