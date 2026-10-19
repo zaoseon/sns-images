@@ -563,7 +563,22 @@ def render(name, scenes, outdir, kicker=None, 내용유형=None, 바탕=None, �
             if tr: fr = Image.new("RGB", (W, H))
         t_acc += dur
     SC_T, SC_I = 0.0, 0
-    pr.stdin.close(); pr.wait(); return out, n / FPS
+    pr.stdin.close(); pr.wait()
+    return _first_frame_gate(out, n / FPS)
+def _first_frame_gate(out, dur):
+    """K-139(대표 10/18 14:05): 0초 프레임(클립 목록·릴스 표지)에 제목·핵심 글이 보여야 한다. 이 렌더러로 만드는 릴스·클립은 모두 여기를 지난다.
+    걸리면 '첫 장면이 다 들어오고 멈춘 시점'(clip_first_frame.start_point)부터 다시 자른다 — 방금 만든 파일이라 바꿔 써도 된다(올린 적 없음).
+    그래도 걸리면 멈춘다. 넘기기: ZS_SKIP_GATE=1."""
+    if os.environ.get("ZS_SKIP_GATE") == "1": return out, dur
+    import clip_first_frame as CFF
+    if not CFF.check(out): return out, dur
+    ss = CFF.start_point(out); tmp = out[:-4] + "._ff.mp4"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", out, "-ss", f"{ss:.2f}", "-c:v", "libx264", "-preset", "medium", "-crf", "16",
+                    "-pix_fmt", "yuv420p", "-r", str(FPS), "-an", "-movflags", "+faststart", tmp], check=True)
+    os.replace(tmp, out); bad = CFF.check(out)
+    if bad: raise SystemExit(f"\n[K-139 첫 프레임] {out}: {ss:.1f}초부터 잘라도 0초에 제목이 안 보여요 — {bad[0]}\n  첫 장면 제목을 0초부터 보이게 고치세요.\n")
+    print(f"  [K-139] {os.path.basename(out)}: 0초에 제목이 없어 {ss:.1f}초(첫 장면이 다 들어온 때)부터 시작하게 잘랐어요")
+    return out, max(0.0, dur - ss)
 def still(scenes, idx, t, path, total=None):
     fr = Image.new("RGB", (W, H)); total = total or sum(d for d, _ in scenes); acc = sum(d for d, _ in scenes[:idx]); background(fr, acc + t, total); cx_ = Ctx(fr, t, scenes[idx][0]); _auto(scenes[idx][1], scenes[idx][0])(cx_)
     if BRAND: brand_layer(fr, getattr(cx_, 'ai_seen', False))
