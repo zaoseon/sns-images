@@ -401,7 +401,7 @@ def equation(name, c, head, lhs, num, den, rows, src):
 
 
 # (가) 19. 세로 막대 -------------------------------------------------------------------------------------------------
-def vbar(name, c, head, bars, vmax, note, src, fmt="{:.2f}", groups=()):
+def vbar(name, c, head, bars, vmax, note, src, fmt="{:.2f}", groups=(), step=1):
     """bars = [(이름, 값, 칠할지)] 0~vmax 막대. 값은 논문 값 그대로. groups = [(묶음 이름, 첫 막대, 끝 막대)] 막대 이름 아래 한 줄."""
     top = 150; gy0 = top + 110; gy1 = gy0 + 520; n = len(bars); gap = 60; bw = (W - 60 - gap * (n - 1)) / n
     nh = _ph(note, XB, 46, W - 100) + 70; gh = 90 if groups else 0
@@ -409,7 +409,7 @@ def vbar(name, c, head, bars, vmax, note, src, fmt="{:.2f}", groups=()):
     for t, a, b in groups:
         xa = X0 + 60 + a * (bw + gap); xb = X0 + 60 + b * (bw + gap) + bw
         cv.line(xa, gy1 + 100, xb, gy1 + 100, c.fg, LW2); cv.text((xa + xb) / 2, gy1 + 150, t, XB, cv.fit(t, XB, 46, xb - xa, 42), c.fg, "mm")
-    for v in range(0, int(vmax) + 1):
+    for v in range(0, int(vmax) + 1, step):
         y = gy1 - v / vmax * (gy1 - gy0); cv.line(X0 + 50, y, RT - 10, y, c.line if not c.dark else c.gray, DG.GRID)
         cv.text(X0 + 30, y, str(v), SB, 42, c.gray, "rm")
     for k, (t, v, on) in enumerate(bars):
