@@ -3974,5 +3974,41 @@
    "폰에서 글자·선이 읽히는지"
   ],
   "since": "2026-10-19 15:00"
+ },
+ {
+  "id": "naver-b5b-1019",
+  "kind": "네이버 예약글 본문 그림(K-131 B5b · K-135, 보는 용도)",
+  "title": "예약 4편(n44·n66 10/29, n45·n62 10/30) 본문 그림 8장",
+  "date": "2026-10-19",
+  "time": "",
+  "status": "new",
+  "channels": [
+   "naver"
+  ],
+  "images": [
+   "/naver/img/naver_b5b_sheet.jpg",
+   "/naver/img/naver_z44_g9f.jpg",
+   "/naver/img/naver_z44_e9f.jpg",
+   "/naver/img/naver_z66_g9f.jpg",
+   "/naver/img/naver_z66_e9f.jpg",
+   "/naver/img/naver_z45_g9f.jpg",
+   "/naver/img/naver_z45_e9f.jpg",
+   "/naver/img/naver_z62_g9f.jpg",
+   "/naver/img/naver_z62_e9f.jpg"
+  ],
+  "links": [
+   "/naver/n44.html",
+   "/naver/n66.html",
+   "/naver/n45.html",
+   "/naver/n62.html"
+  ],
+  "caption": "",
+  "note": "글마다 두 장: ① 본문 값·말(n44 망설임 세 갈래 · n66 용띠 2027 힘 쓸 달 8·9·12월 대 아낄 달 10·11월 · n45 나는 어떻게 방전될까 네 칸 · n62 11월 바뀌는 날 7일 입동~24일 보름달) ② 심리 단락 자리 실험·학자(n44 슈워츠 연구진 2002 최대화·만족화 · n66 모스·거건 1970 클린 씨·더티 씨 · n45 매슬랙 1981 번아웃 세 얼굴 · n62 뷸러 연구진 1994 졸업 논문 33.9일 대 55.5일). 옛 '해 볼 것'·겹침 틀 그림은 뺐어요. 흰 판 n62는 옅은 회색 판. 검색 의도 카드는 아직이라 도입부는 그대로예요.",
+  "checks": [
+   "글마다 두 장이 그 글 이야기로 읽히는지",
+   "숫자·연도·학자가 맞는지(출처는 그림 아래)",
+   "폰에서 글자·선이 읽히는지"
+  ],
+  "since": "2026-10-19 15:30"
  }
 ]
