@@ -3938,5 +3938,41 @@
    "폰에서 글자·선이 읽히는지"
   ],
   "since": "2026-10-19 14:30"
+ },
+ {
+  "id": "naver-b5a-1019",
+  "kind": "네이버 예약글 본문 그림(K-131 B5a · K-135, 보는 용도)",
+  "title": "예약 4편(n42·n58 10/27, n43·n60 10/28) 본문 그림 8장",
+  "date": "2026-10-19",
+  "time": "",
+  "status": "new",
+  "channels": [
+   "naver"
+  ],
+  "images": [
+   "/naver/img/naver_b5a_sheet.jpg",
+   "/naver/img/naver_z42_g9f.jpg",
+   "/naver/img/naver_z42_e9f.jpg",
+   "/naver/img/naver_z58_g9f.jpg",
+   "/naver/img/naver_z58_e9f.jpg",
+   "/naver/img/naver_z43_g9f.jpg",
+   "/naver/img/naver_z43_e9f.jpg",
+   "/naver/img/naver_z60_g9f.jpg",
+   "/naver/img/naver_z60_e9f.jpg"
+  ],
+  "links": [
+   "/naver/n42.html",
+   "/naver/n58.html",
+   "/naver/n43.html",
+   "/naver/n60.html"
+  ],
+  "caption": "",
+  "note": "글마다 두 장: ① 본문 값·말(n42 예민한 피로 세 갈래 · n58 갑 일간 예시 다섯 묶음 열 글자 표 · n43 나는 언제 결제할까 네 칸 · n60 11월 손없는날 다섯 날과 음력) ② 심리 단락 자리 실험·학자(n42 일레인 아론 1997 매우 예민한 사람 15~20% · n58 블랙웰 연구진 2007 성장 마음가짐 수업 · n43 트버스키·카너먼 1981 공연 표 88% 대 46% · n60 트버스키·카너먼 1974 돌림판 25% 대 45%). 글자가 묻혀 보이던 n58 q4(K-138)는 이번에 빠졌어요. 표지가 로열 블루인 n42는 네이비 판(K-067). 검색 의도 카드는 아직이라 도입부는 그대로예요.",
+  "checks": [
+   "글마다 두 장이 그 글 이야기로 읽히는지",
+   "숫자·연도·학자가 맞는지(출처는 그림 아래)",
+   "폰에서 글자·선이 읽히는지"
+  ],
+  "since": "2026-10-19 15:00"
  }
 ]
