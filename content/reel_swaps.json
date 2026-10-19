@@ -3577,7 +3577,7 @@
    "naver"
   ],
   "images": [
-   "/naver/img/naver_b2v3_sheet.jpg",
+   "/naver/img/naver_b2v3_sheet_v.jpg",
    "/naver/img/naver_z17_s7.jpg",
    "/naver/img/naver_z17_e7.jpg",
    "/naver/img/naver_z16_c7.jpg",
@@ -3595,7 +3595,7 @@
    "/naver/img/naver_z22_c7.jpg",
    "/naver/img/naver_z22_e7.jpg",
    "/naver/img/naver_z26_c7.jpg",
-   "/naver/img/naver_z26_e7.jpg",
+   "/naver/img/naver_z26_e7v.jpg",
    "/naver/img/naver_z27_c7.jpg",
    "/naver/img/naver_z27_e7.jpg",
    "/naver/img/naver_z28_t7.jpg",
@@ -3607,7 +3607,7 @@
    "/naver/img/naver_z30_c7.jpg",
    "/naver/img/naver_z30_e7.jpg",
    "/naver/img/naver_z31_c7.jpg",
-   "/naver/img/naver_z31_e7.jpg",
+   "/naver/img/naver_z31_e7v.jpg",
    "/naver/img/naver_z33_c7.jpg",
    "/naver/img/naver_z33_e7.jpg"
   ],
@@ -3705,7 +3705,7 @@
    "naver"
   ],
   "images": [
-   "/naver/img/naver_b3_sheet.jpg",
+   "/naver/img/naver_b3_sheet_v.jpg",
    "/naver/img/naver_z13_g8f.jpg",
    "/naver/img/naver_z13_e8f.jpg",
    "/naver/img/naver_z15_g8f.jpg",
@@ -3717,7 +3717,7 @@
    "/naver/img/naver_z57_g8f.jpg",
    "/naver/img/naver_z57_e8f.jpg",
    "/naver/img/naver_z11_g8f.jpg",
-   "/naver/img/naver_z11_e8f.jpg",
+   "/naver/img/naver_z11_e8vf.jpg",
    "/naver/img/naver_z51_g8f.jpg",
    "/naver/img/naver_z51_e8f.jpg"
   ],
@@ -3806,9 +3806,9 @@
    "naver"
   ],
   "images": [
-   "/naver/img/naver_b4a_sheet.jpg",
+   "/naver/img/naver_b4a_sheet_v.jpg",
    "/naver/img/naver_z61_g9f.jpg",
-   "/naver/img/naver_z61_e9f.jpg",
+   "/naver/img/naver_z61_e9vf.jpg",
    "/naver/img/naver_z34_g9f.jpg",
    "/naver/img/naver_z34_e9f.jpg",
    "/naver/img/naver_z50_g9f.jpg",
@@ -3816,7 +3816,7 @@
    "/naver/img/naver_z25_g9f.jpg",
    "/naver/img/naver_z25_e9f.jpg",
    "/naver/img/naver_z52_g9f.jpg",
-   "/naver/img/naver_z52_e9f.jpg"
+   "/naver/img/naver_z52_e9vf.jpg"
   ],
   "links": [
    "/naver/n61.html",
@@ -3845,13 +3845,13 @@
    "naver"
   ],
   "images": [
-   "/naver/img/naver_b4b_sheet.jpg",
+   "/naver/img/naver_b4b_sheet_v.jpg",
    "/naver/img/naver_z36_g9f.jpg",
    "/naver/img/naver_z36_e9f.jpg",
    "/naver/img/naver_z53_g9f.jpg",
    "/naver/img/naver_z53_e9f.jpg",
    "/naver/img/naver_z37_g9f.jpg",
-   "/naver/img/naver_z37_e9f.jpg"
+   "/naver/img/naver_z37_e9vf.jpg"
   ],
   "links": [
    "/naver/n36.html",
@@ -3878,7 +3878,7 @@
    "naver"
   ],
   "images": [
-   "/naver/img/naver_b4c_sheet.jpg",
+   "/naver/img/naver_b4c_sheet_v.jpg",
    "/naver/img/naver_z38_g9f.jpg",
    "/naver/img/naver_z38_e9f.jpg",
    "/naver/img/naver_z54_g9f.jpg",
@@ -3886,7 +3886,7 @@
    "/naver/img/naver_z39_g9f.jpg",
    "/naver/img/naver_z39_e9f.jpg",
    "/naver/img/naver_z65_g9f.jpg",
-   "/naver/img/naver_z65_e9f.jpg"
+   "/naver/img/naver_z65_e9vf.jpg"
   ],
   "links": [
    "/naver/n38.html",
@@ -3914,9 +3914,9 @@
    "naver"
   ],
   "images": [
-   "/naver/img/naver_b4d_sheet.jpg",
+   "/naver/img/naver_b4d_sheet_v.jpg",
    "/naver/img/naver_z40_g9f.jpg",
-   "/naver/img/naver_z40_e9f.jpg",
+   "/naver/img/naver_z40_e9vf.jpg",
    "/naver/img/naver_z55_g9f.jpg",
    "/naver/img/naver_z55_e9f.jpg",
    "/naver/img/naver_z41_g9f.jpg",
@@ -3950,9 +3950,9 @@
    "naver"
   ],
   "images": [
-   "/naver/img/naver_b5a_sheet.jpg",
+   "/naver/img/naver_b5a_sheet_v.jpg",
    "/naver/img/naver_z42_g9f.jpg",
-   "/naver/img/naver_z42_e9f.jpg",
+   "/naver/img/naver_z42_e9vf.jpg",
    "/naver/img/naver_z58_g9f.jpg",
    "/naver/img/naver_z58_e9f.jpg",
    "/naver/img/naver_z43_g9f.jpg",
@@ -3986,13 +3986,13 @@
    "naver"
   ],
   "images": [
-   "/naver/img/naver_b5b_sheet.jpg",
+   "/naver/img/naver_b5b_sheet_v.jpg",
    "/naver/img/naver_z44_g9f.jpg",
-   "/naver/img/naver_z44_e9f.jpg",
+   "/naver/img/naver_z44_e9vf.jpg",
    "/naver/img/naver_z66_g9f.jpg",
    "/naver/img/naver_z66_e9f.jpg",
    "/naver/img/naver_z45_g9f.jpg",
-   "/naver/img/naver_z45_e9f.jpg",
+   "/naver/img/naver_z45_e9vf.jpg",
    "/naver/img/naver_z62_g9f.jpg",
    "/naver/img/naver_z62_e9f.jpg"
   ],
@@ -4022,9 +4022,9 @@
    "naver"
   ],
   "images": [
-   "/naver/img/naver_b5c_sheet.jpg",
+   "/naver/img/naver_b5c_sheet_v.jpg",
    "/naver/img/naver_z46_g9f.jpg",
-   "/naver/img/naver_z46_e9f.jpg",
+   "/naver/img/naver_z46_e9vf.jpg",
    "/naver/img/naver_z67_g9f.jpg",
    "/naver/img/naver_z67_e9f.jpg",
    "/naver/img/naver_z71_g9f.jpg",
