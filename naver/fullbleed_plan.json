@@ -1806,5 +1806,53 @@
    "new": null,
    "why": "표지·배너는 따로"
   }
+ ],
+ "n61": [
+  {
+   "pos": null,
+   "old": "naver_z61_e9.jpg",
+   "new": "naver_z61_e9f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "B4 10/19"
+  },
+  {
+   "pos": null,
+   "old": "naver_z61_g9.jpg",
+   "new": "naver_z61_g9f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "B4 10/19"
+  }
+ ],
+ "n34": [
+  {
+   "pos": null,
+   "old": "naver_z34_e9.jpg",
+   "new": "naver_z34_e9f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "B4 10/19"
+  },
+  {
+   "pos": null,
+   "old": "naver_z34_g9.jpg",
+   "new": "naver_z34_g9f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "B4 10/19"
+  }
+ ],
+ "n50": [
+  {
+   "pos": null,
+   "old": "naver_z50_e9.jpg",
+   "new": "naver_z50_e9f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "B4 10/19"
+  },
+  {
+   "pos": null,
+   "old": "naver_z50_g9.jpg",
+   "new": "naver_z50_g9f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "B4 10/19"
+  }
  ]
 }

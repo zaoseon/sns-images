@@ -426,7 +426,7 @@ def triangle(name, c, head, verts, fade, center, note, src):
     """verts = [(이름, 짧은 뜻)] 위·왼아래·오른아래. fade = 점선으로 그릴 꼭짓점(먼저 옅어지는 것)."""
     top = 150; cy0 = top + 200; cy1 = top + 640; hw = 340
     P = [(CX, cy0), (CX - hw, cy1), (CX + hw, cy1)]; nh = _ph(note, XB, 46, W - 100) + 70
-    H = _H(top, 640, 170, nh, 50 + _sh(src)); cv = Cv(H, c.bg); B._head(cv, c, head)
+    H = _H(top, 640, 200, nh, 50 + _sh(src)); cv = Cv(H, c.bg); B._head(cv, c, head)   # 아래 꼭짓점 글과 상자 사이 30px 더(10/19)
     for i in range(3):
         a, b = P[i], P[(i + 1) % 3]
         if fade in (i, (i + 1) % 3): _dash(cv, *a, *b, c.gray, LW, 30, 22)
@@ -439,7 +439,7 @@ def triangle(name, c, head, verts, fade, center, note, src):
         ty, sy = (y - 150, y - 92) if i == 0 else (y + 80, y + 134)
         cv.text(tx, ty, t, XB, 50, c.fg if on else c.gray, "mm")
         cv.text(tx, sy, s, SB, 42, c.fg if on else c.gray, "mm")
-    y = cy1 + 170; cv.rr([X0, y, RT - 10, y + nh], 34, fill=c.acc); _para(cv, CX, y + nh / 2, note, XB, 46, c.pillfg, W - 100)
+    y = cy1 + 200; cv.rr([X0, y, RT - 10, y + nh], 34, fill=c.acc); _para(cv, CX, y + nh / 2, note, XB, 46, c.pillfg, W - 100)
     _src(cv, c, H - 55, src); _done(cv, c, name, "triangle")
 
 
