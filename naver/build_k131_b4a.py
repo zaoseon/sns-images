@@ -67,6 +67,40 @@ def plan():
            "엘런 랭어(1975) 복권 실험 큰 숫자: 1달러짜리 복권을 직접 고른 사람은 건네받은 사람보다 되팔 값을 4배 넘게(8.67달러 대 1.96달러) 불렀다는 그림",
            "심리학자 엘런 랭어(1975)는 1달러짜리 복권을 직접 고른 사람과 건네받은 사람에게 추첨 전에 되팔 값을 물었어요.\n직접 고른 쪽이 4배 넘게 불렀어요. 운에 달린 일도 내 손에 있다고 느끼기 쉬운 거예요."),
         drop=["naver_z50_c4"])
+    # n25 배우는 게 취미 — 3절 몇 개 겹치나(본문 말) + 잼 실험(아이엔가·레퍼 2000)
+    P["n25"] = dict(key="25",
+        C=("after", 3, lambda n, c: D3.quad(n, c, "세 풀이 중 몇 개가 겹칠까", [
+            ("3개", "배우고 넓힐 때|숨이 쉬어지는 성격이에요"), ("2개", "배움에서 힘을 얻지만|끝맺기가 약해지기 쉬워요"),
+            ("1개", "관심이 생긴 분야에서만|불이 붙어요"), ("0개", "하나를 깊이 파고드는|방식이 맞아요")], 0,
+            "출처: 이 글 2·3절 세 풀이", note="사주 갑목·을목 · 별자리 쌍둥이·사수 · 숫자 3·5번 중 몇 개인지 세어 봐요."),
+           "세 풀이 중 몇 개가 겹치는지 네 칸 그림: 3개는 배우고 넓힐 때 숨이 쉬어지는 성격, 2개는 끝맺기가 약해지기 쉬움, 1개는 관심 분야에서만, 0개는 하나를 깊이 파는 방식",
+           "몇 개가 겹치는지 네 칸으로 놓아 보면 이래요."),
+        R=("lead", "naver_z25_q4", lambda n, c: D3.vbar(n, c, "잼이 많을수록 덜 샀어요", [("잼 24가지", 3, False), ("잼 6가지", 30, True)], 30,
+            "고를 게 많으면 멈추기 쉬워요.|배울 것 후보는 셋까지만 적어요", "출처: Iyengar & Lepper (2000), J. Personality and Social Psychology · 시식대에 들른 사람 중 산 비율",
+            fmt="{:.0f}%", step=10),
+           "아이엔가와 레퍼(2000) 잼 실험 막대그래프: 시식대에 잼이 24가지일 때는 들른 사람의 3%, 6가지일 때는 30%가 잼을 샀다는 그림",
+           "아이엔가와 레퍼(2000)는 마트 시식대에 잼을 24가지 또는 6가지 놓고 견줬어요.\n6가지일 때는 들른 사람의 30%가 샀지만, 24가지일 때는 3%만 샀어요."),
+        drop=["naver_z25_c4"], intent=True)
+    # n52 수능 D-30 — 1절 네 구간 흐름(본문 값, b4 자리) + 정서 예측(길버트 연구진 1998)
+    P["n52"] = dict(key="52",
+        C=("replace", "naver_z52_b4", lambda n, c: D3.timeline3(n, c, "수능까지 네 구간", [
+            ("10/20~26", "D-30~24", "기상·취침 시각을 수능날에 맞춰 고정해요"),
+            ("10/27~11/2", "D-23~17", "실전 시간표로 풀어 봐요"),
+            ("11/3~9", "D-16~10", "컨디션을 지켜요 · 11월 7일 입동"),
+            ("11/10~18", "D-9~1", "새것을 늘리지 않고 정리해요")],
+            "11월 19일 목요일, 수능날", "출처: 이 글 1·2절 · 2027학년도 수능 2026년 11월 19일(목)"),
+           "수능까지 네 구간 흐름: 10월 20~26일 D-30~24 기상 시각 고정, 10월 27일~11월 2일 실전 시간표, 11월 3~9일 컨디션 유지(11월 7일 입동), 11월 10~18일 정리, 11월 19일 목요일 수능날",
+           None),
+        R=("lead", "naver_z52_q4", lambda n, c: D3.person(n, c, "떨어지면 오래 힘들까", "대니얼 길버트", "Daniel T. Gilbert · 미국 심리학자", "1998 · 정서 예측",
+            [("물음", "젊은 교수들에게 종신 교수 심사에서 떨어지면 몇 년 동안 얼마나 불행할지 짐작하게 했어요"),
+             ("견줌", "실제로 심사를 받은 지 몇 년 지난 사람들의 행복을 쟀어요"),
+             ("결과", "떨어진 사람들도 붙은 사람들만큼 행복했어요")],
+            "앞일의 아픔은 실제보다 크게 짐작해요.|마음은 생각보다 빨리 제자리를 찾아요", "출처: Gilbert, Pinel, Wilson, Blumberg & Wheatley (1998), J. Personality and Social Psychology"),
+           "심리학자 대니얼 길버트 연구진(1998) 카드: 젊은 교수들은 종신 교수 심사에서 떨어지면 오래 불행할 거라고 짐작했지만, 실제로 떨어진 사람들도 붙은 사람들만큼 행복했다는 정서 예측 연구",
+           "길버트 연구진(1998)은 젊은 교수들에게 종신 교수 심사에서 떨어지면 몇 년 동안 얼마나 불행할지 짐작하게 했어요.\n실제로 떨어진 지 몇 년 지난 사람들은 붙은 사람들만큼 행복했어요."),
+        drop=["naver_z52_c4"], intent=True,
+        intro=("<p><b>수능 30일 전</b>부터 시험날까지의 리듬을 절기와 일진으로 정리해 봤어요.</p>",
+               "<p><b>수능 30일 전</b>부터는 공부량보다 잠·식사·시험 시간 리듬을 맞추는 게 먼저예요.</p><p>절기와 일진으로 한 달 달력을 나눠 봤어요.</p>"))
     return P
 
 
@@ -83,7 +117,7 @@ def swap_lead(body, part, new):
 def run(only=None):
     import fullbleed as FBK
     P = plan(); pages = json.load(open(PG, encoding="utf-8")); made = []; rn_ = B3.remote_names(); fbp = {}
-    FB = B3.fb_map()
+    FB = B3.fb_map(); intents = set()
     for pid, sp in P.items():
         if only and pid not in only: continue
         c = CV.Ctx(PAL_OVR[pid]) if pid in PAL_OVR else V2.pal(pid); key = sp["key"]
@@ -107,6 +141,9 @@ def run(only=None):
         cimg = (P_(ctxt) if ctxt else "") + B1.IMG(nf[cn], calt)
         body = B1.replace_img(body, cpos, cimg) if cmode == "replace" else B1.after_head(body, cpos, cimg)
         body, _ = B3.FUN.subn("", body)
+        if sp.get("intro"):
+            o, n_ = sp["intro"]; assert body.count(o) == 1, (pid, "도입부"); body = body.replace(o, n_)
+        if sp.get("intent"): intents.add(pid)
         from urllib.parse import unquote, quote
         body = re.sub(r'/naver/img/([^"/]+)"', lambda m: ("/naver/img/" + quote(FB[unquote(m.group(1))]) + '"') if unquote(m.group(1)) in FB else m.group(0), body)
         pages[pid]["body"] = body; pages[pid]["k131"] = TAG
@@ -117,6 +154,10 @@ def run(only=None):
             have = {x.get("old") for x in plan_.get(pid, [])}
             plan_.setdefault(pid, []).extend([{"pos": None, **x, "src": "B4 10/19"} for x in rows if x["old"] not in have])
         json.dump(plan_, open(fp, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        if intents:   # K-143: 도입부·그림을 카드대로 고친 글은 applied=true(intent_check 가 첫 3줄을 잰다)
+            ip = os.path.join(HERE, "intent_cards.json"); ic = json.load(open(ip, encoding="utf-8"))
+            for pid in intents: ic["cards"][pid]["applied"] = True
+            json.dump(ic, open(ip, "w", encoding="utf-8"), ensure_ascii=False, indent=1); open(ip, "a").write("\n")
     return made
 
 

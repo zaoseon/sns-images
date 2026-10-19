@@ -1854,5 +1854,37 @@
    "how": "master 2560에서 잘라 줄임",
    "src": "B4 10/19"
   }
+ ],
+ "n25": [
+  {
+   "pos": null,
+   "old": "naver_z25_e9.jpg",
+   "new": "naver_z25_e9f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "B4 10/19"
+  },
+  {
+   "pos": null,
+   "old": "naver_z25_g9.jpg",
+   "new": "naver_z25_g9f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "B4 10/19"
+  }
+ ],
+ "n52": [
+  {
+   "pos": null,
+   "old": "naver_z52_e9.jpg",
+   "new": "naver_z52_e9f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "B4 10/19"
+  },
+  {
+   "pos": null,
+   "old": "naver_z52_g9.jpg",
+   "new": "naver_z52_g9f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "B4 10/19"
+  }
  ]
 }
