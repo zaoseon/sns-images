@@ -3866,5 +3866,41 @@
    "폰에서 글자·선이 읽히는지"
   ],
   "since": "2026-10-19 13:30"
+ },
+ {
+  "id": "naver-b4c-1019",
+  "kind": "네이버 예약글 본문 그림(K-131 B4c · K-135, 보는 용도)",
+  "title": "예약 4편(n38·n54 10/23, n39·n65 10/24) 본문 그림 8장",
+  "date": "2026-10-19",
+  "time": "",
+  "status": "new",
+  "channels": [
+   "naver"
+  ],
+  "images": [
+   "/naver/img/naver_b4c_sheet.jpg",
+   "/naver/img/naver_z38_g9f.jpg",
+   "/naver/img/naver_z38_e9f.jpg",
+   "/naver/img/naver_z54_g9f.jpg",
+   "/naver/img/naver_z54_e9f.jpg",
+   "/naver/img/naver_z39_g9f.jpg",
+   "/naver/img/naver_z39_e9f.jpg",
+   "/naver/img/naver_z65_g9f.jpg",
+   "/naver/img/naver_z65_e9f.jpg"
+  ],
+  "links": [
+   "/naver/n38.html",
+   "/naver/n54.html",
+   "/naver/n39.html",
+   "/naver/n65.html"
+  ],
+  "caption": "",
+  "note": "글마다 두 장: ① 본문 값·말(n38 상강 무렵 사주·별자리 견줌 표 · n54 2월 4~6일생 띠: 설날 기준 말띠 대 입춘 기준 양띠 · n39 기다리는 방식 세 기둥(불·물·흙) · n65 개띠 2027 다섯 달 표: 2·3·6월 힘 쓸 달, 4·5월 아낄 달) ② 심리 단락 자리 실험·학자(n38 에먼스·매컬러 2003 감사 10주 · n54 골비처·브란트슈테터 1997 언제·어디서 정한 학생 71% 대 32% · n39 하잔·셰이버 1987 사랑 퀴즈 620명 안정형 56%·회피형 25%·불안형 19% · n65 구드 1960 역할 긴장). 옛 '해 볼 것'·겹침 틀 그림은 뺐어요. 이 네 편은 검색 의도 카드가 아직 없어 도입부는 그대로예요.",
+  "checks": [
+   "글마다 두 장이 그 글 이야기로 읽히는지",
+   "숫자·연도·학자가 맞는지(출처는 그림 아래)",
+   "폰에서 글자·선이 읽히는지"
+  ],
+  "since": "2026-10-19 14:00"
  }
 ]
