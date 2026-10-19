@@ -3902,5 +3902,41 @@
    "폰에서 글자·선이 읽히는지"
   ],
   "since": "2026-10-19 14:00"
+ },
+ {
+  "id": "naver-b4d-1019",
+  "kind": "네이버 예약글 본문 그림(K-131 B4d · K-135, 보는 용도)",
+  "title": "예약 4편(n40·n55 10/25, n41·n56 10/26) 본문 그림 8장",
+  "date": "2026-10-19",
+  "time": "",
+  "status": "new",
+  "channels": [
+   "naver"
+  ],
+  "images": [
+   "/naver/img/naver_b4d_sheet.jpg",
+   "/naver/img/naver_z40_g9f.jpg",
+   "/naver/img/naver_z40_e9f.jpg",
+   "/naver/img/naver_z55_g9f.jpg",
+   "/naver/img/naver_z55_e9f.jpg",
+   "/naver/img/naver_z41_g9f.jpg",
+   "/naver/img/naver_z41_e9f.jpg",
+   "/naver/img/naver_z56_g9f.jpg",
+   "/naver/img/naver_z56_e9f.jpg"
+  ],
+  "links": [
+   "/naver/n40.html",
+   "/naver/n55.html",
+   "/naver/n41.html",
+   "/naver/n56.html"
+  ],
+  "caption": "",
+  "note": "글마다 두 장: ① 본문 값·말(n40 모임에서 맡는 세 역할 챙기기·기분 살피기·분위기 띄우기 · n55 전갈자리가 볼 날짜 셋: 10/24 수성 역행 시작, 11/14 끝, 2027.7.27 목성 처녀자리로 · n41 말이 줄어드는 동안 상대 눈과 내 안 · n56 8괘 이름과 선 세 줄 표) ② 심리 단락 자리 실험·학자(n40 햇필드 1993 감정 전염 · n55 아론 연구진 1997 45분 질문 실험 · n41 길로비치 연구진 2000 티셔츠 짐작 46% 대 실제 23% · n56 랭어·로딘 1976 요양원 스스로 고르기). 옛 '해 볼 것'·겹침 틀 그림은 뺐어요. 표지가 로열 블루인 n55는 네이비 판(K-067). 검색 의도 카드는 아직이라 도입부는 그대로예요.",
+  "checks": [
+   "글마다 두 장이 그 글 이야기로 읽히는지",
+   "숫자·연도·학자가 맞는지(출처는 그림 아래)",
+   "폰에서 글자·선이 읽히는지"
+  ],
+  "since": "2026-10-19 14:30"
  }
 ]
