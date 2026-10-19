@@ -119,6 +119,8 @@
  "naver_z31_h5.jpg": "sides",
  "naver_z31_h6.jpg": "sides",
  "naver_z31_y6.jpg": "relay",
+ "naver_z32_e9.jpg": "vbar",
+ "naver_z32_g9.jpg": "triangle",
  "naver_z33_c7.jpg": "quote",
  "naver_z33_e7.jpg": "rings",
  "naver_z33_o6.jpg": "pick",
@@ -198,6 +200,12 @@
  "naver_z67_g9.jpg": "timeline3",
  "naver_z71_e9.jpg": "exp",
  "naver_z71_g9.jpg": "vbar",
+ "naver_z72_e9.jpg": "exp",
+ "naver_z72_g9.jpg": "quad",
+ "naver_z73_e9.jpg": "bignum",
+ "naver_z73_g9.jpg": "timeline3",
+ "naver_z75_e9.jpg": "exp",
+ "naver_z75_g9.jpg": "compare",
  "naver_zs10_g5.jpg": "compass",
  "naver_zs10_k5.jpg": "calendar"
 }
