@@ -8,6 +8,7 @@
  (라) 고전·우화·신화·속담 — 제목과 장면을 우리 말로 설명만(story·book·scene·proverb·quote·versus). 스틸컷·포스터·현대 대사 인용 없음
 모양 22가지, 한 배치 안 같은 모양 2번까지, 상자+화살표 모양(ARROWY)은 배치 전체 4장까지 — k131_check 가 잰다.
 선 굵기는 diagrams_k131 LW·BOX·AH(K-133). 글자 42px 이상. 장식 아이콘·그라데이션 없음(K-041·K-042)."""
+import re
 import math
 import diagrams_k131 as DG
 from diagrams_k131 import K, Cv, L, RT, XB, SB, LW, LW2, BOX, AH, _dot, _dash, _arrow, _done
@@ -365,13 +366,20 @@ def axis(name, c, head, xl, yl, band, zones, note, src):
 
 # (다) 17. 학자 카드 -----------------------------------------------------------------------------------------
 def person(name, c, head, ko, en, when, rows, link, src):
-    """사진 없이 이름 첫 글자 원 + 이름·연도 + [(꼬리표, 글)] + 우리 글과 이어지는 한 줄."""
+    """사진 없이 연구 연도 칸(원·첫 글자 없음) + 이름·연도 + [(꼬리표, 글)] + 우리 글과 이어지는 한 줄."""
     top = 150; rh = [_ph(t, SB, 44, W - 230) + 40 for _, t in rows]; lh = _ph(link, XB, 46, W - 100) + 70
     H = _H(top, 260, sum(rh), 40, lh, 50 + _sh(src)); cv = Cv(H, c.bg); B._head(cv, c, head)
-    _dot(cv, X0 + 100, top + 120, 100, fill=c.acc); cv.text(X0 + 100, top + 120, ko[0], XB, 96, c.pillfg, "mm")
-    cv.text(X0 + 240, top + 80, ko, XB, cv.fit(ko, XB, 60, W - 240, 44), c.fg, "lm")
-    cv.text(X0 + 240, top + 140, en, SB, cv.fit(en, SB, 44, W - 240, 42), c.gray, "lm")
-    cv.text(X0 + 240, top + 192, when, XB, cv.fit(when, XB, 44, W - 240, 42), _ink(c), "lm")
+    # 10/19 대표: "이름 앞글자 한 자를 넣은 원은 의미가 없다" → 뜻이 있는 것만 둔다. 연구 연도를 왼쪽 칸에 크게, 이름·소속·주제는 오른쪽에.
+    ym = re.match(r"\s*(\d{4})\s*[·,]?\s*(.*)$", when)
+    if ym:
+        yr, topic = ym.group(1), ym.group(2) or ""
+        cv.rr([X0, top + 40, X0 + 200, top + 200], 30, fill=c.acc); cv.text(X0 + 100, top + 120, yr, XB, cv.fit(yr, XB, 64, 180, 44), c.pillfg, "mm")
+        tx = X0 + 240
+    else:
+        topic, tx = when, X0
+    cv.text(tx, top + 80, ko, XB, cv.fit(ko, XB, 60, W - (tx - X0), 44), c.fg, "lm")
+    cv.text(tx, top + 140, en, SB, cv.fit(en, SB, 44, W - (tx - X0), 42), c.gray, "lm")
+    if topic: cv.text(tx, top + 192, topic, XB, cv.fit(topic, XB, 44, W - (tx - X0), 42), _ink(c), "lm")
     y = top + 260
     for (tag, t), h in zip(rows, rh):
         cv.line(X0, y, RT - 10, y, c.line if not c.dark else c.gray, DG.GRID)
