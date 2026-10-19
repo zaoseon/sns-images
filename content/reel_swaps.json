@@ -4010,5 +4010,41 @@
    "폰에서 글자·선이 읽히는지"
   ],
   "since": "2026-10-19 15:30"
+ },
+ {
+  "id": "naver-b5c-1019",
+  "kind": "네이버 예약글 본문 그림(K-131 B5c · K-135, 보는 용도)",
+  "title": "예약 4편(n46·n67 10/31, n71·n63 11/1) 본문 그림 8장",
+  "date": "2026-10-19",
+  "time": "",
+  "status": "new",
+  "channels": [
+   "naver"
+  ],
+  "images": [
+   "/naver/img/naver_b5c_sheet.jpg",
+   "/naver/img/naver_z46_g9f.jpg",
+   "/naver/img/naver_z46_e9f.jpg",
+   "/naver/img/naver_z67_g9f.jpg",
+   "/naver/img/naver_z67_e9f.jpg",
+   "/naver/img/naver_z71_g9f.jpg",
+   "/naver/img/naver_z71_e9f.jpg",
+   "/naver/img/naver_z63_g9f.jpg",
+   "/naver/img/naver_z63_e9f.jpg"
+  ],
+  "links": [
+   "/naver/n46.html",
+   "/naver/n67.html",
+   "/naver/n71.html",
+   "/naver/n63.html"
+  ],
+  "caption": "",
+  "note": "글마다 두 장: ① 본문 값·말(n46 세 가면 · n67 뱀띠 2027 다섯 달 흐름 · n71 여섯 풀이 중 같은 말 2개 61.0%~6개 0%(자오선 3,000명 시험) · n63 같은 태양 두 눈금: 상강·입동·소설과 별자리 210·225·240도) ② 심리 단락 자리 실험·학자(n46 그로스·존 2003 표현 억제 · n67 카너먼 교과서 2년 짐작 8년 · n71 스나이더 1974 맞춤 풀이라 믿을수록 · n63 마시캄포·바우마이스터 2011 계획을 적으면 덜 맴돈다). 옛 '해 볼 것'·겹침 틀 그림은 뺐어요. 흰 판 n46·n71은 옅은 회색 판. 검색 의도 카드는 아직이라 도입부는 그대로예요.",
+  "checks": [
+   "글마다 두 장이 그 글 이야기로 읽히는지",
+   "숫자·연도·학자가 맞는지(출처는 그림 아래)",
+   "폰에서 글자·선이 읽히는지"
+  ],
+  "since": "2026-10-19 16:00"
  }
 ]

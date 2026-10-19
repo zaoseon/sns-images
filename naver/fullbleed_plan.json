@@ -2190,5 +2190,69 @@
    "how": "master 2560에서 잘라 줄임",
    "src": "B4 10/19"
   }
+ ],
+ "n46": [
+  {
+   "pos": null,
+   "old": "naver_z46_e9.jpg",
+   "new": "naver_z46_e9f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "B4 10/19"
+  },
+  {
+   "pos": null,
+   "old": "naver_z46_g9.jpg",
+   "new": "naver_z46_g9f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "B4 10/19"
+  }
+ ],
+ "n67": [
+  {
+   "pos": null,
+   "old": "naver_z67_e9.jpg",
+   "new": "naver_z67_e9f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "B4 10/19"
+  },
+  {
+   "pos": null,
+   "old": "naver_z67_g9.jpg",
+   "new": "naver_z67_g9f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "B4 10/19"
+  }
+ ],
+ "n71": [
+  {
+   "pos": null,
+   "old": "naver_z71_e9.jpg",
+   "new": "naver_z71_e9f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "B4 10/19"
+  },
+  {
+   "pos": null,
+   "old": "naver_z71_g9.jpg",
+   "new": "naver_z71_g9f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "B4 10/19"
+  }
+ ],
+ "n63": [
+  {
+   "pos": null,
+   "old": "naver_z63_e9.jpg",
+   "new": "naver_z63_e9f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "B4 10/19"
+  },
+  {
+   "pos": null,
+   "old": "naver_z63_g9.jpg",
+   "new": "naver_z63_g9f.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "B4 10/19"
+  }
  ]
 }
