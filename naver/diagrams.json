@@ -180,6 +180,8 @@
  "naver_z57_g8.jpg": "triad",
  "naver_z58_e9.jpg": "exp",
  "naver_z58_g9.jpg": "compare",
+ "naver_z59_e9.jpg": "person",
+ "naver_z59_g9.jpg": "versus",
  "naver_z60_e9.jpg": "vbar",
  "naver_z60_g9.jpg": "compare",
  "naver_z61_e9.jpg": "person",
@@ -198,6 +200,8 @@
  "naver_z66_g9.jpg": "versus",
  "naver_z67_e9.jpg": "bignum",
  "naver_z67_g9.jpg": "timeline3",
+ "naver_z70_e9.jpg": "exp",
+ "naver_z70_g9.jpg": "timeline3",
  "naver_z71_e9.jpg": "exp",
  "naver_z71_g9.jpg": "vbar",
  "naver_z72_e9.jpg": "exp",
@@ -206,6 +210,10 @@
  "naver_z73_g9.jpg": "timeline3",
  "naver_z75_e9.jpg": "exp",
  "naver_z75_g9.jpg": "compare",
+ "naver_z76_e9.jpg": "versus",
+ "naver_z76_g9.jpg": "compare",
+ "naver_z77_e9.jpg": "exp",
+ "naver_z77_g9.jpg": "timeline3",
  "naver_zs10_g5.jpg": "compass",
  "naver_zs10_k5.jpg": "calendar"
 }
