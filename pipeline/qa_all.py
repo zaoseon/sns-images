@@ -174,6 +174,14 @@ def faint_checks():
             if h: bad += 1; print("   ", pid, n, f"대비 {min(x[2] for x in h)}:1")
     return {"그림 글자 묻힘(K-138, 발행 전·다시 그린 글 본문 그림)": bad}
 
+def intent_checks():
+    """K-143(대표 10/18): 검색 의도 카드(naver/intent_cards.json) — 반영(applied)한 글의 첫 3줄·연결글·CTA가 카드와 맞는지. 카드 없는 글은 빚으로 숫자만."""
+    sys.path.insert(0, os.path.join(R, "naver")); import intent_check as IC
+    bad, wait, none = IC.run()
+    for k, v in bad.items(): print("   ", k, "; ".join(v))
+    if wait or none: print(f"    (의도 카드 반영 대기 {len(wait)}편 · 카드 없는 글 {len(none)}편 — B4·B5 다시 그리기 때 채운다)")
+    return {"네이버 검색 의도 카드(K-143: 첫 3줄 답·연결글·CTA)": len(bad)}
+
 if __name__ == "__main__":
     res = text_checks()
     res.update(spec_checks())
@@ -182,6 +190,7 @@ if __name__ == "__main__":
     res.update(k131_checks())
     res.update(first_frame_checks())
     res.update(faint_checks())
+    res.update(intent_checks())
     if "--videos" in sys.argv: res.update(video_checks())
     fail = {k: v for k, v in res.items() if v}
     for k, v in res.items(): print(("통과 " if not v else f"걸림 {v}개 ") + "· " + k)
