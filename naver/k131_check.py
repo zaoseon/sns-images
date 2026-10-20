@@ -82,6 +82,16 @@ def k135_check(pages, reg):
         if n > 4: bad.setdefault(f"{b} 배치", []).append(f"상자+화살표 {n}장(4장까지)")
     return bad   # B1(띠·시기 7편)은 관계도·열두 달 칸이 글 내용 그대로라 대표가 그림 내용 승인(10/17 17:42) — 빚으로 둔다
 
+B4CARD = re.compile(r"naver_z\d+_b4f?\.jpg")
+
+def b4_debt(pages):
+    """'풀이로 보면' 틀 카드(…_b4.jpg / 여백 제거판 _b4f.jpg)가 남은 글. CT 10/19 12:40 'b4f(세 풀이로 보면)는 K-131이 금지한 틀'.
+    옛 틀 2장 이하 규칙으로는 안 걸려서 따로 센다(1주 멈춤: 막지 않고 숫자로 — 대체/빼기는 대표 결정 뒤). 돌려주기: (발행 글, 예약 글)"""
+    pub, wait = [], []
+    for pid, v in sorted(pages.items(), key=lambda kv: kv[1].get("dt", "")):
+        if B4CARD.search(v.get("body", "")): (pub if v.get("done") else wait).append(pid)
+    return pub, wait
+
 def line_check():
     """K-133(대표 10/17 17:42 '화살표·차트 얇게 말고 두껍게'): 도식 선 굵기 상수가 기준 밑으로 내려가지 않게."""
     import diagrams_k131 as DG
@@ -101,5 +111,6 @@ if __name__ == "__main__":
     for t in line_check(): bad.setdefault("선 굵기(K-133)", []).append(t)
     for k, v in k135_check(pages, reg).items(): bad.setdefault(k, []).extend(v)
     for k, v in bad.items(): print("✗", k, "; ".join(v))
-    print(f"K-131: 막힌 글 {len(bad)} · 아직 옛 틀인 글(빚) {len(debt)}편")
+    pub, wait = b4_debt(pages)
+    print(f"K-131: 막힌 글 {len(bad)} · 아직 옛 틀인 글(빚) {len(debt)}편 · '풀이로 보면' b4 카드 남은 글 {len(pub) + len(wait)}편(발행 표시 {len(pub)} · 그 밖 {len(wait)})")
     sys.exit(1 if bad else 0)
