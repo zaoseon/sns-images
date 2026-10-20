@@ -4120,5 +4120,45 @@
    "폰에서 글자·선이 읽히는지"
   ],
   "since": "2026-10-19 20:40"
+ },
+ {
+  "id": "naver-b5f-1020",
+  "kind": "네이버 예약글 본문 그림(K-131 B5f · K-135 · K-143, 보는 용도)",
+  "title": "예약 5편(n74·n78 11/6, n79 11/7, n68 11/12, n69 11/14) 본문 그림 10장 + 도입부",
+  "date": "2026-10-20",
+  "time": "",
+  "status": "new",
+  "channels": [
+   "naver"
+  ],
+  "images": [
+   "/naver/img/naver_b5f_sheet.jpg",
+   "/naver/img/naver_z74_g9f.jpg",
+   "/naver/img/naver_z74_e9f.jpg",
+   "/naver/img/naver_z78_g9f.jpg",
+   "/naver/img/naver_z78_e9f.jpg",
+   "/naver/img/naver_z79_g9f.jpg",
+   "/naver/img/naver_z79_e9f.jpg",
+   "/naver/img/naver_z68_g9f.jpg",
+   "/naver/img/naver_z68_e9f.jpg",
+   "/naver/img/naver_z69_g9f.jpg",
+   "/naver/img/naver_z69_e9f.jpg"
+  ],
+  "links": [
+   "/naver/n74.html",
+   "/naver/n78.html",
+   "/naver/n79.html",
+   "/naver/n68.html",
+   "/naver/n69.html"
+  ],
+  "caption": "",
+  "note": "글마다 두 장: ① 본문 값·말(n74 2027년 수성 역행 세 번이 모두 불의 삼합 달 안 · n78 오후 3시 52분 신시를 일간마다 본 시주 표 + 경계 시각 네 칸 · n79 도화 글자 찾기 네 묶음 · n68 닭띠 다섯 달 아낄 달 2·3월 → 힘 쓸 달 4·5·1월 · n69 쥐띠 다섯 달 표) ② 심리 단락 자리 실험·학자(n74 크루거 연구진 2005 이메일 말투 짐작 78% 대 실제 56% · n79 모어랜드·비치 1992 강의실에 자주 온 사람 · n68 휴잇·플렛 1991 완벽주의 세 방향 · n69 부스비 연구진 2018 대화 뒤 호감 격차). n78은 심리 단락이 없어 본문 도식 두 장이에요. 옛 '해 볼 것' 그림은 뺐어요. 검색 의도 카드를 먼저 써서 다섯 편 첫 두 줄을 답으로 바꿨어요.",
+  "checks": [
+   "글마다 두 장이 그 글 이야기로 읽히는지",
+   "숫자·연도·학자·간지가 맞는지(출처는 그림 아래)",
+   "첫 두 줄이 검색한 사람의 답이 되는지",
+   "폰에서 글자·선이 읽히는지"
+  ],
+  "since": "2026-10-20 12:30"
  }
 ]
