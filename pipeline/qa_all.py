@@ -182,6 +182,13 @@ def intent_checks():
     if wait or none: print(f"    (의도 카드 반영 대기 {len(wait)}편 · 카드 없는 글 {len(none)}편 — B4·B5 다시 그리기 때 채운다)")
     return {"네이버 검색 의도 카드(K-143: 첫 3줄 답·연결글·CTA)": len(bad)}
 
+def old_terms_checks():
+    """K-086(대표 10/16): '세 지도' 같은 옛 표현이 앞으로 나갈 원고·승인 카드·클립 글에 없는지. 낱말 원본 copy_rules.옛표현."""
+    import old_terms_audit as OT
+    bad = OT.run()
+    for b in bad: print("   ", " · ".join(map(str, b)))
+    return {"옛 표현(K-086 세 지도 등): 앞으로 나갈 원고·카드·클립 글": len(bad)}
+
 if __name__ == "__main__":
     res = text_checks()
     res.update(spec_checks())
@@ -191,6 +198,7 @@ if __name__ == "__main__":
     res.update(first_frame_checks())
     res.update(faint_checks())
     res.update(intent_checks())
+    res.update(old_terms_checks())
     if "--videos" in sys.argv: res.update(video_checks())
     fail = {k: v for k, v in res.items() if v}
     for k, v in res.items(): print(("통과 " if not v else f"걸림 {v}개 ") + "· " + k)
