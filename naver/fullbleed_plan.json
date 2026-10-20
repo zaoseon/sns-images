@@ -1223,6 +1223,13 @@
    "old": "naver_cta4_1초무료풀이.jpg",
    "new": null,
    "why": "표지·배너는 따로"
+  },
+  {
+   "pos": null,
+   "old": "naver_z28_t7w.jpg",
+   "new": "naver_z28_t7wf.jpg",
+   "how": "master 2560에서 잘라 줄임",
+   "src": "K-086 10/20"
   }
  ],
  "n29": [
