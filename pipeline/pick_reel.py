@@ -39,7 +39,7 @@ def card_layer(h, col, body_col, acc):
     _c[k] = im; return im
 def title(c, s, y, t0, size, color=None, lh=1.4): color = color or M.WHITE; return M.text(c, s, y, t0, size, color=(color + (255,) if len(color) == 3 else color), path=GM, maxw=820, lh=lh, stagger=0.2)
 def small(c, s, y, t0, size, color=None): color = color or M.WHITE; return M.text(c, s, y, t0, size, color=(color + (255,) if len(color) == 3 else color), path=PR, maxw=820, lh=1.5, stagger=0.15)
-def build(hook, sub, instr, note, face="v1_lowbun", cta="follow", dx=0):
+def build(hook, sub, instr, note, face="v1_lowbun", cta="follow", dx=0, labels=None):
     def s1(c):
         M.chip(c, "정월의 카드 고르기", 345, .05); y = title(c, hook, 445, .2, 108)
         small(c, sub, y + 10, .8, 48, 강조()); M.character(c, face, t0=.3, width=730, bottom=1455, dx=dx)
@@ -48,8 +48,14 @@ def build(hook, sub, instr, note, face="v1_lowbun", cta="follow", dx=0):
         몸, 테 = M.CARD[:3], M.GOLD[:3]
         for i, (hj, col, no) in enumerate(CARDS()):
             cx = CX + (i - 1) * 290; fl = 8 * math.sin(c.t * 2.4 + i * 1.3); M.pop(c, card_layer(hj, col, 몸, 테), cx, 870 + fl, .25 + i * .18)
-            M.text(c, no, 1120, .7 + i * .12, 84, color=강조(), path=BOLD, maxw=300, cx=cx, stagger=0)
-        title(c, instr, 1240, 1.3, 62, color=강조()); small(c, note, 1334, 1.7, 44)   # 하단 고정 줄(y 1425~1465) 위에서 끝나게(10/7 규칙 층)
+            if labels:   # 10/23 대표 요청: 카드마다 운명학 이름 + 한마디 역할(자세한 풀이는 캡션 본문)
+                M.text(c, no, 1095, .7 + i * .12, 64, color=강조(), path=BOLD, maxw=300, cx=cx, stagger=0)
+                M.text(c, labels[i][0], 1172, .85 + i * .12, 46, color=밝은(), path=BOLD, maxw=300, cx=cx, stagger=0)
+                M.text(c, labels[i][1], 1230, .95 + i * .12, 42, color=강조(), path=PR, maxw=300, cx=cx, stagger=0)
+            else:
+                M.text(c, no, 1120, .7 + i * .12, 84, color=강조(), path=BOLD, maxw=300, cx=cx, stagger=0)
+        if labels: title(c, instr, 1310, 1.5, 54, color=강조()); small(c, note, 1378, 1.9, 40)
+        else: title(c, instr, 1240, 1.3, 62, color=강조()); small(c, note, 1334, 1.7, 44)   # 하단 고정 줄(y 1425~1465) 위에서 끝나게(10/7 규칙 층)
     def s3(c):
         if cta == "share":
             title(c, "떠오르는 사람에게\n보내 보세요", 480, .1, 112, color=강조()); small(c, "고른 번호와 함께 보내도 좋아요\n다음 편은 매주 올라와요", 900, .8, 56)
@@ -61,7 +67,7 @@ SETS = {"oct3": dict(hook="10월, 나에게\n*먼저 오는 소식*", sub="세 �
         "oct10": dict(hook="그 사람이\n*곧 보여줄 행동*", sub="마음에 떠오르는 사람을 생각하세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-10-10"),
         "oct17": dict(hook="마음이 복잡한 날,\n*나에게 필요한 것*", sub="카드 3장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-10-17"),
         "oct24": dict(hook="요즘 마음에 걸린 일,\n*풀어 가는 순서*", sub="마음에 걸린 일 하나를 떠올리세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-10-24"),
-        "oct31": dict(hook="읽고도 답장 못 한 날,\n*내 마음이 하는 말*", sub="카드 3장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-10-31", cta="share", face="v3_ponytail_flip", dx=-80),
+        "oct31": dict(hook="읽고도 답장 못 한 날,\n*내 마음이 하는 말*", sub="카드 3장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-10-31", cta="share", face="v3_ponytail_flip", dx=-80, labels=[("사주", "말 고르기"), ("별자리", "숨 고르기"), ("수비학", "정하기")]),
         "nov7": dict(hook="말 걸고 싶은 날,\n*필요한 한 걸음*", sub="카드 3장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-11-07", cta="share", face="intro", dx=140)}
 def check_frames(scenes):
     """장면마다 몇 시점의 그림을 배경만 있는 그림과 비교해, 바뀐 부분(글자·카드·정월)이 안전 영역 밖으로 나가는지 검사한다."""
@@ -105,10 +111,10 @@ if __name__ == "__main__":
         M.BACKDROP_IMG = 배경이름 = A.pick("bg", cfg["date"], 몫=배경몫)
         M.bg_static.cache_clear() if hasattr(M.bg_static, "cache_clear") else None
     print(f"판 {판번호} ({판까닭}) · 바탕 {바탕종류}" + (f" — {배경이름}" if 배경이름 else "") + f" ({바탕까닭})")
-    sc = build(cfg["hook"], cfg["sub"], cfg["instr"], cfg["note"], cta=cfg.get("cta", "follow"), face=cfg.get("face", "v1_lowbun"), dx=cfg.get("dx", 0))
+    sc = build(cfg["hook"], cfg["sub"], cfg["instr"], cfg["note"], cta=cfg.get("cta", "follow"), face=cfg.get("face", "v1_lowbun"), dx=cfg.get("dx", 0), labels=cfg.get("labels"))
     bad = check_frames(sc); print("안전 영역 검사:", "통과" if not bad else bad)
     if bad and "--force" not in sys.argv: sys.exit(1)
-    out, secs = M.render(cfg["date"], sc, os.path.join(ROOT, "2026-pick", "v3"), 내용유형=유형, 판=판번호)
+    out, secs = M.render(cfg["date"], sc, os.path.join(ROOT, "2026-pick", os.environ.get("ZS_PICK_OUT", "v3")), 내용유형=유형, 판=판번호)
     if key in ("oct31", "nov7"): mi = MP.choose("love", "pick-" + key); MP.mux(out, [d for d, _ in sc], mi, {"oct31": 75, "nov7": 76}[key]); print("음악:", mi["style"], mi["bpm"], mi["key"], "| 얼굴:", cfg["face"])
     else: music(out, sc, {"oct3": 71, "oct10": 72, "oct17": 73, "oct24": 74}[key])
     print(out, secs, "초")
