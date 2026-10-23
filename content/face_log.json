@@ -22,5 +22,11 @@
   "kind": "ask",
   "face": "v8_gesture",
   "flip": false
+ },
+ {
+  "name": "pick-nov3",
+  "kind": "ask",
+  "face": "v3_ponytail",
+  "flip": false
  }
 ]

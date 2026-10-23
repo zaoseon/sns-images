@@ -957,5 +957,13 @@
   "mode": "up",
   "bpm": 124,
   "key": "F"
+ },
+ {
+  "name": "pick-nov3",
+  "kind": "love",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 116,
+  "key": "G"
  }
 ]
