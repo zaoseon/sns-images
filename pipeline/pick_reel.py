@@ -37,6 +37,36 @@ def card_layer(h, col, body_col, acc):
     d.ellipse((cx - 72, cy - 72, cx + 72, cy + 72), fill=col + (255,)); d.text((cx, cy - 4), h, font=M.font(SER, 92), fill=글색, anchor="mm")
     for (sx, sy) in ((46, 52), (w - 22, 52), (46, hh - 28), (w - 22, hh - 28)): d.text((sx, sy), "✦", font=M.font(M.MED, 26), fill=acc + (170,), anchor="mm")
     _c[k] = im; return im
+_ca = {}
+def card_art_layer(kind, col, body_col, acc):
+    """10/23 대표: '카드에 한자 나오는 것 말고 카드 이미지라도 바꿔 봐' — 한자 대신 그림. 0 해(사주) · 1 별자리 · 2 기하 도형(수비학). 틀·글로우는 card_layer 와 같다."""
+    k = (kind, col, body_col, acc)
+    if k in _ca: return _ca[k]
+    w, hh = 258, 398; im = Image.new("RGBA", (w + 24, hh + 24), (0, 0, 0, 0)); g = Image.new("RGBA", (w + 24, hh + 24), (0, 0, 0, 0))
+    ImageDraw.Draw(g).rounded_rectangle((12, 12, 12 + w, 12 + hh), radius=34, fill=col + (110,)); g = g.filter(ImageFilter.GaussianBlur(18)); im.alpha_composite(g)
+    body = Image.new("RGBA", (w, hh)); bd = ImageDraw.Draw(body)
+    for y in range(hh):
+        t = y / hh; bd.line((0, y, w, y), fill=tuple(min(255, int(v * (1.0 + 0.45 * t))) for v in body_col) + (255,))
+    m = Image.new("L", (w, hh), 0); ImageDraw.Draw(m).rounded_rectangle((0, 0, w - 1, hh - 1), radius=32, fill=255); body.putalpha(m); im.alpha_composite(body, (12, 12))
+    d = ImageDraw.Draw(im); d.rounded_rectangle((12, 12, 12 + w, 12 + hh), radius=34, outline=acc + (255,), width=6); d.rounded_rectangle((30, 30, 12 + w - 18, 12 + hh - 18), radius=24, outline=acc + (110,), width=2)
+    cx, cy = 12 + w // 2, 12 + hh // 2 - 8
+    for r, a in ((112, 36), (98, 70)): d.ellipse((cx - r, cy - r, cx + r, cy + r), outline=col + (a,), width=3)
+    if kind == 0:      # 해: 가운데 원 + 여덟 갈래 빛
+        d.ellipse((cx - 44, cy - 44, cx + 44, cy + 44), fill=col + (255,))
+        for a in range(8):
+            ang = a * math.pi / 4; d.line((cx + 62 * math.cos(ang), cy + 62 * math.sin(ang), cx + 88 * math.cos(ang), cy + 88 * math.sin(ang)), fill=col + (255,), width=9)
+    elif kind == 1:    # 별자리: 점 다섯 개를 선으로 잇는다
+        pts = [(cx - 70, cy + 52), (cx - 30, cy - 18), (cx + 14, cy + 22), (cx + 44, cy - 56), (cx + 74, cy + 30)]
+        d.line(pts, fill=col + (200,), width=5)
+        for (x, y), r in zip(pts, (12, 16, 11, 18, 13)):
+            d.ellipse((x - r - 8, y - r - 8, x + r + 8, y + r + 8), fill=col + (60,)); d.ellipse((x - r, y - r, x + r, y + r), fill=col + (255,))
+    else:              # 기하 도형: 원 안의 삼각형과 가운데 점(숫자·균형의 도형)
+        col = tuple(min(255, int(v + (255 - v) * .4)) for v in col)   # 세 번째 카드색은 어두워 바탕에 묻히므로 밝혀서 그린다
+        R = 86; tri = [(cx + R * math.cos(-math.pi / 2 + i * 2 * math.pi / 3), cy + R * math.sin(-math.pi / 2 + i * 2 * math.pi / 3)) for i in range(3)]
+        d.ellipse((cx - R, cy - R, cx + R, cy + R), outline=col + (255,), width=6); d.polygon(tri, outline=col + (255,), width=6)
+        r2 = 44; d.ellipse((cx - r2, cy - r2, cx + r2, cy + r2), fill=col + (255,))
+    for (sx, sy) in ((46, 52), (w - 22, 52), (46, hh - 28), (w - 22, hh - 28)): d.text((sx, sy), "✦", font=M.font(M.MED, 26), fill=acc + (170,), anchor="mm")
+    _ca[k] = im; return im
 def title(c, s, y, t0, size, color=None, lh=1.4): color = color or M.WHITE; return M.text(c, s, y, t0, size, color=(color + (255,) if len(color) == 3 else color), path=GM, maxw=820, lh=lh, stagger=0.2)
 def small(c, s, y, t0, size, color=None): color = color or M.WHITE; return M.text(c, s, y, t0, size, color=(color + (255,) if len(color) == 3 else color), path=PR, maxw=820, lh=1.5, stagger=0.15)
 def build(hook, sub, instr, note, face="v1_lowbun", cta="follow", dx=0, labels=None):
@@ -63,24 +93,25 @@ def build(hook, sub, instr, note, face="v1_lowbun", cta="follow", dx=0, labels=N
             title(c, "매일 저녁\n사주·별자리·숫자 테스트", 480, .1, 112, color=강조()); small(c, "팔로우하면 다음 편을\n놓치지 않아요", 900, .8, 56)
         small(c, "내 태어난 날 기운은 프로필 링크에서 1초", 1160, 1.3, 44, (255, 255, 255))
     return [(3.0, s1), (5.4, s2), (2.8, s3)]
-def build_seq(hook, sub, labels, face="v1_lowbun", dx=0):
+def build_seq(hook, sub, labels, face="v1_lowbun", dx=0, art=False):
     """10/23 대표 요청(mvk2hxb3 다시): 한꺼번에 보이지 않고 차례로 — 세 카드 나란히 → 1번 카드가 커지며 '말 고르기' → 2번 '숨 고르기' → 3번 '정하기'
     → 다시 세 카드와 번호 아래 사주·별자리·수비학 → 몇 번 카드 골랐는지 댓글 묻기 → 마무리. 제목은 '지금 끌리는 카드를 하나 골라보세요',
     위 고정 줄과 붙지 않게 장면을 짧게 쪼개 자동 맞춤(맨 위 470 이상)이 글을 아래로 내리게 한다."""
     몸, 테 = M.CARD[:3], M.GOLD[:3]; 이름 = ["사주", "별자리", "수비학"]
+    def 카드(i, hj, col): return card_art_layer(i, col, 몸, 테) if art else card_layer(hj, col, 몸, 테)
     def s1(c):
         M.chip(c, "정월의 카드 고르기", 345, .05); y = title(c, hook, 445, .2, 108)
         small(c, sub, y + 10, .8, 48, 강조()); M.character(c, face, t0=.3, width=730, bottom=1455, dx=dx)
     def 세카드(c, cy, t0=.2, 둥실=True):
         for i, (hj, col, no) in enumerate(CARDS()):
             cx = CX + (i - 1) * 290; fl = (8 * math.sin(c.t * 2.4 + i * 1.3)) if 둥실 else 0
-            M.pop(c, card_layer(hj, col, 몸, 테), cx, cy + fl, t0 + i * .15)
+            M.pop(c, 카드(i, hj, col), cx, cy + fl, t0 + i * .15)
     def a(c):
         title(c, "지금 끌리는 카드를\n하나 골라보세요", 470, .05, 96); 세카드(c, 960)
     def 크게(i):
         def f(c):
             hj, col, no = CARDS()[i]; q = M.e_back((c.t - .1) / .45); k = 1.55 * max(.02, q)
-            L = card_layer(hj, col, 몸, 테); L = L.resize((max(1, int(L.width * k)), max(1, int(L.height * k))))
+            L = 카드(i, hj, col); L = L.resize((max(1, int(L.width * k)), max(1, int(L.height * k))))
             M.blit(c.fr, L, CX - L.width / 2, 800 - L.height / 2, c.alpha(M.cl(q * 2)))
             M.text(c, labels[i][1], 1175, .45, 96, color=강조(), path=BOLD, maxw=820, stagger=0)
         return f
@@ -102,7 +133,7 @@ SETS = {"oct3": dict(hook="10월, 나에게\n*먼저 오는 소식*", sub="세 �
         "oct17": dict(hook="마음이 복잡한 날,\n*나에게 필요한 것*", sub="카드 3장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-10-17"),
         "oct24": dict(hook="요즘 마음에 걸린 일,\n*풀어 가는 순서*", sub="마음에 걸린 일 하나를 떠올리세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-10-24"),
         "oct31": dict(hook="읽고도 답장 못 한 날,\n*내 마음이 하는 말*", sub="카드 3장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-10-31", cta="share", face="v3_ponytail_flip", dx=-80, labels=[("사주", "말 고르기"), ("별자리", "숨 고르기"), ("수비학", "정하기")], seq=True),
-        "nov3": dict(hook="요즘 마음에 걸린 일,\n*풀어 가는 순서*", sub="마음에 걸린 일 하나를 떠올리세요", instr="", note="", date="2026-11-03", cta="share", face="intro", dx=80, labels=[("사주", "오래 남은 일부터"), ("별자리", "한 사람에게 말하기"), ("수비학", "날짜 정하기")], seq=True),
+        "nov3": dict(hook="요즘 마음에 걸린 일,\n*풀어 가는 순서*", sub="마음에 걸린 일 하나를 떠올리세요", instr="", note="", date="2026-11-03", cta="share", face="intro", dx=80, labels=[("사주", "오래 남은 일부터"), ("별자리", "한 사람에게 말하기"), ("수비학", "날짜 정하기")], seq=True, art=True, pal="dg_gold"),
         "nov7": dict(hook="말 걸고 싶은 날,\n*필요한 한 걸음*", sub="카드 3장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-11-07", cta="share", face="intro", dx=140)}
 def check_frames(scenes):
     """장면마다 몇 시점의 그림을 배경만 있는 그림과 비교해, 바뀐 부분(글자·카드·정월)이 안전 영역 밖으로 나가는지 검사한다."""
@@ -139,6 +170,7 @@ if __name__ == "__main__":
             m2 += 1
         쓴판.append(p2); 쓴배경.append(A.pick("bg", d2, 몫=m2)); 몫[k2] = (p2, m2, 왜2)
     판번호, 배경몫, 판까닭 = 몫[key]
+    if cfg.get("pal"): 판번호, 판까닭 = cfg["pal"], "대표 지시로 판을 정함"
     if os.environ.get("ZS_PAL"): 판번호, 판까닭 = os.environ["ZS_PAL"], "사양에 직접 적음"
     M.set_pal(판번호); M.set_bg(M.bg_for(cfg["date"]))
     바탕종류, 배경이름, 바탕까닭 = M.set_backdrop(유형, os.environ.get("ZS_BACKDROP"), cfg["date"])
@@ -146,7 +178,7 @@ if __name__ == "__main__":
         M.BACKDROP_IMG = 배경이름 = A.pick("bg", cfg["date"], 몫=배경몫)
         M.bg_static.cache_clear() if hasattr(M.bg_static, "cache_clear") else None
     print(f"판 {판번호} ({판까닭}) · 바탕 {바탕종류}" + (f" — {배경이름}" if 배경이름 else "") + f" ({바탕까닭})")
-    sc = build_seq(cfg["hook"], cfg["sub"], cfg["labels"], face=cfg.get("face", "v1_lowbun"), dx=cfg.get("dx", 0)) if cfg.get("seq") else build(cfg["hook"], cfg["sub"], cfg["instr"], cfg["note"], cta=cfg.get("cta", "follow"), face=cfg.get("face", "v1_lowbun"), dx=cfg.get("dx", 0), labels=cfg.get("labels"))
+    sc = build_seq(cfg["hook"], cfg["sub"], cfg["labels"], face=cfg.get("face", "v1_lowbun"), dx=cfg.get("dx", 0), art=cfg.get("art", False)) if cfg.get("seq") else build(cfg["hook"], cfg["sub"], cfg["instr"], cfg["note"], cta=cfg.get("cta", "follow"), face=cfg.get("face", "v1_lowbun"), dx=cfg.get("dx", 0), labels=cfg.get("labels"))
     bad = check_frames(sc); print("안전 영역 검사:", "통과" if not bad else bad)
     if bad and "--force" not in sys.argv: sys.exit(1)
     out, secs = M.render(cfg["date"], sc, os.path.join(ROOT, "2026-pick", os.environ.get("ZS_PICK_OUT", "v3")), 내용유형=유형, 판=판번호)
