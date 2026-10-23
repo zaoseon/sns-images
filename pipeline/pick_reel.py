@@ -102,6 +102,7 @@ SETS = {"oct3": dict(hook="10월, 나에게\n*먼저 오는 소식*", sub="세 �
         "oct17": dict(hook="마음이 복잡한 날,\n*나에게 필요한 것*", sub="카드 3장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-10-17"),
         "oct24": dict(hook="요즘 마음에 걸린 일,\n*풀어 가는 순서*", sub="마음에 걸린 일 하나를 떠올리세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-10-24"),
         "oct31": dict(hook="읽고도 답장 못 한 날,\n*내 마음이 하는 말*", sub="카드 3장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-10-31", cta="share", face="v3_ponytail_flip", dx=-80, labels=[("사주", "말 고르기"), ("별자리", "숨 고르기"), ("수비학", "정하기")], seq=True),
+        "nov3": dict(hook="요즘 마음에 걸린 일,\n*풀어 가는 순서*", sub="마음에 걸린 일 하나를 떠올리세요", instr="", note="", date="2026-11-03", cta="share", face="intro", dx=80, labels=[("사주", "오래 남은 일부터"), ("별자리", "한 사람에게 말하기"), ("수비학", "날짜 정하기")], seq=True),
         "nov7": dict(hook="말 걸고 싶은 날,\n*필요한 한 걸음*", sub="카드 3장 중 하나만 고르세요", instr="끌리는 카드 번호를 댓글로", note="고른 뒤에 캡션을 열어 보세요", date="2026-11-07", cta="share", face="intro", dx=140)}
 def check_frames(scenes):
     """장면마다 몇 시점의 그림을 배경만 있는 그림과 비교해, 바뀐 부분(글자·카드·정월)이 안전 영역 밖으로 나가는지 검사한다."""
@@ -123,7 +124,7 @@ def music(mp4, scenes, seed):
     tmp = mp4 + ".m.mp4"; subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mp4, "-i", wav, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-shortest", "-movflags", "+faststart", tmp], check=True); os.replace(tmp, mp4)
 if __name__ == "__main__":
     key = sys.argv[1] if len(sys.argv) > 1 else "oct3"; cfg = dict(SETS[key])
-    if key in ("oct31", "nov7"):      # 새 편은 얼굴·음악을 돌려 쓰기 계획에서 고른다(계절 사진 포함)
+    if key in ("oct31", "nov3", "nov7"):      # 새 편은 얼굴·음악을 돌려 쓰기 계획에서 고른다(계절 사진 포함)
         fi = FP.pick("ask", "pick-" + key, md=cfg["date"][5:]); cfg["face"] = fi["face"] + ("_flip" if fi["flip"] else ""); cfg["dx"] = -80 if fi["flip"] else 80
     # 그리기 전에 기획 표에서 판과 바탕을 고른다(대표 10/16 "배경이나 에셋 라이브러리처럼 만들어놓고 골라서", "컬러 조합도 마찬가지").
     # 검사도 렌더와 같은 판·바탕으로 해야 뜻이 있으니 여기서 먼저 정해 두고, 같은 값을 render 에 넘긴다.
@@ -149,6 +150,10 @@ if __name__ == "__main__":
     bad = check_frames(sc); print("안전 영역 검사:", "통과" if not bad else bad)
     if bad and "--force" not in sys.argv: sys.exit(1)
     out, secs = M.render(cfg["date"], sc, os.path.join(ROOT, "2026-pick", os.environ.get("ZS_PICK_OUT", "v3")), 내용유형=유형, 판=판번호)
-    if key in ("oct31", "nov7"): mi = MP.choose("love", "pick-" + key); MP.mux(out, [d for d, _ in sc], mi, {"oct31": 75, "nov7": 76}[key]); print("음악:", mi["style"], mi["bpm"], mi["key"], "| 얼굴:", cfg["face"])
+    if key in ("oct31", "nov3", "nov7"):
+        mi = MP.choose("love", "pick-" + key); MP.mux(out, [d for d, _ in sc], mi, {"oct31": 75, "nov7": 76, "nov3": 77}[key]); print("음악:", mi["style"], mi["bpm"], mi["key"], "| 얼굴:", cfg["face"])
+        lead = sum(d for d, _ in sc) - secs      # K-139 로 영상 앞이 잘렸으면(보통 1.9초) 음악도 같은 만큼 잘라 컷과 박을 맞춘다
+        if lead > 0.05:
+            tmp = out + ".a.mp4"; subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", out, "-ss", f"{lead:.2f}", "-i", out, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-af", f"afade=t=out:st={secs - .5:.2f}:d=0.5", "-t", f"{secs:.2f}", "-movflags", "+faststart", tmp], check=True); os.replace(tmp, out); print(f"음악 앞 {lead:.1f}초를 영상과 같이 잘랐어요")
     else: music(out, sc, {"oct3": 71, "oct10": 72, "oct17": 73, "oct24": 74}[key])
     print(out, secs, "초")
