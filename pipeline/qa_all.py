@@ -87,7 +87,7 @@ def set_checks():
                       한편=bool(d.get("한 편")), 이름=os.path.basename(os.path.dirname(p)))
     for x in 나쁨:
         print("   ", x)
-    return {"캐러셀 세트(최소 7장·CTA·속 빈 장)": len(나쁨)}
+    return {"캐러셀 세트(최소 7장·CTA·속 빈 장·심리 한 장 K-022)": len(나쁨)}
 
 
 def naver_state_checks():

@@ -90,6 +90,12 @@ def 세트(cards, channel="insta_carousel", 한편=False, 이름=""):
                        "표지 1 · 본문 2~4 · 근거 5 · 해 볼 것 6 · CTA 7. 7장 미만이면 만들지도 올리지도 않아요.")
         if cards and not cards[-1].get("cta"):
             bad.append(f"마지막 장에 CTA가 없어요{꼬리}. 끝 장은 '행동 한 줄 + 프로필 링크'입니다(R11, 8-10절).")
+        # K-022 O1(대표 10/14 "채널마다 심리 한 번", 캐러셀은 1장): 장 글 어디에도 마음·관계 말이 없으면 막는다.
+        if channel == "insta_carousel" and cards:
+            import carousel_rules as CRL
+            글 = [" ".join(str(v) for k in ("kick", "hook", "subs", "items", "steps", "rows", "big", "cta", "body", "text")
+                          for v in (c.get(k) if isinstance(c.get(k), list) else [c.get(k)]) if v) for c in cards]
+            bad += [x + 꼬리 for x in CRL.check_psych(글, "캐러셀")]
         빈 = [c.get("id", "?") for c in cards[1:-1] if not 속(c)]   # 표지와 CTA 장은 뺀다
         if 빈:
             bad.append(f"본문인데 제목만 있고 속이 빈 장: {', '.join(빈)}{꼬리}. "
