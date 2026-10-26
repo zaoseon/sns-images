@@ -7,6 +7,8 @@
 
 > **네이버 글 끝·CTA 배너 (10/17 대표, 서브 노트북 점검):** 글 끝은 `… > 링크 카드 > CTA 배너`(K-118, 원본은 `naver/tail_order.py`, 생성기 안전장치 `make_page.cta_last`). 연결글은 👇 유도 문구 한 줄만, 제목 줄 없음 — 링크는 그 👇 줄에(K-119, `format_body`·`format_v2.link_guide`·`related_cards`). CTA 배너는 `naver/cta_banner.py`가 그리는 `naver_cta5_`(1280x400, 제목 57px·부제 50px 이상, 규격 `channel_specs.naver_cta_banner`, K-120). 새 판은 번호를 올려 새 이름으로만. 자세히: zaoseon-site `docs/네이버_발행글_차례와배너_2026-10-17.md`.
 
+> **① 자동 실행 10/26 11:45:** 이 저장소 코드는 안 바꿈. zaoseon-site 사이트 블로그 10/26 자동 초안('오늘에운세')은 기존 글과 같은 slug라 취소, `tools/seo/daily.py`에 맞춤법 검색어 거르기(D-415). 기준대장 K-148(CTA 배너 위 고지)은 키트 `get_post.mjs`가 넣고 있어 naver_kit done — 원고(pages.json)에는 넣지 않는다(두 번 나옴).
+
 > **① 자동 실행 10/25 11:45:** 캐러셀 한 편(cards.json "한 편")에 마음·관계 장이 하나도 없으면 `pipeline/card_gate.세트()`가 막는다(K-022 O1, `carousel_rules.check_psych`, qa_all 연결). 지금 사양 6개 통과. 이미 예약된 캐러셀은 보관본에 장 글자가 없어 확인 못 함. 같은 실행에서 zaoseon-site 사이트 블로그 '11월 이사 손 없는 날' 날짜를 바로잡아 11/8 공개로 옮김.
 
 > **① 자동 실행 10/23 19:45 (CT 13:20 · add-pick-1031 예약):** 대표 승인(13:03·13:18)대로 카드 고르기 11/1(일) 인스타 릴스 18:00 Metricool 404036495 · 스레드 18:30 404036531 예약(영상 `2026-pick/v3v/2026-10-31.mp4`, 캡션 카드 그대로), `content/reel_swaps.json` add-pick-1031 done. pick-1024는 이미 v3v·11/3 done. zaoseon-site `tools/schedule_check.py`에 예약 스레드 말투 검사(K-136, 인스타 고정 문구·태그 1개) → 10/24 20:30 스레드 398187918 옛 틀 1건(대표 확인 대기, 손대지 않음).
