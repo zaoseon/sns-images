@@ -7,6 +7,8 @@
 
 > **네이버 글 끝·CTA 배너 (10/17 대표, 서브 노트북 점검):** 글 끝은 `… > 링크 카드 > CTA 배너`(K-118, 원본은 `naver/tail_order.py`, 생성기 안전장치 `make_page.cta_last`). 연결글은 👇 유도 문구 한 줄만, 제목 줄 없음 — 링크는 그 👇 줄에(K-119, `format_body`·`format_v2.link_guide`·`related_cards`). CTA 배너는 `naver/cta_banner.py`가 그리는 `naver_cta5_`(1280x400, 제목 57px·부제 50px 이상, 규격 `channel_specs.naver_cta_banner`, K-120). 새 판은 번호를 올려 새 이름으로만. 자세히: zaoseon-site `docs/네이버_발행글_차례와배너_2026-10-17.md`.
 
+> **① 자동 실행 10/29 19:45:** n01 주제(2027 띠별 운세) **새 글 n80** 원고(10/30 11:00, CT 10/29 13:55·대표 16:33). n01은 안 건드림(K-147). `naver/build_naver_80.py` 하나로 만든다: 띠 값은 zaoseon-site `tools/tti_extra.json`에서 읽고 assert로 관계(육합·삼합·충·원진·형)·행운 색 규칙·입춘(engine 2/4 10:46)을 잰다. 도식 3장 서로 다른 유형(months·route·twopanel, `naver_z80_{m6,r6,t6}f.jpg`) + 표지 `wide/naver_z80_a4.jpg` + 글별 배너 `naver_cta12_n80_v_navy_inv.jpg`. **fullbleed.py main은 fullbleed_plan.json을 넘긴 글로만 덮어쓴다** — 그래서 convert를 직접 부르고 계획은 합쳤다(다른 글에 쓸 때 조심). **render_all을 부르지 않았다**: 이 세션은 저장소 일부만 받아(img 없음) cta_pick이 다른 글 배너를 바꿀 수 있어서 n80 페이지·목록만 다시 썼다. k151·k131·intent 검사 통과, qa_all 전체는 못 돌림(일부만 받은 저장소). push 권한 없어 zaoseon-site `ops/pending_sns-images/20261029a_1.bundle`.
+
 > **① 자동 실행 10/27 11:45:** 이 저장소 코드는 안 바꿈. zaoseon-site 사이트 블로그 보류 초안 '천칭자리운세'를 고쳐 11/9 공개로 옮김(L-20261027-1150). 오래된 [열림] 항목(10/5~10/17)은 대표 결정·서브 노트북 대기라 이번에 건드리지 않음.
 
 > **① 자동 실행 10/26 11:45:** 이 저장소 코드는 안 바꿈. zaoseon-site 사이트 블로그 10/26 자동 초안('오늘에운세')은 기존 글과 같은 slug라 취소, `tools/seo/daily.py`에 맞춤법 검색어 거르기(D-415). 기준대장 K-148(CTA 배너 위 고지)은 키트 `get_post.mjs`가 넣고 있어 naver_kit done — 원고(pages.json)에는 넣지 않는다(두 번 나옴).
