@@ -182,6 +182,13 @@ def intent_checks():
     if wait or none: print(f"    (의도 카드 반영 대기 {len(wait)}편 · 카드 없는 글 {len(none)}편 — B4·B5 다시 그리기 때 채운다)")
     return {"네이버 검색 의도 카드(K-143: 첫 3줄 답·연결글·CTA)": len(bad)}
 
+def k151_checks():
+    """K-151(대표 10/20) + blogon 진단 검토(10/29): 새로 쓰는 네이버 원고에 고정 첫 인사·'결론부터' 문장, 첫 200자 핵심어 직답, 제목 40자·비하 표현, 태그('자오선' 끝·핵심어). 예약·발행 글은 기준선에 묶어 안 잼."""
+    sys.path.insert(0, os.path.join(R, "naver")); import k151_check as KK
+    bad, new = KK.run()
+    for k, v in bad.items(): print("   ", k, "; ".join(v))
+    return {"네이버 새 원고 틀 반복·첫 답·제목·태그(K-151)": len(bad)}
+
 def old_terms_checks():
     """K-086(대표 10/16): '세 지도' 같은 옛 표현이 앞으로 나갈 원고·승인 카드·클립 글에 없는지. 낱말 원본 copy_rules.옛표현."""
     import old_terms_audit as OT
@@ -199,6 +206,7 @@ if __name__ == "__main__":
     res.update(faint_checks())
     res.update(intent_checks())
     res.update(old_terms_checks())
+    res.update(k151_checks())
     if "--videos" in sys.argv: res.update(video_checks())
     fail = {k: v for k, v in res.items() if v}
     for k, v in res.items(): print(("통과 " if not v else f"걸림 {v}개 ") + "· " + k)
