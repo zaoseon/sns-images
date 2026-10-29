@@ -2553,5 +2553,22 @@
    "how": "master 2560에서 잘라 줄임",
    "src": "B5f 10/20"
   }
+ ],
+ "n80": [
+  {
+   "pos": 1,
+   "old": "naver_z80_m6.jpg",
+   "new": "naver_z80_m6f.jpg"
+  },
+  {
+   "pos": 2,
+   "old": "naver_z80_r6.jpg",
+   "new": "naver_z80_r6f.jpg"
+  },
+  {
+   "pos": 3,
+   "old": "naver_z80_t6.jpg",
+   "new": "naver_z80_t6f.jpg"
+  }
  ]
 }
