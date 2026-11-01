@@ -1435,3 +1435,10 @@ README "2주마다 하는 일" 그대로. 요점만:
 ## 10/13 낮 (D-198)
 - 할로윈(=얼리버드 영상) 새 렌더 `pipeline/halloween_reel.py` → `2026-halloween/halloween.mp4`(18.8초, 경쾌 신스팝 D 126, music_log earlybird-halloween). Metricool 10/31 12:00 인스타 릴스 394556302(uuid 5059508727705455489)에 영상만 교체, 커밋 e2399a3 고정. 표 기준 R68.
 - 카드 고르기 oct31·nov7 소스 '카드 3장'(영상 v3 다시 렌더, 미예약).
+
+## 음악 라이브러리 (11/1 CT · 대표 17:18 "유행 음원과 비슷한 느낌으로 만들어 놓고 쓰자" → "진행해")
+- 32곡 `assets/music_lib/*.mp3`(8장르×4, 약 32초, -14 LUFS) + 목록 `content/music_lib.json`. 유행 음원 결(장르·빠르기·리듬·악기)만 따르고 멜로디는 따라 하지 않는다. 근거 Buffer 10/14·SocialPilot 10/30 릴스 유행 목록.
+- 음색 GeneralUser GS 2.0.3(상업 사용 가능). 저장소에 넣지 않음 — 다시 만들 때 `GIT_LFS_SKIP_SMUDGE=1 git clone --depth 1 https://github.com/mrbumpy409/generaluser-gs /home/claude/mrbumpy409/generaluser-gs` 후 `python3 pipeline/music_lib_build.py`.
+- **쓰기: 따로 할 일 없음.** `reel_music.compose`·`compose_up`이 11/5부터 자동으로 라이브러리 곡을 쓴다(`pipeline/music_lib.py`: 훅 시작부터 영상 길이만큼 자름, 최근 6편 쓴 곡 피함, 크리스마스 팝은 12월만). 11/2~4 릴스 첫 3초 실험은 옛 음악(변수 하나만). 옛 작곡기는 `ZS_MUSIC_LIB=0`.
+- 대표가 zaoseon.com/naver/music.html 에서 [빼기] 한 곡(서버 naver:mlout-<곡>)은 zaoseon-site public/admin/data.json done 을 읽어 고르지 않는다 — 두 저장소를 /home/claude 아래 나란히 받아야 한다.
+- 매달 1일: 유행 목록을 다시 보고 장르를 바꾼다(`G` 표).

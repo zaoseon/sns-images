@@ -22,8 +22,22 @@ STYLES = {
   "따뜻한 기타":   dict(bpm=(92,100), chord=24, lead=25, bass=32, pad=48, drums=1, prog=["pop","calm","emo"], seventh=False),
   "맑은 팝":       dict(bpm=(100,110), chord=4,  lead=11, bass=33, pad=89, drums=2, prog=["pop","ref","emo"], seventh=False),
 }
+def _lib(beats, seed, out_wav, bpm, tail):
+    """11/1 대표 결정: 음악 라이브러리(유행 음원 결, GeneralUser GS 음색)가 있으면 그 곡을 쓴다. ZS_MUSIC_LIB=0 이면 옛 작곡기."""
+    flag = os.environ.get("ZS_MUSIC_LIB", "")
+    if flag == "0": return None
+    import datetime
+    if flag != "1" and datetime.date.today() < datetime.date(2026, 11, 5): return None   # 11/2~4 릴스 첫 3초 실험은 옛 음악 그대로(변수 하나만 바꾸려고)
+    try:
+        import music_lib
+    except Exception:
+        return None
+    return music_lib.render(beats * 60.0 / bpm + tail, seed, out_wav)
+
 def compose(style, beats, seed, out_wav, key="C", tail=1.2):
     cfg = STYLES[style]; rnd = random.Random(seed)
+    _r = _lib(beats, seed, out_wav, random.Random(seed).randint(*cfg["bpm"]), tail)
+    if _r: return _r
     bpm = rnd.randint(*cfg["bpm"]); prog = PROG[rnd.choice(cfg["prog"])]
     minor = rnd.random() < 0.25 and style != "맑은 팝"
     scale = MIN if minor else MAJ; root = midi_of(key + "3")
@@ -101,6 +115,8 @@ def pick_bpm(style, seed):
     cfg = UP.get(style) or STYLES[style]; return random.Random(seed).randint(*cfg["bpm"])
 def compose_up(style, beats, seed, out_wav, key="C", bpm=None, cuts=(), tail=0.3):
     cfg = UP[style]; rnd = random.Random(seed); bpm = bpm or rnd.randint(*cfg["bpm"]); prog = PROG[rnd.choice(cfg["prog"])]
+    _r = _lib(beats, seed, out_wav, bpm, tail)
+    if _r: return _r
     scale = MAJ; root = midi_of(key + "3"); tpb = 480; mid = mido.MidiFile(ticks_per_beat=tpb)
     def tr(p=None, ch=0):
         t = mido.MidiTrack(); mid.tracks.append(t)
