@@ -2570,5 +2570,22 @@
    "old": "naver_z80_t6.jpg",
    "new": "naver_z80_t6f.jpg"
   }
+ ],
+ "n81": [
+  {
+   "pos": 1,
+   "old": "naver_z81_l7.jpg",
+   "new": "naver_z81_l7f.jpg"
+  },
+  {
+   "pos": 2,
+   "old": "naver_z81_e6.jpg",
+   "new": "naver_z81_e6f.jpg"
+  },
+  {
+   "pos": 3,
+   "old": "naver_z81_h6.jpg",
+   "new": "naver_z81_h6f.jpg"
+  }
  ]
 }
