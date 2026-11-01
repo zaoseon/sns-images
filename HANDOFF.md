@@ -1442,3 +1442,4 @@ README "2주마다 하는 일" 그대로. 요점만:
 - **쓰기: 따로 할 일 없음.** `reel_music.compose`·`compose_up`이 11/5부터 자동으로 라이브러리 곡을 쓴다(`pipeline/music_lib.py`: 훅 시작부터 영상 길이만큼 자름, 최근 6편 쓴 곡 피함, 크리스마스 팝은 12월만). 11/2~4 릴스 첫 3초 실험은 옛 음악(변수 하나만). 옛 작곡기는 `ZS_MUSIC_LIB=0`.
 - 대표가 zaoseon.com/naver/music.html 에서 [빼기] 한 곡(서버 naver:mlout-<곡>)은 zaoseon-site public/admin/data.json done 을 읽어 고르지 않는다 — 두 저장소를 /home/claude 아래 나란히 받아야 한다.
 - 매달 1일: 유행 목록을 다시 보고 장르를 바꾼다(`G` 표).
+- **11/1 17:39 대표 청취 결과:** 12곡 뺌 — 시네마틱 빌드업·가을 인디 어쿠스틱은 4곡 모두 빠짐(이 두 장르는 다음 갱신 때 만들지 않는다), 디스코 3·몽환 4·밝은 힙합 3·4. 남은 곡: 디스코·스피드업·밝은 힙합·뎀보우·몽환 16곡(+12월 크리스마스 4곡). `content/music_lib.json` status out 으로도 적어 둠.

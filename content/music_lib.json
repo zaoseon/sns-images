@@ -1,5 +1,5 @@
 {
- "note": "릴스·클립 음악 라이브러리(대표 11/1). status out = 대표가 운영앱에서 뺀 곡. 고르기는 pipeline/music_lib.py",
+ "note": "릴스·클립 음악 라이브러리(대표 11/1). status out = 대표가 운영앱에서 뺀 곡. 고르기는 pipeline/music_lib.py · 11/1 17:39 대표가 12곡 뺌(시네마틱 빌드업·가을 인디 4곡 전부, 디스코3·몽환4·힙합3·4). 남은 곡: 평소 16곡 + 12월 크리스마스 4곡.",
  "tracks": [
   {
    "id": "disco1",
@@ -32,7 +32,7 @@
    "dur": 31.2,
    "file": "assets/music_lib/disco3.mp3",
    "hook_at": 3.9,
-   "status": "ok"
+   "status": "out"
   },
   {
    "id": "disco4",
@@ -120,7 +120,7 @@
    "dur": 31.3,
    "file": "assets/music_lib/sunny3.mp3",
    "hook_at": 5.22,
-   "status": "ok"
+   "status": "out"
   },
   {
    "id": "sunny4",
@@ -131,7 +131,7 @@
    "dur": 32.7,
    "file": "assets/music_lib/sunny4.mp3",
    "hook_at": 5.45,
-   "status": "ok"
+   "status": "out"
   },
   {
    "id": "indie1",
@@ -142,7 +142,7 @@
    "dur": 31.8,
    "file": "assets/music_lib/indie1.mp3",
    "hook_at": 4.9,
-   "status": "ok"
+   "status": "out"
   },
   {
    "id": "indie2",
@@ -153,7 +153,7 @@
    "dur": 32.6,
    "file": "assets/music_lib/indie2.mp3",
    "hook_at": 4.66,
-   "status": "ok"
+   "status": "out"
   },
   {
    "id": "indie3",
@@ -164,7 +164,7 @@
    "dur": 32.9,
    "file": "assets/music_lib/indie3.mp3",
    "hook_at": 4.71,
-   "status": "ok"
+   "status": "out"
   },
   {
    "id": "indie4",
@@ -175,7 +175,7 @@
    "dur": 31.5,
    "file": "assets/music_lib/indie4.mp3",
    "hook_at": 4.85,
-   "status": "ok"
+   "status": "out"
   },
   {
    "id": "holiday1",
@@ -274,7 +274,7 @@
    "dur": 31.8,
    "file": "assets/music_lib/cine1.mp3",
    "hook_at": 4.9,
-   "status": "ok"
+   "status": "out"
   },
   {
    "id": "cine2",
@@ -285,7 +285,7 @@
    "dur": 32.6,
    "file": "assets/music_lib/cine2.mp3",
    "hook_at": 4.66,
-   "status": "ok"
+   "status": "out"
   },
   {
    "id": "cine3",
@@ -296,7 +296,7 @@
    "dur": 31.2,
    "file": "assets/music_lib/cine3.mp3",
    "hook_at": 4.8,
-   "status": "ok"
+   "status": "out"
   },
   {
    "id": "cine4",
@@ -307,7 +307,7 @@
    "dur": 31.5,
    "file": "assets/music_lib/cine4.mp3",
    "hook_at": 4.85,
-   "status": "ok"
+   "status": "out"
   },
   {
    "id": "dream1",
@@ -351,7 +351,7 @@
    "dur": 32.7,
    "file": "assets/music_lib/dream4.mp3",
    "hook_at": 4.36,
-   "status": "ok"
+   "status": "out"
   }
  ]
 }
