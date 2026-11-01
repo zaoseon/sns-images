@@ -1,6 +1,550 @@
 {
- "note": "릴스·클립 음악 라이브러리(대표 11/1). status out = 대표가 운영앱에서 뺀 곡. 고르기는 pipeline/music_lib.py · 11/1 17:39 대표가 12곡 뺌(시네마틱 빌드업·가을 인디 4곡 전부, 디스코3·몽환4·힙합3·4). 남은 곡: 평소 16곡 + 12월 크리스마스 4곡.",
+ "note": "릴스·클립 음악 라이브러리. 2판(ver 2, 11/1 17:42 대표 '비슷비슷·경쾌하게')만 쓴다. 1판은 old/out. status out = 대표가 뺀 곡. 고르기 pipeline/music_lib.py",
  "tracks": [
+  {
+   "id": "v2_candy1",
+   "genre": "candy",
+   "name": "캔디 팝 1",
+   "bpm": 133,
+   "key": "D",
+   "dur": 32.5,
+   "file": "assets/music_lib/v2_candy1.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    9,
+    0,
+    34,
+    13
+   ],
+   "prog": 7,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_candy2",
+   "genre": "candy",
+   "name": "캔디 팝 2",
+   "bpm": 131,
+   "key": "G",
+   "dur": 31.1,
+   "file": "assets/music_lib/v2_candy2.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    13,
+    6,
+    33,
+    10
+   ],
+   "prog": 3,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_candy3",
+   "genre": "candy",
+   "name": "캔디 팝 3",
+   "bpm": 134,
+   "key": "Eb",
+   "dur": 32.2,
+   "file": "assets/music_lib/v2_candy3.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    12,
+    1,
+    34,
+    14
+   ],
+   "prog": 7,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_dembow1",
+   "genre": "dembow",
+   "name": "뎀보우 1",
+   "bpm": 104,
+   "key": "Bbm",
+   "dur": 32.3,
+   "file": "assets/music_lib/v2_dembow1.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    114,
+    45,
+    38,
+    12
+   ],
+   "prog": 3,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_dembow2",
+   "genre": "dembow",
+   "name": "뎀보우 2",
+   "bpm": 108,
+   "key": "D",
+   "dur": 31.1,
+   "file": "assets/music_lib/v2_dembow2.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    75,
+    25,
+    39,
+    108
+   ],
+   "prog": 7,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_dembow3",
+   "genre": "dembow",
+   "name": "뎀보우 3",
+   "bpm": 109,
+   "key": "G",
+   "dur": 33.0,
+   "file": "assets/music_lib/v2_dembow3.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    69,
+    45,
+    38,
+    114
+   ],
+   "prog": 3,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_funk1",
+   "genre": "funk",
+   "name": "디스코 펑크 1",
+   "bpm": 118,
+   "key": "G",
+   "dur": 32.5,
+   "file": "assets/music_lib/v2_funk1.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    62,
+    7,
+    36,
+    48
+   ],
+   "prog": 0,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_funk2",
+   "genre": "funk",
+   "name": "디스코 펑크 2",
+   "bpm": 121,
+   "key": "Eb",
+   "dur": 31.7,
+   "file": "assets/music_lib/v2_funk2.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    56,
+    4,
+    38,
+    61
+   ],
+   "prog": 4,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_funk3",
+   "genre": "funk",
+   "name": "디스코 펑크 3",
+   "bpm": 122,
+   "key": "E",
+   "dur": 31.5,
+   "file": "assets/music_lib/v2_funk3.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    17,
+    7,
+    36,
+    49
+   ],
+   "prog": 0,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_funpop1",
+   "genre": "funpop",
+   "name": "펑키 팝 1",
+   "bpm": 110,
+   "key": "Bb",
+   "dur": 32.7,
+   "file": "assets/music_lib/v2_funpop1.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    78,
+    7,
+    36,
+    61
+   ],
+   "prog": 6,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_funpop2",
+   "genre": "funpop",
+   "name": "펑키 팝 2",
+   "bpm": 109,
+   "key": "D",
+   "dur": 33.0,
+   "file": "assets/music_lib/v2_funpop2.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    22,
+    17,
+    33,
+    61
+   ],
+   "prog": 2,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_funpop3",
+   "genre": "funpop",
+   "name": "펑키 팝 3",
+   "bpm": 112,
+   "key": "G",
+   "dur": 32.1,
+   "file": "assets/music_lib/v2_funpop3.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    26,
+    4,
+    36,
+    57
+   ],
+   "prog": 6,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_jersey1",
+   "genre": "jersey",
+   "name": "저지 클럽 1",
+   "bpm": 142,
+   "key": "Bbm",
+   "dur": 32.1,
+   "file": "assets/music_lib/v2_jersey1.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    85,
+    99,
+    38,
+    55
+   ],
+   "prog": 5,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_jersey2",
+   "genre": "jersey",
+   "name": "저지 클럽 2",
+   "bpm": 138,
+   "key": "D",
+   "dur": 31.3,
+   "file": "assets/music_lib/v2_jersey2.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    82,
+    81,
+    39,
+    55
+   ],
+   "prog": 1,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_jersey3",
+   "genre": "jersey",
+   "name": "저지 클럽 3",
+   "bpm": 138,
+   "key": "Gm",
+   "dur": 31.3,
+   "file": "assets/music_lib/v2_jersey3.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    83,
+    90,
+    38,
+    55
+   ],
+   "prog": 5,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_kpop1",
+   "genre": "kpop",
+   "name": "케이팝 신스 1",
+   "bpm": 127,
+   "key": "Gm",
+   "dur": 32.1,
+   "file": "assets/music_lib/v2_kpop1.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    81,
+    90,
+    38,
+    85
+   ],
+   "prog": 1,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_kpop2",
+   "genre": "kpop",
+   "name": "케이팝 신스 2",
+   "bpm": 126,
+   "key": "Eb",
+   "dur": 32.4,
+   "file": "assets/music_lib/v2_kpop2.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    80,
+    5,
+    39,
+    98
+   ],
+   "prog": 5,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_kpop3",
+   "genre": "kpop",
+   "name": "케이팝 신스 3",
+   "bpm": 125,
+   "key": "E",
+   "dur": 32.6,
+   "file": "assets/music_lib/v2_kpop3.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    84,
+    88,
+    38,
+    55
+   ],
+   "prog": 1,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_spedup1",
+   "genre": "spedup",
+   "name": "스피드업 팝 1",
+   "bpm": 143,
+   "key": "Bb",
+   "dur": 31.9,
+   "file": "assets/music_lib/v2_spedup1.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    1,
+    81,
+    39,
+    9
+   ],
+   "prog": 2,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_spedup2",
+   "genre": "spedup",
+   "name": "스피드업 팝 2",
+   "bpm": 148,
+   "key": "Dm",
+   "dur": 32.4,
+   "file": "assets/music_lib/v2_spedup2.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    10,
+    5,
+    38,
+    13
+   ],
+   "prog": 6,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_spedup3",
+   "genre": "spedup",
+   "name": "스피드업 팝 3",
+   "bpm": 149,
+   "key": "G",
+   "dur": 32.2,
+   "file": "assets/music_lib/v2_spedup3.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    98,
+    4,
+    39,
+    11
+   ],
+   "prog": 2,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_tropic1",
+   "genre": "tropic",
+   "name": "트로피컬 하우스 1",
+   "bpm": 115,
+   "key": "Bbm",
+   "dur": 31.3,
+   "file": "assets/music_lib/v2_tropic1.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    108,
+    12,
+    33,
+    75
+   ],
+   "prog": 4,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_tropic2",
+   "genre": "tropic",
+   "name": "트로피컬 하우스 2",
+   "bpm": 117,
+   "key": "Dm",
+   "dur": 32.8,
+   "file": "assets/music_lib/v2_tropic2.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    72,
+    24,
+    34,
+    78
+   ],
+   "prog": 0,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "v2_tropic3",
+   "genre": "tropic",
+   "name": "트로피컬 하우스 3",
+   "bpm": 116,
+   "key": "G",
+   "dur": 31.0,
+   "file": "assets/music_lib/v2_tropic3.mp3",
+   "hook_at": 0.0,
+   "ins": [
+    46,
+    12,
+    33,
+    85
+   ],
+   "prog": 4,
+   "status": "ok",
+   "ver": 2
+  },
+  {
+   "id": "cine1",
+   "genre": "cine",
+   "name": "시네마틱 빌드업 1",
+   "bpm": 98,
+   "key": "G",
+   "dur": 31.8,
+   "file": "assets/music_lib/cine1.mp3",
+   "hook_at": 4.9,
+   "status": "out"
+  },
+  {
+   "id": "cine2",
+   "genre": "cine",
+   "name": "시네마틱 빌드업 2",
+   "bpm": 103,
+   "key": "C",
+   "dur": 32.6,
+   "file": "assets/music_lib/cine2.mp3",
+   "hook_at": 4.66,
+   "status": "out"
+  },
+  {
+   "id": "cine3",
+   "genre": "cine",
+   "name": "시네마틱 빌드업 3",
+   "bpm": 100,
+   "key": "Fm",
+   "dur": 31.2,
+   "file": "assets/music_lib/cine3.mp3",
+   "hook_at": 4.8,
+   "status": "out"
+  },
+  {
+   "id": "cine4",
+   "genre": "cine",
+   "name": "시네마틱 빌드업 4",
+   "bpm": 99,
+   "key": "Bbm",
+   "dur": 31.5,
+   "file": "assets/music_lib/cine4.mp3",
+   "hook_at": 4.85,
+   "status": "out"
+  },
+  {
+   "id": "dembow1",
+   "genre": "dembow",
+   "name": "뎀보우 1",
+   "bpm": 103,
+   "key": "Bb",
+   "dur": 32.6,
+   "file": "assets/music_lib/dembow1.mp3",
+   "hook_at": 4.66,
+   "status": "old"
+  },
+  {
+   "id": "dembow2",
+   "genre": "dembow",
+   "name": "뎀보우 2",
+   "bpm": 106,
+   "key": "E",
+   "dur": 31.7,
+   "file": "assets/music_lib/dembow2.mp3",
+   "hook_at": 4.53,
+   "status": "old"
+  },
+  {
+   "id": "dembow3",
+   "genre": "dembow",
+   "name": "뎀보우 3",
+   "bpm": 101,
+   "key": "A",
+   "dur": 30.9,
+   "file": "assets/music_lib/dembow3.mp3",
+   "hook_at": 4.75,
+   "status": "old"
+  },
+  {
+   "id": "dembow4",
+   "genre": "dembow",
+   "name": "뎀보우 4",
+   "bpm": 107,
+   "key": "D",
+   "dur": 31.4,
+   "file": "assets/music_lib/dembow4.mp3",
+   "hook_at": 4.49,
+   "status": "old"
+  },
   {
    "id": "disco1",
    "genre": "disco",
@@ -10,7 +554,7 @@
    "dur": 31.7,
    "file": "assets/music_lib/disco1.mp3",
    "hook_at": 3.97,
-   "status": "ok"
+   "status": "old"
   },
   {
    "id": "disco2",
@@ -21,7 +565,7 @@
    "dur": 31.7,
    "file": "assets/music_lib/disco2.mp3",
    "hook_at": 3.97,
-   "status": "ok"
+   "status": "old"
   },
   {
    "id": "disco3",
@@ -43,138 +587,50 @@
    "dur": 31.2,
    "file": "assets/music_lib/disco4.mp3",
    "hook_at": 3.9,
-   "status": "ok"
+   "status": "old"
   },
   {
-   "id": "spedup1",
-   "genre": "spedup",
-   "name": "스피드업 팝 1",
-   "bpm": 150,
-   "key": "Bb",
-   "dur": 32.0,
-   "file": "assets/music_lib/spedup1.mp3",
-   "hook_at": 3.2,
-   "status": "ok"
-  },
-  {
-   "id": "spedup2",
-   "genre": "spedup",
-   "name": "스피드업 팝 2",
-   "bpm": 145,
-   "key": "E",
-   "dur": 31.4,
-   "file": "assets/music_lib/spedup2.mp3",
-   "hook_at": 3.31,
-   "status": "ok"
-  },
-  {
-   "id": "spedup3",
-   "genre": "spedup",
-   "name": "스피드업 팝 3",
-   "bpm": 142,
+   "id": "dream1",
+   "genre": "dream",
+   "name": "몽환 신스팝 1",
+   "bpm": 116,
    "key": "A",
-   "dur": 32.1,
-   "file": "assets/music_lib/spedup3.mp3",
-   "hook_at": 3.38,
-   "status": "ok"
-  },
-  {
-   "id": "spedup4",
-   "genre": "spedup",
-   "name": "스피드업 팝 4",
-   "bpm": 147,
-   "key": "D",
-   "dur": 32.7,
-   "file": "assets/music_lib/spedup4.mp3",
-   "hook_at": 3.27,
-   "status": "ok"
-  },
-  {
-   "id": "sunny1",
-   "genre": "sunny",
-   "name": "밝은 힙합 연주곡 1",
-   "bpm": 91,
-   "key": "A",
-   "dur": 31.6,
-   "file": "assets/music_lib/sunny1.mp3",
-   "hook_at": 5.27,
-   "status": "ok"
-  },
-  {
-   "id": "sunny2",
-   "genre": "sunny",
-   "name": "밝은 힙합 연주곡 2",
-   "bpm": 93,
-   "key": "D",
    "dur": 31.0,
-   "file": "assets/music_lib/sunny2.mp3",
-   "hook_at": 5.16,
-   "status": "ok"
+   "file": "assets/music_lib/dream1.mp3",
+   "hook_at": 4.14,
+   "status": "old"
   },
   {
-   "id": "sunny3",
-   "genre": "sunny",
-   "name": "밝은 힙합 연주곡 3",
-   "bpm": 92,
+   "id": "dream2",
+   "genre": "dream",
+   "name": "몽환 신스팝 2",
+   "bpm": 113,
+   "key": "D",
+   "dur": 31.9,
+   "file": "assets/music_lib/dream2.mp3",
+   "hook_at": 4.25,
+   "status": "old"
+  },
+  {
+   "id": "dream3",
+   "genre": "dream",
+   "name": "몽환 신스팝 3",
+   "bpm": 113,
    "key": "G",
-   "dur": 31.3,
-   "file": "assets/music_lib/sunny3.mp3",
-   "hook_at": 5.22,
-   "status": "out"
+   "dur": 31.9,
+   "file": "assets/music_lib/dream3.mp3",
+   "hook_at": 4.25,
+   "status": "old"
   },
   {
-   "id": "sunny4",
-   "genre": "sunny",
-   "name": "밝은 힙합 연주곡 4",
-   "bpm": 88,
+   "id": "dream4",
+   "genre": "dream",
+   "name": "몽환 신스팝 4",
+   "bpm": 110,
    "key": "C",
    "dur": 32.7,
-   "file": "assets/music_lib/sunny4.mp3",
-   "hook_at": 5.45,
-   "status": "out"
-  },
-  {
-   "id": "indie1",
-   "genre": "indie",
-   "name": "가을 인디 어쿠스틱 1",
-   "bpm": 98,
-   "key": "A",
-   "dur": 31.8,
-   "file": "assets/music_lib/indie1.mp3",
-   "hook_at": 4.9,
-   "status": "out"
-  },
-  {
-   "id": "indie2",
-   "genre": "indie",
-   "name": "가을 인디 어쿠스틱 2",
-   "bpm": 103,
-   "key": "D",
-   "dur": 32.6,
-   "file": "assets/music_lib/indie2.mp3",
-   "hook_at": 4.66,
-   "status": "out"
-  },
-  {
-   "id": "indie3",
-   "genre": "indie",
-   "name": "가을 인디 어쿠스틱 3",
-   "bpm": 102,
-   "key": "G",
-   "dur": 32.9,
-   "file": "assets/music_lib/indie3.mp3",
-   "hook_at": 4.71,
-   "status": "out"
-  },
-  {
-   "id": "indie4",
-   "genre": "indie",
-   "name": "가을 인디 어쿠스틱 4",
-   "bpm": 99,
-   "key": "C",
-   "dur": 31.5,
-   "file": "assets/music_lib/indie4.mp3",
-   "hook_at": 4.85,
+   "file": "assets/music_lib/dream4.mp3",
+   "hook_at": 4.36,
    "status": "out"
   },
   {
@@ -222,135 +678,135 @@
    "status": "ok"
   },
   {
-   "id": "dembow1",
-   "genre": "dembow",
-   "name": "뎀보우 1",
-   "bpm": 103,
-   "key": "Bb",
-   "dur": 32.6,
-   "file": "assets/music_lib/dembow1.mp3",
-   "hook_at": 4.66,
-   "status": "ok"
-  },
-  {
-   "id": "dembow2",
-   "genre": "dembow",
-   "name": "뎀보우 2",
-   "bpm": 106,
-   "key": "E",
-   "dur": 31.7,
-   "file": "assets/music_lib/dembow2.mp3",
-   "hook_at": 4.53,
-   "status": "ok"
-  },
-  {
-   "id": "dembow3",
-   "genre": "dembow",
-   "name": "뎀보우 3",
-   "bpm": 101,
-   "key": "A",
-   "dur": 30.9,
-   "file": "assets/music_lib/dembow3.mp3",
-   "hook_at": 4.75,
-   "status": "ok"
-  },
-  {
-   "id": "dembow4",
-   "genre": "dembow",
-   "name": "뎀보우 4",
-   "bpm": 107,
-   "key": "D",
-   "dur": 31.4,
-   "file": "assets/music_lib/dembow4.mp3",
-   "hook_at": 4.49,
-   "status": "ok"
-  },
-  {
-   "id": "cine1",
-   "genre": "cine",
-   "name": "시네마틱 빌드업 1",
+   "id": "indie1",
+   "genre": "indie",
+   "name": "가을 인디 어쿠스틱 1",
    "bpm": 98,
-   "key": "G",
+   "key": "A",
    "dur": 31.8,
-   "file": "assets/music_lib/cine1.mp3",
+   "file": "assets/music_lib/indie1.mp3",
    "hook_at": 4.9,
    "status": "out"
   },
   {
-   "id": "cine2",
-   "genre": "cine",
-   "name": "시네마틱 빌드업 2",
+   "id": "indie2",
+   "genre": "indie",
+   "name": "가을 인디 어쿠스틱 2",
    "bpm": 103,
-   "key": "C",
+   "key": "D",
    "dur": 32.6,
-   "file": "assets/music_lib/cine2.mp3",
+   "file": "assets/music_lib/indie2.mp3",
    "hook_at": 4.66,
    "status": "out"
   },
   {
-   "id": "cine3",
-   "genre": "cine",
-   "name": "시네마틱 빌드업 3",
-   "bpm": 100,
-   "key": "Fm",
-   "dur": 31.2,
-   "file": "assets/music_lib/cine3.mp3",
-   "hook_at": 4.8,
+   "id": "indie3",
+   "genre": "indie",
+   "name": "가을 인디 어쿠스틱 3",
+   "bpm": 102,
+   "key": "G",
+   "dur": 32.9,
+   "file": "assets/music_lib/indie3.mp3",
+   "hook_at": 4.71,
    "status": "out"
   },
   {
-   "id": "cine4",
-   "genre": "cine",
-   "name": "시네마틱 빌드업 4",
+   "id": "indie4",
+   "genre": "indie",
+   "name": "가을 인디 어쿠스틱 4",
    "bpm": 99,
-   "key": "Bbm",
+   "key": "C",
    "dur": 31.5,
-   "file": "assets/music_lib/cine4.mp3",
+   "file": "assets/music_lib/indie4.mp3",
    "hook_at": 4.85,
    "status": "out"
   },
   {
-   "id": "dream1",
-   "genre": "dream",
-   "name": "몽환 신스팝 1",
-   "bpm": 116,
+   "id": "spedup1",
+   "genre": "spedup",
+   "name": "스피드업 팝 1",
+   "bpm": 150,
+   "key": "Bb",
+   "dur": 32.0,
+   "file": "assets/music_lib/spedup1.mp3",
+   "hook_at": 3.2,
+   "status": "old"
+  },
+  {
+   "id": "spedup2",
+   "genre": "spedup",
+   "name": "스피드업 팝 2",
+   "bpm": 145,
+   "key": "E",
+   "dur": 31.4,
+   "file": "assets/music_lib/spedup2.mp3",
+   "hook_at": 3.31,
+   "status": "old"
+  },
+  {
+   "id": "spedup3",
+   "genre": "spedup",
+   "name": "스피드업 팝 3",
+   "bpm": 142,
    "key": "A",
-   "dur": 31.0,
-   "file": "assets/music_lib/dream1.mp3",
-   "hook_at": 4.14,
-   "status": "ok"
+   "dur": 32.1,
+   "file": "assets/music_lib/spedup3.mp3",
+   "hook_at": 3.38,
+   "status": "old"
   },
   {
-   "id": "dream2",
-   "genre": "dream",
-   "name": "몽환 신스팝 2",
-   "bpm": 113,
+   "id": "spedup4",
+   "genre": "spedup",
+   "name": "스피드업 팝 4",
+   "bpm": 147,
    "key": "D",
-   "dur": 31.9,
-   "file": "assets/music_lib/dream2.mp3",
-   "hook_at": 4.25,
-   "status": "ok"
+   "dur": 32.7,
+   "file": "assets/music_lib/spedup4.mp3",
+   "hook_at": 3.27,
+   "status": "old"
   },
   {
-   "id": "dream3",
-   "genre": "dream",
-   "name": "몽환 신스팝 3",
-   "bpm": 113,
+   "id": "sunny1",
+   "genre": "sunny",
+   "name": "밝은 힙합 연주곡 1",
+   "bpm": 91,
+   "key": "A",
+   "dur": 31.6,
+   "file": "assets/music_lib/sunny1.mp3",
+   "hook_at": 5.27,
+   "status": "old"
+  },
+  {
+   "id": "sunny2",
+   "genre": "sunny",
+   "name": "밝은 힙합 연주곡 2",
+   "bpm": 93,
+   "key": "D",
+   "dur": 31.0,
+   "file": "assets/music_lib/sunny2.mp3",
+   "hook_at": 5.16,
+   "status": "old"
+  },
+  {
+   "id": "sunny3",
+   "genre": "sunny",
+   "name": "밝은 힙합 연주곡 3",
+   "bpm": 92,
    "key": "G",
-   "dur": 31.9,
-   "file": "assets/music_lib/dream3.mp3",
-   "hook_at": 4.25,
-   "status": "ok"
+   "dur": 31.3,
+   "file": "assets/music_lib/sunny3.mp3",
+   "hook_at": 5.22,
+   "status": "out"
   },
   {
-   "id": "dream4",
-   "genre": "dream",
-   "name": "몽환 신스팝 4",
-   "bpm": 110,
+   "id": "sunny4",
+   "genre": "sunny",
+   "name": "밝은 힙합 연주곡 4",
+   "bpm": 88,
    "key": "C",
    "dur": 32.7,
-   "file": "assets/music_lib/dream4.mp3",
-   "hook_at": 4.36,
+   "file": "assets/music_lib/sunny4.mp3",
+   "hook_at": 5.45,
    "status": "out"
   }
  ]
