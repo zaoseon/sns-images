@@ -4396,7 +4396,7 @@
   "id": "reel-exp-1101",
   "since": "2026-11-01",
   "kind": "릴스 첫 3초 실험(대표 대화 승인 11/1 17:17 · Metricool 자동 예약, 자체 음악판)",
-  "title": "릴스 첫 3초 실험 3편 — 쥐띠·말띠·호랑이띠 2027 (10초, 첫 화면 = cover1030 띠+생년 표지)",
+  "title": "릴스 첫 3초 실험 3편 — 소띠·토끼띠·호랑이띠 2027 (10초, 첫 화면 = cover1030 띠+생년 표지)",
   "date": "2026-11-02",
   "time": "20:00",
   "status": "done",
@@ -4404,31 +4404,31 @@
    "instagram"
   ],
   "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/rx_all_preview.mp4",
-  "cover": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/rx-rat_cover.jpg",
+  "cover": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/rx-ox_cover.jpg",
   "videos": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/silent/rx-rat.mp4",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/silent/rx-horse.mp4",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/silent/rx-ox.mp4",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/silent/rx-rabbit.mp4",
    "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/silent/rx-tiger.mp4"
   ],
   "videos_music": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/music/rx-rat.mp4",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/music/rx-horse.mp4",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/music/rx-ox.mp4",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/music/rx-rabbit.mp4",
    "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/music/rx-tiger.mp4"
   ],
   "covers": [
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/rx-rat_cover.jpg",
-   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/rx-horse_cover.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/rx-ox_cover.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/rx-rabbit_cover.jpg",
    "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/rx-tiger_cover.jpg"
   ],
   "sheet": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reel-exp/rx_sheet.jpg",
   "page": "https://zaoseon.com/preview/reel-exp-1101/",
   "caption": "[11/2(월) 저녁 · 쥐띠]\n2027 쥐띠, 돈 기회가 열리는 해예요\n힘 쓸 달 3개와 내 날 기운은 프로필 링크에서 볼 수 있어요\n맞으면 ♥, 주변 쥐띠 친구 태그해 주세요\n\n#사주 #운세 #띠별운세 #2027년운세 #쥐띠\n\n[11/3(화) 저녁 · 말띠]\n2027 말띠, 좋은 짝과 손잡는 해예요\n힘 쓸 달 3개와 내 날 기운은 프로필 링크에서 볼 수 있어요\n맞으면 ♥, 주변 말띠 친구 태그해 주세요\n\n#사주 #운세 #띠별운세 #2027년운세 #말띠\n\n[11/4(수) 저녁 · 호랑이띠]\n2027 호랑이띠, 실력이 눈에 띄는 해예요\n힘 쓸 달 3개와 내 날 기운은 프로필 링크에서 볼 수 있어요\n맞으면 ♥, 주변 호랑이띠 친구 태그해 주세요\n\n#사주 #운세 #띠별운세 #2027년운세 #호랑이띠",
   "captions": {
-   "rat": "2027 쥐띠, 돈 기회가 열리는 해예요\n힘 쓸 달 3개와 내 날 기운은 프로필 링크에서 볼 수 있어요\n맞으면 ♥, 주변 쥐띠 친구 태그해 주세요\n\n#사주 #운세 #띠별운세 #2027년운세 #쥐띠",
-   "horse": "2027 말띠, 좋은 짝과 손잡는 해예요\n힘 쓸 달 3개와 내 날 기운은 프로필 링크에서 볼 수 있어요\n맞으면 ♥, 주변 말띠 친구 태그해 주세요\n\n#사주 #운세 #띠별운세 #2027년운세 #말띠",
-   "tiger": "2027 호랑이띠, 실력이 눈에 띄는 해예요\n힘 쓸 달 3개와 내 날 기운은 프로필 링크에서 볼 수 있어요\n맞으면 ♥, 주변 호랑이띠 친구 태그해 주세요\n\n#사주 #운세 #띠별운세 #2027년운세 #호랑이띠"
+   "ox": "2027 소띠, 자리가 움직이는 해예요 …",
+   "rabbit": "2027 토끼띠, 같이할 사람이 늘어나는 해예요 …",
+   "tiger": "2027 호랑이띠, 실력이 눈에 띄는 해예요 …"
   },
-  "note": "CT 11/1 18:18: 대표 17:17 \"직접 올리라고?\" 정정대로 음악 넣은 판을 Metricool 인스타 릴스로 예약(피드 표시 끔). 11/2 쥐·11/3 말·11/4 호랑이 각 20:00(19:00은 기존 릴스가 있어 20:00). 대표 할 일 없음. 같은 띠 옛 틀 예약(말 11/5, 쥐 11/14)은 그대로.",
+  "note": "CT 11/1 18:18: 대표 17:17 \"직접 올리라고?\" 정정대로 음악 넣은 판을 Metricool 인스타 릴스로 예약(피드 표시 끔). 11/2 쥐·11/3 말·11/4 호랑이 각 20:00(19:00은 기존 릴스가 있어 20:00). 대표 할 일 없음. 같은 띠 옛 틀 예약(말 11/5, 쥐 11/14)은 그대로. · 11/1 18:24 대표 \"같은 띠 나가면 안 되지\": 쥐(11/14 옛 틀)·말(11/5 옛 틀)과 겹쳐 11월 예약 없는 소·토끼로 교체. 11/2 소·11/3 토끼·11/4 호랑이 20:00. 비교 대상: 10월 옛 틀 소띠 10/10·토끼띠 10/8·호랑이띠 10/15 릴스(같은 띠라 비교가 더 정확).",
   "checks": [
    "10초 · 장면 4개(0~1.5초 표지 · 힘 쓸 달 3개 · 아낄 달+해 볼 것 · 태그 부탁)",
    "첫 프레임 = 띠+생년 표지(검정 빈 화면 없음, card_gate.after_video 통과)",
@@ -4439,8 +4439,8 @@
   ],
   "judge": "올린 뒤 48시간에 IGRE28·IGRE24·IGRE21(공유) → zaoseon-site data/analytics/reel_exp_1101.json. 30% 넘는 틀만 다음 띠에, 10% 밑이면 그 틀은 버림",
   "metricool_id": [
-   412770389,
-   412770395,
+   412773212,
+   412773223,
    412770411
   ]
  }
