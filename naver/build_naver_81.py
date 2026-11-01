@@ -101,7 +101,7 @@ for i, n, ys, one, why, m, todo in Z:
     sec3 += P(f"<b>{n} ({ys}년생)</b>", f"<b>{one}</b>", why)
     sec3 += P(f"📅 힘 쓸 달 {' · '.join(GOOD[SLUG[i]])}", f"아낄 달 {' · '.join(CARE[SLUG[i]])}",
               f"🍀 {x['color']} · 숫자 {x['num']} · {x['dir']}", f"✔️ {m}에 해 볼 것: {todo}")
-sec4 = P("<b>삼재라는 이유만으로 큰일을 미룰 까닭은 없어요.</b>", "날삼재는 옛말로 '나가는 해'라, 막는 해보다 마무리를 챙기는 해로 읽어요.",
+sec4 = P("<b>삼재라는 이유만으로 큰 결정을 미룰 까닭은 없어요.</b>", "날삼재는 옛말로 '나가는 해'라, 막는 해보다 마무리를 챙기는 해로 읽어요.",
          "날짜보다 잔금일·만기일·식장 계약 같은 조건을 먼저 맞춰 보세요.")
 sec5 = P("🧠 <b>심리학으로 읽으면</b>", "삼재 마지막 해에는 '그때 시작만 해 둔 일'이 자꾸 떠오르기 쉬워요.",
          "못 끝낸 일은 다른 일을 하는 중에도 머릿속에 끼어든다고 해요.",
@@ -162,8 +162,9 @@ def build():
         for k in "LEK": s = s.replace(f"[[{k}]]", IMG(nm[k], alt[k]))
         body += H(f"{i + 1}. {q}") + s
     body += tail + CTA
-    for w in ("재미로", "상담", "—", "안녕하세요, 자오선의 정월이에요", "결론부터 말씀드릴게요", "반드시", "무조건", "엔진", "손해"):
-        assert w not in body, w
+    import copy_rules as CR                                       # 금지어 단일 출처(큰일·손해·엔진 등)
+    for w in ("재미로", "상담", "—", "안녕하세요, 자오선의 정월이에요", "결론부터 말씀드릴게요") + CR.금지어:
+        assert w not in re.sub(r"<[^>]+>", " ", body), w
     for f in made:   # 사이트 사본(K-069)
         dst = os.path.join(SITE, "public", "naver", "img", f); os.makedirs(os.path.dirname(dst), exist_ok=True)
         shutil.copy(os.path.join(HERE, "img", f), dst)

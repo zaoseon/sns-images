@@ -965,5 +965,32 @@
   "mode": "up",
   "bpm": 116,
   "key": "G"
+ },
+ {
+  "name": "rx-horse",
+  "kind": "clip-rx",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "D",
+  "seed": 1600
+ },
+ {
+  "name": "rx-rat",
+  "kind": "clip-rx",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 117,
+  "key": "F",
+  "seed": 1601
+ },
+ {
+  "name": "rx-tiger",
+  "kind": "clip-rx",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 126,
+  "key": "C",
+  "seed": 1602
  }
 ]
