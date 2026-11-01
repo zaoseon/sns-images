@@ -1,4 +1,4 @@
-"""릴스 첫 3초 실험 3편 — 쥐띠·말띠·호랑이띠 2027 (CT 11/1 17:20 → ①, 대표 11/1 17:08 "진행해").
+"""릴스 첫 3초 실험 3편 — 소띠·토끼띠·호랑이띠 2027 (11/1 18:20 대표 "같은 띠 나가면 안 되지": 쥐·말은 11월 옛 틀 예약이 있어 11월 예약 없는 소·토끼로 바꿈) (CT 11/1 17:20 → ①, 대표 11/1 17:08 "진행해").
 근거: Metricool 9/29~10/31 릴스 66편 — 3초 시청률 대부분 3~13%, 예외 뱀띠 2027(10/31, cover1030 새 표지) 34.5%.
 같은 주제는 그대로 두고 첫 3초만 바꾼다.
 
@@ -40,23 +40,23 @@ BR = "子丑寅卯辰巳午未申酉戌亥"
 def years(i): return [y for y in range(1970, 2023) if (y - 4) % 12 == i]
 REELS = [
     # slug, 이름, 지지 순번, 판, 훅(n80 발행 문장에서), 해 볼 달, 해 볼 것(n80), 근거
-    dict(slug="rat", name="쥐띠", i=0, pal="k_gold", bgk="블랙", hook=("돈 기회", "열리는 해"), m="4월", todo=("미뤄 둔 돈 이야기", "글로 정리하기"),
-         why="물인 쥐띠에게 해의 불(丁)은 재물(n80)"),
-    dict(slug="horse", name="말띠", i=6, pal="dg_gold", bgk="딥그린", hook=("좋은 짝과", "손잡는 해"), m="2월", todo=("함께할 사람과", "첫 약속 날짜 정하기"),
-         why="말(午)과 양(未)은 육합(n80)"),
+    dict(slug="ox", name="소띠", i=1, pal="k_gold", bgk="블랙", hook=("자리가", "움직이는 해"), m="5월", todo=("옮기고 싶은 자리 하나", "알아보기 시작하기"),
+         why="소(丑)와 양(未)은 충 — 자리가 바뀌는 일(n80)", glyph=5),
+    dict(slug="rabbit", name="토끼띠", i=3, pal="dg_gold", bgk="딥그린", hook=("같이할 사람", "느는 해"), m="7월", todo=("함께하고 싶은 사람에게", "먼저 연락하기"),
+         why="토끼(卯)는 돼지(亥)·양(未)과 삼합(n80)"),
     dict(slug="tiger", name="호랑이띠", i=2, pal="w_navy_butter", bgk="네이비", hook=("실력이", "눈에 띄는 해"), m="6월", todo=("보여 줄 결과물 하나에", "마감 날짜 붙이기"),
          why="나무(寅)가 불(丁)을 키움 = 밖으로 나가는 힘(n80)"),
 ]
 assert (2027 - 4) % 12 == BR.index("未")
-LIUHE = {0: 1, 2: 11, 3: 10, 4: 9, 5: 8, 6: 7}
-assert LIUHE[6] == BR.index("未")                                           # 말–양 육합
+assert (BR.index("丑") + 6) % 12 == BR.index("未")                         # 소–양 충
+assert {BR.index("亥"), BR.index("卯"), BR.index("未")} == {11, 3, 7}            # 해묘미 삼합
 for r in REELS:
     t = TTI[r["slug"]]; r["good"], r["care"] = t["good"], t["care"]
     assert r["m"] in r["good"], (r["name"], r["m"], r["good"])             # 해 볼 달은 힘 쓸 달 안에서(n80과 같은 규칙)
     r["years"] = years(r["i"])[-4:]
     assert all((y - 4) % 12 == r["i"] for y in r["years"])
-assert REELS[0]["years"] == [1984, 1996, 2008, 2020] and REELS[1]["years"] == [1978, 1990, 2002, 2014] and REELS[2]["years"] == [1986, 1998, 2010, 2022]
-assert REELS[0]["good"] == ["4월", "8월", "이듬해 1월"] and REELS[1]["good"] == ["2월", "7월", "10월"] and REELS[2]["good"] == ["6월", "10월", "11월"]
+assert REELS[0]["years"] == [1985, 1997, 2009, 2021] and REELS[1]["years"] == [1975, 1987, 1999, 2011] and REELS[2]["years"] == [1986, 1998, 2010, 2022]
+assert REELS[0]["good"] == ["5월", "9월", "12월"] and REELS[1]["good"] == ["7월", "10월", "11월"] and REELS[2]["good"] == ["6월", "10월", "11월"]
 
 # ── 바탕(표지 시안 (가)와 같은 그림 방식: 별밤 + 띠 한자 + 열두 띠 눈금) ───────
 def grad(top, bot):
@@ -77,7 +77,7 @@ def scrim(im, y0, y1, alpha):
     return Image.composite(Image.new("RGB", (W, H), (0, 0, 0)), im, m)
 def background(r):
     p = PAL[r["pal"]]["colors"]; base = hx(p[r["bgk"]]); acc = hx(list(p.values())[1])
-    glyph_alpha = 26 if sum(acc) < 600 else 12            # 밝은 버터색 한자 무늬는 K-138이 글자로 읽어서(1.16) 더 옅게
+    glyph_alpha = r.get("glyph", 26 if sum(acc) < 600 else 12)   # 밝은 버터색 한자 무늬는 K-138이 글자로 읽어서(1.16) 더 옅게 · 丑 아랫부분도(11/1 소띠) 더 옅게
     top = tuple(min(255, int(c * 1.0 + 22)) for c in base)
     im = grad(top, base); stars(im, 700, 100 + r["i"])
     lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
@@ -115,7 +115,10 @@ def scene_cover(r, acc):
     while tw(d, "2027 " + r["name"], F(TITLE, sz)) > SX1 - SX0 - 60: sz -= 4
     assert sz > 92, sz                                                                              # 띠 이름이 가장 큰 글자(훅 92px보다 커야 함)
     center(d, 610 + (150 - sz) // 2, [("2027 ", WHITE), (r["name"], YEL)], sz)
-    center(d, 800, [(r["hook"][0] + " ", WHITE), (r["hook"][1], WHITE)], 92)
+    hs = 92
+    while tw(d, r["hook"][0] + " " + r["hook"][1], F(TITLE, hs)) > SX1 - SX0 - 60: hs -= 2   # 11/1 소띠 훅이 길어 안전 영역을 넘었다 → 칸에 맞춰 줄임
+    assert hs >= 72 and hs < sz, hs
+    center(d, 800 + (92 - hs) // 2, [(r["hook"][0] + " ", WHITE), (r["hook"][1], WHITE)], hs)
     yy = 960
     for s in (f"{r['years'][0]} · {r['years'][1]}", f"{r['years'][2]} · {r['years'][3]}년생"):
         yy = pill(d, yy, s, 60, (18, 18, 18), cream, pad=(40, 14)) + 22
