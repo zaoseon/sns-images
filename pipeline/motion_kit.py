@@ -315,6 +315,7 @@ body{{width:{C['w']}px;height:{C['h']}px;background:{T['bg']};overflow:hidden;
 .mkends{{display:flex;justify-content:space-between;margin-top:34px;font-size:36px;color:{T['sub']}}}
 .mkscap{{font-size:44px;color:{T['sub']};margin-top:28px;line-height:1.5}}
 {BF.css(_tone(T['bg']))}
+{".mk{text-align:center} .mklist,.mkflow{display:inline-block;text-align:left} .mkhead{justify-content:center;gap:24px} .mksw-b{left:0;right:0} .mktab th{text-align:center}" if C.get("align") == "center" else ""}
 """
 
 

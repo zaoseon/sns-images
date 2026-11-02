@@ -108,8 +108,8 @@ def pill(d, y, text, size, fg, bg, pad=(34, 16), outline=None):
                         fill=bg, outline=outline, width=4 if outline else 0)
     d.text((CX - w // 2, y + pad[1] - b[1]), text, font=f, fill=fg); return y + h + pad[1] * 2
 def brand(d, acc):
-    z = Z["상단 왼쪽 고정"]; d.text((z[0], z[1]), "자오선", font=F(TITLE, 40), fill=WHITE)
-    z = Z["상단 오른쪽 고정"]; f = F(BODY, 34); s = "동서양 6개 운명학 교차분석"; d.text((z[2] - tw(d, s, f), z[1] + 4), s, font=f, fill=(225, 225, 225))
+    z = Z["상단 고정"]; f1, f = F(TITLE, 40), F(BODY, 34); s = "  ·  동서양 6개 운명학 교차분석"; x = (z[0] + z[2]) / 2 - (tw(d, "자오선", f1) + tw(d, s, f)) / 2   # 11/2 대표 K-165 가운데 한 줄
+    d.text((x, z[1]), "자오선", font=f1, fill=WHITE); d.text((x + tw(d, "자오선", f1), z[1] + 4), s, font=f, fill=(225, 225, 225))
     url(d, acc)
 def url(d, acc):
     f = F(TITLE, 36); z = Z["하단 고정"]; d.text((z[2] - tw(d, "zaoseon.com", f), z[1]), "zaoseon.com", font=f, fill=acc)

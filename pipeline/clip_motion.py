@@ -295,8 +295,11 @@ sys.path.insert(0, HERE)
 import fonts_kit as _FK, brand_frame as _BF
 def brand_layer(fr, ai=False):
     d = ImageDraw.Draw(fr, "RGBA"); R = 900; gold = (231, 200, 141, 255)
-    d.text((60, 340), _BF.TAG1, font=font(_FK.P["gm_bold"], 42), fill=gold, anchor="la")
-    d.text((R, 346), _BF.TAG2, font=font(_FK.P["pr_xb"], 34), fill=(255, 255, 255, 242), anchor="ra")
+    f1, f2, sep = font(_FK.P["gm_bold"], 42), font(_FK.P["pr_xb"], 34), "  ·  "   # 11/2 대표 K-165: 위쪽 가운데 한 줄
+    w1, ws, w2 = f1.getlength(_BF.TAG1), f2.getlength(sep), f2.getlength(_BF.TAG2); x = 475 - (w1 + ws + w2) / 2
+    d.text((x, 340), _BF.TAG1, font=f1, fill=gold, anchor="la")
+    d.text((x + w1, 346), sep, font=f2, fill=(255, 255, 255, 150), anchor="la")
+    d.text((x + w1 + ws, 346), _BF.TAG2, font=f2, fill=(255, 255, 255, 242), anchor="la")
     d.text((R, 1465), _BF.URL, font=font(_FK.P["gm_bold"], 40), fill=gold, anchor="rd")
     if ai:
         f = font(_FK.P["pr_xb"], 28); tw = f.getlength(_BF.AI); d.rounded_rectangle((60, 1465 - 28 - 14, 60 + tw + 32, 1465 + 8), radius=22, fill=(0, 0, 0, 72))
