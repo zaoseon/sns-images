@@ -20,7 +20,7 @@ def core_kw(title):
     head = re.sub(r"(일까요|이란|란|뜻|보는 법|총정리)$", "", head).strip()
     return [w for w in head.split() if len(w) >= 2][:2]
 
-HOOK = re.compile(r"(법|이유|뜻|정리|날짜|언제|한눈에|가지|차이|순서|찾기|계산|까|표|기준|총정리|\?)")
+HOOK = re.compile(r"(법|이유|뜻|정리|날짜|언제|한눈에|가지|차이|순서|찾기|계산|까|표|기준|총정리|핵심|추천|BEST|TOP|꼭 알아야|후회 없는|모르면|진짜|\\?)")   # 11/2 대표 "낚시성 기준 너무 엄격": 클릭 부르는 말도 찾는 말로 인정
 def title_check(title, body):
     """제목 다섯 기준(K-161). 처방 문장으로 돌려준다."""
     out = []; kw = core_kw(title); t = plain(body)
