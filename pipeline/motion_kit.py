@@ -379,9 +379,9 @@ body{{background:radial-gradient(120% 70% at 50% 40%,{T['card']} 0%,{T['bg']} 55
 .mkimg{{position:absolute;inset:0;background-size:cover;z-index:0;transform-origin:50% 45%}}
 .mkshade{{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,0) 60%,rgba(0,0,0,.45) 100%)}}
 .mkcover{{text-align:center}}
-.mkbig{{font-family:'JW-D',sans-serif;font-size:118px;line-height:1.18;color:#fff;-webkit-text-stroke:14px #000;paint-order:stroke fill;text-shadow:0 6px 0 #000}}
+.mkbig{{font-family:'JW-D',sans-serif;font-size:118px;line-height:1.1;color:#fff;-webkit-text-stroke:14px #000;paint-order:stroke fill;text-shadow:0 6px 0 #000}}
 .mkbig.hi{{color:#FFD43B}} .mkbig.hi2{{color:#FF4D4D}}
-.mksub{{display:inline-block;font-family:'JW-B',sans-serif;font-weight:800;font-size:58px;line-height:1.35;color:#fff;background:rgba(0,0,0,.72);padding:14px 28px;border-radius:14px}}
+.mksub{{display:inline-block;font-family:'JW-B',sans-serif;font-weight:800;font-size:70px;line-height:1.35;color:#fff;background:rgba(0,0,0,.72);padding:14px 28px;border-radius:14px}}
 .mkhan{{position:absolute;left:475px;top:860px;font-family:serif;font-size:560px;line-height:1;color:{T['acc']};z-index:0;transform-origin:50% 60%}}
 .safe{{z-index:2}}
 .mkfig{{height:320px}}
