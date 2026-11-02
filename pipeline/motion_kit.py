@@ -201,9 +201,9 @@ def _조각(c, T, i):
         return f'<div class="mk mkcover" data-z="{z}" {a}>{줄}</div>', ""
     if k == "장면글":   # 11/3 대표 "검은 바탕 글자 작고 여백 많아": 제목·자막을 한 구역(마무리 카드)에 묶어 세로 가운데, 크게
         def _em(t): return sum(.68 if ch.isdigit() else .34 if ch == " " else .55 if ch in "·,.!?" else 1.04 for ch in t) + .25   # 11/3: G마켓 산스 숫자·가운뎃점이 넓고 외곽선이 양쪽에 붙어 '78·90·02년생'이 줄바꿈됐다
-        tk = min(c.get("크기", 132), int(830 / max(_em(x) for x in c["줄"])))
+        def _tk(x): return min(c.get("크기", 132), int(830 / _em(x)))   # 11/3: 줄마다 따로(긴 연도 줄 때문에 '3위 말띠'까지 작아지지 않게)
         sk = min(c.get("자막크기", 86), int(800 / max(_em(x) for x in c["자막"].split("\n"))))
-        줄 = "".join(f'<div class="mkbig{" hi" if j in c.get("강조", []) else ""}{" hi2" if j in c.get("강조2", []) else ""}" data-j="{j}" style="white-space:nowrap;font-size:{tk}px;-webkit-text-stroke:{max(8, tk // 8)}px #000">{_esc(x)}</div>' for j, x in enumerate(c["줄"]))
+        줄 = "".join(f'<div class="mkbig{" hi" if j in c.get("강조", []) else ""}{" hi2" if j in c.get("강조2", []) else ""}" data-j="{j}" style="white-space:nowrap;font-size:{_tk(x)}px;-webkit-text-stroke:{max(8, _tk(x) // 8)}px #000">{_esc(x)}</div>' for j, x in enumerate(c["줄"]))
         낱 = "<br>".join(" ".join(f'<i class=mkw>{_esc(w)}</i>' for w in 줄_.split(" ")) for 줄_ in c["자막"].split("\n"))
         return (f'<div class="mk mkscene" data-z="{z}">'
                 f'<div class="mkcover" data-k="센표지" data-s="{c["s"]}" data-d="0.5" data-e="out3">{줄}</div>'
