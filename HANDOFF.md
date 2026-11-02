@@ -1450,3 +1450,9 @@ README "2주마다 하는 일" 그대로. 요점만:
 - threads-fill-1113-1117(대표 11/1 15:11 승인) → Metricool 스레드 예약 412816558(11/13)·412816564(11/16)·412816569(11/17) 20:30. reel_swaps status done.
 - 같은 띠 겹침 관문(K-160): zaoseon-site `tools/tti_dup_gate.py` — 띠 콘텐츠 만들기 전 `python3 ../zaoseon-site/tools/tti_dup_gate.py --check 소 instagram 2026-11-20`(걸리면 종료 1). 지금 겹침 0건. 띠 빌더에 before() 잇기는 다음.
 - 다음 실행: plan_sns_1115_1128.json 대로 일간 3회차(11/18~27 8편) 카드·영상 + 목·토 2027 오행별(cover1030 틀).
+
+## 11/2 11:45 ① 자동 — 일간 3회차 릴스 8편 (승인 대기 ilgan3-1118-1127)
+- `2026-ilgan3/build.py`(cover1030 틀 첫 화면, 11초 장면 4개, 관문 before/after·K-138·after_video) · `captions.py`(capfix 틀, check 0) · 음악판 `music/`(ZS_MUSIC_LIB=1, 라이브러리 v2). 11/18~27 평일 17:00 후보.
+- 승인되면: Metricool 17:00 빈 칸에 posts[] 그대로 예약(영상 music/ilgan3-*.mp4).
+- 보류: 편성표의 목·토 2027 오행별 일간은 3회차와 같은 천간이 1~3일 안에 겹침(K-113) → 대표·CT 판단 대기. 편성표 '정정_1102' 참고.
+- 이 컨테이너엔 fluidsynth·mido 가 없어서 apt fluidsynth fluid-soundfont-gm · pip mido 를 깔았다.

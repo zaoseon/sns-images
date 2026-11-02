@@ -992,5 +992,77 @@
   "bpm": 126,
   "key": "C",
   "seed": 1602
+ },
+ {
+  "name": "ilgan3-byeong",
+  "kind": "clip-ilgan3",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "D",
+  "seed": 1600
+ },
+ {
+  "name": "ilgan3-eul",
+  "kind": "clip-ilgan3",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 117,
+  "key": "F",
+  "seed": 1601
+ },
+ {
+  "name": "ilgan3-gab",
+  "kind": "clip-ilgan3",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 126,
+  "key": "C",
+  "seed": 1602
+ },
+ {
+  "name": "ilgan3-gi",
+  "kind": "clip-ilgan3",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 120,
+  "key": "G",
+  "seed": 1603
+ },
+ {
+  "name": "ilgan3-gyeong",
+  "kind": "clip-ilgan3",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "A",
+  "seed": 1604
+ },
+ {
+  "name": "ilgan3-jeong",
+  "kind": "clip-ilgan3",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 115,
+  "key": "E",
+  "seed": 1605
+ },
+ {
+  "name": "ilgan3-mu",
+  "kind": "clip-ilgan3",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 128,
+  "key": "D",
+  "seed": 1606
+ },
+ {
+  "name": "ilgan3-sin",
+  "kind": "clip-ilgan3",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 116,
+  "key": "F",
+  "seed": 1607
  }
 ]
