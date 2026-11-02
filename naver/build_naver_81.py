@@ -5,6 +5,7 @@
 - n73(날삼재 이사·결혼, 11/3 예약 원고)과 겹치지 않게: 이 글은 '누가·언제부터 언제까지·띠별 한 줄' 허브다. 이사·결혼은 소제목 하나로만 짧게.
 - 입춘 시각: zaoseon-site engine/engine.py get_solar_terms_kst(y) 11/1 실행 값 = 1996-02-04 22:07 · 2025-02-03 23:10 · 2027-02-04 10:46 · 2028-02-04 16:31 (아래 TERMS, 사이트 엔진이 있으면 다시 잰다).
 - 심리 근거: Masicampo & Baumeister (2011), JPSP, DOI 10.1037/a0024192 (zaoseon-site docs/심리근거카드_마음_임상대조_H09-H16.md 에 있는 카드).
+제목 11/2 CT: 블로그온 제목 다섯 기준(K-161)으로 39자→34자, 찾는 말(언제·날짜) 넣음. 옛 제목 「2027 삼재띠 돼지띠 토끼띠 양띠, 날삼재 끝나는 날과 2028 삼재」
 사용: SITE=<zaoseon-site> python3 naver/build_naver_81.py   (pages.json 에 n81을 넣고 사이트 원고 페이지 n81.html·목록만 다시 쓴다. render_all 은 부르지 않는다)"""
 import os, sys, json, re, html, shutil
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(HERE, "..", "pipeline"))
@@ -170,7 +171,7 @@ def build():
         shutil.copy(os.path.join(HERE, "img", f), dst)
     return body, a4, made
 
-TITLE = "2027 삼재띠 돼지띠 토끼띠 양띠, 날삼재 끝나는 날과 2028 삼재"
+TITLE = "2027 삼재띠 언제 끝날까, 돼지띠 토끼띠 양띠 날삼재 날짜"
 TAGS = ["2027삼재띠", "삼재띠", "2027삼재", "날삼재", "삼재끝나는날", "돼지띠삼재", "토끼띠삼재", "양띠삼재", "2028삼재띠", "자오선"]
 REL = {"id": "n80", "title": "2027 띠별 운세, 정미년 12띠 힘 쓸 달과 아낄 달 한눈에",
        "phrase": "띠마다 힘 쓸 달을 한 장으로 보고 싶다면, 2027 띠별 운세, 정미년 12띠 힘 쓸 달과 아낄 달 한눈에",
