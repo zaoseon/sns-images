@@ -196,12 +196,13 @@ def _조각(c, T, i):
                 f'background-position:{c.get("자리", "50% 40%")}"></div><div class=mkshade></div>', "")
     if k == "센표지":
         크 = c.get("크기", 118)
-        줄 = "".join(f'<div class="mkbig{" hi" if j in c.get("강조", []) else ""}{" hi2" if j in c.get("강조2", []) else ""}" style="font-size:{크}px;-webkit-text-stroke:{max(8, 크 // 8)}px #000">{_esc(x)}</div>' for j, x in enumerate(c["줄"]))
+        줄 = "".join(f'<div class="mkbig{" hi" if j in c.get("강조", []) else ""}{" hi2" if j in c.get("강조2", []) else ""}" data-j="{j}" style="font-size:{크}px;-webkit-text-stroke:{max(8, 크 // 8)}px #000">{_esc(x)}</div>' for j, x in enumerate(c["줄"]))
         return f'<div class="mk mkcover" data-z="{z}" {a}>{줄}</div>', ""
     if k == "자막":
         em = lambda t: sum(.58 if ch.isdigit() else .3 if ch == " " else .45 if ch in "·,.!?" else 1.0 for ch in t)
         크 = min(c.get("크기", 70), int(780 / max(em(x) for x in c["글"].split("\n"))))   # 한 줄이 칸을 넘으면 줄여서 줄바꿈 터짐을 막는다(11/3)
-        return f'<div class="mk" data-z="{z}"><span class="mksub" {a} style="font-size:{크}px">{_esc(c["글"])}</span></div>', ""
+        낱 = "<br>".join(" ".join(f'<i class=mkw>{_esc(w)}</i>' for w in 줄.split(" ")) for 줄 in c["글"].split("\n"))
+        return f'<div class="mk" data-z="{z}"><span class="mksub" {a} style="font-size:{크}px">{낱}</span></div>', ""
     if k == "한자찍기":   # 11/2 대표 "모션그래픽으로 시선 고정": 구역 밖 배경층(글 뒤). 0초 프레임에 이미 보인다(표지=첫 프레임)
         return (f'<div class="mkhan" {a} data-z0="{c.get("위", 380)}">{_esc(c["글자"])}</div>', "")
     if k == "기운그림":
@@ -264,8 +265,19 @@ const AP={
   "표채우기":(el,g)=>{el.style.opacity=g>0?1:0;},
   "흐름선":(el,g)=>{el.style.transform=`scaleX(${g})`;},
   "그림넘김":(el,g)=>{el.style.transform=`scale(${1.0+0.12*g})`; el.style.opacity=1;},
-  "센표지":(el,g)=>{const b=EASE.back(CL(g*1.4)); el.style.transform=`scale(${1.08-0.08*b})`; el.style.opacity=1;},
-  "자막":(el,g)=>{el.style.opacity=g>0?1:0; el.style.transform=`translateY(${(1-EASE.out3(g))*20}px)`;},
+  "센표지":(el,g,t)=>{const s0=+el.dataset.s; el.style.opacity=1;
+     const L=[...el.querySelectorAll('.mkbig')];
+     if(s0<0){ // 표지: 0초 프레임에 이미 다 보인다(K-139). 0.15초부터 줄마다 한 번씩 쾅 펄스
+       L.forEach((x,j)=>{const u=CL((t-0.15-j*0.12)/0.28), k=Math.sin(u*Math.PI); x.style.transform=`scale(${1+0.14*k}) rotate(${(j%2?1:-1)*2.5*k}deg)`;});
+       return;}
+     L.forEach((x,j)=>{const hi=x.classList.contains('hi')||x.classList.contains('hi2'); const st=j*0.16+(hi?0.08:0);
+       const u=CL((t-s0-st)/0.32), b=EASE.back(u); x.style.opacity=u>0?1:0;
+       x.style.transform=`translateY(${(1-b)*-60}px) scale(${(hi?1.9:1.5)-(hi?0.9:0.5)*b}) rotate(${(1-b)*(j%2?6:-6)}deg)`;
+       if(hi&&u>=1){const w=CL((t-s0-st-0.32)/0.25); x.style.transform+=` translateX(${Math.sin(w*Math.PI*6)*(1-w)*10}px)`;}});},
+  "자막":(el,g,t)=>{const s0=+el.dataset.s; el.style.opacity=t>=s0?1:0; el.style.transform=`scaleY(${0.6+0.4*EASE.back(CL((t-s0)/0.25))})`;
+     [...el.querySelectorAll('.mkw')].forEach((w,i)=>{const u=CL((t-s0-0.12-i*0.09)/0.22), b=EASE.back(u);
+       w.style.opacity=u>0?1:0; w.style.transform=`translateY(${(1-b)*26}px) scale(${0.7+0.3*b})`;
+       w.style.color = (u>0&&u<1)?'#FFD43B':'#fff';});},
   "한자찍기":(el,g)=>{const b=EASE.back(g); el.style.transform=`translateX(-50%) scale(${1.35-0.35*b}) rotate(${(1-b)*-6}deg)`;
      el.style.opacity = Math.max(0.16, 0.7 - 0.55*CL((window.__t||0)/0.9));},
   "게이지빼기":(el,g)=>{const a=+el.dataset.from, b=+el.dataset.to, v=a+(b-a)*g;
@@ -383,7 +395,8 @@ body{{background:radial-gradient(120% 70% at 50% 40%,{T['card']} 0%,{T['bg']} 55
 .mkcover{{text-align:center}}
 .mkbig{{font-family:'JW-D',sans-serif;font-size:118px;line-height:1.1;color:#fff;-webkit-text-stroke:14px #000;paint-order:stroke fill;text-shadow:0 6px 0 #000}}
 .mkbig.hi{{color:#FFD43B}} .mkbig.hi2{{color:#FF4D4D}}
-.mksub{{display:inline-block;font-family:'JW-B',sans-serif;font-weight:800;font-size:70px;line-height:1.35;color:#fff;background:rgba(0,0,0,.72);padding:14px 28px;border-radius:14px}}
+.mkw{{display:inline-block;font-style:normal}}
+.mksub{{transform-origin:50% 50%;display:inline-block;font-family:'JW-B',sans-serif;font-weight:800;font-size:70px;line-height:1.35;color:#fff;background:rgba(0,0,0,.72);padding:14px 28px;border-radius:14px}}
 .mkhan{{position:absolute;left:475px;top:860px;font-family:serif;font-size:560px;line-height:1;color:{T['acc']};z-index:0;transform-origin:50% 60%}}
 .safe{{z-index:2}}
 .mkfig{{height:320px}}
