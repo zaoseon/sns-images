@@ -1,0 +1,93 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:PL;src:url(file:///home/claude/sns-images/pipeline/fonts/Paperlogy-8ExtraBold.ttf)}
+@font-face{font-family:PB;src:url(file:///home/claude/sns-images/pipeline/fonts/Paperlogy-9Black.ttf)}
+@font-face{font-family:PR;src:url(file:///home/claude/sns-images/pipeline/fonts/PRETENDARD-BOLD.OTF)}
+@font-face{font-family:PRX;src:url(file:///home/claude/sns-images/pipeline/fonts/PRETENDARD-EXTRABOLD.OTF)}
+@font-face{font-family:SR;src:url(file:///home/claude/sns-images/pipeline/fonts/serif.otf)}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#0f2b24}
+#st{position:absolute;inset:0;overflow:hidden;background:radial-gradient(120% 80% at 30% 35%,#1E4A3E 0%,#163C32 45%,#0c241e 100%)}
+.l{position:absolute;will-change:transform,opacity}
+.t{font-family:PB;color:#F8F3E8;line-height:1.12;letter-spacing:-2px}
+.g{color:#C7A34A}
+.w{display:inline-block;transform-origin:50% 100%}
+.bf{position:absolute;font-family:PR;font-size:30px;color:#BFCBC4;letter-spacing:-.5px}
+.pill{font-family:PRX;background:#C7A34A;color:#163C32;border-radius:999px;padding:18px 36px;font-size:48px}
+svg{position:absolute;overflow:visible}
+</style></head><body><div id="st">
+ <div id="grid" class="l" style="inset:-200px"></div>
+ <div id="dots" class="l" style="inset:0"></div>
+ <div id="han" class="l" style="left:470px;top:330px;font-family:SR;font-size:620px;color:#C7A34A;line-height:1">甲</div>
+ <svg id="tree" width="1080" height="1920" style="left:0;top:0"><path id="trunk" d="M640 1460 L640 760" stroke="#C7A34A" stroke-width="16" fill="none" stroke-linecap="round"/>
+  <path id="b1" d="M640 1080 L520 940" stroke="#C7A34A" stroke-width="10" fill="none" stroke-linecap="round"/><path id="b2" d="M640 960 L780 820" stroke="#C7A34A" stroke-width="10" fill="none" stroke-linecap="round"/><path id="b3" d="M640 860 L560 760" stroke="#C7A34A" stroke-width="8" fill="none" stroke-linecap="round"/></svg>
+ <div id="s1" class="l t" style="left:60px;top:900px;font-size:118px"><span class="w">시작은</span> <span class="w">늘</span><br><span class="w g">내가</span> <span class="w g">먼저</span> <span class="w g">해요</span></div>
+ <div id="sw" class="l" style="left:60px;top:1188px;height:14px;background:#C7A34A;border-radius:7px;width:0"></div>
+ <div id="s2" class="l t" style="left:60px;top:640px;font-size:104px"><span class="w">누가</span> <span class="w">안</span> <span class="w">하면</span><br><span class="w">결국</span> <span class="w g">내가</span> <span class="w g">해요</span></div>
+ <div id="s3" class="l t" style="left:60px;top:560px;font-size:92px">곧게 뻗는<br><span class="g">큰 나무</span> 기운</div>
+ <div id="s4" class="l t" style="left:60px;top:600px;font-size:96px">앞장서는 만큼<br><span class="g">혼자 지쳐요</span></div>
+ <div id="bat" class="l" style="left:60px;top:960px;width:760px;height:120px;border:8px solid #F8F3E8;border-radius:22px"><div id="batf" style="position:absolute;left:10px;top:10px;bottom:10px;width:720px;border-radius:12px;background:#C7A34A"></div></div>
+ <div id="batn" class="l t" style="left:60px;top:1110px;font-size:72px;font-family:PRX">100%</div>
+ <div id="s5" class="l t" style="left:60px;top:560px;font-size:92px">오늘 해 볼 것<br><span class="g">쉬는 시간</span> 먼저</div>
+ <div id="cal" class="l" style="left:60px;top:860px;width:780px"></div>
+ <div id="blk" class="l pill" style="left:60px;top:0">☕ 쉬는 시간</div>
+ <div id="s6" class="l t" style="left:60px;top:620px;font-size:100px">맞으면 <span class="g">♥</span><br>떠오르는 사람<br><span class="g">태그</span></div>
+ <div id="s6b" class="l pill" style="left:60px;top:1060px;font-size:44px">프로필 링크 · 내 첫 글자 1초</div>
+ <div id="flash" class="l" style="inset:0;background:#F8F3E8;opacity:0"></div>
+ <div id="bf1" class="bf" style="left:60px;top:345px">자오선</div><div id="bf2" class="bf" style="right:180px;top:345px">동서양 6개 운명학 교차분석</div><div id="bf3" class="bf" style="right:180px;top:1428px">zaoseon.com</div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x)), lin=(t,a,b)=>cl((t-a)/(b-a));
+const eo=x=>1-Math.pow(1-x,3), eb=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)}, ei=x=>x*x*x;
+function seg(t,a,b){return t>=a&&t<b}
+function show(el,on){el.style.display=on?'block':'none'}
+// 별 점
+(function(){let h='';let r=7;for(let i=0;i<70;i++){r=(r*9301+49297)%233280;const x=r/233280*1080;r=(r*9301+49297)%233280;const y=r/233280*1920;r=(r*9301+49297)%233280;const s=2+r/233280*4;h+=`<i style="position:absolute;left:${x}px;top:${y}px;width:${s}px;height:${s}px;border-radius:50%;background:#F8F3E8;opacity:.5" data-p="${r%628/100}"></i>`}$('dots').innerHTML=h;
+ let g='';for(let i=0;i<12;i++)g+=`<i style="position:absolute;left:0;right:0;top:${i*200}px;height:2px;background:rgba(199,163,74,.08)"></i>`;$('grid').innerHTML=g;
+ let c='';const d=['월','화','수','목','금'];for(let i=0;i<5;i++)c+=`<div style="display:inline-block;width:140px;margin-right:16px;height:260px;border-radius:18px;background:#1E4A3E;border:3px solid #2E5E50;vertical-align:top;font-family:PRX;color:#BFCBC4;font-size:40px;text-align:center;padding-top:18px;box-sizing:border-box">${d[i]}<div style="margin:18px 14px 0;height:34px;border-radius:8px;background:#2E5E50"></div><div style="margin:12px 14px 0;height:34px;border-radius:8px;background:#2E5E50"></div></div>`;$('cal').innerHTML=c;})();
+const words=id=>[...$(id).querySelectorAll('.w')];
+const tl={trunk:700,b1:185,b2:198,b3:128};
+function seek(t){
+ // 배경: 계속 천천히 밀고 들어가는 카메라 + 비트마다 살짝 튐
+ const beat=(t*2)%1, pump=1+0.012*Math.exp(-beat*6);
+ $('st').style.transform=`scale(${(1.0+t*0.012)*pump})`;
+ $('grid').style.transform=`translateY(${-t*40}px)`;
+ [...$('dots').children].forEach((d,i)=>{d.style.opacity=.25+.35*Math.abs(Math.sin(t*2+ +d.dataset.p))});
+ // 브랜드 고정 줄: 표지(0~1.8초)엔 없음
+ ['bf1','bf2','bf3'].forEach(k=>$(k).style.opacity=lin(t,1.8,2.1));
+ // 장면1 0~1.8: 첫 프레임부터 글자 보임(K-139). 한자 획이 쾅, 글자 단어별 튀기
+ const s1=seg(t,0,1.9); show($('s1'),s1); show($('sw'),s1);
+ const hanOn=t<5.2; show($('han'),hanOn);
+ if(hanOn){const a=eb(lin(t,0,.35)); $('han').style.transform=`translate(${(1-a)*60}px,${(1-a)*-40}px) scale(${1.35-0.35*a}) rotate(${(1-a)*-6}deg)`;
+  $('han').style.opacity=(t<1.9?(.18+.82*(1-lin(t,.35,.9))*0+0.22):0.10)*(1-lin(t,4.7,5.2))*(t<1.9?1:1);
+  if(t<0.35)$('han').style.opacity=.6-1.2*t; }
+ if(s1){words('s1').forEach((w,i)=>{const a=eb(lin(t,0.05+i*0.08,0.35+i*0.08));w.style.transform=`translateY(${(1-a)*-30}px) scale(${1.06-.06*a})`;w.style.opacity=.75+.25*a});
+  $('sw').style.width=(eo(lin(t,.75,1.15))*560)+'px';
+  const out=lin(t,1.6,1.9); $('s1').style.transform=`translateX(${-ei(out)*1100}px) skewX(${-out*12}deg)`; $('sw').style.transform=`translateX(${-ei(out)*1100}px)`; }
+ // 장면2 1.8~3.4: 단어가 하나씩 쾅쾅(비트)
+ const s2=seg(t,1.8,3.4); show($('s2'),s2);
+ if(s2){words('s2').forEach((w,i)=>{const a=eb(lin(t,1.85+i*.16,2.1+i*.16));w.style.transform=`scale(${.4+.6*a})`;w.style.opacity=lin(t,1.85+i*.16,1.95+i*.16)});
+  const out=lin(t,3.2,3.4);$('s2').style.transform=`translateY(${-ei(out)*300}px)`;$('s2').style.opacity=1-out;}
+ // 장면3 3.4~5.2: 나무가 자라는 선(정보: 곧게 뻗는 기운)
+ const s3=seg(t,3.4,5.2); show($('s3'),s3); show($('tree'),s3);
+ if(s3){$('s3').style.opacity=lin(t,3.4,3.6);$('s3').style.transform=`translateY(${(1-eo(lin(t,3.4,3.7)))*60}px)`;
+  for(const k in tl){const L=tl[k],st={trunk:3.45,b1:4.0,b2:4.15,b3:4.3}[k];$(k).style.strokeDasharray=L;$(k).style.strokeDashoffset=L*(1-eo(lin(t,st,st+(k=='trunk'?.6:.3))))}
+  const out=lin(t,5.0,5.2);$('s3').style.opacity=1-out;$('tree').style.opacity=1-out;}
+ // 장면4 5.2~7.2: 배터리가 빠진다(정보: 앞장서다 지침)
+ const s4=seg(t,5.2,7.2); ['s4','bat','batn'].forEach(k=>show($(k),s4));
+ if(s4){const a=eo(lin(t,5.2,5.45));$('s4').style.opacity=a;$('s4').style.transform=`translateX(${(1-a)*-80}px)`;
+  const d=eo(lin(t,5.6,6.7)), p=Math.round(100-88*d);$('batf').style.width=(720*(1-.88*d))+'px';$('batf').style.background=p<30?'#E07A5F':'#C7A34A';$('batn').textContent=p+'%';
+  $('bat').style.transform=p<30?`translateX(${Math.sin(t*60)*6}px)`:'none';
+  const out=lin(t,7.0,7.2);['s4','bat','batn'].forEach(k=>$(k).style.opacity=Math.min(+$(k).style.opacity||1,1-out));}
+ // 장면5 7.2~9.0: '쉬는 시간' 블록이 달력에 꽂힌다
+ const s5=seg(t,7.2,9.0); ['s5','cal','blk'].forEach(k=>show($(k),s5));
+ if(s5){const a=eo(lin(t,7.2,7.45));$('s5').style.opacity=a;$('cal').style.opacity=a;
+  const d=eb(lin(t,7.7,8.15));$('blk').style.top=(200+ (1000-200)*d)+'px';$('blk').style.transform=`rotate(${(1-d)*-12}deg) scale(${1+.2*(1-d)})`;
+  const f=lin(t,8.15,8.3)*(1-lin(t,8.3,8.5));$('flash').style.opacity=f*.25;}
+ else $('flash').style.opacity=0;
+ // 장면6 9.0~10.5: 마무리(행동)
+ const s6=seg(t,9.0,10.6); show($('s6'),s6); show($('s6b'),s6);
+ if(s6){const a=eb(lin(t,9.0,9.3));$('s6').style.transform=`scale(${.8+.2*a})`;$('s6').style.opacity=lin(t,9.0,9.15);
+  const b=eb(lin(t,9.4,9.7));$('s6b').style.transform=`translateY(${(1-b)*120}px)`;$('s6b').style.opacity=lin(t,9.4,9.5);}
+}
+window.seek=seek; seek(0);
+</script></body></html>
