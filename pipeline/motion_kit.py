@@ -54,6 +54,9 @@ PAL = {x["id"]: x for x in json.load(
  "기운그림":   dict(쓸곳="기운·성질 설명(나무·덩굴·해·촛불·산·싹·칼·보석)", 나르는것="그 기운이 어떤 모양으로 뻗는지"),
  "게이지빼기": dict(쓸곳="지치는·줄어드는 이야기", 나르는것="힘이 빠져나가는 흐름(숫자 없이 칸만)"),
  "블록꽂기":   dict(쓸곳="해 볼 것을 일정·자리에 넣는 이야기", 나르는것="그 행동이 들어갈 자리"),
+ "그림넘김":   dict(쓸곳="실험 판(K-167): 장면마다 전면 그림 + 천천히 확대", 나르는것="장면이 바뀌었다는 신호, 눈을 붙듦(실험 판만 허용)"),
+ "센표지":     dict(쓸곳="실험 판(K-167) 표지: 띠·숫자·센 말 3~4줄", 나르는것="첫 0.5초에 읽히는 약속 하나"),
+ "자막":       dict(쓸곳="실험 판(K-167) 그림 위 한 줄", 나르는것="그 장면의 한 줄 풀이"),
  "눈금이동":   dict(쓸곳="내가 어디쯤인지(분포 위 자리)", 나르는것="눈금 위에서 멈추는 위치"),
 }
 
@@ -186,6 +189,17 @@ def _조각(c, T, i):
                 f'<div class=mkends><span>{_esc(c.get("왼", ""))}</span>'
                 f'<span>{_esc(c.get("오", ""))}</span></div>'
                 f'<div class=mkscap>{_esc(c.get("설명", ""))}</div></div>', "")
+    if k == "그림넘김":   # 배경층(글 뒤) — 그림 파일은 data URI 로 넣는다(임시 HTML이라 저장소에 안 남음)
+        import base64
+        b = base64.b64encode(open(c["그림"], "rb").read()).decode()
+        return (f'<div class="mkimg" {a} style="background-image:url(data:image/jpeg;base64,{b});'
+                f'background-position:{c.get("자리", "50% 40%")}"></div><div class=mkshade></div>', "")
+    if k == "센표지":
+        크 = c.get("크기", 118)
+        줄 = "".join(f'<div class="mkbig{" hi" if j in c.get("강조", []) else ""}{" hi2" if j in c.get("강조2", []) else ""}" style="font-size:{크}px;-webkit-text-stroke:{max(8, 크 // 8)}px #000">{_esc(x)}</div>' for j, x in enumerate(c["줄"]))
+        return f'<div class="mk mkcover" data-z="{z}" {a}>{줄}</div>', ""
+    if k == "자막":
+        return f'<div class="mk" data-z="{z}"><span class="mksub" {a}>{_esc(c["글"])}</span></div>', ""
     if k == "한자찍기":   # 11/2 대표 "모션그래픽으로 시선 고정": 구역 밖 배경층(글 뒤). 0초 프레임에 이미 보인다(표지=첫 프레임)
         return (f'<div class="mkhan" {a} data-z0="{c.get("위", 380)}">{_esc(c["글자"])}</div>', "")
     if k == "기운그림":
@@ -247,6 +261,9 @@ const AP={
      b.style.opacity=h;   b.style.transform=`translateY(${(1-h)*26}px)`;},
   "표채우기":(el,g)=>{el.style.opacity=g>0?1:0;},
   "흐름선":(el,g)=>{el.style.transform=`scaleX(${g})`;},
+  "그림넘김":(el,g)=>{el.style.transform=`scale(${1.0+0.12*g})`; el.style.opacity=1;},
+  "센표지":(el,g)=>{const b=EASE.back(CL(g*1.4)); el.style.transform=`scale(${1.08-0.08*b})`; el.style.opacity=1;},
+  "자막":(el,g)=>{el.style.opacity=g>0?1:0; el.style.transform=`translateY(${(1-EASE.out3(g))*20}px)`;},
   "한자찍기":(el,g)=>{const b=EASE.back(g); el.style.transform=`translateX(-50%) scale(${1.35-0.35*b}) rotate(${(1-b)*-6}deg)`;
      el.style.opacity = Math.max(0.16, 0.7 - 0.55*CL((window.__t||0)/0.9));},
   "게이지빼기":(el,g)=>{const a=+el.dataset.from, b=+el.dataset.to, v=a+(b-a)*g;
@@ -359,6 +376,12 @@ body{{width:{C['w']}px;height:{C['h']}px;background:{T['bg']};overflow:hidden;
 .mkscap{{font-size:44px;color:{T['sub']};margin-top:28px;line-height:1.5}}
 body{{background:radial-gradient(120% 70% at 50% 40%,{T['card']} 0%,{T['bg']} 55%,{T['bg']} 100%)}}
 .mkstars{{position:absolute;inset:0;z-index:0;background-image:radial-gradient(2px 2px at 12% 18%,{T['ink']}55 50%,transparent 51%),radial-gradient(3px 3px at 78% 12%,{T['ink']}44 50%,transparent 51%),radial-gradient(2px 2px at 30% 72%,{T['ink']}44 50%,transparent 51%),radial-gradient(3px 3px at 88% 64%,{T['ink']}33 50%,transparent 51%),radial-gradient(2px 2px at 55% 88%,{T['ink']}44 50%,transparent 51%),radial-gradient(2px 2px at 8% 52%,{T['ink']}33 50%,transparent 51%)}}
+.mkimg{{position:absolute;inset:0;background-size:cover;z-index:0;transform-origin:50% 45%}}
+.mkshade{{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,0) 60%,rgba(0,0,0,.45) 100%)}}
+.mkcover{{text-align:center}}
+.mkbig{{font-family:'JW-D',sans-serif;font-size:118px;line-height:1.18;color:#fff;-webkit-text-stroke:14px #000;paint-order:stroke fill;text-shadow:0 6px 0 #000}}
+.mkbig.hi{{color:#FFD43B}} .mkbig.hi2{{color:#FF4D4D}}
+.mksub{{display:inline-block;font-family:'JW-B',sans-serif;font-weight:800;font-size:58px;line-height:1.35;color:#fff;background:rgba(0,0,0,.72);padding:14px 28px;border-radius:14px}}
 .mkhan{{position:absolute;left:475px;top:860px;font-family:serif;font-size:560px;line-height:1;color:{T['acc']};z-index:0;transform-origin:50% 60%}}
 .safe{{z-index:2}}
 .mkfig{{height:320px}}
@@ -375,7 +398,7 @@ body{{background:radial-gradient(120% 70% at 50% 40%,{T['card']} 0%,{T['bg']} 55
 """
 
 
-def 페이지(장면, 판="dg_gold_s", ch="reel", ai=True, 끝=None):
+def 페이지(장면, 판="dg_gold_s", ch="reel", ai=True, 끝=None, 상단줄=True):
     """장면 목록을 완성된 HTML 한 장으로. 고정 요소·글꼴·판은 기존 단일 출처에서 가져온다."""
     if 판 not in PAL:
         raise SystemExit(f"[막음] 모르는 판 '{판}'. assets/palettes/color_combos.json 에서 고르세요")
@@ -384,7 +407,7 @@ def 페이지(장면, 판="dg_gold_s", ch="reel", ai=True, 끝=None):
     # 한 단에는 한 조각만. 두 가지를 같이 보여야 하면 더 넓은 단('마무리 카드')을 쓴다.
     본 = {}
     for c in 장면:
-        if c["종류"] == "한자찍기":   # 배경층 — 구역을 차지하지 않는다
+        if c["종류"] in ("한자찍기", "그림넘김"):   # 배경층 — 구역을 차지하지 않는다
             continue
         if c["단"] in 본:
             raise SystemExit(f"[막음] '{c['단']}' 단을 두 번 썼어요 — '{본[c['단']]}' 와 '{c['종류']}' 가 "
@@ -393,12 +416,12 @@ def 페이지(장면, 판="dg_gold_s", ch="reel", ai=True, 끝=None):
     몸, 덧, 뒤 = [], [], []
     for i, c in enumerate(장면):
         m, x = _조각(c, T, i)
-        (뒤 if c["종류"] == "한자찍기" else 몸).append(m)   # 배경층은 안전 영역 밖(글 뒤)
+        (뒤 if c["종류"] in ("한자찍기", "그림넘김") else 몸).append(m)   # 배경층은 안전 영역 밖(글 뒤)
         if x:
             덧.append(x)
     return (f"<!doctype html><html><head><meta charset=utf-8><style>{_css(T, ch)}"
             f"{''.join(덧)}</style></head><body>"
-            f"<div class=mkstars></div>{''.join(뒤)}<div class=safe>{''.join(몸)}</div>{BF.html(ch, ai=ai, tone=_tone(T['bg']))}"
+            f"<div class=mkstars></div>{''.join(뒤)}<div class=safe>{''.join(몸)}</div>{BF.html(ch, ai=ai, tone=_tone(T['bg'])) if 상단줄 else ''}"
             f"<script>{RUNTIME}</script></body></html>").replace("<body>", f'<body data-end="{끝 or 0}">', 1)
 
 
