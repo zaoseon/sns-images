@@ -50,6 +50,10 @@ PAL = {x["id"]: x for x in json.load(
  "줄바꾸기":   dict(쓸곳="흔한 오해 → 사실", 나르는것="앞말이 뒷말로 바뀌는 대조"),
  "표채우기":   dict(쓸곳="운명학별 교차표", 나르는것="칸이 채워지며 드러나는 모양"),
  "흐름선":     dict(쓸곳="절차·입력에서 결과까지", 나르는것="거쳐 가는 길과 순서"),
+ "한자찍기":   dict(쓸곳="표지 첫 1초 — 그 글의 한자 하나(천간·띠·괘)", 나르는것="이 글이 어떤 글자 이야기인지(첫 화면에서 눈을 붙든다)"),
+ "기운그림":   dict(쓸곳="기운·성질 설명(나무·덩굴·해·촛불·산·싹·칼·보석)", 나르는것="그 기운이 어떤 모양으로 뻗는지"),
+ "게이지빼기": dict(쓸곳="지치는·줄어드는 이야기", 나르는것="힘이 빠져나가는 흐름(숫자 없이 칸만)"),
+ "블록꽂기":   dict(쓸곳="해 볼 것을 일정·자리에 넣는 이야기", 나르는것="그 행동이 들어갈 자리"),
  "눈금이동":   dict(쓸곳="내가 어디쯤인지(분포 위 자리)", 나르는것="눈금 위에서 멈추는 위치"),
 }
 
@@ -182,6 +186,33 @@ def _조각(c, T, i):
                 f'<div class=mkends><span>{_esc(c.get("왼", ""))}</span>'
                 f'<span>{_esc(c.get("오", ""))}</span></div>'
                 f'<div class=mkscap>{_esc(c.get("설명", ""))}</div></div>', "")
+    if k == "한자찍기":   # 11/2 대표 "모션그래픽으로 시선 고정": 구역 밖 배경층(글 뒤). 0초 프레임에 이미 보인다(표지=첫 프레임)
+        return (f'<div class="mkhan" {a} data-z0="{c.get("위", 380)}">{_esc(c["글자"])}</div>', "")
+    if k == "기운그림":
+        모양 = {
+         "나무": ["M400 340 L400 40", "M400 220 L300 120", "M400 160 L500 60", "M400 110 L340 40"],
+         "덩굴": ["M120 320 C220 300 200 200 300 190 S420 120 480 140 S640 60 700 40", "M300 190 C320 150 360 150 370 120", "M480 140 C500 110 540 110 550 80"],
+         "해":   ["M400 300 m-110 0 a110 110 0 1 0 220 0", "M400 150 L400 70", "M290 190 L240 130", "M510 190 L560 130", "M200 300 L120 300", "M600 300 L680 300"],
+         "촛불": ["M360 330 L360 200 L440 200 L440 330", "M400 200 C370 160 380 110 400 70 C420 110 430 160 400 200"],
+         "산":   ["M100 330 L300 80 L420 230 L520 120 L700 330", "M300 80 L340 140 L300 160 L260 140 Z"],
+         "싹":   ["M400 330 L400 170", "M400 220 C330 220 300 170 310 120 C360 120 400 160 400 220", "M400 190 C470 190 500 140 490 90 C440 90 400 130 400 190"],
+         "칼":   ["M400 330 L400 60", "M340 270 L460 270", "M400 60 L380 110 M400 60 L420 110"],
+         "보석": ["M400 60 L520 160 L400 330 L280 160 Z", "M280 160 L520 160", "M340 160 L400 60 L460 160 L400 330"],
+        }[c["모양"]]
+        간격 = c.get("간격", 0.25)
+        paths = "".join(f'<path class=mkpath d="{d}" data-k="선그리기" data-s="{c["s"] + j * 간격}" data-d="{c["d"]}" data-e="out3"/>'
+                        for j, d in enumerate(모양))
+        return (f'<div class="mk" data-z="{z}"><svg class="mksvg mkfig" viewBox="0 0 800 350">{paths}</svg>'
+                + (f'<div class="t-cap" data-k="나타나기" data-s="{c["s"] + c["d"]}" data-d="0.5" data-e="out3" data-dy="16">{_esc(c["설명"])}</div>' if c.get("설명") else "")
+                + '</div>', "")
+    if k == "게이지빼기":
+        return (f'<div class="mk" data-z="{z}"><div class=mkgauge><div class=mkgfill {a} data-from="{c.get("부터", 100)}" data-to="{c.get("까지", 12)}"></div></div>'
+                f'<div class="t-cap" data-k="나타나기" data-s="{c["s"]}" data-d="0.4" data-e="out3" data-dy="10">{_esc(c.get("설명", ""))}</div></div>', "")
+    if k == "블록꽂기":
+        칸 = c.get("칸", ["월", "화", "수", "목", "금"]); 자리 = c.get("자리", 2)
+        cells = "".join(f'<div class=mkday>{_esc(x)}<i></i><i></i></div>' for x in 칸)
+        return (f'<div class="mk" data-z="{z}"><div class=mkweek>{cells}'
+                f'<div class=mkblock {a} data-col="{자리}" data-n="{len(칸)}">{_esc(c["글"])}</div></div></div>', "")
     raise SystemExit(f"[막음] '{k}' 의 그리는 길이 아직 없어요")
 
 
@@ -216,10 +247,22 @@ const AP={
      b.style.opacity=h;   b.style.transform=`translateY(${(1-h)*26}px)`;},
   "표채우기":(el,g)=>{el.style.opacity=g>0?1:0;},
   "흐름선":(el,g)=>{el.style.transform=`scaleX(${g})`;},
+  "한자찍기":(el,g)=>{const b=EASE.back(g); el.style.transform=`translateX(-50%) scale(${1.35-0.35*b}) rotate(${(1-b)*-6}deg)`;
+     el.style.opacity = Math.max(0.16, 0.7 - 0.55*CL((window.__t||0)/0.9));},
+  "게이지빼기":(el,g)=>{const a=+el.dataset.from, b=+el.dataset.to, v=a+(b-a)*g;
+     el.style.width=v+'%'; el.classList.toggle('low', v<30);
+     el.parentNode.style.transform = v<30 ? `translateX(${Math.sin(g*80)*5}px)` : 'none';},
+  "블록꽂기":(el,g)=>{const c=+el.dataset.col, n=+el.dataset.n, b=EASE.back(g);
+     const dd=el.parentNode.querySelectorAll('.mkday')[c]; el.style.left=(dd.offsetLeft+dd.offsetWidth/2)+'px'; el.style.top=`${-420+(420+90)*b}px`;
+     el.style.transform=`rotate(${(1-b)*-10}deg)`; el.style.opacity=g>0?1:0;},
   "눈금이동":(el,g)=>{el.style.left=`calc(${g*(+el.dataset.v)}% - 18px)`; el.style.opacity=g>0?1:0;}
 };
 const MK=[...document.querySelectorAll('[data-k]')];
-window.seek=(t)=>{
+const END=+(document.body.dataset.end||0);
+window.seek=(t)=>{ window.__t=t;
+  if(END){const o=CL((t-(END-0.25))/0.25), e=o*o*o; const sf=document.querySelector('.safe');
+    sf.style.transform=`translateX(${-e*1100}px) skewX(${-o*10}deg)`; sf.style.opacity=1-o*.3;
+    const h=document.querySelector('.mkhan'); if(h) h.style.marginLeft=(-e*600)+'px';}
   for(const el of MK){
     const s=+el.dataset.s, d=+el.dataset.d||0.8, k=el.dataset.k;
     const g=(EASE[el.dataset.e||'out3'])((t-s)/d);
@@ -250,7 +293,7 @@ def _css(T, ch):
         f'width:{x1 - x0}px}}'   # max-height 를 두지 않는다 — 안 보이게 가둘 뿐 검사가 못 잡는다
         for n, (x0, y0, x1, y1) in Z.items())
     return f"""
-{K.css_inline(display="pl")}
+{K.css_inline(display="gm" if ch in ("reel", "naver_clip") else "pl")}
 *{{margin:0;padding:0;box-sizing:border-box}}
 body{{width:{C['w']}px;height:{C['h']}px;background:{T['bg']};overflow:hidden;
      font-family:'JW-B',sans-serif;color:{T['ink']};-webkit-font-smoothing:antialiased}}
@@ -314,12 +357,25 @@ body{{width:{C['w']}px;height:{C['h']}px;background:{T['bg']};overflow:hidden;
   background:{T['acc']};box-shadow:0 0 0 8px {T['bg']}}}
 .mkends{{display:flex;justify-content:space-between;margin-top:34px;font-size:36px;color:{T['sub']}}}
 .mkscap{{font-size:44px;color:{T['sub']};margin-top:28px;line-height:1.5}}
+body{{background:radial-gradient(120% 70% at 50% 40%,{T['card']} 0%,{T['bg']} 55%,{T['bg']} 100%)}}
+.mkstars{{position:absolute;inset:0;z-index:0;background-image:radial-gradient(2px 2px at 12% 18%,{T['ink']}55 50%,transparent 51%),radial-gradient(3px 3px at 78% 12%,{T['ink']}44 50%,transparent 51%),radial-gradient(2px 2px at 30% 72%,{T['ink']}44 50%,transparent 51%),radial-gradient(3px 3px at 88% 64%,{T['ink']}33 50%,transparent 51%),radial-gradient(2px 2px at 55% 88%,{T['ink']}44 50%,transparent 51%),radial-gradient(2px 2px at 8% 52%,{T['ink']}33 50%,transparent 51%)}}
+.mkhan{{position:absolute;left:475px;top:860px;font-family:serif;font-size:560px;line-height:1;color:{T['acc']};z-index:0;transform-origin:50% 60%}}
+.safe{{z-index:2}}
+.mkfig{{height:320px}}
+.mkgauge{{height:110px;border:8px solid {T['ink']};border-radius:24px;padding:10px;position:relative;width:720px;margin:0 auto}}
+.mkgauge:after{{content:'';position:absolute;right:-26px;top:28px;width:16px;height:38px;border-radius:0 8px 8px 0;background:{T['ink']}}}
+.mkgfill{{height:100%;border-radius:12px;background:{T['acc']}}}
+.mkgfill.low{{background:#E07A5F}}
+.mkweek{{position:relative;display:flex;gap:14px;justify-content:center}}
+.mkday{{width:140px;height:240px;border-radius:18px;background:{T['card']};font-family:'JW-D',sans-serif;font-size:40px;color:{T['sub']};text-align:center;padding-top:16px}}
+.mkday i{{display:block;margin:16px 14px 0;height:30px;border-radius:8px;background:{T['bg']};opacity:.6}}
+.mkblock{{position:absolute;white-space:nowrap;font-family:'JW-D',sans-serif;font-size:44px;background:{T['acc']};color:{T['bg']};border-radius:999px;padding:16px 30px;opacity:0;transform-origin:50% 50%;margin-left:0;translate:-50% 0}}
 {BF.css(_tone(T['bg']))}
 {".mk{text-align:center} .mklist,.mkflow{display:inline-block;text-align:left} .mkhead{justify-content:center;gap:24px} .mksw-b{left:0;right:0} .mktab th{text-align:center}" if C.get("align") == "center" else ""}
 """
 
 
-def 페이지(장면, 판="dg_gold_s", ch="reel", ai=True):
+def 페이지(장면, 판="dg_gold_s", ch="reel", ai=True, 끝=None):
     """장면 목록을 완성된 HTML 한 장으로. 고정 요소·글꼴·판은 기존 단일 출처에서 가져온다."""
     if 판 not in PAL:
         raise SystemExit(f"[막음] 모르는 판 '{판}'. assets/palettes/color_combos.json 에서 고르세요")
@@ -328,20 +384,22 @@ def 페이지(장면, 판="dg_gold_s", ch="reel", ai=True):
     # 한 단에는 한 조각만. 두 가지를 같이 보여야 하면 더 넓은 단('마무리 카드')을 쓴다.
     본 = {}
     for c in 장면:
+        if c["종류"] == "한자찍기":   # 배경층 — 구역을 차지하지 않는다
+            continue
         if c["단"] in 본:
             raise SystemExit(f"[막음] '{c['단']}' 단을 두 번 썼어요 — '{본[c['단']]}' 와 '{c['종류']}' 가 "
                              f"같은 자리에 겹칩니다. 한 단에는 한 조각만 두거나 더 넓은 단('마무리 카드')을 쓰세요.")
         본[c["단"]] = c["종류"]
-    몸, 덧 = [], []
+    몸, 덧, 뒤 = [], [], []
     for i, c in enumerate(장면):
         m, x = _조각(c, T, i)
-        몸.append(m)
+        (뒤 if c["종류"] == "한자찍기" else 몸).append(m)   # 배경층은 안전 영역 밖(글 뒤)
         if x:
             덧.append(x)
     return (f"<!doctype html><html><head><meta charset=utf-8><style>{_css(T, ch)}"
             f"{''.join(덧)}</style></head><body>"
-            f"<div class=safe>{''.join(몸)}</div>{BF.html(ch, ai=ai, tone=_tone(T['bg']))}"
-            f"<script>{RUNTIME}</script></body></html>")
+            f"<div class=mkstars></div>{''.join(뒤)}<div class=safe>{''.join(몸)}</div>{BF.html(ch, ai=ai, tone=_tone(T['bg']))}"
+            f"<script>{RUNTIME}</script></body></html>").replace("<body>", f'<body data-end="{끝 or 0}">', 1)
 
 
 def 만들기(이름, 장면, 판="dg_gold_s", 초=8.0, fps=30, ch="reel"):
