@@ -199,7 +199,9 @@ def _조각(c, T, i):
         줄 = "".join(f'<div class="mkbig{" hi" if j in c.get("강조", []) else ""}{" hi2" if j in c.get("강조2", []) else ""}" style="font-size:{크}px;-webkit-text-stroke:{max(8, 크 // 8)}px #000">{_esc(x)}</div>' for j, x in enumerate(c["줄"]))
         return f'<div class="mk mkcover" data-z="{z}" {a}>{줄}</div>', ""
     if k == "자막":
-        return f'<div class="mk" data-z="{z}"><span class="mksub" {a}>{_esc(c["글"])}</span></div>', ""
+        em = lambda t: sum(.58 if ch.isdigit() else .3 if ch == " " else .45 if ch in "·,.!?" else 1.0 for ch in t)
+        크 = min(c.get("크기", 70), int(780 / max(em(x) for x in c["글"].split("\n"))))   # 한 줄이 칸을 넘으면 줄여서 줄바꿈 터짐을 막는다(11/3)
+        return f'<div class="mk" data-z="{z}"><span class="mksub" {a} style="font-size:{크}px">{_esc(c["글"])}</span></div>', ""
     if k == "한자찍기":   # 11/2 대표 "모션그래픽으로 시선 고정": 구역 밖 배경층(글 뒤). 0초 프레임에 이미 보인다(표지=첫 프레임)
         return (f'<div class="mkhan" {a} data-z0="{c.get("위", 380)}">{_esc(c["글자"])}</div>', "")
     if k == "기운그림":
