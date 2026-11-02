@@ -56,6 +56,7 @@ PAL = {x["id"]: x for x in json.load(
  "블록꽂기":   dict(쓸곳="해 볼 것을 일정·자리에 넣는 이야기", 나르는것="그 행동이 들어갈 자리"),
  "그림넘김":   dict(쓸곳="실험 판(K-167): 장면마다 전면 그림 + 천천히 확대", 나르는것="장면이 바뀌었다는 신호, 눈을 붙듦(실험 판만 허용)"),
  "센표지":     dict(쓸곳="실험 판(K-167) 표지: 띠·숫자·센 말 3~4줄", 나르는것="첫 0.5초에 읽히는 약속 하나"),
+ "장면글":     dict(쓸곳="실험 판(K-167) 한 장면의 제목+자막을 한 덩어리로 화면 가운데에 크게", 나르는것="그 장면의 약속과 풀이(여백 없이 크게)"),
  "자막":       dict(쓸곳="실험 판(K-167) 그림 위 한 줄", 나르는것="그 장면의 한 줄 풀이"),
  "눈금이동":   dict(쓸곳="내가 어디쯤인지(분포 위 자리)", 나르는것="눈금 위에서 멈추는 위치"),
 }
@@ -198,6 +199,15 @@ def _조각(c, T, i):
         크 = c.get("크기", 118)
         줄 = "".join(f'<div class="mkbig{" hi" if j in c.get("강조", []) else ""}{" hi2" if j in c.get("강조2", []) else ""}" data-j="{j}" style="font-size:{크}px;-webkit-text-stroke:{max(8, 크 // 8)}px #000">{_esc(x)}</div>' for j, x in enumerate(c["줄"]))
         return f'<div class="mk mkcover" data-z="{z}" {a}>{줄}</div>', ""
+    if k == "장면글":   # 11/3 대표 "검은 바탕 글자 작고 여백 많아": 제목·자막을 한 구역(마무리 카드)에 묶어 세로 가운데, 크게
+        def _em(t): return sum(.58 if ch.isdigit() else .3 if ch == " " else .45 if ch in "·,.!?" else 1.0 for ch in t)
+        tk = min(c.get("크기", 132), int(830 / max(_em(x) for x in c["줄"])))
+        sk = min(c.get("자막크기", 86), int(800 / max(_em(x) for x in c["자막"].split("\n"))))
+        줄 = "".join(f'<div class="mkbig{" hi" if j in c.get("강조", []) else ""}{" hi2" if j in c.get("강조2", []) else ""}" data-j="{j}" style="font-size:{tk}px;-webkit-text-stroke:{max(8, tk // 8)}px #000">{_esc(x)}</div>' for j, x in enumerate(c["줄"]))
+        낱 = "<br>".join(" ".join(f'<i class=mkw>{_esc(w)}</i>' for w in 줄_.split(" ")) for 줄_ in c["자막"].split("\n"))
+        return (f'<div class="mk mkscene" data-z="{z}">'
+                f'<div class="mkcover" data-k="센표지" data-s="{c["s"]}" data-d="0.5" data-e="out3">{줄}</div>'
+                f'<span class="mksub" data-k="자막" data-s="{c["s"] + 0.75}" data-d="0.4" data-e="out3" style="font-size:{sk}px;margin-top:34px">{낱}</span></div>', "")
     if k == "자막":
         em = lambda t: sum(.58 if ch.isdigit() else .3 if ch == " " else .45 if ch in "·,.!?" else 1.0 for ch in t)
         크 = min(c.get("크기", 70), int(780 / max(em(x) for x in c["글"].split("\n"))))   # 한 줄이 칸을 넘으면 줄여서 줄바꿈 터짐을 막는다(11/3)
@@ -393,6 +403,8 @@ body{{background:radial-gradient(120% 70% at 50% 40%,{T['card']} 0%,{T['bg']} 55
 .mkimg{{position:absolute;inset:0;background-size:cover;z-index:0;transform-origin:50% 45%}}
 .mkshade{{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,0) 60%,rgba(0,0,0,.45) 100%)}}
 .mkcover{{text-align:center}}
+.mk.mkcover[data-z="마무리 카드"]{{display:flex;flex-direction:column;justify-content:center;height:{Z.get("마무리 카드", (0,0,0,890))[3] - Z.get("마무리 카드", (0,0,0,0))[1]}px}}
+.mkscene{{display:flex;flex-direction:column;align-items:center;justify-content:center;height:{Z.get("마무리 카드", (0,0,0,890))[3] - Z.get("마무리 카드", (0,0,0,0))[1]}px}}
 .mkbig{{font-family:'JW-D',sans-serif;font-size:118px;line-height:1.1;color:#fff;-webkit-text-stroke:14px #000;paint-order:stroke fill;text-shadow:0 6px 0 #000}}
 .mkbig.hi{{color:#FFD43B}} .mkbig.hi2{{color:#FF4D4D}}
 .mkw{{display:inline-block;font-style:normal}}
