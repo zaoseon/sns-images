@@ -2822,9 +2822,10 @@
   "cid": null,
   "clips": null,
   "category": "2027 신년운세",
-  "done": false,
+  "done": true,
   "k131": "n80 10/29(K-151 새 글)",
-  "source": "build_naver_80.py (n01 주제 새 글, n01 그대로)"
+  "source": "build_naver_80.py (n01 주제 새 글, n01 그대로)",
+  "published": "2026-11-01T15:16"
  },
  "n81": {
   "dt": "2026-11-02T18:00:00",

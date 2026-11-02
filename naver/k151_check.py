@@ -3,6 +3,7 @@
   1) 고정 문장: 모든 글에 똑같이 들어간 첫 인사·'결론부터' 문장(아래 FIXED) → 막음. 첫 인사를 넣으려면 그 글의 장면으로 새로 쓴다.
   2) 첫 문단(200자)에 제목 핵심어가 없음 → 막음(K-143·N16: 첫 3줄에 정의·직답 한 문장)
   3) 제목 다섯 기준(대표 11/2 14:42 "블로그온 제목 진단 반영", K-161): ① 핵심어가 제목 맨 앞(10자 안)·본문 첫 200자·소제목 하나 이상·본문 2번 이상 ② 숫자 ③ 15~35자 ④ 찾는 말·후킹(법·이유·뜻·날짜·언제·한눈에·가지 등) ⑤ 특수문자 — 괄호·꺾쇠·느낌표·물결·이모지 금지, 쉼표·가운뎃점·물음표 합쳐 3개까지. 비하 표현(R24) 금지 → 막음
+  3-1) (대표 11/2 14:56 블로그온 11/1 진단 반영, K-162) 첫 200자에 핵심어로 시작하는 정의·직답 문장('○○는 …예요/이에요/입니다') · 공식·연구 출처 링크 2개 이상(11/3 이후 발행 글부터) → 막음
   4) 태그에 '자오선'과 본문 핵심어 태그가 있는가(10/7 대표 확정: 10개 이내, '자오선' 고정) → 막음
 사용: python3 naver/k151_check.py   (막힐 것이 있으면 종료 코드 1)"""
 import os, re, json, html, sys
@@ -45,6 +46,11 @@ def check(pid, v):
     bad += title_check(title, v.get("body", ""))
     d = [x for x in DEMEAN if x in title]
     if d: bad.append(f"제목 비하 표현 '{d[0]}'(R24)")
+    if kw and not re.search(re.escape(kw[0]) + r"[^.?!]{0,60}?(이에요|예요|에요|입니다|이다|합니다|해요)[.!]", t[:220]):
+        bad.append(f"첫 200자에 '{kw[0]}…예요/입니다' 정의·직답 문장 없음(K-162, AI 브리핑·GEO)")
+    ext = [u for u in re.findall(r'href="(https?://[^"]+)"', v.get("body", "")) if not re.search(r"zaoseon\.com|raw\.githubusercontent|blog\.naver\.com/zaoseon", u)]
+    if (v.get("dt") or "") >= "2026-11-03" and len(set(ext)) < 2:
+        bad.append(f"출처 링크 {len(set(ext))}개 → 공식·연구 출처 2개 이상(K-162, 확인한 주소만 — N3)")
     tags = v.get("tags") or []
     if tags and (tags[-1] != "자오선" or len(tags) > 10): bad.append(f"태그 {len(tags)}개·마지막 '{tags[-1]}'(10개 이내, 마지막 '자오선')")
     if tags and kw and not any(any(k.replace(' ', '') in g for k in kw) for g in tags): bad.append("태그에 제목 핵심어 없음")
