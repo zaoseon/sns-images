@@ -1,5 +1,5 @@
 """브랜드 고정 요소(10/6 대표 지시) — 모든 이미지·영상에 같은 자리에 넣는다.
-- 상단: 카드·캐러셀은 왼쪽 "자오선" · 오른쪽 "동서양 6개 운명학 교차분석"(10/6). **릴스·클립은 위쪽 가운데 한 줄 "자오선 · 동서양 6개 운명학 교차분석"(대표 11/2, K-165)**
+- 상단: 카드·캐러셀은 왼쪽 "자오선" · 오른쪽 "동서양 6개 운명학 교차분석"(10/6). **릴스·클립은 위쪽 가운데 한 줄 "자오선 · 동서양 6개 운명학 교차분석"(대표 11/2, K-166)**
 - 우측 하단: zaoseon.com (고정)
 - 좌측 하단: "정월은 가상의 AI 캐릭터입니다"(흐린 색, 10/6 대표 지정) (정월이 나오는 이미지·장면에만, 위치는 항상 같은 곳)
 위치는 인스타 화면 가림(UI)을 피한다. 릴스·클립 1080x1920: 안전 영역 위 330 · 아래 1470 · 오른쪽 900(10/6 네이버 클립 캡처 실측: 버튼 줄 x 905~). 카드 1080x1350: 가장자리 55px.
@@ -27,7 +27,7 @@ def html(kind="reel", ai=False, ai_id="bfAI", stacked=False, tone="dark", page=N
     P = REEL if kind == "reel" else CARD
     left = 60 if kind == "reel" else 55
     url_fs, ai_fs = (40, 28) if kind == "reel" else (36, 26)
-    if kind == "reel":   # 11/2 대표 "위쪽 가운데 한 줄로"(K-165): 릴스·클립은 안전 영역(50~900) 가운데에 한 줄
+    if kind == "reel":   # 11/2 대표 "위쪽 가운데 한 줄로"(K-166): 릴스·클립은 안전 영역(50~900) 가운데에 한 줄
         tl = (f'<div class="bf" id=bfTop style="left:50px;width:850px;top:{P["tag_top"]}px;text-align:center">'
               f'<span class=bf-l id=bfL>{TAG1}</span><span class=bf-r style="margin:0 14px;opacity:.6">·</span>'
               f'<span class=bf-r id=bfR>{TAG2}</span></div>')
