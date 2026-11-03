@@ -48,6 +48,36 @@ def 얹기(video, lines, out, rate="+8%", music_vol=0.30):
                     "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-shortest", out], check=True)
     return log
 
+
+async def _say_wb(text, out, rate):
+    import edge_tts
+    c = edge_tts.Communicate(text, VOICE, rate=rate, boundary="WordBoundary", proxy=os.environ.get("HTTPS_PROXY"))
+    ws = []
+    with open(out, "wb") as f:
+        async for ch in c.stream():
+            if ch["type"] == "audio": f.write(ch["data"])
+            elif ch["type"] == "WordBoundary": ws.append((ch["text"], ch["offset"] / 1e7, ch["duration"] / 1e7))
+    return ws
+
+def 말시간(text, out, rate="+8%"):
+    """목소리 + 낱말마다 시작 시각(초). 앞 무음을 자르지 않아 시각이 그대로 맞는다. 자막을 목소리에 맞출 때 쓴다(11/3)."""
+    os.environ.setdefault("SSL_CERT_FILE", "/root/.ccr/ca-bundle.crt")
+    ws = asyncio.run(_say_wb(text, out, rate))
+    w = out + ".wav"
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", out, "-ar", "44100", "-ac", "2", w], check=True)
+    return w, ws, _dur(w)
+
+def 섞기(video, parts, out, music_vol=0.30):
+    """parts = [(시작초, wav)]. 음악 낮추기·-14 LUFS는 얹기와 같다."""
+    ins = ["-i", video] + sum((["-i", w] for _, w in parts), [])
+    fc = "".join(f"[{k+1}:a]adelay={int(s*1000)}|{int(s*1000)},apad[v{k}];" for k, (s, _) in enumerate(parts))
+    fc += "".join(f"[v{k}]" for k in range(len(parts))) + f"amix=inputs={len(parts)}:normalize=0:duration=first,volume=1.6[vo];"
+    fc += "[vo]asplit=2[vo1][vo2];"
+    fc += f"[0:a]volume={music_vol}[mu];[mu][vo1]sidechaincompress=threshold=0.03:ratio=6:attack=20:release=300[md];"
+    fc += "[md][vo2]amix=inputs=2:normalize=0:duration=first,loudnorm=I=-14:TP=-1.5:LRA=11[a]"
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error"] + ins + ["-filter_complex", fc, "-map", "0:v", "-map", "[a]",
+                    "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-shortest", out], check=True)
+
 if __name__ == "__main__":
     import sys
     spec = json.load(open(sys.argv[1], encoding="utf-8"))

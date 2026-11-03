@@ -57,6 +57,7 @@ PAL = {x["id"]: x for x in json.load(
  "그림넘김":   dict(쓸곳="실험 판(K-167): 장면마다 전면 그림 + 천천히 확대", 나르는것="장면이 바뀌었다는 신호, 눈을 붙듦(실험 판만 허용)"),
  "센표지":     dict(쓸곳="실험 판(K-167) 표지: 띠·숫자·센 말 3~4줄", 나르는것="첫 0.5초에 읽히는 약속 하나"),
  "장면글":     dict(쓸곳="실험 판(K-167) 한 장면의 제목+자막을 한 덩어리로 화면 가운데에 크게", 나르는것="그 장면의 약속과 풀이(여백 없이 크게)"),
+ "말자막":     dict(쓸곳="실험 판(K-167) 목소리 장면: 제목 + 말하는 대로 한 낱말씩 붙는 자막(줄마다 다른 등장·강조 낱말 터짐)", 나르는것="지금 듣는 말이 어디인지, 그 문장에서 무게가 실린 낱말"),
  "자막":       dict(쓸곳="실험 판(K-167) 그림 위 한 줄", 나르는것="그 장면의 한 줄 풀이"),
  "눈금이동":   dict(쓸곳="내가 어디쯤인지(분포 위 자리)", 나르는것="눈금 위에서 멈추는 위치"),
 }
@@ -208,6 +209,26 @@ def _조각(c, T, i):
         return (f'<div class="mk mkscene" data-z="{z}">'
                 f'<div class="mkcover" data-k="센표지" data-s="{c["s"]}" data-d="0.5" data-e="out3">{줄}</div>'
                 f'<span class="mksub" data-k="자막" data-s="{c["s"] + 0.75}" data-d="0.4" data-e="out3" style="font-size:{sk}px;margin-top:34px">{낱}</span></div>', "")
+    if k == "말자막":   # 11/3 대표 "검은 상자 안에서 통으로 나와 심심하다 — 다양한 방법으로 나오고 강조도": 목소리 낱말 시각에 맞춰 붙는다
+        def _em(t): return sum(.68 if ch.isdigit() else .34 if ch == " " else .55 if ch in "·,.!?" else 1.04 for ch in t) + .3
+        def _tk(x): return min(c.get("크기", 132), int(830 / _em(x)))
+        줄 = "".join(f'<div class="mkbig{" hi" if j in c.get("강조", []) else ""}{" hi2" if j in c.get("강조2", []) else ""}" data-j="{j}" style="white-space:nowrap;font-size:{_tk(x)}px;-webkit-text-stroke:{max(8, _tk(x) // 8)}px #000">{_esc(x)}</div>' for j, x in enumerate(c["줄"]))
+        모양 = c.get("모양") or [0, 1, 2, 3]
+        rows = []
+        for i, ln in enumerate(c["자막"]):   # ln = [[낱말, 시각, 강조여부], ...]
+            v = 모양[i % len(모양)]
+            txt = " ".join(w for w, _, _ in ln)
+            fs = min(c.get("자막크기", 108), int(860 / _em(txt) / (1.08 if any(e for _, _, e in ln) else 1)))   # 11/3 시험: 84는 작게 보임
+            ws = []
+            for w, t0, e in ln:
+                cls = "mkw mkem" if e else "mkw"
+                inner = "".join(f'<u>{_esc(ch)}</u>' for ch in w) if v == 3 else _esc(w)
+                ws.append(f'<i class="{cls}" data-t="{t0:.3f}">{inner}</i>')
+            st = ln[0][1] - 0.12
+            rows.append(f'<div class="mkcl v{v}" data-v="{v}" data-k="말자막줄" data-s="{st:.3f}" data-d="0.4" data-e="out3" style="font-size:{fs}px"><span class=mkrib></span><span class=mkln>{" ".join(ws)}</span></div>')
+        return (f'<div class="mk mkscene" data-z="{z}">'
+                f'<div class="mkcover" data-k="센표지" data-s="{c["s"]}" data-d="0.5" data-e="out3">{줄}</div>'
+                f'<div class="mkcls">{"".join(rows)}</div></div>', "")
     if k == "자막":
         em = lambda t: sum(.58 if ch.isdigit() else .3 if ch == " " else .45 if ch in "·,.!?" else 1.0 for ch in t)
         크 = min(c.get("크기", 70), int(780 / max(em(x) for x in c["글"].split("\n"))))   # 한 줄이 칸을 넘으면 줄여서 줄바꿈 터짐을 막는다(11/3)
@@ -284,6 +305,19 @@ const AP={
        const u=CL((t-s0-st)/0.32), b=EASE.back(u); x.style.opacity=u>0?1:0;
        x.style.transform=`translateY(${(1-b)*-60}px) scale(${(hi?1.9:1.5)-(hi?0.9:0.5)*b}) rotate(${(1-b)*(j%2?6:-6)}deg)`;
        if(hi&&u>=1){const w=CL((t-s0-st-0.32)/0.25); x.style.transform+=` translateX(${Math.sin(w*Math.PI*6)*(1-w)*10}px)`;}});},
+  "말자막줄":(el,g,t)=>{const v=+el.dataset.v, s0=+el.dataset.s; el.style.opacity=t>=s0?1:0;
+     const rib=el.querySelector('.mkrib');
+     if(v===0){ rib.style.clipPath=`inset(0 ${(1-EASE.out3((t-s0)/0.3))*100}% 0 0)`; }
+     if(v===2){ const b=EASE.back((t-s0)/0.45); el.style.transform=`translateX(${(1-b)*900}px) skewX(${(1-CL((t-s0)/0.45))*-18}deg)`; }
+     [...el.querySelectorAll('.mkw')].forEach((w,i)=>{const t0=+w.dataset.t, em=w.classList.contains('mkem');
+       if(v===3){ const ch=[...w.querySelectorAll('u')]; ch.forEach((c,j)=>{c.style.opacity=t>=t0+j*0.05?1:0;}); w.style.opacity=1; }
+       else { const u=CL((t-t0)/0.24), b=EASE.back(u); w.style.opacity=u>0?1:0;
+         if(v===1) w.style.transform=`translateY(${(1-b)*-90}px) rotate(${(1-b)*(i%2?8:-8)}deg)`;
+         else if(v===0) w.style.transform=`translateY(${(1-b)*30}px)`;
+         else w.style.transform=`scale(${0.6+0.4*b})`; }
+       if(em){ const p=CL((t-t0)/0.35), k=Math.sin(p*Math.PI); const base=w.style.transform&&v!==3?w.style.transform:'';
+         w.style.transform=base+` scale(${(t>=t0?1.14:1)+0.5*k}) rotate(${k*(i%2?5:-5)}deg)`;
+         w.style.setProperty('--u', (CL((t-t0-0.2)/0.3)*100)+'%'); }});},
   "자막":(el,g,t)=>{const s0=+el.dataset.s; el.style.opacity=t>=s0?1:0; el.style.transform=`scaleY(${0.6+0.4*EASE.back(CL((t-s0)/0.25))})`;
      [...el.querySelectorAll('.mkw')].forEach((w,i)=>{const u=CL((t-s0-0.12-i*0.09)/0.22), b=EASE.back(u);
        w.style.opacity=u>0?1:0; w.style.transform=`translateY(${(1-b)*26}px) scale(${0.7+0.3*b})`;
@@ -408,6 +442,20 @@ body{{background:radial-gradient(120% 70% at 50% 40%,{T['card']} 0%,{T['bg']} 55
 .mkbig{{font-family:'JW-D',sans-serif;font-size:118px;line-height:1.1;color:#fff;-webkit-text-stroke:14px #000;paint-order:stroke fill;text-shadow:0 6px 0 #000}}
 .mkbig.hi{{color:#FFD43B}} .mkbig.hi2{{color:#FF4D4D}}
 .mkw{{display:inline-block;font-style:normal}}
+.mkcls{{display:flex;flex-direction:column;align-items:center;gap:26px;margin-top:56px}}
+.mkcl .mkw{{margin:0 .13em}}
+.mkcl{{position:relative;display:inline-block;font-family:'JW-B',sans-serif;font-weight:900;line-height:1.25;color:#fff;white-space:nowrap;padding:6px 22px}}
+.mkcl .mkln{{position:relative;z-index:1}}
+.mkcl .mkrib{{position:absolute;inset:0;border-radius:10px;display:none}}
+.mkcl.v0 .mkrib{{display:block;background:#FFD43B;transform:rotate(-1.5deg)}}
+.mkcl.v0{{color:#111}}
+.mkcl.v0 .mkem{{color:#D62828}}
+.mkcl.v1,.mkcl.v3{{-webkit-text-stroke:10px #000;paint-order:stroke fill;text-shadow:0 5px 0 #000}}
+.mkcl.v2 .mkrib{{display:block;background:rgba(10,10,20,.78);border-left:12px solid #FFD43B}}
+.mkcl u{{text-decoration:none}}
+.mkem{{position:relative;color:#FFD43B}}
+.mkem:after{{content:'';position:absolute;left:0;bottom:-6px;height:10px;width:var(--u,0%);background:#FF4D4D;border-radius:5px}}
+.mkcl.v0 .mkem:after{{background:#111}}
 .mksub{{transform-origin:50% 50%;display:inline-block;font-family:'JW-B',sans-serif;font-weight:800;font-size:70px;line-height:1.35;color:#fff;background:rgba(0,0,0,.72);padding:14px 28px;border-radius:14px}}
 .mkhan{{position:absolute;left:475px;top:860px;font-family:serif;font-size:560px;line-height:1;color:{T['acc']};z-index:0;transform-origin:50% 60%}}
 .safe{{z-index:2}}
