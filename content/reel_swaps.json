@@ -4542,5 +4542,39 @@
    "2027 오행별 캐러셀·릴스(목·토)는 같은 천간이 며칠 안에 겹쳐 보류함 — 아래 note"
   ],
   "note": "편성표 content/plan_sns_1115_1128.json 평일 17:00 칸. Metricool 11/18~11/28 예약 0건 확인(11/2 11:45). 장면: 표지(첫 프레임부터 완성, 위 고정 줄 없음) → 기운·까닭 → 오늘 해 볼 것 → 프로필 링크 1초. 관문: 장면 32개 card_gate before/after · K-138 faint 0 · after_video 0 · copy_rules 첫줄검사 0 · capfix.check 8편 0. 음악: clip_v3_music.py, 음악 라이브러리 v2 곡(ZS_MUSIC_LIB=1 — 11/18 이후 나갈 영상이라 라이브러리로). 2회차 첫 줄·풀이 문장과 겹치지 않음(코드 assert). 첫 줄 근거는 1회차(행동형 1·2위) — 2회차 행동/형용사 결과는 11/17 끝나야 나와서 아직 없다. 승인되면 ①이 Metricool 빈 칸 17:00에 예약(피드 표시 규칙 그대로). [보류] 2027 오행별 캐러셀·릴스(11/19 나무=갑·을, 11/21 불, 11/26 흙, 11/28 쇠): 3회차와 같은 천간이 1~3일 안에 다시 나가 K-113에 걸린다(예: 11/19 을이 08:00·12:00·17:00 세 번). 둘 중 하나를 고르거나 주제를 바꿔야 한다 — ①이 정하지 않음."
+ },
+ {
+  "id": "reel-exp2-1103",
+  "since": "2026-11-03",
+  "kind": "새 릴스 실험 판(K-167 · 옛 그림+큰 글자+목소리+음악)",
+  "title": "실험 판 2편 — ① 2027 돈 들어오는 띠 3가지(요청형 끝) ② 도화살 있는 사람 특징 5가지(확인형 끝)",
+  "date": null,
+  "time": "17:00",
+  "status": "new",
+  "channels": [
+   "instagram"
+  ],
+  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out/exp1-money.mp4",
+  "videos": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out/exp1-money.mp4",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out/exp2-dohwa.mp4"
+  ],
+  "covers": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out/exp1-money_cover.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out/exp2-dohwa_cover.jpg"
+  ],
+  "cover": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out/exp1-money_cover.jpg",
+  "sheet": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out/exp1-money_sheet.jpg",
+  "sheets": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out/exp1-money_sheet.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out/exp2-dohwa_sheet.jpg"
+  ],
+  "caption": "[① 돈 들어오는 띠]\n2027 돈 들어오는 띠 3가지\n3위부터 1위, 조심할 띠까지 담았어요\n다음 편 듣고 싶은 띠를 댓글로 남겨 주세요\n내 날 기운은 프로필 링크에서 볼 수 있어요\n\n#사주 #운세 #띠별운세 #2027년운세 #재물운\n\n[② 도화살]\n도화살 있는 사람 특징 5가지\n몇 개나 해당되세요? 숫자 하나만 댓글로 남겨 주세요\n내 사주에 도화가 있는지는 프로필 링크에서 확인할 수 있어요\n\n#사주 #도화살 #운세 #연애운 #2027년운세",
+  "checks": [
+   "글자 크기·여백(11/3 '검은 바탕 글자 작고 여백 많아' 반영)",
+   "목소리(SunHi 여성)가 괜찮은지 — 남자 목소리로 바꿀 수 있음",
+   "승인하면 정규 릴스와 번갈아 17:00 빈 날에 Metricool 예약(날짜는 CT가 겹침 검사 뒤 정함)"
+  ],
+  "note": "CT 11/3 11:50. 빌더 2026-exp/exp1_money.py·exp2_dohwa.py, 목소리 pipeline/narration.py(줄 2026-exp/exp1_voice.json·exp2_voice.json), 음악 clip_v3_music. 그림은 assets/pd_art 공개 옛 그림. 정월 안 씀(대표 11/2). 길이 38초·48.5초(실험 판 40~60초 기준)."
  }
 ]
