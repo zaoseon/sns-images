@@ -27,7 +27,10 @@ def 장면(c, P, i, 끝):
     os.makedirs(f"{WORK}/voice", exist_ok=True)
     자막 = c.get("자막", [])
     줄들 = [x.split(" ") for x in 자막]
-    말 = (c["말제목"] + " " + " ".join(x.replace("*", "") for x in 자막)).strip()
+    # 11/3 대표 요청(mw0j07m8): 줄 사이에 쉼표, 끝에 마침표를 넣어 목소리가 줄마다 숨을 쉬게(낱말은 그대로라 시각 맞추기에 영향 없음)
+    줄말 = [x.replace("*", "").strip() for x in 자막]
+    줄말 = [(x if x[-1:] in ",.?!" else x + ",") for x in 줄말[:-1]] + [(줄말[-1] if 줄말[-1][-1:] in ".?!" else 줄말[-1].rstrip(",") + ".")] if 줄말 else []
+    말 = (c["말제목"] + " " + " ".join(줄말)).strip()
     wav, wb, vd = NR.말시간(말, f"{WORK}/voice/{c['이름']}.mp3")
     초 = round(max(c.get("최소", 3.0), LEAD + vd + c.get("여유", 0.8)), 2)
     제목낱 = len(c["말제목"].split(" "))
