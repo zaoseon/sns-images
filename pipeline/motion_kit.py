@@ -106,9 +106,12 @@ def _조각(c, T, i):
     a = f'data-k="{c["종류"]}" data-s="{c["s"]}" data-d="{c["d"]}" data-e="{c["완화"]}"'
     z = c["단"]
     k = c["종류"]
+    # 11/3 ①: 제목 단 글이 한 줄 8자를 넘으면 100px 로는 칸(850px)을 넘어 세 줄로 터진다(일간 3회차 '까닭'·'해 볼 것').
+    # 크기=… 를 주면 그 글자 크기로 쓴다(주지 않으면 전과 같다).
+    fs = f' style="font-size:{int(c["크기"])}px"' if c.get("크기") else ""
     if k == "나타나기":
         cls = "t-ttl" if z == "제목" else ("t-lbl" if z == "상단 라벨" else "t-body")
-        return f'<div class="mk {cls}" data-z="{z}" {a}>{_esc(c["글"])}</div>', ""
+        return f'<div class="mk {cls}" data-z="{z}" {a}{fs}>{_esc(c["글"])}</div>', ""
     if k == "숫자세기":
         # 숫자와 설명을 **한 상자 안에** 넣는다. 둘을 각각 data-z 로 내보냈더니 둘 다 구역 꼭대기에
         # 절대 배치돼 설명이 숫자 위에 겹쳤다(10/16 견본에서 눈으로 잡았다 — 구역은 안 넘겨서
@@ -143,7 +146,7 @@ def _조각(c, T, i):
     if k == "가리개열기":
         쪽 = {"왼쪽": "inset(0 VAR% 0 0)", "위": "inset(0 0 VAR% 0)",
               "가운데": "inset(0 CAL% 0 CAL%)"}[c.get("쪽", "왼쪽")]
-        return (f'<div class="mk t-body" data-z="{z}" {a} data-side="{c.get("쪽", "왼쪽")}">'
+        return (f'<div class="mk t-body" data-z="{z}" {a} data-side="{c.get("쪽", "왼쪽")}"{fs}>'
                 f'{_esc(c["글"])}</div>', "")
     if k == "쌓이기":
         it = "".join(f'<li data-k="나타나기" data-s="{c["s"] + j * c.get("간격", 0.45)}" '
@@ -159,11 +162,11 @@ def _조각(c, T, i):
     if k == "낱말강조":
         앞, 낱, 뒤 = c["앞"], c["낱말"], c["뒤"]
         return (f'<div class="mk t-ttl" data-z="{z}" data-k="나타나기" data-s="{c["s"]}" data-d="0.6" '
-                f'data-e="out3">{_esc(앞)}<span class=mkword {a}>{_esc(낱)}</span>{_esc(뒤)}</div>', "")
+                f'data-e="out3"{fs}>{_esc(앞)}<span class=mkword {a}>{_esc(낱)}</span>{_esc(뒤)}</div>', "")
     if k == "줄바꾸기":
         return (f'<div class="mk mkswap" data-z="{z}" {a}>'
-                f'<div class="mksw mksw-a">{_esc(c["앞줄"])}</div>'
-                f'<div class="mksw mksw-b">{_esc(c["뒷줄"])}</div></div>', "")
+                f'<div class="mksw mksw-a"{fs}>{_esc(c["앞줄"])}</div>'
+                f'<div class="mksw mksw-b"{fs}>{_esc(c["뒷줄"])}</div></div>', "")
     if k == "표채우기":
         머리 = "".join(f"<th>{_esc(x)}</th>" for x in c["머리"])
         몸 = ""
@@ -235,7 +238,9 @@ def _조각(c, T, i):
         낱 = "<br>".join(" ".join(f'<i class=mkw>{_esc(w)}</i>' for w in 줄.split(" ")) for 줄 in c["글"].split("\n"))
         return f'<div class="mk" data-z="{z}"><span class="mksub" {a} style="font-size:{크}px">{낱}</span></div>', ""
     if k == "한자찍기":   # 11/2 대표 "모션그래픽으로 시선 고정": 구역 밖 배경층(글 뒤). 0초 프레임에 이미 보인다(표지=첫 프레임)
-        return (f'<div class="mkhan" {a} data-z0="{c.get("위", 380)}">{_esc(c["글자"])}</div>', "")
+        # 11/3 ①: 위=… 를 주면 한자 꼭대기를 그 y 로 내린다(0초 프레임에 훅 글자와 겹치지 않게). 안 주면 전과 같다.
+        st = f' style="top:{int(c["위"])}px"' if "위" in c else ""
+        return (f'<div class="mkhan" {a} data-z0="{c.get("위", 380)}"{st}>{_esc(c["글자"])}</div>', "")
     if k == "기운그림":
         모양 = {
          "나무": ["M400 340 L400 40", "M400 220 L300 120", "M400 160 L500 60", "M400 110 L340 40"],

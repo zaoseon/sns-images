@@ -4571,5 +4571,35 @@
    "승인하면 정규 릴스와 번갈아 17:00 빈 날에 Metricool 예약(날짜는 CT가 겹침 검사 뒤 정함)"
   ],
   "note": "CT 11/3 13:40. 12:01 대표 '검은 상자 안 통으로 나와 심심' → 말자막(목소리 낱말 시각) 판으로 바꿈. 빌더 2026-exp/exp1_money_v.py·exp2_dohwa_v.py(voice_reel). 길이 47초·52초. 옛 상자 판(reel-exp2-1103)은 이 카드로 바뀜."
+ },
+ {
+  "id": "ilgan3m-sb-1103",
+  "since": "2026-11-03",
+  "kind": "스토리보드(승인 뒤 영상) · 새 릴스(인스타 · 11/15~28 빈 칸)",
+  "title": "일간 성격 3회차 모션 판 8편 스토리보드 — 갑~신, 18.5초·장면 6개, 기운 그림 8가지 (반려된 ilgan3-1118-1127 대신)",
+  "date": "2026-11-18",
+  "time": "17:00",
+  "status": "new",
+  "channels": [
+   "instagram"
+  ],
+  "sheet": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-ilgan3m/storyboard_ilgan3m.jpg",
+  "covers": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-ilgan3m/sb_gab.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-ilgan3m/sb_eul.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-ilgan3m/sb_byeong.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-ilgan3m/sb_jeong.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-ilgan3m/sb_mu.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-ilgan3m/sb_gi.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-ilgan3m/sb_gyeong.jpg",
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-ilgan3m/sb_sin.jpg"
+  ],
+  "caption": "(스토리보드 승인 카드라 캡션은 영상 판에서 붙여요. 글은 3회차 문장 그대로: 훅 2줄 → 둘째 줄 → 기운 → 까닭 → 오늘 해 볼 것 → 프로필 링크에서 생년월일만 넣으면 내 첫 글자 1초 확인)",
+  "checks": [
+   "장면 순서 6개(표지 → 둘째 줄 → 기운 그림 → 까닭 → 해 볼 것 → 끝)와 길이 18.5초가 괜찮은지",
+   "편마다 '까닭'·'해 볼 것' 기법 짝이 다름(게이지빼기·가리개열기·낱말강조 / 블록꽂기·흐름선·쌓이기·눈금이동·가리개열기) — 더 세게 움직여야 할 편이 있는지",
+   "그림은 키트가 실제로 그린 장면 끝 화면이에요. 가리개열기 장면(병·경 까닭) 글자가 작은 편이라 영상 판에서 키워요"
+  ],
+  "note": "근거: ops/to-content.md 11/2 19:55 CT 항목(대표 19:48 '겁나 심심하잖아') + 20:15 알림 '스토리보드를 먼저 앱 카드로'. 빌더 2026-ilgan3m/storyboard.py(motion_kit 기법으로 장면 페이지를 만들어 끝 화면을 찍음). 3회차 정지판의 v_* 판(v_emerald·v_violet·v_choco)은 모션 theme 이 없어 을 g_ivory · 정 p_purple · 무 y_olive 로 바꿈. 표지: 0초 프레임에 훅 글자·천간 한자가 다 보이고(K-139) 한자는 글 아래로 내림, 상단 고정 줄은 2장면부터(K-166). 승인되면 ①이 8편 영상(motion_kit + html_motion + clip_v3_music, 관문 card_gate·faint_gate·after_video·copy_rules)을 만들어 영상 카드로 다시 올린다. 예약은 영상 승인 뒤. API 비용 0."
  }
 ]
