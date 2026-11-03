@@ -444,6 +444,7 @@ body{{background:radial-gradient(120% 70% at 50% 40%,{T['card']} 0%,{T['bg']} 55
 .mkw{{display:inline-block;font-style:normal}}
 .mkcls{{display:flex;flex-direction:column;align-items:center;gap:26px;margin-top:56px}}
 .mkcl .mkw{{margin:0 .13em}}
+.mkcl .mkem{{margin:0 .26em}}
 .mkcl{{position:relative;display:inline-block;font-family:'JW-B',sans-serif;font-weight:900;line-height:1.25;color:#fff;white-space:nowrap;padding:6px 22px}}
 .mkcl .mkln{{position:relative;z-index:1}}
 .mkcl .mkrib{{position:absolute;inset:0;border-radius:10px;display:none}}
