@@ -994,6 +994,7 @@
   "seed": 1602
  },
  {
+<<<<<<< Updated upstream
   "name": "ilgan3-byeong",
   "kind": "clip-ilgan3",
   "style": "상큼 팝",
@@ -1005,6 +1006,10 @@
  {
   "name": "ilgan3-eul",
   "kind": "clip-ilgan3",
+=======
+  "name": "rx-ox",
+  "kind": "clip-rx",
+>>>>>>> Stashed changes
   "style": "발랄 우쿨렐레",
   "mode": "up",
   "bpm": 117,
@@ -1012,13 +1017,19 @@
   "seed": 1601
  },
  {
+<<<<<<< Updated upstream
   "name": "ilgan3-gab",
   "kind": "clip-ilgan3",
+=======
+  "name": "rx-rabbit",
+  "kind": "clip-rx",
+>>>>>>> Stashed changes
   "style": "경쾌 신스팝",
   "mode": "up",
   "bpm": 126,
   "key": "C",
   "seed": 1602
+<<<<<<< Updated upstream
  },
  {
   "name": "ilgan3-gi",
@@ -1064,5 +1075,7 @@
   "bpm": 116,
   "key": "F",
   "seed": 1607
+=======
+>>>>>>> Stashed changes
  }
 ]
