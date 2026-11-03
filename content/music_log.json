@@ -1092,5 +1092,10 @@
   "name": "vr-t_mv2",
   "kind": "lib-v2",
   "track": "v2_candy3.mp3"
+ },
+ {
+  "name": "vr-exp2_dohwa",
+  "kind": "lib-v2",
+  "track": "v2_dembow2.mp3"
  }
 ]
