@@ -1112,5 +1112,10 @@
   "name": "vr-yukhyo",
   "kind": "lib-v2",
   "track": "v2_funpop2.mp3"
+ },
+ {
+  "name": "vr-charge",
+  "kind": "lib-v2",
+  "track": "v2_jersey1.mp3"
  }
 ]
