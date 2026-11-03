@@ -4547,14 +4547,14 @@
   "id": "reel-exp2-1103",
   "since": "2026-11-03",
   "kind": "새 릴스 실험 판(K-167 · 옛 그림+큰 글자+목소리+음악)",
-  "title": "실험 판 2편 — ① 2027 돈 들어오는 띠 3가지(요청형 끝) ② 도화살 있는 사람 특징 5가지(확인형 끝)",
+  "title": "실험 판 2편 — ① 2027 돈 들어오는 띠 3가지(요청형 끝) ② 도화살 있는 사람 특징 5가지(확인형 끝) — 보기 편하게 두 편을 이어 붙임(실제로는 따로 올림)",
   "date": null,
   "time": "17:00",
   "status": "new",
   "channels": [
    "instagram"
   ],
-  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out/exp1-money.mp4",
+  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out/exp_all_preview.mp4",
   "videos": [
    "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out/exp1-money.mp4",
    "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out/exp2-dohwa.mp4"
