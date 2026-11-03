@@ -1107,5 +1107,10 @@
   "name": "vr-ilgan_a",
   "kind": "lib-v2",
   "track": "v2_funk3.mp3"
+ },
+ {
+  "name": "vr-yukhyo",
+  "kind": "lib-v2",
+  "track": "v2_funpop2.mp3"
  }
 ]
