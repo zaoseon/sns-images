@@ -214,8 +214,11 @@ def _조각(c, T, i):
                 f'<span class="mksub" data-k="자막" data-s="{c["s"] + 0.75}" data-d="0.4" data-e="out3" style="font-size:{sk}px;margin-top:34px">{낱}</span></div>', "")
     if k == "말자막":   # 11/3 대표 "검은 상자 안에서 통으로 나와 심심하다 — 다양한 방법으로 나오고 강조도": 목소리 낱말 시각에 맞춰 붙는다
         def _em(t): return sum(.68 if ch.isdigit() else .34 if ch == " " else .55 if ch in "·,.!?" else 1.04 for ch in t) + .3
-        def _tk(x): return min(c.get("크기", 132), int(830 / _em(x)))
-        줄 = "".join(f'<div class="mkbig{" hi" if j in c.get("강조", []) else ""}{" hi2" if j in c.get("강조2", []) else ""}" data-j="{j}" style="white-space:nowrap;font-size:{_tk(x)}px;-webkit-text-stroke:{max(8, _tk(x) // 8)}px #000">{_esc(x)}</div>' for j, x in enumerate(c["줄"]))
+        # 11/4 대표 "첫 번째 두 번째 이 텍스트 크기는 작고 그 아래 내용이 커야": 순서 말(첫 번째·하나·둘…)과 작은줄에 적은 줄은 작게, 나머지(내용)는 크게
+        import re as _re
+        _작 = set(c.get("작은줄", [])) | {j for j, x in enumerate(c["줄"]) if _re.fullmatch(r"(첫|두|세|네|다섯|여섯|일곱|여덟|아홉|열) ?번째|하나|둘|셋|넷|다섯", x.strip())}
+        def _tk(x, j=None): return min(78 if j in _작 else c.get("크기", 150), int(830 / _em(x)))
+        줄 = "".join(f'<div class="mkbig{" hi" if j in c.get("강조", []) else ""}{" hi2" if j in c.get("강조2", []) else ""}{" mksm" if j in _작 else ""}" data-j="{j}" style="white-space:nowrap;font-size:{_tk(x, j)}px;-webkit-text-stroke:{max(8, _tk(x, j) // 8)}px #000">{_esc(x)}</div>' for j, x in enumerate(c["줄"]))
         모양 = c.get("모양") or [0, 1, 2, 3]
         rows = []
         for i, ln in enumerate(c["자막"]):   # ln = [[낱말, 시각, 강조여부], ...]
@@ -445,6 +448,7 @@ body{{background:radial-gradient(120% 70% at 50% 40%,{T['card']} 0%,{T['bg']} 55
 .mk.mkcover[data-z="마무리 카드"]{{display:flex;flex-direction:column;justify-content:center;height:{Z.get("마무리 카드", (0,0,0,890))[3] - Z.get("마무리 카드", (0,0,0,0))[1]}px}}
 .mkscene{{display:flex;flex-direction:column;align-items:center;justify-content:center;height:{Z.get("마무리 카드", (0,0,0,890))[3] - Z.get("마무리 카드", (0,0,0,0))[1]}px}}
 .mkbig{{font-family:'JW-D',sans-serif;font-size:118px;line-height:1.1;color:#fff;-webkit-text-stroke:14px #000;paint-order:stroke fill;text-shadow:0 6px 0 #000}}
+.mkbig.mksm{{opacity:.92;margin-bottom:6px}}
 .mkbig.hi{{color:#FFD43B}} .mkbig.hi2{{color:#FF4D4D}}
 .mkw{{display:inline-block;font-style:normal}}
 .mkcls{{display:flex;flex-direction:column;align-items:center;gap:26px;margin-top:56px}}

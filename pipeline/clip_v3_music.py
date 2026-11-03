@@ -18,7 +18,20 @@ STYLES = ["상큼 팝", "발랄 우쿨렐레", "경쾌 신스팝", "통통 마�
 def dur(p):
     return float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", p], capture_output=True, text=True, check=True).stdout.strip())
 
+LIB = os.environ.get("ZS_LIB", "")   # 11/4 대표 "음악도 새로 만든 것 좀 넣어라": ZS_LIB=v2 면 승인된 새 음악 24곡(assets/music_lib/v2_*.mp3, musiclib1101b 11/1 승인)을 돌려 쓴다
+
+def add_lib(cid, i):
+    src = os.path.join(SRC, cid + ".mp4"); dst = os.path.join(OUT, cid + ".mp4"); total = dur(src)
+    lib = sorted(glob.glob(os.path.join(ROOT, "assets", "music_lib", LIB + "_*.mp3")))
+    used = [x.get("track") for x in json.load(open(os.path.join(ROOT, "content", "music_log.json"))) if x.get("track")]
+    fresh = [t for t in lib if os.path.basename(t) not in used[-len(lib) + 1:]] or lib   # 최근에 쓴 곡은 건너뛴다
+    tr = fresh[(i + len(used)) % len(fresh)]; fo = max(0.0, total - 0.8)
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", src, "-stream_loop", "-1", "-i", tr, "-map", "0:v", "-map", "1:a", "-c:v", "copy",
+                    "-af", f"afade=t=in:d=0.3,afade=t=out:st={fo:.2f}:d=0.8", "-c:a", "aac", "-b:a", "128k", "-t", f"{total:.3f}", "-movflags", "+faststart", dst], check=True)
+    return dict(name=cid, kind="lib-" + LIB, track=os.path.basename(tr))
+
 def add(cid, i):
+    if LIB: return add_lib(cid, i)
     src = os.path.join(SRC, cid + ".mp4"); dst = os.path.join(OUT, cid + ".mp4")
     style = STYLES[i % 4]; key = KEYS[i % len(KEYS)]; seed = 1600 + i; total = dur(src)
     bpm = RM.pick_bpm(style, seed); beats = max(8, (total - 0.3) / (60.0 / bpm))
@@ -34,6 +47,6 @@ if __name__ == "__main__":
     allids = sorted(os.path.basename(p)[:-4] for p in glob.glob(os.path.join(SRC, PRE + "*.mp4")))
     logp = os.path.join(ROOT, "content", "music_log.json"); log = json.load(open(logp))
     for cid in ids:
-        e = add(cid, allids.index(cid)); print(cid, e["style"], e["bpm"], e["key"])
+        e = add(cid, allids.index(cid)); print(cid, e.get("track") or (e["style"], e["bpm"], e["key"]))
         log = [x for x in log if x.get("name") != cid] + [e]
     json.dump(log, open(logp, "w"), ensure_ascii=False, indent=1)

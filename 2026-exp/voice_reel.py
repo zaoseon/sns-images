@@ -49,7 +49,7 @@ def 장면(c, P, i, 끝):
     if c.get("표지"):
         부분.append(쓰기("센표지", 왜="멈춤", s=-0.5, d=0.6, 단="마무리 카드", 줄=c["제목"], 강조=c.get("강조", []), 크기=c.get("크기", 140)))
     else:
-        부분.append(쓰기("말자막", 왜="정보", s=0, d=0.5, 단="마무리 카드", 줄=c["제목"], 강조=c.get("강조", []), 강조2=c.get("강조2", []), 자막=rows, 모양=c.get("모양")))
+        부분.append(쓰기("말자막", 왜="정보", s=0, d=0.5, 단="마무리 카드", 줄=c["제목"], 강조=c.get("강조", []), 강조2=c.get("강조2", []), 자막=rows, 모양=c.get("모양"), 작은줄=c.get("작은줄", [0] if len(c["제목"]) == 2 else [])))
     p = f"{WORK}/{c['이름']}.html"
     open(p, "w", encoding="utf-8").write(MK.페이지(부분, 판=P, ch="reel", ai=False, 끝=(None if 끝 else 초), 상단줄=not c.get("표지")))
     mp4 = HM.render(p, c["이름"], 초=초, fps=30, ch="reel")[0]
@@ -69,10 +69,9 @@ def 만들기(씬, 이름, P="k_gold", out_dir=None):
     src, mo = f"{SNS}/_vr_src", f"{SNS}/_vr_out"
     shutil.rmtree(src, True); shutil.rmtree(mo, True); os.makedirs(src)
     shutil.copy(raw, f"{src}/vr-{이름}.mp4")
-    subprocess.run(["python3", "pipeline/clip_v3_music.py"], cwd=SNS, env=dict(os.environ, ZS_SRC="_vr_src", ZS_OUT="_vr_out", ZS_PRE="vr-"), check=True, stdout=subprocess.DEVNULL)
+    subprocess.run(["python3", "pipeline/clip_v3_music.py"], cwd=SNS, env=dict(os.environ, ZS_SRC="_vr_src", ZS_OUT="_vr_out", ZS_PRE="vr-", ZS_LIB="v2"), check=True, stdout=subprocess.DEVNULL)
     mus = f"{WORK}/{이름}_music.mp4"; shutil.copy(f"{mo}/vr-{이름}.mp4", mus)
     shutil.rmtree(src, True); shutil.rmtree(mo, True)
-    subprocess.run(["git", "checkout", "-q", "--", "content/music_log.json"], cwd=SNS)
     mix = f"{WORK}/{이름}_mix.mp4"; NR.섞기(mus, voice, mix)
     out = f"{out_dir or WORK}/{이름}.mp4"
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mix, "-c:v", "libx264", "-preset", "veryfast", "-crf", "24", "-c:a", "copy", out], check=True)

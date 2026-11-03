@@ -1082,5 +1082,15 @@
   "bpm": 126,
   "key": "C",
   "seed": 1602
+ },
+ {
+  "name": "vr-t_dv1",
+  "kind": "lib-v2",
+  "track": "v2_candy1.mp3"
+ },
+ {
+  "name": "vr-t_mv2",
+  "kind": "lib-v2",
+  "track": "v2_candy3.mp3"
  }
 ]
