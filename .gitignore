@@ -2,3 +2,15 @@ __pycache__/
 
 # 모션 중간 HTML — 글꼴이 base64 로 박혀 한 장 39MB. MP4 만 남긴다(10/16)
 2026-motion/html/*.html
+
+# 11/4 voice_reel 장면 조각(렌더 중 잠깐 생기고 parts로 옮겨짐)
+2026-motion/html/dv-*.mp4
+2026-motion/html/mv-*.mp4
+2026-motion/html/ia-*.mp4
+2026-motion/html/ib-*.mp4
+2026-motion/html/yh-*.mp4
+2026-motion/html/ch-*.mp4
+2026-motion/html/me-*.mp4
+2026-motion/html/hr-*.mp4
+2026-motion/html/sh-*.mp4
+2026-motion/html/cn-*.mp4
