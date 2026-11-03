@@ -199,9 +199,10 @@ def _조각(c, T, i):
         b = base64.b64encode(open(c["그림"], "rb").read()).decode()
         return (f'<div class="mkimg" {a} style="background-image:url(data:image/jpeg;base64,{b});'
                 f'background-position:{c.get("자리", "50% 40%")}"></div><div class=mkshade></div>', "")
-    if k == "센표지":
-        크 = c.get("크기", 118)
-        줄 = "".join(f'<div class="mkbig{" hi" if j in c.get("강조", []) else ""}{" hi2" if j in c.get("강조2", []) else ""}" data-j="{j}" style="font-size:{크}px;-webkit-text-stroke:{max(8, 크 // 8)}px #000">{_esc(x)}</div>' for j, x in enumerate(c["줄"]))
+    if k == "센표지":   # 11/4: 줄마다 폭에 맞춰 줄이고 줄바꿈을 막는다('첫 글자로 보는'이 '보/는'으로 쪼개졌다)
+        def _em(t): return sum(.68 if ch.isdigit() else .34 if ch == " " else .55 if ch in "·,.!?" else 1.04 for ch in t) + .3
+        def 크(x): return min(c.get("크기", 118), int(830 / _em(x)))
+        줄 = "".join(f'<div class="mkbig{" hi" if j in c.get("강조", []) else ""}{" hi2" if j in c.get("강조2", []) else ""}" data-j="{j}" style="white-space:nowrap;font-size:{크(x)}px;-webkit-text-stroke:{max(8, 크(x) // 8)}px #000">{_esc(x)}</div>' for j, x in enumerate(c["줄"]))
         return f'<div class="mk mkcover" data-z="{z}" {a}>{줄}</div>', ""
     if k == "장면글":   # 11/3 대표 "검은 바탕 글자 작고 여백 많아": 제목·자막을 한 구역(마무리 카드)에 묶어 세로 가운데, 크게
         def _em(t): return sum(.68 if ch.isdigit() else .34 if ch == " " else .55 if ch in "·,.!?" else 1.04 for ch in t) + .25   # 11/3: G마켓 산스 숫자·가운뎃점이 넓고 외곽선이 양쪽에 붙어 '78·90·02년생'이 줄바꿈됐다
