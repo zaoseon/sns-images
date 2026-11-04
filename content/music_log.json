@@ -1109,11 +1109,6 @@
   "track": "v2_funpop2.mp3"
  },
  {
-  "name": "vr-charge",
-  "kind": "lib-v2",
-  "track": "v2_jersey1.mp3"
- },
- {
   "name": "vr-mercury",
   "kind": "lib-v2",
   "track": "v2_jersey3.mp3"
@@ -1142,5 +1137,10 @@
   "name": "vr-ilgan_a",
   "kind": "lib-v2",
   "track": "v2_candy2.mp3"
+ },
+ {
+  "name": "vr-charge",
+  "kind": "lib-v2",
+  "track": "v2_dembow1.mp3"
  }
 ]
