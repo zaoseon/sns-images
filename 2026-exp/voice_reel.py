@@ -26,6 +26,7 @@ def _맞추기(토큰, 경계):
 def 장면(c, P, i, 끝):
     os.makedirs(f"{WORK}/voice", exist_ok=True)
     자막 = c.get("자막", [])
+    if len(자막) > 3: raise SystemExit(f"[막음] {c['이름']} 자막 {len(자막)}줄 — 3줄까지만(4줄이면 아래 고정 줄을 넘어요, 11/4)")
     줄들 = [x.split(" ") for x in 자막]
     # 11/3 대표 요청(mw0j07m8): 줄 사이에 쉼표, 끝에 마침표를 넣어 목소리가 줄마다 숨을 쉬게(낱말은 그대로라 시각 맞추기에 영향 없음)
     줄말 = [x.replace("*", "").strip() for x in 자막]
