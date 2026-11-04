@@ -1132,5 +1132,10 @@
   "name": "vr-harak",
   "kind": "lib-v2",
   "track": "v2_spedup1.mp3"
+ },
+ {
+  "name": "vr-sheep",
+  "kind": "lib-v2",
+  "track": "v2_spedup3.mp3"
  }
 ]
