@@ -1137,5 +1137,10 @@
   "name": "vr-sheep",
   "kind": "lib-v2",
   "track": "v2_spedup3.mp3"
+ },
+ {
+  "name": "vr-cancel",
+  "kind": "lib-v2",
+  "track": "v2_tropic2.mp3"
  }
 ]
