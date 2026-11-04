@@ -219,6 +219,8 @@ def _조각(c, T, i):
         import re as _re
         _작 = set(c.get("작은줄", [])) | {j for j, x in enumerate(c["줄"]) if _re.fullmatch(r"(첫|두|세|네|다섯|여섯|일곱|여덟|아홉|열) ?번째|하나|둘|셋|넷|다섯", x.strip())}
         def _tk(x, j=None): return min(78 if j in _작 else c.get("크기", 150), int(830 / _em(x)))
+        for j, x in enumerate(c["줄"]):
+            if j not in _작 and _tk(x, j) < 90: raise SystemExit(f"[막음] 제목 줄이 길어 {_tk(x, j)}px로 작아져요(90px 아래): '{x}' — 짧게 나누세요")
         줄 = "".join(f'<div class="mkbig{" hi" if j in c.get("강조", []) else ""}{" hi2" if j in c.get("강조2", []) else ""}{" mksm" if j in _작 else ""}" data-j="{j}" style="white-space:nowrap;font-size:{_tk(x, j)}px;-webkit-text-stroke:{max(8, _tk(x, j) // 8)}px #000">{_esc(x)}</div>' for j, x in enumerate(c["줄"]))
         모양 = c.get("모양") or [0, 1, 2, 3]
         rows = []
@@ -226,6 +228,8 @@ def _조각(c, T, i):
             v = 모양[i % len(모양)]
             txt = " ".join(w for w, _, _ in ln)
             fs = min(c.get("자막크기", 108), int(860 / _em(txt) / (1.08 if any(e for _, _, e in ln) else 1)))   # 11/3 시험: 84는 작게 보임
+            if fs < c.get("최소자막", 80):   # 11/4 대표 '실수하면 안 된다': 긴 줄 때문에 글자가 작아지면 그리기 전에 막는다(줄을 나눠서 다시)
+                raise SystemExit(f"[막음] 자막 줄이 길어 {fs}px로 작아져요(80px 아래): '{txt}' — 8자 안팎으로 나누세요")
             ws = []
             for w, t0, e in ln:
                 cls = "mkw mkem" if e else "mkw"
