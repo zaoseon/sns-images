@@ -25,6 +25,10 @@ BOX_CLOSE = "</td></tr></tbody></table>"
 HR_HTML = f'<hr width="{LINE_W}" align="center" style="width:{LINE_W}px;max-width:100%;border:0;border-top:1px solid {LINE_GRAY};margin:0 auto">'   # 구분선: 회색, 가운데, 이미지보다 짧게(앞뒤 빈 줄 없음)
 ITEM = re.compile(r"^(🔹|🔸|▪️|▫️|•|[①-⑩]|\d+위|\d+\)|\d+\.\s)")
 NUMHEAD = re.compile(r"^\d+\.\s")
+# 11/4 대표 "띠원고 틀 수정"(띠 원고 8편 틀 반복 줄이기): 차례·요약 박스 머리말을 글마다 다르게 쓴다. 서식은 같은 자리로 알아본다.
+ORDER_HEADS = ("📌 이 글의 순서", "📌 본명년 읽는 순서", "📌 날삼재 해 차례", "📌 다섯 갈래로 보기",
+               "📌 말띠 글 차례", "📌 닭띠 미리 보기", "📌 쥐띠 글 순서")
+SUMMARY_HEAD = re.compile(r"^\S{1,4}\s*(한 줄 요약|한 줄로 보면|핵심 한 줄|짧게 말하면|한마디로|요점 한 줄|먼저 결론)")
 
 def pl(p): return FB.plain_of(p).replace("\xa0", " ").strip()
 def blank(p): return p != HR and pl(p) == "" and "<img" not in p
@@ -95,7 +99,7 @@ def _tighten_intro(paras):
 
 def _summary_range(paras):
     """'한 줄 요약' 줄부터 요약 항목이 이어지는 끝까지 [s, e]. 없으면 None."""
-    s = next((i for i, p in enumerate(paras) if p != HR and re.match(r"^\S{1,4}\s*한 줄 요약", pl(p)) and not big(p)), None)
+    s = next((i for i, p in enumerate(paras) if p != HR and SUMMARY_HEAD.match(pl(p)) and not big(p)), None)
     if s is None: return None
     e = s; n = len(paras)
     while e + 1 < n:
@@ -132,7 +136,7 @@ def _box_summary(paras):
     return paras[:s] + [BOX_OPEN + "".join(inner) + BOX_CLOSE] + paras[e + 1:]
 
 def _order_block(paras):
-    h = next((i for i, p in enumerate(paras) if p != HR and pl(p).startswith("📌 이 글의 순서")), None)
+    h = next((i for i, p in enumerate(paras) if p != HR and pl(p).startswith(ORDER_HEADS)), None)
     if h is None: return None
     e = h
     while e + 1 < len(paras) and paras[e + 1] != HR and NUMHEAD.match(pl(paras[e + 1])) and not big(paras[e + 1]) and not blank(paras[e + 1]): e += 1
@@ -160,7 +164,7 @@ def _dividers(paras):
     for i, p in enumerate(paras):
         if p != HR and ((i in heads) or (after_order is not None and False)):
             out.append(HR)
-        if p != HR and ((pl(p).startswith("👇") and not ENGAGE.search(pl(p))) or pl(p).startswith("📌 이 글의 순서")):   # 함께 볼 글 안내(👇) 앞, 이 글의 순서 앞. 댓글·공유 유도 문구의 👇 앞에는 두지 않는다
+        if p != HR and ((pl(p).startswith("👇") and not ENGAGE.search(pl(p))) or pl(p).startswith(ORDER_HEADS)):   # 함께 볼 글 안내(👇) 앞, 이 글의 순서 앞. 댓글·공유 유도 문구의 👇 앞에는 두지 않는다
             out.append(HR)
         out.append(p)
     return out
@@ -210,7 +214,7 @@ def _items_blank(paras):
     out = []; in_order = False
     for p in paras:
         t = pl(p) if p != HR and not p.startswith("<table") else ""
-        if t.startswith("📌 이 글의 순서"): in_order = True
+        if t.startswith(ORDER_HEADS): in_order = True
         elif in_order and not (NUMHEAD.match(t) and not big(p)): in_order = False
         if not in_order and _is_item(p):
             if out and not blank(out[-1]) and out[-1] != HR and not isimg(out[-1]) and not big(out[-1]) and not out[-1].startswith("<table"): out.append(FB.BLANK())
@@ -288,7 +292,7 @@ def _paragraph_gaps(paras):
     out = []; cnt = 0; chain = False; ci = _conclusion_idx(paras); in_order = False
     for i, p in enumerate(paras):
         t = pl(p) if p != HR and not p.startswith("<table") else ""
-        if t.startswith("📌 이 글의 순서"): in_order = True
+        if t.startswith(ORDER_HEADS): in_order = True
         elif in_order and not (NUMHEAD.match(t) and not big(p) and t): in_order = False
         if out and not blank(out[-1]) and out[-1] != HR and not out[-1].startswith("<table") and not isimg(out[-1]) and _plainp(p) or (out and _is_q(p) and False):
             prev = out[-1]
@@ -321,7 +325,7 @@ def _sublabel_blank(paras):
     out = []
     for i, p in enumerate(paras):
         out.append(p)
-        order_head = p != HR and not p.startswith("<table") and pl(p).startswith("📌 이 글의 순서")
+        order_head = p != HR and not p.startswith("<table") and pl(p).startswith(ORDER_HEADS)
         if (order_head or ((_wholebold(p) or _is_sublabel(p)) and not big(p))) and not _is_q(p) and not (p != HR and not p.startswith("<table") and pl(p).startswith("👇")) and i + 1 < len(paras):
             q = paras[i + 1]
             if _plainp(q) and not _wholebold(q): out.append(FB.BLANK())
