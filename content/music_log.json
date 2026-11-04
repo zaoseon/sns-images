@@ -1144,11 +1144,6 @@
   "track": "v2_dembow3.mp3"
  },
  {
-  "name": "vr-gunghap",
-  "kind": "lib-v2",
-  "track": "v2_funpop3.mp3"
- },
- {
   "name": "vr-imgye",
   "kind": "lib-v2",
   "track": "v2_jersey3.mp3"
@@ -1157,5 +1152,10 @@
   "name": "vr-fire",
   "kind": "lib-v2",
   "track": "v2_spedup2.mp3"
+ },
+ {
+  "name": "vr-gunghap",
+  "kind": "lib-v2",
+  "track": "v2_kpop3.mp3"
  }
 ]
