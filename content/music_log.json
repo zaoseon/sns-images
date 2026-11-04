@@ -1117,5 +1117,10 @@
   "name": "vr-charge",
   "kind": "lib-v2",
   "track": "v2_jersey1.mp3"
+ },
+ {
+  "name": "vr-mercury",
+  "kind": "lib-v2",
+  "track": "v2_jersey3.mp3"
  }
 ]
