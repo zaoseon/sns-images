@@ -1122,5 +1122,10 @@
   "name": "vr-mercury",
   "kind": "lib-v2",
   "track": "v2_jersey3.mp3"
+ },
+ {
+  "name": "vr-ilgan_b",
+  "kind": "lib-v2",
+  "track": "v2_kpop2.mp3"
  }
 ]
