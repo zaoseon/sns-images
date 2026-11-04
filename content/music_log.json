@@ -1142,5 +1142,10 @@
   "name": "vr-mercury",
   "kind": "lib-v2",
   "track": "v2_dembow3.mp3"
+ },
+ {
+  "name": "vr-fire",
+  "kind": "lib-v2",
+  "track": "v2_funk2.mp3"
  }
 ]
