@@ -2672,5 +2672,22 @@
    "old": "naver_z86_e7.jpg",
    "new": "naver_z86_e7f.jpg"
   }
+ ],
+ "n87": [
+  {
+   "pos": 1,
+   "old": "naver_z87_l7.jpg",
+   "new": "naver_z87_l7f.jpg"
+  },
+  {
+   "pos": 2,
+   "old": "naver_z87_c7.jpg",
+   "new": "naver_z87_c7f.jpg"
+  },
+  {
+   "pos": 3,
+   "old": "naver_z87_v7.jpg",
+   "new": "naver_z87_v7f.jpg"
+  }
  ]
 }

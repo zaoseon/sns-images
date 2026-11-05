@@ -267,6 +267,12 @@
  "naver_z86_k7f.jpg": "counter",
  "naver_z86_q7.jpg": "quad",
  "naver_z86_q7f.jpg": "quad",
+ "naver_z87_c7.jpg": "compare",
+ "naver_z87_c7f.jpg": "compare",
+ "naver_z87_l7.jpg": "ladder",
+ "naver_z87_l7f.jpg": "ladder",
+ "naver_z87_v7.jpg": "vbar",
+ "naver_z87_v7f.jpg": "vbar",
  "naver_zs10_g5.jpg": "compass",
  "naver_zs10_k5.jpg": "calendar"
 }
