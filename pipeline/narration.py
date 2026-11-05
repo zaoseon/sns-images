@@ -45,7 +45,7 @@ def 얹기(video, lines, out, rate="+8%", music_vol=0.30):
     fc += f"[0:a]volume={music_vol}[mu];[mu][vo1]sidechaincompress=threshold=0.03:ratio=6:attack=20:release=300[md];"
     fc += "[md][vo2]amix=inputs=2:normalize=0:duration=first,loudnorm=I=-14:TP=-1.5:LRA=11[a]"
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error"] + ins + ["-filter_complex", fc, "-map", "0:v", "-map", "[a]",
-                    "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-shortest", out], check=True)
+                    "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-ar", "48000", "-shortest", out], check=True)
     return log
 
 
@@ -76,7 +76,7 @@ def 섞기(video, parts, out, music_vol=0.30):
     fc += f"[0:a]volume={music_vol}[mu];[mu][vo1]sidechaincompress=threshold=0.03:ratio=6:attack=20:release=300[md];"
     fc += "[md][vo2]amix=inputs=2:normalize=0:duration=first,loudnorm=I=-14:TP=-1.5:LRA=11[a]"
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error"] + ins + ["-filter_complex", fc, "-map", "0:v", "-map", "[a]",
-                    "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-shortest", out], check=True)
+                    "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-ar", "48000", "-shortest", out], check=True)
 
 if __name__ == "__main__":
     import sys
