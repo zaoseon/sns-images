@@ -285,6 +285,12 @@
  "naver_z89_e7f.jpg": "exp",
  "naver_z89_q7.jpg": "quad",
  "naver_z89_q7f.jpg": "quad",
+ "naver_z90_b7.jpg": "bignum",
+ "naver_z90_b7f.jpg": "bignum",
+ "naver_z90_k9.jpg": "fork",
+ "naver_z90_k9f.jpg": "fork",
+ "naver_z90_s8.jpg": "sides",
+ "naver_z90_s8f.jpg": "sides",
  "naver_zs10_g5.jpg": "compass",
  "naver_zs10_k5.jpg": "calendar"
 }
