@@ -2757,5 +2757,27 @@
    "old": "naver_z91_e9.jpg",
    "new": "naver_z91_e9f.jpg"
   }
+ ],
+ "n92": [
+  {
+   "pos": 1,
+   "old": "naver_z92_t3.jpg",
+   "new": "naver_z92_t3f.jpg"
+  },
+  {
+   "pos": 2,
+   "old": "naver_z92_r3.jpg",
+   "new": "naver_z92_r3f.jpg"
+  },
+  {
+   "pos": 3,
+   "old": "naver_z92_m3.jpg",
+   "new": "naver_z92_m3f.jpg"
+  },
+  {
+   "pos": 4,
+   "old": "naver_z92_v3.jpg",
+   "new": "naver_z92_v3f.jpg"
+  }
  ]
 }
