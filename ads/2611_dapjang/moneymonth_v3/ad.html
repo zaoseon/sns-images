@@ -41,6 +41,7 @@ canvas{position:absolute;inset:0}
 <div id="brand">자오선</div><div id="ai">AI가 계산·작성한 콘텐츠예요</div>
 </div>
 <script>
+window.FX=['박자글자','배경뒤집기','글자띠','원와이프','도형격자변형','입자글자','UI시연','방사형'];
 const NAVY='#0F1730',Y='#FFD600',LIGHT='#F3F1EA',W='#fff';
 const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)), mix=(a,b,p)=>a+(b-a)*p;
 const ease=x=>{x=cl(x);return 1-Math.pow(1-x,3)}, eio=x=>{x=cl(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};

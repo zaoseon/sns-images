@@ -182,8 +182,30 @@ def render_html(html, 나갈경로, 초, fps=30, ch="reel"):
     os.makedirs(os.path.dirname(os.path.abspath(나갈경로)), exist_ok=True); shutil.move(out, 나갈경로); return secs
 
 
+FXLOG = os.path.join(ROOT, "ads", "fx_log.json")
+
+
+def 기법_검사(html, 이름, 기록=False):
+    """11/10 대표 22:04 "같은 틀이라니 모션이 얼마나 많은데": HTML 의 window.FX(motion_fx.js 기법 이름)가
+    앞 3편과 3개 넘게 겹치면 막는다. ZS_FX_OK=1 로만 건너뛴다. 기록=True 면 렌더 뒤 fx_log 에 적는다."""
+    import re
+    m = re.search(r"window\.FX\s*=\s*\[([^\]]*)\]", open(html, encoding="utf-8").read())
+    if not m: return
+    fx = [x.strip().strip("'\"") for x in m.group(1).split(",") if x.strip()]
+    try: log = json.load(open(FXLOG, encoding="utf-8"))
+    except Exception: log = []
+    앞 = [x for x in log if x.get("name") != 이름][-3:]
+    for x in 앞:
+        겹 = sorted(set(fx) & set(x.get("fx", [])))
+        if len(겹) > 3 and os.environ.get("ZS_FX_OK") != "1":
+            raise SystemExit(f"[막음] 기법이 '{x['name']}' 와 {len(겹)}개 겹쳐요({'·'.join(겹)}). 3개까지만. motion_fx.js LIST 에서 다른 기법을 고르세요.")
+    if 기록:
+        log = [x for x in log if x.get("name") != 이름] + [{"name": 이름, "fx": fx}]
+        json.dump(log, open(FXLOG, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+
+
 def render(html, 이름, 초=15.0, fps=30, ch="reel", 블러=1):
-    금지_검사(html)
+    금지_검사(html); 기법_검사(html, 이름)
     C = CS.CH[ch]
     w, h = C["w"], C["h"]            # 크기는 channel_specs 에서 — 여기 숫자를 박지 않는다
     os.makedirs(OUT, exist_ok=True)
@@ -218,6 +240,7 @@ def main():
     초 = float(next((x.split("=")[1] for x in sys.argv if x.startswith("--초=")), 15))
     fps = int(next((x.split("=")[1] for x in sys.argv if x.startswith("--fps=")), 30))
     p, d = render(a[0], a[1], 초, fps, 블러=int(opt("블러", "1")))
+    기법_검사(a[0], a[1], 기록=True)
     if opt("출력"):
         os.makedirs(os.path.dirname(os.path.abspath(opt("출력"))), exist_ok=True); shutil.move(p, opt("출력")); p = opt("출력")
     if opt("소리", "fun") != "없음":

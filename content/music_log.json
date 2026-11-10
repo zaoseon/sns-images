@@ -1173,5 +1173,13 @@
   "mode": "up",
   "bpm": 120,
   "key": "G"
+ },
+ {
+  "name": "ad_dapjang_heart_v1",
+  "kind": "love",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 118,
+  "key": "A"
  }
 ]
