@@ -1165,5 +1165,13 @@
   "mode": "up",
   "bpm": 114,
   "key": "E"
+ },
+ {
+  "name": "ad_dapjang_moneymonth_v3",
+  "kind": "fun",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "G"
  }
 ]

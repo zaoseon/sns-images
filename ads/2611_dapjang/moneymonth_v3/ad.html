@@ -1,0 +1,132 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:PL;src:url(../../../pipeline/fonts/Paperlogy-9Black.ttf)}
+@font-face{font-family:PR;src:url(../../../pipeline/fonts/PRETENDARD-EXTRABOLD.OTF)}
+@font-face{font-family:SR;src:url(../../../pipeline/fonts/serif.otf)}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#0F1730}
+#s{position:absolute;inset:0;overflow:hidden}
+canvas{position:absolute;inset:0}
+.t{position:absolute;left:0;right:0;text-align:center;white-space:nowrap;will-change:transform}
+.mq{position:absolute;left:-400px;white-space:nowrap;font:900 150px PL;letter-spacing:-4px}
+#brand{position:absolute;top:300px;left:90px;font:900 44px PL}
+#ai{position:absolute;bottom:300px;left:0;right:0;text-align:center;font:800 32px PR}
+#card{position:absolute;left:90px;right:90px;top:560px;height:820px;background:#fff;border-radius:48px;box-shadow:0 30px 80px rgba(15,23,48,.18)}
+#inp{position:absolute;left:60px;right:60px;top:70px;height:130px;border:4px solid #0F1730;border-radius:26px;font:800 56px PR;line-height:122px;padding:0 34px;color:#0F1730;box-sizing:border-box}
+#btn{position:absolute;left:60px;right:60px;top:240px;height:130px;border-radius:999px;background:#0F1730;color:#FFD600;font:900 58px PL;line-height:130px;text-align:center}
+#res{position:absolute;left:60px;right:60px;top:70px;bottom:60px;color:#0F1730}
+#cur{position:absolute;width:0;height:0;border-left:26px solid transparent;border-right:26px solid transparent;border-bottom:56px solid #111;transform-origin:50% 0}
+.pill{position:absolute;left:150px;right:150px;height:150px;border-radius:999px;background:#FFD600;color:#0F1730;font:900 64px PL;line-height:150px;text-align:center}
+.tag{position:absolute;font:800 34px PR;color:#8F9BC0}
+</style></head><body><div id="s">
+<canvas id="cv" width="1080" height="1920"></canvas>
+<div id="m1" class="mq"></div><div id="m2" class="mq"></div><div id="m3" class="mq"></div><div id="m4" class="mq"></div><div id="m5" class="mq"></div>
+<div id="a0" class="t" style="top:610px;font:italic 400 96px SR">아니..</div>
+<div id="a1" class="t" style="top:740px;font:900 200px PL;letter-spacing:-6px">2027년엔</div>
+<div id="a2" class="t" style="top:780px;font:900 132px PL;letter-spacing:-5px">돈 들어오는 달이</div>
+<div id="a3" class="t" style="top:760px;font:900 176px PL;letter-spacing:-6px">있긴 해?ㅠ</div>
+<div id="fc" class="t" style="top:700px;font:900 330px PL;letter-spacing:-10px"></div>
+<div id="c3" class="t" style="top:1420px;font:900 84px PL;color:#0F1730">돈 들어오는 달, 두 번</div>
+<div id="c4" class="t" style="top:1420px;font:800 54px PR;color:#C9D1E8">띠 말고 <b style="color:#FFD600">태어난 시간</b>까지 계산해요</div>
+<div id="card"><div id="inp"><span id="typed"></span></div><div id="btn">무료 판정 보기</div>
+ <div id="res"><div style="font:800 40px PR;color:#5A678F">2027년 돈 들어오는 달</div>
+ <div style="font:900 190px PL;letter-spacing:-6px;line-height:1.05"><span id="cnt">0</span><span style="font-size:110px">번</span></div>
+ <canvas id="ch" width="780" height="360" style="position:absolute;left:0;top:300px"></canvas></div>
+ <div class="tag" id="ex2" style="right:40px;top:24px;color:#8F9BC0">예시</div></div>
+<div id="cur"></div>
+<div id="e1" class="t" style="top:640px;font:900 170px PL;letter-spacing:-6px;color:#fff">정월의 답장</div>
+<div id="e2" class="t" style="top:850px;font:800 58px PR;color:#fff">생일만 넣으면 <b style="color:#FFD600">내 달</b>이 보여요</div>
+<div id="e3" class="pill" style="top:1050px">무료 판정 보기</div>
+<div id="e4" class="t" style="top:1240px;font:800 46px PR;color:#C9D1E8">zaoseon.com</div>
+<div class="tag" id="ex" style="right:90px;top:420px">예시</div>
+<div id="brand">자오선</div><div id="ai">AI가 계산·작성한 콘텐츠예요</div>
+</div>
+<script>
+const NAVY='#0F1730',Y='#FFD600',LIGHT='#F3F1EA',W='#fff';
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)), mix=(a,b,p)=>a+(b-a)*p;
+const ease=x=>{x=cl(x);return 1-Math.pow(1-x,3)}, eio=x=>{x=cl(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+function sp(t,k=14,z=.72){if(t<=0)return 0;const wd=k*Math.sqrt(1-z*z);return 1-Math.exp(-z*k*t)*(Math.cos(wd*t)+(z*k/wd)*Math.sin(wd*t))}
+const H=i=>{const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)};   // 고정 무작위(같은 i → 같은 값)
+const $=id=>document.getElementById(id), cv=$('cv'), g=cv.getContext('2d');
+window.SFX=[{t:0,k:'swoosh'},{t:.5,k:'press'},{t:1,k:'press'},{t:1.5,k:'press'},
+ ...[0,1,2,3].map(i=>({t:2+i*.25,k:'tick'})),{t:3,k:'swoosh'},{t:4.3,k:'swoosh'},{t:4.75,k:'tick'},{t:5.25,k:'tick'},{t:5.75,k:'tick'},
+ {t:6.1,k:'chime'},{t:6.8,k:'swoosh'},{t:7.3,k:'swoosh'},{t:7.9,k:'chime'},{t:8.4,k:'swoosh'},{t:9,k:'chime'},{t:9.4,k:'swoosh'},
+ ...Array.from({length:12},(_,i)=>({t:9.8+i*.07,k:'tick'})),{t:11,k:'press'},{t:11.4,k:'chime'},{t:12.5,k:'swoosh'},{t:12.6,k:'press'},{t:14.2,k:'press'},{t:14.2,k:'chime'}];
+const MQ='돈 들어오는 달 — 2027 — 내 달 — ';
+['m1','m2','m3','m4','m5'].forEach((id,i)=>{const e=$(id);e.textContent=MQ.repeat(4);e.style.top=(520+i*175)+'px';
+ e.style.color=i%2?'transparent':W; e.style.transformOrigin='940px 50%'; e.style.webkitTextStroke=i%2?'3px '+Y:'0'});
+let P3=[],P9=[];
+function pts(txt){const c=document.createElement('canvas');c.width=1080;c.height=900;const x=c.getContext('2d');
+ x.fillStyle='#000';x.font='900 560px PL';x.textAlign='center';x.textBaseline='middle';x.fillText(txt,540,470);
+ const d=x.getImageData(0,0,1080,900).data,o=[];for(let yy=0;yy<900;yy+=11)for(let xx=0;xx<1080;xx+=11)if(d[(yy*1080+xx)*4+3]>128)o.push([xx,yy+430]);return o}
+function shape(cx,cy,s,r,p){ // r: 0 원 → 1 네모, p: 0 네모 → 1 십자
+ const rad=mix(s/2,s*.14,r); const a=s*(1-.62*p);
+ [[a,s],[s,a]].forEach(([w,h])=>{g.beginPath();g.roundRect(cx-w/2,cy-h/2,w,h,Math.min(rad,w/2,h/2));g.fill()});}
+function vis(id,on){$(id).style.display=on?'':'none'}
+function setT(id,t0,t,scale0=1.5){const e=$(id),a=sp(t-t0,16,.62);e.style.transform=`scale(${mix(scale0,1,a)})`;e.style.opacity=t>=t0?1:0}
+function seek(t){
+ g.clearRect(0,0,1080,1920);
+ let bg=NAVY;
+ // 장면1 0~3: 큰 글자가 박자마다 바뀜 + 배경 뒤집기
+ if(t<1)bg=NAVY;else if(t<1.5)bg=Y;else if(t<2)bg=NAVY;else if(t<3){const k=Math.floor((t-2)/.25);bg=k%2?NAVY:Y}
+ else if(t<4.6)bg=NAVY;else if(t<7.05)bg=Y;else if(t<9.5)bg=NAVY;else if(t<12.5)bg=LIGHT;else bg=NAVY;
+ g.fillStyle=bg;g.fillRect(0,0,1080,1920);
+ vis('a0',t<.5); if(t<.5){const a=sp(t,12,.8);$('a0').style.transform=`translateY(${(1-a)*80}px)`;$('a0').style.color=W;$('a0').style.opacity=cl(t/.12)}
+ vis('a1',t>=.5&&t<1); if(t>=.5&&t<1){setT('a1',.5,t);$('a1').style.color=Y}
+ vis('a2',t>=1&&t<1.5); if(t>=1&&t<1.5){setT('a2',1,t);$('a2').style.color=NAVY}
+ vis('a3',t>=1.5&&t<2); if(t>=1.5&&t<2){setT('a3',1.5,t);$('a3').style.color=W}
+ vis('fc',t>=2&&t<3); if(t>=2&&t<3){const k=Math.floor((t-2)/.25);$('fc').textContent=['3월?','6월?','9월?','12월?'][k];$('fc').style.color=k%2?Y:NAVY;setT('fc',2+k*.25,t,1.25)}
+ // 장면2 3~4.6: 흐르는 글자 띠 + 노란 원이 화면을 덮음
+ const s2=t>=3&&t<4.7; ['m1','m2','m3','m4','m5'].forEach((id,i)=>{vis(id,s2); if(s2){const d=i%2?1:-1, v=(t-3)*620*d - (i%2?900:0);
+  $(id).style.transform=`rotate(-9deg) translateX(${v}px)`; $(id).style.opacity=cl((t-3-i*.04)/.12)*(1-eio((t-4.2)/.35))}});
+ if(t>=4.1&&t<4.7){const r=eio((t-4.1)/.5)*1300;g.fillStyle=Y;g.beginPath();g.arc(540,960,r,0,7);g.fill()}
+ // 장면3 4.6~7.05: 열두 달 도형 격자가 원→네모→십자, 3·9월만 커짐
+ vis('c3',t>=6.2&&t<7.05); vis('ex',(t>=4.6&&t<7.05)||(t>=7.05&&t<9.5));
+ if(t>=4.6&&t<7.3){const cols=3,sx=270,sy=230,x0=270,y0=560;
+  for(let i=0;i<12;i++){const cx=x0+(i%cols)*sx, cy=y0+Math.floor(i/cols)*sy, gold=(i==2||i==8), w=i*.035;
+   const ap=sp(t-4.65-w,13,.65), r=sp(t-4.75-w,15,.7), p=sp(t-5.25-w,15,.7)-sp(t-5.75-w,15,.7);
+   let s=150*ap; if(t>6){const q=sp(t-6.05,12,.6); s=gold?mix(150,230,q):mix(150,46,q)}
+   g.fillStyle=gold&&t>6?NAVY:'#1E2A55'; if(s>1)shape(cx,cy,s,r,cl(p));
+   g.fillStyle=gold&&t>6?Y:'#fff'; g.font=`900 ${gold&&t>6?66:44}px PL`;g.textAlign='center';g.textBaseline='middle';
+   if(s>60)g.fillText((i+1)+'월',cx,cy+3)}
+  $('c3').style.opacity=cl((t-6.2)/.15);$('c3').style.transform=`translateY(${(1-ease((t-6.2)/.35))*40}px)`;
+  if(t>=6.8){const r=eio((t-6.8)/.4)*2300;g.fillStyle=NAVY;g.beginPath();g.arc(810,1250,r,0,7);g.fill()}}
+ // 장면4 7.05~9.5: 입자 2,000개가 모여 '3월' → 흩어져 '9월'
+ vis('c4',t>=7.9&&t<9.5);
+ if(t>=7.05&&t<9.6){const N=Math.max(P3.length,P9.length);g.fillStyle=Y;
+  for(let i=0;i<N;i++){const a=P3[i%P3.length],b=P9[i%P9.length],h=H(i),h2=H(i+999),ang=h*6.283,R=700+h2*500;
+   let x=540+Math.cos(ang)*R,y=960+Math.sin(ang)*R;
+   const p1=sp(t-7.15-h*.45,9,.75); x=mix(x,a[0],p1); y=mix(y,a[1],p1);
+   const p2=eio((t-8.35-h2*.3)/.55); if(p2>0){const sw=Math.sin(Math.PI*p2)*(h-.5)*520; x=mix(x,b[0],p2)+sw; y=mix(y,b[1],p2)-Math.abs(sw)*.4}
+   if(t>9.25){const p3=eio((t-9.25)/.3);y-=p3*(900+h*700)}
+   const z=i%3==0?9:6; g.fillRect(x-z/2,y-z/2,z,z)}
+  $('c4').style.opacity=cl((t-7.9)/.2)}
+ if(t>=9.3&&t<9.6){const y=mix(1920,0,eio((t-9.3)/.3));g.fillStyle=LIGHT;g.fillRect(0,y,1080,1920)}
+ // 장면5 9.5~12.5: 앱 화면 시연 — 입력 → 단추 누름 → 숫자 카운트 + 선 그래프
+ const s5=t>=9.5&&t<12.6; vis('card',s5); vis('cur',t>=10.4&&t<11.5);
+ if(s5){const a=sp(t-9.5,12,.7);$('card').style.transform=`translateY(${(1-a)*300}px) scale(${mix(.9,1,a)})`;
+  const txt='1990.05.12  오전 7시';$('typed').textContent=txt.slice(0,Math.floor(cl((t-9.8)/.85)*txt.length));
+  const pressed=t>=11; vis('inp',t<11.15); vis('btn',t<11.15); vis('res',t>=11.15);
+  $('btn').style.transform=`scale(${t>=11&&t<11.15?.93:1})`;
+  if(t>=10.4){const m=eio((t-10.4)/.5);$('cur').style.left=mix(900,560,m)+'px';$('cur').style.top=mix(1500,880,m)+'px';$('cur').style.transform=`rotate(-25deg) scale(${t>=11&&t<11.12?.85:1})`}
+  if(t>=11.15){const c=Math.round(cl((t-11.3)/.5)*2);$('cnt').textContent=c;
+   const ch=$('ch').getContext('2d');ch.clearRect(0,0,780,360);const V=[.3,.25,.85,.35,.3,.4,.33,.28,.92,.36,.4,.3];
+   const q=cl((t-11.35)/.9)*11;ch.strokeStyle=NAVY;ch.lineWidth=8;ch.lineJoin='round';ch.beginPath();
+   for(let i=0;i<=Math.floor(q)+1&&i<12;i++){let x=30+i*65,y=320-V[i]*280;if(i>q){const f=q-Math.floor(q);x=mix(30+(i-1)*65,x,f);y=mix(320-V[i-1]*280,y,f)}i?ch.lineTo(x,y):ch.moveTo(x,y)}ch.stroke();
+   [2,8].forEach((i,k)=>{if(q>=i){const s=sp(t-11.35-i/11*.9,16,.6);ch.fillStyle=Y;ch.beginPath();ch.arc(30+i*65,320-V[i]*280,22*s,0,7);ch.fill();
+     ch.fillStyle=NAVY;ch.font='900 40px PL';ch.textAlign='center';if(s>.5)ch.fillText((i+1)+'월',30+i*65,320-V[i]*280-38)}});}
+  if(t>12.3){$('card').style.opacity=1-ease((t-12.3)/.25)}else $('card').style.opacity=1}
+ // 장면6 12.5~15: 회전 방사형 + 큰 이름 + 단추
+ const s6=t>=12.5; ['e1','e2','e3','e4'].forEach(i=>vis(i,s6));
+ if(s6){const sp6=sp(t-12.5,8,.8); g.save();g.translate(540,780);g.rotate(t*.35);g.fillStyle='rgba(255,214,0,.13)';
+  for(let i=0;i<16;i++){g.rotate(6.283/16);g.beginPath();g.moveTo(0,0);g.lineTo(-70*sp6,-1400);g.lineTo(70*sp6,-1400);g.fill()}g.restore();
+  setT('e1',12.6,t,1.6);
+  $('e2').style.opacity=cl((t-13)/.2);$('e2').style.transform=`translateY(${(1-ease((t-13)/.35))*40}px)`;
+  const a=sp(t-13.4,13,.65);$('e3').style.opacity=cl((t-13.4)/.1);$('e3').style.transform=`scale(${t>=14.2&&t<14.4?.93:mix(.5,1,a)})`;
+  $('e4').style.opacity=cl((t-13.7)/.2)}
+ // 고정: 위 '자오선' · 아래 AI 고지(판 색에 따라 글자색)
+ const dark=(bg==NAVY)&&!(t>=4.35&&t<4.6)&&!(t>=6.95&&t<7.05);$('brand').style.color=dark?Y:NAVY;$('ai').style.color=dark?'#8F9BC0':'#5A678F';
+ $('ex').style.color=dark?'#8F9BC0':'#5A678F';
+}
+(async()=>{await document.fonts.load('900 100px PL');await document.fonts.load('800 40px PR');await document.fonts.load('italic 400 40px SR');
+ P3=pts('3월');P9=pts('9월');window.seek=seek;seek(0)})();
+</script></body></html>
