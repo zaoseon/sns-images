@@ -1181,5 +1181,13 @@
   "mode": "up",
   "bpm": 118,
   "key": "A"
+ },
+ {
+  "name": "reel_1113_hwagae",
+  "kind": "fun",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 124,
+  "key": "C"
  }
 ]

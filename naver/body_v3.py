@@ -59,15 +59,17 @@ def intro_v3(name, c, summary, maps, label, face):
         ls = K.balanced(tmp, summary, XB, size, mw)
         if len(ls) <= 3: break
     lh = int(size * 1.3); R_ = 70
-    H = 70 + 2 * R_ + 40 + 70 + len(ls) * lh + 40 + 60 + 60; cv = _panel(H, c)
+    H = 70 + 2 * R_ + 40 + 70 + len(ls) * lh + 40 + 60 + 60 + 60; cv = _panel(H, c)
     cy = 70 + R_; cx = L + 10 + R_
     TQ.badge(cv.img, cv.d, face, c, int(cx * K.S), int(cy * K.S), int(R_ * K.S))
-    cv.text(cx + R_ + 30, cy - 18, "정월의 한 줄 결론", XB, 40, c.acc, "lm"); cv.text(cx + R_ + 30, cy + 30, "AI로 생성한 가상의 캐릭터입니다", SB, 26, c.gray, "lm")
+    # 11/11 대표 폰 캡처("이미지가 모바일 최적화 안 된 게 섞여 있어"): 26px·28px 글자는 폰에서 8~9px. 꽉 찬 판(f) 기준 1280px 에서 34px 이상(폰 약 10px)
+    cv.text(cx + R_ + 30, cy - 20, "정월의 한 줄 결론", XB, 46, c.acc, "lm"); cv.text(cx + R_ + 30, cy + 32, "AI로 생성한 가상의 캐릭터예요", SB, 32, c.gray, "lm")
     y = 70 + 2 * R_ + 50
     for l in ls: cv.text(L + 10, y, l, XB, size, c.fg, "la"); y += lh
     cv.line(L + 10, y + 20, L + 170, y + 20, c.acc, 10)
     plain = re.sub(r"\([^)]*[\u4e00-\u9fff][^)]*\)", "", maps); m = label + "  " + plain   # 한자 괄호는 빼고(글꼴이 섞여 보임)
-    cv.text(L + 10, y + 70, m, SB, cv.fit(m, SB, 38, mw, 28), c.gray, "la")
+    ms = K.balanced(cv, m, SB, 40, mw) if cv.tw(m, SB, 40) > mw else [m]
+    for k, l in enumerate(ms[:2]): cv.text(L + 10, y + 70 + k * 54, l, SB, 40, c.gray, "la")
     _save(cv, name)
 
 def pal_of(pid):
