@@ -1157,5 +1157,13 @@
   "name": "vr-imgye",
   "kind": "lib-v2",
   "track": "v2_kpop1.mp3"
+ },
+ {
+  "name": "ad_dapjang_moneymonth_v2",
+  "kind": "fun",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 114,
+  "key": "E"
  }
 ]

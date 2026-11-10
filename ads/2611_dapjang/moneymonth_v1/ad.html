@@ -1,0 +1,96 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:PL;src:url(../../../pipeline/fonts/Paperlogy-9Black.ttf)}
+@font-face{font-family:PLX;src:url(../../../pipeline/fonts/Paperlogy-8ExtraBold.ttf)}
+@font-face{font-family:PR;src:url(../../../pipeline/fonts/PRETENDARD-EXTRABOLD.OTF)}
+@font-face{font-family:PRB;src:url(../../../pipeline/fonts/PRETENDARD-BLACK.OTF)}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#0F1730}
+#s{position:absolute;inset:0;overflow:hidden;color:#fff}
+.ab{position:absolute;left:0;right:0;text-align:center;will-change:transform,opacity}
+.mask{position:absolute;left:0;right:0;overflow:hidden;text-align:center}
+.mask>span{display:inline-block}
+#h0{top:520px;font:900 92px PL;color:#FFD600;height:120px}
+#h1{top:660px;font:900 88px PL;height:136px;letter-spacing:-2px}
+#h2{top:790px;font:900 88px PL;height:136px;letter-spacing:-2px}
+#inp{top:560px;left:120px;right:120px;height:150px;border:4px solid #FFD600;border-radius:28px;position:absolute;box-sizing:border-box;padding:0 40px;font:800 64px PR;line-height:142px;text-align:left;color:#fff}
+#inl{position:absolute;top:470px;left:124px;font:800 44px PR;color:#C9D1E8}
+#cur{display:inline-block;width:5px;height:66px;background:#FFD600;vertical-align:-10px;margin-left:6px}
+#chart{position:absolute;left:110px;right:110px;top:560px;height:700px}
+.bar{position:absolute;bottom:80px;width:52px;border-radius:14px 14px 4px 4px;background:#3A4670}
+.ml{position:absolute;bottom:20px;width:52px;text-align:center;font:800 34px PR;color:#C9D1E8}
+.tag{position:absolute;font:900 50px PL;color:#111;background:#FFD600;border-radius:999px;padding:8px 26px;white-space:nowrap}
+#base{position:absolute;left:0;right:0;bottom:78px;height:4px;background:#5A678F}
+#cap{top:1330px;font:900 84px PL;height:110px}
+#cap2{top:1440px;font:800 52px PR;color:#C9D1E8;height:70px}
+#ex{position:absolute;top:490px;right:120px;font:800 36px PR;color:#8F9BC0}
+#t1{top:640px;font:900 96px PL;height:130px}
+#t2{top:780px;font:900 96px PL;height:130px;color:#FFD600}
+#pill{position:absolute;left:140px;right:140px;top:1040px;height:150px;border-radius:999px;background:#FFD600;color:#111;font:900 64px PL;line-height:150px;text-align:center}
+#sub{top:1230px;font:800 50px PR;color:#fff}
+#url{top:1310px;font:800 44px PR;color:#C9D1E8}
+#brand{position:absolute;top:300px;left:110px;font:900 44px PL;color:#FFD600}
+#ai{position:absolute;bottom:300px;left:110px;right:110px;font:800 34px PR;color:#8F9BC0;text-align:center}
+</style></head><body><div id="s">
+<div id="brand">자오선</div>
+<div class="mask" id="h0"><span>아니..</span></div>
+<div class="mask" id="h1"><span>2027년엔 돈 들어오는 달이</span></div>
+<div class="mask" id="h2"><span>있긴 한 거야?ㅠㅠ</span></div>
+<div id="inl">생일·태어난 시간</div>
+<div id="inp"><span id="typed"></span><span id="cur"></span></div>
+<div id="ex">예시</div>
+<div id="chart"><div id="base"></div></div>
+<div class="mask" id="cap"><span>돈 들어오는 달, 두 번</span></div>
+<div class="mask" id="cap2"><span>띠 말고 태어난 시간까지 계산해요</span></div>
+<div class="mask" id="t1"><span>생일만 넣으면</span></div>
+<div class="mask" id="t2"><span>내 달이 보여요</span></div>
+<div id="pill">무료 판정 보기</div>
+<div class="ab" id="sub">정월의 답장 · 2,900원부터</div>
+<div class="ab" id="url">zaoseon.com</div>
+<div id="ai">AI가 계산·작성한 콘텐츠예요</div>
+</div>
+<script>
+window.SFX=[{t:0,k:'swoosh'},{t:2.9,k:'swoosh'},...Array.from({length:14},(_,i)=>({t:3.1+i*0.086,k:'tick'})),{t:4.7,k:'swoosh'},{t:6.3,k:'chime'},{t:6.42,k:'chime'},{t:8.9,k:'swoosh'},{t:10.9,k:'press'},{t:10.9,k:'chime'}];
+const B=0.5; // 120BPM 한 박 0.5초
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+function spring(t,k=14,z=0.78){ if(t<=0)return 0; const w=k, d=z; const wd=w*Math.sqrt(1-d*d); return 1-Math.exp(-d*w*t)*(Math.cos(wd*t)+(d*w/wd)*Math.sin(wd*t)); }
+const ease=x=>{x=cl(x);return 1-Math.pow(1-x,3)};
+const $=id=>document.getElementById(id);
+const months=[1,2,3,4,5,6,7,8,9,10,11,12], H=[220,180,520,240,200,260,210,190,560,230,250,200], GOLD=[2,8];
+const ch=$('chart'); const W=860, gap=W/12;
+months.forEach((m,i)=>{const b=document.createElement('div');b.className='bar';b.id='b'+i;b.style.left=(i*gap+(gap-52)/2)+'px';ch.appendChild(b);
+ const l=document.createElement('div');l.className='ml';l.textContent=m;l.style.left=(i*gap+(gap-52)/2)+'px';ch.appendChild(l);});
+GOLD.forEach((i,k)=>{const t=document.createElement('div');t.className='tag';t.id='g'+k;t.textContent=(i+1)+'월';ch.appendChild(t);});
+function rise(el,t0,t,out0,out1){ // 마스크 선 위로 올라왔다가 위로 빠짐
+  const sp=el.querySelector('span'); const a=spring(t-t0); let y=(1-a)*110, o=t>=t0?1:0;
+  if(out0!==undefined && t>out0){ const b=ease((t-out0)/(out1-out0)); y=-b*120; }
+  sp.style.transform=`translateY(${y}%)`; el.style.opacity=o; }
+function show(el,on){el.style.display=on?'':'none'}
+window.seek=function(t){
+  // 장면1 0~2.6s 훅
+  rise($('h0'),0.0,t,2.4,2.8); rise($('h1'),0.25,t,2.45,2.85); rise($('h2'),0.5,t,2.5,2.9);
+  [ 'h0','h1','h2'].forEach(i=>show($(i),t<3.0));
+  // 장면2 2.9~4.6s 입력
+  const s2=t>=2.9&&t<4.9; show($('inp'),s2); show($('inl'),s2);
+  if(s2){ const a=spring(t-2.9); $('inp').style.transform=`translateY(${(1-a)*60}px)`; $('inp').style.opacity=cl((t-2.9)/0.15);
+    const txt='1990.05.12  오전 7시'; const n=Math.floor(cl((t-3.1)/1.2)*txt.length); $('typed').textContent=txt.slice(0,n);
+    $('cur').style.opacity=(Math.floor(t/0.25)%2)?0.2:1;
+    if(t>4.5){const b=ease((t-4.5)/0.4); $('inp').style.transform=`translateY(${-b*80}px)`; $('inp').style.opacity=1-b; $('inl').style.opacity=1-b;} else {$('inl').style.opacity=cl((t-2.9)/0.2)} }
+  // 장면3 4.7~8.8s 막대
+  const s3=t>=4.7&&t<9.0; show($('chart'),s3); show($('ex'),s3); show($('cap'),s3); show($('cap2'),s3);
+  if(s3){ $('ex').style.opacity=cl((t-4.8)/0.3);
+    months.forEach((m,i)=>{const t0=4.8+i*0.06; const isG=GOLD.includes(i); const t1=isG?6.3:t0;
+      const base=isG?200:H[i]; let h=spring(t-t0,12,0.8)*base; if(isG) h+= spring(t-t1,13,0.72)*(H[i]-200);
+      const b=$('b'+i); b.style.height=Math.max(0,h)+'px'; b.style.background=(isG&&t>=6.3)?'#FFD600':'#3A4670';
+      if(t>8.5){b.style.opacity=1-ease((t-8.5)/0.4)} else b.style.opacity=1; });
+    GOLD.forEach((i,k)=>{const g=$('g'+k); const a=spring(t-6.55-k*0.12,16,0.7); g.style.left=(i*gap+gap/2-62)+'px'; g.style.bottom=(80+H[i]+18)+'px';
+      g.style.transform=`scale(${a})`; g.style.opacity=t>=6.55?1:0; if(t>8.5) g.style.opacity=1-ease((t-8.5)/0.4);});
+    rise($('cap'),6.9,t,8.5,8.9); rise($('cap2'),7.4,t,8.55,8.95); }
+  // 장면4 8.9~12s 행동
+  const s4=t>=8.9; ['t1','t2','sub','url'].forEach(i=>show($(i),s4)); show($('pill'),s4);
+  if(s4){ rise($('t1'),8.95,t); rise($('t2'),9.2,t); const a=spring(t-9.7,13,0.75); $('pill').style.transform=`scale(${0.6+0.4*a})`; $('pill').style.opacity=cl((t-9.7)/0.12);
+    const p=t>10.9&&t<11.15?0.94:1; if(t>10.9) $('pill').style.transform=`scale(${p})`;
+    $('sub').style.opacity=cl((t-10.1)/0.25); $('sub').style.transform=`translateY(${(1-ease((t-10.1)/0.35))*30}px)`;
+    $('url').style.opacity=cl((t-10.35)/0.25); }
+};
+seek(0);
+</script></body></html>

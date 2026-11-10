@@ -18,8 +18,19 @@ HTML 쪽 약속 하나
   CSS 애니메이션을 시간에 맡기지 않고 우리가 시각을 지정하므로 **몇 번을 돌려도 같은 영상**이 나온다
   (화면 녹화는 그때그때 다르다).
 
-사용: python3 pipeline/html_motion.py 파일.html 나갈이름 [--초 15] [--fps 30]
-결과: 2026-motion/html/<나갈이름>.mp4
+사용: python3 pipeline/html_motion.py 파일.html 나갈이름 [--초=15] [--fps=30] [--소리=fun|love|data|없음] [--출력=경로.mp4]
+     python3 pipeline/html_motion.py 파일.html --확인=1.5,4,7.6,11.5      박자별 확인 컷 한 장(전체 렌더 전에 본다)
+결과: 2026-motion/html/<나갈이름>.mp4 (소리 있음 — K-070)
+
+11/10 보완(대표 "이 제작 기법도 콘텐츠 제작 파이프라인에 추가", 빌더 조쉬 모션 프롬프트 벤치마크)
+  ① 소리를 붙인다. 전에는 소리 없는 mp4 만 나왔다(K-070 위반 위험). 음악은 music_plan(→reel_music) 그대로 쓰고
+     — 음악 도구를 새로 만들지 않는다 — HTML 이 `window.SFX=[{t:초,k:'swoosh|tick|chime|press'}]` 를 내놓으면
+     그 시각에 효과음을 얹는다. 소리는 48kHz(네이버 클립이 96kHz 를 거부, 11/5).
+  ② 금지 검사: 시간이 seek(t) 밖에서 흐르는 것(CSS 애니메이션·transition·타이머·Math.random·Date.now)과
+     빌더 조쉬 금지 목록 중 코드로 잴 수 있는 것(blur·glow 그림자)을 그리기 전에 막는다.
+  ③ 확인 컷: 박자 시각 몇 개만 먼저 찍어 한 장으로 붙인다 — 360장 다 찍고 틀린 것을 알지 않게.
+  ④ render_html(html, 나갈경로, 초): motion_kinetic·motion_litho 등이 부르던 이름이 없어서 깨져 있었다. 되살렸다.
+  만드는 법 정리: zaoseon-site:docs/제작_가이드라인_최종_2026-10-16.md 16절.
 """
 import os, sys, json, shutil, asyncio, subprocess, tempfile
 
@@ -74,7 +85,94 @@ async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역):
     return n
 
 
+금지 = [  # (찾을 것, 까닭) — 시간은 seek(t) 하나가 정한다. 꾸밈만 하는 효과는 안 쓴다(K-073·빌더 조쉬 금지 목록)
+    (r"@keyframes|animation\s*:", "CSS 애니메이션 — 시간이 seek 밖에서 흐른다"),
+    (r"transition\s*:", "transition — 프레임마다 결과가 달라진다"),
+    (r"setTimeout|setInterval|requestAnimationFrame", "타이머 — seek(t) 하나로 정해야 한다"),
+    (r"Math\.random|Date\.now|performance\.now", "무작위·현재 시각 — 몇 번을 돌려도 같은 영상이어야 한다"),
+    (r"filter\s*:[^;]*blur|backdrop-filter", "blur — 흐림 등장·배경 흐림 금지"),
+    (r"text-shadow\s*:[^;]*\d{2,}px", "큰 글자 그림자(glow) 금지"),
+]
+
+
+def 금지_검사(html):
+    import re
+    s = open(html, encoding="utf-8").read()
+    걸림 = [why for pat, why in 금지 if re.search(pat, s)]
+    if 걸림:
+        raise SystemExit("[막음] " + os.path.basename(html) + " — " + " / ".join(걸림))
+
+
+def 확인컷(html, 시각, ch="reel"):
+    """박자 시각 몇 개만 찍어 가로로 붙인 한 장(1/3 크기). 돌려줌: png 경로."""
+    from PIL import Image
+    from playwright.sync_api import sync_playwright
+    금지_검사(html)
+    C = CS.CH[ch]; w, h = C["w"], C["h"]; ims = []
+    with sync_playwright() as pw:
+        b = pw.chromium.launch(); pg = b.new_page(viewport={"width": w, "height": h})
+        pg.goto("file://" + os.path.abspath(html)); pg.wait_for_function("typeof window.seek === 'function'")
+        pg.evaluate("document.fonts.ready")
+        for t in 시각:
+            pg.evaluate("t => window.seek(t)", t); f = tempfile.mktemp(suffix=".png"); pg.screenshot(path=f)
+            ims.append(Image.open(f).convert("RGB").resize((w // 3, h // 3))); os.remove(f)
+        b.close()
+    c = Image.new("RGB", (w // 3 * len(ims), h // 3), "white")
+    for i, im in enumerate(ims): c.paste(im, (i * (w // 3), 0))
+    out = os.path.splitext(os.path.abspath(html))[0] + "_확인.png"; c.save(out); return out
+
+
+def _효과음(path, 초, cues, sr=48000):
+    import numpy as np, wave
+    n = int(sr * 초); a = np.zeros(n); tt = lambda d: np.arange(int(sr * d)) / sr
+    g = np.random.default_rng(7)   # 씨앗 고정 — 같은 영상엔 같은 소리
+    def sw():  t = tt(.4);  return .10 * g.standard_normal(len(t)) * np.sin(np.pi * t / .4)
+    def tick(): t = tt(.04); return .12 * g.standard_normal(len(t)) * np.exp(-t * 120)
+    def chime(f): t = tt(1.2); return .22 * (np.sin(2*np.pi*f*t) + .5*np.sin(4*np.pi*f*t)) * np.exp(-t * 3.5)
+    def press(): t = tt(.12); return .35 * np.sin(2*np.pi*(180 - 600*t)*t) * np.exp(-t * 30)
+    ci = 0
+    for c in cues:
+        k = c.get("k"); s_ = sw() if k == "swoosh" else tick() if k == "tick" else press() if k == "press" else None
+        if k == "chime": s_ = chime([880, 1174.7, 1318.5][ci % 3]); ci += 1
+        if s_ is None: continue
+        i = int(float(c["t"]) * sr); j = min(n, i + len(s_))
+        if i < n: a[i:j] += s_[:j - i]
+    s = (np.tanh(a * 1.2) * .85 * 32767).astype("int16")
+    w = wave.open(path, "wb"); w.setnchannels(2); w.setsampwidth(2); w.setframerate(sr)
+    w.writeframes(np.stack([s, s], 1).tobytes()); w.close()
+
+
+def 소리붙이기(mp4, 초, html, 분위기="fun", 이름=None):
+    """music_plan 음악 + HTML 의 window.SFX 효과음 → 48kHz aac. 영상은 다시 인코딩하지 않는다."""
+    import music_plan as MP
+    from playwright.sync_api import sync_playwright
+    with sync_playwright() as pw:
+        b = pw.chromium.launch(); pg = b.new_page(); pg.goto("file://" + os.path.abspath(html))
+        cues = pg.evaluate("() => window.SFX || []"); b.close()
+    info = MP.choose(분위기, 이름 or os.path.splitext(os.path.basename(mp4))[0])
+    MP.mux(mp4, [초], info, 91)                      # 음악(박자 맞춤)은 기존 도구 그대로
+    if cues:
+        wav = mp4 + ".sfx.wav"; _효과음(wav, 초, cues); tmp = mp4 + ".s.mp4"
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mp4, "-i", wav, "-filter_complex",
+                        "[0:a]volume=0.7[m];[m][1:a]amix=inputs=2:duration=first:normalize=0[a]",
+                        "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-ar", "48000", "-b:a", "160k",
+                        "-movflags", "+faststart", tmp], check=True)
+        os.replace(tmp, mp4); os.remove(wav)
+    else:
+        tmp = mp4 + ".r.mp4"
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mp4, "-c:v", "copy", "-c:a", "aac", "-ar", "48000",
+                        "-b:a", "160k", "-movflags", "+faststart", tmp], check=True); os.replace(tmp, mp4)
+    return info
+
+
+def render_html(html, 나갈경로, 초, fps=30, ch="reel"):
+    """motion_* 모듈이 부르는 이름(소리 없이 렌더만 — 음악은 부른 쪽이 MP.mux 로 붙인다). 돌려줌: 초."""
+    out, secs = render(html, "_tmp_" + os.path.basename(나갈경로).rsplit(".", 1)[0], 초, fps, ch)
+    os.makedirs(os.path.dirname(os.path.abspath(나갈경로)), exist_ok=True); shutil.move(out, 나갈경로); return secs
+
+
 def render(html, 이름, 초=15.0, fps=30, ch="reel"):
+    금지_검사(html)
     C = CS.CH[ch]
     w, h = C["w"], C["h"]            # 크기는 channel_specs 에서 — 여기 숫자를 박지 않는다
     os.makedirs(OUT, exist_ok=True)
@@ -101,12 +199,21 @@ def render(html, 이름, 초=15.0, fps=30, ch="reel"):
 
 def main():
     a = [x for x in sys.argv[1:] if not x.startswith("--")]
+    opt = lambda k, d=None: next((x.split("=", 1)[1] for x in sys.argv if x.startswith("--" + k + "=")), d)
+    if a and opt("확인"):
+        print("확인 컷:", 확인컷(a[0], [float(x) for x in opt("확인").split(",")])); return 0
     if len(a) < 2:
         print(__doc__); return 1
     초 = float(next((x.split("=")[1] for x in sys.argv if x.startswith("--초=")), 15))
     fps = int(next((x.split("=")[1] for x in sys.argv if x.startswith("--fps=")), 30))
     p, d = render(a[0], a[1], 초, fps)
-    print(f"  {os.path.relpath(p, ROOT)} · {d:.1f}초 · {fps}fps · {CH['w']}x{CH['h']}")
+    if opt("출력"):
+        os.makedirs(os.path.dirname(os.path.abspath(opt("출력"))), exist_ok=True); shutil.move(p, opt("출력")); p = opt("출력")
+    if opt("소리", "fun") != "없음":
+        mi = 소리붙이기(p, d, a[0], opt("소리", "fun"), a[1]); print(f"  음악: {mi['style']} {mi['bpm']}bpm {mi['key']} + 효과음")
+    else:
+        print("  [주의] 소리 없음 — 릴스·클립·광고로 내보내지 않는다(K-070)")
+    print(f"  {p} · {d:.1f}초 · {fps}fps · {CH['w']}x{CH['h']}")
     return 0
 
 
