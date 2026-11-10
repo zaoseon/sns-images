@@ -18,7 +18,7 @@ HTML 쪽 약속 하나
   CSS 애니메이션을 시간에 맡기지 않고 우리가 시각을 지정하므로 **몇 번을 돌려도 같은 영상**이 나온다
   (화면 녹화는 그때그때 다르다).
 
-사용: python3 pipeline/html_motion.py 파일.html 나갈이름 [--초=15] [--fps=30] [--소리=fun|love|data|없음] [--출력=경로.mp4]
+사용: python3 pipeline/html_motion.py 파일.html 나갈이름 [--초=15] [--fps=30] [--소리=fun|love|data|없음] [--출력=경로.mp4] [--블러=4]
      python3 pipeline/html_motion.py 파일.html --확인=1.5,4,7.6,11.5      박자별 확인 컷 한 장(전체 렌더 전에 본다)
 결과: 2026-motion/html/<나갈이름>.mp4 (소리 있음 — K-070)
 
@@ -29,6 +29,7 @@ HTML 쪽 약속 하나
   ② 금지 검사: 시간이 seek(t) 밖에서 흐르는 것(CSS 애니메이션·transition·타이머·Math.random·Date.now)과
      빌더 조쉬 금지 목록 중 코드로 잴 수 있는 것(blur·glow 그림자)을 그리기 전에 막는다.
   ③ 확인 컷: 박자 시각 몇 개만 먼저 찍어 한 장으로 붙인다 — 360장 다 찍고 틀린 것을 알지 않게.
+  ⑤ --블러=N: 한 프레임 안을 N장 찍어 평균(모션 블러). 빠른 움직임이 끊겨 보일 때만. 렌더 시간 N배.
   ④ render_html(html, 나갈경로, 초): motion_kinetic·motion_litho 등이 부르던 이름이 없어서 깨져 있었다. 되살렸다.
   만드는 법 정리: zaoseon-site:docs/제작_가이드라인_최종_2026-10-16.md 16절.
 """
@@ -43,7 +44,7 @@ CH = CS.CH["reel"]
 OUT = os.path.join(ROOT, "2026-motion", "html")
 
 
-async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역):
+async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러=1):
     from playwright.async_api import async_playwright
     n = int(round(초 * fps))
     async with async_playwright() as pw:
@@ -79,8 +80,18 @@ async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역):
                     f"'{z}' 바닥 {b_:.0f}px, 구역 끝 {끝}px ({b_ - 끝:.0f}px 넘침)"
                     for z, b_, 끝 in 넘침) + ". 글을 줄이거나 더 넓은 구역('마무리 카드')으로 옮기세요.")
         for i in range(n):
-            await pg.evaluate("t => window.seek(t)", i / fps)
-            await pg.screenshot(path=os.path.join(tmp, f"f{i:05d}.png"))
+            if 블러 <= 1:
+                await pg.evaluate("t => window.seek(t)", i / fps)
+                await pg.screenshot(path=os.path.join(tmp, f"f{i:05d}.png")); continue
+            # 11/10 모션 블러(Prompt Motion 고친 쇼릴 프롬프트): 한 프레임 시간(셔터 절반) 안을 블러장 찍어 평균한다
+            import numpy as np, io
+            from PIL import Image
+            acc = None
+            for k in range(블러):
+                await pg.evaluate("t => window.seek(t)", (i + 0.5 * k / 블러) / fps)
+                a = np.asarray(Image.open(io.BytesIO(await pg.screenshot())).convert("RGB"), dtype=np.float32)
+                acc = a if acc is None else acc + a
+            Image.fromarray((acc / 블러).round().astype("uint8")).save(os.path.join(tmp, f"f{i:05d}.png"))
         await b.close()
     return n
 
@@ -171,7 +182,7 @@ def render_html(html, 나갈경로, 초, fps=30, ch="reel"):
     os.makedirs(os.path.dirname(os.path.abspath(나갈경로)), exist_ok=True); shutil.move(out, 나갈경로); return secs
 
 
-def render(html, 이름, 초=15.0, fps=30, ch="reel"):
+def render(html, 이름, 초=15.0, fps=30, ch="reel", 블러=1):
     금지_검사(html)
     C = CS.CH[ch]
     w, h = C["w"], C["h"]            # 크기는 channel_specs 에서 — 여기 숫자를 박지 않는다
@@ -184,7 +195,7 @@ def render(html, 이름, 초=15.0, fps=30, ch="reel"):
         # bottom(=zaoseon.com 글자 줄, y1465)을 썼는데 고지 칸은 y1425 에서 시작해
         # 1441 까지 글이 내려와도 통과했다 — 실제로는 이미 겹친 상태였다(10/16).
         한계 = 고정top - 24
-        n = asyncio.run(_shoot(html, 초, fps, w, h, tmp, 한계, 구역))
+        n = asyncio.run(_shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러))
         out = os.path.join(OUT, 이름 + ".mp4")
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-framerate", str(fps),
                         "-i", os.path.join(tmp, "f%05d.png"),
@@ -206,7 +217,7 @@ def main():
         print(__doc__); return 1
     초 = float(next((x.split("=")[1] for x in sys.argv if x.startswith("--초=")), 15))
     fps = int(next((x.split("=")[1] for x in sys.argv if x.startswith("--fps=")), 30))
-    p, d = render(a[0], a[1], 초, fps)
+    p, d = render(a[0], a[1], 초, fps, 블러=int(opt("블러", "1")))
     if opt("출력"):
         os.makedirs(os.path.dirname(os.path.abspath(opt("출력"))), exist_ok=True); shutil.move(p, opt("출력")); p = opt("출력")
     if opt("소리", "fun") != "없음":
