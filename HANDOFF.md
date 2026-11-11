@@ -1478,3 +1478,4 @@ README "2주마다 하는 일" 그대로. 요점만:
 - motion_kit 선택 칸 추가(안 주면 전과 같음): 나타나기·낱말강조·줄바꾸기·가리개열기 `크기=`(제목 칸에서 한 줄 8자 넘는 글이 세 줄로 터지는 것 막기), 한자찍기 `위=`(0초 프레임에 훅과 안 겹치게).
 - 알아 둘 것: 3회차 v_* 판(v_emerald·v_violet·v_choco)은 color_combos 에 모션 theme 이 없다 → 을 g_ivory · 정 p_purple · 무 y_olive. 낱말강조 '뒤' 글 앞 띄어쓰기가 화면에서 사라진다(낱말 끝에 붙여 씀으로 피함).
 - 승인 뒤 할 일: 8편 영상(motion_kit 장면 페이지 → html_motion → 장면 끝= 넘김으로 이어 붙이기 → clip_v3_music) + 관문 → 영상 카드 → 승인 → Metricool 11/18~27 평일 17:00.
+- 11/11 19:50 ① 자동: 메타 시험 광고 이미지 12장 `ads/2611_dapjang/stills/`(build.py — 첫 줄 6종 × meta_ad_feed 1:1·meta_ad_story 9:16, channel_specs 에 두 채널 더함, 정월 웹툰풍은 toon.py), 승인 카드 ad-dapjang-stills-1111(new). 릴스 실험 11/13·14·15 Metricool 영상 교체(대표 12:15 승인) → 424271212·424271584·424271610. push 403이라 zaoseon-site ops/pending_sns-images 패치 2개(c·d).
