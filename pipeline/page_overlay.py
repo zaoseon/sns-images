@@ -6,7 +6,8 @@ HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 from PIL import Image, ImageDraw, ImageFont
 import fonts_kit as K, brand_frame as BF
 R = os.path.abspath(os.path.join(HERE, ".."))
-SAFE = (50, 330, 900, 1470)
+import channel_specs as _CS
+SAFE = _CS.CH["reel"]["safe"]   # 규격은 channel_specs 에서(11/11 왼쪽 60)
 B = 0.645                                                       # 리소그래프 6판 박자 간격(초)
 PAGES = [("p1", "1 표지·훅", 4.2), ("p2", "2 정월 설명 ①", 9.5), ("p3", "3 정월 설명 ② 같은 말", 13.0), ("p4", "4 정월 설명 ③ 다른 말", 16.4), ("p5", "5 12별자리 순위", 25.3), ("p6", "6 마무리 ① 댓글", 28.2), ("p7", "7 마무리 ② 팔로우·홈페이지", 35.0)]
 FONT = lambda sz: ImageFont.truetype(K.P["pr_xb"], sz)

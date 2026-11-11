@@ -11,7 +11,7 @@ R = os.path.abspath(os.path.join(HERE, ".."))
 AS = os.path.join(R, "assets", "brand_bg")
 GOLD = "#e7c88d"; PINK = "#ff5c9d"; BLUE = "#4560f0"
 # 채널 지오메트리: W,H · 안전영역 · 위 고정줄 아래 y · 아래 고정줄 위 y · 제목 글꼴 · brand_frame 종류
-CHAN = {"reel": dict(W=1080, H=1920, safe=(50, 330, 900, 1470), head_bottom=385, foot_top=1425, title="gm_bold", kind="reel", stacked=False, gap=25, min_body=44),
+CHAN = {"reel": dict(W=1080, H=1920, safe=__import__("channel_specs").CH["reel"]["safe"], head_bottom=385, foot_top=1425, title="gm_bold", kind="reel", stacked=False, gap=25, min_body=44),
         "carousel": dict(W=1080, H=1440, safe=(55, 55, 1025, 1385), head_bottom=108, foot_top=1350, title="pl_blk", kind="card", stacked=False, gap=22, min_body=44)}
 def content_box(ch):
     c = CHAN[ch]; s = c["safe"]; return (s[0], c["head_bottom"] + c["gap"], s[2], c["foot_top"] - c["gap"])

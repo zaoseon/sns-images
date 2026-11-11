@@ -249,7 +249,7 @@ FX.bubble=(g,t,t0,{text,x=FX.cx,y=600,tail='down',tx=null,font='72px BZ',color='
 
 // 11/11 대표 "채널 별 콘텐츠 안전영역 관련해서도 준 거 기억하지?": 규격은 channel_specs.py 가 단일 출처다.
 // html_motion.py 가 페이지를 열 때 window.ZS_SPEC 를 넣는다(여기 숫자는 node 견본용 대체값일 뿐, 제작은 주입값을 쓴다).
-FX.SPEC=(typeof window!=='undefined'&&window.ZS_SPEC)||{safe:[50,330,900,1470],top:[50,340,900,390],bottom:[60,1425,900,1465]};
+FX.SPEC=(typeof window!=='undefined'&&window.ZS_SPEC)||{safe:[60,330,900,1470],top:[60,340,900,390],bottom:[60,1425,900,1465]};
 FX.cx=(FX.SPEC.safe[0]+FX.SPEC.safe[2])/2;          // 글·그림 가운데 = 안전 영역 가운데(K-165). 540 이 아니다
 FX.aw=()=>FX.SPEC.safe[2]-FX.SPEC.safe[0]-40;FX.cy=(FX.SPEC.top[3]+FX.SPEC.bottom[1])/2;
 FX.area=()=>({x0:FX.SPEC.safe[0],x1:FX.SPEC.safe[2],y0:FX.SPEC.top[3]+10,y1:FX.SPEC.bottom[1]-10});  // 글이 들어갈 수 있는 칸
@@ -258,7 +258,7 @@ FX.area=()=>({x0:FX.SPEC.safe[0],x1:FX.SPEC.safe[2],y0:FX.SPEC.top[3]+10,y1:FX.S
 FX.BRAND=Object.assign({name:'자오선',tag:'동서양 6개 운명학 교차분석',url:'zaoseon.com',ai:'정월은 가상의 AI 캐릭터입니다',accent:'#E7C88D',ink:'#FFFFFF',pill:'rgba(0,0,0,.38)',
  palette:['#FF5A1F','#2F6BFF','#2EBD6B','#FFC21A','#FFD400'],fonts:{title:'PL',body:'PR',hand:'BZ'}},(typeof window!=='undefined'&&window.ZS_BRAND)||{});
 FX.C=FX.BRAND.palette.concat(['#FF5A1F','#2F6BFF','#2EBD6B','#FFC21A','#FFD400'].slice(FX.BRAND.palette.length));
-FX.frame=(g,{ai=FX.BRAND.ai,gold=FX.BRAND.accent,ink=FX.BRAND.ink,pill=FX.BRAND.pill}={})=>{window.__zsFrame=1;g.save();g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;
+FX.frame=(g,{ai=FX.BRAND.ai,gold=FX.BRAND.accent,ink=FX.BRAND.ink,pill=FX.BRAND.pill}={})=>{if(window.__zsNoFrame){window.__zsFrameOpt={ai};return}window.__zsFrame=1;g.save();g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;
  const B=FX.BRAND,TF=B.fonts.title,BF=B.fonts.body,[tx0,ty0,tx1,ty1]=FX.SPEC.top,[bx0,by0,bx1,by1]=FX.SPEC.bottom,cy=(ty0+ty1)/2,by=(by0+by1)/2;g.textBaseline='middle';
  if(B.name||B.tag){const sep=B.name&&B.tag?'  ·  ':'';g.font='900 42px '+TF;const a=g.measureText(B.name||'').width;g.font='800 34px '+BF;const d=g.measureText(sep).width,b=g.measureText(B.tag||'').width;let x=(tx0+tx1)/2-(a+d+b)/2;
  g.fillStyle=pill;g.beginPath();g.roundRect(x-22,ty0-6,a+d+b+44,ty1-ty0+12,28);g.fill();

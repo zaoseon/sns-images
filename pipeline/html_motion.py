@@ -44,13 +44,13 @@ CH = CS.CH["reel"]
 OUT = os.path.join(ROOT, "2026-motion", "html")
 
 
-async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러=1, ch="reel"):
+async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러=1, ch="reel", 고정없이=False):
     from playwright.async_api import async_playwright
     n = int(round(초 * fps))
     async with async_playwright() as pw:
         b = await pw.chromium.launch(args=["--force-color-profile=srgb", "--disable-lcd-text"])
         pg = await b.new_page(viewport={"width": w, "height": h}, device_scale_factor=1)
-        await pg.add_init_script(_spec_js(ch))
+        await pg.add_init_script(_spec_js(ch) + ("window.__zsNoFrame=1;document.addEventListener('DOMContentLoaded',()=>{const s=document.createElement('style');s.textContent='.bf{display:none!important}';document.head.appendChild(s)});" if 고정없이 else ""))
         await pg.goto("file://" + os.path.abspath(html))
         await pg.wait_for_function("typeof window.seek === 'function'", timeout=15000)
         # 글이 아래 고정 줄을 넘는지 **브라우저로 재서** 막는다.
@@ -80,7 +80,10 @@ async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러=1, ch="reel")
                 raise SystemExit("[막음] 구역을 넘었어요 — " + " / ".join(
                     f"'{z}' 바닥 {b_:.0f}px, 구역 끝 {끝}px ({b_ - 끝:.0f}px 넘침)"
                     for z, b_, 끝 in 넘침) + ". 글을 줄이거나 더 넓은 구역('마무리 카드')으로 옮기세요.")
+        opts = []
         for i in range(n):
+            if 고정없이:   # 프레임마다 페이지가 F.frame 에 넘긴 값(정월 장면이면 정월 AI 고지)을 적어 둔다
+                await pg.evaluate("t => {window.__zsFrameOpt=null;window.seek(t)}", i / fps); opts.append(await pg.evaluate("window.__zsFrameOpt"))
             if 블러 <= 1:
                 await pg.evaluate("t => window.seek(t)", i / fps)
                 await pg.screenshot(path=os.path.join(tmp, f"f{i:05d}.png")); continue
@@ -94,6 +97,7 @@ async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러=1, ch="reel")
                 acc = a if acc is None else acc + a
             Image.fromarray((acc / 블러).round().astype("uint8")).save(os.path.join(tmp, f"f{i:05d}.png"))
         await b.close()
+    if 고정없이: json.dump(opts, open(os.path.join(tmp, "frame_opts.json"), "w", encoding="utf-8"), ensure_ascii=False)
     return n
 
 
@@ -250,23 +254,35 @@ def 금지_검사(html):
         raise SystemExit("[막음] " + os.path.basename(html) + " — " + " / ".join(걸림))
 
 
-def 확인컷(html, 시각, ch="reel"):
-    """박자 시각 몇 개만 찍어 가로로 붙인 한 장(1/3 크기). 돌려줌: png 경로."""
+def 확인컷(html, 시각, ch="reel", 설계="reel"):
+    """박자 시각 몇 개만 찍어 가로로 붙인 한 장(1/3 크기). 채널이 설계와 다르면 자동으로 옮긴 모습을 찍는다. 돌려줌: png 경로."""
     from PIL import Image
     from playwright.sync_api import sync_playwright
+    import channel_remap as RM
     금지_검사(html)
-    C = CS.CH[ch]; w, h = C["w"], C["h"]; ims = []
+    옮김 = ch != 설계 and RM.옮길수있나(설계, ch); src = 설계 if 옮김 else ch
+    C = CS.CH[src]; w, h = C["w"], C["h"]; ims = []
     with sync_playwright() as pw:
-        b = pw.chromium.launch(); pg = b.new_page(viewport={"width": w, "height": h}); pg.add_init_script(_spec_js(ch))
+        b = pw.chromium.launch(); pg = b.new_page(viewport={"width": w, "height": h}); pg.add_init_script(_spec_js(src) + ("window.__zsNoFrame=1;" if 옮김 else ""))
         pg.goto("file://" + os.path.abspath(html)); pg.wait_for_function("typeof window.seek === 'function'")
         pg.evaluate("document.fonts.ready")
         for t in 시각:
-            pg.evaluate("t => window.seek(t)", t); f = tempfile.mktemp(suffix=".png"); pg.screenshot(path=f)
-            ims.append(Image.open(f).convert("RGB").resize((w // 3, h // 3))); os.remove(f)
+            pg.evaluate("t => {window.__zsFrameOpt=null;window.seek(t)}", t); f = tempfile.mktemp(suffix=".png"); pg.screenshot(path=f)
+            ims.append((f, pg.evaluate("window.__zsFrameOpt") or {"ai": ""}))
         b.close()
+    shots = ims; ims = []
+    for f, o in shots:     # 브라우저를 닫은 뒤 옮긴다(고정판도 브라우저를 쓴다)
+        if 옮김: RM.옮기기(f, 설계, ch, RM.고정판(ch, o, 브랜드()))
+        ims.append(Image.open(f).convert("RGB").resize((w // 3, h // 3))); os.remove(f)
     c = Image.new("RGB", (w // 3 * len(ims), h // 3), "white")
     for i, im in enumerate(ims): c.paste(im, (i * (w // 3), 0))
-    out = os.path.splitext(os.path.abspath(html))[0] + "_확인.png"; c.save(out); return out
+    if os.environ.get("ZS_GUIDE") == "1":      # --가이드: 데드존 판을 얹어 본다(deadzone_guide.py, 값은 channel_specs)
+        import deadzone_guide as DG
+        g = DG.guide(ch).resize((w // 3, h // 3))
+        c = c.convert("RGBA")
+        for i in range(len(ims)): c.alpha_composite(g, (i * (w // 3), 0))
+        c = c.convert("RGB")
+    out = os.path.splitext(os.path.abspath(html))[0] + (f"_확인_{ch}.png" if ch != "reel" else "_확인.png"); c.save(out); return out
 
 
 def _효과음(path, 초, cues, sr=48000):
@@ -372,9 +388,30 @@ def 안전영역_막기(html, 초, ch="reel"):
                          + "\n  (규격: pipeline/channel_specs.py. 가운데는 F.cx, 칸은 F.area())")
 
 
-def render(html, 이름, 초=15.0, fps=30, ch="reel", 블러=1):
-    금지_검사(html); 기법_검사(html, 이름); 안전영역_막기(html, 초, ch)
+def _고정옵션(html, 초, ch):
+    """페이지가 F.frame 에 넘긴 값(ai 고지 등)을 읽는다 — 채널을 옮길 때 새 자리에 같은 고정 요소를 그리려고."""
+    from playwright.sync_api import sync_playwright
     C = CS.CH[ch]
+    with sync_playwright() as pw:
+        b = pw.chromium.launch(); pg = b.new_page(viewport={"width": C["w"], "height": C["h"]}); pg.add_init_script(_spec_js(ch) + "window.__zsNoFrame=1;")
+        pg.goto("file://" + os.path.abspath(html)); pg.wait_for_function("typeof window.seek === 'function'", timeout=15000)
+        pg.evaluate("document.fonts.ready"); pg.evaluate("t => window.seek(t)", 초 / 2)
+        o = pg.evaluate("window.__zsFrameOpt||null"); b.close()
+    return o
+
+
+def render(html, 이름, 초=15.0, fps=30, ch="reel", 블러=1, 설계="reel"):
+    """ch 가 페이지를 짠 채널(설계, 기본 reel)과 다르고 비율이 같으면 channel_remap 으로 자동으로 옮긴다:
+    관문은 설계 채널로 재고(옮기기는 기하 변환이라 글 칸 안이 보장된다), 고정 요소는 새 채널 자리에 다시 그린다."""
+    import channel_remap as RM
+    옮김 = ch != 설계 and RM.옮길수있나(설계, ch)
+    if ch != 설계 and not 옮김:
+        raise SystemExit(f"[막음] {설계} 로 짠 장면은 {ch}({CS.CH[ch]['w']}x{CS.CH[ch]['h']})로 자동으로 못 옮겨요 — 비율이 달라요. 이 채널용 장면을 따로 짜세요.")
+    금지_검사(html); 기법_검사(html, 이름); 안전영역_막기(html, 초, 설계 if 옮김 else ch)
+    if 옮김:
+        M = RM.행렬(설계, ch)
+        print(f"  {설계} → {ch} 자동 옮김: 배율 {M[0]:.3f}, 글 칸 {RM.글칸(설계)} → {RM.글칸(ch)}")
+    C = CS.CH[설계 if 옮김 else ch]
     w, h = C["w"], C["h"]            # 크기는 channel_specs 에서 — 여기 숫자를 박지 않는다
     os.makedirs(OUT, exist_ok=True)
     tmp = tempfile.mkdtemp(prefix="htmlmo_")
@@ -385,7 +422,13 @@ def render(html, 이름, 초=15.0, fps=30, ch="reel", 블러=1):
         # bottom(=zaoseon.com 글자 줄, y1465)을 썼는데 고지 칸은 y1425 에서 시작해
         # 1441 까지 글이 내려와도 통과했다 — 실제로는 이미 겹친 상태였다(10/16).
         한계 = 고정top - 24
-        n = asyncio.run(_shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러, ch))
+        n = asyncio.run(_shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러, 설계 if 옮김 else ch, 고정없이=옮김))
+        if 옮김:
+            opts = json.load(open(os.path.join(tmp, "frame_opts.json"), encoding="utf-8")); 판들 = {}
+            for i in range(n):
+                key = json.dumps(opts[i] or {"ai": ""}, ensure_ascii=False, sort_keys=True)
+                if key not in 판들: 판들[key] = RM.고정판(ch, json.loads(key), 브랜드())
+                RM.옮기기(os.path.join(tmp, f"f{i:05d}.png"), 설계, ch, 판들[key], M)
         out = os.path.join(OUT, 이름 + ".mp4")
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-framerate", str(fps),
                         "-i", os.path.join(tmp, "f%05d.png"),
@@ -412,16 +455,29 @@ def main():
             if want and want not in k: continue
             print(f"[{k}]"); [print(f"  · {n} — {d['l'].get(n, '')}") for n in v]
         print("함수 쓰는 법·견본: 2026-reels-test/fx_gallery/ad.html, 목록 문서: zaoseon-site docs/모션_기법_목록_2026-11-11.md"); return 0
+    chs = [c.strip() for c in opt("채널", "reel").split(",")]   # 11/11: 같은 페이지를 채널마다(reel·naver_clip·youtube_shorts·youtube). 위치는 F.SPEC 이 채널대로 바꾼다
+    for c in chs:
+        if c not in CS.CH: raise SystemExit(f"[막음] 모르는 채널 {c} — channel_specs.VIDEO: {CS.VIDEO}")
+    if any(x == "--가이드" for x in sys.argv): os.environ["ZS_GUIDE"] = "1"
     if a and opt("확인"):
-        print("확인 컷:", 확인컷(a[0], [float(x) for x in opt("확인").split(",")]))
-        try: 안전영역_막기(a[0], float(opt("초", "15"))); print("안전 영역: 통과")
-        except SystemExit as e: print(e)
+        for c in chs:
+            print(f"[{c}] 확인 컷:", 확인컷(a[0], [float(x) for x in opt("확인").split(",")], c))
+            import channel_remap as RM
+            g = "reel" if c != "reel" and RM.옮길수있나("reel", c) else c
+            try: 안전영역_막기(a[0], float(opt("초", "15")), g); print(f"[{c}] 안전 영역: 통과" + (" (reel 로 재고 자동 옮김)" if g != c else ""))
+            except SystemExit as e: print(e)
         return 0
     if len(a) < 2:
         print(__doc__); return 1
     초 = float(next((x.split("=")[1] for x in sys.argv if x.startswith("--초=")), 15))
     fps = int(next((x.split("=")[1] for x in sys.argv if x.startswith("--fps=")), 30))
-    p, d = render(a[0], a[1], 초, fps, 블러=int(opt("블러", "1")))
+    if len(chs) > 1:     # 채널 여럿: 이름 뒤에 _채널 을 붙여 하나씩 렌더하고 소리까지 붙인다
+        for c in chs:
+            p, d = render(a[0], f"{a[1]}_{c}", 초, fps, c, 블러=int(opt("블러", "1")))
+            if opt("소리", 브랜드().get("music", "fun")) != "없음": 소리붙이기(p, d, a[0], opt("소리", 브랜드().get("music", "fun")), a[1])
+            print(f"[{c}] {p}")
+        기법_검사(a[0], a[1], 기록=True); return 0
+    p, d = render(a[0], a[1], 초, fps, chs[0], 블러=int(opt("블러", "1")))
     기법_검사(a[0], a[1], 기록=True)
     if opt("출력"):
         os.makedirs(os.path.dirname(os.path.abspath(opt("출력"))), exist_ok=True); shutil.move(p, opt("출력")); p = opt("출력")
