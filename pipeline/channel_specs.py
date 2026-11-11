@@ -123,7 +123,24 @@ CH["naver_blog_body"] = dict(
     min_text=42, cover="", cta="", body="제작 도구: naver/imgkit.py (좌표는 여기와 같다)")
 CH["naver_blog_thumb"].setdefault("deadzone", [("caution", (0, 0, 240, 720), "왼쪽 날개 — 링크 카드·모바일 목록에서 잘림(10/4 실측)"),
                                                ("caution", (960, 0, 1200, 720), "오른쪽 날개 — 잘림")])
-for _k in ("insta_carousel", "site_blog_thumb", "naver_cta_banner", "naver_cta_banner6"):
+# 메타 광고 소재(11/11 ① 자동, zaoseon-site to-content '메타 시험 광고 소재'). 피드 1:1 은 겹치는 UI 가 없어 가장자리 여백만,
+# 스토리·릴스 광고 9:16 은 메타 안내(위 14%·아래 20% 비움)대로 위 270·아래 384 를 비운다.
+CH["meta_ad_feed"] = dict(
+    name="메타 광고 피드 1:1", w=1080, h=1080, ratio="1:1", conf="메타 광고 피드 1:1 권장 1080x1080. 가장자리 60 여백",
+    ui=dict(top=0, bottom=0, right=0), safe=(60, 50, 1020, 1030), align="center",
+    zones=[("상단 고정", 60, 50, 1020, 96, "가운데 한 줄 '자오선 · 정월의 답장'"), ("제목", 60, 120, 1020, 400, "첫 줄 훅 2~3줄"),
+           ("본문·그림", 60, 410, 1020, 860, "정월 또는 판정 화면"), ("버튼·마무리", 60, 870, 1020, 970, "알약 단추 한 줄"),
+           ("하단 고정", 60, 985, 1020, 1025, "AI 고지 한 줄")],
+    fonts=dict(title="페이퍼로지 64~84px", body="프리텐다드 40~48px", label="30px 이상"), cover="", cta="알약 단추", body="")
+CH["meta_ad_story"] = dict(
+    name="메타 광고 스토리·릴스 9:16", w=1080, h=1920, ratio="9:16", conf="메타 안내: 위 14%(270)·아래 20%(384) 비움, 좌우 60",
+    ui=dict(top=270, bottom=384, right=0), safe=(60, 270, 1020, 1536), align="center",
+    deadzone=[("ui", (0, 0, 1080, 270), "위 14% 프로필·닫기"), ("ui", (0, 1536, 1080, 1920), "아래 20% 행동 단추·캡션")],
+    zones=[("상단 고정", 60, 280, 1020, 330, "가운데 한 줄 '자오선 · 정월의 답장'"), ("제목", 60, 360, 1020, 700, "첫 줄 훅 2~3줄"),
+           ("본문·그림", 60, 720, 1020, 1330, "정월 또는 판정 화면"), ("버튼·마무리", 60, 1350, 1020, 1460, "알약 단추 한 줄"),
+           ("하단 고정", 60, 1480, 1020, 1530, "AI 고지 한 줄")],
+    fonts=dict(title="페이퍼로지 76~96px", body="프리텐다드 44~52px", label="32px 이상"), cover="", cta="알약 단추", body="")
+for _k in ("insta_carousel", "site_blog_thumb", "naver_cta_banner", "naver_cta_banner6", "meta_ad_feed"):
     _a, _b, _c, _d = CH[_k]["safe"]; _w, _h = CH[_k]["w"], CH[_k]["h"]
     CH[_k].setdefault("deadzone", [("band", (0, 0, _w, _b), "가장자리 여백"), ("band", (0, _d, _w, _h), "가장자리 여백"),
                                    ("band", (0, 0, _a, _h), "가장자리 여백"), ("band", (_c, 0, _w, _h), "가장자리 여백")])
