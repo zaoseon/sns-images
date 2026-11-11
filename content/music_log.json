@@ -1189,5 +1189,21 @@
   "mode": "up",
   "bpm": 124,
   "key": "C"
+ },
+ {
+  "name": "reel_1114_fire",
+  "kind": "fun",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 114,
+  "key": "E"
+ },
+ {
+  "name": "reel_1115_samhap",
+  "kind": "love",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "F"
  }
 ]
