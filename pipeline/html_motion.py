@@ -111,7 +111,7 @@ def _spec_js(ch="reel"):
             "xs=bx.map(p=>p[0]),ys=bx.map(p=>p[1]),sc=Math.hypot(T.a,T.b);"
             "const cr=this.canvas.getBoundingClientRect(),kx=cr.width/this.canvas.width,ky=cr.height/this.canvas.height;"
             "const fm=/(\\d+(?:\\.\\d+)?)px\\s+(.+)$/.exec(this.font)||[0,0,''];"
-            "if(sc>0.85)window.__zsTxt.push([String(s).slice(0,20),cr.left+kx*Math.min(...xs),cr.top+ky*Math.min(...ys),cr.left+kx*Math.max(...xs),cr.top+ky*Math.max(...ys),parseFloat(fm[1])*sc*kx,fm[2].replace(/['\"]/g,'').split(',')[0].trim()])}}catch(e){}"
+            "if(sc>0.85)window.__zsTxt.push([String(s).slice(0,20),cr.left+kx*Math.min(...xs),cr.top+ky*Math.min(...ys),cr.left+kx*Math.max(...xs),cr.top+ky*Math.max(...ys),parseFloat(fm[1])*sc*kx,fm[2].replace(/['\"]/g,'').split(',')[0].trim(),window.__zsLoose?1:0])}}catch(e){}"
             "return o.call(this,s,x,y,...r)}})})();"
             # DOM 글자도 잰다(캔버스+DOM 섞어 쓴 페이지가 있다). 고정 요소(.bf)는 뺀다.
             "window.__zsDom=()=>{const R=[],W=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;while(n=W.nextNode()){"
@@ -140,7 +140,7 @@ def 안전영역_검사(pg, 초, ch="reel", 간격=0.1):
         t = min(i * 간격, 초 - 0.01)
         pg.evaluate("t => {window.__zsTxt=[];window.seek(t)}", t)
         rows = pg.evaluate("() => window.__zsTxt.concat(window.__zsDom())")
-        for s, a, b, c, d, px, fam in rows:
+        for s, a, b, c, d, px, fam, *_ in rows:
             넘 = max(x0 - a, c - x1, y0 - b, d - y1)
             if 넘 > 2: 밖.setdefault(s, []).append((round(t, 2), round(넘)))
             # 11/11 대표 13:09 "가독성 잘 생각해줘": 글자가 너무 작으면 막는다(손글씨는 더 크게)
@@ -190,10 +190,11 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
                     q, r = 합[ii], 합[jj]
                     if r[2] < q[2]: q, r = r, q
                     if _붙일(q, r):
-                        u = [q[0] + " " + r[0], min(q[1], r[1]), min(q[2], r[2]), max(q[3], r[3]), max(q[4], r[4]), q[5], q[6]]
+                        u = [q[0] + " " + r[0], min(q[1], r[1]), min(q[2], r[2]), max(q[3], r[3]), max(q[4], r[4]), q[5], q[6], (q[7] if len(q) > 7 else 0) or (r[7] if len(r) > 7 else 0)]
                         합[ii] = u; del 합[jj]; 바뀜 = True; break
                 if 바뀜: break
         for row in 합:
+            if len(row) > 7 and row[7]: continue      # 일부러 붙이는 효과(녹는 단어 등)는 '붙음'을 재지 않는다
             tx, bx0, by0, bx1, by1, px = row[0], *[int(round(v)) for v in row[1:5]], row[5] or 40
             mg = min(40, max(14, int(px * B["near"])))
             X0, Y0, X1, Y1 = max(bx0 - mg, 0), max(by0 - mg, 0), min(bx1 + mg, a.shape[1] - 1), min(by1 + mg, a.shape[0] - 1)
@@ -359,7 +360,7 @@ def 안전영역_막기(html, 초, ch="reel"):
     canvas = "<canvas" in src
     if canvas and not frame: 문제.insert(0, "고정 요소 없음 — draw 끝에 F.frame(g) 를 부르세요(위 가운데 한 줄·AI 고지·zaoseon.com)")
     if 문제 and os.environ.get("ZS_SAFE_OK") != "1":
-        raise SystemExit(f"[막음] 안전 영역·균형({ch}) — 글 칸 x {칸[0]}~{칸[2]}, y {칸[1]}~{칸[3]}:\n  " + "\n  ".join(문제[:30])
+        raise SystemExit(f"[막음] 안전 영역·균형({ch}) — 글 칸 x {칸[0]}~{칸[2]}, y {칸[1]}~{칸[3]}:\n  " + "\n  ".join(문제[:200])
                          + "\n  (규격: pipeline/channel_specs.py. 가운데는 F.cx, 칸은 F.area())")
 
 
