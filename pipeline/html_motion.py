@@ -233,6 +233,15 @@ def render(html, 이름, 초=15.0, fps=30, ch="reel", 블러=1):
 def main():
     a = [x for x in sys.argv[1:] if not x.startswith("--")]
     opt = lambda k, d=None: next((x.split("=", 1)[1] for x in sys.argv if x.startswith("--" + k + "=")), d)
+    if any(x.startswith("--기법") for x in sys.argv):
+        # 11/11 대표 "어떤 콘텐츠 만들든 상황이나 내용에 따라 사용할 수 있게": 상황별 기법 표(motion_fx.js FX.USE·LIST)
+        js = os.path.join(HERE, "motion_fx.js")
+        out = subprocess.run(["node", "-e", f"global.window={{}};require({json.dumps(js)});console.log(JSON.stringify({{u:window.FXK.USE,l:window.FXK.LIST}}))"], capture_output=True, text=True).stdout
+        d = json.loads(out); want = opt("기법", "")
+        for k, v in d["u"].items():
+            if want and want not in k: continue
+            print(f"[{k}]"); [print(f"  · {n} — {d['l'].get(n, '')}") for n in v]
+        print("함수 쓰는 법·견본: 2026-reels-test/fx_gallery/ad.html, 목록 문서: zaoseon-site docs/모션_기법_목록_2026-11-11.md"); return 0
     if a and opt("확인"):
         print("확인 컷:", 확인컷(a[0], [float(x) for x in opt("확인").split(",")])); return 0
     if len(a) < 2:

@@ -1205,5 +1205,13 @@
   "mode": "up",
   "bpm": 120,
   "key": "F"
+ },
+ {
+  "name": "fx_gallery",
+  "kind": "data",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 116,
+  "key": "G"
  }
 ]
