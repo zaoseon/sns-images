@@ -263,3 +263,6 @@ FX.frame=(g,{ai='정월은 가상의 AI 캐릭터입니다',gold='#E7C88D',ink='
  if(ai){g.font='800 28px PR';const w=g.measureText(ai).width;g.fillStyle=pill;g.beginPath();g.roundRect(bx0,by0,w+32,by1-by0,20);g.fill();g.fillStyle='rgba(255,255,255,.7)';g.textAlign='left';g.fillText(ai,bx0+16,by)}
  g.restore();window.__zsFrame=0};
 window.FXK=FX;})();
+
+// 프롬프트 100 기법(motion_fx100.js)을 같이 불러온다 — 페이지는 motion_fx.js 하나만 넣으면 된다
+(function(){if(typeof document!=='undefined'&&document.currentScript&&document.readyState==='loading'){document.write('<script src="'+document.currentScript.src.replace(/[^/]*$/,'')+'motion_fx100.js"><\/script>')}})();

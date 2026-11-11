@@ -395,7 +395,7 @@ def main():
     if any(x.startswith("--기법") for x in sys.argv):
         # 11/11 대표 "어떤 콘텐츠 만들든 상황이나 내용에 따라 사용할 수 있게": 상황별 기법 표(motion_fx.js FX.USE·LIST)
         js = os.path.join(HERE, "motion_fx.js")
-        out = subprocess.run(["node", "-e", f"global.window={{}};require({json.dumps(js)});console.log(JSON.stringify({{u:window.FXK.USE,l:window.FXK.LIST}}))"], capture_output=True, text=True).stdout
+        out = subprocess.run(["node", "-e", f"global.window={{}};require({json.dumps(js)});require({json.dumps(js.replace("motion_fx.js","motion_fx100.js"))});console.log(JSON.stringify({{u:window.FXK.USE,l:window.FXK.LIST}}))"], capture_output=True, text=True).stdout
         d = json.loads(out); want = opt("기법", "")
         for k, v in d["u"].items():
             if want and want not in k: continue
