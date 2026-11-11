@@ -103,7 +103,7 @@ def _spec_js(ch="reel"):
     DOM 검사(.safe/.mk)는 캔버스 글자를 못 잰다. 그래서 fillText 를 감싸 글자 상자를 직접 잰다."""
     C = CS.CH[ch]; z = {r[0]: list(r[1:5]) for r in C["zones"]}
     spec = dict(safe=list(C["safe"]), top=z["상단 고정"], bottom=z["하단 고정"])
-    return ("window.ZS_SPEC=" + json.dumps(spec) + ";window.__zsTxt=[];window.__zsFrame=0;"
+    return ("window.ZS_BRAND=" + json.dumps(브랜드(), ensure_ascii=False) + ";window.ZS_SPEC=" + json.dumps(spec) + ";window.__zsTxt=[];window.__zsFrame=0;"
             "(function(){const P=CanvasRenderingContext2D.prototype;['fillText','strokeText'].forEach(k=>{const o=P[k];P[k]=function(s,x,y,...r){"
             "try{if(!window.__zsFrame&&this.globalAlpha>0.15&&String(s).trim()){const m=this.measureText(s),T=this.getTransform(),"
             "w=m.width,al=this.textAlign,x0=al==='center'?x-w/2:(al==='right'||al==='end')?x-w:x,a=m.actualBoundingBoxAscent,d=m.actualBoundingBoxDescent,"
@@ -326,7 +326,15 @@ def render_html(html, 나갈경로, 초, fps=30, ch="reel"):
     os.makedirs(os.path.dirname(os.path.abspath(나갈경로)), exist_ok=True); shutil.move(out, 나갈경로); return secs
 
 
-FXLOG = os.path.join(ROOT, "ads", "fx_log.json")
+def 브랜드(이름=None):
+    """brands/<id>.json(모션 엔진 브랜드 설정). 이름이 없으면 ZS_BRAND 환경 변수, 그것도 없으면 zaoseon."""
+    이름 = 이름 or os.environ.get("ZS_BRAND") or "zaoseon"
+    p = os.path.join(HERE, "brands", 이름 + ".json")
+    if not os.path.exists(p): raise SystemExit(f"[막음] 브랜드 설정이 없어요: {p} (brands/_example.json 을 복사해 만드세요)")
+    return {k: v for k, v in json.load(open(p, encoding="utf-8")).items() if not k.startswith("_")}
+
+
+def _fxlog(): return os.path.join(ROOT, 브랜드().get("fx_log", "ads/fx_log.json"))
 
 
 def 기법_검사(html, 이름, 기록=False):
@@ -336,7 +344,7 @@ def 기법_검사(html, 이름, 기록=False):
     m = re.search(r"window\.FX\s*=\s*\[([^\]]*)\]", open(html, encoding="utf-8").read())
     if not m: return
     fx = [x.strip().strip("'\"") for x in m.group(1).split(",") if x.strip()]
-    try: log = json.load(open(FXLOG, encoding="utf-8"))
+    try: log = json.load(open(_fxlog(), encoding="utf-8"))
     except Exception: log = []
     앞 = [x for x in log if x.get("name") != 이름][-3:]
     for x in 앞:
@@ -345,7 +353,7 @@ def 기법_검사(html, 이름, 기록=False):
             raise SystemExit(f"[막음] 기법이 '{x['name']}' 와 {len(겹)}개 겹쳐요({'·'.join(겹)}). 3개까지만. motion_fx.js LIST 에서 다른 기법을 고르세요.")
     if 기록:
         log = [x for x in log if x.get("name") != 이름] + [{"name": 이름, "fx": fx}]
-        json.dump(log, open(FXLOG, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        json.dump(log, open(_fxlog(), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 
 def 안전영역_막기(html, 초, ch="reel"):
@@ -358,7 +366,7 @@ def 안전영역_막기(html, 초, ch="reel"):
         src = open(html, encoding="utf-8").read(); frame = ".frame(" in src
         문제, 칸 = 안전영역_검사(pg, 초, ch); 문제 += 균형_검사(pg, 초, ch); b.close()
     canvas = "<canvas" in src
-    if canvas and not frame: 문제.insert(0, "고정 요소 없음 — draw 끝에 F.frame(g) 를 부르세요(위 가운데 한 줄·AI 고지·zaoseon.com)")
+    if canvas and not frame: 문제.insert(0, "고정 요소 없음 — draw 끝에 F.frame(g) 를 부르세요(위 가운데 한 줄·AI 고지·주소, 글자는 brands/<id>.json)")
     if 문제 and os.environ.get("ZS_SAFE_OK") != "1":
         raise SystemExit(f"[막음] 안전 영역·균형({ch}) — 글 칸 x {칸[0]}~{칸[2]}, y {칸[1]}~{칸[3]}:\n  " + "\n  ".join(문제[:200])
                          + "\n  (규격: pipeline/channel_specs.py. 가운데는 F.cx, 칸은 F.area())")
@@ -393,6 +401,8 @@ def render(html, 이름, 초=15.0, fps=30, ch="reel", 블러=1):
 def main():
     a = [x for x in sys.argv[1:] if not x.startswith("--")]
     opt = lambda k, d=None: next((x.split("=", 1)[1] for x in sys.argv if x.startswith("--" + k + "=")), d)
+    if opt("브랜드"): os.environ["ZS_BRAND"] = opt("브랜드")
+    브랜드()   # 없는 브랜드면 여기서 멈춘다
     if any(x.startswith("--기법") for x in sys.argv):
         # 11/11 대표 "어떤 콘텐츠 만들든 상황이나 내용에 따라 사용할 수 있게": 상황별 기법 표(motion_fx.js FX.USE·LIST)
         js = os.path.join(HERE, "motion_fx.js")
@@ -415,8 +425,8 @@ def main():
     기법_검사(a[0], a[1], 기록=True)
     if opt("출력"):
         os.makedirs(os.path.dirname(os.path.abspath(opt("출력"))), exist_ok=True); shutil.move(p, opt("출력")); p = opt("출력")
-    if opt("소리", "fun") != "없음":
-        mi = 소리붙이기(p, d, a[0], opt("소리", "fun"), a[1]); print(f"  음악: {mi['style']} {mi['bpm']}bpm {mi['key']} + 효과음")
+    if opt("소리", 브랜드().get("music", "fun")) != "없음":
+        mi = 소리붙이기(p, d, a[0], opt("소리", 브랜드().get("music", "fun")), a[1]); print(f"  음악: {mi['style']} {mi['bpm']}bpm {mi['key']} + 효과음")
     else:
         print("  [주의] 소리 없음 — 릴스·클립·광고로 내보내지 않는다(K-070)")
     print(f"  {p} · {d:.1f}초 · {fps}fps · {CH['w']}x{CH['h']}")

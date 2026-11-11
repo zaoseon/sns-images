@@ -1,0 +1,15 @@
+{
+ "_설명": "새 브랜드 견본. 복사해서 brands/<id>.json 으로 저장. ai 를 빈 문자열로 두면 AI 고지를 안 그린다.",
+ "id": "example",
+ "name": "브랜드",
+ "tag": "한 줄 소개",
+ "url": "example.com",
+ "ai": "",
+ "accent": "#FFFFFF",
+ "ink": "#FFFFFF",
+ "pill": "rgba(0,0,0,.38)",
+ "palette": ["#FF5A1F", "#2F6BFF", "#2EBD6B", "#FFC21A", "#FFD400"],
+ "fonts": {"title": "PL", "body": "PR", "hand": "BZ"},
+ "fx_log": "ads/fx_log_example.json",
+ "music": "fun"
+}

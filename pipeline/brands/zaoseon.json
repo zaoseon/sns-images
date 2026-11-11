@@ -1,0 +1,15 @@
+{
+ "_설명": "모션 엔진(motion_fx*.js·html_motion.py) 브랜드 설정. 다른 브랜드는 이 파일을 복사해 값만 바꾼다. html_motion.py --브랜드=<이름> 또는 ZS_BRAND=<이름>.",
+ "id": "zaoseon",
+ "name": "자오선",
+ "tag": "동서양 6개 운명학 교차분석",
+ "url": "zaoseon.com",
+ "ai": "정월은 가상의 AI 캐릭터입니다",
+ "accent": "#E7C88D",
+ "ink": "#FFFFFF",
+ "pill": "rgba(0,0,0,.38)",
+ "palette": ["#FF5A1F", "#2F6BFF", "#2EBD6B", "#FFC21A", "#FFD400"],
+ "fonts": {"title": "PL", "body": "PR", "hand": "BZ"},
+ "fx_log": "ads/fx_log.json",
+ "music": "fun"
+}

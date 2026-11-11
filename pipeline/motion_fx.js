@@ -253,14 +253,18 @@ FX.SPEC=(typeof window!=='undefined'&&window.ZS_SPEC)||{safe:[50,330,900,1470],t
 FX.cx=(FX.SPEC.safe[0]+FX.SPEC.safe[2])/2;          // 글·그림 가운데 = 안전 영역 가운데(K-165). 540 이 아니다
 FX.aw=()=>FX.SPEC.safe[2]-FX.SPEC.safe[0]-40;FX.cy=(FX.SPEC.top[3]+FX.SPEC.bottom[1])/2;
 FX.area=()=>({x0:FX.SPEC.safe[0],x1:FX.SPEC.safe[2],y0:FX.SPEC.top[3]+10,y1:FX.SPEC.bottom[1]-10});  // 글이 들어갈 수 있는 칸
-// 고정 요소(brand_frame.py 와 같은 내용·자리): 위 가운데 한 줄(K-166) · 아래 왼쪽 AI 고지 · 아래 오른쪽 zaoseon.com
-FX.frame=(g,{ai='정월은 가상의 AI 캐릭터입니다',gold='#E7C88D',ink='#FFFFFF',pill='rgba(0,0,0,.38)'}={})=>{window.__zsFrame=1;g.save();g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;
- const [tx0,ty0,tx1,ty1]=FX.SPEC.top,[bx0,by0,bx1,by1]=FX.SPEC.bottom,cy=(ty0+ty1)/2,by=(by0+by1)/2;g.textBaseline='middle';
- g.font='900 42px PL';const a=g.measureText('자오선').width;g.font='800 34px PR';const d=g.measureText('  ·  ').width,b=g.measureText('동서양 6개 운명학 교차분석').width;let x=(tx0+tx1)/2-(a+d+b)/2;
+// 고정 요소(brand_frame.py 와 같은 자리): 위 가운데 한 줄(K-166) · 아래 왼쪽 AI 고지 · 아래 오른쪽 주소 — 글자는 브랜드 설정에서
+// 브랜드 값은 html_motion.py 가 brands/<id>.json 을 읽어 window.ZS_BRAND 로 넣는다(아래는 주입이 없을 때 대체값).
+FX.BRAND=Object.assign({name:'자오선',tag:'동서양 6개 운명학 교차분석',url:'zaoseon.com',ai:'정월은 가상의 AI 캐릭터입니다',accent:'#E7C88D',ink:'#FFFFFF',pill:'rgba(0,0,0,.38)',
+ palette:['#FF5A1F','#2F6BFF','#2EBD6B','#FFC21A','#FFD400'],fonts:{title:'PL',body:'PR',hand:'BZ'}},(typeof window!=='undefined'&&window.ZS_BRAND)||{});
+FX.C=FX.BRAND.palette.concat(['#FF5A1F','#2F6BFF','#2EBD6B','#FFC21A','#FFD400'].slice(FX.BRAND.palette.length));
+FX.frame=(g,{ai=FX.BRAND.ai,gold=FX.BRAND.accent,ink=FX.BRAND.ink,pill=FX.BRAND.pill}={})=>{window.__zsFrame=1;g.save();g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;
+ const B=FX.BRAND,TF=B.fonts.title,BF=B.fonts.body,[tx0,ty0,tx1,ty1]=FX.SPEC.top,[bx0,by0,bx1,by1]=FX.SPEC.bottom,cy=(ty0+ty1)/2,by=(by0+by1)/2;g.textBaseline='middle';
+ if(B.name||B.tag){const sep=B.name&&B.tag?'  ·  ':'';g.font='900 42px '+TF;const a=g.measureText(B.name||'').width;g.font='800 34px '+BF;const d=g.measureText(sep).width,b=g.measureText(B.tag||'').width;let x=(tx0+tx1)/2-(a+d+b)/2;
  g.fillStyle=pill;g.beginPath();g.roundRect(x-22,ty0-6,a+d+b+44,ty1-ty0+12,28);g.fill();
- g.textAlign='left';g.font='900 42px PL';g.fillStyle=gold;g.fillText('자오선',x,cy);g.font='800 34px PR';g.fillStyle=ink;g.globalAlpha=.6;g.fillText('  ·  ',x+a,cy);g.globalAlpha=.95;g.fillText('동서양 6개 운명학 교차분석',x+a+d,cy);g.globalAlpha=1;
- g.font='900 40px PL';const u=g.measureText('zaoseon.com').width;g.fillStyle=pill;g.beginPath();g.roundRect(bx1-u-18,by0-4,u+36,by1-by0+8,24);g.fill();g.fillStyle=gold;g.textAlign='right';g.fillText('zaoseon.com',bx1,by);
- if(ai){g.font='800 28px PR';const w=g.measureText(ai).width;g.fillStyle=pill;g.beginPath();g.roundRect(bx0,by0,w+32,by1-by0,20);g.fill();g.fillStyle='rgba(255,255,255,.7)';g.textAlign='left';g.fillText(ai,bx0+16,by)}
+ g.textAlign='left';g.font='900 42px '+TF;g.fillStyle=gold;if(B.name)g.fillText(B.name,x,cy);g.font='800 34px '+BF;g.fillStyle=ink;g.globalAlpha=.6;if(sep)g.fillText(sep,x+a,cy);g.globalAlpha=.95;if(B.tag)g.fillText(B.tag,x+a+d,cy);g.globalAlpha=1}
+ if(B.url){g.font='900 40px '+TF;const u=g.measureText(B.url).width;g.fillStyle=pill;g.beginPath();g.roundRect(bx1-u-18,by0-4,u+36,by1-by0+8,24);g.fill();g.fillStyle=gold;g.textAlign='right';g.fillText(B.url,bx1,by)}
+ if(ai){g.font='800 28px '+BF;const w=g.measureText(ai).width;g.fillStyle=pill;g.beginPath();g.roundRect(bx0,by0,w+32,by1-by0,20);g.fill();g.fillStyle='rgba(255,255,255,.7)';g.textAlign='left';g.fillText(ai,bx0+16,by)}
  g.restore();window.__zsFrame=0};
 window.FXK=FX;})();
 
