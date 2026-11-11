@@ -112,10 +112,13 @@ FX.chips=(g,t,t0,{labels,x=null,y=1200,gap=18,font='800 36px PR',bg='#fff',fg='#
  const rows=[[]];let cx=x0;labels.forEach((l,i)=>{const w=g.measureText(l).width+fs*1.3;if(cx+w>A.x1&&rows[rows.length-1].length){rows.push([]);cx=x0}rows[rows.length-1].push([l,i,w]);cx+=w+gap});
  const pos=[];rows.forEach((r,ri)=>{const rw=r.reduce((a,[, ,w])=>a+w,0)+gap*(r.length-1);let px=align=='center'?FX.cx-rw/2:x0;const py=y+ri*(ch+gap);
   r.forEach(([l,i,w])=>{pos[i]=[px+w/2,py+ch/2];const s=sp(t-t0-i*.12,16,.55);if(s>0){g.save();g.translate(px+w/2,py+ch/2);g.scale(s,s);g.fillStyle=bg;g.beginPath();g.roundRect(-w/2,-ch/2,w,ch,ch/2);g.fill();g.fillStyle=fg;g.textAlign='center';g.textBaseline='middle';g.fillText(l,0,2);g.restore()}px+=w+gap})});g.restore();return pos};
-FX.annot=(g,t,t0,{from,to,text,color='#E53935',font='72px BZ'})=>{const p=eio((t-t0)/.5);if(p<=0)return;g.save();g.strokeStyle=color;g.lineWidth=5;g.lineCap='round';
- const mx=(from[0]+to[0])/2+40,my=(from[1]+to[1])/2-50,N=20;g.beginPath();for(let i=0;i<=N*p;i++){const u=i/N,X=(1-u)*(1-u)*from[0]+2*u*(1-u)*mx+u*u*to[0],Y=(1-u)*(1-u)*from[1]+2*u*(1-u)*my+u*u*to[1];i?g.lineTo(X,Y):g.moveTo(X,Y)}g.stroke();
- if(p>.95){const a=Math.atan2(to[1]-my,to[0]-mx);g.beginPath();g.moveTo(to[0],to[1]);g.lineTo(to[0]-22*Math.cos(a-.5),to[1]-22*Math.sin(a-.5));g.moveTo(to[0],to[1]);g.lineTo(to[0]-22*Math.cos(a+.5),to[1]-22*Math.sin(a+.5));g.stroke()}
- g.fillStyle=color;g.font=font;g.globalAlpha=cl((t-t0-.3)/.2);g.fillText(text,from[0]-10,from[1]-14);g.restore()};
+FX.annot=(g,t,t0,{from,to,text,color='#E53935',font='72px BZ'})=>{const p=eio((t-t0)/.5);if(p<=0)return;g.save();
+ // 11/11 대표 "나 여기 표시선이랑 텍스트도 겹쳐": 글은 from 을 가운데로 놓고, 선은 글 상자 가장자리 + 20px 에서 시작한다(글 위로 선이 지나가지 않음)
+ g.font=font;const fs=parseFloat(font.match(/(\d+)px/)[1]),w=g.measureText(text).width,hx=w/2+20,hy=fs*.6+20,dx=to[0]-from[0],dy=to[1]-from[1],L=Math.hypot(dx,dy)||1,
+  k=Math.min(Math.abs(dx)>1e-3?hx/Math.abs(dx):1e9,Math.abs(dy)>1e-3?hy/Math.abs(dy):1e9),st=[from[0]+dx*k,from[1]+dy*k];
+ g.strokeStyle=color;g.lineWidth=5;g.lineCap='round';const mx=(st[0]+to[0])/2+30,my=(st[1]+to[1])/2-30,N=20;g.beginPath();for(let i=0;i<=N*p;i++){const u=i/N,X=(1-u)*(1-u)*st[0]+2*u*(1-u)*mx+u*u*to[0],Y=(1-u)*(1-u)*st[1]+2*u*(1-u)*my+u*u*to[1];i?g.lineTo(X,Y):g.moveTo(X,Y)}g.stroke();
+ if(p>.95){const a=Math.atan2(to[1]-my,to[0]-mx);g.beginPath();g.moveTo(to[0],to[1]);g.lineTo(to[0]-26*Math.cos(a-.5),to[1]-26*Math.sin(a-.5));g.moveTo(to[0],to[1]);g.lineTo(to[0]-26*Math.cos(a+.5),to[1]-26*Math.sin(a+.5));g.stroke()}
+ g.fillStyle=color;g.textAlign='center';g.textBaseline='middle';g.globalAlpha=cl((t-t0-.3)/.2);g.fillText(text,from[0],from[1]);g.restore()};
 FX.ball=(g,t,t0,{x0=150,x1=930,yb=1250,r=46,color='#2F6BFF',hops=3,dur=2})=>{const T=cl((t-t0)/dur);if(t<t0)return;const x=mix(x0,x1,ez.io(T)),ph=(T*hops)%1,h=420*Math.exp(-T*1.2);
  const y=yb-r-h*4*ph*(1-ph),vy=Math.abs(1-2*ph),near=ph<.08||ph>.92;const sx=near?1.35:1-vy*.0+(.15*(1-vy)),sy=near?.68:1+.18*vy;
  g.save();g.strokeStyle='rgba(0,0,0,.25)';g.lineWidth=3;g.beginPath();g.moveTo(80,yb);g.lineTo(1000,yb);g.stroke();g.translate(x,near?yb-r*sy:y);g.scale(sx,sy);g.fillStyle=color;g.beginPath();g.arc(0,0,r,0,7);g.fill();g.restore()};
@@ -235,10 +238,13 @@ FX.character=(g,t,{imgs,x=FX.cx,y=1920,h=1150,enter=0,exit=null,talk=[],beat=.5,
  const breath=1+Math.sin(t*2.4)*.008,bob=talking?Math.abs(Math.sin(t*Math.PI/beat))*-14:0,tilt=talking?Math.sin(t*Math.PI/beat/2)*.025:Math.sin(t*1.1)*.008;
  const dy=from=='bottom'?(1-a)*700+out*900:0,dx=from=='left'?(1-a)*-800-out*900:from=='right'?(1-a)*800+out*900:0;
  g.save();g.translate(x+dx,y+dy+bob);g.rotate(tilt);g.scale(breath*(a>1?1:mix(.9,1,a)),breath);g.drawImage(im,-w/2,-h,w,h);g.restore()};
-FX.bubble=(g,t,t0,{text,x=FX.cx,y=600,tail='down',tx=null,font='72px BZ',color='#111',bg='#fff',maxw=820,pad=46,lh=1.25})=>{const a=sp(t-t0,16,.55);if(a<=0)return;g.save();g.font=font;
- const lines=String(text).split('\n'),fs=parseFloat(font.match(/(\d+)px/)[1]),w=Math.min(maxw,Math.max(...lines.map(l=>g.measureText(l).width))+pad*2),h=lines.length*fs*lh+pad*1.4;
- g.translate(x,y);g.scale(a,a);g.rotate((1-a)*-.15);g.fillStyle=bg;g.beginPath();g.roundRect(-w/2,-h/2,w,h,44);g.fill();
- const ttx=(tx==null?0:tx-x);g.beginPath();if(tail=='down'){g.moveTo(ttx-26,h/2-2);g.lineTo(ttx+6,h/2+48);g.lineTo(ttx+30,h/2-2)}else{g.moveTo(ttx-26,-h/2+2);g.lineTo(ttx+6,-h/2-48);g.lineTo(ttx+30,-h/2+2)}g.fill();
+FX.bubble=(g,t,t0,{text,x=FX.cx,y=600,tail='down',tx=null,font='72px BZ',color='#111',bg='#fff',maxw=820,pad=46,lh=1.25,sticker=true,tilt=-.03,edge='#FFFFFF'})=>{const a=sp(t-t0,16,.55);if(a<=0)return;g.save();g.font=font;
+ // 11/11 대표 13:40 "정월이 스티커 느낌이면 말풍선도 그런 느낌으로 통일감": 말풍선도 스티커 — 꼬리까지 한 덩어리, 흰 테두리 + 아래로 떨어진 단단한 그림자, 살짝 기울기
+ const lines=String(text).split('\n'),fs=parseFloat(font.match(/(\d+)px/)[1]),w=Math.min(maxw,Math.max(...lines.map(l=>g.measureText(l).width))+pad*2),h=lines.length*fs*lh+pad*1.4,ttx=(tx==null?0:tx-x),r=Math.min(48,h/2);
+ const shape=()=>{g.beginPath();g.roundRect(-w/2,-h/2,w,h,r);if(tail=='down'){g.moveTo(ttx-34,h/2-4);g.lineTo(ttx+2,h/2+56);g.lineTo(ttx+38,h/2-4)}else{g.moveTo(ttx-34,-h/2+4);g.lineTo(ttx+2,-h/2-56);g.lineTo(ttx+38,-h/2+4)}};
+ g.translate(x,y);g.scale(a,a);g.rotate((1-a)*-.15+(sticker?tilt:0));
+ if(sticker){g.save();g.translate(0,12);g.fillStyle='rgba(0,0,0,.28)';shape();g.fill();g.restore();g.lineJoin='round';g.strokeStyle=edge;g.lineWidth=18;shape();g.stroke()}
+ g.fillStyle=bg;shape();g.fill();
  g.fillStyle=color;g.textAlign='center';g.textBaseline='middle';lines.forEach((l,i)=>g.fillText(l,0,(i-(lines.length-1)/2)*fs*lh+4));g.restore()};
 
 // 11/11 대표 "채널 별 콘텐츠 안전영역 관련해서도 준 거 기억하지?": 규격은 channel_specs.py 가 단일 출처다.

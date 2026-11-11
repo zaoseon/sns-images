@@ -121,7 +121,8 @@ def _spec_js(ch="reel"):
             "const rg=document.createRange();rg.selectNodeContents(n);const r=rg.getBoundingClientRect();if(!r.width)continue;"
             "if(e.offsetWidth&&e.getBoundingClientRect().width/e.offsetWidth<0.85)continue;"
             "const cs=getComputedStyle(e),k=e.offsetWidth?e.getBoundingClientRect().width/e.offsetWidth:1;"
-            "R.push([n.textContent.trim().slice(0,20),r.left,r.top,r.right,r.bottom,parseFloat(cs.fontSize)*k,cs.fontFamily.replace(/['\"]/g,'').split(',')[0].trim()])}return R};")
+            "const fz=parseFloat(cs.fontSize)*k,cy_=(r.top+r.bottom)/2,hh=Math.min((r.bottom-r.top)/2,fz*.55);"
+            "R.push([n.textContent.trim().slice(0,20),r.left,cy_-hh,r.right,cy_+hh,fz,cs.fontFamily.replace(/['\"]/g,'').split(',')[0].trim()])}return R};")
 
 
 def 안전영역_검사(pg, 초, ch="reel", 간격=0.1):
@@ -133,7 +134,7 @@ def 안전영역_검사(pg, 초, ch="reel", 간격=0.1):
     import fonts_kit as FK
     이름 = {"BZ": "hand_bazzi", "DK": "hand_brush", "HC": "hand_cute", "HP": "hand_pen", "DG": "hand_round"}
     손글씨_최소 = {f: FK.HAND_MIN[k] for f, k in 이름.items()}
-    일반_최소 = 34                      # channel_specs 릴스 라벨 '프리텐다드 34px 이상'
+    일반_최소 = CS.BALANCE["min_text"]   # 11/11 대표 '본문·배지 글자 크게' — channel_specs.BALANCE
     n = int(초 / 간격)
     for i in range(n + 1):
         t = min(i * 간격, 초 - 0.01)
@@ -154,6 +155,80 @@ def 안전영역_검사(pg, 초, ch="reel", 간격=0.1):
     for s, v in 작음.items():
         if len(v) >= 3: 문제.append(f"'{s}' 글자 {v[0][1]}px — {v[0][3] or '글꼴'}는 {v[0][2]}px 이상(가독성)")
     return 문제, (x0, y0, x1, y1)
+
+
+def 균형_검사(pg, 초, ch="reel", 간격=0.25):
+    """화면 픽셀로 장면 균형을 잰다(11/11 대표 13:27). 글 칸 안에서 배경과 다른 픽셀의 묶음 상자를 구해
+    ① 위 간격(상단 고정 줄 + gap_top) ② 세로·가로 가운데 ③ 채움(작은 글만 위에 떠 있는 장면) 을 본다.
+    hold 초 넘게 이어질 때만 문제로 친다. 배경색은 글 칸 가장자리 픽셀의 중앙값."""
+    import numpy as np, io
+    from PIL import Image
+    B = CS.BALANCE; C = CS.CH[ch]; z = {r[0]: r[1:5] for r in C["zones"]}
+    sx0, sx1 = C["safe"][0], C["safe"][2]; top = z["상단 고정"][3]; bot = z["하단 고정"][1]
+    ay0, ay1 = top + 10, bot - 10; acx = (sx0 + sx1) / 2; acy = (top + B["gap_top"] + bot - 10) / 2
+    keys = {"위 간격": [], "가운데": [], "채움": []}
+    n = int(초 / 간격)
+    for i in range(n + 1):
+        t = min(i * 간격, 초 - 0.01)
+        pg.evaluate("t => {window.__zsTxt=[];window.seek(t)}", t)
+        a = np.asarray(Image.open(io.BytesIO(pg.screenshot())).convert("RGB")).astype(int)
+        # 11/11 대표 13:38 "뱃지나 텍스트, 그래픽 구성 요소들 간 간격이 붙지 않게": 글자 상자 둘레(글자 크기의 1/4, 최소 14px)에
+        # 다른 것(선·그림·다른 글자·뱃지 가장자리)이 들어와 있으면 '붙음'. 뱃지 안 글자는 뱃지 여백이 모자랄 때 걸린다.
+        rows_ = pg.evaluate("() => window.__zsTxt.concat(window.__zsDom())")
+        # 한 덩어리 글(줄바꿈한 두 줄, 같은 글자 크기)은 하나로 합친다 — 같은 글의 줄 사이는 '붙음'이 아니다
+        rows_.sort(key=lambda r: (r[2], r[1]))
+        def _붙일(q, r):
+            fs_ = max(q[5] or 40, r[5] or 40); 같은크기 = abs((q[5] or 0) - (r[5] or 0)) <= .3 * fs_
+            세로잇기 = -fs_ * .6 < r[2] - q[4] < fs_ * .6 and min(q[3], r[3]) > max(q[1], r[1])           # 줄바꿈한 다음 줄
+            가로잇기 = min(q[4], r[4]) - max(q[2], r[2]) > .5 * min(q[4] - q[2], r[4] - r[2]) and max(q[1], r[1]) - min(q[3], r[3]) < fs_ * .6   # 같은 줄의 굵게·색 바꾼 조각
+            return 같은크기 and (세로잇기 or 가로잇기)
+        합 = [list(r) for r in rows_]; 바뀜 = True
+        while 바뀜:
+            바뀜 = False
+            for ii in range(len(합)):
+                for jj in range(ii + 1, len(합)):
+                    q, r = 합[ii], 합[jj]
+                    if r[2] < q[2]: q, r = r, q
+                    if _붙일(q, r):
+                        u = [q[0] + " " + r[0], min(q[1], r[1]), min(q[2], r[2]), max(q[3], r[3]), max(q[4], r[4]), q[5], q[6]]
+                        합[ii] = u; del 합[jj]; 바뀜 = True; break
+                if 바뀜: break
+        for row in 합:
+            tx, bx0, by0, bx1, by1, px = row[0], *[int(round(v)) for v in row[1:5]], row[5] or 40
+            mg = min(40, max(14, int(px * B["near"])))
+            X0, Y0, X1, Y1 = max(bx0 - mg, 0), max(by0 - mg, 0), min(bx1 + mg, a.shape[1] - 1), min(by1 + mg, a.shape[0] - 1)
+            if Y1 <= Y0 or X1 <= X0 or by0 < top or by1 > bot: continue
+            R_ = a[Y0:Y1, X0:X1]; inner = np.zeros(R_.shape[:2], bool); inner[by0 - Y0:by1 - Y0, bx0 - X0:bx1 - X0] = True
+            ring = R_[~inner]
+            if len(ring) < 50: continue
+            med = np.median(ring, 0); diff = np.abs(ring - med).max(1) > 60
+            if diff.mean() > 0.03: keys.setdefault("붙음 · " + tx[:12], []).append((t, f"'{tx}' 둘레 {mg}px 안에 다른 요소({diff.mean() * 100:.0f}%)"))
+        A = a[ay0:ay1, :]
+        edge = np.concatenate([A[:, :24].reshape(-1, 3), A[:, -24:].reshape(-1, 3)])
+        bg = np.median(edge, 0)
+        m = np.abs(A - bg).max(2) > 48
+        rows = np.where(m.sum(1) > 14)[0]
+        if len(rows) == 0: continue
+        cols = np.where(m[rows.min():rows.max() + 1].sum(0) > 14)[0]
+        if len(cols) == 0: continue
+        y0, y1 = rows.min() + ay0, rows.max() + ay0; x0, x1 = cols.min(), cols.max()
+        h, w = y1 - y0, x1 - x0
+        if y0 < top + B["gap_top"] - 4: keys["위 간격"].append((t, f"내용 위 끝 y{y0} (상단 고정 줄 아래 {y0 - top}px, {B['gap_top']}px 이상)"))
+        if abs((y0 + y1) / 2 - acy) > B["center_tol_y"] or abs((x0 + x1) / 2 - acx) > B["center_tol_x"]:
+            keys["가운데"].append((t, f"내용 묶음 가운데 ({(x0 + x1) / 2:.0f},{(y0 + y1) / 2:.0f}) — 칸 가운데 ({acx:.0f},{acy:.0f})"))
+        if h < B["min_fill_h"] * (bot - top - B["gap_top"]) and w < B["min_fill_w"] * (sx1 - sx0):
+            keys["채움"].append((t, f"내용 {w}x{h}px — 비어 보임(글자를 키우거나 그림을 더 크게)"))
+    문제 = []
+    for k, v in keys.items():
+        if not v: continue
+        ts = [x[0] for x in v]; run = 1; s0 = 0; best = (1, 0)
+        for j in range(1, len(ts)):
+            if ts[j] - ts[j - 1] <= 간격 + 1e-6: run += 1
+            else: run = 1; s0 = j
+            if run > best[0]: best = (run, s0)
+        if best[0] * 간격 > (B["hold"] * .75 if k.startswith("붙음") else B["hold"]):
+            x = v[best[1]]; 문제.append(f"[{k}] {x[0]:.2f}초부터 {best[0] * 간격:.1f}초 동안 — {x[1]}")
+    return 문제
 
 
 금지 = [  # (찾을 것, 까닭) — 시간은 seek(t) 하나가 정한다. 꾸밈만 하는 효과는 안 쓴다(K-073·빌더 조쉬 금지 목록)
@@ -280,11 +355,11 @@ def 안전영역_막기(html, 초, ch="reel"):
         pg.goto("file://" + os.path.abspath(html)); pg.wait_for_function("typeof window.seek === 'function'", timeout=15000)
         pg.evaluate("document.fonts.ready")
         src = open(html, encoding="utf-8").read(); frame = ".frame(" in src
-        문제, 칸 = 안전영역_검사(pg, 초, ch); b.close()
+        문제, 칸 = 안전영역_검사(pg, 초, ch); 문제 += 균형_검사(pg, 초, ch); b.close()
     canvas = "<canvas" in src
     if canvas and not frame: 문제.insert(0, "고정 요소 없음 — draw 끝에 F.frame(g) 를 부르세요(위 가운데 한 줄·AI 고지·zaoseon.com)")
     if 문제 and os.environ.get("ZS_SAFE_OK") != "1":
-        raise SystemExit(f"[막음] 안전 영역({ch}) — 글 칸 x {칸[0]}~{칸[2]}, y {칸[1]}~{칸[3]}:\n  " + "\n  ".join(문제[:12])
+        raise SystemExit(f"[막음] 안전 영역·균형({ch}) — 글 칸 x {칸[0]}~{칸[2]}, y {칸[1]}~{칸[3]}:\n  " + "\n  ".join(문제[:30])
                          + "\n  (규격: pipeline/channel_specs.py. 가운데는 F.cx, 칸은 F.area())")
 
 
