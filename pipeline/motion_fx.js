@@ -1,3 +1,14 @@
+
+
+// 글꼴은 이 파일이 페이지에 직접 붙인다(페이지마다 @font-face 를 다시 적지 않는다). 이름: PL 페이퍼로지 · PR 프리텐다드 · BZ 배찌체 · DK 동해독도 · HC 개구 · HP 나눔펜 · DG 동글
+(function(){if(typeof document==='undefined'||!document.currentScript||typeof FontFace==='undefined')return;const base=document.currentScript.src.replace(/[^/]*$/,'')+'fonts/';
+ const L={PL:'Paperlogy-9Black.ttf',PR:'PRETENDARD-EXTRABOLD.OTF',BZ:'Bazzi.ttf',DK:'EastSeaDokdo-Regular.ttf',HC:'Gaegu-Bold.ttf',HP:'NanumPenScript-Regular.ttf',DG:'Dongle-Bold.ttf'};
+ const have=new Set([...document.fonts].map(f=>f.family.replace(/['"]/g,'')));window.__zsFonts=Promise.all(Object.entries(L).filter(([k])=>!have.has(k)).map(([k,f])=>new FontFace(k,`url(${base+f})`).load().then(ff=>document.fonts.add(ff)).catch(()=>0)))})();
+// 11/11 대표 13:09 "곡선·그래프·선 같은 구성 요소가 얇은 느낌… 볼륨감 있게": 모든 선 두께를 한 곳에서 키운다.
+// 선 굵기 = 적은 값 × 1.7(20px 넘는 굵은 선은 × 1.15), 가장 가는 선도 6px. 끝·꺾임은 둥글게. 페이지에서 window.ZS_VOL 로 바꿀 수 있다.
+(function(){const P=typeof CanvasRenderingContext2D!=='undefined'&&CanvasRenderingContext2D.prototype;if(!P||P.__zsVol)return;const d=Object.getOwnPropertyDescriptor(P,'lineWidth');if(!d||!d.set)return;P.__zsVol=1;
+ Object.defineProperty(P,'lineWidth',{configurable:true,get(){return d.get.call(this)},set(v){const k=(typeof window!=='undefined'&&window.ZS_VOL)||1.7;
+  const w=v<=0?v:(v>=20?v*Math.min(k,1.15):Math.max(v*k,6));d.set.call(this,w);try{this.lineJoin='round'}catch(e){}}})})();
 /* 모션 기법 모음(화려한 쪽, K-186 대표 11/10 "화려하게" · 22:04 "모션이 얼마나 많은데")
    광고·릴스 HTML 이 <script src=".../pipeline/motion_fx.js"> 로 불러 쓴다. 모든 함수는 시간 t 만으로 그린다(seek 규칙).
    편마다 다른 조합을 쓴다: HTML 에 window.FX=[기법 이름…] 을 적으면 html_motion.py 가 앞 3편과 겹침을 잰다.
@@ -101,7 +112,7 @@ FX.chips=(g,t,t0,{labels,x=null,y=1200,gap=18,font='800 36px PR',bg='#fff',fg='#
  const rows=[[]];let cx=x0;labels.forEach((l,i)=>{const w=g.measureText(l).width+fs*1.3;if(cx+w>A.x1&&rows[rows.length-1].length){rows.push([]);cx=x0}rows[rows.length-1].push([l,i,w]);cx+=w+gap});
  const pos=[];rows.forEach((r,ri)=>{const rw=r.reduce((a,[, ,w])=>a+w,0)+gap*(r.length-1);let px=align=='center'?FX.cx-rw/2:x0;const py=y+ri*(ch+gap);
   r.forEach(([l,i,w])=>{pos[i]=[px+w/2,py+ch/2];const s=sp(t-t0-i*.12,16,.55);if(s>0){g.save();g.translate(px+w/2,py+ch/2);g.scale(s,s);g.fillStyle=bg;g.beginPath();g.roundRect(-w/2,-ch/2,w,ch,ch/2);g.fill();g.fillStyle=fg;g.textAlign='center';g.textBaseline='middle';g.fillText(l,0,2);g.restore()}px+=w+gap})});g.restore();return pos};
-FX.annot=(g,t,t0,{from,to,text,color='#E53935',font='italic 400 46px SR'})=>{const p=eio((t-t0)/.5);if(p<=0)return;g.save();g.strokeStyle=color;g.lineWidth=5;g.lineCap='round';
+FX.annot=(g,t,t0,{from,to,text,color='#E53935',font='72px BZ'})=>{const p=eio((t-t0)/.5);if(p<=0)return;g.save();g.strokeStyle=color;g.lineWidth=5;g.lineCap='round';
  const mx=(from[0]+to[0])/2+40,my=(from[1]+to[1])/2-50,N=20;g.beginPath();for(let i=0;i<=N*p;i++){const u=i/N,X=(1-u)*(1-u)*from[0]+2*u*(1-u)*mx+u*u*to[0],Y=(1-u)*(1-u)*from[1]+2*u*(1-u)*my+u*u*to[1];i?g.lineTo(X,Y):g.moveTo(X,Y)}g.stroke();
  if(p>.95){const a=Math.atan2(to[1]-my,to[0]-mx);g.beginPath();g.moveTo(to[0],to[1]);g.lineTo(to[0]-22*Math.cos(a-.5),to[1]-22*Math.sin(a-.5));g.moveTo(to[0],to[1]);g.lineTo(to[0]-22*Math.cos(a+.5),to[1]-22*Math.sin(a+.5));g.stroke()}
  g.fillStyle=color;g.font=font;g.globalAlpha=cl((t-t0-.3)/.2);g.fillText(text,from[0]-10,from[1]-14);g.restore()};
@@ -224,7 +235,7 @@ FX.character=(g,t,{imgs,x=FX.cx,y=1920,h=1150,enter=0,exit=null,talk=[],beat=.5,
  const breath=1+Math.sin(t*2.4)*.008,bob=talking?Math.abs(Math.sin(t*Math.PI/beat))*-14:0,tilt=talking?Math.sin(t*Math.PI/beat/2)*.025:Math.sin(t*1.1)*.008;
  const dy=from=='bottom'?(1-a)*700+out*900:0,dx=from=='left'?(1-a)*-800-out*900:from=='right'?(1-a)*800+out*900:0;
  g.save();g.translate(x+dx,y+dy+bob);g.rotate(tilt);g.scale(breath*(a>1?1:mix(.9,1,a)),breath);g.drawImage(im,-w/2,-h,w,h);g.restore()};
-FX.bubble=(g,t,t0,{text,x=FX.cx,y=600,tail='down',tx=null,font='700 72px HP',color='#111',bg='#fff',maxw=820,pad=46,lh=1.25})=>{const a=sp(t-t0,16,.55);if(a<=0)return;g.save();g.font=font;
+FX.bubble=(g,t,t0,{text,x=FX.cx,y=600,tail='down',tx=null,font='72px BZ',color='#111',bg='#fff',maxw=820,pad=46,lh=1.25})=>{const a=sp(t-t0,16,.55);if(a<=0)return;g.save();g.font=font;
  const lines=String(text).split('\n'),fs=parseFloat(font.match(/(\d+)px/)[1]),w=Math.min(maxw,Math.max(...lines.map(l=>g.measureText(l).width))+pad*2),h=lines.length*fs*lh+pad*1.4;
  g.translate(x,y);g.scale(a,a);g.rotate((1-a)*-.15);g.fillStyle=bg;g.beginPath();g.roundRect(-w/2,-h/2,w,h,44);g.fill();
  const ttx=(tx==null?0:tx-x);g.beginPath();if(tail=='down'){g.moveTo(ttx-26,h/2-2);g.lineTo(ttx+6,h/2+48);g.lineTo(ttx+30,h/2-2)}else{g.moveTo(ttx-26,-h/2+2);g.lineTo(ttx+6,-h/2-48);g.lineTo(ttx+30,-h/2+2)}g.fill();

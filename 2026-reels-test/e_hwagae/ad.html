@@ -8,7 +8,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#3B82F6
 .b{position:absolute;max-width:700px;padding:30px 40px;border-radius:44px;font:800 54px/1.35 PR;box-sizing:border-box;transform-origin:var(--o)}
 .l{left:90px;background:#fff;color:#111;border-bottom-left-radius:12px;--o:0% 100%}
 .r{right:90px;background:#FFD93D;color:#111;border-bottom-right-radius:12px;--o:100% 100%}
-#who{position:absolute;left:90px;top:440px;font:800 38px PR;color:#DCE8FF}
+#who{position:absolute;left:90px;top:430px;font:800 46px PR;color:#DCE8FF}
 #dots{position:absolute;left:90px;top:520px;width:170px;height:96px;border-radius:44px;background:#fff}
 #brand{position:absolute;top:300px;left:90px;font:900 44px PL;color:#FFD93D}#ai{position:absolute;bottom:300px;left:0;right:0;text-align:center;font:800 32px PR;color:#DCE8FF}
 .card{position:absolute;top:900px;width:400px;height:400px;border-radius:48px;font:900 70px/1.2 PL;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#111}
@@ -68,8 +68,8 @@ function draw0(t){
  if(t>=6.85&&t<7.15){g.fillStyle=BL;g.fillRect(0,0,1080,eio((t-6.85)/.3)*1920)}
  vis('k1',t>=7&&t<9);vis('k2',t>=7.5&&t<9);
  if(t>=7&&t<9){pop('k1',7.5-.5,t);pop('k2',8,t);$('k1').style.transform=`translateY(${(1-sp(t-7,14,.7))*80}px)`;
-  for(let i=0;i<9;i++){const x=120+i*105,h=mix(0,60+((i*37)%5)*40,sp(t-8-i*.03,12,.6));g.fillStyle='rgba(255,255,255,.25)';g.fillRect(x,1450-h,52,h)}
-  g.fillStyle='#fff';g.font='800 40px PR';g.textAlign='center';if(t>8.3)g.fillText('나만의 충전 막대',540,1520)}
+  for(let i=0;i<9;i++){const x=95+i*104,h=mix(0,80+((i*37)%5)*48,sp(t-8-i*.03,12,.6));g.fillStyle=i%3==1?Y:'rgba(255,255,255,.9)';if(h>1){g.beginPath();g.roundRect(x,1420-h,82,h,[20,20,6,6]);g.fill()}}
+  g.fillStyle='#fff';g.font='900 56px PL';g.textAlign='center';if(t>8.3)g.fillText('나만의 충전 막대',540,1500)}
  // 4 고르기
  const s4=t>=9&&t<12;['c0','c1','c2','c3'].forEach(i=>vis(i,s4));
  if(s4){$('c0').style.opacity=cl((t-9)/.15);pop('c1',9.5,t);pop('c2',9.75,t);

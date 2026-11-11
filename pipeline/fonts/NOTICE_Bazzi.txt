@@ -1,0 +1,2 @@
+배찌체(Bazzi) © (주)넥슨코리아. 넥슨 폰트 사용정책(https://levelup.nexon.com/index.html#policy)에 따라 개인·기업 상업 이용 무료, 영상 자막·임베딩 허용.
+폰트 파일을 수정해서 재배포하거나 폰트 자체를 판매하지 않는다. 이 파일은 원본 그대로다(@kfonts/nexon-bazzi 0.3.0 의 src/Bazzi.ttf).

@@ -11,7 +11,12 @@ P = dict(gm_bold=os.path.join(FD, "GmarketSansBold.ttf"), gm_med=os.path.join(FD
          # 11/11 대표 "폰트도 손글씨 폰트 같은 것도 좀 추가": 무료(SIL OFL, google/fonts) 손글씨 3종 — 속마음·메모·말풍선·주석에. 제목·숫자는 그대로 페이퍼로지.
          hand_pen=os.path.join(FD, "NanumPenScript-Regular.ttf"),   # 펜 손글씨(속마음·주석·편지)
          hand_cute=os.path.join(FD, "Gaegu-Bold.ttf"),              # 둥근 귀여운 손글씨(말풍선·정월 대사)
-         hand_round=os.path.join(FD, "Dongle-Bold.ttf"))            # 동글 굵은 글씨(짧은 외침·스티커)
+         hand_round=os.path.join(FD, "Dongle-Bold.ttf"),            # 동글 굵은 글씨(짧은 외침·스티커)
+         # 11/11 13:09 대표 "배찌처럼 가독성 높은 손글씨, 첨부처럼 손글씨 자체를 크게": 말풍선·주석 기본은 배찌체, 큰 외침은 동해독도(붓글씨)
+         hand_bazzi=os.path.join(FD, "Bazzi.ttf"),                 # 넥슨 배찌체 — 가장 잘 읽히는 손글씨. 말풍선·주석·정월 대사 기본(NOTICE_Bazzi.txt)
+         hand_brush=os.path.join(FD, "EastSeaDokdo-Regular.ttf"))   # 동해독도(OFL) — 붓 손글씨, 110px 이상 큰 외침·제목에만
+# 손글씨 가장 작은 크기(px): 이보다 작으면 폰에서 안 읽힌다(대표 11/11 "손글씨 자체를 좀 키워서"). html_motion 관문이 잰다.
+HAND_MIN = dict(hand_bazzi=64, hand_cute=64, hand_round=80, hand_pen=88, hand_brush=110)
 _cm = {}
 def _cmap(k):
     if k not in _cm: _cm[k] = set(TTFont(P[k], lazy=True).getBestCmap().keys())

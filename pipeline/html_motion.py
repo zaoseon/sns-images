@@ -110,7 +110,8 @@ def _spec_js(ch="reel"):
             "bx=[[x0,y-a],[x0+w,y-a],[x0,y+d],[x0+w,y+d]].map(([px,py])=>[T.a*px+T.c*py+T.e,T.b*px+T.d*py+T.f]),"
             "xs=bx.map(p=>p[0]),ys=bx.map(p=>p[1]),sc=Math.hypot(T.a,T.b);"
             "const cr=this.canvas.getBoundingClientRect(),kx=cr.width/this.canvas.width,ky=cr.height/this.canvas.height;"
-            "if(sc>0.85)window.__zsTxt.push([String(s).slice(0,20),cr.left+kx*Math.min(...xs),cr.top+ky*Math.min(...ys),cr.left+kx*Math.max(...xs),cr.top+ky*Math.max(...ys)])}}catch(e){}"
+            "const fm=/(\\d+(?:\\.\\d+)?)px\\s+(.+)$/.exec(this.font)||[0,0,''];"
+            "if(sc>0.85)window.__zsTxt.push([String(s).slice(0,20),cr.left+kx*Math.min(...xs),cr.top+ky*Math.min(...ys),cr.left+kx*Math.max(...xs),cr.top+ky*Math.max(...ys),parseFloat(fm[1])*sc*kx,fm[2].replace(/['\"]/g,'').split(',')[0].trim()])}}catch(e){}"
             "return o.call(this,s,x,y,...r)}})})();"
             # DOM 글자도 잰다(캔버스+DOM 섞어 쓴 페이지가 있다). 고정 요소(.bf)는 뺀다.
             "window.__zsDom=()=>{const R=[],W=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;while(n=W.nextNode()){"
@@ -119,7 +120,8 @@ def _spec_js(ch="reel"):
             "let o=1;for(let x=e;x&&x.nodeType===1;x=x.parentElement)o*=parseFloat(getComputedStyle(x).opacity);if(o<0.15)continue;"
             "const rg=document.createRange();rg.selectNodeContents(n);const r=rg.getBoundingClientRect();if(!r.width)continue;"
             "if(e.offsetWidth&&e.getBoundingClientRect().width/e.offsetWidth<0.85)continue;"
-            "R.push([n.textContent.trim().slice(0,20),r.left,r.top,r.right,r.bottom])}return R};")
+            "const cs=getComputedStyle(e),k=e.offsetWidth?e.getBoundingClientRect().width/e.offsetWidth:1;"
+            "R.push([n.textContent.trim().slice(0,20),r.left,r.top,r.right,r.bottom,parseFloat(cs.fontSize)*k,cs.fontFamily.replace(/['\"]/g,'').split(',')[0].trim()])}return R};")
 
 
 def 안전영역_검사(pg, 초, ch="reel", 간격=0.1):
@@ -127,21 +129,30 @@ def 안전영역_검사(pg, 초, ch="reel", 간격=0.1):
     들어오고 나가는 순간(잠깐 밖에 있는 것)은 봐준다. 크기가 85% 미만으로 커지는 중인 글도 뺀다."""
     C = CS.CH[ch]; z = {r[0]: r[1:5] for r in C["zones"]}
     x0, x1 = C["safe"][0], C["safe"][2]; y0 = z["상단 고정"][3] + 10; y1 = z["하단 고정"][1] - 10
-    밖 = {}
+    밖 = {}; 작음 = {}
+    import fonts_kit as FK
+    이름 = {"BZ": "hand_bazzi", "DK": "hand_brush", "HC": "hand_cute", "HP": "hand_pen", "DG": "hand_round"}
+    손글씨_최소 = {f: FK.HAND_MIN[k] for f, k in 이름.items()}
+    일반_최소 = 34                      # channel_specs 릴스 라벨 '프리텐다드 34px 이상'
     n = int(초 / 간격)
     for i in range(n + 1):
         t = min(i * 간격, 초 - 0.01)
         pg.evaluate("t => {window.__zsTxt=[];window.seek(t)}", t)
         rows = pg.evaluate("() => window.__zsTxt.concat(window.__zsDom())")
-        for s, a, b, c, d in rows:
+        for s, a, b, c, d, px, fam in rows:
             넘 = max(x0 - a, c - x1, y0 - b, d - y1)
             if 넘 > 2: 밖.setdefault(s, []).append((round(t, 2), round(넘)))
+            # 11/11 대표 13:09 "가독성 잘 생각해줘": 글자가 너무 작으면 막는다(손글씨는 더 크게)
+            최소 = 손글씨_최소.get(fam, 일반_최소)
+            if px and px < 최소 - 0.5: 작음.setdefault(s, []).append((round(t, 2), round(px), 최소, fam))
     문제 = []
     for s, v in 밖.items():
         ts = [t for t, _ in v]; run = best = 1
         for k in range(1, len(ts)):
             run = run + 1 if ts[k] - ts[k - 1] <= 간격 + 1e-6 else 1; best = max(best, run)
         if best * 간격 >= 0.3: 문제.append(f"'{s}' {v[0][0]}초부터 {max(n_ for _, n_ in v)}px 밖")
+    for s, v in 작음.items():
+        if len(v) >= 3: 문제.append(f"'{s}' 글자 {v[0][1]}px — {v[0][3] or '글꼴'}는 {v[0][2]}px 이상(가독성)")
     return 문제, (x0, y0, x1, y1)
 
 
