@@ -7,7 +7,11 @@ from fontTools.ttLib import TTFont
 FD = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
 P = dict(gm_bold=os.path.join(FD, "GmarketSansBold.ttf"), gm_med=os.path.join(FD, "GmarketSansMedium.ttf"),
          pl_xb=os.path.join(FD, "Paperlogy-8ExtraBold.ttf"), pl_blk=os.path.join(FD, "Paperlogy-9Black.ttf"),
-         pr_xb=os.path.join(FD, "PRETENDARD-EXTRABOLD.OTF"), pr_blk=os.path.join(FD, "PRETENDARD-BLACK.OTF"), serif=os.path.join(FD, "serif.otf"))
+         pr_xb=os.path.join(FD, "PRETENDARD-EXTRABOLD.OTF"), pr_blk=os.path.join(FD, "PRETENDARD-BLACK.OTF"), serif=os.path.join(FD, "serif.otf"),
+         # 11/11 대표 "폰트도 손글씨 폰트 같은 것도 좀 추가": 무료(SIL OFL, google/fonts) 손글씨 3종 — 속마음·메모·말풍선·주석에. 제목·숫자는 그대로 페이퍼로지.
+         hand_pen=os.path.join(FD, "NanumPenScript-Regular.ttf"),   # 펜 손글씨(속마음·주석·편지)
+         hand_cute=os.path.join(FD, "Gaegu-Bold.ttf"),              # 둥근 귀여운 손글씨(말풍선·정월 대사)
+         hand_round=os.path.join(FD, "Dongle-Bold.ttf"))            # 동글 굵은 글씨(짧은 외침·스티커)
 _cm = {}
 def _cmap(k):
     if k not in _cm: _cm[k] = set(TTFont(P[k], lazy=True).getBestCmap().keys())

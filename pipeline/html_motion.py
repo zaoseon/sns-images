@@ -44,12 +44,13 @@ CH = CS.CH["reel"]
 OUT = os.path.join(ROOT, "2026-motion", "html")
 
 
-async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러=1):
+async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러=1, ch="reel"):
     from playwright.async_api import async_playwright
     n = int(round(초 * fps))
     async with async_playwright() as pw:
         b = await pw.chromium.launch(args=["--force-color-profile=srgb", "--disable-lcd-text"])
         pg = await b.new_page(viewport={"width": w, "height": h}, device_scale_factor=1)
+        await pg.add_init_script(_spec_js(ch))
         await pg.goto("file://" + os.path.abspath(html))
         await pg.wait_for_function("typeof window.seek === 'function'", timeout=15000)
         # 글이 아래 고정 줄을 넘는지 **브라우저로 재서** 막는다.
@@ -96,6 +97,53 @@ async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러=1):
     return n
 
 
+def _spec_js(ch="reel"):
+    """channel_specs 값을 페이지에 넣는다(window.ZS_SPEC) + 캔버스 글자 위치 기록기.
+    11/11 대표 "채널 별 콘텐츠 안전영역 … 기억하지?": 캔버스 릴스 4편이 안전 영역을 안 지켰다.
+    DOM 검사(.safe/.mk)는 캔버스 글자를 못 잰다. 그래서 fillText 를 감싸 글자 상자를 직접 잰다."""
+    C = CS.CH[ch]; z = {r[0]: list(r[1:5]) for r in C["zones"]}
+    spec = dict(safe=list(C["safe"]), top=z["상단 고정"], bottom=z["하단 고정"])
+    return ("window.ZS_SPEC=" + json.dumps(spec) + ";window.__zsTxt=[];window.__zsFrame=0;"
+            "(function(){const P=CanvasRenderingContext2D.prototype;['fillText','strokeText'].forEach(k=>{const o=P[k];P[k]=function(s,x,y,...r){"
+            "try{if(!window.__zsFrame&&this.globalAlpha>0.15&&String(s).trim()){const m=this.measureText(s),T=this.getTransform(),"
+            "w=m.width,al=this.textAlign,x0=al==='center'?x-w/2:(al==='right'||al==='end')?x-w:x,a=m.actualBoundingBoxAscent,d=m.actualBoundingBoxDescent,"
+            "bx=[[x0,y-a],[x0+w,y-a],[x0,y+d],[x0+w,y+d]].map(([px,py])=>[T.a*px+T.c*py+T.e,T.b*px+T.d*py+T.f]),"
+            "xs=bx.map(p=>p[0]),ys=bx.map(p=>p[1]),sc=Math.hypot(T.a,T.b);"
+            "if(sc>0.85)window.__zsTxt.push([String(s).slice(0,20),Math.min(...xs),Math.min(...ys),Math.max(...xs),Math.max(...ys)])}}catch(e){}"
+            "return o.call(this,s,x,y,...r)}})})();"
+            # DOM 글자도 잰다(캔버스+DOM 섞어 쓴 페이지가 있다). 고정 요소(.bf)는 뺀다.
+            "window.__zsDom=()=>{const R=[],W=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;while(n=W.nextNode()){"
+            "const e=n.parentElement;if(!e||!n.textContent.trim()||e.closest('.bf,script,style'))continue;"
+            "if(e.checkVisibility&&!e.checkVisibility({opacityProperty:true,visibilityProperty:true}))continue;"
+            "let o=1;for(let x=e;x&&x.nodeType===1;x=x.parentElement)o*=parseFloat(getComputedStyle(x).opacity);if(o<0.15)continue;"
+            "const rg=document.createRange();rg.selectNodeContents(n);const r=rg.getBoundingClientRect();if(!r.width)continue;"
+            "if(e.offsetWidth&&e.getBoundingClientRect().width/e.offsetWidth<0.85)continue;"
+            "R.push([n.textContent.trim().slice(0,20),r.left,r.top,r.right,r.bottom])}return R};")
+
+
+def 안전영역_검사(pg, 초, ch="reel", 간격=0.1):
+    """캔버스 글자가 '글 칸'(안전 영역 안, 위·아래 고정 줄 사이)을 0.3초 넘게 벗어나면 막는다.
+    들어오고 나가는 순간(잠깐 밖에 있는 것)은 봐준다. 크기가 85% 미만으로 커지는 중인 글도 뺀다."""
+    C = CS.CH[ch]; z = {r[0]: r[1:5] for r in C["zones"]}
+    x0, x1 = C["safe"][0], C["safe"][2]; y0 = z["상단 고정"][3] + 10; y1 = z["하단 고정"][1] - 10
+    밖 = {}
+    n = int(초 / 간격)
+    for i in range(n + 1):
+        t = min(i * 간격, 초 - 0.01)
+        pg.evaluate("t => {window.__zsTxt=[];window.seek(t)}", t)
+        rows = pg.evaluate("() => window.__zsTxt.concat(window.__zsDom())")
+        for s, a, b, c, d in rows:
+            넘 = max(x0 - a, c - x1, y0 - b, d - y1)
+            if 넘 > 2: 밖.setdefault(s, []).append((round(t, 2), round(넘)))
+    문제 = []
+    for s, v in 밖.items():
+        ts = [t for t, _ in v]; run = best = 1
+        for k in range(1, len(ts)):
+            run = run + 1 if ts[k] - ts[k - 1] <= 간격 + 1e-6 else 1; best = max(best, run)
+        if best * 간격 >= 0.3: 문제.append(f"'{s}' {v[0][0]}초부터 {max(n_ for _, n_ in v)}px 밖")
+    return 문제, (x0, y0, x1, y1)
+
+
 금지 = [  # (찾을 것, 까닭) — 시간은 seek(t) 하나가 정한다. 꾸밈만 하는 효과는 안 쓴다(K-073·빌더 조쉬 금지 목록)
     (r"@keyframes|animation\s*:", "CSS 애니메이션 — 시간이 seek 밖에서 흐른다"),
     (r"transition\s*:", "transition — 프레임마다 결과가 달라진다"),
@@ -121,7 +169,7 @@ def 확인컷(html, 시각, ch="reel"):
     금지_검사(html)
     C = CS.CH[ch]; w, h = C["w"], C["h"]; ims = []
     with sync_playwright() as pw:
-        b = pw.chromium.launch(); pg = b.new_page(viewport={"width": w, "height": h})
+        b = pw.chromium.launch(); pg = b.new_page(viewport={"width": w, "height": h}); pg.add_init_script(_spec_js(ch))
         pg.goto("file://" + os.path.abspath(html)); pg.wait_for_function("typeof window.seek === 'function'")
         pg.evaluate("document.fonts.ready")
         for t in 시각:
@@ -141,9 +189,17 @@ def _효과음(path, 초, cues, sr=48000):
     def tick(): t = tt(.04); return .12 * g.standard_normal(len(t)) * np.exp(-t * 120)
     def chime(f): t = tt(1.2); return .22 * (np.sin(2*np.pi*f*t) + .5*np.sin(4*np.pi*f*t)) * np.exp(-t * 3.5)
     def press(): t = tt(.12); return .35 * np.sin(2*np.pi*(180 - 600*t)*t) * np.exp(-t * 30)
+    # 11/11 대표 "효과음 같은 것도 넣어주고": 종류 더함 — pop(말풍선) · ding(정답) · whoosh(빠른 이동) · boing(통통) · cash(돈) · sparkle(반짝) · thud(쾅)
+    def pop(): t = tt(.09); return .4 * np.sin(2*np.pi*(500 + 2400*t)*t) * np.exp(-t * 45)
+    def ding(): t = tt(1.0); return .26 * (np.sin(2*np.pi*1568*t) + .6*np.sin(2*np.pi*2349*t)) * np.exp(-t * 4)
+    def whoosh(): t = tt(.35); n = g.standard_normal(len(t)); f = np.convolve(n, np.ones(6)/6, "same"); return .22 * f * np.sin(np.pi * t / .35) ** 2
+    def boing(): t = tt(.4); return .3 * np.sin(2*np.pi*(220 + 160*np.sin(2*np.pi*9*t))*t) * np.exp(-t * 7)
+    def cash(): t = tt(.6); return .22 * (np.sin(2*np.pi*2093*t) + np.sin(2*np.pi*2637*t)) * np.exp(-t * 6) * (t > .04) + ding()[:len(t)] * .0
+    def sparkle(): t = tt(.7); return .14 * sum(np.sin(2*np.pi*f*t) * np.exp(-((t - k*.08) ** 2) / .0006) for k, f in enumerate([2637, 3136, 3520, 4186]))
+    def thud(): t = tt(.3); return .6 * np.sin(2*np.pi*(90 - 40*t)*t) * np.exp(-t * 14)
     ci = 0
     for c in cues:
-        k = c.get("k"); s_ = sw() if k == "swoosh" else tick() if k == "tick" else press() if k == "press" else None
+        k = c.get("k"); s_ = {"swoosh": sw, "tick": tick, "press": press, "pop": pop, "ding": ding, "whoosh": whoosh, "boing": boing, "cash": cash, "sparkle": sparkle, "thud": thud}.get(k, lambda: None)()
         if k == "chime": s_ = chime([880, 1174.7, 1318.5][ci % 3]); ci += 1
         if s_ is None: continue
         i = int(float(c["t"]) * sr); j = min(n, i + len(s_))
@@ -204,8 +260,24 @@ def 기법_검사(html, 이름, 기록=False):
         json.dump(log, open(FXLOG, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 
+def 안전영역_막기(html, 초, ch="reel"):
+    from playwright.sync_api import sync_playwright
+    C = CS.CH[ch]
+    with sync_playwright() as pw:
+        b = pw.chromium.launch(); pg = b.new_page(viewport={"width": C["w"], "height": C["h"]}); pg.add_init_script(_spec_js(ch))
+        pg.goto("file://" + os.path.abspath(html)); pg.wait_for_function("typeof window.seek === 'function'", timeout=15000)
+        pg.evaluate("document.fonts.ready")
+        src = open(html, encoding="utf-8").read(); frame = ".frame(" in src
+        문제, 칸 = 안전영역_검사(pg, 초, ch); b.close()
+    canvas = "<canvas" in src
+    if canvas and not frame: 문제.insert(0, "고정 요소 없음 — draw 끝에 F.frame(g) 를 부르세요(위 가운데 한 줄·AI 고지·zaoseon.com)")
+    if 문제 and os.environ.get("ZS_SAFE_OK") != "1":
+        raise SystemExit(f"[막음] 안전 영역({ch}) — 글 칸 x {칸[0]}~{칸[2]}, y {칸[1]}~{칸[3]}:\n  " + "\n  ".join(문제[:12])
+                         + "\n  (규격: pipeline/channel_specs.py. 가운데는 F.cx, 칸은 F.area())")
+
+
 def render(html, 이름, 초=15.0, fps=30, ch="reel", 블러=1):
-    금지_검사(html); 기법_검사(html, 이름)
+    금지_검사(html); 기법_검사(html, 이름); 안전영역_막기(html, 초, ch)
     C = CS.CH[ch]
     w, h = C["w"], C["h"]            # 크기는 channel_specs 에서 — 여기 숫자를 박지 않는다
     os.makedirs(OUT, exist_ok=True)
@@ -217,7 +289,7 @@ def render(html, 이름, 초=15.0, fps=30, ch="reel", 블러=1):
         # bottom(=zaoseon.com 글자 줄, y1465)을 썼는데 고지 칸은 y1425 에서 시작해
         # 1441 까지 글이 내려와도 통과했다 — 실제로는 이미 겹친 상태였다(10/16).
         한계 = 고정top - 24
-        n = asyncio.run(_shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러))
+        n = asyncio.run(_shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러, ch))
         out = os.path.join(OUT, 이름 + ".mp4")
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-framerate", str(fps),
                         "-i", os.path.join(tmp, "f%05d.png"),
@@ -243,7 +315,10 @@ def main():
             print(f"[{k}]"); [print(f"  · {n} — {d['l'].get(n, '')}") for n in v]
         print("함수 쓰는 법·견본: 2026-reels-test/fx_gallery/ad.html, 목록 문서: zaoseon-site docs/모션_기법_목록_2026-11-11.md"); return 0
     if a and opt("확인"):
-        print("확인 컷:", 확인컷(a[0], [float(x) for x in opt("확인").split(",")])); return 0
+        print("확인 컷:", 확인컷(a[0], [float(x) for x in opt("확인").split(",")]))
+        try: 안전영역_막기(a[0], float(opt("초", "15"))); print("안전 영역: 통과")
+        except SystemExit as e: print(e)
+        return 0
     if len(a) < 2:
         print(__doc__); return 1
     초 = float(next((x.split("=")[1] for x in sys.argv if x.startswith("--초=")), 15))
