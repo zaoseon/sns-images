@@ -8,7 +8,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#172554
 #brand{position:absolute;top:300px;left:90px;font:900 44px PL}#ai{position:absolute;bottom:300px;left:0;right:0;text-align:center;font:800 32px PR}
 .no{position:absolute;left:90px;top:440px;font:900 44px PL;padding:10px 28px;border-radius:999px;background:#FF5A5F;color:#fff}
 .k{position:absolute;top:900px;width:190px;height:190px;border-radius:40px;background:#fff;color:#172554;font:900 120px/190px PL;text-align:center}
-</style></head><body><div id="s"><canvas id="cv" width="1080" height="1920"></canvas>
+#s{transform-origin:540px 907px;transform:translate(-65px,-50px) scale(.88)}</style></head><body><div id="s"><canvas id="cv" width="1080" height="1920"></canvas>
 <div id="w0" class="t" style="top:700px;font:900 200px PL;letter-spacing:-8px"></div>
 <div id="w1" class="t" style="top:1000px;font:900 92px PL"></div>
 <div id="g1" class="t" style="top:1380px;font:900 80px PL;color:#fff">확 타올랐다가</div>
@@ -25,7 +25,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#172554
 <div id="q1" class="t" style="top:1180px;font:800 56px PR;color:#172554">댓글에 <b>숫자 하나만</b></div>
 <div id="e1" class="t" style="top:700px;font:900 96px/1.25 PL;color:#fff">식은 걸까,<br><span style="color:#FF5A5F">지루한 걸까</span></div>
 <div id="e2" class="t" style="top:1020px;font:800 54px PR;color:#C7CCE8">내 불 기운은 프로필 링크에서 1초</div>
-<div id="brand">자오선</div><div id="ai">AI가 계산·작성한 콘텐츠예요</div></div>
+</div>
 <script src="../../pipeline/motion_fx.js"></script>
 <script>
 window.FX=['박자글자','입자글자','방사형','온도계게이지','태양그리기','별자리선긋기','숫자카드팝'];
@@ -37,7 +37,7 @@ window.SFX=[{t:0,k:'press'},{t:.5,k:'press'},{t:1,k:'press'},{t:1.5,k:'press'},{
 let P5=[];function pts(txt){const c=document.createElement('canvas');c.width=1080;c.height=800;const x=c.getContext('2d');x.font='900 640px PL';x.textAlign='center';x.textBaseline='middle';x.fillText(txt,540,420);
  const d=x.getImageData(0,0,1080,800).data,o=[];for(let y=0;y<800;y+=12)for(let xx=0;xx<1080;xx+=12)if(d[(y*1080+xx)*4+3]>128)o.push([xx,y+380]);return o}
 const WORDS=[['시작은','#fff',MN],['불꽃','#fff',CO],['인데','#fff',VI],['금방 식는','#fff',MN]];
-function seek(t){
+function draw0(t){
  let bg=MN; if(t<2){bg=WORDS[Math.min(3,Math.floor(t/.5))][2]} else if(t>=11.3&&t<13.1) bg='#F7F8FA';
  g.fillStyle=bg;g.fillRect(0,0,1080,1920);
  // 1 박자글자 0~2 + 아래 줄
@@ -85,7 +85,7 @@ function seek(t){
  if(s7){g.fillStyle=MN;g.fillRect(0,0,1080,1920);
   for(let i=0;i<160;i++){const h=H(i+300),T=(t-13.1+h*3)%3,x=90+H(i+999)*900+Math.sin(T*3+i)*30,y=1650-T*420;g.fillStyle=`rgba(255,90,95,${1-T/3})`;g.beginPath();g.arc(x,y,4+h*6,0,7);g.fill()}
   $('e1').style.transform=`scale(${mix(1.4,1,sp(t-13.2,15,.6))})`;$('e2').style.opacity=cl((t-13.6)/.2);if(t>14.2&&t<14.35)$('e2').style.transform='scale(1.05)';else $('e2').style.transform=''}
- const light=(t>=11.3&&t<13.1);$('brand').style.color=light?MN:CO;$('ai').style.color=light?'#555':'#C7CCE8';
+ const light=(t>=11.3&&t<13.1);
 }
-(async()=>{await document.fonts.load('900 100px PL');await document.fonts.load('800 40px PR');P5=pts('5');window.seek=seek;seek(0)})();
-</script></body></html>
+(async()=>{await document.fonts.load('900 100px PL');await document.fonts.load('800 40px PR');P5=pts('5');window.seek=t=>{draw0(t);const p=g.getImageData(4,4,1,1).data;document.body.style.background=`rgb(${p[0]},${p[1]},${p[2]})`;const fr=document.getElementById('zsfr').getContext('2d');fr.clearRect(0,0,1080,1920);FXK.frame(fr,{ai:'AI가 계산·작성한 콘텐츠예요'})};seek(0)})();
+</script><canvas id="zsfr" width="1080" height="1920" style="position:absolute;left:0;top:0;z-index:99;pointer-events:none"></canvas></body></html>

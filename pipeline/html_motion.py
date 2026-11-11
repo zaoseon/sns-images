@@ -109,7 +109,8 @@ def _spec_js(ch="reel"):
             "w=m.width,al=this.textAlign,x0=al==='center'?x-w/2:(al==='right'||al==='end')?x-w:x,a=m.actualBoundingBoxAscent,d=m.actualBoundingBoxDescent,"
             "bx=[[x0,y-a],[x0+w,y-a],[x0,y+d],[x0+w,y+d]].map(([px,py])=>[T.a*px+T.c*py+T.e,T.b*px+T.d*py+T.f]),"
             "xs=bx.map(p=>p[0]),ys=bx.map(p=>p[1]),sc=Math.hypot(T.a,T.b);"
-            "if(sc>0.85)window.__zsTxt.push([String(s).slice(0,20),Math.min(...xs),Math.min(...ys),Math.max(...xs),Math.max(...ys)])}}catch(e){}"
+            "const cr=this.canvas.getBoundingClientRect(),kx=cr.width/this.canvas.width,ky=cr.height/this.canvas.height;"
+            "if(sc>0.85)window.__zsTxt.push([String(s).slice(0,20),cr.left+kx*Math.min(...xs),cr.top+ky*Math.min(...ys),cr.left+kx*Math.max(...xs),cr.top+ky*Math.max(...ys)])}}catch(e){}"
             "return o.call(this,s,x,y,...r)}})})();"
             # DOM 글자도 잰다(캔버스+DOM 섞어 쓴 페이지가 있다). 고정 요소(.bf)는 뺀다.
             "window.__zsDom=()=>{const R=[],W=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;while(n=W.nextNode()){"

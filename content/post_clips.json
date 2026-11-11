@@ -432,7 +432,7 @@
  },
  {
   "id": "v4-1114-cancel",
-  "post": "n46",
+  "post": "n33",
   "type": "클립(하루 1개)",
   "hook": "약속 취소가 반가운 사람, 이상한 걸까?",
   "title": "네이버 클립 · 약속 취소가 반가운 사람, 이상한 걸까?",
@@ -441,14 +441,16 @@
   "images": [
    "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out/b1104-cancel_cover.jpg"
   ],
-  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out_clip/b1104-cancel.mp4",
+  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1113_hwagae.mp4",
   "rec": "2026-11-14",
   "time": "20:00",
-  "note": "11/5 대표 '클립 다시 시작해'. 새 틀 목소리 릴스(인스타와 같은 영상). 폰 네이버 블로그 앱으로 올리고 블로그 스티커로 「속마음 숨기는 사람, 웃는 얼굴 뒤에 가면 쓰는 이유」(n46) 글을 걸어요. (11/5 13:20 소리 96kHz→48kHz 다시 만듦: 네이버 '편집할 수 없는 미디어')"
+  "note": "11/11 대표 '클립 촌스럽다, 남은 것 다 바꿔' → 새 모션 릴스로 교체(안전 영역 관문 통과). 영상 주제(화개·불)에 맞춰 블로그 스티커 글을 n46→n33「약속 취소가 반가운 마음, 혼자 충전형 성격 풀이」로 바꿈(발행된 글). 폰 네이버 블로그 앱으로 올리고 블로그 스티커로 그 글을 걸어요.",
+  "video_old": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out_clip/b1104-cancel.mp4",
+  "post_old": "n46"
  },
  {
   "id": "v4-1115-fire",
-  "post": "n39",
+  "post": "n30",
   "type": "클립(하루 1개)",
   "hook": "빨리 달아오르고 빨리 식는 사람, 공통점 3가지",
   "title": "네이버 클립 · 빨리 달아오르고 빨리 식는 사람, 공통점 3가지",
@@ -457,10 +459,12 @@
   "images": [
    "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out/b1104-fire_cover.jpg"
   ],
-  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out_clip/b1104-fire.mp4",
+  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1114_fire.mp4",
   "rec": "2026-11-15",
   "time": "20:00",
-  "note": "11/5 대표 '클립 다시 시작해'. 새 틀 목소리 릴스(인스타와 같은 영상). 폰 네이버 블로그 앱으로 올리고 블로그 스티커로 「불안형 애착일까요? 연락을 기다리다 지칠 때의 마음」(n39) 글을 걸어요. (11/5 13:20 소리 96kHz→48kHz 다시 만듦: 네이버 '편집할 수 없는 미디어')"
+  "note": "11/11 대표 '클립 촌스럽다, 남은 것 다 바꿔' → 새 모션 릴스로 교체(안전 영역 관문 통과). 영상 주제(화개·불)에 맞춰 블로그 스티커 글을 n39→n30「빨리 식는 연애, 열정의 속도가 다른 사람의 마음」로 바꿈(발행된 글). 폰 네이버 블로그 앱으로 올리고 블로그 스티커로 그 글을 걸어요.",
+  "video_old": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out_clip/b1104-fire.mp4",
+  "post_old": "n39"
  },
  {
   "id": "v4-1116-gunghap",
@@ -473,10 +477,11 @@
   "images": [
    "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out/b1104-gunghap_cover.jpg"
   ],
-  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out_clip/b1104-gunghap.mp4",
+  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1115_samhap.mp4",
   "rec": "2026-11-16",
   "time": "20:00",
-  "note": "11/5 대표 '클립 다시 시작해'. 새 틀 목소리 릴스(인스타와 같은 영상). 폰 네이버 블로그 앱으로 올리고 블로그 스티커로 「띠 궁합 제대로 보는 법, 삼합·육합·원진으로 보는 띠」(n72) 글을 걸어요. (11/5 13:20 소리 96kHz→48kHz 다시 만듦: 네이버 '편집할 수 없는 미디어')"
+  "note": "11/11 대표 '클립 촌스럽다, 남은 것 다 바꿔' → 새 모션 릴스로 교체(안전 영역 관문 통과). 폰 네이버 블로그 앱으로 올리고 블로그 스티커로 그 글을 걸어요.",
+  "video_old": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out_clip/b1104-gunghap.mp4"
  },
  {
   "id": "v4-1117-imgye",
