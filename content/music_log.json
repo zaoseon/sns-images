@@ -6,5 +6,21 @@
   "mode": "up",
   "bpm": 124,
   "key": "C"
+ },
+ {
+  "name": "reel_1116_imgye",
+  "kind": "fun",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 114,
+  "key": "E"
+ },
+ {
+  "name": "reel_1117_yeokma",
+  "kind": "fun",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 118,
+  "key": "F"
  }
 ]

@@ -4,7 +4,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#2B2350
 // 11/17 17:00 릴스 실험 C(그림 — 코드로 그린 평면 일러스트, 색 3개, 카메라 이동·시차) — 역마. 문장·띠 묶음은 네이버 n21 원고 그대로(engine/dapjang_move.py YEOKMA 와 같음).
 window.FX=['글자늘이기','낱말블록교체','칩줄세우기','공튀기기','덮개그리기'];
 const F=FXK,{cl,mix,ease,eio,sp}=F,BG='#2B2350',H1='#3E3470',H2='#56489A',OR='#F2A65A',IV='#F8F3E8',g=document.getElementById('cv').getContext('2d');
-window.SFX=[{t:.1,k:'whoosh'},{t:.4,k:'pop'},{t:.25,k:'pop'},{t:1.4,k:'thud'},{t:2.9,k:'swoosh'},{t:3.3,k:'boing'},{t:4.4,k:'chime'},
+window.SFX=[{t:.1,k:'whoosh'},{t:.4,k:'pop'},{t:.25,k:'pop'},{t:.45,k:'thud'},{t:2.9,k:'swoosh'},{t:3.3,k:'boing'},{t:4.4,k:'chime'},
  {t:5.6,k:'whoosh'},{t:5.9,k:'pop'},{t:6.2,k:'pop'},{t:6.5,k:'pop'},{t:6.8,k:'pop'},{t:10.9,k:'whoosh'},{t:11.3,k:'ding'},{t:13.1,k:'swoosh'},{t:13.5,k:'pop'},{t:14.3,k:'ding'}];
 function T(txt,x,y,font,color,align='center'){g.font=font;g.fillStyle=color;g.textAlign=align;g.textBaseline='middle';g.fillText(txt,x,y)}
 function fade(t,a,b){return cl((t-a)/.25)*cl((b-t)/.25)}
@@ -21,9 +21,9 @@ function draw(t){const X=F.cx;g.fillStyle=BG;g.fillRect(0,0,1080,1920);
  const cam=t*260;
  // 1 훅 — 글자 늘이기 + 도장
  if(t<2.9){land(t,cam,1760);const a=cl((2.9-t)/.25);g.save();g.globalAlpha=a;
-  const s1=sp(t+.3,14,.6);g.save();g.translate(X,790);g.scale(s1,s1);T('역마살 있으면',0,0,'900 104px PL',IV);g.restore();
-  if(t>.2){const p=ease(cl((t-.2)/.5));g.save();g.translate(X,950);g.scale(mix(1.6,1,p),1);g.globalAlpha*=p;T('떠돌이 팔자?',0,0,'900 128px PL',OR);g.restore()}
-  if(t>1.4){const b=sp(t-1.4,16,.5);g.save();g.translate(X,1150);g.rotate(0);g.scale(b,b);g.strokeStyle=IV;g.lineWidth=12;g.beginPath();g.roundRect(-270,-100,540,200,28);g.stroke();T('아니에요',0,4,'900 110px PL',IV);g.restore()}
+  const s1=sp(t+.3,14,.6);g.save();g.translate(X,F.cy-230);g.scale(s1,s1);T('역마살 있으면',0,0,'900 104px PL',IV);g.restore();
+  if(t>.1){const p=ease(cl((t-.1)/.35));g.save();g.translate(X,F.cy-70);g.scale(mix(1.6,1,p),1);g.globalAlpha*=p;T('떠돌이 팔자?',0,0,'900 128px PL',OR);g.restore()}
+  if(t>.4){const b=sp(t-.4,16,.5);g.save();g.translate(X,F.cy+190);g.rotate(0);g.scale(b,b);g.strokeStyle=IV;g.lineWidth=12;g.beginPath();g.roundRect(-270,-100,540,200,28);g.stroke();T('아니에요',0,4,'900 110px PL',IV);g.restore()}
   g.restore()}
  // 2 가방이 길을 굴러감(공 튀기기) + 한 줄
  if(t>=2.8&&t<5.7){const a=fade(t,2.8,5.7);g.save();g.globalAlpha=a;
@@ -41,8 +41,8 @@ function draw(t){const X=F.cx;g.fillStyle=BG;g.fillRect(0,0,1080,1920);
   g.restore()}
  // 4 뜻 — 낱말 블록 교체
  if(t>=10.9&&t<13.2){const a=fade(t,10.9,13.2);g.save();g.globalAlpha=a;land(t,cam,1560);
-  T('이동·출장·이사·해외',X,700,'900 84px PL',IV);
-  const W=['도망','충전'],k=t>11.9?1:0,b=sp(t-(k?11.9:11.2),15,.55);g.save();g.translate(X,920);g.scale(b,b);g.fillStyle=k?OR:H2;g.beginPath();g.roundRect(-230,-90,460,180,40);g.fill();T(W[k],0,4,'900 120px PL',k?BG:IV);g.restore();
+  T('이동·출장·이사·여행',X,700,'900 84px PL',IV);
+  const W=['?','충전'],k=t>11.9?1:0,b=sp(t-(k?11.9:11.2),15,.55);g.save();g.translate(X,920);g.scale(b,b);g.fillStyle=k?OR:H2;g.beginPath();g.roundRect(-230,-90,460,180,40);g.fill();T(W[k],0,4,'900 120px PL',k?BG:IV);g.restore();
   if(t>12.2)T('떠나는 건 내 방식의 충전',X,1160,'900 72px PL',IV);
   g.restore()}
  // 5 행동
