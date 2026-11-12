@@ -134,7 +134,7 @@ def 안전영역_검사(pg, 초, ch="reel", 간격=0.1):
     들어오고 나가는 순간(잠깐 밖에 있는 것)은 봐준다. 크기가 85% 미만으로 커지는 중인 글도 뺀다."""
     C = CS.CH[ch]; z = {r[0]: r[1:5] for r in C["zones"]}
     x0, x1 = C["safe"][0], C["safe"][2]; y0 = z["상단 고정"][3] + 10; y1 = z["하단 고정"][1] - 10
-    밖 = {}; 작음 = {}
+    밖 = {}; 작음 = {}; 얼굴겹침 = {}; 손글씨 = {}
     import fonts_kit as FK
     이름 = {"BZ": "hand_bazzi", "DK": "hand_brush", "HC": "hand_cute", "HP": "hand_pen", "DG": "hand_round"}
     손글씨_최소 = {f: FK.HAND_MIN[k] for f, k in 이름.items()}
@@ -142,9 +142,15 @@ def 안전영역_검사(pg, 초, ch="reel", 간격=0.1):
     n = int(초 / 간격)
     for i in range(n + 1):
         t = min(i * 간격, 초 - 0.01)
-        pg.evaluate("t => {window.__zsTxt=[];window.seek(t)}", t)
+        pg.evaluate("t => {window.__zsTxt=[];window.__zsChar=[];window.seek(t)}", t)
         rows = pg.evaluate("() => window.__zsTxt.concat(window.__zsDom())")
+        얼굴 = pg.evaluate("() => window.__zsChar||[]"); 손글씨됨 = pg.evaluate("() => !!window.__zsHandOK")
         for s, a, b, c, d, px, fam, *_ in rows:
+            # 11/12 16:18 대표 '내 첫 글자는 프로필 링크 뱃지랑 정월 얼굴이랑 겹치잖아': 글자가 캐릭터 얼굴 자리에 들어가면 막는다
+            for fx0, fy0, fx1, fy1 in 얼굴:
+                if min(c, fx1) - max(a, fx0) > 4 and min(d, fy1) - max(b, fy0) > 4: 얼굴겹침.setdefault(s, []).append(round(t, 2))
+            # 11/12 16:18 대표 '폰트도 다른거랑 안맞고': 영상 글자는 PL·PR 만. 손글씨 글꼴은 장면이 window.__zsHandOK=1 로 까닭을 밝힐 때만
+            if fam in 이름 and not 손글씨됨: 손글씨.setdefault(s, []).append(round(t, 2))
             넘 = max(x0 - a, c - x1, y0 - b, d - y1)
             if 넘 > 2: 밖.setdefault(s, []).append((round(t, 2), round(넘)))
             # 11/11 대표 13:09 "가독성 잘 생각해줘": 글자가 너무 작으면 막는다(손글씨는 더 크게)
@@ -156,6 +162,10 @@ def 안전영역_검사(pg, 초, ch="reel", 간격=0.1):
         for k in range(1, len(ts)):
             run = run + 1 if ts[k] - ts[k - 1] <= 간격 + 1e-6 else 1; best = max(best, run)
         if best * 간격 >= 0.3: 문제.append(f"'{s}' {v[0][0]}초부터 {max(n_ for _, n_ in v)}px 밖")
+    for s, v in 얼굴겹침.items():
+        if len(v) >= 3: 문제.append(f"'{s}' {v[0]}초부터 캐릭터 얼굴과 겹침 — 글·뱃지를 얼굴 밖(위·옆)으로 옮기거나 캐릭터를 줄이세요(대표 11/12)")
+    for s, v in 손글씨.items():
+        if len(v) >= 3: 문제.append(f"'{s}' 손글씨 글꼴 — 다른 콘텐츠와 안 맞아요. PL(제목)·PR(본문)로 쓰세요(대표 11/12)"); break
     for s, v in 작음.items():
         if len(v) >= 3: 문제.append(f"'{s}' 글자 {v[0][1]}px — {v[0][3] or '글꼴'}는 {v[0][2]}px 이상(가독성)")
     return 문제, (x0, y0, x1, y1)
@@ -200,7 +210,7 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
         for row in 합:
             if len(row) > 7 and row[7]: continue      # 일부러 붙이는 효과(녹는 단어 등)는 '붙음'을 재지 않는다
             tx, bx0, by0, bx1, by1, px = row[0], *[int(round(v)) for v in row[1:5]], row[5] or 40
-            mg = min(40, max(14, int(px * B["near"])))
+            mg = min(64, max(14, int(px * B["near"])))   # 11/12 대표 "떠돌이 팔자?랑 아니예요랑 너무 붙어" — 큰 글자는 둘레도 넓게(상한 40→64)
             X0, Y0, X1, Y1 = max(bx0 - mg, 0), max(by0 - mg, 0), min(bx1 + mg, a.shape[1] - 1), min(by1 + mg, a.shape[0] - 1)
             if Y1 <= Y0 or X1 <= X0 or by0 < top or by1 > bot: continue
             R_ = a[Y0:Y1, X0:X1]; inner = np.zeros(R_.shape[:2], bool); inner[by0 - Y0:by1 - Y0, bx0 - X0:bx1 - X0] = True

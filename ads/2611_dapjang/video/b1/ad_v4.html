@@ -106,7 +106,7 @@ function draw(t) {
       g.fillStyle = back ? Y : 'rgba(255,255,255,.22)'; rr(-cw / 2, -ch / 2, cw, ch, 26); g.fill();
       g.strokeStyle = 'rgba(255,255,255,.35)'; g.lineWidth = 4; g.stroke();
       if (!back) { window.__zsLoose = 1; txt(`${m + 1}월`, 0, -18, '900 66px PL', '#fff');
-        const q = seg(t, 4.0 + (m % 4) * 0.1, 4.25 + (m % 4) * 0.1); g.globalAlpha *= q; txt('?', 0, 44, '900 56px PL', Y); g.globalAlpha /= q || 1; window.__zsLoose = 0; }
+        const q = seg(t, 4.0 + (m % 4) * 0.1, 4.25 + (m % 4) * 0.1); g.globalAlpha *= q; txt('?', 0, 44, '900 70px PL', Y); g.globalAlpha /= q || 1; window.__zsLoose = 0; }
       g.restore();
     }
     // 스포트라이트: 둥근 빛이 판을 지그재그로 훑는다(어느 달도 멈춰 찍지 않는다)
@@ -169,12 +169,12 @@ function draw(t) {
       const k2 = E.o(seg(t, 9.6, 10.0)), qx = ax1 - 320, qy = ay0 + 610;
       if (k2 > 0) {
         g.save(); g.globalAlpha *= k2; g.translate(mix(pcx, qx, k2), mix(pcy, qy, k2)); g.scale(mix(0.4, 1, k2), mix(0.4, 1, k2));
-        g.shadowColor = 'rgba(0,0,0,.4)'; g.shadowBlur = 40; g.shadowOffsetY = 16; g.fillStyle = '#fff'; rr(-310, -230, 620, 460, 34); g.fill(); g.shadowColor = 'transparent';
+        g.shadowColor = 'rgba(0,0,0,.4)'; g.shadowBlur = 40; g.shadowOffsetY = 16; g.fillStyle = '#fff'; rr(-370, -240, 740, 480, 34); g.fill(); g.shadowColor = 'transparent';
         const vals = [1.66, 0.6, 0.56, 0.34], labs = ['재주로', '꾸준히', '크게', '사람으로'];
         window.__zsLoose = 1;
         vals.forEach((v, i) => { const gk = E.o(seg(t, 9.8 + i * 0.16, 10.3 + i * 0.16)), yy = -160 + i * 105;
-          txt(labs[i], -205, yy, '900 46px PR', '#1b2a3a');
-          g.fillStyle = i === 0 ? '#2F6BFF' : '#9db6ff'; rr(-110, yy - 20, 330 * (v / 1.66) * gk, 40, 20); g.fill(); });
+          txt(labs[i], -230, yy, '900 60px PR', '#1b2a3a');
+          g.fillStyle = i === 0 ? '#2F6BFF' : '#9db6ff'; rr(-90, yy - 22, 420 * (v / 1.66) * gk, 44, 22); g.fill(); });
         window.__zsLoose = 0; g.restore();
       }
       // 결과 조각 3: 잠긴 목록이 툭 떨어지며 자물쇠가 흔들린다
@@ -199,7 +199,7 @@ function draw(t) {
     g.restore();
     if (t > 13.15) { for (let i = 0; i < 2; i++) { const r = seg(t, 13.15 + i * 0.18, 13.9 + i * 0.18); if (r <= 0 || r >= 1) continue;
       g.globalAlpha = 1 - r; g.strokeStyle = Y; g.lineWidth = 8; rr(cx - 430 - r * 80, by - 85 - r * 80, 860 + r * 160, 170 + r * 160, 85 + r * 80); g.stroke(); } g.globalAlpha = 1; }
-    const s = seg(t, 12.7, 13.0); g.globalAlpha = s; txt('생일만 넣으면 돼요', cx, by + 230, '800 58px PR', '#fff'); g.globalAlpha = 1;
+    const s = seg(t, 12.7, 13.0); g.globalAlpha = s; txt('생일만 넣으면 돼요', cx, by + 230, '800 64px PR', '#fff'); g.globalAlpha = 1;
   }
   F.frame(g, { ai: '생일로 계산하고, 풀이 문장은 AI로 써요' });
 }

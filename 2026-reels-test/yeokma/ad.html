@@ -23,7 +23,7 @@ function draw(t){const X=F.cx;g.fillStyle=BG;g.fillRect(0,0,1080,1920);
  if(t<2.9){land(t,cam,1760);const a=cl((2.9-t)/.25);g.save();g.globalAlpha=a;
   const s1=sp(t+.3,14,.6);g.save();g.translate(X,F.cy-230);g.scale(s1,s1);T('역마살 있으면',0,0,'900 104px PL',IV);g.restore();
   if(t>.1){const p=ease(cl((t-.1)/.35));g.save();g.translate(X,F.cy-70);g.scale(mix(1.6,1,p),1);g.globalAlpha*=p;T('떠돌이 팔자?',0,0,'900 128px PL',OR);g.restore()}
-  if(t>.4){const b=sp(t-.4,16,.5);g.save();g.translate(X,F.cy+190);g.rotate(0);g.scale(b,b);g.strokeStyle=IV;g.lineWidth=12;g.beginPath();g.roundRect(-270,-100,540,200,28);g.stroke();T('아니에요',0,4,'900 110px PL',IV);g.restore()}
+  if(t>.4){const b=sp(t-.4,16,.5);g.save();g.translate(X,F.cy+190);g.rotate(0);g.scale(b,b);g.strokeStyle=IV;g.lineWidth=12;g.beginPath();g.roundRect(-320,-125,640,250,32);g.stroke();T('아니에요',0,4,'900 110px PL',IV);g.restore()}
   g.restore()}
  // 2 가방이 길을 굴러감(공 튀기기) + 한 줄
  if(t>=2.8&&t<5.7){const a=fade(t,2.8,5.7);g.save();g.globalAlpha=a;
@@ -35,20 +35,20 @@ function draw(t){const X=F.cx;g.fillStyle=BG;g.fillRect(0,0,1080,1920);
  if(t>=5.6&&t<11.1){const a=fade(t,5.6,11.1);g.save();g.globalAlpha=a;
   T('내 띠로 찾는 역마 자리',X,600,'900 84px PL',IV);
   const R=[['원숭이·쥐·용띠','호랑이'],['호랑이·말·개띠','원숭이'],['뱀·닭·소띠','돼지'],['돼지·토끼·양띠','뱀']];
-  R.forEach(([l,r],i)=>{const b=sp(t-5.9-i*.3,14,.62);if(b<=0)return;const y=780+i*165;g.save();g.translate(X+(1-b)*-60,y);g.globalAlpha*=cl(b*2);
-   g.fillStyle=i%2?H2:H1;g.beginPath();g.roundRect(-400,-66,800,132,30);g.fill();T(l,-370,2,'900 58px PL',IV,'left');T('→',140,2,'900 58px PL',OR);
-   g.fillStyle=OR;g.beginPath();g.roundRect(190,-50,200,100,50);g.fill();T(r,290,2,`900 ${r.length>2?46:52}px PL`,BG);g.restore()});
+  R.forEach(([l,r],i)=>{const b=sp(t-5.8-i*.15,14,.62);if(b<=0)return;const y=780+i*165;g.save();g.translate(X+(1-b)*-60,y);g.globalAlpha*=cl(b*2);
+   g.fillStyle=i%2?H2:H1;g.beginPath();g.roundRect(-410,-72,820,144,30);g.fill();T(l,-370,2,'900 60px PL',IV,'left');T('→',95,2,'900 60px PL',OR);
+   g.fillStyle=OR;g.beginPath();g.roundRect(140,-62,262,124,62);g.fill();T(r,271,2,'900 60px PL',BG);g.restore()});
   g.restore()}
  // 4 뜻 — 낱말 블록 교체
  if(t>=10.9&&t<13.2){const a=fade(t,10.9,13.2);g.save();g.globalAlpha=a;land(t,cam,1560);
   T('이동·출장·이사·여행',X,700,'900 84px PL',IV);
-  const W=['?','충전'],k=t>11.9?1:0,b=sp(t-(k?11.9:11.2),15,.55);g.save();g.translate(X,920);g.scale(b,b);g.fillStyle=k?OR:H2;g.beginPath();g.roundRect(-230,-90,460,180,40);g.fill();T(W[k],0,4,'900 120px PL',k?BG:IV);g.restore();
+  const W=['?','충전'],k=t>11.9?1:0,b=sp(t-(k?11.9:11.2),15,.55);g.save();g.translate(X,920);g.scale(b,b);g.fillStyle=k?OR:H2;g.beginPath();g.roundRect(-280,-120,560,240,48);g.fill();T(W[k],0,4,'900 120px PL',k?BG:IV);g.restore();
   if(t>12.2)T('떠나는 건 내 방식의 충전',X,1160,'900 72px PL',IV);
   g.restore()}
  // 5 행동
  if(t>=13){const a=cl((t-13)/.25);g.save();g.globalAlpha=a;
   const s=sp(t-13.3,14,.6);g.save();g.translate(X,790);g.scale(s,s);T('같은 띠라도',0,0,'900 92px PL',IV);T('태어난 날마다 달라요',0,120,'900 92px PL',OR);g.restore();
-  const b=sp(t-14.1,14,.6);g.save();g.translate(X,1130);g.scale(b,b);g.fillStyle=IV;g.beginPath();g.roundRect(-330,-66,660,132,66);g.fill();T('생일만 넣으면 무료 판정 →',0,-2,'900 50px PL','#111');g.restore();
+  const b=sp(t-14.1,14,.6);g.save();g.translate(X,1130);g.scale(b,b);g.fillStyle=IV;g.beginPath();g.roundRect(-405,-70,810,140,70);g.fill();T('생일만 넣으면 무료 판정 →',0,-2,'900 60px PL','#111');g.restore();
   g.restore()}
  F.frame(g,{ai:'AI가 계산·작성한 콘텐츠예요'});
 }

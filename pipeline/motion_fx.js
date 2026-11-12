@@ -237,7 +237,8 @@ FX.character=(g,t,{imgs,x=FX.cx,y=1920,h=1150,enter=0,exit=null,talk=[],beat=.5,
  const talking=talk.some(([s,e])=>t>=s&&t<e),im=(talking&&imgs[1])?imgs[1]:imgs[0],w=im.width*h/im.height;
  const breath=1+Math.sin(t*2.4)*.008,bob=talking?Math.abs(Math.sin(t*Math.PI/beat))*-14:0,tilt=talking?Math.sin(t*Math.PI/beat/2)*.025:Math.sin(t*1.1)*.008;
  const dy=from=='bottom'?(1-a)*700+out*900:0,dx=from=='left'?(1-a)*-800-out*900:from=='right'?(1-a)*800+out*900:0;
- g.save();g.translate(x+dx,y+dy+bob);g.rotate(tilt);g.scale(breath*(a>1?1:mix(.9,1,a)),breath);g.drawImage(im,-w/2,-h,w,h);g.restore()};
+ g.save();g.translate(x+dx,y+dy+bob);g.rotate(tilt);g.scale(breath*(a>1?1:mix(.9,1,a)),breath);g.drawImage(im,-w/2,-h,w,h);g.restore();
+ if(a>.85&&out<.15&&typeof window!=='undefined'){(window.__zsChar=window.__zsChar||[]).push([x+dx-w*.3,y+dy-h,x+dx+w*.3,y+dy-h*.55])}};   // 11/12 대표 '뱃지랑 정월 얼굴이랑 겹치잖아': 얼굴 자리(위 45%·가운데 60%)를 관문에 넘긴다
 FX.bubble=(g,t,t0,{text,x=FX.cx,y=600,tail='down',tx=null,font='72px BZ',color='#111',bg='#fff',maxw=820,pad=46,lh=1.25,sticker=true,tilt=-.03,edge='#FFFFFF'})=>{const a=sp(t-t0,16,.55);if(a<=0)return;g.save();g.font=font;
  // 11/11 대표 13:40 "정월이 스티커 느낌이면 말풍선도 그런 느낌으로 통일감": 말풍선도 스티커 — 꼬리까지 한 덩어리, 흰 테두리 + 아래로 떨어진 단단한 그림자, 살짝 기울기
  const lines=String(text).split('\n'),fs=parseFloat(font.match(/(\d+)px/)[1]),w=Math.min(maxw,Math.max(...lines.map(l=>g.measureText(l).width))+pad*2),h=lines.length*fs*lh+pad*1.4,ttx=(tx==null?0:tx-x),r=Math.min(48,h/2);
