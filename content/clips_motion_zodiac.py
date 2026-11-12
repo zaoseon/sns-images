@@ -1,6 +1,6 @@
 """2027 띠 릴스 5편 새 틀 제작(10/7 대표 승인: 옛 v3 방식(명조·검은 바탕·작은 글씨) -> 새 틀로 같은 칸 덮어쓰기). 구성 그림: https://claude.ai/artifact/CSAxkf1JuXZNMQJssNi5MS
 편마다 달력 장면·돈 일 사람 장면·마무리를 다르게(R19). 데이터는 build_2026-w42.py의 T(기존 띠 글과 같은 값)만 쓴다. 정월은 말띠·돼지띠 마무리에만(R03).
-장면: 표지(훅) -> 왜 그럴까 -> 힘 쓸 달·아낄 달 -> 돈·일·사람 -> 마무리. 사용: python3 content/clips_motion_zodiac.py [이름 ...] -> 2026-motion/zodiac/<이름>.mp4 + _cover.jpg"""
+장면: 표지(훅) -> 왜 그럴까 -> 좋은 달·조심할 달 -> 돈·일·사람 -> 마무리. 사용: python3 content/clips_motion_zodiac.py [이름 ...] -> 2026-motion/zodiac/<이름>.mp4 + _cover.jpg"""
 import sys, os, math, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, "..")); sys.path.insert(0, os.path.join(ROOT, "pipeline"))
 from clip_motion import *
@@ -80,11 +80,11 @@ def S_why(name):
             if g > 0: circ(d, CX + 250, 250, int(140 * min(g, 1.05)), "未", (255, 255, 255, 30), CORAL, fs=130)
             blit(c.fr, im, 0, Y0, 1.0); text(c, "서로 서운하게 만드는 사이(해)", y + 450, 1.9, 58, color=CORAL, maxw=840, stagger=0); text(c, "子와 未는 해이면서 원진이에요", y + 540, 2.5, 46, color=DIM, maxw=840, stagger=0)
     return f
-# ── 힘 쓸 달·아낄 달
+# ── 좋은 달·조심할 달
 def S_cal(name):
     t = T[name]; good, save = t["good"], t["save"]
     def f(c):
-        tt = c.t; y = title(c, "힘 쓸 달 · 아낄 달", size=88)
+        tt = c.t; y = title(c, "좋은 달 · 조심할 달", size=88)
         im, d = lay(900); Y0 = 600; fm = font(BLACK, 46)
         def st(m): return "g" if m in good else ("s" if m in save else "n")
         if name == "말띠":  # 12칸 격자
@@ -96,7 +96,7 @@ def S_cal(name):
                 elif k == "s": d.rounded_rectangle((x0, y0, x0 + w, y0 + h), 22, outline=CORAL, width=6); col = CORAL
                 else: d.rounded_rectangle((x0, y0, x0 + w, y0 + h), 22, fill=(255, 255, 255, 36)); col = (255, 255, 255, 170)
                 if g > .8: d.text((x0 + 100, y0 + 65), ML(m), font=fm, fill=col, anchor="mm")
-            blit(c.fr, im, 0, Y0, 1.0); text(c, "금색은 힘 쓸 달 · 붉은 테두리는 아낄 달", Y0 + 560, 4.0, 46, color=DIM, maxw=840, stagger=0)
+            blit(c.fr, im, 0, Y0, 1.0); text(c, "금색은 좋은 달 · 붉은 테두리는 조심할 달", Y0 + 560, 4.0, 46, color=DIM, maxw=840, stagger=0)
         elif name == "양띠":  # 노선도 두 줄
             for row, ms in enumerate((MONTHS[:6], MONTHS[6:])):
                 yy = 120 + row * 300; d.line([(90, yy), (990, yy)], fill=(255, 255, 255, 90), width=8)
@@ -107,20 +107,20 @@ def S_cal(name):
                     if k == "g": d.ellipse((x - 62 * min(g, 1.05), yy - 62 * min(g, 1.05), x + 62 * min(g, 1.05), yy + 62 * min(g, 1.05)), fill=GOLD); d.text((x, yy - 2), ML(m), font=fm, fill=(30, 24, 40, 255), anchor="mm")
                     elif k == "s": d.ellipse((x - 62, yy - 62, x + 62, yy + 62), outline=CORAL, width=7); d.text((x, yy - 2), ML(m), font=fm, fill=CORAL, anchor="mm")
                     else: d.ellipse((x - 22, yy - 22, x + 22, yy + 22), fill=(255, 255, 255, 130)); d.text((x, yy + 52), ML(m).replace("월", ""), font=font(BLACK, 34), fill=(255, 255, 255, 150), anchor="mm")
-            blit(c.fr, im, 0, Y0, 1.0); text(c, "큰 금색 역은 힘 쓸 달 · 붉은 역은 아낄 달", Y0 + 560, 5.4, 46, color=DIM, maxw=840, stagger=0)
+            blit(c.fr, im, 0, Y0, 1.0); text(c, "큰 금색 역은 좋은 달 · 붉은 역은 조심할 달", Y0 + 560, 5.4, 46, color=DIM, maxw=840, stagger=0)
         elif name == "닭띠":  # 막대
             for i, m in enumerate(MONTHS):
                 g = e_out(cl((tt - (.25 + i * .14)) / .5)); x = 100 + i * 72; k = st(m); h = 380 if k == "g" else (110 if k == "s" else 230)
                 col = GOLD if k == "g" else (CORAL if k == "s" else (255, 255, 255, 110))
                 d.rounded_rectangle((x, 520 - h * g, x + 54, 520), 12, fill=col)
                 d.text((x + 27, 560), ML(m).replace("월", ""), font=font(BLACK, 36), fill=(255, 255, 255, 190), anchor="mm")
-            blit(c.fr, im, 0, Y0, 1.0); text(c, "높은 막대는 힘 쓸 달 · 낮은 막대는 아낄 달", Y0 + 640, 4.4, 46, color=DIM, maxw=840, stagger=0)
+            blit(c.fr, im, 0, Y0, 1.0); text(c, "높은 막대는 좋은 달 · 낮은 막대는 조심할 달", Y0 + 640, 4.4, 46, color=DIM, maxw=840, stagger=0)
         elif name == "돼지띠":  # 키네틱 글자
             g1 = e_out(cl((tt - .3) / .4)); g2 = e_out(cl((tt - 2.4) / .4))
             def kin(label, ms, col, t0, ys):
                 text(c, label, ys, t0, 56, color=col, maxw=800, stagger=0)
                 for i, m in enumerate(ms): text(c, ML(m), ys + 90 + i * 0, t0 + .3 + i * .5, 120, color=col, maxw=300, cx=CX - 260 + i * 260, stagger=0, anim="rise")
-            kin("힘 쓸 달", good, GOLD, .3, 640); kin("아낄 달", save, CORAL, 2.8, 960)
+            kin("좋은 달", good, GOLD, .3, 640); kin("조심할 달", save, CORAL, 2.8, 960)
         else:  # 쥐띠 점 격자
             for i, m in enumerate(MONTHS):
                 g = e_back(cl((tt - (.25 + i * .12)) / .35)); r_, c_ = divmod(i, 6); x = 140 + c_ * 160; yy = 120 + r_ * 220; k = st(m)
@@ -128,7 +128,7 @@ def S_cal(name):
                 if k == "g": d.ellipse((x - 68 * min(g, 1.05), yy - 68 * min(g, 1.05), x + 68 * min(g, 1.05), yy + 68 * min(g, 1.05)), fill=GOLD); d.text((x, yy - 2), ML(m), font=fm, fill=(30, 24, 40, 255), anchor="mm")
                 elif k == "s": d.ellipse((x - 68, yy - 68, x + 68, yy + 68), outline=CORAL, width=8); d.text((x, yy - 2), ML(m), font=fm, fill=CORAL, anchor="mm")
                 else: d.ellipse((x - 30, yy - 30, x + 30, yy + 30), fill=(255, 255, 255, 100)); d.text((x, yy + 62), ML(m).replace("월", ""), font=font(BLACK, 34), fill=(255, 255, 255, 150), anchor="mm")
-            blit(c.fr, im, 0, Y0, 1.0); text(c, "금색 동그라미는 힘 쓸 달\n붉은 테두리는 아낄 달", Y0 + 520, 4.2, 46, color=DIM, maxw=840, stagger=0, lh=1.4)
+            blit(c.fr, im, 0, Y0, 1.0); text(c, "금색 동그라미는 좋은 달\n붉은 테두리는 조심할 달", Y0 + 520, 4.2, 46, color=DIM, maxw=840, stagger=0, lh=1.4)
     return f
 SHORT = {"말띠": [("돈", "좋은 조건의 제안이 들어와요"), ("일", "나를 알아봐 주는 파트너가 생겨요"), ("사람", "오래된 관계가 한 단계 깊어져요")],
          "양띠": [("돈", "새 투자보다 정리가 먼저예요"), ("일", "더 적은 힘으로 하는 법을 찾아요"), ("사람", "편하지만 부딪히기도 쉬워요")],
@@ -230,7 +230,7 @@ def S_why2(name):
 def S_cal2(name):
     t = T[name]; good, save = t["good"], t["save"]
     def f(c):
-        tt = c.t; y = title(c, "힘 쓸 달 · 아낄 달", size=88); im, d = lay(900); Y0 = 600; fm = font(BLACK, 44)
+        tt = c.t; y = title(c, "좋은 달 · 조심할 달", size=88); im, d = lay(900); Y0 = 600; fm = font(BLACK, 44)
         if name == "원숭이띠":   # 원형 시계: 2월이 맨 위, 시계 방향
             R = 300; cx_, cy_ = CX, 330
             d.ellipse((cx_ - R, cy_ - R, cx_ + R, cy_ + R), outline=(255, 255, 255, 70), width=4)
@@ -241,9 +241,9 @@ def S_cal2(name):
                 elif m in save: rr_ = 56; d.ellipse((x - rr_, yy - rr_, x + rr_, yy + rr_), outline=CORAL, width=7); d.text((x, yy - 2), ML(m), font=fm, fill=CORAL, anchor="mm")
                 else: d.ellipse((x - 16, yy - 16, x + 16, yy + 16), fill=(255, 255, 255, 120))
             d.text((cx_, cy_ - 12), "2027", font=font(BLACK, 80), fill=(255, 255, 255, 200), anchor="mm"); d.text((cx_, cy_ + 56), "2월부터 한 바퀴", font=font(BLACK, 40), fill=(255, 255, 255, 150), anchor="mm")
-            blit(c.fr, im, 0, Y0, 1.0); text(c, "금색은 힘 쓸 달 · 붉은 테두리는 아낄 달", Y0 + 700, 4.6, 44, color=DIM, maxw=840, stagger=0)
+            blit(c.fr, im, 0, Y0, 1.0); text(c, "금색은 좋은 달 · 붉은 테두리는 조심할 달", Y0 + 700, 4.6, 44, color=DIM, maxw=840, stagger=0)
         elif name == "개띠":    # 칩 두 열
-            for col, (label, ms, colr, cx_) in enumerate((("힘 쓸 달", good, GOLD, 290), ("아낄 달", save, CORAL, 790))):
+            for col, (label, ms, colr, cx_) in enumerate((("좋은 달", good, GOLD, 290), ("조심할 달", save, CORAL, 790))):
                 g0 = e_out(cl((tt - (.3 + col * 2.0)) / .4)); d.text((cx_, 40), label, font=font(BLACK, 60), fill=(colr[0], colr[1], colr[2], int(255 * g0)), anchor="mm")
                 for i, m in enumerate(ms):
                     g = e_back(cl((tt - (.7 + col * 2.0 + i * .5)) / .4))
@@ -263,7 +263,7 @@ def S_cal2(name):
                 if m in good or m in save:
                     gg = e_out(cl((tt - (.5 + i * .18)) / .5)); colr = GOLD if m in good else CORAL
                     d.rounded_rectangle((250, yy - 20, 250 + 650 * gg, yy + 20), 20, fill=colr)
-            blit(c.fr, im, 0, tlt, 1.0); text(c, "금색 힘 쓸 달 · 붉은색 아낄 달", tlt + RH * 12 + 20, 4.2, 44, color=DIM, maxw=840, stagger=0)
+            blit(c.fr, im, 0, tlt, 1.0); text(c, "금색 좋은 달 · 붉은색 조심할 달", tlt + RH * 12 + 20, 4.2, 44, color=DIM, maxw=840, stagger=0)
         else:  # 뱀띠: 물결선
             n = 12; xs = [110 + i * (860 / 11) for i in range(n)]
             def yv(m): return 90 if m in good else (430 if m in save else 260)
@@ -280,7 +280,7 @@ def S_cal2(name):
                 elif m in save: d.ellipse((x - 34, yy - 34, x + 34, yy + 34), outline=CORAL, width=7)
                 else: d.ellipse((x - 12, yy - 12, x + 12, yy + 12), fill=(255, 255, 255, 140))
                 d.text((x, 560), ML(m).replace("월", ""), font=font(BLACK, 36), fill=(255, 255, 255, 190 if (m in good or m in save) else 120), anchor="mm")
-            blit(c.fr, im, 0, Y0, 1.0); text(c, "파도의 높은 곳은 힘 쓸 달 · 낮은 곳은 아낄 달", Y0 + 640, 4.0, 44, color=DIM, maxw=840, stagger=0)
+            blit(c.fr, im, 0, Y0, 1.0); text(c, "파도의 높은 곳은 좋은 달 · 낮은 곳은 조심할 달", Y0 + 640, 4.0, 44, color=DIM, maxw=840, stagger=0)
     return f
 def S_work2(name):
     s = SHORT2[name]
@@ -564,8 +564,8 @@ def G_cal(name):
             elif m in save and us > 0: r = 58 * (1 + .18 * us); d.ellipse((x - r, yy - r, x + r, yy + r), fill=(255, 255, 255, 26), outline=lerp((255, 255, 255, 190), CORAL, us), width=int(5 + 3 * us)); col = lerp((255, 255, 255, 255), CORAL, us); fs_ = int(52 * (1 + .12 * us))
             else: d.ellipse((x - r, yy - r, x + r, yy + r), fill=(255, 255, 255, 26), outline=(255, 255, 255, 190), width=5); col = (255, 255, 255, 255)
             d.text((x, yy - 2), ML(m), font=font(BLACK, fs_), fill=col, anchor="mm")
-        d.text((cx_, cy_ - 8), "힘 쓸 달", font=font(BLACK, int(86 * (1 + .12 * ug))), fill=lerp((255, 255, 255, 255), GOLD, ug), anchor="mm")
-        d.text((cx_, cy_ + 108), "아낄 달", font=font(BLACK, int(86 * (1 + .12 * us))), fill=lerp((255, 255, 255, 255), CORAL, us), anchor="mm")
+        d.text((cx_, cy_ - 8), "좋은 달", font=font(BLACK, int(86 * (1 + .12 * ug))), fill=lerp((255, 255, 255, 255), GOLD, ug), anchor="mm")
+        d.text((cx_, cy_ + 108), "조심할 달", font=font(BLACK, int(86 * (1 + .12 * us))), fill=lerp((255, 255, 255, 255), CORAL, us), anchor="mm")
         stack_top([810], []); blit(c.fr, im, 0, 910 - 450, 1.0)   # 그림 층 760px, 가운데 y 380이 y 910에 오게
     return f
 def G_one(name, key, label):
@@ -617,7 +617,7 @@ def zodiac_lint(names=None):
     return probs
 CTA_DUR = {"q": 3.8, "big": 4.1, "face": 3.9, "line": 4.0}
 def scenes_of(name):
-    """대표 10/8 지정 순서: 1 키워드 / 2 출생연도 / 3 문장 / 4 왜 그럴까 / 5 힘 쓸 달·아낄 달 / 6 돈 / 7 일 / 8 사람 / 9 행운의 숫자 / 10 마무리. 길이는 R13(문장 2초·낱말 1초 이상): 마지막 글이 나온 뒤 2초 이상 남게"""
+    """대표 10/8 지정 순서: 1 키워드 / 2 출생연도 / 3 문장 / 4 왜 그럴까 / 5 좋은 달·조심할 달 / 6 돈 / 7 일 / 8 사람 / 9 행운의 숫자 / 10 마무리. 길이는 R13(문장 2초·낱말 1초 이상): 마지막 글이 나온 뒤 2초 이상 남게"""
     return [(2.6, G_kw(name)), (2.4, G_years(name)), (2.8, G_hook(name)), (4.3, G_why(name)), (5.0, G_cal(name)), (3.2, G_one(name, "money", "돈")), (3.2, G_one(name, "work", "일")), (3.2, G_one(name, "people", "사람")), (3.6, G_lucky(name)), (CTA_DUR[CFG[name]["cta"]], G_cta(name))]
 # ───────── R36 모션 다양화(대표 10/9: 모션이 단순하고 같은 효과가 반복돼 중간에 이탈할 것 같다)
 # 장면마다 글·도형 등장 효과(9종)와 장면 전환(5종)을 돌려 쓴다. 이웃 장면은 반드시 다르고, 한 편에 효과 6종 이상·전환 4종 이상. 띠마다 시작 위치를 달리해 이웃 영상도 다르게 보이게 한다.

@@ -213,7 +213,7 @@ def tti(s, outdir, prefix):
     foot(d, L, "옆으로 넘겨 보세요 →"); save(img, 2)
     # 3 달력과 행운
     img, d, L, R = base(2, n)
-    d.text((L,250), "힘을 쓸 달 · 아낄 달", font=F(SER,70), fill=PAPER); d.line([(L,360),(L+80,360)], fill=GOLD, width=3)
+    d.text((L,250), "좋은 달 · 조심할 달", font=F(SER,70), fill=PAPER); d.line([(L,360),(L+80,360)], fill=GOLD, width=3)
     cw, ch, gx, gy = (R-L-3*20)//4, 104, 20, 18; y0 = 400
     for m in range(12):
         x = L + (m%4)*(cw+gx); y = y0 + (m//4)*(ch+gy); mm = m+1
@@ -225,8 +225,8 @@ def tti(s, outdir, prefix):
             d.rounded_rectangle([x,y,x+cw,y+ch], radius=16, outline=LINE, width=2); c = DIM
         d.text((x+cw//2,y+ch//2), f"{mm}월", font=F(SER,40), fill=c, anchor="mm")
     y = y0 + 3*(ch+gy) + 6
-    d.rounded_rectangle([L,y+4,L+30,y+34], radius=6, fill=GOLD); d.text((L+44,y+19), "힘을 쓸 달", font=F(MED,28), fill=PAPER, anchor="lm")
-    d.rounded_rectangle([L+250,y+4,L+280,y+34], radius=6, outline=RED, width=3); d.text((L+294,y+19), "아낄 달", font=F(MED,28), fill=PAPER, anchor="lm")
+    d.rounded_rectangle([L,y+4,L+30,y+34], radius=6, fill=GOLD); d.text((L+44,y+19), "좋은 달", font=F(MED,28), fill=PAPER, anchor="lm")
+    d.rounded_rectangle([L+250,y+4,L+280,y+34], radius=6, outline=RED, width=3); d.text((L+294,y+19), "조심할 달", font=F(MED,28), fill=PAPER, anchor="lm")
     if 13 in s["good"]: d.text((R,y+19), "+ 이듬해 1월도 좋아요", font=F(MED,28), fill=GOLD, anchor="rm")
     y += 90; d.line([(L,y),(R,y)], fill=LINE, width=1); y += 40
     lf, vf = F(SEMI,32), F(MED,38)

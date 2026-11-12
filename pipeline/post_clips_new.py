@@ -43,7 +43,7 @@ def captions(no, A, title):
         acts = [r[1] for r in (a.get("arow") or []) if r and r[1]]
         return [" ".join(a["hook"]), first, a["tbl0"] or short(title), "이번에 해 볼 것: " + " · ".join(acts) if acts else "이번에 해 볼 것"]
     m = re.match(r"(.+?띠 운세), (.+?) 힘 쓸", title)
-    return [m.group(1), m.group(2), "힘 쓸 달과 아낄 달", "이번에 해 볼 것"] if m else [short(title), short(title), "표로 한눈에 보기", "이번에 해 볼 것"]
+    return [m.group(1), m.group(2), "좋은 달과 조심할 달", "이번에 해 볼 것"] if m else [short(title), short(title), "표로 한눈에 보기", "이번에 해 볼 것"]
 def build(no, A, pages):
     pid = f"{no:02d}"; names = [f"naver_z{pid}_{x}.jpg" for x in "aibc"]; paths = [os.path.join(IMG, "master", x) if os.path.exists(os.path.join(IMG, "master", x)) else os.path.join(IMG, x) for x in names]
     assert all(os.path.exists(p) for p in paths), (no, names)
@@ -57,7 +57,7 @@ def entry(no, A, pages, date):
     a = A.get(no) or {}; title = pages[f"n{no}"]["title"]; caps = captions(no, A, title); fl = lambda x: x.replace("\n", " "); sm = [clean(x) for x in (a.get("summary") or [])]
     one = next((sentence(x) for x in sm if "한 줄 요약" in x), ""); todo = next((sentence(x) for x in sm if "해 볼 것" in x), "")
     if not one:
-        m = re.match(r"(.+?띠 운세), (.+?) 힘 쓸", title); one = f"{m.group(1)}, {m.group(2)}." if m else sentence(title); todo = "힘 쓸 달과 아낄 달을 표로 정리했어요. 힘 쓸 달 하나에 표시해 두세요."
+        m = re.match(r"(.+?띠 운세), (.+?) 힘 쓸", title); one = f"{m.group(1)}, {m.group(2)}." if m else sentence(title); todo = "좋은 달과 조심할 달을 표로 정리했어요. 좋은 달 하나에 표시해 두세요."
     tags = [t.replace(" ", "") for t in (a.get("tags") or [])][:4]
     if not tags:
         mm = re.search(r"(\S+?띠) 운세", title); z = mm.group(1) if mm else "띠"; tags = ["사주", "2027년운세", z + "운세", "띠별운세"]

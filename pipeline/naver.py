@@ -31,8 +31,8 @@ def months(path, head, good, save, lucky):
         else: d.rounded_rectangle([x, y, x+cw, y+ch], 12, outline=R.LINE, width=2); c = R.DIM
         d.text((x+cw//2, y+ch//2), f"{mm}월", font=R.F(R.SER, 32), fill=c, anchor="mm")
     y = y0 + 2*(ch+g) + 6
-    d.rounded_rectangle([40, y+4, 64, y+28], 5, fill=R.GOLD); d.text((74, y+16), "힘을 쓸 달", font=R.F(R.MED, 24), fill=R.PAPER, anchor="lm")
-    d.rounded_rectangle([230, y+4, 254, y+28], 5, outline=R.RED, width=3); d.text((264, y+16), "아낄 달", font=R.F(R.MED, 24), fill=R.PAPER, anchor="lm")
+    d.rounded_rectangle([40, y+4, 64, y+28], 5, fill=R.GOLD); d.text((74, y+16), "좋은 달", font=R.F(R.MED, 24), fill=R.PAPER, anchor="lm")
+    d.rounded_rectangle([230, y+4, 254, y+28], 5, outline=R.RED, width=3); d.text((264, y+16), "조심할 달", font=R.F(R.MED, 24), fill=R.PAPER, anchor="lm")
     if 13 in save: d.text((W-40, y+16), "+ 이듬해 1월도 아껴요", font=R.F(R.MED, 24), fill=(205,110,100), anchor="rm")
     if 13 in good: d.text((W-40, y+16), "+ 이듬해 1월도 좋아요", font=R.F(R.MED, 24), fill=R.GOLD, anchor="rm")
     d.text((40, y+52), lucky, font=R.F(R.SEMI, 28), fill=R.GOLD)

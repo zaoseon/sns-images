@@ -5,7 +5,7 @@ import carousel_editor as CE
 from playwright.sync_api import sync_playwright
 from PIL import Image
 D = dict(dayChar="", hanja="", accent="#f36435", face="v2_straight", kicker="2027 신년 감정서", coverTitle="열두 달을\n달력처럼", coverSub="10월 얼리버드, 선착순 50명",
-    personality=["열두 달을\n달력처럼 펼쳐요", "힘을 쓸 달과 아낄 달,\n그달에 해 볼 일 하나까지\n정리해 드려요."],
+    personality=["열두 달을\n달력처럼 펼쳐요", "좋은 달과 조심할 달,\n그달에 해 볼 일 하나까지\n정리해 드려요."],
     love=["사주 하나로\n보지 않아요", "사주·자미두수·당사주·하락이수\n점성술·수비학, 여섯 지도를\n겹쳐서 읽어요."],
     money=["10월 31일까지\n선착순 50명", "STANDARD 19,000 → 14,900원\nDELUXE 39,000 → 29,000원\nPREMIUM 59,000 → 45,000원"],
     advice=["", ""], chartNote="", values=[.3,.3,.3,.3,.3], highlight=0, ctaQ="2027년, 어느 달에\n힘을 쓰면 좋을까요?", nextTitle="zaoseon.com/ny")
