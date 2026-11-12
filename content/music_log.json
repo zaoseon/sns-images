@@ -1237,5 +1237,13 @@
   "mode": "up",
   "bpm": 120,
   "key": "E"
+ },
+ {
+  "name": "ad_dapjang_b1_video_v3",
+  "kind": "fun",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 118,
+  "key": "F"
  }
 ]

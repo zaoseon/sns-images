@@ -101,5 +101,21 @@
    "ripple",
    "sparkBurst"
   ]
+ },
+ {
+  "name": "ad_dapjang_b1_video_v3",
+  "fx": [
+   "kineticDrop",
+   "shakePunch",
+   "swipeHighlight",
+   "tileFlip",
+   "scanSweep",
+   "phoneRise",
+   "typeIn",
+   "flashCut",
+   "lensZoom",
+   "ripple",
+   "sparkBurst"
+  ]
  }
 ]

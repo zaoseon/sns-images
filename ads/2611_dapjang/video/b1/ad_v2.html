@@ -7,12 +7,8 @@
 // 목소리: 손님 속마음(cust) → 정월이 답함(jw). 효과음은 움직임마다 하나. 특정 달을 찍지 않는다(가짜 결과 금지 K-185).
 // 손님 캐릭터 그림이 오면 ① 장면 가운데에 넣는다(지금은 글만).
 window.FX = ['kineticDrop', 'shakePunch', 'swipeHighlight', 'tileFlip', 'scanSweep', 'phoneRise', 'typeIn', 'flashCut', 'lensZoom', 'ripple', 'sparkBurst'];
-window.VO = [
-  { t: 0.15, who: 'cust', slot: 3.0, text: '아니.. 돈 들어오는 달이 있긴 한 거야?' },
-  { t: 3.30, who: 'jw',   slot: 3.0, text: '있어. 근데 사람마다 달라.' },
-  { t: 7.00, who: 'jw',   slot: 3.6, text: '생일만 넣으면, 내 돈 유형이 바로 나와.' },
-  { t: 12.0, who: 'jw',   slot: 2.4, text: '먼저 무료로 봐 봐.' }
-];
+// 11/12 14:11 대표 "목소리없이" — 무료 TTS 는 AI 티가 나서 광고에 목소리를 넣지 않는다. 자막·음악·효과음만.
+window.VO = [];
 window.SFX = [
   { t: 0.15, k: 'thud' }, { t: 0.45, k: 'thud' }, { t: 0.8, k: 'thud' }, { t: 0.95, k: 'whoosh' }, { t: 1.7, k: 'boing' },
   { t: 2.75, k: 'whoosh' }, ...Array.from({ length: 12 }, (_, m) => ({ t: 3.0 + m * 0.08, k: 'tick' })),
