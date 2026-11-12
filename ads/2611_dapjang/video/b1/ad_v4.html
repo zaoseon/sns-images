@@ -119,7 +119,7 @@ function draw(t) {
     const pop = E.b(seg(t, 5.45, 5.8));
     if (t > 5.45) { g.save(); g.translate(cx, cy + 250); g.scale(pop, pop);
       g.fillStyle = Y; rr(-420, -140, 840, 280, 40); g.fill();
-      window.__zsLoose = 1; txt('힘 쓸 달은', 0, -46, '900 76px PL', '#111'); txt('사람마다 달라요', 0, 48, '900 76px PL', '#111'); window.__zsLoose = 0;
+      window.__zsLoose = 1; txt('돈 모이는 달·새는 달은', 0, -46, '900 70px PL', '#111'); txt('사람마다 달라요', 0, 48, '900 76px PL', '#111'); window.__zsLoose = 0;
       g.restore(); }
     g.globalAlpha = 1;
   }
@@ -153,13 +153,13 @@ function draw(t) {
     else { const i = img.view, sc = E.o(seg(t, 8.5, 8.8)); g.drawImage(i, 0, 600 + sc * 0, i.width, i.width * ph / pw, -pw / 2, -ph / 2, pw, ph); }
     if (t >= 8.3 && t < 8.75) { const f = 1 - Math.abs(seg(t, 8.3, 8.75) * 2 - 1); g.fillStyle = `rgba(255,255,255,${f})`; g.fillRect(-pw / 2, -ph / 2, pw, ph); }
     g.restore(); g.restore();
-    // 입력 숫자: 화면에서 하나씩 튀어나와 크게 줄을 선다(가려진 생일 — 실제 값 아님)
+    // 입력 숫자: 화면에서 하나씩 튀어나와 크게 줄을 선다(시험 화면에 넣은 예시 생일 그대로)
     if (t >= 7.4 && t < 8.6) {
-      const digs = ['●●●●', '●●', '●●'], fade = seg(t, 8.3, 8.6);
+      const digs = ['1994', '03', '17'], fade = seg(t, 8.3, 8.6);
       digs.forEach((d, i) => { const k = E.b(seg(t, 7.45 + i * 0.26, 7.75 + i * 0.26));
         if (k <= 0) return; const tx = cx - 260 + i * 260, ty = ay0 + 330;
         g.save(); g.globalAlpha = (1 - fade) * cl(k); g.translate(mix(pcx, tx, k), mix(pcy, ty, k)); g.scale(k, k);
-        g.fillStyle = '#fff'; rr(-115, -58, 230, 116, 30); g.fill(); window.__zsLoose = 1; txt(d, 0, 4, '900 52px PL', NAVY); window.__zsLoose = 0; g.restore(); });
+        g.fillStyle = '#fff'; rr(-115, -58, 230, 116, 30); g.fill(); window.__zsLoose = 1; txt(d, 0, 4, '900 66px PL', NAVY); window.__zsLoose = 0; g.restore(); });
     }
     if (result) {
       // 결과 조각 1: '통장형' 단추가 휴대폰에서 날아나와 크게 박힌다
