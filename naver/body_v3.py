@@ -26,6 +26,10 @@ def _head(cv, c, head):
     cv.text(L + 10, 96, head, XB, cv.fit(head, XB, 68, RT - L - 220, 52), c.fg, "ls")
     cv.text(RT - 10, 92, "子午線 자오선", SER, 30, c.gray, "rs")
 
+def _pillfill(c):
+    """알약 바탕색: 강조색(acc)이 알약 글자색(pillfg)과 같은 판(y_gray_s 등)에서는 알약이 까맣게 비어 보였다(11/12 ① 자동, n68 한눈에 b4f) → 그때는 c.pill"""
+    return c.pill if tuple(c.acc) == tuple(c.pillfg) and getattr(c, "pill", None) else c.acc
+
 def table_v3(name, c, head, cols, rows_):
     rh = 170; top = 150; H = top + rh * len(rows_) + 50; cv = _panel(H, c); _head(cv, c, head)
     for i, r in enumerate(rows_):
@@ -33,7 +37,7 @@ def table_v3(name, c, head, cols, rows_):
         if i: cv.line(L + 10, y, RT - 10, y, c.line, 2)
         lab, val = r[0], r[1]; one = r[2] if len(r) > 2 else ""
         lw = cv.tw(lab, XB, 40) + 48
-        cv.rr([L + 10, y + 30, L + 10 + lw, y + 30 + 62], 31, fill=c.acc); cv.text(L + 10 + lw / 2, y + 61, lab, XB, 40, c.pillfg, "mm")
+        cv.rr([L + 10, y + 30, L + 10 + lw, y + 30 + 62], 31, fill=_pillfill(c)); cv.text(L + 10 + lw / 2, y + 61, lab, XB, 40, c.pillfg, "mm")
         x = L + 10 + max(lw, 190) + 34; mw = RT - 10 - x
         cv.text(x, y + 76, val, XB, cv.fit(val, XB, 60, mw, 42), c.fg, "ls")
         if one: cv.text(x, y + 132, one, SB, cv.fit(one, SB, 42, mw, 34), c.gray, "ls")
@@ -44,7 +48,7 @@ def rows_v3(name, c, head, items):
     for i, it in enumerate(items):
         lab, big, small = it[0], it[1], (it[2] if len(it) > 2 else "")
         y = top + i * rh; r = 46; cx = L + 10 + r
-        cv.d.ellipse([(cx - r) * K.S, (y + 30) * K.S, (cx + r) * K.S, (y + 30 + 2 * r) * K.S], fill=c.acc)
+        cv.d.ellipse([(cx - r) * K.S, (y + 30) * K.S, (cx + r) * K.S, (y + 30 + 2 * r) * K.S], fill=_pillfill(c))
         cv.text(cx, y + 30 + r, str(i + 1), BK, 50, c.pillfg, "mm")
         x = cx + r + 34; mw = RT - 10 - x
         cv.text(x, y + 78, big, XB, cv.fit(big, XB, 58, mw, 42), c.fg, "ls")
