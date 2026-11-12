@@ -188,9 +188,12 @@ function draw(t) {
   // ⑥ 11.8~15 단추: 노란 선이 그어졌다가 단추로 부풀고, 눌리면 물결·집중선
   if (t >= 11.8) {
     const a = seg(t, 11.8, 12.05), grow = E.b(seg(t, 12.0, 12.45)), press = t > 13.1 && t < 13.35 ? 0.92 : 1;
-    const by = cy + 60;
+    const by = cy + 170;
     const tk = E.o(seg(t, 12.3, 12.7));
-    g.save(); g.beginPath(); g.rect(0, by - 360, W, 170); g.clip(); txt('내 2027년은', cx, by - 270 + (1 - tk) * 150, '900 100px PL', '#fff'); g.restore();
+    // 11/12 17:03 대표 "광고인데 마지막이 '내 2027년은' 이게 끝이야?" — 끝 장면은 끝맺은 문장으로: 무엇을 받는지 + 어떻게 받는지
+    const tk2 = E.o(seg(t, 12.45, 12.85));
+    g.save(); g.beginPath(); g.rect(0, by - 425, W, 130); g.clip(); txt('텅장일까, 통장일까?', cx, by - 360 + (1 - tk) * 130, '900 92px PL', '#fff'); g.restore();
+    g.save(); g.beginPath(); g.rect(0, by - 280, W, 130); g.clip(); txt('생일만 넣으면 바로 나와요', cx, by - 215 + (1 - tk2) * 130, '900 84px PL', Y); g.restore();
     if (t > 13.15) { const r = seg(t, 13.15, 13.9); g.globalAlpha = 1 - r; speed(cx, by, r, 28, 'rgba(255,214,0,.6)'); g.globalAlpha = 1; }
     const w = mix(10, 860, E.o(a)), h = mix(10, 170, grow);
     g.save(); g.translate(cx, by); g.scale(press, press);
@@ -199,7 +202,6 @@ function draw(t) {
     g.restore();
     if (t > 13.15) { for (let i = 0; i < 2; i++) { const r = seg(t, 13.15 + i * 0.18, 13.9 + i * 0.18); if (r <= 0 || r >= 1) continue;
       g.globalAlpha = 1 - r; g.strokeStyle = Y; g.lineWidth = 8; rr(cx - 430 - r * 80, by - 85 - r * 80, 860 + r * 160, 170 + r * 160, 85 + r * 80); g.stroke(); } g.globalAlpha = 1; }
-    const s = seg(t, 12.7, 13.0); g.globalAlpha = s; txt('생일만 넣으면 돼요', cx, by + 230, '800 64px PR', '#fff'); g.globalAlpha = 1;
   }
   F.frame(g, { ai: '생일로 계산하고, 풀이 문장은 AI로 써요' });
 }

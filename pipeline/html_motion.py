@@ -169,6 +169,16 @@ def 안전영역_검사(pg, 초, ch="reel", 간격=0.1):
         for k in range(1, len(ts)):
             run = run + 1 if ts[k] - ts[k - 1] <= 간격 + 1e-6 else 1; best = max(best, run)
         if best * 간격 >= 0.3: 문제.append(f"'{s}' {v[0][0]}초부터 {max(n_ for _, n_ in v)}px 밖")
+    # 11/12 17:03 대표 "광고인데 마지막이 '내 2027년은' 이게 끝이야?": 끝 장면 글이 조사로 끝나 말이 끊기면 막는다(단추 글 → 은 뺌)
+    pg.evaluate("t => {window.__zsTxt=[];window.seek(t)}", 초 - 0.05)
+    끝 = [r for r in pg.evaluate("() => window.__zsTxt") if not r[7]]
+    끝.sort(key=lambda r: r[2])
+    for k, r in enumerate(끝):
+        tx = str(r[0]).strip()
+        다음 = 끝[k + 1] if k + 1 < len(끝) else None
+        이어짐 = 다음 and abs((다음[5] or 0) - (r[5] or 0)) < 8 and 다음[2] - r[4] < (r[5] or 60) * .8
+        if len(tx) >= 3 and "→" not in tx and tx[-1] in "은는이가을를의와과도에" and not 이어짐:
+            문제.append(f"끝 장면 '{tx}' — 말이 끊겨요. 무엇을 받는지까지 끝맺은 문장으로(대표 11/12)")
     for s, v in 얼굴겹침.items():
         if len(v) >= 3: 문제.append(f"'{s}' {v[0]}초부터 캐릭터 얼굴과 겹침 — 글·뱃지를 얼굴 밖(위·옆)으로 옮기거나 캐릭터를 줄이세요(대표 11/12)")
     for s, v in 손글씨.items():
