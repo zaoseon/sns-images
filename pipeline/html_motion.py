@@ -488,7 +488,7 @@ def render(html, 이름, 초=15.0, fps=30, ch="reel", 블러=1, 설계="reel"):
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-framerate", str(fps),
                         "-i", os.path.join(tmp, "f%05d.png"),
                         "-vf", "format=yuv420p", "-c:v", "libx264", "-profile:v", "high",
-                        "-crf", "16", "-preset", "medium",
+                        "-crf", "16", "-preset", "medium", "-g", str(fps), "-maxrate", "6M", "-bufsize", "12M",   # 11/12 '멈췄다 나오는 끊김': 1초마다 키프레임·순간 비트레이트 상한
                         "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709",
                         "-movflags", "+faststart", out], check=True)
         return out, n / fps
