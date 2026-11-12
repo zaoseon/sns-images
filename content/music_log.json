@@ -1229,5 +1229,13 @@
   "mode": "up",
   "bpm": 114,
   "key": "C"
+ },
+ {
+  "name": "ad_dapjang_b1_video_v2",
+  "kind": "fun",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "E"
  }
 ]

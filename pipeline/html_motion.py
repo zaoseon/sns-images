@@ -319,7 +319,7 @@ def 소리붙이기(mp4, 초, html, 분위기="fun", 이름=None):
     from playwright.sync_api import sync_playwright
     with sync_playwright() as pw:
         b = pw.chromium.launch(); pg = b.new_page(); pg.goto("file://" + os.path.abspath(html))
-        cues = pg.evaluate("() => window.SFX || []"); b.close()
+        cues = pg.evaluate("() => window.SFX || []"); vo = pg.evaluate("() => window.VO || []"); b.close()
     info = MP.choose(분위기, 이름 or os.path.splitext(os.path.basename(mp4))[0])
     MP.mux(mp4, [초], info, 91)                      # 음악(박자 맞춤)은 기존 도구 그대로
     if cues:
@@ -333,6 +333,11 @@ def 소리붙이기(mp4, 초, html, 분위기="fun", 이름=None):
         tmp = mp4 + ".r.mp4"
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mp4, "-c:v", "copy", "-c:a", "aac", "-ar", "48000",
                         "-b:a", "160k", "-movflags", "+faststart", tmp], check=True); os.replace(tmp, mp4)
+    if vo:   # 11/12: window.VO=[{t,text,who,slot}] 가 있으면 목소리를 얹고, 말하는 동안 음악·효과음을 낮춘다(사이드체인), -14 LUFS
+        import narration as NR, tempfile as _tf
+        parts, log = NR.목소리들(vo, _tf.mkdtemp(prefix="vo_")); tmp = mp4 + ".v.mp4"
+        NR.섞기(mp4, parts, tmp, music_vol=0.55); os.replace(tmp, mp4)
+        info["목소리"] = log
     return info
 
 

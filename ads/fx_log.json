@@ -85,5 +85,21 @@
    "phoneScroll",
    "buttonPress"
   ]
+ },
+ {
+  "name": "ad_dapjang_b1_video_v2",
+  "fx": [
+   "kineticDrop",
+   "shakePunch",
+   "swipeHighlight",
+   "tileFlip",
+   "scanSweep",
+   "phoneRise",
+   "typeIn",
+   "flashCut",
+   "lensZoom",
+   "ripple",
+   "sparkBurst"
+  ]
  }
 ]

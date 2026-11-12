@@ -11,14 +11,14 @@ VOICE = os.environ.get("ZS_VOICE", "ko-KR-SunHiNeural")
 def _dur(p):
     return float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", p], capture_output=True, text=True).stdout.strip())
 
-async def _say(text, out, rate):
+async def _say(text, out, rate, voice=None, pitch="+0Hz"):
     import edge_tts
-    c = edge_tts.Communicate(text, VOICE, rate=rate, proxy=os.environ.get("HTTPS_PROXY"))
+    c = edge_tts.Communicate(text, voice or VOICE, rate=rate, pitch=pitch, proxy=os.environ.get("HTTPS_PROXY"))
     await c.save(out)
 
-def 말(text, out, rate="+8%"):
+def 말(text, out, rate="+8%", voice=None, pitch="+0Hz"):
     os.environ.setdefault("SSL_CERT_FILE", "/root/.ccr/ca-bundle.crt")
-    asyncio.run(_say(text, out, rate))
+    asyncio.run(_say(text, out, rate, voice, pitch))
     # 앞뒤 무음 자르기
     t = out + ".t.wav"
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", out, "-af",
@@ -77,6 +77,29 @@ def 섞기(video, parts, out, music_vol=0.30):
     fc += "[md][vo2]amix=inputs=2:normalize=0:duration=first,loudnorm=I=-14:TP=-1.5:LRA=11[a]"
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error"] + ins + ["-filter_complex", fc, "-map", "0:v", "-map", "[a]",
                     "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-ar", "48000", "-shortest", out], check=True)
+
+# 11/12 대표 "TTS는 자연스럽게": 말하는 사람마다 결을 나눈다. edge-tts 한국어 여성 목소리는 SunHi 하나뿐이라 높이·빠르기로 나눈다.
+#   cust(손님 속마음): 조금 높고 빠르게 — 한탄·혼잣말 결 / jw(정월): 낮고 차분하게 — 답해 주는 결 / nar(안내): 기본
+WHO = {"cust": dict(voice="ko-KR-SunHiNeural", rate="+12%", pitch="+12Hz"),
+       "jw":   dict(voice="ko-KR-SunHiNeural", rate="+0%",  pitch="-6Hz"),
+       "nar":  dict(voice="ko-KR-SunHiNeural", rate="+6%",  pitch="+0Hz"),
+       "man":  dict(voice="ko-KR-InJoonNeural", rate="+6%", pitch="+0Hz")}
+
+
+def 목소리들(cues, tmp):
+    """cues = [{t, text, who, slot}] (HTML window.VO). 글자 그대로 읽히면 어색한 것(ㅠㅠ·ㅋㅋ·;;)은 HTML 쪽 text 에서 뺀다.
+    칸보다 길면 1.25배까지만 빠르게(그 이상은 부자연스러워 막는다). 돌려줌: [(시작초, wav)], 기록"""
+    parts, log = [], []
+    for i, c in enumerate(cues):
+        w = WHO.get(c.get("who", "nar"), WHO["nar"])
+        f = 말(c["text"], f"{tmp}/vo{i}.mp3", w["rate"], w["voice"], w["pitch"]); d = _dur(f); slot = float(c.get("slot", 9)); sp = 1.0
+        if d > slot:
+            sp = d / slot
+            if sp > 1.25: raise SystemExit(f"[막음] 목소리가 칸보다 길어요({i}번 {d:.1f}초 > {slot:.1f}초) — 글을 줄이세요: {c['text']}")
+            f2 = f"{tmp}/vo{i}f.wav"; subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", f, "-af", f"atempo={sp:.3f}", f2], check=True); f = f2; d = _dur(f)
+        parts.append((float(c["t"]), f)); log.append({"줄": i, "누구": c.get("who", "nar"), "시작": c["t"], "길이": round(d, 2), "칸": slot, "빠르기": round(sp, 2), "글": c["text"]})
+    return parts, log
+
 
 if __name__ == "__main__":
     import sys

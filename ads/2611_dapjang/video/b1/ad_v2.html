@@ -1,0 +1,141 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#102A43}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../../../pipeline/motion_fx.js"></script>
+<script>
+// 정월의 답장 메타 광고 B1 v2 (11/12, 대표 "효과음 제대로, TTS 자연스럽게, 모션그래픽으로 시선") — 15초 세로(meta_ad_story).
+// 목소리: 손님 속마음(cust) → 정월이 답함(jw). 효과음은 움직임마다 하나. 특정 달을 찍지 않는다(가짜 결과 금지 K-185).
+// 손님 캐릭터 그림이 오면 ① 장면 가운데에 넣는다(지금은 글만).
+window.FX = ['kineticDrop', 'shakePunch', 'swipeHighlight', 'tileFlip', 'scanSweep', 'phoneRise', 'typeIn', 'flashCut', 'lensZoom', 'ripple', 'sparkBurst'];
+window.VO = [
+  { t: 0.15, who: 'cust', slot: 3.0, text: '아니.. 돈 들어오는 달이 있긴 한 거야?' },
+  { t: 3.30, who: 'jw',   slot: 3.0, text: '있어. 근데 사람마다 달라.' },
+  { t: 7.00, who: 'jw',   slot: 3.6, text: '생일만 넣으면, 내 돈 유형이 바로 나와.' },
+  { t: 12.0, who: 'jw',   slot: 2.4, text: '먼저 무료로 봐 봐.' }
+];
+window.SFX = [
+  { t: 0.15, k: 'thud' }, { t: 0.45, k: 'thud' }, { t: 0.8, k: 'thud' }, { t: 0.95, k: 'whoosh' }, { t: 1.7, k: 'boing' },
+  { t: 2.75, k: 'whoosh' }, ...Array.from({ length: 12 }, (_, m) => ({ t: 3.0 + m * 0.08, k: 'tick' })),
+  { t: 4.3, k: 'pop' }, { t: 4.9, k: 'sparkle' }, { t: 3.3, k: 'pop' },
+  { t: 6.55, k: 'whoosh' }, ...Array.from({ length: 8 }, (_, i) => ({ t: 7.6 + i * 0.11, k: 'tick' })),
+  { t: 8.75, k: 'ding' }, { t: 9.6, k: 'whoosh' }, { t: 10.5, k: 'pop' },
+  { t: 11.75, k: 'whoosh' }, { t: 12.9, k: 'press' }, { t: 13.0, k: 'sparkle' }, { t: 14.0, k: 'chime' }
+];
+const F = window.FXK, cv = document.getElementById('c'), g = cv.getContext('2d');
+const NAVY = '#102A43', Y = '#FFD600', PINK = '#FF5C8A', W = 1080, H = 1920;
+const E = { o: t => 1 - Math.pow(1 - t, 3), io: t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+  b: t => { const c = 1.70158; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); },
+  el: t => t === 0 || t === 1 ? t : Math.pow(2, -9 * t) * Math.sin((t * 10 - .75) * 2.1) + 1 };
+const cl = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v)), seg = (t, a, b) => cl((t - a) / (b - a));
+const rnd = i => { const x = Math.sin(i * 127.1) * 43758.5; return x - Math.floor(x); };   // 고정 난수(시간 함수 유지)
+const img = {}; let left = 2;
+function load(k, src) { const i = new Image(); i.onload = () => { img[k] = i; if (--left === 0) window.seek = draw; }; i.src = src; }
+load('view', '../view.jpg'); load('inp', '../in.jpg');
+function rr(x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
+function txt(s, x, y, px, col = '#fff', w = 900, f = 'PL') { g.font = `${w} ${px}px ${f}`; g.fillStyle = col; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(s, x, y); }
+function bg(t) {   // 배경: 남색 + 천천히 도는 빛 두 개(평판 단색이 아니게)
+  g.fillStyle = NAVY; g.fillRect(0, 0, W, H);
+  [[0.2, '#1A3F6E'], [0.7, '#2B2A5E']].forEach(([p, c], i) => {
+    const x = W * (0.3 + 0.4 * Math.sin(t * 0.4 + i * 2)), y = H * (p + 0.05 * Math.cos(t * 0.5 + i));
+    const r = g.createRadialGradient(x, y, 0, x, y, 700); r.addColorStop(0, c); r.addColorStop(1, 'rgba(16,42,67,0)');
+    g.fillStyle = r; g.fillRect(0, 0, W, H); });
+}
+function sparks(cx, cy, t0, t, n = 18, col = Y) {   // 반짝이 터짐
+  const k = seg(t, t0, t0 + 0.9); if (k <= 0 || k >= 1) return;
+  for (let i = 0; i < n; i++) { const a = rnd(i) * 6.283, d = 80 + 260 * E.o(k) * (0.5 + rnd(i + 9)), s = 10 * (1 - k) + 4;
+    g.globalAlpha = 1 - k; g.fillStyle = i % 3 ? col : '#fff'; g.save(); g.translate(cx + Math.cos(a) * d, cy + Math.sin(a) * d); g.rotate(k * 3 + i);
+    g.fillRect(-s / 2, -s * 1.6, s, s * 3.2); g.fillRect(-s * 1.6, -s / 2, s * 3.2, s); g.restore(); }
+  g.globalAlpha = 1;
+}
+function draw(t) {
+  g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1; bg(t);
+  const A = F.area(), cx = F.cx, cy = F.cy;
+  // 화면 흔들림(쾅 순간)
+  const hits = [0.15, 0.45, 0.8], sh = hits.reduce((s, h) => s + (t > h && t < h + .25 ? Math.sin((t - h) * 90) * 14 * (1 - (t - h) / .25) : 0), 0);
+  g.save(); g.translate(sh, 0);
+  // ① 손님 속마음 — 글자가 쾅쾅 떨어진다 + 형광펜이 긋는다
+  if (t < 3.0) {
+    const out = seg(t, 2.55, 3.0);
+    const L = [['아니.. 2027년엔', null], ['돈 들어오는 달이', [0, 7]], ['있긴 한 거야?', null]];
+    L.forEach(([s, hl], i) => {
+      const t0 = [0.15, 0.45, 0.8][i], k = E.b(seg(t, t0, t0 + 0.32)), y = cy - 240 + i * 210 - out * 140;
+      if (k <= 0) return; g.globalAlpha = cl(k) * (1 - out);
+      g.save(); g.translate(cx, y - (1 - cl(k)) * 160); g.scale(1.6 - 0.6 * cl(k), 1.6 - 0.6 * cl(k));
+      if (hl) { const sw = E.io(seg(t, 0.75, 1.1)); g.font = '900 124px PL'; const full = g.measureText(s).width, part = g.measureText(s.slice(0, hl[1])).width;
+        window.__zsLoose = 1; g.fillStyle = Y; g.globalAlpha *= 0.85; rr(-full / 2 - 8, 8, part * sw + 16, 58, 12); g.fill(); g.globalAlpha /= 0.85; }
+      txt(s, 0, 0, 124, '#fff'); window.__zsLoose = 0;
+      g.restore();
+    });
+    if (t > 1.7) { const k = E.el(seg(t, 1.7, 2.3)); g.globalAlpha = 1 - out; g.save(); g.translate(cx + 300, cy + 165); g.rotate(-0.2); g.scale(k, k);
+      window.__zsLoose = 1; txt('ㅠㅠ', 0, 0, 96, PINK); window.__zsLoose = 0; g.restore(); }
+    g.globalAlpha = 1;
+  }
+  // ② 열두 달 — 타일이 뒤집혀 깔리고, 빛줄기가 훑고, '?' 가 튄다
+  if (t >= 2.75 && t < 6.9) {
+    const a = seg(t, 2.75, 3.1), out = seg(t, 6.4, 6.9), zoom = 1 + 0.06 * E.o(seg(t, 4.8, 6.4));
+    g.globalAlpha = a * (1 - out); txt('2027년 열두 달', cx, A.y0 + 110, 96);
+    const cw = 250, ch = 165, gx = cx - (cw * 3 + 40) / 2, gy = A.y0 + 210, gcx = cx, gcy = gy + 2 * (ch + 18);
+    g.save(); g.translate(gcx, gcy); g.scale(zoom, zoom); g.translate(-gcx, -gcy);
+    for (let m = 0; m < 12; m++) {
+      const r = Math.floor(m / 3), c = m % 3, f = seg(t, 3.0 + m * 0.08, 3.32 + m * 0.08), sx = Math.cos((1 - E.o(f)) * Math.PI / 2);
+      const x = gx + c * (cw + 20), y = gy + r * (ch + 18);
+      g.save(); g.translate(x + cw / 2, y + ch / 2); g.scale(Math.max(sx, 0.001), 1);
+      g.fillStyle = 'rgba(255,255,255,.12)'; rr(-cw / 2, -ch / 2, cw, ch, 28); g.fill(); g.strokeStyle = 'rgba(255,255,255,.4)'; g.lineWidth = 5; g.stroke();
+      window.__zsLoose = 1; txt(`${m + 1}월`, 0, -22, 70);
+      const q = E.el(seg(t, 4.3 + (m % 5) * 0.1, 4.8 + (m % 5) * 0.1)); if (q > 0) { g.save(); g.translate(0, 46); g.scale(q, q); txt('?', 0, 0, 64, Y); g.restore(); }
+      window.__zsLoose = 0; g.restore();
+    }
+    // 빛줄기
+    const sw = seg(t, 4.9, 5.6); if (sw > 0 && sw < 1) { const sx2 = gx - 200 + sw * (cw * 3 + 440); const lg = g.createLinearGradient(sx2 - 120, 0, sx2 + 120, 0);
+      lg.addColorStop(0, 'rgba(255,214,0,0)'); lg.addColorStop(0.5, 'rgba(255,214,0,.35)'); lg.addColorStop(1, 'rgba(255,214,0,0)');
+      g.fillStyle = lg; g.fillRect(gx - 40, gy - 20, cw * 3 + 120, 4 * (ch + 18) + 20); }
+    g.restore();
+    const s = E.b(seg(t, 3.3, 3.7)); if (s > 0) { g.save(); g.translate(cx, gy + 4 * (ch + 18) + 84); g.scale(s, s);
+      g.fillStyle = Y; rr(-400, -60, 800, 120, 60); g.fill(); txt('그 달은 사람마다 달라요', 0, 4, 62, '#111'); g.restore(); }
+    g.globalAlpha = 1;
+  }
+  // ③ 휴대폰 — 튀어 올라오고, 생일이 쳐지고, 번쩍 넘어가고, 렌즈가 유형을 짚는다
+  if (t >= 6.5 && t < 12.0) {
+    const up = E.b(seg(t, 6.5, 7.2)), out = seg(t, 11.6, 12.0), tilt = (1 - E.o(seg(t, 6.5, 7.4))) * 0.12;
+    const pw = 500, ph = 880, px = cx - pw / 2, py = A.y0 + 225 + (1 - up) * 900;
+    g.globalAlpha = 1 - out;
+    const cap = t < 8.75 ? '생일만 넣으면' : '내 돈 유형이 바로';
+    const ck = E.b(seg(t, t < 8.75 ? 6.8 : 8.75, (t < 8.75 ? 6.8 : 8.75) + 0.35));
+    g.save(); g.translate(cx, A.y0 + 105); g.scale(ck, ck); txt(cap, 0, 0, 88); g.restore();
+    g.save(); g.translate(cx, py + ph / 2); g.rotate(tilt); g.translate(-cx, -(py + ph / 2));
+    g.shadowColor = 'rgba(0,0,0,.5)'; g.shadowBlur = 40; g.fillStyle = '#0b1b2c'; rr(px - 22, py - 22, pw + 44, ph + 44, 70); g.fill(); g.shadowBlur = 0;
+    g.strokeStyle = Y; g.lineWidth = 8; g.stroke();
+    g.save(); rr(px, py, pw, ph, 50); g.clip();
+    if (t < 8.75) { const i = img.inp, s = pw / i.width; g.drawImage(i, 0, 160, i.width, ph / s, px, py, pw, ph);
+      // 생일 칸에 한 자씩 쳐지는 표시(입력 커서)
+      const n = Math.floor(seg(t, 7.6, 8.5) * 8), bx = px + 40, by = py + 548; g.fillStyle = 'rgba(255,214,0,.25)'; g.fillRect(bx, by, 40 + n * 46, 64);
+      if (Math.floor(t * 4) % 2 === 0) { g.fillStyle = '#111'; g.fillRect(bx + 44 + n * 46, by + 10, 5, 44); } }
+    else { const i = img.view, s = pw / i.width, scroll = E.io(seg(t, 9.6, 10.4)) * 330; g.drawImage(i, 0, 160 + scroll, i.width, ph / s, px, py, pw, ph); }
+    const fl = 1 - Math.abs(seg(t, 8.55, 8.95) * 2 - 1); if (fl > 0) { g.fillStyle = `rgba(255,255,255,${fl})`; g.fillRect(px, py, pw, ph); }
+    g.restore();
+    g.fillStyle = '#0b1b2c'; rr(cx - 90, py - 4, 180, 34, 17); g.fill();
+    // 렌즈: 결과 화면 유형 단추를 짚는다
+    const lz = E.b(seg(t, 10.5, 10.9)); if (lz > 0 && t < 11.7) { const lx = px + pw * 0.72, ly = py + 215; g.save(); g.globalAlpha = (1 - out) * cl(lz);
+      g.strokeStyle = Y; g.lineWidth = 10; g.beginPath(); g.arc(lx, ly, 90 * lz, 0, 7); g.stroke(); g.lineWidth = 14; g.beginPath(); g.moveTo(lx + 64 * lz, ly + 64 * lz); g.lineTo(lx + 120 * lz, ly + 120 * lz); g.stroke(); g.restore(); }
+    g.restore();
+    sparks(cx, py + 120, 8.75, t, 16);
+    g.globalAlpha = 1;
+  }
+  // ④ 마무리 — 큰 글 + 단추가 눌리고 물결 + 반짝이
+  if (t >= 11.75) {
+    const a = E.b(seg(t, 11.75, 12.2)), press = t > 12.9 && t < 13.15 ? 0.92 : 1;
+    g.globalAlpha = cl(a);
+    g.save(); g.translate(cx, cy - 260); g.scale(a, a); txt('내 돈 들어오는 달', 0, 0, 108); g.restore();
+    g.save(); g.translate(cx, cy - 110); g.scale(a, a); window.__zsLoose = 1; g.font = '900 108px PL'; const w2 = g.measureText('지금 확인').width;
+    g.fillStyle = Y; g.globalAlpha *= 0.85; rr(-w2 / 2 - 10, 10, w2 * E.io(seg(t, 12.2, 12.6)) + 20, 56, 12); g.fill(); g.globalAlpha = cl(a); txt('지금 확인', 0, 0, 108); window.__zsLoose = 0; g.restore();
+    const bp = E.el(seg(t, 12.3, 12.9)); g.save(); g.translate(cx, cy + 120); g.scale(bp * press, bp * press);
+    g.fillStyle = Y; rr(-430, -85, 860, 170, 85); g.fill(); txt('내 2027년 유형 무료로 보기 →', 0, 4, 62, '#111'); g.restore();
+    if (t > 12.9) { const r = seg(t, 12.9, 13.7); g.globalAlpha = 1 - r; g.strokeStyle = Y; g.lineWidth = 10; rr(cx - 430 - r * 60, cy + 35 - r * 60, 860 + r * 120, 170 + r * 120, 85 + r * 60); g.stroke(); g.globalAlpha = 1; }
+    sparks(cx, cy + 120, 13.0, t, 22);
+    const s = seg(t, 13.3, 13.7); g.globalAlpha = s; txt('생일만 넣으면 돼요', cx, cy + 320, 58, '#fff', 800, 'PR');
+    g.globalAlpha = 1;
+  }
+  g.restore();
+  F.frame(g, { ai: '생일로 계산하고, 풀이 문장은 AI로 써요' });
+}
+</script></body></html>
