@@ -1247,6 +1247,7 @@
   "key": "F"
  },
  {
+<<<<<<< Updated upstream
   "name": "reel_1116_imgye",
   "kind": "fun",
   "style": "발랄 우쿨렐레",
@@ -1261,5 +1262,13 @@
   "mode": "up",
   "bpm": 120,
   "key": "E"
+=======
+  "name": "ad_dapjang_b1_v4",
+  "kind": "fun",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 124,
+  "key": "G"
+>>>>>>> Stashed changes
  }
 ]
