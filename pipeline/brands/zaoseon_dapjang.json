@@ -1,0 +1,15 @@
+{
+ "_설명": "자오선 '정월의 답장' 광고용(11/12). 위 고정 줄을 '자오선 · 정월의 답장'으로, AI 고지는 장면이 넘긴다.",
+ "id": "zaoseon_dapjang",
+ "name": "자오선",
+ "tag": "정월의 답장",
+ "url": "zaoseon.com",
+ "ai": "정월은 가상의 AI 캐릭터입니다",
+ "accent": "#FFD600",
+ "ink": "#FFFFFF",
+ "pill": "rgba(0,0,0,.38)",
+ "palette": ["#FF5A1F", "#2F6BFF", "#2EBD6B", "#FFD600", "#FFC21A"],
+ "fonts": {"title": "PL", "body": "PR", "hand": "BZ"},
+ "fx_log": "ads/fx_log.json",
+ "music": "fun"
+}

@@ -459,12 +459,14 @@ def main():
     for c in chs:
         if c not in CS.CH: raise SystemExit(f"[막음] 모르는 채널 {c} — channel_specs.VIDEO: {CS.VIDEO}")
     if any(x == "--가이드" for x in sys.argv): os.environ["ZS_GUIDE"] = "1"
+    설계 = opt("설계", "reel")   # 11/12: 페이지를 어느 채널 규격으로 짰나(메타 스토리 광고 등). 다른 채널은 여기서 자동으로 옮긴다
+    if 설계 not in CS.CH: raise SystemExit(f"[막음] 모르는 설계 채널 {설계}")
     if a and opt("확인"):
         for c in chs:
-            print(f"[{c}] 확인 컷:", 확인컷(a[0], [float(x) for x in opt("확인").split(",")], c))
+            print(f"[{c}] 확인 컷:", 확인컷(a[0], [float(x) for x in opt("확인").split(",")], c, 설계))
             import channel_remap as RM
-            g = "reel" if c != "reel" and RM.옮길수있나("reel", c) else c
-            try: 안전영역_막기(a[0], float(opt("초", "15")), g); print(f"[{c}] 안전 영역: 통과" + (" (reel 로 재고 자동 옮김)" if g != c else ""))
+            g = 설계 if c != 설계 and RM.옮길수있나(설계, c) else c
+            try: 안전영역_막기(a[0], float(opt("초", "15")), g); print(f"[{c}] 안전 영역: 통과" + (f" ({g} 로 재고 자동 옮김)" if g != c else ""))
             except SystemExit as e: print(e)
         return 0
     if len(a) < 2:
@@ -473,11 +475,11 @@ def main():
     fps = int(next((x.split("=")[1] for x in sys.argv if x.startswith("--fps=")), 30))
     if len(chs) > 1:     # 채널 여럿: 이름 뒤에 _채널 을 붙여 하나씩 렌더하고 소리까지 붙인다
         for c in chs:
-            p, d = render(a[0], f"{a[1]}_{c}", 초, fps, c, 블러=int(opt("블러", "1")))
+            p, d = render(a[0], f"{a[1]}_{c}", 초, fps, c, 블러=int(opt("블러", "1")), 설계=설계)
             if opt("소리", 브랜드().get("music", "fun")) != "없음": 소리붙이기(p, d, a[0], opt("소리", 브랜드().get("music", "fun")), a[1])
             print(f"[{c}] {p}")
         기법_검사(a[0], a[1], 기록=True); return 0
-    p, d = render(a[0], a[1], 초, fps, chs[0], 블러=int(opt("블러", "1")))
+    p, d = render(a[0], a[1], 초, fps, chs[0], 블러=int(opt("블러", "1")), 설계=설계)
     기법_검사(a[0], a[1], 기록=True)
     if opt("출력"):
         os.makedirs(os.path.dirname(os.path.abspath(opt("출력"))), exist_ok=True); shutil.move(p, opt("출력")); p = opt("출력")

@@ -1,0 +1,96 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#102A43}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../../../pipeline/motion_fx.js"></script>
+<script>
+// 정월의 답장 메타 광고 B1 영상판 (11/12, 대표 "이미지로만 가면 심심") — 15초, 세로.
+// 흐름: ① 첫 줄 한탄(0~2.8) ② 2027 열두 달 판이 깔리고 '?' 가 뛴다(2.8~6.6, 특정 달을 찍지 않음 — 가짜 결과 금지 K-185)
+//       ③ 휴대폰 결과 화면이 올라와 내려 읽힌다(6.6~11.6) ④ 단추가 눌린다(11.6~15)
+window.FX = ['popText', 'gridFill', 'phoneScroll', 'buttonPress'];
+const F = window.FXK, cv = document.getElementById('c'), g = cv.getContext('2d');
+const NAVY = '#102A43', Y = '#FFD600', W = 1080, H = 1920;
+const E = { o: t => 1 - Math.pow(1 - t, 3), b: t => { const c = 1.70158; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); } };
+const cl = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v)), seg = (t, a, b) => cl((t - a) / (b - a));
+const img = {}; let left = 2;
+function load(k, src) { const i = new Image(); i.onload = () => { img[k] = i; if (--left === 0) window.seek = draw; }; i.src = src; }
+load('view', '../view.jpg'); load('inp', '../in.jpg');
+
+function rr(x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
+function hlText(parts, x, y, px) {   // parts: [[글, 강조?], ...] 가운데 정렬 한 줄
+  g.font = `900 ${px}px PL`; const ws = parts.map(p => g.measureText(p[0]).width), tw = ws.reduce((a, b) => a + b, 0);
+  let cx = x - tw / 2; g.textAlign = 'left'; g.textBaseline = 'middle';
+  window.__zsLoose = 1;   // 강조 띠는 글자에 붙여 그린 것(의도)
+  parts.forEach((p, i) => { if (p[1]) { g.fillStyle = Y; g.globalAlpha *= 0.28; rr(cx - 6, y + px * 0.08, ws[i] + 12, px * 0.42, 10); g.fill(); g.globalAlpha /= 0.28; g.fillStyle = Y; } else g.fillStyle = '#fff'; g.fillText(p[0], cx, y); cx += ws[i]; });
+  window.__zsLoose = 0; g.textAlign = 'center';
+}
+function draw(t) {
+  g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1; g.fillStyle = NAVY; g.fillRect(0, 0, W, H);
+  const A = F.area(), ax0 = A.x0, ay0 = A.y0, ax1 = A.x1, ay1 = A.y1, cx = F.cx, cy = F.cy;
+  // ① 첫 줄
+  if (t < 3.1) {
+    const out = seg(t, 2.6, 3.1), sh = t < 0.5 ? Math.sin(t * 60) * 8 * (1 - t / 0.5) : 0;
+    const L = [[['아니.. 2027년엔', 0]], [['돈 들어오는 달', 1], ['이', 0]], [['있긴 한 거야?', 0], ['ㅠㅠ', 1]]];
+    L.forEach((ln, i) => { const k = E.b(seg(t, 0.15 + i * 0.35, 0.55 + i * 0.35)); g.globalAlpha = cl(k) * (1 - out);
+      g.save(); g.translate(cx + sh, cy - 210 + i * 200 - out * 120); g.scale(0.6 + 0.4 * k, 0.6 + 0.4 * k); hlText(ln, 0, 0, 120); g.restore(); });
+    g.globalAlpha = 1;
+  }
+  // ② 열두 달 판
+  if (t >= 2.8 && t < 6.9) {
+    const a = seg(t, 2.8, 3.3), out = seg(t, 6.4, 6.9); g.globalAlpha = a * (1 - out);
+    g.font = '900 92px PL'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#fff';
+    g.fillText('2027년 열두 달', cx, ay0 + 110);
+    const cw = 250, ch = 165, gx = cx - (cw * 3 + 40) / 2, gy = ay0 + 210;
+    for (let m = 0; m < 12; m++) {
+      const r = Math.floor(m / 3), c = m % 3, k = E.b(seg(t, 3.0 + m * 0.09, 3.35 + m * 0.09));
+      const x = gx + c * (cw + 20), y = gy + r * (ch + 18);
+      g.save(); g.translate(x + cw / 2, y + ch / 2); g.scale(k, k);
+      g.fillStyle = 'rgba(255,255,255,.10)'; rr(-cw / 2, -ch / 2, cw, ch, 28); g.fill();
+      g.strokeStyle = 'rgba(255,255,255,.35)'; g.lineWidth = 5; g.stroke();
+      window.__zsLoose = 1; g.fillStyle = '#fff'; g.font = '900 70px PL'; g.fillText(`${m + 1}월`, 0, -22);
+      const q = seg(t, 4.4 + (m % 4) * 0.12, 4.7 + (m % 4) * 0.12), bob = Math.sin((t - 4.4) * 6 + m) * 8 * q;
+      g.globalAlpha *= q; g.fillStyle = Y; g.font = '900 64px PL'; g.fillText('?', 0, 46 + bob * 0.6); g.globalAlpha /= q || 1; window.__zsLoose = 0;
+      g.restore();
+    }
+    const s = seg(t, 3.3, 3.7); g.globalAlpha = s * (1 - out);
+    g.fillStyle = Y; rr(cx - 400, gy + 4 * (ch + 18) + 24, 800, 120, 60); g.fill();
+    g.fillStyle = '#111'; g.font = '900 64px PL'; g.fillText('힘 쓸 달은 사람마다 달라요', cx, gy + 4 * (ch + 18) + 86);
+    g.globalAlpha = 1;
+  }
+  // ③ 휴대폰 결과 화면
+  if (t >= 6.5 && t < 12.0) {
+    const up = E.o(seg(t, 6.5, 7.2)), out = seg(t, 11.6, 12.0);
+    const pw = 500, ph = 880, px = cx - pw / 2, py = ay0 + 225 + (1 - up) * 900;
+    g.globalAlpha = 1 - out;
+    g.font = '900 84px PL'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#fff';
+    const cap = t < 9.0 ? [['생일만 넣으면', 0]] : [['내 유형', 1], ['이 바로 나와요', 0]];
+    hlText(cap, cx, ay0 + 105, 84);
+    g.fillStyle = '#0b1b2c'; rr(px - 22, py - 22, pw + 44, ph + 44, 70); g.fill();
+    g.strokeStyle = Y; g.lineWidth = 8; g.stroke();
+    g.save(); rr(px, py, pw, ph, 50); g.clip();
+    if (t < 9.0) { const i = img.inp, s = pw / i.width; g.drawImage(i, 0, 160, i.width, ph / s, px, py, pw, ph); }   // 맨 위 '시험 화면' 안내 띠는 잘라 낸다
+    else { const i = img.view, s = pw / i.width, top = 160, scroll = E.o(seg(t, 9.4, 11.2)) * 520;
+      g.drawImage(i, 0, top + scroll, i.width, ph / s, px, py, pw, ph); }
+    if (t >= 8.6 && t < 9.4) { const f = 1 - Math.abs(seg(t, 8.6, 9.4) * 2 - 1); g.fillStyle = `rgba(255,255,255,${f})`; g.fillRect(px, py, pw, ph); }
+    g.restore();
+    g.fillStyle = '#0b1b2c'; rr(cx - 90, py - 4, 180, 34, 17); g.fill();
+    g.globalAlpha = 1;
+  }
+  // ④ 단추
+  if (t >= 11.8) {
+    const a = E.b(seg(t, 11.8, 12.3)), press = t > 13.2 && t < 13.6 ? 0.93 : 1;
+    g.globalAlpha = cl(a);
+    g.font = '900 104px PL'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    hlText([['결제 없이', 0]], cx, cy - 250, 112); hlText([['먼저 봐요', 0]], cx, cy - 100, 112);
+    g.save(); g.translate(cx, cy + 120); g.scale(a * press, a * press);
+    g.fillStyle = Y; rr(-430, -85, 860, 170, 85); g.fill();
+    g.fillStyle = '#111'; g.font = '900 64px PL'; g.fillText('내 2027년 유형 무료로 보기 →', 0, 4);
+    g.restore();
+    const s = seg(t, 12.6, 13.0); g.globalAlpha = s; g.fillStyle = '#fff'; g.font = '800 58px PR';
+    g.fillText('생일만 넣으면 돼요', cx, cy + 320);
+    if (t > 13.2) { const r = seg(t, 13.2, 13.9); g.globalAlpha = 1 - r; g.strokeStyle = Y; g.lineWidth = 10;
+      g.beginPath(); g.arc(cx + 300, cy + 140, 30 + r * 100, 0, 7); g.stroke(); }
+    g.globalAlpha = 1;
+  }
+  F.frame(g, { ai: '생일로 계산하고, 풀이 문장은 AI로 써요' });
+}
+</script></body></html>

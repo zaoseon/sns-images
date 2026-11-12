@@ -76,5 +76,14 @@
   "fx": [
    "견본"
   ]
+ },
+ {
+  "name": "ad_dapjang_b1_video",
+  "fx": [
+   "popText",
+   "gridFill",
+   "phoneScroll",
+   "buttonPress"
+  ]
  }
 ]
