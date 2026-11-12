@@ -38,5 +38,13 @@
   "mode": "up",
   "bpm": 124,
   "key": "A"
+ },
+ {
+  "name": "ad_dapjang_b2_9x16_v3",
+  "kind": "fun",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 114,
+  "key": "C"
  }
 ]

@@ -437,7 +437,7 @@ def 광고모션_검사(pg, 초, ch, 간격=0.1):
     ① 두 어절 이상을 한 번에 그린 시간 비율 ≤ sentence_share(상자 안 글·__zsLoose 는 뺀다)
     ② 캐릭터가 아닌 그림 하나가 zoom_min 배 넘게 확대 ③ 크기·기울기가 바뀌며 들어오는 글 조각 kinetic_min 개 이상."""
     if not ch.startswith("meta_ad"): return []
-    M = CS.AD_MOTION; 문장 = 0; 전체 = 0; 배율 = {}; 움직 = {}
+    M = CS.AD_MOTION; 문장 = 0; 전체 = 0; 배율 = {}; 움직 = {}; 작은주 = 0; 작은글 = {}
     for i in range(int(초 / 간격) + 1):
         t = min(i * 간격, 초 - 0.01)
         pg.evaluate("t => {window.__zsTxt=[];window.__zsBox=[];window.__zsImg=[];window.__zsKin=[];window.seek(t)}", t)
@@ -445,6 +445,11 @@ def 광고모션_검사(pg, 초, ch, 간격=0.1):
         def 상자안(tb): return any(tb[0] >= q[0] - 2 and tb[1] >= q[1] - 2 and tb[2] <= q[2] + 2 and tb[3] <= q[3] + 2 for q in boxes)
         안 = {r[0] for r in txt if 상자안(r[1:5])}
         보임 = [r for r in rows if r[0].strip()]
+        fs_ = [r for r in txt if (r[5] or 0) > 0]
+        if fs_:
+            if max(r[5] for r in fs_) < M["main_min"]: 작은주 += 1
+            for r in fs_:
+                if r[5] < M["body_min"] - 0.5: 작은글[r[0][:12]] = min(작은글.get(r[0][:12], 999), r[5])
         if 보임:
             전체 += 1
             if any(len(r[0].split()) >= 2 and not r[3] and r[0][:20] not in 안 for r in 보임): 문장 += 1
@@ -456,6 +461,10 @@ def 광고모션_검사(pg, 초, ch, 간격=0.1):
     문제 = []
     if 전체 and 문장 / 전체 > M["sentence_share"]:
         문제.append(f"[광고 모션] 두 어절 넘는 글을 한 번에 그린 시간 {문장 / 전체 * 100:.0f}% (≤{M['sentence_share'] * 100:.0f}%) — 어절·글자 단위로 따로 들어오게(K-198)")
+    if 전체 and 작은주 / 전체 > 0.1:
+        문제.append(f"[광고 모션] 가장 큰 글이 {M['main_min']}px 안 되는 화면 {작은주 / 전체 * 100:.0f}% — 훅·자막을 크게(대표 11/12 21:08 '폰트 크기 작게 보여')")
+    if 작은글:
+        문제.append("[광고 모션] " + str(M['body_min']) + "px 안 되는 글: " + ", ".join(f"'{k}' {v:.0f}px" for k, v in list(작은글.items())[:6]) + " — 광고 영상 글은 " + str(M['body_min']) + "px 이상")
     줌 = max([hi / max(lo, 1e-3) for lo, hi in 배율.values()] or [0])
     if 줌 < M["zoom_min"]:
         문제.append(f"[광고 모션] 화면 확대 {줌:.1f}배 — 결과 화면 등 그림 하나를 {M['zoom_min']:.0f}배 넘게 확대해 화면 안 내용을 보여 주세요(K-198)")
