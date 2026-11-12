@@ -5,7 +5,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#2B2350
 window.FX=['글자늘이기','낱말블록교체','칩줄세우기','공튀기기','덮개그리기'];
 const F=FXK,{cl,mix,ease,eio,sp}=F,BG='#2B2350',H1='#3E3470',H2='#56489A',OR='#F2A65A',IV='#F8F3E8',g=document.getElementById('cv').getContext('2d');
 window.SFX=[{t:.1,k:'whoosh'},{t:.4,k:'pop'},{t:.25,k:'pop'},{t:.45,k:'thud'},{t:2.9,k:'swoosh'},{t:3.3,k:'boing'},{t:4.4,k:'chime'},
- {t:5.6,k:'whoosh'},{t:5.9,k:'pop'},{t:6.2,k:'pop'},{t:6.5,k:'pop'},{t:6.8,k:'pop'},{t:10.9,k:'whoosh'},{t:11.3,k:'ding'},{t:13.1,k:'swoosh'},{t:13.5,k:'pop'},{t:14.3,k:'ding'}];
+ {t:5.6,k:'whoosh'},{t:5.85,k:'tick'},{t:6.05,k:'tick'},{t:6.25,k:'tick'},{t:6.45,k:'tick'},{t:7.0,k:'pop'},{t:7.7,k:'pop'},{t:8.4,k:'pop'},{t:9.1,k:'ding'},{t:10.9,k:'whoosh'},{t:11.3,k:'ding'},{t:13.1,k:'swoosh'},{t:13.5,k:'pop'},{t:14.3,k:'ding'}];
 function T(txt,x,y,font,color,align='center'){g.font=font;g.fillStyle=color;g.textAlign=align;g.textBaseline='middle';g.fillText(txt,x,y)}
 function fade(t,a,b){return cl((t-a)/.25)*cl((b-t)/.25)}
 // 평면 풍경: 언덕 두 겹(시차) + 해 + 길. cam = 카메라가 오른쪽으로 간 거리
@@ -33,11 +33,16 @@ function draw(t){const X=F.cx;g.fillStyle=BG;g.fillRect(0,0,1080,1920);
   g.restore()}
  // 3 내 띠로 찾는 역마 자리 — 네 줄 블록
  if(t>=5.6&&t<11.1){const a=fade(t,5.6,11.1);g.save();g.globalAlpha=a;
-  T('내 띠로 찾는 역마 자리',X,600,'900 84px PL',IV);
+  // 11/12 23:53 대표 '통으로 나오지 말고 주황 배지 나오는 타이밍 조절': 띠(띠 묶음)가 먼저 차례로 서고, 주황 답은 0.7초 간격으로 하나씩 튀어나온다
+  T('내 띠로 찾는 역마 자리',X,570,'900 84px PL',IV);
   const R=[['원숭이·쥐·용띠','호랑이'],['호랑이·말·개띠','원숭이'],['뱀·닭·소띠','돼지'],['돼지·토끼·양띠','뱀']];
-  R.forEach(([l,r],i)=>{const b=sp(t-5.8-i*.15,14,.62);if(b<=0)return;const y=760+i*176;g.save();g.translate(X+(1-b)*-60,y);g.globalAlpha*=cl(b*2);
-   g.fillStyle=i%2?H2:H1;g.beginPath();g.roundRect(-410,-64,820,128,30);g.fill();T(l,-370,2,'900 60px PL',IV,'left');T('→',95,2,'900 60px PL',OR);
-   g.fillStyle=OR;g.beginPath();g.roundRect(140,-56,266,112,56);g.fill();T(r,273,2,'900 60px PL',BG);g.restore()});
+  R.forEach(([l,r],i)=>{const b=sp(t-5.8-i*.2,14,.62);if(b<=0)return;const y=730+i*176;g.save();g.translate(X+(1-b)*-60,y);g.globalAlpha*=cl(b*2);
+   g.fillStyle=i%2?H2:H1;g.beginPath();g.roundRect(-410,-64,820,128,30);g.fill();T(l,-370,2,'900 60px PL',IV,'left');
+   g.fillStyle='rgba(242,166,90,.16)';g.beginPath();g.roundRect(140,-56,266,112,56);g.fill();   // 답이 들어올 빈 자리
+   const pb=sp(t-(7.0+i*.7),13,.6);
+   if(pb>0){g.save();g.globalAlpha=cl(pb*2);T('→',95,2,'900 60px PL',OR);g.restore();
+    g.save();g.translate(273,0);g.scale(pb,pb);g.fillStyle=OR;g.beginPath();g.roundRect(-133,-56,266,112,56);g.fill();T(r,0,2,'900 60px PL',BG);g.restore()}
+   g.restore()});
   g.restore()}
  // 4 뜻 — 낱말 블록 교체
  if(t>=10.9&&t<13.2){const a=fade(t,10.9,13.2);g.save();g.globalAlpha=a;land(t,cam,1560);

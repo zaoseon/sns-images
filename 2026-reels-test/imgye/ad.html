@@ -17,8 +17,8 @@ function draw(t){const X=F.cx;g.fillStyle=BG;g.fillRect(0,0,1080,1920);
  let jw=false;
  // 1 정월 + 훅
  if(t<3.1){const o=cl((3.05-t)/.3);g.save();g.globalAlpha=o;   // 11/12 대표 '정월 나오는 거 어색' → 영상에서 뺌(K-197). 훅은 글자만
-  const a1=sp(t-.15,14,.6);g.save();g.translate(X,F.cy-170);g.scale(a1,a1);T('말 없는 친구,',0,0,'900 104px PL',IV);T('다 듣고 있어요',0,130,'900 104px PL',IV);g.restore();
-  if(t>.7){const a2=sp(t-.7,15,.55);g.save();g.translate(X,F.cy+215);g.scale(a2,a2);g.fillStyle=AQ;g.beginPath();g.roundRect(-370,-86,740,172,86);g.fill();T('판단은 벌써 끝났을걸요?',0,4,'900 68px PL','#0E2A47');g.restore()}
+  const a1=sp(t-.15,14,.6);g.save();g.translate(X,F.cy-235);g.scale(a1,a1);T('말 없는 친구,',0,0,'900 136px PL',IV);T('다 듣고 있어요',0,175,'900 136px PL',IV);g.restore();
+  if(t>.7){const a2=sp(t-.7,15,.55);g.save();g.translate(X,F.cy+205);g.scale(a2,a2);g.fillStyle=AQ;g.beginPath();g.roundRect(-418,-92,836,184,92);g.fill();T('판단은 벌써 끝났을걸요?',0,4,'900 74px PL','#0E2A47');g.restore()}
   g.restore()}
  // 2 임 — 큰 물: 물결링 + 글자 스태거
  if(t>=3&&t<6.9){const a=fade(t,3,6.9),z=1+.06*ease(cl((t-3)/3.9));g.save();g.globalAlpha=a;g.translate(X,860);g.scale(z,z);g.translate(-X,-860);
