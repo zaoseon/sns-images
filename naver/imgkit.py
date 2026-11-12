@@ -316,9 +316,9 @@ def months(path, head, good, save, lucky):
         elif mm in save: cv.rr([x, y, x + cw, y + ch], 26, fill=WHITE, outline=RED_, w=6); cv.text(x + cw / 2, y + ch / 2, f"{mm}월", TITLE, 58, RED_, "mm")
         else: cv.rr([x, y, x + cw, y + ch], 26, fill=WHITE, outline=line, w=3); cv.text(x + cw / 2, y + ch / 2, f"{mm}월", TITLE, 58, DIM, "mm")
     y = top + 2 * ch + gap + 40 + 33
-    cv.rr([L, y - 22, L + 44, y + 22], 10, fill=acc); cv.text(L + 60, y, "힘을 쓸 달", BODY, 44, ink(fg, bg), "lm")
-    x2 = L + 60 + cv.tw("힘을 쓸 달", BODY, 44) + 56
-    cv.rr([x2, y - 22, x2 + 44, y + 22], 10, fill=WHITE, outline=RED_, w=5); cv.text(x2 + 60, y, "아낄 달", BODY, 44, ink(fg, bg), "lm")
+    cv.rr([L, y - 22, L + 44, y + 22], 10, fill=acc); cv.text(L + 60, y, "좋은 달", BODY, 44, ink(fg, bg), "lm")
+    x2 = L + 60 + cv.tw("좋은 달", BODY, 44) + 56
+    cv.rr([x2, y - 22, x2 + 44, y + 22], 10, fill=WHITE, outline=RED_, w=5); cv.text(x2 + 60, y, "조심할 달", BODY, 44, ink(fg, bg), "lm")
     if any(s_ > 12 for s_ in save): cv.text(RT, y, "+ 이듬해 1월도 아껴요", BODY, 42, RED_, "rm")
     cv.text(L, y + 84, lucky, BODY, cv.fit(lucky, BODY, 46, RT - L, 36), ink(acc, bg), "lm")
     cv.save(os.path.basename(path))

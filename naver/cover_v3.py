@@ -200,6 +200,6 @@ def all_configs():
         if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == "mk" and len(n.args) >= 12:
             try:
                 no, name, glyph, el, face, hook = (ast.literal_eval(n.args[i]) for i in (0, 2, 3, 4, 5, 11))
-                T[f"n{no}"] = dict(d="ring", el=el, face=face, kick=f"2027 {name}", hook=hook, sub="힘 쓸 달 · 아낄 달", glyph=glyph)
+                T[f"n{no}"] = dict(d="ring", el=el, face=face, kick=f"2027 {name}", hook=hook, sub="좋은 달 · 조심할 달", glyph=glyph)
             except Exception: pass
     return T

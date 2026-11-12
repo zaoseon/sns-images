@@ -1,6 +1,6 @@
 """네이버 본문 도식·인포그래픽 (K-131, 대표 10/17 15:25 "내부 이미지도 탬플릿처럼 쓰지 말고 도식화·인포그래픽 넣어라").
 옛 5틀(i 결론·b 배지 목록·s 흐름·q 질문·c 해 볼 것)은 '색 판 위 글자 목록'이라 그림이 아니다. 여기 함수는 글 안의 실제 값(띠 관계 표·
-손없는날 음력 계산·삼재 연도·힘 쓸 달)만으로 모양을 그린다. 지어낸 수치 없음. 그림 속 핵심은 본문 글에도 있다(N8).
+손없는날 음력 계산·삼재 연도·좋은 달)만으로 모양을 그린다. 지어낸 수치 없음. 그림 속 핵심은 본문 글에도 있다(N8).
 유형(K-131 계획서 1~6): months(열두 달 칸) · wheel(12띠 관계도) · matrix(12x12 교차표) · calendar(달력) · compass(계산 과정 도식) · timeline(연도 흐름)
 판·글꼴은 body_v3 와 같다(그 글 표지와 같은 두 색 판 = K-044, 글자 42px 이상, 장식 아이콘·그라데이션 없음 = K-041·K-042, 색 셋 = K-043).
 만든 파일은 diagrams.json 에 {파일: 유형}으로 적는다 → k131_check.py 가 글마다 도식 2장 이상·옛 틀 2장 이하를 잰다.
@@ -43,8 +43,8 @@ def _legend(cv, c, y, items):
         draw(x + 26, y); cv.text(x + 64, y, t, SB, 42, c.fg, "lm"); x += 64 + cv.tw(t, SB, 42) + 48
 
 # 1. 열두 달 칸 --------------------------------------------------------------
-def months(name, c, head, rows, next_jan=True, up_label="힘을 쓸 달", dn_label="아낄 달"):
-    """rows = [(띠 이름, 힘 쓸 달 집합, 아낄 달 집합)]. 달 13 = 이듬해 1월. dn_label=None 이면 둘째 표시는 범례에서 뺀다(그 글에 없는 값)."""
+def months(name, c, head, rows, next_jan=True, up_label="좋은 달", dn_label="조심할 달"):
+    """rows = [(띠 이름, 좋은 달 집합, 조심할 달 집합)]. 달 13 = 이듬해 1월. dn_label=None 이면 둘째 표시는 범례에서 뺀다(그 글에 없는 값)."""
     ncol = 13 if next_jan else 12; lab = 200; top = 150; hh = 66; rh = 80
     gx = L + 10 + lab; cw = (RT - 10 - gx) / ncol
     H = top + hh + rh * len(rows) + 190; cv = Cv(H, c.bg); B._head(cv, c, head)
@@ -186,7 +186,7 @@ def timeline(name, c, head, y0, groups, mark=None):
 # 7. 한 띠의 열두 달 칸(사주 해: 2월 입춘 ~ 이듬해 1월) -----------------------------------
 def monthgrid(name, c, head, cells, note="마지막 칸은 이듬해 1월이에요"):
     """cells = [(월 숫자, 꼬리표 or '', 'up'|'dn'|None)] 12칸(2월부터). 칸 안: 'N월' · 그달의 띠 · 꼬리표(그 글에 적힌 관계만).
-    up = 칠한 칸(힘을 쓸 달), dn = 굵은 테두리(아낄 달). 그달의 띠 = 월 지지(2월 寅 … 12월 子, 1월 丑)."""
+    up = 칠한 칸(좋은 달), dn = 굵은 테두리(조심할 달). 그달의 띠 = 월 지지(2월 寅 … 12월 子, 1월 丑)."""
     cols, gap, ch = 4, 16, 210; top = 150; cw = (RT - L - 20 - gap * (cols - 1)) / cols; rows_ = math.ceil(len(cells) / cols)
     H = int(top + rows_ * (ch + gap) + 170); cv = Cv(H, c.bg); B._head(cv, c, head)
     for k, (m, tag, st) in enumerate(cells):
@@ -198,8 +198,8 @@ def monthgrid(name, c, head, cells, note="마지막 칸은 이듬해 1월이에�
         cv.text(x + 24, y + 122, ZJ[m % 12] + " 달", SB, cv.fit(ZJ[m % 12] + " 달", SB, 42, cw - 40, 42), sub, "lm")
         if tag: cv.text(x + 24, y + 172, tag, XB, cv.fit(tag, XB, 42, cw - 40, 42), fg, "lm")
     y = top + rows_ * (ch + gap) + 50
-    _legend(cv, c, y, [(lambda x, y: cv.rr([x - 26, y - 26, x + 26, y + 26], 10, fill=c.acc), "힘을 쓸 달"),
-                       (lambda x, y: cv.rr([x - 26, y - 26, x + 26, y + 26], 10, outline=c.fg, w=BOX), "아낄 달")])
+    _legend(cv, c, y, [(lambda x, y: cv.rr([x - 26, y - 26, x + 26, y + 26], 10, fill=c.acc), "좋은 달"),
+                       (lambda x, y: cv.rr([x - 26, y - 26, x + 26, y + 26], 10, outline=c.fg, w=BOX), "조심할 달")])
     if note: cv.text(L + 10, y + 80, note, SB, cv.fit(note, SB, 42, RT - L - 20, 42), c.gray, "lm")
     _done(cv, c, name, "monthgrid")
 
