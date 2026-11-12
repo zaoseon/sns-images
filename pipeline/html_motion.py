@@ -527,14 +527,15 @@ def main():
     if len(a) < 2:
         print(__doc__); return 1
     초 = float(next((x.split("=")[1] for x in sys.argv if x.startswith("--초=")), 15))
-    fps = int(next((x.split("=")[1] for x in sys.argv if x.startswith("--fps=")), 30))
+    # 11/12 17:08 대표 "왜 자꾸 영상이 끊기냐": 30fps·블러 없이 큰 움직임이 한 프레임에 30px 넘게 뛰어 끊겨 보였다 → 기본 60fps + 모션 블러 2장
+    fps = int(next((x.split("=")[1] for x in sys.argv if x.startswith("--fps=")), 60))
     if len(chs) > 1:     # 채널 여럿: 이름 뒤에 _채널 을 붙여 하나씩 렌더하고 소리까지 붙인다
         for c in chs:
-            p, d = render(a[0], f"{a[1]}_{c}", 초, fps, c, 블러=int(opt("블러", "1")), 설계=설계)
+            p, d = render(a[0], f"{a[1]}_{c}", 초, fps, c, 블러=int(opt("블러", "2")), 설계=설계)
             if opt("소리", 브랜드().get("music", "fun")) != "없음": 소리붙이기(p, d, a[0], opt("소리", 브랜드().get("music", "fun")), a[1])
             print(f"[{c}] {p}")
         기법_검사(a[0], a[1], 기록=True); return 0
-    p, d = render(a[0], a[1], 초, fps, chs[0], 블러=int(opt("블러", "1")), 설계=설계)
+    p, d = render(a[0], a[1], 초, fps, chs[0], 블러=int(opt("블러", "2")), 설계=설계)
     기법_검사(a[0], a[1], 기록=True)
     if opt("출력"):
         os.makedirs(os.path.dirname(os.path.abspath(opt("출력"))), exist_ok=True); shutil.move(p, opt("출력")); p = opt("출력")

@@ -149,6 +149,25 @@
   ]
  },
  {
+  "name": "ad_dapjang_b1_v4",
+  "fx": [
+   "kineticSlam",
+   "speedLines",
+   "irisWipe",
+   "flip3D",
+   "spotlight",
+   "stackCollapse",
+   "whipPan",
+   "phoneTilt3D",
+   "popOut",
+   "growBars",
+   "lockShake",
+   "lineToButton",
+   "ripple",
+   "burstLines"
+  ]
+ },
+ {
   "name": "reel_1116_imgye",
   "fx": [
    "글자튀기",
@@ -168,25 +187,6 @@
    "칩줄세우기",
    "공튀기기",
    "덮개그리기"
-  ]
- },
- {
-  "name": "ad_dapjang_b1_v4",
-  "fx": [
-   "kineticSlam",
-   "speedLines",
-   "irisWipe",
-   "flip3D",
-   "spotlight",
-   "stackCollapse",
-   "whipPan",
-   "phoneTilt3D",
-   "popOut",
-   "growBars",
-   "lockShake",
-   "lineToButton",
-   "ripple",
-   "burstLines"
   ]
  }
 ]
