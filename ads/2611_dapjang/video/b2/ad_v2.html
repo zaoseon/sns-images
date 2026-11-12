@@ -1,0 +1,113 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#102A43}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../../../pipeline/motion_fx.js"></script>
+<script>
+// 정월의 답장 메타 광고 B2 v2(손님 캐릭터판) — 15초 세로(--설계=meta_ad_story).
+// 11/12 18:56 대표 "텍스트가 문장단위로 나와서 심심 … 화면 안의 내용이 확대 … 텍스트도 감각적으로"(K-198):
+//  글은 어절·글자 단위로 따로 쾅·튀기·떨어지기·타자, 결과 화면은 창 안에서 유형 단추 → 점수 막대로 확대·이동(카메라 줌·팬).
+// 손님 캐릭터 V1(대표 11/12 13:49 승인). 실사 정월 없음(K-197). 결과 화면은 시험 결과 화면(view.jpg) 그대로, 특정 달 안 찍음(K-185).
+window.FX = ['캐릭터등장', '어절쾅', '글자타자', '집중선', '화면흔들림', '창안확대', '카메라팬', '형광펜쓸기', '휙넘기기', '선에서단추로', '누름물결'];
+window.VO = [];
+window.SFX = [{ t: 0.15, k: 'whoosh' }, { t: 0.55, k: 'pop' }, { t: 0.8, k: 'pop' }, { t: 1.15, k: 'thud' },
+  { t: 2.6, k: 'swoosh' }, { t: 2.95, k: 'pop' }, { t: 3.15, k: 'pop' }, ...[0, 1, 2, 3].map(i => ({ t: 3.45 + i * 0.09, k: 'tick' })),
+  { t: 4.8, k: 'whoosh' }, { t: 5.45, k: 'swoosh' }, { t: 5.7, k: 'ding' }, { t: 7.4, k: 'swoosh' }, { t: 8.3, k: 'whoosh' }, { t: 8.6, k: 'ding' },
+  { t: 9.6, k: 'whoosh' }, { t: 10.25, k: 'thud' }, { t: 10.7, k: 'pop' }, { t: 10.9, k: 'pop' }, { t: 11.15, k: 'thud' }, { t: 11.3, k: 'sparkle' },
+  { t: 12.35, k: 'swoosh' }, { t: 12.6, k: 'pop' }, { t: 12.85, k: 'pop' }, ...[0, 1, 2, 3].map(i => ({ t: 13.1 + i * 0.1, k: 'tick' })),
+  { t: 13.55, k: 'pop' }, { t: 14.15, k: 'press' }, { t: 14.25, k: 'sparkle' }, { t: 14.6, k: 'chime' }];
+const F = window.FXK, cv = document.getElementById('c'), g = cv.getContext('2d');
+const NAVY = '#102A43', Y = '#FFD600', W = 1080, H = 1920;
+const E = { o: t => 1 - Math.pow(1 - t, 3), io: t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+  b: t => { const c = 1.70158; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); } };
+const cl = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v)), seg = (t, a, b) => cl((t - a) / (b - a)), mix = (a, b, p) => a + (b - a) * p;
+const img = {}; const KEYS = { cry: '../../characters/ZS_CUST_cry_v1.png', doubt: '../../characters/ZS_CUST_doubt_v1.png',
+  phone: '../../characters/ZS_CUST_phone_v1.png', view: '../view.jpg' };
+let left = Object.keys(KEYS).length;
+function rr(x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
+function txt(s, x, y, font, color) { g.font = font; g.fillStyle = color; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(s, x, y); }
+
+// 어절 모션: words=[[글, px, 색, 방식]], 방식 slam(크게→쾅)·pop(튀어나옴)·drop(위에서 돌며 떨어짐)·type(글자 하나씩)
+// 한 줄로 가운데 정렬. 어절 사이는 보통 띄어쓰기(글자 크기 × 0.3). 강조 어절은 1.28배 안(관문이 한 줄로 묶어 잰다). out: 나갈 때 위로 날아감.
+function kw(words, y, t0, step, t, out = null) {
+  const GAP = 0.3 * words.reduce((a, w) => a + w[1], 0) / words.length; g.font = '900 80px PL';
+  const ws = words.map(([s, px]) => { g.font = `900 ${px}px PL`; return g.measureText(s).width; });
+  let x = F.cx - (ws.reduce((a, b) => a + b, 0) + GAP * (words.length - 1)) / 2;
+  const o = out == null ? 0 : E.io(seg(t, out, out + 0.3));
+  words.forEach(([s, px, col, how], i) => { const w = ws[i], c = x + w / 2; x += w + GAP; const st = t0 + i * step; if (t < st) return;
+    const k = seg(t, st, st + (how === 'slam' ? 0.22 : 0.35)), ox = (i - (words.length - 1) / 2) * 60 * o;
+    g.save(); g.globalAlpha = 1 - o; g.translate(c + ox, y - o * 160);
+    if (how === 'slam') { const s0 = mix(2.6, 1, E.o(k)); g.scale(s0, s0); g.rotate((1 - k) * (i % 2 ? .3 : -.3)); }
+    else if (how === 'pop') { const s0 = E.b(k); g.scale(s0, s0); g.rotate((1 - cl(k * 1.4)) * (i % 2 ? .2 : -.2)); }
+    else if (how === 'drop') { g.translate(0, (1 - E.b(k)) * -140); g.rotate((1 - k) * .45); }
+    if (how === 'type') { g.font = `900 ${px}px PL`; let cx0 = -w / 2; [...s].forEach((ch, j) => { const cw = g.measureText(ch).width, kk = E.b(seg(t, st + j * 0.09, st + j * 0.09 + 0.25));
+      if (kk > 0) { g.save(); g.translate(cx0 + cw / 2, 0); g.scale(kk, kk); g.rotate((1 - cl(kk)) * .4); txt(ch, 0, 0, `900 ${px}px PL`, col); g.restore(); } cx0 += cw; }); }
+    else txt(s, 0, 0, `900 ${px}px PL`, col);
+    g.restore(); });
+}
+function speed(cx, cy, p, n = 34) { if (p <= 0 || p >= 1) return; g.save(); g.strokeStyle = `rgba(255,255,255,${.22 * (1 - p)})`; g.lineWidth = 6; g.lineCap = 'round';
+  for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2 + (i % 3) * .05, r0 = 520 - p * 160 + (i % 4) * 30, r1 = r0 + 240;
+    g.beginPath(); g.moveTo(cx + Math.cos(a) * r0, cy + Math.sin(a) * r0); g.lineTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1); g.stroke(); } g.restore(); }
+// 손님 컷: 너비를 화면에 꽉(양옆 끝), 아래는 화면 밖(아래 끝). 머리 위 끝 600, 턱 약 1390 — 아래 고정 줄(1480)과 얼굴이 안 겹친다.
+const CH_H = 1536 * W / 1024, CH_BOTTOM = 1920 + 300;
+function cust(t, k, enter, exit, from = 'bottom') { F.character(g, t, { imgs: [img[k]], x: F.cx, y: CH_BOTTOM, h: CH_H, enter, exit, from }); }
+
+// 결과 화면 창: view.jpg(780×2600) 를 창 안에서 배율 s, 초점 (fx,fy) 로 보여 준다 — 카메라 줌·팬
+const KF = [[4.8, .46, 390, 900], [5.4, 1.15, 390, 900], [6.15, 2.6, 552, 832], [7.4, 2.6, 552, 832], [8.2, 1.4, 390, 1250], [10.0, 1.4, 390, 1250], [10.2, .5, 390, 1300]];
+function cam(t) { for (let i = 0; i < KF.length - 1; i++) { const [a, s0, x0, y0] = KF[i], [b, s1, x1, y1] = KF[i + 1];
+  if (t <= b) { const p = E.io(seg(t, a, b)); return [mix(s0, s1, p), mix(x0, x1, p), mix(y0, y1, p)]; } } const l = KF[KF.length - 1]; return [l[1], l[2], l[3]]; }
+
+function draw(t) {
+  g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1; g.fillStyle = NAVY; g.fillRect(0, 0, W, H);
+  const A = F.area(), cx = F.cx, cy = F.cy, ty = A.y0 + 122;
+  // 배경: 천천히 흐르는 사선 줄(정지 화면처럼 보이지 않게)
+  g.save(); g.strokeStyle = 'rgba(255,255,255,.035)'; g.lineWidth = 40; for (let i = -6; i < 14; i++) { const x = i * 160 + (t * 40) % 160; g.beginPath(); g.moveTo(x, 0); g.lineTo(x - 900, 1920); g.stroke(); } g.restore();
+  // 화면 흔들림(쾅 순간)
+  const hits = [1.15, 11.15], hit = hits.reduce((m, h) => Math.max(m, t > h && t < h + .22 ? 1 - (t - h) / .22 : 0), 0);
+  g.save(); g.translate(Math.sin(t * 95) * 16 * hit, Math.cos(t * 80) * 12 * hit);
+  // ① 0~2.6 우는 손님 + '통장이 / 벌써 / 텅!'
+  if (t < 2.75) { cust(t, 'cry', 0.1, 2.45); speed(cx, ty, seg(t, 1.1, 1.6));
+    kw([['통장이', 80, '#fff', 'pop'], ['벌써', 80, '#fff', 'pop'], ['텅!', 100, Y, 'slam']], ty, 0.5, 0.3, t, 2.3); }
+  // ② 2.6~4.8 미심쩍은 손님(옆에서 휙) + '내년엔 / 좀 / 모일까?'(마지막은 글자 하나씩)
+  if (t >= 2.55 && t < 5.0) { cust(t, 'doubt', 2.55, 4.55, 'right');
+    kw([['내년엔', 80, '#fff', 'drop'], ['좀', 80, '#fff', 'drop'], ['모일까?', 92, Y, 'type']], ty, 2.9, 0.22, t, 4.45); }
+  // ③ 4.8~10.2 결과 화면 창 — 작게 떴다가 창이 커지며 유형 단추로 확대 → 점수 막대로 이동·확대 → 빠지며 나감
+  if (t >= 4.8 && t < 10.45) {
+    const grow = E.b(seg(t, 4.8, 5.4)), out = E.io(seg(t, 10.05, 10.45));
+    const ww = mix(360, 900, cl(grow)), wh = mix(640, 760, cl(grow)), wx = cx - ww / 2 + out * -1100, wy = A.y0 + 315 + (1 - cl(grow)) * 80;
+    const [s, fx, fy] = cam(t);
+    g.save(); g.globalAlpha = cl(seg(t, 4.8, 5.0));
+    g.shadowColor = 'rgba(0,0,0,.45)'; g.shadowBlur = 50; g.shadowOffsetY = 20; g.fillStyle = '#081624'; rr(wx - 18, wy - 18, ww + 36, wh + 36, 52); g.fill(); g.shadowColor = 'transparent';
+    g.strokeStyle = Y; g.lineWidth = 7; g.stroke();
+    rr(wx, wy, ww, wh, 38); g.save(); g.clip(); g.fillStyle = '#fff'; g.fillRect(wx, wy, ww, wh);
+    const i = img.view, dx = wx + ww / 2 - fx * s, dy = wy + wh / 2 - fy * s; g.drawImage(i, 0, 0, i.width, i.height, dx, dy, i.width * s, i.height * s);
+    // 유형 단추를 감싸는 노란 고리(확대가 멈춘 동안 맥박)
+    if (t > 6.1 && t < 7.45) { const p = (Math.sin((t - 6.1) * 7) + 1) / 2; window.__zsLoose = 1; g.strokeStyle = Y; g.lineWidth = 10 + p * 6;
+      rr(dx + 400 * s - 14, dy + 784 * s - 14, 304 * s + 28, 96 * s + 28, 30); g.stroke(); window.__zsLoose = 0; }
+    // 첫 점수 막대 줄에 형광펜이 쓸고 지나감
+    if (t > 8.5 && t < 10.0) { const p = E.o(seg(t, 8.5, 9.0)); window.__zsLoose = 1; g.fillStyle = 'rgba(255,214,0,.35)';
+      rr(dx + 60 * s, dy + 1145 * s, 660 * s * p, 75 * s, 12); g.fill(); window.__zsLoose = 0; }
+    g.restore(); g.restore();
+    // 창 위 자막: '정월의 답장' + 어절 모션(초점이 바뀔 때 자막도 바뀐다)
+    kw([['정월의', 60, Y, 'pop'], ['답장', 60, Y, 'pop']], A.y0 + 85, 4.9, 0.12, t, 10.0);
+    if (t < 7.6) kw([['내', 78, '#fff', 'pop'], ['돈', 78, '#fff', 'pop'], ['유형이', 78, '#fff', 'pop'], ['딱!', 96, Y, 'slam']], A.y0 + 205, 5.35, 0.14, t, 7.3);
+    else kw([['어디서', 78, '#fff', 'drop'], ['버는지까지', 92, Y, 'type']], A.y0 + 205, 7.6, 0.25, t, 10.0);
+  }
+  // ④ 10.2~12.3 휴대폰 보고 놀란 손님 + '어? / 완전 / 내 / 얘기잖아' + 반짝(얼굴 밖 둘레)
+  if (t >= 10.2 && t < 12.55) { cust(t, 'phone', 10.2, 12.2); speed(cx, ty, seg(t, 11.1, 11.6));
+    if (t > 10.9 && t < 12.2) { for (let s = 0; s < 6; s++) { const a = s / 6 * Math.PI * 2 + t * 1.5, r = 440 + Math.sin(t * 6 + s) * 20, k = cl(Math.sin((t - 11) * 5 + s) * .5 + .5);
+      g.save(); g.globalAlpha = k * (1 - seg(t, 11.9, 12.2)); g.translate(cx + Math.cos(a) * r, 980 + Math.sin(a) * r * 0.55); g.rotate(t * 2); g.fillStyle = Y; g.beginPath();
+      for (let p = 0; p < 8; p++) { const rad = p % 2 ? 7 : 26, an = p / 8 * Math.PI * 2; g.lineTo(Math.cos(an) * rad, Math.sin(an) * rad); } g.fill(); g.restore(); } }
+    kw([['어?', 84, '#fff', 'slam'], ['완전', 76, '#fff', 'pop'], ['내', 76, '#fff', 'pop'], ['얘기잖아', 92, Y, 'slam']], ty, 10.55, 0.2, t, 12.1); }
+  // ⑤ 12.3~15 마무리: 물음 두 어절이 위에서 떨어지고, 아래 줄은 어절씩 튀어나옴 → 노란 선이 단추로 부풀고 눌림
+  if (t >= 12.3) { const grow = E.b(seg(t, 13.35, 13.8)), press = t > 14.15 && t < 14.4 ? 0.92 : 1, by = cy + 170;
+    kw([['텅장일까,', 92, '#fff', 'drop'], ['통장일까?', 92, '#fff', 'drop']], by - 360, 12.4, 0.25, t);
+    kw([['생일만', 80, Y, 'pop'], ['넣으면', 80, Y, 'pop'], ['바로', 80, Y, 'pop'], ['나와요', 80, Y, 'pop']], by - 215, 12.95, 0.12, t);
+    const bw = mix(40, 760, grow), bh = mix(10, 150, cl(grow)); g.save(); g.translate(cx, by); g.scale(press, press);
+    g.fillStyle = Y; rr(-bw / 2, -bh / 2, bw, bh, bh / 2); g.fill();
+    if (grow > 0.6) { g.globalAlpha = cl((grow - 0.6) / 0.4); txt('무료로 유형 보기 →', 0, 4, '900 70px PL', '#111'); g.globalAlpha = 1; } g.restore();
+    if (t > 14.2) { const r = seg(t, 14.2, 14.9); window.__zsLoose = 1; g.save(); g.strokeStyle = `rgba(255,214,0,${1 - r})`; g.lineWidth = 8; rr(cx - 380 - r * 60, by - 75 - r * 40, 760 + r * 120, 150 + r * 80, 75 + r * 40); g.stroke(); g.restore(); window.__zsLoose = 0; } }
+  g.restore();
+  F.frame(g, { ai: '생일로 계산하고, 풀이 문장은 AI로 써요' });
+}
+for (const [k, src] of Object.entries(KEYS)) { const i = new Image(); i.onload = async () => { img[k] = i; if (--left === 0) { await window.__zsFonts; await document.fonts.load('900 80px PL'); window.seek = draw; draw(0); } }; i.src = src; }
+</script></body></html>

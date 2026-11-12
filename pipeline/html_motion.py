@@ -124,6 +124,14 @@ def _spec_js(ch="reel"):
             "this.__zsRR=[cr.left+kx*Math.min(...xs),cr.top+kx*Math.min(...ys),cr.left+kx*Math.max(...xs),cr.top+kx*Math.max(...ys),sc]}catch(e){}return rr.call(this,x,y,w,h,...r)};"
             "['fill','stroke'].forEach(k=>{const o=P[k];P[k]=function(...a){try{const b=this.__zsRR;if(b&&!window.__zsFrame&&!window.__zsLoose&&this.globalAlpha>0.5&&b[4]>0.9)window.__zsBox.push(b.slice(0,4))}catch(e){}return o.apply(this,a)}});"
             "const bp=P.beginPath;P.beginPath=function(){this.__zsRR=null;return bp.call(this)}})();"
+            # 11/12 18:56 대표 '화면 안의 내용이 확대된다거나': drawImage 를 감싸 그림마다 확대 배율을 적는다(K-198 광고모션_검사)
+            "(function(){const P=CanvasRenderingContext2D.prototype,di=P.drawImage;window.__zsImg=[];P.drawImage=function(im,...r){try{if(!window.__zsFrame&&im&&im.src&&this.globalAlpha>0.3){"
+            "const T=this.getTransform(),sc=Math.hypot(T.a,T.b),sw=r.length>=8?r[2]:(im.naturalWidth||im.width),dw=r.length>=8?r[6]:r.length>=4?r[2]:(im.naturalWidth||im.width);"
+            "window.__zsImg.push([String(im.src).split('/').pop(),sc*dw/Math.max(1,sw)])}}catch(e){}return di.call(this,im,...r)}})();"
+            # 글 조각마다 변환 배율·기울기를 적는다(움직이며 들어오는 글 세기)
+            "(function(){const P=CanvasRenderingContext2D.prototype,ft=P.fillText;window.__zsKin=[];P.fillText=function(s,x,y,...r){try{if(!window.__zsFrame&&this.globalAlpha>0.15){const T=this.getTransform();"
+            "window.__zsKin.push([String(s),Math.hypot(T.a,T.b),Math.atan2(T.b,T.a),window.__zsLoose?1:0,this.__zsInBox?1:0])}}catch(e){}return ft.call(this,s,x,y,...r)}})();"
+
             # DOM 글자도 잰다(캔버스+DOM 섞어 쓴 페이지가 있다). 고정 요소(.bf)는 뺀다.
             "window.__zsDom=()=>{const R=[],W=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;while(n=W.nextNode()){"
             "const e=n.parentElement;if(!e||!n.textContent.trim()||e.closest('.bf,script,style'))continue;"
@@ -424,6 +432,39 @@ def 기법_검사(html, 이름, 기록=False):
         json.dump(log, open(_fxlog(), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 
+def 광고모션_검사(pg, 초, ch, 간격=0.1):
+    """K-198(대표 11/12 18:56): 광고 영상은 문장 통째로 뜨는 글만으로 만들지 않는다.
+    ① 두 어절 이상을 한 번에 그린 시간 비율 ≤ sentence_share(상자 안 글·__zsLoose 는 뺀다)
+    ② 캐릭터가 아닌 그림 하나가 zoom_min 배 넘게 확대 ③ 크기·기울기가 바뀌며 들어오는 글 조각 kinetic_min 개 이상."""
+    if not ch.startswith("meta_ad"): return []
+    M = CS.AD_MOTION; 문장 = 0; 전체 = 0; 배율 = {}; 움직 = {}
+    for i in range(int(초 / 간격) + 1):
+        t = min(i * 간격, 초 - 0.01)
+        pg.evaluate("t => {window.__zsTxt=[];window.__zsBox=[];window.__zsImg=[];window.__zsKin=[];window.seek(t)}", t)
+        rows = pg.evaluate("() => window.__zsKin"); boxes = pg.evaluate("() => window.__zsBox||[]"); txt = pg.evaluate("() => window.__zsTxt")
+        def 상자안(tb): return any(tb[0] >= q[0] - 2 and tb[1] >= q[1] - 2 and tb[2] <= q[2] + 2 and tb[3] <= q[3] + 2 for q in boxes)
+        안 = {r[0] for r in txt if 상자안(r[1:5])}
+        보임 = [r for r in rows if r[0].strip()]
+        if 보임:
+            전체 += 1
+            if any(len(r[0].split()) >= 2 and not r[3] and r[0][:20] not in 안 for r in 보임): 문장 += 1
+        for s_, k in pg.evaluate("() => window.__zsImg"):
+            if "ZS_CUST" in s_ or "characters" in s_: continue
+            lo, hi = 배율.get(s_, (k, k)); 배율[s_] = (min(lo, k), max(hi, k))
+        for r in 보임:
+            lo, hi, ro = 움직.get(r[0], (r[1], r[1], 0)); 움직[r[0]] = (min(lo, r[1]), max(hi, r[1]), max(ro, abs(r[2])))
+    문제 = []
+    if 전체 and 문장 / 전체 > M["sentence_share"]:
+        문제.append(f"[광고 모션] 두 어절 넘는 글을 한 번에 그린 시간 {문장 / 전체 * 100:.0f}% (≤{M['sentence_share'] * 100:.0f}%) — 어절·글자 단위로 따로 들어오게(K-198)")
+    줌 = max([hi / max(lo, 1e-3) for lo, hi in 배율.values()] or [0])
+    if 줌 < M["zoom_min"]:
+        문제.append(f"[광고 모션] 화면 확대 {줌:.1f}배 — 결과 화면 등 그림 하나를 {M['zoom_min']:.0f}배 넘게 확대해 화면 안 내용을 보여 주세요(K-198)")
+    n움 = sum(1 for lo, hi, ro in 움직.values() if hi / max(lo, 1e-3) > 1.3 or ro > 0.08)
+    if n움 < M["kinetic_min"]:
+        문제.append(f"[광고 모션] 크기·기울기가 바뀌며 들어오는 글 {n움}개 (≥{M['kinetic_min']}) — 쾅·튀기·돌며 들어오기 같은 글자 모션을 쓰세요(K-198)")
+    return 문제
+
+
 def 안전영역_막기(html, 초, ch="reel"):
     from playwright.sync_api import sync_playwright
     C = CS.CH[ch]
@@ -432,7 +473,7 @@ def 안전영역_막기(html, 초, ch="reel"):
         pg.goto("file://" + os.path.abspath(html)); pg.wait_for_function("typeof window.seek === 'function'", timeout=15000)
         pg.evaluate("document.fonts.ready")
         src = open(html, encoding="utf-8").read(); frame = ".frame(" in src
-        문제, 칸 = 안전영역_검사(pg, 초, ch); 문제 += 균형_검사(pg, 초, ch); b.close()
+        문제, 칸 = 안전영역_검사(pg, 초, ch); 문제 += 균형_검사(pg, 초, ch); 문제 += 광고모션_검사(pg, 초, ch); b.close()
     canvas = "<canvas" in src
     # 11/12 16:45 대표 "정월이 나오는거 너무 어색하고 별로" → 릴스·광고 영상에 실사 정월 누끼(characters/cut/)를 넣지 않는다(K-197)
     _src = open(html, encoding="utf-8").read() if os.path.exists(html) else ""
