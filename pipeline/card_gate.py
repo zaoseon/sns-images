@@ -297,7 +297,11 @@ def after(path, c, channel="insta_carousel"):
 
     # 위 쏠림 — 고정 요소(상단 띠·하단 주소)를 빼고 '내용'만 보고 잰다.
     # 10/16 1판은 고정 요소가 아래에 있어서 균형 검사를 그냥 통과했지만, 실제로는 아래 1/4 가 비어 있었다.
-    band = diff[CH["zones"][2][2]:CH["zones"][-1][2], :]            # 상단 라벨 위 ~ 하단 고정 위
+    # 11/12: zones[2] 가 늘 '상단 라벨'인 줄 알았는데 메타 광고 규격은 zones[2] 가 '본문·그림'이라 띠가 중간부터 잡혔다.
+    _zn = {x[0]: x[1:5] for x in CH["zones"]}
+    # 다른 채널(캐러셀·릴스·클립)은 옛 값 그대로 둔다(zones[2] 가 상단 라벨·제목). 본문부터 잡히는 규격만 첫 내용 구역 위로.
+    _b0 = CH["zones"][2][2] if CH["zones"][2][0] in ("상단 라벨", "제목") else min(v[1] for k, v in _zn.items() if "고정" not in k)
+    band = diff[_b0:CH["zones"][-1][2], :]                          # 상단 라벨 위 ~ 하단 고정 위
     byr = np.where(band.any(1))[0]
     if len(byr):
         top, bot = int(byr[0]), band.shape[0] - 1 - int(byr[-1])

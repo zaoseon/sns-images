@@ -22,15 +22,15 @@ BG, BUTTER, Y = "#102A43", "#FFF3C4", "#FFD600"
 
 # 첫 줄 6종 — [b]…[/b] 가 강조(노랑 띠). 줄은 의미 단위.
 ADS = [
-    dict(id="B1", 공식=1, 훅="마음 공감(저만 그런가요)", 그림="toon",
+    dict(id="B1", 공식=1, 훅="마음 공감(저만 그런가요)", 그림="text",
          줄=["아니.. 2027년엔", "[b]돈 들어오는 달[/b]이", "있긴 한 거야?ㅠㅠ"]),
-    dict(id="B2", 공식=2, 훅="상황 지목", 그림="real",
+    dict(id="B2", 공식=2, 훅="상황 지목", 그림="text",
          줄=["흠.. 일복은 넘치는데", "왜 [b]통장[/b]은 그대로야?"]),
     dict(id="B3", 공식=3, 훅="상황 지목", 그림="phone",
          줄=["2027년 돈 들어오는 달,", "[b]모르고 지나가면[/b]", "아깝잖아요."]),   # 11/12 대표: '?? : … 나 : 네?' 는 처음 보는 사람이 못 알아봄
-    dict(id="B4", 공식=4, 훅="상황 지목", 그림="toon",
+    dict(id="B4", 공식=4, 훅="상황 지목", 그림="text",
          줄=["축하해,", "2027년에 [b]너 바빠져[/b]."]),
-    dict(id="B5", 공식=5, 훅="흔한 오해 교정", 그림="real",
+    dict(id="B5", 공식=5, 훅="흔한 오해 교정", 그림="text",
          줄=["좋은 달만 말하는", "운세 말고.", "[b]조심할 달[/b]도 그대로 적어요."]),
     dict(id="B6", 공식=9, 훅="허락", 그림="phone",
          줄=["결제 없이 먼저 봐요.", "생일만 넣으면", "[b]내 유형[/b]이 무료로 나와요."]),
@@ -39,7 +39,7 @@ FACE = {"toon": "jw_toon_v7.png", "real": os.path.join(ROOT, "characters", "cut"
 FACE_ID = {"toon": "v7_hanbok", "real": "v8_gesture"}
 CTA = "내 2027년 유형 무료로 보기"   # 11/12 대표 "마지막 카피 뭔 얘긴지 모르겠음" — '판정'은 우리 안쪽 말이라 받는 것을 그대로 쓴다
 TOP = "자오선 · 정월의 답장"
-AI = {"toon": "정월은 가상의 AI 캐릭터예요 · 풀이 문장은 AI로 써요", "real": "정월은 가상의 AI 캐릭터예요 · 풀이 문장은 AI로 써요",
+AI = {"text": "생일로 계산하고, 풀이 문장은 AI로 써요", "toon": "정월은 가상의 AI 캐릭터예요 · 풀이 문장은 AI로 써요", "real": "정월은 가상의 AI 캐릭터예요 · 풀이 문장은 AI로 써요",
       "phone": "생일로 계산하고, 풀이 문장은 AI로 써요"}
 TITLE_PX = {"meta_ad_feed": 74, "meta_ad_story": 88}
 
@@ -64,7 +64,14 @@ def page(a, ch):
     tz, vz, bz, fz, hz = Z["제목"], Z["본문·그림"], Z["버튼·마무리"], Z["하단 고정"], Z["상단 고정"]
     lines = "".join(f"<div>{line_html(t)}</div>" for t in a["줄"])
     vis = a["그림"]
-    if vis == "phone":
+    if vis == "text":
+        # 11/12 대표 "정월 이미지가 너무 지저분해. 누끼도 지저분하고 말투랑 표정이 안 어울려" — 정월 없이 글만 크게(K-061: 읽히는 크기이거나 아예 없거나)
+        # 묶음(글~단추) 세로 가운데를 맞추려고 글은 구역 맨 위(상단 라벨 자리)부터 내려 쓰고, 단추 위까지 칸을 채운다
+        top0 = tz[1]; bot0 = bz[1] - 60   # 제목 구역 위 ~ 단추 아래 사이 가운데(card_gate after: 띠 위가 비면 안 됨)
+        title = (f'<div class="hook plain big" style="left:{tz[0]}px;width:{tz[2]-tz[0]}px;top:{top0}px;height:{bot0-top0}px;'
+                 f'font-size:{int(tp*1.6)}px;justify-content:flex-start;gap:0.3em;line-height:1.25" data-lo="{top0}" data-hi="{bz[3]}">{lines}</div>')
+        visual = ""
+    elif vis == "phone":
         title = f'<div class="hook plain" style="left:{tz[0]}px;width:{tz[2]-tz[0]}px;top:{tz[1]}px;height:{tz[3]-tz[1]}px;font-size:{tp}px">{lines}</div>'
         ph_h = vz[3] - vz[1]; ph_w = int(ph_h * 0.50)
         shot = uri(os.path.join(SITE, "public", "preview", "dapjang-flow", "view.jpg"), crop=(0, 0, 780, 1560))
@@ -110,15 +117,23 @@ for(const box of document.querySelectorAll('.hook,.bubble')){{const t=box.classL
  let f=parseFloat(getComputedStyle(box).fontSize);const mw=box.clientWidth-(box.classList.contains('bubble')?80:20),mh=box.clientHeight-(box.classList.contains('bubble')?40:0);
  const wid=()=>Math.max(...[...t.children].filter(x=>x.tagName=='DIV').map(x=>x.getBoundingClientRect().width));
  while(f>40&&(wid()>mw||t.scrollHeight>mh)){{f-=2;box.style.fontSize=f+'px';}} box.dataset.f=f;}}
+// 글만 있는 판: 글 묶음과 단추를 한 덩어리로 보고 구역 가운데에 둔다(빈 가운데를 없앤다, 11/12)
+const big=document.querySelector('.hook.big'),pill=document.querySelector('.pill');
+if(big&&pill){{const lo=+big.dataset.lo,hi=+big.dataset.hi,kids=[...big.children];
+ const ph=pill.offsetHeight,H=()=>kids[kids.length-1].getBoundingClientRect().bottom-kids[0].getBoundingClientRect().top;
+ let f=parseFloat(big.style.fontSize),th=H(),gap=Math.round(th*0.28)+60;
+ while(f>60&&th+gap+ph>(hi-lo)*0.86){{f-=2;big.style.fontSize=f+'px';th=H();gap=Math.round(th*0.28)+60;}}
+ const g=th+gap+ph,t0=Math.round((lo+hi)/2-g/2);
+ big.style.height=th+'px';big.style.top=t0+'px';pill.style.top=(t0+th+gap)+'px';}}
 document.body.dataset.done=1;}});
 </script></body></html>"""
 
 
 def spec(a, ch):
     c = dict(id=f"{a['id']}_{ch}", pal=PAL, bg=BG, accent=Y, **{"강조색 까닭": "광고 영상 v3·heart_v1 과 같은 노랑(옐로우&블랙 판)"},
-             layout="L9" if a["그림"] != "phone" else "L2", 훅=a["훅"],
+             layout="L9" if a["그림"] in ("toon", "real") else "L2", 훅=a["훅"],
              hook=[x.replace("[b]", "").replace("[/b]", "") for x in a["줄"]], cta=CTA, cta_size=58, kick_size=68)
-    if a["그림"] != "phone":
+    if a["그림"] in ("toon", "real"):
         c.update(face=FACE_ID[a["그림"]], 말하는글=True)
     return c
 
