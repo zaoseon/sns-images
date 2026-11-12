@@ -1479,3 +1479,9 @@ README "2주마다 하는 일" 그대로. 요점만:
 - 알아 둘 것: 3회차 v_* 판(v_emerald·v_violet·v_choco)은 color_combos 에 모션 theme 이 없다 → 을 g_ivory · 정 p_purple · 무 y_olive. 낱말강조 '뒤' 글 앞 띄어쓰기가 화면에서 사라진다(낱말 끝에 붙여 씀으로 피함).
 - 승인 뒤 할 일: 8편 영상(motion_kit 장면 페이지 → html_motion → 장면 끝= 넘김으로 이어 붙이기 → clip_v3_music) + 관문 → 영상 카드 → 승인 → Metricool 11/18~27 평일 17:00.
 - 11/11 19:50 ① 자동: 메타 시험 광고 이미지 12장 `ads/2611_dapjang/stills/`(build.py — 첫 줄 6종 × meta_ad_feed 1:1·meta_ad_story 9:16, channel_specs 에 두 채널 더함, 정월 웹툰풍은 toon.py), 승인 카드 ad-dapjang-stills-1111(new). 릴스 실험 11/13·14·15 Metricool 영상 교체(대표 12:15 승인) → 424271212·424271584·424271610. push 403이라 zaoseon-site ops/pending_sns-images 패치 2개(c·d).
+
+## 11/12 11:45 ① 자동 — 릴스 실험 11/16·11/17 두 편(승인 대기)
+- `2026-reels-test/imgye/ad.html` → `reel_1116_imgye.mp4`: 형식 F(1·2 고르기)+정월, 임·계(물 기운). 문장은 11/16 예약 캡션·승인 스레드 그대로. 승인 카드 **reeltest-1116**(예약 416136346 영상만 교체, 캡션·시각 그대로). 승인되면 11/17 네이버 클립 v4-1117-imgye(n20)도 이 영상으로.
+- `2026-reels-test/yeokma/ad.html` → `reel_1117_yeokma.mp4`: 형식 C(코드로 그린 평면 일러스트, 색 3개, 시차), 역마 띠 네 묶음 = 네이버 n21 = engine YEOKMA. 승인 카드 **reeltest-1117**(11/17 17:00 인스타 새 글, 캡션 capfix 0). 11/17 17:00 살아 있는 예약 없음(초안 416085623 만 있음, 안 건드림).
+- 균형 관문 요령: 풍경(언덕)이 글 칸 안에 넓게 깔리면 '가운데'가 흔들린다 — 글 장면에서는 풍경을 빼거나 아래로 내린다. 도장 테두리를 기울이면 '붙음'에 걸린다.
+- 이 컨테이너엔 mido 가 없어서 pip 로 깔았다(소리 붙이기).
