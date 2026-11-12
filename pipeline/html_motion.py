@@ -397,6 +397,9 @@ def 안전영역_막기(html, 초, ch="reel"):
         src = open(html, encoding="utf-8").read(); frame = ".frame(" in src
         문제, 칸 = 안전영역_검사(pg, 초, ch); 문제 += 균형_검사(pg, 초, ch); b.close()
     canvas = "<canvas" in src
+    # 11/12 16:45 대표 "정월이 나오는거 너무 어색하고 별로" → 릴스·광고 영상에 실사 정월 누끼(characters/cut/)를 넣지 않는다(K-197)
+    _src = open(html, encoding="utf-8").read() if os.path.exists(html) else ""
+    if "characters/cut/" in _src and "__zsJWOK" not in _src: 문제.insert(0, "영상에 실사 정월 누끼(characters/cut/) — 넣지 않아요(K-197). 글자·모션으로, 사람이 필요하면 그림 캐릭터로")
     if canvas and not frame: 문제.insert(0, "고정 요소 없음 — draw 끝에 F.frame(g) 를 부르세요(위 가운데 한 줄·AI 고지·주소, 글자는 brands/<id>.json)")
     if 문제 and os.environ.get("ZS_SAFE_OK") != "1":
         raise SystemExit(f"[막음] 안전 영역·균형({ch}) — 글 칸 x {칸[0]}~{칸[2]}, y {칸[1]}~{칸[3]}:\n  " + "\n  ".join(문제[:200])
