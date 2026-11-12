@@ -1,0 +1,81 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#102A43}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../../../pipeline/motion_fx.js"></script>
+<script>
+// 정월의 답장 메타 광고 B2(손님 캐릭터판) — 15초 세로(meta_ad_story로 짬, --설계=meta_ad_story).
+// 손님 캐릭터 V1(대표 11/12 13:49 인스타툰 대화 승인) → 실제 결과 화면 + 정월 답 자막 → 무료 보기.
+// 실사 정월 누끼 없음(K-197). 손님 컷은 가슴 위 클로즈업이라 아래·양옆을 화면 끝에 붙인다(메타 crop_edges).
+// 결과 화면은 시험 결과 화면(view.jpg) 그대로. 특정 달을 찍지 않는다(K-185). 목소리 없음.
+window.FX = ['캐릭터등장', '휙넘기기', '형광펜', '휴대폰3D기울기', '화면스크롤', '선에서단추로', '누름물결'];
+window.VO = [];
+window.SFX = [{ t: 0.15, k: 'whoosh' }, { t: 0.9, k: 'thud' }, { t: 1.6, k: 'pop' },
+  { t: 3.2, k: 'swoosh' }, { t: 4.0, k: 'boing' },
+  { t: 6.0, k: 'whoosh' }, { t: 6.5, k: 'pop' }, { t: 8.3, k: 'swoosh' }, { t: 9.4, k: 'ding' },
+  { t: 10.6, k: 'whoosh' }, { t: 11.1, k: 'sparkle' },
+  { t: 12.4, k: 'swoosh' }, { t: 12.9, k: 'pop' }, { t: 13.7, k: 'press' }, { t: 13.8, k: 'sparkle' }, { t: 14.4, k: 'chime' }];
+const F = window.FXK, cv = document.getElementById('c'), g = cv.getContext('2d');
+const NAVY = '#102A43', Y = '#FFD600', W = 1080, H = 1920;
+const E = { o: t => 1 - Math.pow(1 - t, 3), io: t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+  b: t => { const c = 1.70158; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); } };
+const cl = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v)), seg = (t, a, b) => cl((t - a) / (b - a)), mix = (a, b, p) => a + (b - a) * p;
+const img = {}; const KEYS = { cry: '../../characters/ZS_CUST_cry_v1.png', doubt: '../../characters/ZS_CUST_doubt_v1.png',
+  phone: '../../characters/ZS_CUST_phone_v1.png', view: '../view.jpg' };
+let left = Object.keys(KEYS).length;
+function rr(x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
+function txt(s, x, y, font, color) { g.font = font; g.fillStyle = color; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(s, x, y); }
+function hl(s, x, y, px, p) { g.font = `900 ${px}px PL`; const w = g.measureText(s).width;
+  window.__zsLoose = 1; g.fillStyle = Y; rr(x - w / 2 - 48, y - px * 0.95, (w + 96) * p, px * 1.9, 28); g.fill(); window.__zsLoose = 0; }
+// 두 줄 글: 아래에서 가려 올라온다(줄마다 시차)
+function rise(lines, t0, y0, gap, t) { lines.forEach(([s, px, col, mark], i) => { const k = E.o(seg(t, t0 + i * 0.25, t0 + i * 0.25 + 0.35)); if (k <= 0) return;
+  const y = y0 + i * gap; g.save(); g.beginPath(); g.rect(0, y - px, W, px * 2); g.clip();
+  if (mark) hl(s, F.cx, y + (1 - k) * px * 1.6, px, E.o(seg(t, t0 + i * 0.25 + 0.3, t0 + i * 0.25 + 0.7)));
+  txt(s, F.cx, y + (1 - k) * px * 1.6, `900 ${px}px PL`, mark ? '#111' : col); g.restore(); }); }
+// 손님 컷: 너비를 화면에 꽉 채우고(양옆 끝), 아래는 화면 밖까지(아래 끝). 머리 위 끝 600, 턱 약 1390 — 아래 고정 줄(1480)과 얼굴이 겹치지 않게(11/12 확인 컷).
+const CH_H = 1536 * W / 1024, CH_BOTTOM = 1920 + 300;
+function cust(t, k, enter, exit, from = 'bottom') { F.character(g, t, { imgs: [img[k]], x: F.cx, y: CH_BOTTOM, h: CH_H, enter, exit, from }); }
+
+function draw(t) {
+  g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1; g.fillStyle = NAVY; g.fillRect(0, 0, W, H);
+  const A = F.area(), cx = F.cx, cy = F.cy, ty = A.y0 + 122;
+  // ① 0~3.2 우는 손님이 아래에서 올라오고, 위에 속마음 두 줄
+  if (t < 3.35) { cust(t, 'cry', 0.1, 3.0);
+    if (t < 3.05) rise([['통장이 벌써 비었어요', 76, '#fff', 1]], 0.7, ty, 170, t); }
+  // ② 3.2~6.0 미심쩍은 손님이 옆에서 휙 들어온다
+  if (t >= 3.2 && t < 6.2) { cust(t, 'doubt', 3.2, 5.8, 'right');
+    if (t < 5.85) rise([['내년엔 좀 모일까?', 76, '#fff', 1]], 3.5, ty, 170, t); }
+  // ③ 6.0~10.6 실제 결과 화면(휴대폰) + 정월의 답 자막
+  if (t >= 6.0 && t < 10.8) { const inn = E.b(seg(t, 6.0, 6.5)), out = E.io(seg(t, 10.4, 10.8));
+    const cap = t < 8.3 ? ['정월의 답장', '돈 모이는 달·새는 달은', '사람마다 달라요'] : ['정월의 답장', '생일만 넣으면', '내 돈 유형이 나와요'];
+    const cs = t < 8.3 ? 6.2 : 8.3, ck = E.o(seg(t, cs, cs + 0.35));
+    g.save(); g.globalAlpha = 1 - out;
+    txt(cap[0], cx, A.y0 + 80, '900 60px PL', Y);
+    g.save(); g.beginPath(); g.rect(0, A.y0 + 120, W, 210); g.clip();
+    txt(cap[1], cx, A.y0 + 170 + (1 - ck) * 200, '900 72px PL', '#fff'); txt(cap[2], cx, A.y0 + 265 + (1 - ck) * 200, '900 72px PL', '#fff'); g.restore();
+    const pw = 400, ph = 680, pcx = cx + (1 - inn) * 760, pcy = A.y0 + 390 + ph / 2 + out * 900;
+    const tilt = (1 - inn) * 0.3 + Math.sin(t * 1.3) * 0.015;
+    g.save(); g.translate(pcx, pcy); g.rotate(tilt);
+    g.fillStyle = '#081624'; rr(-pw / 2 - 20, -ph / 2 - 20, pw + 40, ph + 40, 60); g.fill(); g.strokeStyle = Y; g.lineWidth = 7; g.stroke();
+    rr(-pw / 2, -ph / 2, pw, ph, 44); g.save(); g.clip();
+    const i = img.view, sy = mix(560, 1040, E.io(seg(t, 8.6, 9.6)));   // 유형 단추 → 점수 막대로 화면이 내려간다
+    g.drawImage(i, 0, sy, i.width, i.width * ph / pw, -pw / 2, -ph / 2, pw, ph);
+    g.restore(); g.restore(); g.restore(); }
+  // ④ 10.6~12.5 휴대폰 보고 놀란 손님 + 반짝
+  if (t >= 10.6 && t < 12.7) { cust(t, 'phone', 10.6, 12.3);
+    if (t > 11.0 && t < 12.3) { for (let s = 0; s < 6; s++) { const a = s / 6 * Math.PI * 2 + t * 1.5, r = 440 + Math.sin(t * 6 + s) * 20, k = cl(Math.sin((t - 11) * 5 + s) * .5 + .5);
+      const sx = cx + Math.cos(a) * r, sy2 = 980 + Math.sin(a) * r * 0.55; g.save(); g.globalAlpha = k * (1 - seg(t, 12.0, 12.3)); g.translate(sx, sy2); g.rotate(t * 2);
+      g.fillStyle = Y; g.beginPath(); for (let p = 0; p < 8; p++) { const rad = p % 2 ? 7 : 26, an = p / 8 * Math.PI * 2; g.lineTo(Math.cos(an) * rad, Math.sin(an) * rad); } g.fill(); g.restore(); } }
+    if (t < 12.3) rise([['어? 완전 내 얘기잖아', 76, '#fff', 1]], 11.0, ty, 170, t); }
+  // ⑤ 12.4~15 마무리: 물음 두 줄 → 노란 선이 단추로 부풀고 눌림
+  if (t >= 12.4) { const grow = E.b(seg(t, 12.7, 13.15)), press = t > 13.7 && t < 13.95 ? 0.92 : 1, by = cy + 170;
+    const tk = E.o(seg(t, 12.45, 12.85)), tk2 = E.o(seg(t, 12.65, 13.05));
+    g.save(); g.beginPath(); g.rect(0, by - 425, W, 130); g.clip(); txt('텅장일까, 통장일까?', cx, by - 360 + (1 - tk) * 130, '900 92px PL', '#fff'); g.restore();
+    g.save(); g.beginPath(); g.rect(0, by - 280, W, 130); g.clip(); txt('생일만 넣으면 바로 나와요', cx, by - 215 + (1 - tk2) * 130, '900 84px PL', Y); g.restore();
+    const bw = mix(40, 760, grow), bh = mix(10, 150, cl(grow)); g.save(); g.translate(cx, by); g.scale(press, press);
+    g.fillStyle = Y; rr(-bw / 2, -bh / 2, bw, bh, bh / 2); g.fill();
+    if (grow > 0.6) { g.globalAlpha = cl((grow - 0.6) / 0.4); txt('무료로 유형 보기 →', 0, 4, '900 70px PL', '#111'); g.globalAlpha = 1; } g.restore();
+    if (t > 13.75) { const r = seg(t, 13.75, 14.5); g.save(); g.strokeStyle = `rgba(255,214,0,${1 - r})`; g.lineWidth = 8; rr(cx - 380 - r * 60, by - 75 - r * 40, 760 + r * 120, 150 + r * 80, 75 + r * 40); g.stroke(); g.restore(); } }
+  F.frame(g, { ai: '생일로 계산하고, 풀이 문장은 AI로 써요' });
+}
+for (const [k, src] of Object.entries(KEYS)) { const i = new Image(); i.onload = async () => { img[k] = i; if (--left === 0) { await window.__zsFonts; await document.fonts.load('900 80px PL'); window.seek = draw; draw(0); } }; i.src = src; }
+</script></body></html>
