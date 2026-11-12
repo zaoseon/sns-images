@@ -40,8 +40,12 @@ function draw(t){const X=F.cx;g.fillStyle=BG;g.fillRect(0,0,1080,1920);
  if(t>=10.3&&t<13.2){const a=fade(t,10.3,13.2),A=F.area(),w=390,h=450,gx=(A.x1-A.x0-2*w)/3;g.save();g.globalAlpha=a;
   T('나는 어느 쪽?',X,520,'900 100px PL',IV);
   const on=t>11.4?Math.floor((t-11.4)/.5)%2:-1;
-  [['1','듣는 쪽',AQ],['2','말하는 쪽',IV]].forEach(([n,s,c],i)=>{const s0=sp(t-10.5-i*.15,15,.55)*(on==i?1.07:1);card(A.x0+gx+w/2+i*(w+gx),900,w,h,s0,c,n,s)});
-  if(t>11.2){const b=sp(t-11.2,15,.6);g.save();g.translate(X,1290);g.scale(b,b);T('댓글에 숫자 하나만!',0,0,'900 82px PL',YL);g.restore()}g.restore()}
+  // 11/12 대표 '또 붙어있네… 각각의 간격': 두 장을 위아래로, 사이 60px. 고른 쪽은 커지지 않고 테두리로 표시(옆 카드와 닿지 않게)
+  [['1','듣는 쪽',AQ],['2','말하는 쪽',IV]].forEach(([n,s,c],i)=>{const s0=sp(t-10.5-i*.15,15,.55);if(s0<=0)return;const cw=720,ch=260,cy_=805+i*310;
+   g.save();g.translate(X,cy_);g.scale(s0,s0);g.fillStyle=c;g.beginPath();g.roundRect(-cw/2,-ch/2,cw,ch,44);g.fill();
+   if(on==i){g.strokeStyle=YL;g.lineWidth=10;g.stroke()}
+   T(n,-cw/2+120,6,'900 140px PL','#0E2A47');T(s,-cw/2+240,4,'900 88px PL','#0E2A47','left');g.restore()});
+  if(t>11.2){const b=sp(t-11.2,15,.6);g.save();g.translate(X,1345);g.scale(b,b);T('댓글에 숫자 하나만!',0,0,'900 82px PL',YL);g.restore()}g.restore()}
  // 5 정월 + 행동
  if(t>=13){const a5=sp(t-13.2,14,.6);g.save();g.translate(X,F.cy-120);g.scale(a5,a5);T('나는 1번!',0,0,'900 120px PL',IV);T('너는 몇 번?',0,150,'900 120px PL',AQ);g.restore();
   const b=sp(t-14.1,14,.6);g.save();g.translate(X,F.cy+230);g.scale(b,b);g.fillStyle=YL;g.beginPath();g.roundRect(-410,-66,820,132,66);g.fill();T('내 첫 글자는 프로필 링크에서',0,-2,'900 60px PL','#111');g.restore()}

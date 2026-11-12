@@ -94,7 +94,7 @@ function draw(t) {
     g.globalAlpha = 1 - out;
     const tt = E.b(seg(t, 3.1, 3.45));
     g.save(); g.translate(cx, ay0 + 185); g.scale(tt, tt); txt('2027년, 열두 달 중', 0, 0, '900 84px PL', '#fff'); g.restore();
-    const cw = 250, ch = 160, gap = 22, gx = cx - (cw * 3 + gap * 2) / 2, gy = ay0 + 290;
+    const cw = 230, ch = 160, gap = 50, gx = cx - (cw * 3 + gap * 2) / 2, gy = ay0 + 290;
     for (let m = 0; m < 12; m++) {
       const r = Math.floor(m / 3), c = m % 3, f = seg(t, 3.15 + m * 0.07, 3.45 + m * 0.07);
       const x = gx + c * (cw + gap) + cw / 2, y = gy + r * (ch + gap) + ch / 2;
@@ -141,10 +141,10 @@ function draw(t) {
     // 위 자막(장면마다 바뀜, 아래에서 위로 가려 올라옴)
     const cap = t < 8.5 ? '생일만 넣으면' : t < 10.0 ? '내 유형이 바로 나와요' : '어디서 버는지까지';
     const cs = t < 8.5 ? 6.6 : t < 10.0 ? 8.5 : 10.0, ck = E.o(seg(t, cs, cs + 0.3));
-    g.save(); g.beginPath(); g.rect(0, ay0 + 40, W, 140); g.clip(); txt(cap, cx, ay0 + 110 + (1 - ck) * 120, '900 80px PL', '#fff'); g.restore();
+    g.save(); g.beginPath(); g.rect(0, ay0 + 40, W, 140); g.clip(); txt(cap, cx, ay0 + 95 + (1 - ck) * 120, '900 80px PL', '#fff'); g.restore();
     // 휴대폰(가로 눌림 + 기울기로 3D 느낌). 결과가 나오면 왼쪽으로 비켜서고 작아진다.
-    const shift = E.io(seg(t, 8.8, 9.3)), pw = 470 * mix(1, 0.62, shift), ph = 840 * mix(1, 0.62, shift);
-    const pcx = mix(cx, ax0 + 195, shift) + (1 - inn) * 700, pcy = mix(ay0 + 680, ay0 + 760, shift);
+    const shift = E.io(seg(t, 8.8, 9.3)), pw = 470 * mix(1, 0.5, shift), ph = 840 * mix(1, 0.5, shift);
+    const pcx = mix(cx, ax0 + 158, shift) + (1 - inn) * 700, pcy = mix(ay0 + 680, ay0 + 760, shift);
     const tilt = (1 - inn) * 0.35 + Math.sin(t * 1.4) * 0.02, squash = mix(0.55, 1, inn);
     g.save(); g.translate(pcx, pcy); g.rotate(tilt); g.scale(squash, 1);
     g.fillStyle = '#081624'; rr(-pw / 2 - 20, -ph / 2 - 20, pw + 40, ph + 40, 64); g.fill(); g.strokeStyle = Y; g.lineWidth = 7; g.stroke();
@@ -157,30 +157,30 @@ function draw(t) {
     if (t >= 7.4 && t < 8.6) {
       const digs = ['1994', '03', '17'], fade = seg(t, 8.3, 8.6);
       digs.forEach((d, i) => { const k = E.b(seg(t, 7.45 + i * 0.26, 7.75 + i * 0.26));
-        if (k <= 0) return; const tx = cx - 260 + i * 260, ty = ay0 + 330;
+        if (k <= 0) return; const tx = cx - 280 + i * 280, ty = ay0 + 330;
         g.save(); g.globalAlpha = (1 - fade) * cl(k); g.translate(mix(pcx, tx, k), mix(pcy, ty, k)); g.scale(k, k);
-        g.fillStyle = '#fff'; rr(-115, -58, 230, 116, 30); g.fill(); window.__zsLoose = 1; txt(d, 0, 4, '900 66px PL', NAVY); window.__zsLoose = 0; g.restore(); });
+        g.fillStyle = "#fff"; rr(-112, -58, 224, 116, 30); g.fill(); window.__zsLoose = 1; txt(d, 0, 4, '900 66px PL', NAVY); window.__zsLoose = 0; g.restore(); });
     }
     if (result) {
       // 결과 조각 1: '통장형' 단추가 휴대폰에서 날아나와 크게 박힌다
-      const k1 = E.b(seg(t, 8.95, 9.35)), bx = ax1 - 290, by = ay0 + 250;
+      const k1 = E.b(seg(t, 8.95, 9.35)), bx = ax1 - 290, by = ay0 + 262;
       if (k1 > 0) piece('badge', mix(pcx, bx, k1), mix(pcy, by, k1), mix(0.4, 1.25, k1), mix(0.4, -0.06, k1));
       // 결과 조각 2: 점수 막대 — 화면 조각이 나온 뒤 막대가 실제 비율대로 다시 자란다
-      const k2 = E.o(seg(t, 9.6, 10.0)), qx = ax1 - 320, qy = ay0 + 610;
+      const k2 = E.o(seg(t, 9.6, 10.0)), qx = ax0 + 654, qy = ay0 + 642;
       if (k2 > 0) {
         g.save(); g.globalAlpha *= k2; g.translate(mix(pcx, qx, k2), mix(pcy, qy, k2)); g.scale(mix(0.4, 1, k2), mix(0.4, 1, k2));
-        g.shadowColor = 'rgba(0,0,0,.4)'; g.shadowBlur = 40; g.shadowOffsetY = 16; g.fillStyle = '#fff'; rr(-370, -240, 740, 480, 34); g.fill(); g.shadowColor = 'transparent';
+        g.shadowColor = 'rgba(0,0,0,.4)'; g.shadowBlur = 40; g.shadowOffsetY = 16; g.fillStyle = '#fff'; rr(-300, -220, 600, 440, 34); g.fill(); g.shadowColor = 'transparent';
         const vals = [1.66, 0.6, 0.56, 0.34], labs = ['재주로', '꾸준히', '크게', '사람으로'];
         window.__zsLoose = 1;
-        vals.forEach((v, i) => { const gk = E.o(seg(t, 9.8 + i * 0.16, 10.3 + i * 0.16)), yy = -160 + i * 105;
-          txt(labs[i], -230, yy, '900 60px PR', '#1b2a3a');
-          g.fillStyle = i === 0 ? '#2F6BFF' : '#9db6ff'; rr(-90, yy - 22, 420 * (v / 1.66) * gk, 44, 22); g.fill(); });
+        vals.forEach((v, i) => { const gk = E.o(seg(t, 9.8 + i * 0.16, 10.3 + i * 0.16)), yy = -150 + i * 100;
+          txt(labs[i], -170, yy, '900 60px PR', '#1b2a3a');
+          g.fillStyle = i === 0 ? '#2F6BFF' : '#9db6ff'; rr(-20, yy - 22, 280 * (v / 1.66) * gk, 44, 22); g.fill(); });
         window.__zsLoose = 0; g.restore();
       }
       // 결과 조각 3: 잠긴 목록이 툭 떨어지며 자물쇠가 흔들린다
-      const k3 = E.el(seg(t, 10.6, 11.2)), lx = cx + 185, ly = ay1 - 150;
+      const k3 = E.el(seg(t, 10.6, 11.2)), lx = ax0 + 654, ly = ay1 - 106;
       if (t > 10.6) { const wob = t > 10.9 ? Math.sin((t - 10.9) * 30) * 0.06 * (1 - seg(t, 10.9, 11.5)) : 0;
-        piece('lock', lx, mix(ay0 - 300, ly, k3), 0.9, wob); }
+        piece('lock', lx, mix(ay0 - 300, ly, k3), 0.7, wob); }
     }
     g.globalAlpha = 1;
   }

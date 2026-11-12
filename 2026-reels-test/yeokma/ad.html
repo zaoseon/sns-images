@@ -13,9 +13,9 @@ function land(t,cam,yb){
  g.fillStyle=H1;g.beginPath();g.moveTo(0,1920);for(let x=0;x<=1080;x+=20){g.lineTo(x,yb-260+Math.sin((x+cam*.4)/170)*70)}g.lineTo(1080,1920);g.fill();
  g.fillStyle=H2;g.beginPath();g.moveTo(0,1920);for(let x=0;x<=1080;x+=20){g.lineTo(x,yb-90+Math.sin((x+cam*.9)/120+1)*45)}g.lineTo(1080,1920);g.fill();
  g.fillStyle=BG;g.fillRect(0,yb,1080,1920-yb);g.fillStyle=OR;for(let i=-1;i<9;i++){const x=((i*160-cam)%1280+1280)%1280-100;g.fillRect(x,yb+40,90,14)}}
-function suitcase(x,y,s,rot){g.save();g.translate(x,y);g.rotate(rot);g.scale(s,s);g.fillStyle=OR;g.beginPath();g.roundRect(-90,-130,180,220,28);g.fill();
+function suitcase(x,y,s,rot){window.__zsLoose=1;g.save();g.translate(x,y);g.rotate(rot);g.scale(s,s);g.fillStyle=OR;g.beginPath();g.roundRect(-90,-130,180,220,28);g.fill();
  g.fillStyle=BG;g.fillRect(-40,-170,80,20);g.fillRect(-50,-170,16,46);g.fillRect(34,-170,16,46);g.fillStyle=IV;g.fillRect(-90,-40,180,22);
- g.fillStyle=BG;g.beginPath();g.arc(-55,105,18,0,7);g.arc(55,105,18,0,7);g.fill();g.restore()}
+ g.fillStyle=BG;g.beginPath();g.arc(-55,105,18,0,7);g.arc(55,105,18,0,7);g.fill();g.restore();window.__zsLoose=0}   // 가방은 길 위에 붙어 구르는 것(일부러)
 function draw(t){const X=F.cx;g.fillStyle=BG;g.fillRect(0,0,1080,1920);
  for(let i=0;i<34;i++){g.fillStyle='rgba(248,243,232,.22)';g.beginPath();g.arc(F.H(i)*1080,F.H(i+4)*900+80,2+F.H(i+7)*3,0,7);g.fill()}
  const cam=t*260;
@@ -35,9 +35,9 @@ function draw(t){const X=F.cx;g.fillStyle=BG;g.fillRect(0,0,1080,1920);
  if(t>=5.6&&t<11.1){const a=fade(t,5.6,11.1);g.save();g.globalAlpha=a;
   T('내 띠로 찾는 역마 자리',X,600,'900 84px PL',IV);
   const R=[['원숭이·쥐·용띠','호랑이'],['호랑이·말·개띠','원숭이'],['뱀·닭·소띠','돼지'],['돼지·토끼·양띠','뱀']];
-  R.forEach(([l,r],i)=>{const b=sp(t-5.8-i*.15,14,.62);if(b<=0)return;const y=780+i*165;g.save();g.translate(X+(1-b)*-60,y);g.globalAlpha*=cl(b*2);
-   g.fillStyle=i%2?H2:H1;g.beginPath();g.roundRect(-410,-72,820,144,30);g.fill();T(l,-370,2,'900 60px PL',IV,'left');T('→',95,2,'900 60px PL',OR);
-   g.fillStyle=OR;g.beginPath();g.roundRect(140,-62,262,124,62);g.fill();T(r,271,2,'900 60px PL',BG);g.restore()});
+  R.forEach(([l,r],i)=>{const b=sp(t-5.8-i*.15,14,.62);if(b<=0)return;const y=760+i*176;g.save();g.translate(X+(1-b)*-60,y);g.globalAlpha*=cl(b*2);
+   g.fillStyle=i%2?H2:H1;g.beginPath();g.roundRect(-410,-64,820,128,30);g.fill();T(l,-370,2,'900 60px PL',IV,'left');T('→',95,2,'900 60px PL',OR);
+   g.fillStyle=OR;g.beginPath();g.roundRect(140,-56,266,112,56);g.fill();T(r,273,2,'900 60px PL',BG);g.restore()});
   g.restore()}
  // 4 뜻 — 낱말 블록 교체
  if(t>=10.9&&t<13.2){const a=fade(t,10.9,13.2);g.save();g.globalAlpha=a;land(t,cam,1560);

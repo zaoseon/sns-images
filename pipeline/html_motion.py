@@ -117,6 +117,13 @@ def _spec_js(ch="reel"):
             "const fm=/(\\d+(?:\\.\\d+)?)px\\s+(.+)$/.exec(this.font)||[0,0,''];"
             "if(sc>0.85)window.__zsTxt.push([String(s).slice(0,20),cr.left+kx*Math.min(...xs),cr.top+ky*Math.min(...ys),cr.left+kx*Math.max(...xs),cr.top+ky*Math.max(...ys),parseFloat(fm[1])*sc*kx,fm[2].replace(/['\"]/g,'').split(',')[0].trim(),window.__zsLoose?1:0])}}catch(e){}"
             "return o.call(this,s,x,y,...r)}})})();"
+            # 11/12 16:51 대표 "또 붙어있네... 각각의 간격 좀": 둥근 상자(카드·뱃지·알약·칩)를 그릴 때 자리를 적어 관문이 상자끼리·상자와 글 사이 간격을 잰다
+            "(function(){const P=CanvasRenderingContext2D.prototype,rr=P.roundRect;window.__zsBox=[];"
+            "P.roundRect=function(x,y,w,h,...r){try{const T=this.getTransform(),sc=Math.hypot(T.a,T.b),cr=this.canvas.getBoundingClientRect(),kx=cr.width/this.canvas.width,"
+            "q=[[x,y],[x+w,y],[x,y+h],[x+w,y+h]].map(([px,py])=>[T.a*px+T.c*py+T.e,T.b*px+T.d*py+T.f]),xs=q.map(v=>v[0]),ys=q.map(v=>v[1]);"
+            "this.__zsRR=[cr.left+kx*Math.min(...xs),cr.top+kx*Math.min(...ys),cr.left+kx*Math.max(...xs),cr.top+kx*Math.max(...ys),sc]}catch(e){}return rr.call(this,x,y,w,h,...r)};"
+            "['fill','stroke'].forEach(k=>{const o=P[k];P[k]=function(...a){try{const b=this.__zsRR;if(b&&!window.__zsFrame&&!window.__zsLoose&&this.globalAlpha>0.5&&b[4]>0.9)window.__zsBox.push(b.slice(0,4))}catch(e){}return o.apply(this,a)}});"
+            "const bp=P.beginPath;P.beginPath=function(){this.__zsRR=null;return bp.call(this)}})();"
             # DOM 글자도 잰다(캔버스+DOM 섞어 쓴 페이지가 있다). 고정 요소(.bf)는 뺀다.
             "window.__zsDom=()=>{const R=[],W=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;while(n=W.nextNode()){"
             "const e=n.parentElement;if(!e||!n.textContent.trim()||e.closest('.bf,script,style'))continue;"
@@ -184,11 +191,31 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
     n = int(초 / 간격)
     for i in range(n + 1):
         t = min(i * 간격, 초 - 0.01)
-        pg.evaluate("t => {window.__zsTxt=[];window.seek(t)}", t)
+        pg.evaluate("t => {window.__zsTxt=[];window.__zsBox=[];window.seek(t)}", t)
         a = np.asarray(Image.open(io.BytesIO(pg.screenshot())).convert("RGB")).astype(int)
         # 11/11 대표 13:38 "뱃지나 텍스트, 그래픽 구성 요소들 간 간격이 붙지 않게": 글자 상자 둘레(글자 크기의 1/4, 최소 14px)에
         # 다른 것(선·그림·다른 글자·뱃지 가장자리)이 들어와 있으면 '붙음'. 뱃지 안 글자는 뱃지 여백이 모자랄 때 걸린다.
         rows_ = pg.evaluate("() => window.__zsTxt.concat(window.__zsDom())")
+        # 상자 간격(대표 11/12 16:51): 상자끼리, 상자와 그 밖의 글 사이가 BALANCE['box_gap'] 보다 좁으면 '간격'
+        bx_ = []
+        for q in pg.evaluate("() => window.__zsBox||[]"):
+            w_, h_ = q[2] - q[0], q[3] - q[1]
+            if w_ < 40 or h_ < 30 or w_ > a.shape[1] * .95 or q[1] < top or q[3] > bot: continue
+            if not any(abs(q[i] - r[i]) < 3 for r in bx_ for i in range(4)) or not bx_: bx_.append(q)
+        def _gap(p_, q_):
+            dx = max(q_[0] - p_[2], p_[0] - q_[2]); dy = max(q_[1] - p_[3], p_[1] - q_[3]); return max(dx, dy)
+        def _안(p_, q_): return p_[0] >= q_[0] - 2 and p_[1] >= q_[1] - 2 and p_[2] <= q_[2] + 2 and p_[3] <= q_[3] + 2
+        for ii in range(len(bx_)):
+            for jj in range(ii + 1, len(bx_)):
+                p_, q_ = bx_[ii], bx_[jj]
+                if _안(p_, q_) or _안(q_, p_): continue
+                g_ = _gap(p_, q_)
+                if g_ < B["box_gap"]: keys.setdefault("간격 · 상자끼리", []).append((t, f"상자 사이 {g_:.0f}px ({p_[0]:.0f},{p_[1]:.0f},{p_[2]:.0f},{p_[3]:.0f})·({q_[0]:.0f},{q_[1]:.0f},{q_[2]:.0f},{q_[3]:.0f}) — {B['box_gap']}px 이상 띄우세요" if g_ >= 0 else f"상자끼리 {-g_:.0f}px 겹침 — 겹치지 않게"))
+            for r in rows_:
+                tb = r[1:5]
+                if any(_안(tb, q) for q in bx_): continue
+                g_ = _gap(bx_[ii], tb)
+                if 0 <= g_ < B["box_gap"]: keys.setdefault("간격 · " + str(r[0])[:10], []).append((t, f"'{r[0]}' 와 상자 사이 {g_:.0f}px — {B['box_gap']}px 이상"))
         # 한 덩어리 글(줄바꿈한 두 줄, 같은 글자 크기)은 하나로 합친다 — 같은 글의 줄 사이는 '붙음'이 아니다
         rows_.sort(key=lambda r: (r[2], r[1]))
         def _붙일(q, r):
@@ -241,7 +268,7 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
             if ts[j] - ts[j - 1] <= 간격 + 1e-6: run += 1
             else: run = 1; s0 = j
             if run > best[0]: best = (run, s0)
-        if best[0] * 간격 > (B["hold"] * .75 if k.startswith("붙음") else B["hold"]):
+        if best[0] * 간격 > (B["hold"] * .75 if k.startswith(("붙음", "간격")) else B["hold"]):
             x = v[best[1]]; 문제.append(f"[{k}] {x[0]:.2f}초부터 {best[0] * 간격:.1f}초 동안 — {x[1]}")
     return 문제
 
