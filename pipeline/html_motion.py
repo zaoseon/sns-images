@@ -204,8 +204,8 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
     from PIL import Image
     B = CS.BALANCE; C = CS.CH[ch]; z = {r[0]: r[1:5] for r in C["zones"]}
     sx0, sx1 = C["safe"][0], C["safe"][2]; top = z["상단 고정"][3]; bot = z["하단 고정"][1]
-    ay0, ay1 = top + 10, bot - 10; acx = (sx0 + sx1) / 2; acy = (top + B["gap_top"] + bot - 10) / 2
-    keys = {"위 간격": [], "가운데": [], "채움": []}
+    ay0, ay1 = top + 10, bot - 10; acx = (sx0 + sx1) / 2; acy = (top + bot) / 2   # 11/13 K-203: 핸들~핸들 가운데(옛 값은 위만 60 띄우고 아래는 10 이라 아래로 쏠려도 통과)
+    keys = {"위 간격": [], "아래 간격": [], "상하 균형": [], "균형 리듬": [], "가운데": [], "채움": []}
     n = int(초 / 간격)
     for i in range(n + 1):
         t = min(i * 간격, 초 - 0.01)
@@ -274,6 +274,18 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
         y0, y1 = rows.min() + ay0, rows.max() + ay0; x0, x1 = cols.min(), cols.max()
         h, w = y1 - y0, x1 - x0
         if y0 < top + B["gap_top"] - 4: keys["위 간격"].append((t, f"내용 위 끝 y{y0} (상단 고정 줄 아래 {y0 - top}px, {B['gap_top']}px 이상)"))
+        # 11/13 K-203: 블록(글·그림 덩어리) 사이 간격을 잰다. 줄 사이(rhythm_band 미만)는 한 덩어리.
+        ys_ = rows + ay0; 블록 = []; s_ = ys_[0]; p_ = ys_[0]
+        for yy in ys_[1:]:
+            if yy - p_ - 1 >= B["rhythm_band"]: 블록.append((s_, p_)); s_ = yy
+            p_ = yy
+        블록.append((s_, p_))
+        g_top, g_bot = 블록[0][0] - top, bot - 블록[-1][1]
+        안 = [블록[i + 1][0] - 블록[i][1] for i in range(len(블록) - 1)]
+        if g_bot < B["gap_bottom"] - 4: keys["아래 간격"].append((t, f"내용 아래 끝 y{블록[-1][1]} (하단 고정 줄 위 {g_bot}px, {B['gap_bottom']}px 이상)"))
+        if abs(g_top - g_bot) > B["edge_tol"]: keys["상하 균형"].append((t, f"상단 핸들↔내용 {g_top}px · 내용↔하단 핸들 {g_bot}px (차이 {abs(g_top - g_bot)}px, {B['edge_tol']}px 이하)"))
+        전부 = [g_top, g_bot] + 안
+        if 안 and max(전부) > B["rhythm_ratio"] * max(min(전부), 1): keys["균형 리듬"].append((t, f"간격 [위,아래,사이…]={[int(v) for v in 전부]} 블록 y={[(int(a_), int(b_)) for a_, b_ in 블록]} — 가장 넓은 것이 가장 좁은 것의 {max(전부) / max(min(전부), 1):.1f}배({B['rhythm_ratio']}배 이하로)"))
         if abs((y0 + y1) / 2 - acy) > B["center_tol_y"] or abs((x0 + x1) / 2 - acx) > B["center_tol_x"]:
             keys["가운데"].append((t, f"내용 묶음 가운데 ({(x0 + x1) / 2:.0f},{(y0 + y1) / 2:.0f}) — 칸 가운데 ({acx:.0f},{acy:.0f})"))
         if h < B["min_fill_h"] * (bot - top - B["gap_top"]) and w < B["min_fill_w"] * (sx1 - sx0):
