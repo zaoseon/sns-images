@@ -196,6 +196,26 @@ def 안전영역_검사(pg, 초, ch="reel", 간격=0.1):
     return 문제, (x0, y0, x1, y1)
 
 
+def 표지_검사(pg, ch="reel"):
+    """11/13 18:48 대표(K-205): 클립은 첫 화면이 표지다. 표지 시각 프레임에 제목·그림이 이미 나와 있어야 한다 —
+    모션이 시작하기 전 빈 화면이 표지로 쓰이면 안 된다. 표지 시각은 channel_specs.BALANCE['cover_t'][채널]."""
+    import numpy as np, io
+    from PIL import Image
+    B = CS.BALANCE; t = (B.get("cover_t") or {}).get(ch)
+    if t is None: return []
+    C = CS.CH[ch]; z = {r[0]: r[1:5] for r in C["zones"]}
+    top = z["상단 고정"][3]; bot = z["하단 고정"][1]; sx0, sx1 = C["safe"][0], C["safe"][2]
+    pg.evaluate("t => {window.__zsTxt=[];window.__zsBox=[];window.seek(t)}", t)
+    a = np.asarray(Image.open(io.BytesIO(pg.screenshot())).convert("RGB")).astype(int)
+    A = a[top + 10:bot - 10, sx0:sx1]
+    edge = np.concatenate([A[:, :24].reshape(-1, 3), A[:, -24:].reshape(-1, 3)]); bg = np.median(edge, 0)
+    m = np.abs(A - bg).max(2) > 48; fill = float(m.mean()); rows = np.where(m.sum(1) > 14)[0]
+    h = (rows[-1] - rows[0]) / A.shape[0] if len(rows) else 0.0
+    if fill < B["cover_fill"] or h < B["cover_h"]:
+        return [f"[표지] {ch} 표지 프레임({t}초)가 비었어요 — 내용 채움 {fill * 100:.1f}%(5% 이상)·내용 높이 {h * 100:.0f}%(22% 이상). 클립은 첫 화면이 표지라서 0초에 제목·핵심 그림이 이미 보여야 해요(모션은 그 뒤에 시작)"]
+    return []
+
+
 def 균형_검사(pg, 초, ch="reel", 간격=0.25):
     """화면 픽셀로 장면 균형을 잰다(11/11 대표 13:27). 글 칸 안에서 배경과 다른 픽셀의 묶음 상자를 구해
     ① 위 간격(상단 고정 줄 + gap_top) ② 세로·가로 가운데 ③ 채움(작은 글만 위에 떠 있는 장면) 을 본다.
@@ -486,7 +506,7 @@ def 광고모션_검사(pg, 초, ch, 간격=0.1):
     return 문제
 
 
-def 안전영역_막기(html, 초, ch="reel"):
+def 안전영역_막기(html, 초, ch="reel", 표지채널=None):
     from playwright.sync_api import sync_playwright
     C = CS.CH[ch]
     with sync_playwright() as pw:
@@ -494,7 +514,7 @@ def 안전영역_막기(html, 초, ch="reel"):
         pg.goto("file://" + os.path.abspath(html)); pg.wait_for_function("typeof window.seek === 'function'", timeout=15000)
         pg.evaluate("document.fonts.ready")
         src = open(html, encoding="utf-8").read(); frame = ".frame(" in src
-        문제, 칸 = 안전영역_검사(pg, 초, ch); 문제 += 균형_검사(pg, 초, ch); 문제 += 광고모션_검사(pg, 초, ch); b.close()
+        문제, 칸 = 안전영역_검사(pg, 초, ch); 문제 += 균형_검사(pg, 초, ch); 문제 += 표지_검사(pg, 표지채널 or ch); 문제 += 광고모션_검사(pg, 초, ch); b.close()
     canvas = "<canvas" in src
     # 11/12 16:45 대표 "정월이 나오는거 너무 어색하고 별로" → 릴스·광고 영상에 실사 정월 누끼(characters/cut/)를 넣지 않는다(K-197)
     _src = open(html, encoding="utf-8").read() if os.path.exists(html) else ""
@@ -524,7 +544,7 @@ def render(html, 이름, 초=15.0, fps=30, ch="reel", 블러=1, 설계="reel"):
     옮김 = ch != 설계 and RM.옮길수있나(설계, ch)
     if ch != 설계 and not 옮김:
         raise SystemExit(f"[막음] {설계} 로 짠 장면은 {ch}({CS.CH[ch]['w']}x{CS.CH[ch]['h']})로 자동으로 못 옮겨요 — 비율이 달라요. 이 채널용 장면을 따로 짜세요.")
-    금지_검사(html); 기법_검사(html, 이름); 안전영역_막기(html, 초, 설계 if 옮김 else ch)
+    금지_검사(html); 기법_검사(html, 이름); 안전영역_막기(html, 초, 설계 if 옮김 else ch, 표지채널=ch)
     if 옮김:
         M = RM.행렬(설계, ch)
         print(f"  {설계} → {ch} 자동 옮김: 배율 {M[0]:.3f}, 글 칸 {RM.글칸(설계)} → {RM.글칸(ch)}")
@@ -583,7 +603,7 @@ def main():
             print(f"[{c}] 확인 컷:", 확인컷(a[0], [float(x) for x in opt("확인").split(",")], c, 설계))
             import channel_remap as RM
             g = 설계 if c != 설계 and RM.옮길수있나(설계, c) else c
-            try: 안전영역_막기(a[0], float(opt("초", "15")), g); print(f"[{c}] 안전 영역: 통과" + (f" ({g} 로 재고 자동 옮김)" if g != c else ""))
+            try: 안전영역_막기(a[0], float(opt("초", "15")), g, 표지채널=c); print(f"[{c}] 안전 영역: 통과" + (f" ({g} 로 재고 자동 옮김)" if g != c else ""))
             except SystemExit as e: print(e)
         return 0
     if len(a) < 2:
