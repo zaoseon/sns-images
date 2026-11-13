@@ -54,5 +54,21 @@
   "mode": "up",
   "bpm": 118,
   "key": "E"
+ },
+ {
+  "name": "reel_1114_fire",
+  "kind": "fun",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "F"
+ },
+ {
+  "name": "reel_1115_samhap",
+  "kind": "fun",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 124,
+  "key": "G"
  }
 ]
