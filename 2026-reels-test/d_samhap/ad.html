@@ -7,25 +7,25 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#F5F0E6
 .t{position:absolute;left:50px;right:180px;text-align:center;white-space:nowrap}
 #brand{position:absolute;top:300px;left:90px;font:900 44px PL;color:#477A61}#ai{position:absolute;bottom:300px;left:0;right:0;text-align:center;font:800 32px PR;color:#6b6b6b}
 /* 11/11 13:27 무대를 줄이지 않는다. 글 칸 = x 50~900(가운데 475), y 450~1415 */</style></head><body><div id="s"><canvas id="cv" width="1080" height="1920"></canvas>
-<div id="h1" class="t" style="top:700px;font:900 118px/1.2 PL;color:#1d3b2c">나랑 한 팀인 띠<br><span style="color:#477A61">따로 있어요</span></div>
-<div id="h2" class="t" style="top:1020px;font:800 62px PR;color:#5a5a5a">띠 궁합, 한 팀이 되는 4묶음</div>
-<div id="tl" class="t" style="top:1238px;font:900 84px/1 PL;color:#1d3b2c"></div>
-<div id="ts" class="t" style="top:1356px;font:800 48px/1 PR;color:#5a5a5a"></div>
-<div id="c1" class="t" style="top:1238px;font:900 84px/1 PL;color:#1d3b2c">세 띠가 모이면</div>
-<div id="c2" class="t" style="top:1356px;font:800 48px/1 PR;color:#477A61">기운 하나로 뭉쳐요(삼합)</div>
-<div id="e1" class="t" style="top:690px;font:900 112px/1.2 PL;color:#F5F0E6">다음 편에서 볼<br>두 띠를 골라 줘</div>
-<div id="e2" class="t" style="top:985px;font:800 62px PR;color:#D7DFD5">댓글에 '쥐랑 말'처럼</div>
-<div id="e3" class="t" style="top:1100px;left:140px;right:270px;height:150px;border-radius:999px;background:#F5F0E6;color:#1d3b2c;font:900 62px/150px PL">내 띠는 프로필 링크</div>
+<div id="h1" class="t" style="top:675px;font:900 118px/1.2 PL;color:#1d3b2c">나랑 한 팀인 띠<br><span style="color:#477A61">따로 있어요</span></div>
+<div id="h2" class="t" style="top:1058px;font:800 62px PR;color:#5a5a5a">띠 궁합, 한 팀이 되는 4묶음</div>
+<div id="tl" class="t" style="top:1264px;font:900 84px/1 PL;color:#1d3b2c"></div>
+<div id="ts" class="t" style="top:802px;font:800 60px/1 PR;color:#5a5a5a;letter-spacing:-2px"></div>
+<div id="c1" class="t" style="top:1124px;font:900 84px/1 PL;color:#1d3b2c">세 띠가 모이면</div>
+<div id="c2" class="t" style="top:1274px;font:800 62px/1.2 PR;color:#477A61">기운 하나로 뭉쳐요(삼합)</div>
+<div id="e1" class="t" style="top:482px;font:900 112px/1.2 PL;color:#F5F0E6">다음 편에서 볼<br>두 띠를 골라 줘</div>
+<div id="e2" class="t" style="top:816px;font:800 62px PR;color:#D7DFD5">댓글에 '쥐랑 말'처럼</div>
+<div id="e3" class="t" style="top:965px;left:140px;right:270px;height:150px;border-radius:999px;background:#F5F0E6;color:#1d3b2c;font:900 62px/150px PL">내 띠는 프로필 링크</div>
 </div>
 <script src="../../pipeline/motion_fx.js"></script>
 <script>
 window.FX=['원형배치','삼각형그리기','하이라이트순환'];
 const {cl,mix,ease,eio,sp}=FXK,GR='#477A61',IV='#F5F0E6',SG='#D7DFD5',DK='#1d3b2c';
 const $=id=>document.getElementById(id),g=$('cv').getContext('2d'),vis=(id,on)=>$(id).style.display=on?'':'none';
-const AN=['쥐','소','호랑이','토끼','용','뱀','말','양','원숭이','닭','개','돼지'];
+const AN=['쥐','소','호랑이','토끼','용','뱀','말','양','원숭이','닭','개','돼지'],HJ=['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
 const TEAM=[[0,4,8],[2,6,10],[1,5,9],[3,7,11]], TC=['#477A61','#E07A5F','#3D5A80','#C7A34A'];
-const TSUB=['물 기운으로 모이는 팀','불 기운으로 모이는 팀','쇠 기운으로 모이는 팀','나무 기운으로 모이는 팀'];
-const CX=FXK.cx,CY=835,R=295;const pos=i=>{const a=-Math.PI/2+i*Math.PI/6;return[CX+Math.cos(a)*R,CY+Math.sin(a)*R]};
+const TSUB=['물 기운','불 기운','쇠 기운','나무 기운'];
+const CX=FXK.cx;let CY=832,R=296,RR=70;const pos=i=>{const a=-Math.PI/2+i*Math.PI/6;return[CX+Math.cos(a)*R,CY+Math.sin(a)*R]};
 window.SFX=[{t:0,k:'swoosh'},{t:.4,k:'press'},{t:1.9,k:'swoosh'},...AN.map((_,i)=>({t:2.1+i*.08,k:'tick'})),
  {t:4,k:'swoosh'},{t:4.6,k:'chime'},{t:5.6,k:'swoosh'},{t:6.2,k:'chime'},{t:7.2,k:'swoosh'},{t:7.8,k:'chime'},{t:8.8,k:'swoosh'},{t:9.4,k:'chime'},
  {t:10.6,k:'press'},{t:12.6,k:'swoosh'},{t:13.2,k:'press'},{t:14.3,k:'press'}];
@@ -33,6 +33,7 @@ function tri(k,p,fill){const q=TEAM[k].map(pos);g.save();g.strokeStyle=TC[k];g.l
  const seg=p*3;g.beginPath();g.moveTo(q[0][0],q[0][1]);for(let i=0;i<3;i++){const a=q[i],b=q[(i+1)%3],f=cl(seg-i);if(f<=0)break;g.lineTo(mix(a[0],b[0],f),mix(a[1],b[1],f))}g.stroke();
  if(fill>0){g.globalAlpha=fill*.18;g.fillStyle=TC[k];g.beginPath();g.moveTo(q[0][0],q[0][1]);g.lineTo(q[1][0],q[1][1]);g.lineTo(q[2][0],q[2][1]);g.fill()}g.restore()}
 function draw0(t){
+ {const u=eio(cl((t-10.4)/.4));R=mix(296,240,u);CY=mix(832,764,u);RR=mix(70,54,u)}
  const end=t>=12.6; g.fillStyle=end?GR:IV;g.fillRect(0,0,1080,1920);
  vis('h1',t<2.1);vis('h2',t<2.1);
  if(t<2.1){const a=sp(t,12,.7);$('h1').style.transform=`translateY(${(1-a)*100}px)`;$('h1').style.opacity=cl(t/.15);$('h2').style.opacity=cl((t-.6)/.2);
@@ -46,22 +47,22 @@ function draw0(t){
   if(t>=10.4){g.translate(CX,CY);g.rotate((t-10.4)*.35);g.translate(-CX,-CY)}
   g.strokeStyle=SG;g.lineWidth=4;g.beginPath();g.arc(CX,CY,R,0,7);g.stroke();
   for(let k=0;k<4;k++){const t0=4+k*1.6;if(t>=t0){const p=eio((t-t0-.1)/.6);const lit=t>=10.4||(ti==k);tri(k,p,lit?cl((t-t0-.6)/.3):(t>=t0+1.6?.35:0))}}
-  AN.forEach((n,i)=>{const [x,y]=pos(i),s=sp(t-2.1-i*.08,14,.6);let col='#fff',tc=DK,rr=76;
-   const team=TEAM.findIndex(T=>T.includes(i));if((ti==team&&t>=4)||t>=10.4){col=TC[team];tc='#fff';if(ti==team)rr=82}
-   g.fillStyle=col;g.strokeStyle='#AFC2B2';g.lineWidth=4;g.beginPath();g.arc(x,y,rr*s,0,7);g.fill();g.stroke();
-   if(s>.5){g.save();g.translate(x,y);if(t>=10.4)g.rotate(-(t-10.4)*.35);g.fillStyle=tc;g.font=`900 ${n.length>2?44:54}px PL`;g.letterSpacing=n.length>2?'-4px':'0px';g.textAlign='center';g.textBaseline='middle';g.fillText(n,0,2);g.restore()}});
+  AN.forEach((n,i)=>{const [x,y]=pos(i),s=sp(t-2.1-i*.08,14,.6);let col='#fff',tc=DK,rr=RR;
+   const team=TEAM.findIndex(T=>T.includes(i));if(t>=10.4)col=TC[team];else if(ti==team&&t>=4){const h=TC[team],m=v=>Math.round(parseInt(h.substr(v,2),16)*.3+255*.7);col=`rgb(${m(1)},${m(3)},${m(5)})`;rr=RR+4}
+   g.fillStyle=col;g.beginPath();g.arc(x,y,rr*s,0,7);g.fill();
+   if(s>.5&&t<10.4){g.save();g.translate(x,y);g.fillStyle=tc;g.font='900 60px PL';g.textAlign='center';g.textBaseline='middle';g.fillText(HJ[i],0,3);g.restore()}});
   g.restore()}
  vis('tl',t>=2.5&&t<10.4);vis('ts',t>=4&&t<10.4);
  if(t>=2.5&&t<4){$('tl').textContent='12띠를 둥글게 놓으면';$('tl').style.color=DK;$('tl').style.transform=`scale(${mix(1.3,1,sp(t-2.5,15,.6))})`;$('tl').style.opacity=t<3.85?1:1-cl((t-3.85)/.15)}
  if(t>=4&&t<10.4){const k=Math.floor((t-4)/1.6),a=sp(t-4-k*1.6-.4,15,.6);$('tl').textContent=TEAM[k].map(i=>AN[i]).join(' · ');$('tl').style.color=TC[k];
-  $('tl').style.transform=`scale(${mix(1.3,1,a)})`;$('tl').style.opacity=t-4-k*1.6>.4?1:0;$('ts').textContent=(k+1)+'팀 · '+TSUB[k];$('ts').style.opacity=cl((t-4-k*1.6-.6)/.2)}
- vis('c1',t>=10.6&&t<12.6);vis('c2',t>=11&&t<12.6);
+  $('tl').style.transform=`scale(${mix(1.3,1,a)})`;$('tl').style.opacity=t-4-k*1.6>.4?1:0;$('ts').textContent=TSUB[k];$('ts').style.opacity=cl((t-4-k*1.6-.6)/.2)}
+ vis('c1',t>=10.6&&t<12.45);vis('c2',t>=11&&t<12.45);
  if(t>=10.6&&t<12.6){$('c1').style.transform=`scale(${mix(1.3,1,sp(t-10.6,15,.6))})`;$('c2').style.opacity=cl((t-11)/.2)}
- if(t>=12.3&&t<12.7){g.fillStyle=GR;g.beginPath();g.arc(CX,CY,eio((t-12.3)/.35)*1500,0,7);g.fill()}
+ if(t>=12.25&&t<12.7){g.fillStyle=GR;g.beginPath();g.arc(CX,CY,eio((t-12.25)/.35)*1500,0,7);g.fill()}
  ['e1','e2','e3'].forEach(i=>vis(i,end));
- if(end){$('e1').style.transform=`scale(${mix(1.35,1,sp(t-12.7,15,.6))})`;$('e2').style.opacity=cl((t-13)/.2);
-  const b=sp(t-13.2,14,.6);$('e3').style.transform=`scale(${t>=14.3&&t<14.45?.94:b})`;
-  FXK.trail(g,t,13.4,1.4,u=>{const a=-Math.PI/2+u*6.6;return[FXK.cx+Math.cos(a)*400,1330+Math.sin(a)*70]},{color:SG,loop:true,r:12})}
+ if(end){$('e1').style.transform=`scale(${mix(1.35,1,sp(t-12.7,15,.6))})`;$('e2').style.opacity=cl((t-12.8)/.2);
+  const b=sp(t-12.9,14,.6);$('e3').style.transform=`scale(${t>=14.3&&t<14.45?.94:b})`;
+  FXK.trail(g,t,13.1,1.4,u=>{const a=-Math.PI/2+u*6.6;return[FXK.cx+Math.cos(a)*380,1260+Math.sin(a)*40]},{color:SG,loop:true,r:12})}
  
 }
 (async()=>{await document.fonts.load('900 100px PL');await document.fonts.load('800 40px PR');window.seek=t=>{draw0(t);const p=g.getImageData(4,4,1,1).data;document.body.style.background=`rgb(${p[0]},${p[1]},${p[2]})`;const fr=document.getElementById('zsfr').getContext('2d');fr.clearRect(0,0,1080,1920);FXK.frame(fr,{ai:'AI가 계산·작성한 콘텐츠예요'})};seek(0)})();
