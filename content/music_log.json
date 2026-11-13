@@ -70,5 +70,21 @@
   "mode": "up",
   "bpm": 124,
   "key": "G"
+ },
+ {
+  "name": "reel_1119_eul",
+  "kind": "fun",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 114,
+  "key": "A"
+ },
+ {
+  "name": "reel_1120_byeong",
+  "kind": "fun",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 118,
+  "key": "C"
  }
 ]

@@ -1,0 +1,76 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- 11/20 17:00 인스타 릴스 실험 칸 · 형식 A(화려 모션) · 일간 병(丙)
+     글: 2026-ilgan3/build.py REELS byeong 문장 그대로(훅·둘째 줄·기운·까닭·해 볼 것). 새 문장은 막대 이름표 두 개와 끝 장면뿐.
+     숫자 없음(막대는 비유 그림, 값 표시 안 함). 정월 없음(K-197). 판 m_young(미드나잇 블루 #172554 + 코랄 #FF5A5F + 바이올렛 #5B3FD6, 3회차 병 판 그대로).
+     글 칸 x 50~900(가운데 FXK.cx), y 450~1365. -->
+<style>
+@font-face{font-family:PL;src:url(../../pipeline/fonts/Paperlogy-9Black.ttf)}
+@font-face{font-family:PR;src:url(../../pipeline/fonts/PRETENDARD-EXTRABOLD.OTF)}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#172554}
+#s{position:absolute;inset:0;overflow:hidden}canvas{position:absolute;inset:0}
+.t{position:absolute;left:50px;right:180px;text-align:center;white-space:nowrap}
+</style></head><body><div id="s"><canvas id="cv" width="1080" height="1920"></canvas>
+<div id="a1" class="t" style="top:580px;font:900 120px/1.1 PL;color:#fff;letter-spacing:-4px">들어서기만 하면</div>
+<div id="a2" class="t" style="top:820px;font:900 180px/1.1 PL;color:#fff;letter-spacing:-4px">분위기가</div>
+<div id="a3" class="t" style="top:1010px;font:900 180px/1.1 PL;color:#FF5A5F;letter-spacing:-4px">바뀌어요</div>
+<div id="b1" class="t" style="top:530px;font:900 110px/1.18 PL;color:#fff">조용한 자리가<br><span style="color:#FF5A5F">제일 어색해요</span></div>
+<div id="c1" class="t" style="top:480px;font:900 104px/1.15 PL;color:#fff">한낮을 비추는<br><span style="color:#FF5A5F">해 기운</span>이에요</div>
+<div id="d1" class="t" style="top:520px;font:900 100px/1.18 PL;color:#fff">밝게 비추느라<br><span style="color:#FF5A5F">내 기분</span>은<br>뒤로 미뤄요</div>
+<div id="e1" class="t" style="top:500px;font:900 104px/1.18 PL;color:#fff">혼자 쉬는<br><span style="color:#FF5A5F">30분을 따로</span><br>잡아 보세요</div>
+<div id="f1" class="t" style="top:521px;font:900 120px/1.18 PL;color:#172554">내 첫 글자도<br>병일까?</div>
+<div id="f2" class="t" style="top:935px;font:800 64px PR;color:#172554">생일만 넣으면 무료 판정</div>
+<div id="f3" class="t" style="top:1142px;left:140px;right:270px;height:150px;border-radius:999px;background:#172554;color:#FF5A5F;font:900 66px/150px PL">프로필 링크 ↗</div>
+</div>
+<script src="../../pipeline/motion_fx.js"></script>
+<script>
+window.FX=['테마물결','노드불켜기','태양그리기','순위막대','궤도링','원와이프'];
+const {cl,mix,ease,eio,sp}=FXK,NV='#172554',NV2='#1F2F66',DK='#0B1020',CO='#FF5A5F',CO2='#FFB199',VI='#5B3FD6',W='#FFFFFF',SUB='#C7CCE6';
+const $=id=>document.getElementById(id),g=$('cv').getContext('2d'),vis=(id,on)=>$(id).style.display=on?'':'none';
+window.SFX=[{t:.25,k:'press'},{t:.55,k:'swoosh'},{t:.9,k:'chime'},{t:2.25,k:'swoosh'},{t:2.7,k:'tick'},{t:3.4,k:'press'},{t:3.6,k:'tick'},{t:3.8,k:'tick'},{t:4.0,k:'chime'},
+ {t:4.85,k:'swoosh'},{t:5.4,k:'chime'},{t:7.65,k:'swoosh'},{t:8.3,k:'tick'},{t:8.9,k:'tick'},{t:9.6,k:'press'},{t:10.45,k:'swoosh'},{t:11.2,k:'tick'},{t:12.1,k:'chime'},
+ {t:13.0,k:'swoosh'},{t:13.6,k:'chime'},{t:14.3,k:'press'}];
+function pop(id,t0,t,k=15,z=.6){const a=sp(t-t0,k,z);$(id).style.transform=`scale(${a})`;$(id).style.opacity=t>=t0?1:0}
+function rise(id,t0,t){const a=sp(t-t0,14,.7);$(id).style.transform=`translateY(${(1-a)*90}px)`;$(id).style.opacity=cl((t-t0)/.12)}
+function wipe(t,t0,col,y=907){if(t>=t0&&t<t0+.42){g.fillStyle=col;g.beginPath();g.arc(FXK.cx,y,eio((t-t0)/.42)*1500,0,7);g.fill()}}
+// 노드 불켜기: 꺼진 점들 가운데로 코랄 점이 들어오면 물결 따라 차례로 켜짐
+function room(t,t0){const cols=5,rows=3,gap=130,x0=FXK.cx-2*gap,y0=960;const tin=t0+.9;
+ const ent=sp(t-t0-.2,12,.7),ex=FXK.cx,ey=y0+gap;
+ if(t>=tin&&t<tin+.5){const r=(t-tin)*800;g.save();g.strokeStyle=`rgba(255,90,95,${.45*(1-(t-tin)/.5)})`;g.lineWidth=6;g.beginPath();g.arc(ex,ey,r,0,7);g.stroke();g.restore()}
+ for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){if(i==2&&j==1)continue;const x=x0+i*gap,y=y0+j*gap,a=sp(t-t0-(i+j)*.03,14,.7);if(a<=0)continue;
+  const d=Math.hypot(x-FXK.cx,y-ey),on=t>=tin+d/900;const k=on?sp(t-tin-d/900,16,.5):0;g.fillStyle=on?(((i+j)%2)?CO2:'#FFD66B'):'rgba(255,255,255,.34)';g.beginPath();g.arc(x,y,mix(30,40,k)*a,0,7);g.fill()}
+ g.fillStyle=CO;g.beginPath();g.arc(ex,ey,52*ent,0,7);g.fill()}
+// 막대 둘: 모두의 기분은 오르고 내 기분은 줄어듦(순위막대)
+function bars(t,t0){const x0=440,x1=880,lab=[['모두의 기분',mix(.35,.95,eio(cl((t-t0)/1.2))),CO],['내 기분',mix(.75,.18,eio(cl((t-t0-.4)/1.2))),VI]];
+ lab.forEach(([n,p,c],i)=>{const y=990+i*170,a=sp(t-t0+.3-i*.1,14,.7);if(a<=0)return;g.save();g.globalAlpha=cl(a);g.font='800 60px PR';g.textAlign='right';g.textBaseline='middle';g.fillStyle=SUB;g.fillText(n,x0-50,y+50);
+  g.fillStyle='rgba(255,255,255,.12)';g.beginPath();g.roundRect(x0,y,x1-x0,100,50);g.fill();g.fillStyle=c;g.beginPath();g.roundRect(x0,y,Math.max(100,(x1-x0)*p),100,50);g.fill();g.restore()})}
+// 30분 링: 시계 반이 차고 점 넷이 궤도를 돎
+function clock(t,t0){const x=FXK.cx,y=1110,r=150,p=eio(cl((t-t0)/1.1))*.5,a=sp(t-t0+.2,14,.7);if(a<=0)return;g.save();g.translate(x,y);g.scale(a,a);
+ g.lineCap='round';g.lineWidth=34;g.strokeStyle='rgba(255,255,255,.14)';g.beginPath();g.arc(0,0,r,0,7);g.stroke();g.strokeStyle=CO;g.beginPath();g.arc(0,0,r,-Math.PI/2,-Math.PI/2+6.283*p);g.stroke();
+ for(let i=0;i<4;i++){const q=t*1.4+i*1.571;g.fillStyle=i%2?CO2:VI;g.beginPath();g.arc(Math.cos(q)*(r+36),Math.sin(q)*(r+36),9,0,7);g.fill()}
+ g.fillStyle=W;g.font='900 68px PL';g.textAlign='center';g.textBaseline='middle';g.fillText('30분',0,6);g.restore()}
+function draw0(t){
+ // 1 훅: 꺼진 방(DK)이 0.5초에 물결로 켜짐(테마물결) — 글자는 0초부터 보임(K-139)
+ let bg=t<.5?DK:NV; if(t>=13.2)bg=CO; g.fillStyle=bg;g.fillRect(0,0,1080,1920);
+ const s1=t<2.4;['a1','a2','a3'].forEach(i=>vis(i,s1));
+ if(s1){if(t>=.5&&t<1.1){g.fillStyle=VI;g.beginPath();g.arc(FXK.cx,1040,eio((t-.5)/.6)*1600,0,7);g.fill();g.fillStyle=NV;g.beginPath();g.arc(FXK.cx,1040,eio(cl((t-.62)/.5))*1600,0,7);g.fill()}
+  const a=sp(t+.25,16,.55),b=sp(t+.1,16,.55),c=sp(t-.5,14,.45);$('a1').style.transform=`scale(${mix(.86,1,a)})`;$('a2').style.transform=`scale(${mix(.8,1,b)})`;
+  $('a3').style.color=t>=.5?CO:'#5A6178';$('a3').style.transform=`scale(${t>=.5?mix(1.25,1,c):1}) rotate(${t>=.5?mix(-4,0,c):0}deg)`}
+ // 2 조용한 자리: 꺼진 점들 → 코랄 점이 들어오면 차례로 켜짐
+ wipe(t,2.2,NV2);const s2=t>=2.4&&t<5.0;vis('b1',s2);
+ if(s2){g.fillStyle=NV2;g.fillRect(0,0,1080,1920);rise('b1',2.45,t);room(t,2.5)}
+ // 3 해 기운: 돌아가는 해와 丙
+ wipe(t,4.8,NV);const s3=t>=5.0&&t<7.8;vis('c1',s3);
+ if(s3){rise('c1',5.05,t);FXK.sun(g,t,5.3,{y:1095,r:140,L:110,char:'丙',c1:CO,c2:CO2})}
+ // 4 까닭: 모두의 기분 막대는 오르고 내 기분은 줄어듦
+ wipe(t,7.6,NV2);const s4=t>=7.8&&t<10.6;vis('d1',s4);
+ if(s4){g.fillStyle=NV2;g.fillRect(0,0,1080,1920);rise('d1',7.85,t);bars(t,8.3)}
+ // 5 해 볼 것: 30분 링
+ wipe(t,10.4,NV);const s5=t>=10.6&&t<13.2;vis('e1',s5);
+ if(s5){rise('e1',10.65,t);clock(t,11.0)}
+ // 6 끝
+ wipe(t,13.0,CO);const s6=t>=13.2;['f1','f2','f3'].forEach(i=>vis(i,s6));
+ if(s6){const a=sp(t-13.2,15,.62);$('f1').style.transform=`scale(${mix(1.3,1,a)})`;$('f2').style.opacity=cl((t-13.6)/.2);pop('f3',13.9,t);
+  if(t>=14.3&&t<14.45)$('f3').style.transform='scale(.94)'}
+}
+(async()=>{await document.fonts.load('900 100px PL');await document.fonts.load('800 40px PR');window.seek=t=>{draw0(t);const p=g.getImageData(4,4,1,1).data;document.body.style.background=`rgb(${p[0]},${p[1]},${p[2]})`;const fr=document.getElementById('zsfr').getContext('2d');fr.clearRect(0,0,1080,1920);FXK.frame(fr,{ai:'AI가 계산·작성한 콘텐츠예요'})};seek(0)})();
+</script><canvas id="zsfr" width="1080" height="1920" style="position:absolute;left:0;top:0;z-index:99;pointer-events:none"></canvas></body></html>
