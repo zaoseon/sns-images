@@ -85,7 +85,9 @@ async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러=1, ch="reel",
             if 고정없이:   # 프레임마다 페이지가 F.frame 에 넘긴 값(정월 장면이면 정월 AI 고지)을 적어 둔다
                 await pg.evaluate("t => {window.__zsFrameOpt=null;window.seek(t)}", i / fps); opts.append(await pg.evaluate("window.__zsFrameOpt"))
             if 블러 <= 1:
-                await pg.evaluate("t => window.seek(t)", i / fps)
+                # 11/13 K-205: 클립은 첫 프레임이 표지 — 페이지가 window.coverT 를 내놓으면 0번 프레임은 그 시각 장면으로 그린다
+                _ct = (await pg.evaluate("typeof window.coverT==='number'?window.coverT:null")) if (i == 0 and ch == "naver_clip") else None
+                await pg.evaluate("t => window.seek(t)", _ct if _ct is not None else i / fps)
                 await pg.screenshot(path=os.path.join(tmp, f"f{i:05d}.png")); continue
             # 11/10 모션 블러(Prompt Motion 고친 쇼릴 프롬프트): 한 프레임 시간(셔터 절반) 안을 블러장 찍어 평균한다
             import numpy as np, io
@@ -205,6 +207,8 @@ def 표지_검사(pg, ch="reel"):
     if t is None: return []
     C = CS.CH[ch]; z = {r[0]: r[1:5] for r in C["zones"]}
     top = z["상단 고정"][3]; bot = z["하단 고정"][1]; sx0, sx1 = C["safe"][0], C["safe"][2]
+    _ct = pg.evaluate("typeof window.coverT==='number'?window.coverT:null")   # 페이지가 표지 장면 시각을 정해 두면 0번 프레임은 그 장면
+    if _ct is not None: t = _ct
     pg.evaluate("t => {window.__zsTxt=[];window.__zsBox=[];window.seek(t)}", t)
     a = np.asarray(Image.open(io.BytesIO(pg.screenshot())).convert("RGB")).astype(int)
     A = a[top + 10:bot - 10, sx0:sx1]
