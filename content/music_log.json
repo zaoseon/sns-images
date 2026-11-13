@@ -46,5 +46,13 @@
   "mode": "up",
   "bpm": 114,
   "key": "C"
+ },
+ {
+  "name": "reel_1118_gab",
+  "kind": "fun",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 118,
+  "key": "E"
  }
 ]
