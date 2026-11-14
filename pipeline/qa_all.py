@@ -56,6 +56,11 @@ def text_checks():
     out["면책 문장 '재미로…'(K-128: 만드는 코드·승인 대기 캡션·안 올린 클립 설명·발행 전 원고)"] = len(DA.run())
     sys.path.insert(0, os.path.join(R, "naver")); import cover_audit as CVA   # 대표 10/15: 상강 대표 이미지 목록에서 또 잘림. 글자형 구도는 얼굴 가운데(QCS)만
     out["네이버 대표 이미지(가운데 720 안·글자형은 얼굴 가운데)"] = len(CVA.run())
+    import io as _io, contextlib as _cl, clip_audit as CA   # 11/14 대표 '규칙 만들었으면 적용해라'(K-203·K-205): 아직 안 올린 클립의 표지(0번 프레임)·표지 그림·크기·소리
+    with _cl.redirect_stdout(_io.StringIO()) as _buf: CA.main()
+    _lines = [x for x in _buf.getvalue().splitlines() if x and "통과" not in x]
+    for x in _lines: print("   ", x)
+    out["클립 표지·영상 감사(K-205: 안 올린 클립 0번 프레임·표지 그림=첫 프레임·1080x1920·소리)"] = len(_lines)
     if "--images" in sys.argv or "--videos" in sys.argv: out["금지어 '상담' 그림 속 글자(카드 그림 OCR, 느림)"] = len(BW.scan_images())
     return out
 def spec_checks():
