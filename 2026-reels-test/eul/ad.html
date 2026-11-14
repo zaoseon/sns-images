@@ -76,7 +76,7 @@ function draw0(t){
  // 2 카톡: 마라탕 → 좋아 → (속마음 쾅) → 옆집 파스타
  wipe(t,2.2,EM2);const s2=t>=2.4&&t<6.4;
  if(s2){g.fillStyle=EM2;g.fillRect(0,0,1080,1920);
-  stack(t,[{t0:2.55,h:bubH('주말에 마라탕 가자!'),draw:(y,a)=>bub('주말에 마라탕 가자!','l',y,a)},
+  stack(t,[{t0:2.55,h:bubH('주말에 마라탕 ㄱㄱ?'),draw:(y,a)=>bub('주말에 마라탕 ㄱㄱ?','l',y,a)},
    {t0:3.15,h:bubH('좋아ㅎㅎ'),draw:(y,a)=>bub('좋아ㅎㅎ','r',y,a)},
    {t0:3.75,h:220,draw:(y,a)=>inner('(사실 매운 거\n못 먹음)',y,a,t,3.75)},
    {t0:4.45,h:bubH('근데 옆집 파스타도\n맛있대!'),draw:(y,a)=>bub('근데 옆집 파스타도\n맛있대!','r',y,a)}])}
