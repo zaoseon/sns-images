@@ -60,7 +60,7 @@ def video(path, ch="reel", step=0.25):
         b = _bbox(a, top + 10, bot - 10)
         if i == 0:   # 표지(0번 프레임)
             ok = b and b["fill"] >= B["cover_fill"] and (b["y1"] - b["y0"]) / (bot - top - 20) >= B["cover_h"]
-            if not ok: (막음 if ch == "naver_clip" else 경고).append(f"표지(0초 프레임)가 비었어요 — 채움 {(b['fill'] if b else 0) * 100:.1f}%(5%↑) 높이 {((b['y1'] - b['y0']) / (bot - top - 20) if b else 0) * 100:.0f}%(22%↑). 목록 표지는 첫 프레임이다(K-205)")
+            if not ok: (막음 if ch == "naver_clip" else 경고).append(f"표지(0초 프레임)가 비었어요 — 채움 {(b['fill'] if b else 0) * 100:.1f}%(5%↑) 높이 {((b['y1'] - b['y0']) / (bot - top - 20) if b else 0) * 100:.0f}%(22%↑). 목록 표지는 첫 프레임이다(K-205). 인스타 릴스는 예약에 표지 시각(videoCoverMilliseconds)이 있으면 그 장면이 표지")
         if not b: continue
         g_top, g_bot = b["blocks"][0][0] - top, bot - b["blocks"][-1][1]; 안 = [b["blocks"][j + 1][0] - b["blocks"][j][1] for j in range(len(b["blocks"]) - 1)]
         if b["y0"] < top + B["gap_top"] - 4: hit("위 간격", t, f"내용 위 끝이 상단 고정 줄 아래 {b['y0'] - top}px (60↑)")
