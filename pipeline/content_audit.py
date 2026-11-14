@@ -116,15 +116,8 @@ def body(path):
     막음, 경고 = [], []; im = Image.open(path).convert("RGB"); W, H = im.size
     if W not in (1280, 640, 480): 경고.append(f"폭 {W}px — 본문 이미지는 1280(원본)·640·480")
     if W >= 1000 and (H < 300 or H > 2400): 경고.append(f"높이 {H}px — 모바일 한 화면에 보기 어렵거나 너무 길어요(300~2400)")
-    # 모바일 가독성: 폰 화면 폭 360 에 맞춰 줄였을 때 글자 높이 = 원본 × 360/W. 글자 덩어리(가로로 이어진 줄)의 높이 하위 10% 를 잰다
-    s = 360 / W; a = np.asarray(im.convert("L"), float); small = np.asarray(im.resize((360, max(1, int(H * s))), Image.LANCZOS).convert("L"), float)
-    edge = np.abs(np.diff(small, axis=1)) > 40; rows = edge.sum(1) > 4; runs = []; c = 0
-    for r in rows:
-        if r: c += 1
-        elif c: runs.append(c); c = 0
-    if c: runs.append(c)
-    글줄 = [x for x in runs if 3 <= x <= 40]
-    if 글줄 and np.percentile(글줄, 10) < 7: 경고.append(f"폰 폭(360px)에서 가장 작은 글줄 높이 약 {np.percentile(글줄, 10):.0f}px — 7px 미만은 읽기 힘듦(원본 글자 {int(7 / s)}px↑ 권장)")
+    # 글자 크기는 끝난 파일에서 재지 않는다: 줄 높이로 어림하면 축 숫자·로고·글자 조각을 작은 글로 잘못 잡았다(11/14 첫 실행 8건 모두 실제 48px 안팎).
+    # 대신 그리는 순간 잰다 — sns-images naver/imgkit.py Cv.text·check (channel_specs naver_blog_body min_text, 고정 요소 제외).
     if os.path.getsize(path) > 2_500_000: 경고.append(f"파일 {os.path.getsize(path) // 1000}KB — 모바일 로딩 무거움")
     막음 += _faint(path); return 막음, 경고
 

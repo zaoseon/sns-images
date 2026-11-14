@@ -47,12 +47,23 @@ def F(path, size): return R.F(path, int(round(size * S)))
 def HF(t, path, size):
     f = F(path, size); return R.HF(t, f)
 
+SMALL_OK = ("子午線", "AI로 생성", "가상의 캐릭터", "AI가 계산")   # 고정 요소 글(작아도 됨)
+def _MIN_TEXT():
+    try:
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "pipeline")); import channel_specs as _CS
+        return _CS.CH["naver_blog_body"]["min_text"]
+    except Exception: return 42
+
 class Cv:
     def __init__(s, h, bg):
         s.h = h; s.bg = bg; s.img = Image.new("RGB", (BW * S, h * S), WHITE); s.d = ImageDraw.Draw(s.img)
         s.d.rounded_rectangle([OX * S, 0, (OX + CW) * S - 1, h * S - 1], 44 * S, fill=bg)
     def tw(s, t, path, size): return s.d.textlength(t, font=HF(t, path, size)) / S
-    def text(s, x, y, t, path, size, fill, anchor="la"): s.d.text((x * S, y * S), t, font=HF(t, path, size), fill=fill, anchor=anchor)
+    def text(s, x, y, t, path, size, fill, anchor="la"):
+        # 11/14 대표 '권장안대로'(K-208): 본문 그림 글자는 폰에서 읽히게 channel_specs naver_blog_body min_text(42) 이상 — 꽉 찬 판(f)은 1100→1280 으로 커지므로
+        # 그리는 크기 × 1280/1100 로 잰다. 고정 요소(오른쪽 위 로고 子午線 자오선 · AI 표시)는 뺀다. save() 에서 걸리면 멈춘다.
+        if not any(k in t for k in SMALL_OK): s.__dict__.setdefault("_sizes", []).append((t, size * BW / CW))
+        s.d.text((x * S, y * S), t, font=HF(t, path, size), fill=fill, anchor=anchor)
     def rr(s, box, r, fill=None, outline=None, w=0):
         s.d.rounded_rectangle([v * S for v in box], r * S, fill=fill, outline=outline, width=int(round(w * S)))
     def line(s, x0, y0, x1, y1, fill, w=2): s.d.line([(x0 * S, y0 * S), (x1 * S, y1 * S)], fill=fill, width=int(round(w * S)))
@@ -74,7 +85,13 @@ class Cv:
             else: lines.append(cur); cur = w
         if cur: lines.append(cur)
         return lines
+    def check(s, name):
+        _min = _MIN_TEXT(); _작 = [(t, round(v)) for t, v in s.__dict__.get("_sizes", []) if v < _min and t.strip()]
+        if _작 and os.environ.get("ZS_SMALL_OK") != "1":
+            raise SystemExit(f"[막음] {name}: 폰에서 작은 글자 {len(_작)}곳 — 꽉 찬 판 기준 {_min}px 이상(channel_specs naver_blog_body min_text): " + " / ".join(f"'{t[:14]}' {v}px" for t, v in _작[:6]))
+
     def save(s, name):
+        s.check(name)
         s.d.rectangle([0, 0, OX * S - 1, s.h * S], fill=WHITE); s.d.rectangle([(OX + CW) * S, 0, BW * S, s.h * S], fill=WHITE)   # 워터마크가 여백으로 번지지 않게 마지막에 다시 흰색
         os.makedirs(MASTER, exist_ok=True); os.makedirs(DELIV, exist_ok=True)
         guard_overwrite(name)

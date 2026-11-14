@@ -13,6 +13,7 @@ XB = K.FD + "PRETENDARD-EXTRABOLD.OTF"; BK = K.FD + "PRETENDARD-BLACK.OTF"; SB =
 PREVIEW = os.environ.get("PREVIEW")
 
 def _save(cv, name):
+    cv.check(name)
     if PREVIEW:
         from PIL import Image
         cv.d.rectangle([0, 0, K.OX * K.S - 1, cv.h * K.S], fill=WHITE); cv.d.rectangle([(K.OX + K.CW) * K.S, 0, K.BW * K.S, cv.h * K.S], fill=WHITE)
