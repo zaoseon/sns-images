@@ -44,7 +44,7 @@ CH = CS.CH["reel"]
 OUT = os.path.join(ROOT, "2026-motion", "html")
 
 
-async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러=1, ch="reel", 고정없이=False):
+async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러=1, ch="reel", 고정없이=False, 표지채널=None):
     from playwright.async_api import async_playwright
     n = int(round(초 * fps))
     async with async_playwright() as pw:
@@ -86,7 +86,7 @@ async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러=1, ch="reel",
                 await pg.evaluate("t => {window.__zsFrameOpt=null;window.seek(t)}", i / fps); opts.append(await pg.evaluate("window.__zsFrameOpt"))
             if 블러 <= 1:
                 # 11/13 K-205: 클립은 첫 프레임이 표지 — 페이지가 window.coverT 를 내놓으면 0번 프레임은 그 시각 장면으로 그린다
-                _ct = (await pg.evaluate("typeof window.coverT==='number'?window.coverT:null")) if (i == 0 and ch == "naver_clip") else None
+                _ct = (await pg.evaluate("typeof window.coverT==='number'?window.coverT:null")) if (i == 0 and (표지채널 or ch) == "naver_clip") else None
                 await pg.evaluate("t => window.seek(t)", _ct if _ct is not None else i / fps)
                 await pg.screenshot(path=os.path.join(tmp, f"f{i:05d}.png")); continue
             # 11/10 모션 블러(Prompt Motion 고친 쇼릴 프롬프트): 한 프레임 시간(셔터 절반) 안을 블러장 찍어 평균한다
@@ -94,7 +94,7 @@ async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러=1, ch="reel",
             from PIL import Image
             acc = None
             # 11/14 K-205 구멍 막음: 기본 렌더는 블러 2장 경로라 coverT 가 0번 프레임에 안 먹었다(블러 1 경로에만 있었음). 표지 프레임은 블러 없이 그 장면 한 장.
-            _ct = (await pg.evaluate("typeof window.coverT==='number'?window.coverT:null")) if (i == 0 and ch == "naver_clip") else None
+            _ct = (await pg.evaluate("typeof window.coverT==='number'?window.coverT:null")) if (i == 0 and (표지채널 or ch) == "naver_clip") else None
             if _ct is not None:
                 await pg.evaluate("t => window.seek(t)", _ct); await pg.screenshot(path=os.path.join(tmp, f"f{i:05d}.png")); continue
             for k in range(블러):
@@ -567,7 +567,7 @@ def render(html, 이름, 초=15.0, fps=30, ch="reel", 블러=1, 설계="reel"):
         # bottom(=zaoseon.com 글자 줄, y1465)을 썼는데 고지 칸은 y1425 에서 시작해
         # 1441 까지 글이 내려와도 통과했다 — 실제로는 이미 겹친 상태였다(10/16).
         한계 = 고정top - 24
-        n = asyncio.run(_shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러, 설계 if 옮김 else ch, 고정없이=옮김))
+        n = asyncio.run(_shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러, 설계 if 옮김 else ch, 고정없이=옮김, 표지채널=ch))
         if 옮김:
             opts = json.load(open(os.path.join(tmp, "frame_opts.json"), encoding="utf-8")); 판들 = {}
             for i in range(n):
