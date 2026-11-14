@@ -1,0 +1,79 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- 11/22(일) 17:00 인스타 릴스 실험 칸 · 형식 F(1·2 고르기 퀴즈) · 사주 시간표
+     글: zaoseon-site public/naver/n78.html(사주 시간표, 오후 3시 52분은 무슨 시일까) 그대로 —
+     하루를 두 시간씩 열두 시(미시 오후 1시~3시 전 = 양, 신시 오후 3시~5시 전 = 원숭이),
+     "오후 3시 정각은 신시가 시작되는 때, 2시 59분은 아직 미시", 서머타임(1987~88년 여름) 때 태어났어도 시계에 적힌 시각 그대로.
+     지어낸 숫자 없음. 정월 없음(K-197). 한자 없음. 일간 아닌 주제(K-113, 11/20 병·11/23 정 사이).
+     판 b_orange(블루 #2355D9 + 오렌지 #FF8A34 + 오프화이트 #F7F8FA) — 앞 편(dohwa p_black·byeong m_young·eul v_emerald)과 다른 판. -->
+<style>
+@font-face{font-family:PL;src:url(../../pipeline/fonts/Paperlogy-9Black.ttf)}
+@font-face{font-family:PR;src:url(../../pipeline/fonts/PRETENDARD-EXTRABOLD.OTF)}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#2355D9}canvas{position:absolute;inset:0}
+</style></head><body><canvas id="cv" width="1080" height="1920"></canvas>
+<script src="../../pipeline/motion_fx.js"></script>
+<script>
+window.coverT=1.5;
+window.FX=['숫자쾅','고르기카드','시계바늘','부채꼴채움','카운트다운','알약눌림'];
+const F=FXK,{cl,mix,ease,eio,sp}=F,BL='#2355D9',BL2='#1B44B0',OR='#FF8A34',OW='#F7F8FA',INK='#14213D',W='#FFFFFF';
+const g=document.getElementById('cv').getContext('2d');
+const SI=['자','축','인','묘','진','사','오','미','신','유','술','해'];   // 자시 = 밤 11시 시작
+window.SFX=[{t:.05,k:'press'},{t:.3,k:'tick'},{t:.55,k:'tick'},{t:.8,k:'tick'},{t:1.05,k:'chime'},
+ {t:2.6,k:'swoosh'},{t:2.9,k:'pop'},{t:3.05,k:'pop'},{t:3.8,k:'tick'},{t:4.3,k:'tick'},{t:4.8,k:'tick'},
+ {t:5.4,k:'swoosh'},{t:6.4,k:'tick'},{t:6.9,k:'tick'},{t:7.4,k:'chime'},{t:8.3,k:'tick'},{t:8.5,k:'ding'},{t:9.3,k:'pop'},
+ {t:10.3,k:'swoosh'},{t:10.7,k:'pop'},{t:12.6,k:'swoosh'},{t:13.2,k:'pop'},{t:14.2,k:'press'}];
+function T(txt,x,y,font,color){g.font=font;g.fillStyle=color;g.textAlign='center';g.textBaseline='middle';g.fillText(txt,x,y)}
+function pill(x,y,w,h,bg,txt,font,fg,s=1){g.save();g.translate(x,y);g.scale(s,s);g.fillStyle=bg;g.beginPath();g.roundRect(-w/2,-h/2,w,h,h/2);g.fill();T(txt,0,4,font,fg);g.restore()}
+function wipe(t,t0,col){const p=eio(cl((t-t0)/.3));if(p<=0||p>=1)return;g.fillStyle=col;g.fillRect(0,1920*(1-p),1080,1920*p)}
+// 시계: 24시간 판을 열두 칸(두 시간씩). 각도 0 = 위(밤 12시). 자시는 밤 11시~1시라 -15° 부터
+function ang(h){return (h/24)*Math.PI*2-Math.PI/2}
+function dial(t,t0,cx,cy,R,hour,lit){const a=sp(t-t0,13,.7);if(a<=0)return;g.save();g.translate(cx,cy);g.scale(cl(a,0,1.1),cl(a,0,1.1));
+ g.fillStyle=W;g.beginPath();g.arc(0,0,R,0,7);g.fill();g.strokeStyle=BL;g.lineWidth=8;g.stroke();
+ SI.forEach((s,i)=>{const h0=23+i*2,a0=ang(h0),a1=ang(h0+2),on=lit===i;
+  if(on){const p=eio(cl((t-lit_t[i])/.35)),am1=mix(a0,a1,p);g.fillStyle=OR;g.beginPath();g.arc(0,0,R-6,a0,am1);g.arc(0,0,R*.9,am1,a0,true);g.closePath();g.fill()}
+  g.strokeStyle='#D9E1F2';g.lineWidth=4;g.beginPath();g.moveTo(0,0);g.lineTo(Math.cos(a0)*R,Math.sin(a0)*R);g.stroke();
+  const am=(a0+a1)/2,rr=R*.66;T(s,Math.cos(am)*rr,Math.sin(am)*rr+3,'900 64px PL',on?OR:INK)});
+ // 바늘
+ const ah=ang(hour);g.strokeStyle=INK;g.lineWidth=14;g.lineCap='round';g.beginPath();g.moveTo(0,0);g.lineTo(Math.cos(ah)*R*.5,Math.sin(ah)*R*.5);g.stroke();
+ g.fillStyle=INK;g.beginPath();g.arc(0,0,22,0,7);g.fill();g.restore()}
+const lit_t={7:6.35,8:8.3};
+// 고르기카드: 1·2 카드가 번갈아 커짐(안전 영역 x60~900 안에 두 장)
+function picks(t,t0){const w=350,h=430,y=855,xs=[F.cx-210,F.cx+210],L=[['1','미시'],['2','신시']];
+ L.forEach(([n,sub],i)=>{const a=sp(t-t0-i*.12,15,.55);if(a<=0)return;const on=t>t0+.8&&Math.floor((t-t0-.8)/.5)%2==i,k=a*(on?1.05:1);
+  g.save();g.translate(xs[i],y);g.scale(k,k);g.fillStyle=on?OR:W;g.beginPath();g.roundRect(-w/2,-h/2,w,h,48);g.fill();
+  T(n,0,-50,'900 150px PL',INK);T(sub,0,110,'900 76px PL',INK);g.restore()})}
+function draw(t){const X=F.cx,Y=F.cy;
+ let bg=BL;if(t>=5.4)bg=OW;if(t>=10.3)bg=BL;if(t>=12.6)bg=OR;g.fillStyle=bg;g.fillRect(0,0,1080,1920);
+ // 1 훅(0~2.6): 0초부터 글이 서 있다. '1분' 이 외곽선으로 쌓이다 마지막만 채움
+ if(t<2.6){const a=sp(t+.35,16,.5);g.save();g.translate(X,670);g.scale(mix(1.4,1,a),mix(1.4,1,a));g.rotate(mix(-.12,0,a));T('1분',0,0,'900 220px PL',OR);g.restore();
+  const b=sp(t+.25,15,.6);g.save();g.translate(X,900);g.scale(mix(.9,1,b),mix(.9,1,b));T('차이로',0,0,'900 120px PL',W);g.restore();
+  const c=sp(t+.15,15,.55);g.save();g.translate(X,1170);g.scale(mix(.92,1,c),mix(.92,1,c));pill(0,0,720,170,W,'시가 갈려요','900 96px PL',BL);g.restore()}
+ wipe(t,2.35,BL2);
+ // 2 퀴즈(2.6~5.4): 오후 2시 59분생은? 1 미시 · 2 신시 — 카드가 번갈아 커지고 3·2·1
+ if(t>=2.6&&t<5.4){g.fillStyle=BL2;g.fillRect(0,0,1080,1920);
+  const a=sp(t-2.58,15,.6);g.save();g.translate(X,520);g.scale(a,a);T('오후 2시 59분생은',0,0,'900 92px PL',W);g.restore();
+  picks(t,2.6);
+  if(t<3.7){const s0=sp(t-2.62,15,.6);g.save();g.translate(X,1290);g.scale(s0,s0);T('골라 봐요',0,0,'900 76px PL',W);g.restore()}
+  if(t>=3.7){const k=Math.min(2,Math.floor((t-3.7)/.5)),s=sp(t-3.7-k*.5,16,.5);g.save();g.translate(X,1290);g.scale(s,s);T(['3','2','1'][k],0,0,'900 150px PL',OR);g.restore()}}
+ wipe(t,5.15,OW);
+ // 3 시계(5.4~10.3): 열두 시 판 → 바늘이 2시 59분 → 미시 칸 채움 → 3시 정각 → 신시
+ if(t>=5.4&&t<10.3){const hour=t<6.3?mix(12,14.98,eio(cl((t-5.6)/.7))):t<8.2?14.98:mix(14.98,15.0,cl((t-8.2)/.1));
+  const lit=t>=8.3?8:(t>=6.35?7:null);
+  const hd=sp(t-5.45,15,.6);g.save();g.translate(X,500);g.scale(hd,hd);T(t<8.3?'2시 59분 = 미시(양)':'3시 정각 = 신시(원숭이)',0,0,'900 74px PL',INK);g.restore();
+  dial(t,5.5,X,900,310,hour,lit);
+  if(t<6.9){const s=sp(t-5.5,15,.6);g.save();g.translate(X,1300);g.scale(s,s);T('두 시간씩 열두 칸',0,0,'800 66px PR',INK);g.restore()}
+  if(t>=6.9&&t<8.2){const s=sp(t-6.9,15,.6);g.save();g.translate(X,1300);g.scale(s,s);T('오후 1시 ~ 3시 전',0,0,'800 66px PR',INK);g.restore()}
+  if(t>=8.3&&t<9.3){const s=sp(t-8.3,15,.6);g.save();g.translate(X,1300);g.scale(s,s);T('오후 3시 ~ 5시 전',0,0,'800 66px PR',INK);g.restore()}
+  if(t>=9.3){const s=sp(t-9.3,16,.5);g.save();g.translate(X,1300);g.scale(s,s);pill(0,0,600,130,OR,'정답은 1번 미시','900 72px PL',W);g.restore()}}
+ wipe(t,10.05,BL);
+ // 4 한 가지 더(10.3~12.6): 서머타임 때 태어났어도 시계 시각 그대로
+ if(t>=10.3&&t<12.6){const a=sp(t-10.35,15,.6);g.save();g.translate(X,560);g.scale(a,a);pill(0,0,520,120,OR,'하나 더','900 68px PL',INK);g.restore();
+  const b=sp(t-10.6,15,.6);g.save();g.translate(X,800);g.scale(mix(1.2,1,b),mix(1.2,1,b));g.globalAlpha=cl(b);T('1987~88년',0,0,'900 120px PL',W);T('여름생도',0,150,'900 120px PL',W);g.restore();
+  const c=sp(t-11.2,15,.6);if(t>=11.2){g.save();g.translate(X,1230);g.scale(c,c);T('시계에 적힌 시각 그대로',0,0,'900 74px PL',OR);g.restore()}}
+ wipe(t,12.35,OR);
+ // 5 끝(12.6~15)
+ if(t>=12.6){const a=sp(t-12.65,15,.62);g.save();g.translate(X,620);g.scale(mix(1.3,1,a),mix(1.3,1,a));T('내 태어난 시는',0,0,'900 116px PL',INK);T('몇 시?',0,150,'900 116px PL',INK);g.restore();
+  if(t>=13.0){g.globalAlpha=cl((t-13.0)/.2);T('생일만 넣으면 무료 판정',X,1010,'800 66px PR',INK);g.globalAlpha=1}
+  if(t>=13.2){const b=sp(t-13.2,15,.6);pill(X,1230,640,150,INK,'프로필 링크 ↗','900 70px PL',OR,t>=14.2&&t<14.35?.94:b)}}
+}
+(async()=>{await document.fonts.load('900 100px PL');await document.fonts.load('800 40px PR');window.seek=t=>{draw(t);const p=g.getImageData(4,4,1,1).data;document.body.style.background=`rgb(${p[0]},${p[1]},${p[2]})`;const fr=document.getElementById('zsfr').getContext('2d');fr.clearRect(0,0,1080,1920);FXK.frame(fr,{ai:'AI가 계산·작성한 콘텐츠예요'})};seek(0)})();
+</script><canvas id="zsfr" width="1080" height="1920" style="position:absolute;left:0;top:0;z-index:99;pointer-events:none"></canvas></body></html>

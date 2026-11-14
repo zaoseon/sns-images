@@ -1492,3 +1492,8 @@ README "2주마다 하는 일" 그대로. 요점만:
 - `2026-reels-test/yeokma/ad.html` → `reel_1117_yeokma.mp4`: 형식 C(코드로 그린 평면 일러스트, 색 3개, 시차), 역마 띠 네 묶음 = 네이버 n21 = engine YEOKMA. 승인 카드 **reeltest-1117**(11/17 17:00 인스타 새 글, 캡션 capfix 0). 11/17 17:00 살아 있는 예약 없음(초안 416085623 만 있음, 안 건드림).
 - 균형 관문 요령: 풍경(언덕)이 글 칸 안에 넓게 깔리면 '가운데'가 흔들린다 — 글 장면에서는 풍경을 빼거나 아래로 내린다. 도장 테두리를 기울이면 '붙음'에 걸린다.
 - 이 컨테이너엔 mido 가 없어서 pip 로 깔았다(소리 붙이기).
+
+## 11/14 19:45 ① 자동 — 릴스 실험 11/22 사주 시간표 퀴즈(승인 대기)
+- `2026-reels-test/sigan/ad.html`(형식 F — 안전 영역 x60~900 안에 두 장 놓는 자체 `picks()`; FXK.pickCards 는 x 90~990 이라 가운데·간격 관문에 걸림, 시계판 `dial()` 24시간 판 열두 칸·자시는 밤 11시 시작) → `reel_1122_sigan.mp4`, 카드 reeltest-1122(new). 글은 zaoseon-site public/naver/n78.html 그대로.
+- 승인 확인: reeltest-1121·threads-1121-dohwa·threads-1119-eul 아직 승인 없음(운영앱 완료 기록 checkList 직접 읽음).
+- 이 클라우드: `pip install mido` 만 있으면 소리 붙이기가 돈다(음악은 assets/music_lib 라이브러리 곡이라 fluidsynth 없이 됨, 11/14 확인).

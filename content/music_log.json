@@ -126,5 +126,13 @@
   "mode": "up",
   "bpm": 120,
   "key": "C"
+ },
+ {
+  "name": "reel_1122_sigan",
+  "kind": "data",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "E"
  }
 ]
