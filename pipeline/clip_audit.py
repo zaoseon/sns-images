@@ -43,6 +43,11 @@ def main():
         im = _frame0(mp4); fill, h, ok = 표지재기(im)
         if not ok: 문제.append(f"{c['id']}: 표지(0번 프레임) 비었음 — 채움 {fill*100:.1f}%·높이 {h*100:.0f}% (5%·22% 이상)")
         want = f"clip_cover/{c['id']}.jpg"; cur = (c.get("images") or [""])[0]
+        _lp = _local(cur) if cur.endswith(want) else None   # 이름만 맞고 영상이 다시 렌더된 뒤 그림이 옛것이면 막는다(내용 비교)
+        if _lp and os.path.exists(_lp) and np.abs(np.asarray(Image.open(_lp).convert("RGB").resize((108, 192)), dtype=int) - np.asarray(im.resize((108, 192)), dtype=int)).mean() > 6:
+            문제.append(f"{c['id']}: 표지 그림이 영상 첫 프레임과 다름(영상을 다시 렌더한 뒤 그림을 안 바꿈) — --고침")
+            if 고침:
+                im.save(_lp, quality=92); 문제.pop(); print(f"{c['id']}: 표지 그림 새로 뽑음")
         if not cur.endswith(want):
             if 고침 and ok:
                 p = os.path.join(ROOT, "2026-reels-test", want); os.makedirs(os.path.dirname(p), exist_ok=True); im.save(p, quality=92)
