@@ -56,6 +56,14 @@ def rows_v3(name, c, head, items):
         cv.text(x, y + 132, sub, SB, cv.fit(sub, SB, 40, mw, 32), c.gray, "ls")
     _save(cv, name)
 
+def _대비(a, b):
+    def L(x):
+        if isinstance(x, str): x = tuple(int(x.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))
+        v = [(u / 255) / 12.92 if u / 255 <= .03928 else ((u / 255 + .055) / 1.055) ** 2.4 for u in x[:3]]
+        return .2126 * v[0] + .7152 * v[1] + .0722 * v[2]
+    l1, l2 = sorted((L(a), L(b)), reverse=True); return (l1 + .05) / (l2 + .05)
+
+
 def intro_v3(name, c, summary, maps, label, face):
     import thumb_sq as TQ
     tmp = Cv(100, c.bg); mw = RT - L - 20
@@ -67,7 +75,9 @@ def intro_v3(name, c, summary, maps, label, face):
     cy = 70 + R_; cx = L + 10 + R_
     TQ.badge(cv.img, cv.d, face, c, int(cx * K.S), int(cy * K.S), int(R_ * K.S))
     # 11/11 대표 폰 캡처("이미지가 모바일 최적화 안 된 게 섞여 있어"): 26px·28px 글자는 폰에서 8~9px. 꽉 찬 판(f) 기준 1280px 에서 34px 이상(폰 약 10px)
-    cv.text(cx + R_ + 30, cy - 20, "정월의 한 줄 결론", XB, 46, c.acc, "lm"); cv.text(cx + R_ + 30, cy + 32, "AI로 생성한 가상의 캐릭터예요", SB, 32, c.gray, "lm")
+    # 11/14 감사(content_audit body): 분홍 판 위 분홍 강조색 '정월의 한 줄 결론'이 대비 1.3 으로 묻힘(n54) → 판과 대비 4.5 미만이면 본문 글자색으로
+    _lab = c.acc if _대비(c.acc, c.bg) >= 4.5 else c.fg; _ai = c.gray if _대비(c.gray, c.bg) >= 4.5 else c.fg
+    cv.text(cx + R_ + 30, cy - 20, "정월의 한 줄 결론", XB, 46, _lab, "lm"); cv.text(cx + R_ + 30, cy + 32, "AI로 생성한 가상의 캐릭터예요", SB, 32, _ai, "lm")
     y = 70 + 2 * R_ + 50
     for l in ls: cv.text(L + 10, y, l, XB, size, c.fg, "la"); y += lh
     cv.line(L + 10, y + 20, L + 170, y + 20, c.acc, 10)

@@ -61,6 +61,34 @@ def text_checks():
     _lines = [x for x in _buf.getvalue().splitlines() if x and "통과" not in x]
     for x in _lines: print("   ", x)
     out["클립 표지·영상 감사(K-205: 안 올린 클립 0번 프레임·표지 그림=첫 프레임·1080x1920·소리)"] = len(_lines)
+    # 11/14 대표 "릴스·캐러셀·쇼츠·네이버 대표이미지(섬네일)·원고 내부 이미지 모바일도 감사도구"(K-208): 끝난 파일을 channel_specs 값으로 다시 잰다
+    import content_audit as CAU, re as _re, urllib.parse as _up
+    _pg = json.load(open(os.path.join(R, "naver", "pages.json"), encoding="utf-8"))
+    try: _st = {x["id"]: x.get("status") for x in json.load(open(os.path.join(os.environ.get("SITE", os.path.join(R, "..", "zaoseon-site")), "public", "admin", "data.json"), encoding="utf-8"))["naver_all"]}
+    except Exception: _st = {}
+    _th, _bd = set(), set()
+    for _k, _v in _pg.items():
+        if "body" not in _v or _st.get(_k) == "published" or (not _st and _v.get("done")): continue
+        if _v.get("cover"): _th.add(os.path.join(R, "naver", "img", _v["cover"]))
+        for _m in _re.findall(r'naver/img/([^"\' >]+\.jpg)', _v["body"]):
+            _m = _up.unquote(_m)
+            if "cta" not in _m: _bd.add(os.path.join(R, "naver", "img", "m1280", _m))
+    _n = 0
+    for _f, _fn in [(x, CAU.thumb) for x in sorted(_th)] + [(x, CAU.body) for x in sorted(_bd)]:
+        if not os.path.exists(_f): continue
+        _m, _w = _fn(_f)
+        for x in _m: print("   ", os.path.basename(_f), x)
+        _n += bool(_m)
+    out["네이버 발행 전 대표 이미지·본문 이미지(크기·가운데 720·작게 줄였을 때 대비·글자 묻힘·모바일 글줄)"] = _n
+    if "--videos" in sys.argv:   # 느림(영상마다 0.25초 간격 프레임): 안 올린 클립 영상만
+        _pc = json.load(open(os.path.join(R, "content", "post_clips.json"), encoding="utf-8")); import datetime as _dt
+        _n = 0
+        for _c in _pc:
+            if (_c.get("rec") or "") < _dt.date.today().isoformat() or "/main/" not in _c.get("video", ""): continue
+            _m, _w = CAU.video(os.path.join(R, _c["video"].split("/main/")[-1]), "naver_clip")
+            for x in _m: print("   ", _c["id"], x)
+            _n += bool(_m)
+        out["안 올린 클립 영상 전체 프레임(간격·균형·표지)"] = _n
     if "--images" in sys.argv or "--videos" in sys.argv: out["금지어 '상담' 그림 속 글자(카드 그림 OCR, 느림)"] = len(BW.scan_images())
     return out
 def spec_checks():
