@@ -28,6 +28,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#172554
 </div>
 <script src="../../pipeline/motion_fx.js"></script>
 <script>
+window.coverT=0.8;   // 11/14 K-205: 클립 표지(0번 프레임) = 제목이 서 있는 장면
 window.FX=['박자글자','입자글자','방사형','온도계게이지','태양그리기','별자리선긋기','숫자카드팝'];
 const {cl,mix,ease,eio,sp,H}=FXK,F_CX=FXK.cx,CO='#FF5A5F',VI='#5B3FD6',MN='#172554',W='#FFFFFF';
 const $=id=>document.getElementById(id),g=$('cv').getContext('2d'),vis=(id,on)=>$(id).style.display=on?'':'none';

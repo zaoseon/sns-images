@@ -93,6 +93,10 @@ async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러=1, ch="reel",
             import numpy as np, io
             from PIL import Image
             acc = None
+            # 11/14 K-205 구멍 막음: 기본 렌더는 블러 2장 경로라 coverT 가 0번 프레임에 안 먹었다(블러 1 경로에만 있었음). 표지 프레임은 블러 없이 그 장면 한 장.
+            _ct = (await pg.evaluate("typeof window.coverT==='number'?window.coverT:null")) if (i == 0 and ch == "naver_clip") else None
+            if _ct is not None:
+                await pg.evaluate("t => window.seek(t)", _ct); await pg.screenshot(path=os.path.join(tmp, f"f{i:05d}.png")); continue
             for k in range(블러):
                 await pg.evaluate("t => window.seek(t)", (i + 0.5 * k / 블러) / fps)
                 a = np.asarray(Image.open(io.BytesIO(await pg.screenshot())).convert("RGB"), dtype=np.float32)
