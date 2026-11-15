@@ -4770,12 +4770,13 @@
   "channels": [
    "instagram"
   ],
-  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1116_imgye.mp4",
+  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1116_imgye_v2.mp4",
   "caption": "(예약 캡션 그대로) 태어난 날 첫 글자, 임·계 / 나는 듣는 쪽이에요, 말하는 쪽이에요? 1, 2로 골라 주세요 / 내 첫 글자는 프로필 링크에서 1초면 볼 수 있어요 / #사주 #운세 #일간 #속마음 #성격테스트",
   "replace_metricool_id": 416136346,
   "checks": "['15초, 소리 있음(음악+효과음 48kHz)', '형식 F(1·2 고르기)+G 정월 — 11/15 D 삼합과 다른 꼴(K-187)', '문장은 11/16 예약 캡션·11/1 승인 스레드(임·계) 그대로, 숫자 없음', '안전 영역·균형 관문 통과(글 칸 x60~900·y400~1415), 기법 겹침 관문 통과(앞 3편과 3개 이하)', 'copy_rules 첫줄검사·hook_k185_check 0건']",
-  "note": "11/12 11:45 ① 자동: 옛 틀(글자 카드) 예약 416136346 의 영상만 바꿈(K-188). 같은 시각 초안 416085618 은 안 건드림. 승인되면 다음 ① 실행이 Metricool 영상만 교체(캡션·시각 그대로). 승인되면 11/17 20:00 네이버 클립 v4-1117-imgye(n20, 옛 틀 b1104-imgye)도 같은 주제라 이 영상으로 바꿈(K-188).",
-  "metricool_id": 426356806
+  "note": "11/12 11:45 ① 자동: 옛 틀(글자 카드) 예약 416136346 의 영상만 바꿈(K-188). 같은 시각 초안 416085618 은 안 건드림. 승인되면 다음 ① 실행이 Metricool 영상만 교체(캡션·시각 그대로). 승인되면 11/17 20:00 네이버 클립 v4-1117-imgye(n20, 옛 틀 b1104-imgye)도 같은 주제라 이 영상으로 바꿈(K-188). | 11/15 18:50 ① 새 간격 관문(K-213: 줄 사이·다른 글·글↔그림·그림↔그림·바깥 여백) 통과본으로 다시 렌더. 예약본 영상 교체 필요",
+  "metricool_id": 426356806,
+  "video_prev": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1116_imgye.mp4"
  },
  {
   "id": "reeltest-1117",
@@ -4788,11 +4789,12 @@
   "channels": [
    "instagram"
   ],
-  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1117_yeokma.mp4",
+  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1117_yeokma_v2.mp4",
   "caption": "역마살 있으면 떠돌이 팔자? 아니에요.\n움직이고 있을 때 숨이 쉬어지는 사주예요.\n내 띠의 역마 자리는 영상에서 찾아보세요.\n이동·출장·이사·해외처럼 변화가 많은 건 나쁜 게 아니라, 내 방식의 충전이에요.\n같은 띠라도 태어난 날마다 달라요.\n\n맞으면 ♥, 떠오르는 사람이 있으면 공유하거나 태그해 주세요.\n매일 저녁, 나를 알아보는 테스트가 올라와요. 팔로우해 두면 다음 편을 놓치지 않아요.\n생일만 넣으면 무료 판정, 프로필 링크에서 바로 볼 수 있어요.\n\n사주 하나, 별자리 하나만 보면 한쪽 이야기만 듣게 돼요.\n자오선은 여섯 가지 운명학을 겹쳐서, 같은 답이 나오는 곳을 찾아요.\n\n#사주 #운세 #역마살 #띠별운세 #여행",
   "checks": "['15초, 소리 있음(라이브러리 음악+효과음 48kHz)', '형식 C(그림: 색 3개 평면 일러스트·카메라 이동·시차) — 11/16 F 고르기와 다른 꼴(K-187)', '띠 네 묶음은 네이버 n21 원고 그대로 = engine/dapjang_move.py YEOKMA', '안전 영역·균형 관문 통과, 기법 겹침 관문 통과', 'capfix 0 · copy_rules 첫줄검사 0 · hook_k185_check 0 · 해시태그 5']",
-  "note": "11/12 11:45 ① 자동. 승인되면 다음 ① 실행이 Metricool 11/17 17:00 인스타 릴스(피드 표시 켬)로 예약. 같은 띠 겹침: 2027 띠 운세가 아니라 해당 없음.",
-  "metricool_id": 426356821
+  "note": "11/12 11:45 ① 자동. 승인되면 다음 ① 실행이 Metricool 11/17 17:00 인스타 릴스(피드 표시 켬)로 예약. 같은 띠 겹침: 2027 띠 운세가 아니라 해당 없음. | 11/15 18:50 ① 새 간격 관문(K-213: 줄 사이·다른 글·글↔그림·그림↔그림·바깥 여백) 통과본으로 다시 렌더. 예약본 영상 교체 필요",
+  "metricool_id": 426356821,
+  "video_prev": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1117_yeokma.mp4"
  },
  {
   "id": "ad-dapjang-b2-video-1112",
@@ -4821,11 +4823,12 @@
   "channels": [
    "instagram"
   ],
-  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1118_gab.mp4",
+  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1118_gab_v2.mp4",
   "caption": "시작은 늘 내가 먼저 해요.\n누가 안 하면 결국 내가 하는 쪽이에요.\n태어난 날 첫 글자가 갑(甲)인 분의 이야기예요.\n첫 글자는 열 가지가 날마다 돌아서, 열 명 중 한 명꼴이에요.\n곧게 뻗는 큰 나무 기운이에요.\n앞장서는 만큼 혼자 지칠 때가 많아요.\n오늘 해 볼 것: 쉬는 시간을 일정에 먼저 넣어 보세요.\n\n맞으면 ♥, 떠오르는 사람이 있으면 공유하거나 태그해 주세요.\n매일 저녁, 나를 알아보는 테스트가 올라와요. 팔로우해 두면 다음 편을 놓치지 않아요.\n생일만 넣으면 무료 판정, 프로필 링크에서 바로 볼 수 있어요.\n\n사주 하나, 별자리 하나만 보면 한쪽 이야기만 듣게 돼요.\n자오선은 여섯 가지 운명학을 겹쳐서, 같은 답이 나오는 곳을 찾아요.\n\n#사주 #운세 #갑목 #일간 #리더",
   "checks": "['15초, 소리 있음(통통 마림바 118bpm + 효과음 21개, 48kHz)', '형식 B(진짜 숫자) — 11/17 C 그림·11/16 F 고르기와 다른 꼴(K-187). 숫자는 지어낸 통계가 아니라 일간 열 가지가 날마다 돈다는 계산(열 명 중 한 명꼴)', '글은 2026-ilgan3 REELS 갑 문장 그대로(훅·둘째 줄·기운·까닭·해 볼 것)', '실사 정월 없음(K-197)', '안전 영역·균형 관문 통과, 기법 겹침 관문 통과(앞 3편과 0개)', '0초 프레임 검사 통과', 'capfix 0 · copy_rules 첫줄검사·태그검사 0 · hook_k185_check 0 · 옛 표현·상담·재미로 없음 · 해시태그 5']",
-  "note": "11/13 11:45 ① 자동. Metricool 11/18 17:00 은 비어 있음(11/13 확인). 반려된 ilgan3-1118-1127(hold)·스토리보드 ilgan3m-sb-1103(new, 미승인)의 11/18 칸을 실험 칸으로 씀 — 두 카드는 건드리지 않음. 승인되면 ① 또는 CT 가 Metricool 11/18 17:00 인스타 릴스(피드 표시 켬)로 예약. 빌더 2026-reels-test/gab/ad.html. API 비용 0. | Metricool 426747651 — 11/13 19:01 CT 예약(승인 11/13 18:31).",
-  "metricool_id": "426747651"
+  "note": "11/13 11:45 ① 자동. Metricool 11/18 17:00 은 비어 있음(11/13 확인). 반려된 ilgan3-1118-1127(hold)·스토리보드 ilgan3m-sb-1103(new, 미승인)의 11/18 칸을 실험 칸으로 씀 — 두 카드는 건드리지 않음. 승인되면 ① 또는 CT 가 Metricool 11/18 17:00 인스타 릴스(피드 표시 켬)로 예약. 빌더 2026-reels-test/gab/ad.html. API 비용 0. | Metricool 426747651 — 11/13 19:01 CT 예약(승인 11/13 18:31). | 11/15 18:50 ① 새 간격 관문(K-213: 줄 사이·다른 글·글↔그림·그림↔그림·바깥 여백) 통과본으로 다시 렌더. 예약본 영상 교체 필요",
+  "metricool_id": "426747651",
+  "video_prev": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1118_gab.mp4"
  },
  {
   "id": "threads-1118-gab",
@@ -4949,7 +4952,7 @@
   "channels": [
    "instagram"
   ],
-  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1119_eul_v3.mp4",
+  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1119_eul_v4.mp4",
   "caption": "싫다는 말 대신 다른 길로 돌아가요.\n부딪히기보다 결국 해내는 쪽이에요.\n태어난 날 첫 글자가 을(乙)인 분의 이야기예요.\n어디든 뻗어 가는 덩굴 기운이에요.\n맞춰 주다가 내 뜻을 놓칠 때가 있어요.\n오늘 해 볼 것: 원하는 것 하나를 먼저 말해 보세요.\n\n맞으면 ♥, 떠오르는 사람이 있으면 공유하거나 태그해 주세요.\n매일 저녁, 나를 알아보는 테스트가 올라와요. 팔로우해 두면 다음 편을 놓치지 않아요.\n생일만 넣으면 무료 판정, 프로필 링크에서 바로 볼 수 있어요.\n\n사주 하나, 별자리 하나만 보면 한쪽 이야기만 듣게 돼요.\n자오선은 여섯 가지 운명학을 겹쳐서, 같은 답이 나오는 곳을 찾아요.\n\n#사주 #운세 #을목 #일간 #자기이해",
   "checks": [
    "15초, 소리 있음(발랄 우쿨렐레 114bpm + 효과음 20개, 48kHz)",
@@ -4959,9 +4962,9 @@
    "안전 영역·균형(K-203 새 검사 포함) 관문 통과, 기법 겹침 관문 통과(앞 3편과 1개 이하)",
    "capfix 0 · copy_rules 첫줄검사·태그검사 0 · hook_k185_check 0 · 옛 표현·상담·재미로 없음 · 해시태그 5"
   ],
-  "note": "11/13 19:45 ① 자동. Metricool 11/19 17:00·20:30 비어 있음(11/13 19:55 확인). 편성표 plan_sns_1115_1128 의 '일간 3회차 을' 칸(반려된 ilgan3-1118-1127 은 건드리지 않음). 승인되면 Metricool 11/19 17:00 인스타 릴스(피드 표시 켬)로 예약. 빌더 2026-reels-test/eul/ad.html. API 비용 0. | Metricool 427686071 — 11/14 11:49 ① 예약(승인 11/13 22:45). | 11/15 16:00 CT: 대표 '고쳐줘'(K-211 그림 옆 간격) — '(사실 매운 거 못 먹음)'↔아래 말풍선 60→약 85px, v3로 바꾸고 Metricool 영상 교체. Metricool 새 id 428644640(uuid 같음).",
+  "note": "11/13 19:45 ① 자동. Metricool 11/19 17:00·20:30 비어 있음(11/13 19:55 확인). 편성표 plan_sns_1115_1128 의 '일간 3회차 을' 칸(반려된 ilgan3-1118-1127 은 건드리지 않음). 승인되면 Metricool 11/19 17:00 인스타 릴스(피드 표시 켬)로 예약. 빌더 2026-reels-test/eul/ad.html. API 비용 0. | Metricool 427686071 — 11/14 11:49 ① 예약(승인 11/13 22:45). | 11/15 16:00 CT: 대표 '고쳐줘'(K-211 그림 옆 간격) — '(사실 매운 거 못 먹음)'↔아래 말풍선 60→약 85px, v3로 바꾸고 Metricool 영상 교체. Metricool 새 id 428644640(uuid 같음). | 11/15 18:50 ① 새 간격 관문(K-213: 줄 사이·다른 글·글↔그림·그림↔그림·바깥 여백) 통과본으로 다시 렌더. 예약본 영상 교체 필요",
   "metricool_id": "427686071",
-  "video_prev": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1119_eul_v2.mp4"
+  "video_prev": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1119_eul_v3.mp4"
  },
  {
   "id": "threads-1119-eul",
@@ -4996,7 +4999,7 @@
   "channels": [
    "instagram"
   ],
-  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1120_byeong.mp4",
+  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1120_byeong_v2.mp4",
   "caption": "들어서기만 하면 분위기가 바뀌어요.\n조용한 자리가 제일 어색해요.\n태어난 날 첫 글자가 병(丙)인 분의 이야기예요.\n한낮을 비추는 해 기운이에요.\n밝게 비추느라 내 기분은 뒤로 미뤄요.\n오늘 해 볼 것: 혼자 쉬는 30분을 따로 잡아 보세요.\n\n맞으면 ♥, 떠오르는 사람이 있으면 공유하거나 태그해 주세요.\n매일 저녁, 나를 알아보는 테스트가 올라와요. 팔로우해 두면 다음 편을 놓치지 않아요.\n생일만 넣으면 무료 판정, 프로필 링크에서 바로 볼 수 있어요.\n\n사주 하나, 별자리 하나만 보면 한쪽 이야기만 듣게 돼요.\n자오선은 여섯 가지 운명학을 겹쳐서, 같은 답이 나오는 곳을 찾아요.\n\n#사주 #운세 #병화 #일간 #성격테스트",
   "checks": [
    "15초, 소리 있음(통통 마림바 118bpm + 효과음 21개, 48kHz)",
@@ -5007,8 +5010,9 @@
    "capfix 0 · copy_rules 첫줄검사·태그검사 0 · hook_k185_check 0 · 해시태그 5",
    "0초 프레임은 꺼진 방(어두운 판·회색 '바뀌어요'), 0.5초에 켜짐 — 인스타 표지는 Metricool 1500ms 장면"
   ],
-  "note": "11/13 19:45 ① 자동. Metricool 11/20 17:00 비어 있음. 편성표 '일간 3회차 병' 칸. 승인되면 Metricool 11/20 17:00 인스타 릴스 예약. 빌더 2026-reels-test/byeong/ad.html. API 비용 0. | Metricool 427686076 — 11/14 11:49 ① 예약(승인 11/13 22:47).",
-  "metricool_id": "427686076"
+  "note": "11/13 19:45 ① 자동. Metricool 11/20 17:00 비어 있음. 편성표 '일간 3회차 병' 칸. 승인되면 Metricool 11/20 17:00 인스타 릴스 예약. 빌더 2026-reels-test/byeong/ad.html. API 비용 0. | Metricool 427686076 — 11/14 11:49 ① 예약(승인 11/13 22:47). | 11/15 18:50 ① 새 간격 관문(K-213: 줄 사이·다른 글·글↔그림·그림↔그림·바깥 여백) 통과본으로 다시 렌더. 예약본 영상 교체 필요",
+  "metricool_id": "427686076",
+  "video_prev": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1120_byeong.mp4"
  },
  {
   "id": "threads-1120-byeong",
@@ -5043,7 +5047,7 @@
   "channels": [
    "instagram"
   ],
-  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1121_dohwa.mp4",
+  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1121_dohwa_v2.mp4",
   "caption": "도화살 있으면 인기 많다?\n꼭 그렇진 않아요.\n도화는 사람을 끌어당기는 매력과 표현으로 읽는 글자예요.\n2027년엔 도화가 해가 아니라 달로 들어와요.\n3월 호랑이·말·개 · 6월 소·뱀·닭 · 9월 쥐·용·원숭이 · 12월 돼지·토끼·양\n도화 달은 절기로 세서 그달 6~8일쯤 시작해요.\n※ 1월~2월 초에 태어났다면 앞 해 띠일 수 있어요\n오늘 해 볼 것: 내 도화 달에 첫인상 하나만 가볍게 가꿔 보세요.\n\n맞으면 ♥, 떠오르는 사람이 있으면 공유하거나 태그해 주세요.\n매일 저녁, 나를 알아보는 테스트가 올라와요. 팔로우해 두면 다음 편을 놓치지 않아요.\n생일만 넣으면 무료 판정, 프로필 링크에서 바로 볼 수 있어요.\n\n사주 하나, 별자리 하나만 보면 한쪽 이야기만 듣게 돼요.\n자오선은 여섯 가지 운명학을 겹쳐서, 같은 답이 나오는 곳을 찾아요.\n\n#사주 #운세 #도화살 #연애운 #띠별운세",
   "checks": [
    "15초, 소리 있음(경쾌 신스팝 120bpm + 효과음, 48kHz)",
@@ -5054,7 +5058,8 @@
    "capfix 0 · copy_rules 첫줄검사·태그검사 0 · hook_k185_check 0 · 옛 표현(힘 쓸 달·아낄 달)·상담·재미로 없음 · 해시태그 5",
    "11/21~22 은 3회차 일간(병 11/20·정 11/23)과 같은 천간을 피해 일간 아닌 주제로 잡음(K-113)"
   ],
-  "note": "11/14 11:45 ① 자동. Metricool 11/21 17:00·20:30 비어 있음(11/14 11:49 확인). 편성표 11/21 칸은 '2027 불 일간(보류, K-113)'이라 건드리지 않고 17:00 실험 칸만 씀. 승인되면 Metricool 11/21 17:00 인스타 릴스(피드 표시 켬, 표지 1500ms)로 예약. 빌더 2026-reels-test/dohwa/ad.html. API 비용 0. | [11/15 11:49 ① 자동] 운영앱 승인(11/14 20:08~09) → Metricool 428541365 예약."
+  "note": "11/14 11:45 ① 자동. Metricool 11/21 17:00·20:30 비어 있음(11/14 11:49 확인). 편성표 11/21 칸은 '2027 불 일간(보류, K-113)'이라 건드리지 않고 17:00 실험 칸만 씀. 승인되면 Metricool 11/21 17:00 인스타 릴스(피드 표시 켬, 표지 1500ms)로 예약. 빌더 2026-reels-test/dohwa/ad.html. API 비용 0. | [11/15 11:49 ① 자동] 운영앱 승인(11/14 20:08~09) → Metricool 428541365 예약. | 11/15 18:50 새 간격 관문(K-213) 통과본으로 다시 렌더",
+  "video_prev": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1121_dohwa.mp4"
  },
  {
   "id": "threads-1121-dohwa",
@@ -5088,7 +5093,7 @@
   "channels": [
    "instagram"
   ],
-  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1122_sigan_v3.mp4",
+  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1122_sigan_v4.mp4",
   "caption": "1분 차이로 시가 갈려요.\n오후 2시 59분생은 아직 미시예요.\n오후 3시 정각부터 신시가 시작돼요.\n사주에서는 하루를 두 시간씩 열두 시로 나눠요.\n미시는 오후 1시~3시 전(양), 신시는 오후 3시~5시 전(원숭이)이에요.\n1987~88년 여름에 태어났다면 서머타임을 빼지 말고 시계에 적힌 시각 그대로 적어 주세요.\n오늘 해 볼 것: 내 출생 시각이 열두 시 중 어느 시인지 찾아 보세요.\n\n맞으면 ♥, 떠오르는 사람이 있으면 공유하거나 태그해 주세요.\n매일 저녁, 나를 알아보는 테스트가 올라와요. 팔로우해 두면 다음 편을 놓치지 않아요.\n생일만 넣으면 무료 판정, 프로필 링크에서 바로 볼 수 있어요.\n\n사주 하나, 별자리 하나만 보면 한쪽 이야기만 듣게 돼요.\n자오선은 여섯 가지 운명학을 겹쳐서, 같은 답이 나오는 곳을 찾아요.\n\n#사주 #운세 #사주시간 #태어난시간 #만세력",
   "checks": [
    "15초, 소리 있음(상큼 팝 120bpm 라이브러리 곡 + 효과음, 48kHz)",
@@ -5099,8 +5104,8 @@
    "capfix 0 · copy_rules 첫줄검사·태그검사·금지어 0 · hook_k185 첫 줄 통과 · 옛 표현·상담·재미로 없음 · 해시태그 5",
    "11/22 은 3회차 일간(병 11/20·정 11/23) 사이라 일간 아닌 주제로 잡음(K-113)"
   ],
-  "note": "11/14 19:45 ① 자동. Metricool 11/22 17:00 인스타 비어 있음(11/14 19:55 확인), 20:30 스레드는 기존 예약 417268312(카드 번호 고르기)라 스레드 카드는 만들지 않음. 승인되면 Metricool 11/22 17:00 인스타 릴스(피드 표시 켬, 표지 1500ms)로 예약. 빌더 2026-reels-test/sigan/ad.html. API 비용 0. | 11/15 15:30 CT: 대표 지적(원판과 '정답은 1번 미시' 알약 8~17px로 붙음) → 원판 R300·알약 내려 50px 띄움, 새 관문 '간격 · 그림 옆' 통과, v2로 교체. 아직 승인 전. | 11/15 15:50 v3: 대표 '선택 카드랑 위 문장 간격 붙음' → 제목 위로·카드 아래로(77→117px), 시계 장면 제목↔원판도 같은 규칙. 관문: 큰 그림 위 제목은 제목 줄 높이 이상.",
-  "video_prev": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1122_sigan.mp4"
+  "note": "11/14 19:45 ① 자동. Metricool 11/22 17:00 인스타 비어 있음(11/14 19:55 확인), 20:30 스레드는 기존 예약 417268312(카드 번호 고르기)라 스레드 카드는 만들지 않음. 승인되면 Metricool 11/22 17:00 인스타 릴스(피드 표시 켬, 표지 1500ms)로 예약. 빌더 2026-reels-test/sigan/ad.html. API 비용 0. | 11/15 15:30 CT: 대표 지적(원판과 '정답은 1번 미시' 알약 8~17px로 붙음) → 원판 R300·알약 내려 50px 띄움, 새 관문 '간격 · 그림 옆' 통과, v2로 교체. 아직 승인 전. | 11/15 15:50 v3: 대표 '선택 카드랑 위 문장 간격 붙음' → 제목 위로·카드 아래로(77→117px), 시계 장면 제목↔원판도 같은 규칙. 관문: 큰 그림 위 제목은 제목 줄 높이 이상. | 11/15 18:50 새 간격 관문(K-213) 통과본으로 다시 렌더",
+  "video_prev": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/reel_1122_sigan_v3.mp4"
  },
  {
   "id": "reeltest-1123",
