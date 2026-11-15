@@ -280,6 +280,45 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
                         u = [q[0] + " " + r[0], min(q[1], r[1]), min(q[2], r[2]), max(q[3], r[3]), max(q[4], r[4]), q[5], q[6], (q[7] if len(q) > 7 else 0) or (r[7] if len(r) > 7 else 0)]
                         합[ii] = u; del 합[jj]; 바뀜 = True; break
                 if 바뀜: break
+        # 11/15 17:27 대표(K-213) ① 같은 글 두 줄도 줄 사이가 좁으면 붙어 보인다 — 합치기 전에 잰다
+        for ii in range(len(rows_)):
+            for jj in range(len(rows_)):
+                q, r = rows_[ii], rows_[jj]
+                if ii == jj or (len(q) > 7 and q[7]) or (len(r) > 7 and r[7]): continue
+                fs_ = max(q[5] or 40, r[5] or 40)
+                if abs((q[5] or 0) - (r[5] or 0)) > .3 * fs_ or min(q[3], r[3]) <= max(q[1], r[1]): continue
+                g_l = r[2] - q[4]
+                if 0 <= g_l < fs_ * .6 and g_l < B["line_gap"] * fs_:
+                    keys.setdefault("간격 · 줄 사이 · " + str(q[0])[:8], []).append((t, f"'{q[0]}'↔'{r[0]}' 줄 사이 {g_l:.0f}px — 글자 {fs_:.0f}px × {B['line_gap']} = {B['line_gap'] * fs_:.0f}px 이상"))
+        # ② 글 상자 바로 위·아래 그림 화소(옅은 빛번짐은 빼고 강한 화소만) — 빛 원이 글 뒤를 덮으면 띠 검사가 놓친다
+        bg0 = np.median(np.concatenate([a[top + 10:bot - 10, :24].reshape(-1, 3), a[top + 10:bot - 10, -24:].reshape(-1, 3)]), 0)
+        강 = np.abs(a - bg0).max(2) > 100
+        for r in rows_ + [[None, *q] for q in bx_]:
+            x0_, y0_, x1_, y1_ = [int(round(v)) for v in r[1:5]]
+            강[max(y0_ - 6, 0):y1_ + 6, max(x0_ - 6, 0):x1_ + 6] = False    # 글자·상자 자체는 뺀다
+        for r in rows_:
+            if (len(r) > 7 and r[7]) or any(_안(r[1:5], q) for q in bx_): continue
+            x0_, y0_, x1_, y1_ = [int(round(v)) for v in r[1:5]]
+            if y0_ < top or y1_ > bot: continue
+            D = B["text_graphic"]
+            for 쪽, (ya, yb) in (("아래", (y1_ + 1, y1_ + D)), ("위", (y0_ - D, y0_ - 1))):
+                ya, yb = max(ya, top), min(yb, bot)
+                if yb <= ya: continue
+                blk = 강[ya:yb, x0_:x1_]
+                if blk.sum() > 30:
+                    yy = np.where(blk.any(1))[0]; d_ = (yy.min() if 쪽 == "아래" else D - 1 - yy.max())
+                    keys.setdefault("간격 · 글과 그림 · " + str(r[0])[:8], []).append((t, f"'{r[0]}' {쪽} {d_}px 에 그림 — {D}px 이상 띄우세요"))
+        # ③ 옅은 빛번짐(배경과 20~100 다른 넓은 면)이 글·상자 바로 위·아래 띠를 절반 넘게 덮으면 붙은 것(11/15 17:37 K-213)
+        d_all = np.abs(a - bg0).max(2); 약 = (d_all > 20) & (d_all <= 100)
+        for r in [q for q in rows_ if not (len(q) > 7 and q[7])] + [[None, *q] for q in bx_]:
+            x0_, y0_, x1_, y1_ = [int(round(v)) for v in r[1:5]]
+            if y0_ < top or y1_ > bot or x1_ <= x0_: continue
+            G = B["glow_gap"]
+            for 쪽, (ya, yb) in (("아래", (y1_ + 6, y1_ + 6 + G)), ("위", (y0_ - 6 - G, y0_ - 6))):
+                ya, yb = max(ya, top), min(yb, bot)
+                if yb <= ya: continue
+                if 약[ya:yb, x0_:x1_].mean() > .5 and not 강[ya:yb, x0_:x1_].any():
+                    keys.setdefault("간격 · 빛번짐 · " + str(r[0] or "상자")[:8], []).append((t, f"'{r[0] or '상자'}' {쪽}쪽 {G}px 띠를 빛번짐이 덮음 — 빛 원을 줄이거나 {G}px 이상 띄우세요"))
         for row in 합:
             if len(row) > 7 and row[7]: continue      # 일부러 붙이는 효과(녹는 단어 등)는 '붙음'을 재지 않는다
             tx, bx0, by0, bx1, by1, px = row[0], *[int(round(v)) for v in row[1:5]], row[5] or 40
@@ -321,6 +360,8 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
             h_a, h_b = 띠[k_][1] - 띠[k_][0], 띠[k_ + 1][1] - 띠[k_ + 1][0]
             if max(h_a, h_b) < B["graphic_h"]: continue
             if m[띠[k_][1] - ay0 + 1:띠[k_ + 1][0] - ay0].sum() > 0: continue   # 틈에 가는 선·점이 지나가면 한 그림의 부분(삼합 원판의 꼭짓점 원 등)
+            gr_ = np.abs(A[띠[k_][1] - ay0 + 1:띠[k_ + 1][0] - ay0] - bg).max(2) > 20
+            if len(gr_) and (gr_.sum(1) > 14).all(): continue   # 11/15 K-213: 틈이 배경과 비슷한 색 띠(촛대 줄무늬 등)로 꽉 차 있으면 한 그림의 부분
             # 11/15 15:23 대표 "선택 카드랑 위에 텍스트 문장 간격이 붙어서": 큰 그림 바로 위의 제목 줄은 그 줄 높이만큼 이상 띄운다(92px 제목에 77px 간격이 붙어 보임)
             req = max(B["box_gap"], h_a) if h_a < B["graphic_h"] <= h_b else B["box_gap"]
             if g2 < req:
@@ -344,7 +385,7 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
             else: run = 1; s0 = j
             if run > best[0]: best = (run, s0)
         # 11/15: 정답 알약처럼 1초 안쪽으로 보이는 장면도 멈춰 보면 붙어 보인다 → '그림 옆' 간격은 0.5초(2컷)만 이어져도 막는다
-        if best[0] * 간격 > (0.4 if k.startswith("간격 · 그림") else B["hold"] * .75 if k.startswith(("붙음", "간격")) else B["hold"]):
+        if best[0] * 간격 > (0.4 if k.startswith(("간격 · 그림", "간격 · 글과 그림", "간격 · 줄 사이")) else B["hold"] * .75 if k.startswith(("붙음", "간격")) else B["hold"]):
             x = v[best[1]]; 문제.append(f"[{k}] {x[0]:.2f}초부터 {best[0] * 간격:.1f}초 동안 — {x[1]}")
     return 문제
 
@@ -480,13 +521,15 @@ def 기법_검사(html, 이름, 기록=False):
     fx = [x.strip().strip("'\"") for x in m.group(1).split(",") if x.strip()]
     try: log = json.load(open(_fxlog(), encoding="utf-8"))
     except Exception: log = []
-    앞 = [x for x in log if x.get("name") != 이름][-3:]
+    판 = lambda n: re.sub(r"_v\d+$", "", os.path.basename(str(n)))   # 11/15: 고친 판(_v2)은 같은 편 — 자기 옛판과 비교하지 않는다
+    이름 = 판(이름)
+    앞 = [x for x in log if 판(x.get("name")) != 이름][-3:]
     for x in 앞:
         겹 = sorted(set(fx) & set(x.get("fx", [])))
         if len(겹) > 3 and os.environ.get("ZS_FX_OK") != "1":
             raise SystemExit(f"[막음] 기법이 '{x['name']}' 와 {len(겹)}개 겹쳐요({'·'.join(겹)}). 3개까지만. motion_fx.js LIST 에서 다른 기법을 고르세요.")
     if 기록:
-        log = [x for x in log if x.get("name") != 이름] + [{"name": 이름, "fx": fx}]
+        log = [x for x in log if 판(x.get("name")) != 이름] + [{"name": 이름, "fx": fx}]
         json.dump(log, open(_fxlog(), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 

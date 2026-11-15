@@ -14,8 +14,8 @@ window.SFX=[{t:.1,k:'whoosh'},{t:.05,k:'pop'},{t:.4,k:'thud'},{t:2.9,k:'swoosh'}
 function T(txt,x,y,font,color,align='center'){g.font=font;g.fillStyle=color;g.textAlign=align;g.textBaseline='middle';g.fillText(txt,x,y)}
 function fade(t,a,b){return cl((t-a)/.25)*cl((b-t)/.25)}
 // 촛불: 몸통 + 심지 + 흔들리는 불꽃(사인 두 개 겹침, seek 시각으로만 움직임)
-function candle(x,y,s,lit,t){g.save();g.translate(x,y);g.scale(s,s);
- if(lit>0){const r=mix(0,260,ease(lit));g.fillStyle='rgba(255,181,71,.13)';g.beginPath();g.arc(0,-150,r,0,7);g.fill();g.fillStyle='rgba(255,181,71,.12)';g.beginPath();g.arc(0,-150,r*.62,0,7);g.fill()}
+function candle(x,y,s,lit,t,gr=260){g.save();g.translate(x,y);g.scale(s,s);
+ if(lit>0){const r=mix(0,gr,ease(lit));g.fillStyle='rgba(255,181,71,.13)';g.beginPath();g.arc(0,-150,r,0,7);g.fill();g.fillStyle='rgba(255,181,71,.12)';g.beginPath();g.arc(0,-150,r*.62,0,7);g.fill()}
  g.fillStyle=CR;g.beginPath();g.roundRect(-58,-60,116,230,18);g.fill();g.fillStyle=B3;g.fillRect(-58,120,116,14);
  g.fillStyle=BG;g.fillRect(-4,-92,8,34);
  if(lit>0){const w=Math.sin(t*9)*6+Math.sin(t*23)*3,h=mix(10,96,ease(lit));g.fillStyle=FL;g.beginPath();g.moveTo(-26,-96);g.quadraticCurveTo(-30,-96-h*.55,w,-96-h);g.quadraticCurveTo(30,-96-h*.55,26,-96);g.quadraticCurveTo(0,-74,-26,-96);g.fill();
@@ -23,30 +23,30 @@ function candle(x,y,s,lit,t){g.save();g.translate(x,y);g.scale(s,s);
  g.restore()}
 // 방 벽(시차): 창문은 느리게, 선반은 빠르게 지나간다. cam = 카메라가 오른쪽으로 간 거리
 function room(cam){window.__zsLoose=1;g.fillStyle=B3;for(let i=-1;i<6;i++){const x=((i*300-cam)%1800+1800)%1800-400;g.fillRect(x,1272,220,16)}window.__zsLoose=0}   // 탁자 줄이 지나가며 카메라가 옆으로 흐르는 느낌(시차)
-function memo(x,y,rot,txt,s){window.__zsLoose=1;g.save();g.translate(x,y);g.rotate(rot);g.scale(s,s);g.fillStyle=CR;g.beginPath();g.roundRect(-230,-62,460,124,14);g.fill();
- g.fillStyle=FL;g.fillRect(-36,-74,72,22);T(txt,0,4,'900 64px PL',BG);g.restore();window.__zsLoose=0}
+function memo(x,y,rot,txt,s){window.__zsLoose=1;g.save();g.translate(x,y);g.rotate(rot);g.scale(s,s);g.fillStyle=CR;g.beginPath();g.roundRect(-230,-54,460,108,14);g.fill();
+ g.fillStyle=FL;g.fillRect(-36,-66,72,22);T(txt,0,4,'900 64px PL',BG);g.restore();window.__zsLoose=0}
 function draw(t){const X=F.cx,cam=t*180;g.fillStyle=BG;g.fillRect(0,0,1080,1920);
  for(let i=0;i<30;i++){g.fillStyle='rgba(255,224,178,.18)';g.beginPath();g.arc(F.H(i)*1080,F.H(i+5)*300+60,2+F.H(i+9)*3,0,7);g.fill()}
  // 1 훅 — 메모가 한 장씩 붙고 큰 글자가 쾅
  if(t<2.9){const a=cl((2.9-t)/.25);g.save();g.globalAlpha=a;
   const M=[['커피는 연하게',-.07,-.3],['목요일 면접',.05,-.12],['고양이 이름 보리',-.03,.05]];
-  M.forEach(([s,r,t0],i)=>{const b=sp(t-t0,15,.55);if(b>0)memo(X,898+i*184,r,s,b)});
-  const s1=sp(t+.25,14,.6);g.save();g.translate(X,550);g.scale(s1,s1);T('남이 흘린 말을',0,0,'900 100px PL',IV);g.restore();
-  {const b=sp(t+.2,16,.5);g.save();g.translate(X,680);g.scale(b,b);T('다 기억해 둬요',0,0,'900 116px PL',FL);g.restore()}
+  M.forEach(([s,r,t0],i)=>{const b=sp(t-t0,15,.55);if(b>0)memo(X,912+i*184,r,s,b)});
+  const s1=sp(t+.25,14,.6);g.save();g.translate(X,540);g.scale(s1,s1);T('남이 흘린 말을',0,0,'900 100px PL',IV);g.restore();
+  {const b=sp(t+.2,16,.5);g.save();g.translate(X,690);g.scale(b,b);T('다 기억해 둬요',0,0,'900 116px PL',FL);g.restore()}
   g.restore()}
  // 2 방을 지나가는 카메라 + 한 줄
  if(t>=2.8&&t<5.8){const a=fade(t,2.8,5.8);g.save();g.globalAlpha=a;room(cam);
   T('작은 걸 챙기는 데',X,600,'900 96px PL',IV);
   if(t>3.2){const b=sp(t-3.2,14,.6);g.save();g.translate(X,864);g.scale(b,b);T('진심이에요',0,0,'900 120px PL',FL);g.restore()}
-  candle(X,1115,.9,0,t);
+  candle(X,1060,.9,0,t);   // 11/15 K-213: 탁자 줄(y1272)과 48px 이상
   g.restore()}
  // 3 성냥이 그어지고 촛불이 켜짐 — 빛이 번짐
  if(t>=5.7&&t<8.7){const a=fade(t,5.7,8.7);g.save();g.globalAlpha=a;
-  const lit=cl((t-6.1)/.7);candle(X,1103,1.15,lit,t);
-  if(t<6.3){const p=ease(cl((t-5.8)/.45));g.save();g.translate(mix(X+330,X+40,p),mix(1060,900,p));g.rotate(-.6);g.fillStyle=CR;g.fillRect(-6,0,12,120);g.fillStyle=FL;g.beginPath();g.arc(0,0,14,0,7);g.fill();g.restore()}
+  const lit=cl((t-6.1)/.7);candle(X,1170,.95,lit,t,140);   // 11/15 대표 '촛불이랑 밤을 밝히는 촛불 기운 붙어있음'(K-213)
+  if(t<6.3){const p=ease(cl((t-5.8)/.45));g.save();g.translate(mix(X+330,X+40,p),mix(1200,1045,p));g.rotate(-.6);g.fillStyle=CR;g.fillRect(-6,0,12,120);g.fillStyle=FL;g.beginPath();g.arc(0,0,14,0,7);g.fill();g.restore()}
   T('태어난 날 첫 글자가',X,565,'900 76px PL',CR);
-  const b=sp(t-6.4,14,.6);g.save();g.translate(X,700);g.scale(b,b);T('정인 사람',0,0,'900 120px PL',IV);g.restore();
-  if(t>7.2){const c=sp(t-7.2,14,.6);g.save();g.translate(X,850);g.scale(c,c);T('밤을 밝히는 촛불 기운',0,0,'900 80px PL',FL);g.restore()}
+  const b=sp(t-6.0,14,.6);g.save();g.translate(X,700);g.scale(b,b);T('정인 사람',0,0,'900 120px PL',IV);g.restore();
+  if(t>6.6){const c=sp(t-6.6,14,.6);g.save();g.translate(X,850);g.scale(c,c);T('밤을 밝히는 촛불 기운',0,0,'900 80px PL',FL);g.restore()}
   g.restore()}
  // 4 선물이 오가고, 돌아오는 게 없으면 불이 작아짐
  if(t>=8.6&&t<11.2){const a=fade(t,8.6,11.2);g.save();g.globalAlpha=a;
@@ -68,9 +68,9 @@ function draw(t){const X=F.cx,cam=t*180;g.fillStyle=BG;g.fillRect(0,0,1080,1920)
   if(t>11.4){const b=sp(t-11.4,14,.6);g.save();g.translate(X,1240);g.scale(b,b);T('적어 보세요',0,0,'900 96px PL',FL);g.restore()}
   g.restore()}
  // 6 끝 — 질문 + 무료 판정
- if(t>=13.2){const a=cl((t-13.2)/.25);g.save();g.globalAlpha=a;candle(X,1230,.7,1,t);
-  const s=sp(t-13.4,14,.6);g.save();g.translate(X,600);g.scale(s,s);T('내 첫 글자도',0,0,'900 116px PL',IV);T('정일까?',0,130,'900 116px PL',FL);g.restore();
-  const b=sp(t-14.1,14,.6);g.save();g.translate(X,960);g.scale(b,b);g.fillStyle=CR;g.beginPath();g.roundRect(-405,-70,810,140,70);g.fill();T('생일만 넣으면 무료 판정 →',0,-2,'900 60px PL',BG);g.restore();
+ if(t>=13.3){const a=cl((t-13.3)/.25);g.save();g.globalAlpha=a;candle(X,1225,.6,1,t,110);
+  const s=sp(t-13.4,14,.6);g.save();g.translate(X,560);g.scale(s,s);T('내 첫 글자도',0,0,'900 116px PL',IV);T('정일까?',0,150,'900 116px PL',FL);g.restore();
+  const b=sp(t-14.1,14,.6);g.save();g.translate(X,930);g.scale(b,b);g.fillStyle=CR;g.beginPath();g.roundRect(-405,-70,810,140,70);g.fill();T('생일만 넣으면 무료 판정 →',0,-2,'900 60px PL',BG);g.restore();
   g.restore()}
  F.frame(g,{ai:'AI가 계산·작성한 콘텐츠예요'});
 }
