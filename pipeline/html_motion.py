@@ -133,7 +133,11 @@ def _spec_js(ch="reel"):
             # 11/12 18:56 대표 '화면 안의 내용이 확대된다거나': drawImage 를 감싸 그림마다 확대 배율을 적는다(K-198 광고모션_검사)
             "(function(){const P=CanvasRenderingContext2D.prototype,di=P.drawImage;window.__zsImg=[];P.drawImage=function(im,...r){try{if(!window.__zsFrame&&im&&im.src&&this.globalAlpha>0.3){"
             "const T=this.getTransform(),sc=Math.hypot(T.a,T.b),sw=r.length>=8?r[2]:(im.naturalWidth||im.width),dw=r.length>=8?r[6]:r.length>=4?r[2]:(im.naturalWidth||im.width);"
-            "window.__zsImg.push([String(im.src).split('/').pop(),sc*dw/Math.max(1,sw)])}}catch(e){}return di.call(this,im,...r)}})();"
+            "window.__zsImg.push([String(im.src).split('/').pop(),sc*dw/Math.max(1,sw)]);"
+            # 11/15 17:51 대표(K-213) '이미지와 이미지·이미지와 글 사이 간격': 그림도 상자로 적어 box_gap(상자끼리·상자↔글)을 받게 한다
+            "if(!window.__zsLoose){const dx=r.length>=8?r[4]:r[0],dy=r.length>=8?r[5]:r[1],ddw=r.length>=8?r[6]:r.length>=4?r[2]:(im.naturalWidth||im.width),ddh=r.length>=8?r[7]:r.length>=4?r[3]:(im.naturalHeight||im.height),"
+            "q=[[dx,dy],[dx+ddw,dy],[dx,dy+ddh],[dx+ddw,dy+ddh]].map(([px,py])=>[T.a*px+T.c*py+T.e,T.b*px+T.d*py+T.f]),xs=q.map(v=>v[0]),ys=q.map(v=>v[1]),"
+            "cr=this.canvas.getBoundingClientRect(),kx=cr.width/this.canvas.width;window.__zsBox.push([cr.left+kx*Math.min(...xs),cr.top+kx*Math.min(...ys),cr.left+kx*Math.max(...xs),cr.top+kx*Math.max(...ys)])}}}catch(e){}return di.call(this,im,...r)}})();"
             # 글 조각마다 변환 배율·기울기를 적는다(움직이며 들어오는 글 세기)
             "(function(){const P=CanvasRenderingContext2D.prototype,ft=P.fillText;window.__zsKin=[];P.fillText=function(s,x,y,...r){try{if(!window.__zsFrame&&this.globalAlpha>0.15){const T=this.getTransform();"
             "window.__zsKin.push([String(s),Math.hypot(T.a,T.b),Math.atan2(T.b,T.a),window.__zsLoose?1:0,this.__zsInBox?1:0])}}catch(e){}return ft.call(this,s,x,y,...r)}})();"
@@ -290,14 +294,35 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
                 g_l = r[2] - q[4]
                 if 0 <= g_l < fs_ * .6 and g_l < B["line_gap"] * fs_:
                     keys.setdefault("간격 · 줄 사이 · " + str(q[0])[:8], []).append((t, f"'{q[0]}'↔'{r[0]}' 줄 사이 {g_l:.0f}px — 글자 {fs_:.0f}px × {B['line_gap']} = {B['line_gap'] * fs_:.0f}px 이상"))
+        # ④ 다른 종류 글(크기·색이 다른 글) 사이 세로 간격 — 같은 글 줄 사이(line_gap)와 따로 정한다(11/15 17:51 대표 '다른 종류의 글과 글 사이 간격')
+        for ii in range(len(rows_)):
+            for jj in range(ii + 1, len(rows_)):
+                q, r = rows_[ii], rows_[jj]
+                if (len(q) > 7 and q[7]) or (len(r) > 7 and r[7]): continue
+                if r[2] < q[2]: q, r = r, q
+                fs_ = max(q[5] or 40, r[5] or 40)
+                if abs((q[5] or 0) - (r[5] or 0)) <= .3 * fs_: continue                 # 같은 크기 = 같은 글(line_gap 이 잼)
+                if min(q[3], r[3]) <= max(q[1], r[1]): continue                          # 가로로 안 겹치면 옆 글
+                g_p = r[2] - q[4]
+                need = max(B["para_min"], B["para_gap"] * min(q[5] or 40, r[5] or 40))
+                if 0 <= g_p < need:
+                    keys.setdefault("간격 · 다른 글 · " + str(q[0])[:6], []).append((t, f"'{q[0]}'({q[5]:.0f}px)↔'{r[0]}'({r[5]:.0f}px) 사이 {g_p:.0f}px — 작은 글자 × {B['para_gap']} = {need:.0f}px 이상"))
         # ② 글 상자 바로 위·아래 그림 화소(옅은 빛번짐은 빼고 강한 화소만) — 빛 원이 글 뒤를 덮으면 띠 검사가 놓친다
         bg0 = np.median(np.concatenate([a[top + 10:bot - 10, :24].reshape(-1, 3), a[top + 10:bot - 10, -24:].reshape(-1, 3)]), 0)
         강 = np.abs(a - bg0).max(2) > 100
+        강0 = 강.copy()   # 글자·상자를 지우기 전 원본: 글이 알약·카드 안에 있는지(둘레에 강한 화소) 보려고
+        def _안에있나(r_):
+            x0_, y0_, x1_, y1_ = [int(round(v)) for v in r_[1:5]]
+            H_, W_ = 강0.shape
+            면 = [강0[max(y0_ - 16, 0):max(y0_ - 1, 0), x0_:x1_].any(), 강0[min(y1_ + 1, H_):min(y1_ + 16, H_), x0_:x1_].any(),
+                 강0[y0_:y1_, max(x0_ - 16, 0):max(x0_ - 1, 0)].any(), 강0[y0_:y1_, min(x1_ + 1, W_):min(x1_ + 16, W_)].any()]
+            pad = 강0[max(y0_ - 16, 0):min(y1_ + 16, H_), max(x0_ - 16, 0):min(x1_ + 16, W_)]
+            return sum(면) >= 3 or pad.mean() > .35   # 사방 16px 안에 알약·카드 가장자리가 있거나, 글 둘레가 큰 색 면(시계 칸·원판)이면 그 안에 든 글
         for r in rows_ + [[None, *q] for q in bx_]:
             x0_, y0_, x1_, y1_ = [int(round(v)) for v in r[1:5]]
             강[max(y0_ - 6, 0):y1_ + 6, max(x0_ - 6, 0):x1_ + 6] = False    # 글자·상자 자체는 뺀다
         for r in rows_:
-            if (len(r) > 7 and r[7]) or any(_안(r[1:5], q) for q in bx_): continue
+            if (len(r) > 7 and r[7]) or any(_안(r[1:5], q) for q in bx_) or _안에있나(r): continue
             x0_, y0_, x1_, y1_ = [int(round(v)) for v in r[1:5]]
             if y0_ < top or y1_ > bot: continue
             D = B["text_graphic"]
@@ -317,7 +342,7 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
             for 쪽, (ya, yb) in (("아래", (y1_ + 6, y1_ + 6 + G)), ("위", (y0_ - 6 - G, y0_ - 6))):
                 ya, yb = max(ya, top), min(yb, bot)
                 if yb <= ya: continue
-                if 약[ya:yb, x0_:x1_].mean() > .5 and not 강[ya:yb, x0_:x1_].any():
+                if 약[ya:yb, x0_:x1_].mean() > .5 and not 강[ya:yb, x0_:x1_].any() and 약[y0_:y1_, x0_:x1_].mean() < .3:   # 글 자리까지 같은 색 면이면 판 위의 글(옅은 카드·그라데이션)이라 빛번짐이 아니다
                     keys.setdefault("간격 · 빛번짐 · " + str(r[0] or "상자")[:8], []).append((t, f"'{r[0] or '상자'}' {쪽}쪽 {G}px 띠를 빛번짐이 덮음 — 빛 원을 줄이거나 {G}px 이상 띄우세요"))
         for row in 합:
             if len(row) > 7 and row[7]: continue      # 일부러 붙이는 효과(녹는 단어 등)는 '붙음'을 재지 않는다
@@ -385,7 +410,7 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
             else: run = 1; s0 = j
             if run > best[0]: best = (run, s0)
         # 11/15: 정답 알약처럼 1초 안쪽으로 보이는 장면도 멈춰 보면 붙어 보인다 → '그림 옆' 간격은 0.5초(2컷)만 이어져도 막는다
-        if best[0] * 간격 > (0.4 if k.startswith(("간격 · 그림", "간격 · 글과 그림", "간격 · 줄 사이")) else B["hold"] * .75 if k.startswith(("붙음", "간격")) else B["hold"]):
+        if best[0] * 간격 > (0.4 if k.startswith(("간격 · 그림", "간격 · 글과 그림", "간격 · 줄 사이", "간격 · 다른 글")) else B["hold"] * .75 if k.startswith(("붙음", "간격")) else B["hold"]):
             x = v[best[1]]; 문제.append(f"[{k}] {x[0]:.2f}초부터 {best[0] * 간격:.1f}초 동안 — {x[1]}")
     return 문제
 
