@@ -37,7 +37,7 @@ function dial(t,t0,cx,cy,R,hour,lit){const a=sp(t-t0,13,.7);if(a<=0)return;g.sav
  g.fillStyle=INK;g.beginPath();g.arc(0,0,22,0,7);g.fill();g.restore()}
 const lit_t={7:6.35,8:8.3};
 // 고르기카드: 1·2 카드가 번갈아 커짐(안전 영역 x60~900 안에 두 장)
-function picks(t,t0){const w=350,h=430,y=855,xs=[F.cx-210,F.cx+210],L=[['1','미시'],['2','신시']];
+function picks(t,t0){const w=350,h=430,y=875,xs=[F.cx-210,F.cx+210],L=[['1','미시'],['2','신시']];
  L.forEach(([n,sub],i)=>{const a=sp(t-t0-i*.12,15,.55);if(a<=0)return;const on=t>t0+.8&&Math.floor((t-t0-.8)/.5)%2==i,k=a*(on?1.05:1);
   g.save();g.translate(xs[i],y);g.scale(k,k);g.fillStyle=on?OR:W;g.beginPath();g.roundRect(-w/2,-h/2,w,h,48);g.fill();
   T(n,0,-50,'900 150px PL',INK);T(sub,0,110,'900 76px PL',INK);g.restore()})}
@@ -50,7 +50,7 @@ function draw(t){const X=F.cx,Y=F.cy;
  wipe(t,2.35,BL2);
  // 2 퀴즈(2.6~5.4): 오후 2시 59분생은? 1 미시 · 2 신시 — 카드가 번갈아 커지고 3·2·1
  if(t>=2.6&&t<5.4){g.fillStyle=BL2;g.fillRect(0,0,1080,1920);
-  const a=sp(t-2.58,15,.6);g.save();g.translate(X,520);g.scale(a,a);T('오후 2시 59분생은',0,0,'900 92px PL',W);g.restore();
+  const a=sp(t-2.58,15,.6);g.save();g.translate(X,500);g.scale(a,a);T('오후 2시 59분생은',0,0,'900 92px PL',W);g.restore();
   picks(t,2.6);
   if(t<3.7){const s0=sp(t-2.62,15,.6);g.save();g.translate(X,1290);g.scale(s0,s0);T('골라 봐요',0,0,'900 76px PL',W);g.restore()}
   if(t>=3.7){const k=Math.min(2,Math.floor((t-3.7)/.5)),s=sp(t-3.7-k*.5,16,.5);g.save();g.translate(X,1290);g.scale(s,s);T(['3','2','1'][k],0,0,'900 150px PL',OR);g.restore()}}
@@ -58,8 +58,8 @@ function draw(t){const X=F.cx,Y=F.cy;
  // 3 시계(5.4~10.3): 열두 시 판 → 바늘이 2시 59분 → 미시 칸 채움 → 3시 정각 → 신시
  if(t>=5.4&&t<10.3){const hour=t<6.3?mix(12,14.98,eio(cl((t-5.6)/.7))):t<8.2?14.98:mix(14.98,15.0,cl((t-8.2)/.1));
   const lit=t>=8.3?8:(t>=6.35?7:null);
-  const hd=sp(t-5.45,15,.6);g.save();g.translate(X,500);g.scale(hd,hd);T(t<8.3?'2시 59분 = 미시(양)':'3시 정각 = 신시(원숭이)',0,0,'900 74px PL',INK);g.restore();
-  dial(t,5.5,X,890,300,hour,lit);   // 11/15 대표 '또 이래??': 원판과 아래 알약이 8~17px로 붙어 있었다 → 원판 줄이고 아래 요소를 올려 64px 띄움
+  const hd=sp(t-5.45,15,.6);g.save();g.translate(X,492);g.scale(hd,hd);T(t<8.3?'2시 59분 = 미시(양)':'3시 정각 = 신시(원숭이)',0,0,'900 74px PL',INK);g.restore();
+  dial(t,5.5,X,906,288,hour,lit);   // 11/15 대표 '또 이래??': 원판과 아래 알약이 8~17px로 붙어 있었다 → 원판 줄이고 아래 요소를 올려 64px 띄움
   if(t<6.9){const s=sp(t-5.5,15,.6);g.save();g.translate(X,1286);g.scale(s,s);T('두 시간씩 열두 칸',0,0,'800 66px PR',INK);g.restore()}
   if(t>=6.9&&t<8.2){const s=sp(t-6.9,15,.6);g.save();g.translate(X,1286);g.scale(s,s);T('오후 1시 ~ 3시 전',0,0,'800 66px PR',INK);g.restore()}
   if(t>=8.3&&t<9.3){const s=sp(t-8.3,15,.6);g.save();g.translate(X,1286);g.scale(s,s);T('오후 3시 ~ 5시 전',0,0,'800 66px PR',INK);g.restore()}

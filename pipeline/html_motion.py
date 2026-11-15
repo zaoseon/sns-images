@@ -318,8 +318,13 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
         띠.append((s2, p2))
         for k_ in range(len(띠) - 1):
             g2 = 띠[k_ + 1][0] - 띠[k_][1] - 1
-            if g2 < B["box_gap"] and max(띠[k_][1] - 띠[k_][0], 띠[k_ + 1][1] - 띠[k_ + 1][0]) >= B["graphic_h"]:
-                keys.setdefault("간격 · 그림 옆", []).append((t, f"큰 그림과 이웃 요소 사이 {g2}px (y{띠[k_][1]}→y{띠[k_ + 1][0]}) — {B['box_gap']}px 이상 띄우세요"))
+            h_a, h_b = 띠[k_][1] - 띠[k_][0], 띠[k_ + 1][1] - 띠[k_ + 1][0]
+            if max(h_a, h_b) < B["graphic_h"]: continue
+            if m[띠[k_][1] - ay0 + 1:띠[k_ + 1][0] - ay0].sum() > 0: continue   # 틈에 가는 선·점이 지나가면 한 그림의 부분(삼합 원판의 꼭짓점 원 등)
+            # 11/15 15:23 대표 "선택 카드랑 위에 텍스트 문장 간격이 붙어서": 큰 그림 바로 위의 제목 줄은 그 줄 높이만큼 이상 띄운다(92px 제목에 77px 간격이 붙어 보임)
+            req = max(B["box_gap"], h_a) if h_a < B["graphic_h"] <= h_b else B["box_gap"]
+            if g2 < req:
+                keys.setdefault("간격 · 그림 옆", []).append((t, f"큰 그림과 {'위 제목' if req > B['box_gap'] else '이웃 요소'} 사이 {g2}px (y{띠[k_][1]}→y{띠[k_ + 1][0]}) — {req}px 이상 띄우세요"))
         g_top, g_bot = 블록[0][0] - top, bot - 블록[-1][1]
         안 = [블록[i + 1][0] - 블록[i][1] for i in range(len(블록) - 1)]
         if g_bot < B["gap_bottom"] - 4: keys["아래 간격"].append((t, f"내용 아래 끝 y{블록[-1][1]} (하단 고정 줄 위 {g_bot}px, {B['gap_bottom']}px 이상)"))
