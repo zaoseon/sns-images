@@ -35,12 +35,19 @@ ADS = [
     dict(id="B6", 공식=9, 훅="마음 공감(저만 그런가요)", 그림="phone",
          줄=["월급은 그대로인데", "통장은 왜", "[b]맨날 비어 있을까?[/b]"]),   # 11/12 16:21 대표 '결제없이 먼저봐요 쓰지 말라 했잖아'
 ]
+# 11/16 2차 세트(손님판): 1차 B1·B3·B5 와 같은 훅·같은 틀에 그림만 손님 캐릭터로 바꾼다(변수 하나만 달라야 비교가 된다)
+ADS += [
+    dict(id="C1", 공식=1, 훅="마음 공감(저만 그런가요)", 그림="cust", 손님="cry", 줄=ADS[0]["줄"]),
+    dict(id="C3", 공식=3, 훅="상황 지목", 그림="cust", 손님="shock", 줄=ADS[2]["줄"]),
+    dict(id="C5", 공식=5, 훅="사람들이 실제로 치는 질문 인용", 그림="cust", 손님="doubt", 줄=ADS[4]["줄"]),
+]
+CUST_DIR = os.path.join(HERE, "..", "characters")
 FACE = {"toon": "jw_toon_v7.png", "real": os.path.join(ROOT, "characters", "cut", "v8_gesture.png")}
 FACE_ID = {"toon": "v7_hanbok", "real": "v8_gesture"}
 CTA = "내 2027년 유형 무료로 보기"   # 11/12 대표 "마지막 카피 뭔 얘긴지 모르겠음" — '판정'은 우리 안쪽 말이라 받는 것을 그대로 쓴다
 TOP = "자오선 · 정월의 답장"
 AI = {"text": "생일로 계산하고, 풀이 문장은 AI로 써요", "toon": "정월은 가상의 AI 캐릭터예요 · 풀이 문장은 AI로 써요", "real": "정월은 가상의 AI 캐릭터예요 · 풀이 문장은 AI로 써요",
-      "phone": "생일로 계산하고, 풀이 문장은 AI로 써요"}
+      "phone": "생일로 계산하고, 풀이 문장은 AI로 써요", "cust": "생일로 계산하고, 풀이 문장은 AI로 써요"}
 TITLE_PX = {"meta_ad_feed": 74, "meta_ad_story": 88}
 
 
@@ -71,6 +78,13 @@ def page(a, ch):
         title = (f'<div class="hook plain big" style="left:{tz[0]}px;width:{tz[2]-tz[0]}px;top:{top0}px;height:{bot0-top0}px;'
                  f'font-size:{int(tp*1.6)}px;justify-content:flex-start;gap:0.3em;line-height:1.25" data-lo="{top0}" data-hi="{bz[3]}">{lines}</div>')
         visual = ""
+    elif vis == "cust":
+        title = f'<div class="hook plain" style="left:{tz[0]}px;width:{tz[2]-tz[0]}px;top:{tz[1]}px;height:{tz[3]-tz[1]}px;font-size:{tp}px">{lines}</div>'
+        fp = os.path.join(CUST_DIR, f"ZS_CUST_{a['손님']}_v1.png"); im = Image.open(fp); fw, fh = im.size
+        crop = (0, 0, fw, int(fh * 0.80))               # 머리~가슴(스웨터까지)
+        vh = vz[3] - vz[1]; vw = int(vh * fw / (fh * 0.80))
+        visual = (f'<img class="face" src="{uri(fp, crop=crop, max_w=1100)}" '
+                  f'style="left:{(W-vw)//2}px;top:{vz[1]}px;width:{vw}px;height:{vh}px">')
     elif vis == "phone":
         title = f'<div class="hook plain" style="left:{tz[0]}px;width:{tz[2]-tz[0]}px;top:{tz[1]}px;height:{tz[3]-tz[1]}px;font-size:{tp}px">{lines}</div>'
         ph_h = vz[3] - vz[1]; ph_w = int(ph_h * 0.50)
@@ -147,6 +161,7 @@ def main():
             C = CS.CH[ch]
             pg = b.new_page(viewport=dict(width=C["w"], height=C["h"]), device_scale_factor=1)
             for a in ADS:
+                if os.environ.get("ONLY") and not a["id"].startswith(os.environ["ONLY"]): continue
                 c = spec(a, ch)
                 G.before(c, channel=ch)
                 html = os.path.join(OUT, f"_{c['id']}.html"); open(html, "w", encoding="utf-8").write(page(a, ch))
@@ -164,7 +179,7 @@ def main():
                     # 웹툰·실사 정월 그림 속 색 경계를 '글자 묻힘'으로 잡는 경우가 있다 — 그림 구역 안의 묻힘만 사람이 보고 넘긴다.
                     vz = {z[0]: z[1:5] for z in C["zones"]}["본문·그림"]
                     rest = [l for l in str(e).splitlines()[1:] if l.strip().startswith("·") and not (
-                        "묻혔어요" in l and c.get("face") and vz[1] <= int(l.split("y ")[1].split()[0]) <= vz[3])]
+                        "묻혔어요" in l and (c.get("face") or a["그림"] == "cust") and vz[1] <= int(l.split("y ")[1].split()[0]) <= vz[3])]
                     if rest:
                         raise
                     print("  [확인] 정월 그림 구역 안의 색 경계만 묻힘으로 잡힘 — 글자 아님(눈으로 확인)")
