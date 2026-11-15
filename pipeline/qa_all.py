@@ -61,6 +61,13 @@ def text_checks():
     _lines = [x for x in _buf.getvalue().splitlines() if x and "통과" not in x]
     for x in _lines: print("   ", x)
     out["클립 표지·영상 감사(K-205: 안 올린 클립 0번 프레임·표지 그림=첫 프레임·1080x1920·소리)"] = len(_lines)
+    # 11/15 대표 "아직 어긋난 곳 수정해야지": 공통 엔진 정본(kcos-motion)이 옆에 있으면 사본(pipeline/)과 같은지 본다
+    _ks = os.path.join(R, "..", "kcos-motion", "tools", "engine_sync.py")
+    if os.path.exists(_ks):
+        import subprocess as _sp
+        _r = _sp.run([sys.executable, _ks], capture_output=True, text=True, env={**os.environ, "ZS_SNS": R})
+        if _r.returncode: print("   ", _r.stdout.strip())
+        out["공통 엔진 정본·사본 어긋남(kcos-motion ↔ pipeline/, tools/engine_sync.py)"] = 1 if _r.returncode else 0
     # 11/14 대표 "릴스·캐러셀·쇼츠·네이버 대표이미지(섬네일)·원고 내부 이미지 모바일도 감사도구"(K-208): 끝난 파일을 channel_specs 값으로 다시 잰다
     import content_audit as CAU, re as _re, urllib.parse as _up
     _pg = json.load(open(os.path.join(R, "naver", "pages.json"), encoding="utf-8"))

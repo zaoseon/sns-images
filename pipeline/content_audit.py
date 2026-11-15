@@ -9,7 +9,8 @@
   python3 tools/content_audit.py carousel 폴더또는카드.jpg [...]        # 인스타 캐러셀 1080x1440
   python3 tools/content_audit.py thumb 파일.jpg [...]                   # 네이버 대표 이미지 1200x720
   python3 tools/content_audit.py body 파일.jpg [...]                    # 네이버 본문 이미지(1280 폭, 모바일)
-  --경고도   경고(참고)까지 실패로 센다.   종료 코드: 막음 있으면 1.
+  --경고도   경고(참고)까지 실패로 센다.
+  --brand <브랜드>   브랜드 추가 검사(tools/content_audit_brand.py: 여백 밖·잘림·휴대폰 글자 크기, 공통 해석기 값). 인스타툰·BB는 이것을 붙여 쓴다.   종료 코드: 막음 있으면 1.
 채널 규격 위치: ZS_SPECS=<channel_specs.py 가 있는 폴더> (없으면 이 저장소 specs/ → sns-images pipeline/)."""
 import os, sys, io, json, subprocess, glob
 import numpy as np
@@ -131,6 +132,13 @@ def main():
     for f in files: paths += sorted(glob.glob(os.path.join(f, "*.jp*g")) + glob.glob(os.path.join(f, "*.png"))) if os.path.isdir(f) else [f]
     fn = {"video": lambda p: video(p, ch), "carousel": carousel, "thumb": thumb, "body": body}[kind]
     경고도 = "--경고도" in sys.argv; 막힘 = 0
+    brand = sys.argv[sys.argv.index("--brand") + 1] if "--brand" in sys.argv else None
+    if brand:
+        a_ = [x for x in a if x != brand]; files = a_[2:] if kind == "video" else a_[1:]
+        paths = []
+        for f in files: paths += sorted(glob.glob(os.path.join(f, "*.jp*g")) + glob.glob(os.path.join(f, "*.png"))) if os.path.isdir(f) else [f]
+        sys.path.insert(0, HERE); import content_audit_brand as CB
+        _fn = fn; fn = lambda p: tuple(x + y for x, y in zip(_fn(p), CB.check(p, kind, brand)))
     if kind == "carousel" and len(paths) < 7 and len(files) == 1 and os.path.isdir(files[0]): print(f"[막음] {files[0]}: 카드 {len(paths)}장 — 캐러셀은 최소 7장(R58)"); 막힘 += 1
     for p in paths:
         m, w = fn(p); name = os.path.relpath(p)
