@@ -1497,3 +1497,9 @@ README "2주마다 하는 일" 그대로. 요점만:
 - `2026-reels-test/sigan/ad.html`(형식 F — 안전 영역 x60~900 안에 두 장 놓는 자체 `picks()`; FXK.pickCards 는 x 90~990 이라 가운데·간격 관문에 걸림, 시계판 `dial()` 24시간 판 열두 칸·자시는 밤 11시 시작) → `reel_1122_sigan.mp4`, 카드 reeltest-1122(new). 글은 zaoseon-site public/naver/n78.html 그대로.
 - 승인 확인: reeltest-1121·threads-1121-dohwa·threads-1119-eul 아직 승인 없음(운영앱 완료 기록 checkList 직접 읽음).
 - 이 클라우드: `pip install mido` 만 있으면 소리 붙이기가 돈다(음악은 assets/music_lib 라이브러리 곡이라 fluidsynth 없이 됨, 11/14 확인).
+
+## 11/15 11:45 ① 자동 — 승인분 예약 3건 + 릴스 실험 11/23 일간 정(승인 대기)
+- 운영앱 승인(11/14 20:08~09) 확인 → Metricool 예약: threads-1119-eul **428541361**(11/19 20:30) · reeltest-1121 **428541365**(11/21 17:00, 표지 1500ms) · threads-1121-dohwa **428541370**(11/21 20:30). 카드 done.
+- reeltest-1122(11/22 17:00 시간표 퀴즈)는 아직 승인 없음 → 예약 안 함.
+- 새 편 **reel_1123_jeong**(형식 C 그림, 판 v_violet, 글은 3회차 정 문장 그대로) → 카드 **reeltest-1123** new. 빌더 `2026-reels-test/jeong/ad.html`. 11/23 은 콘텐츠 계획상 스레드 칸 없음.
+- 다음: 11/24~26 17:00 실험 편(3회차 무·기·경 칸, C 이틀 연속 금지 → B·E·A·D 중). 11/13 화개·11/14 불 48시간 숫자는 19:45 실행에서.
