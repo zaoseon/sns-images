@@ -18,7 +18,7 @@ function draw(t){const X=F.cx;g.fillStyle=BG;g.fillRect(0,0,1080,1920);
  let jw=false;
  // 1 정월 + 훅
  if(t<3.1){const o=cl((3.05-t)/.3);g.save();g.globalAlpha=o;   // 11/12 대표 '정월 나오는 거 어색' → 영상에서 뺌(K-197). 훅은 글자만
-  const a1=sp(t-.15,14,.6);g.save();g.translate(X,F.cy-235);g.scale(a1,a1);T('말 없는 친구,',0,0,'900 136px PL',IV);T('다 듣고 있어요',0,175,'900 136px PL',IV);g.restore();
+  const a1=sp(t-.15,14,.6);g.save();g.translate(X,F.cy-235);g.scale(a1,a1);T('말 없는 친구,',0,0,'900 136px PL',IV);T('다 듣고 있어요',0,186,'900 136px PL',IV);g.restore();
   if(t>.7){const a2=sp(t-.7,15,.55);g.save();g.translate(X,F.cy+205);g.scale(a2,a2);g.fillStyle=AQ;g.beginPath();g.roundRect(-418,-92,836,184,92);g.fill();T('판단은 벌써 끝났을걸요?',0,4,'900 74px PL','#0E2A47');g.restore()}
   g.restore()}
  // 2 임 — 큰 물: 물결링 + 글자 스태거
@@ -35,18 +35,18 @@ function draw(t){const X=F.cx;g.fillStyle=BG;g.fillRect(0,0,1080,1920);
   [0,1,2,3].forEach(i=>F.dotLand(g,t,6.95+i*.25,{x:X-240+i*160,y:838,r:36,color:i==3?YL:AQ,h:240}));
   g.fillStyle='rgba(111,211,224,.35)';g.fillRect(X-330,874,660,8);
   if(t>6.9)T('스며드는 비 같은 기운',X,1018,'900 80px PL',IV);
-  if(t>7.3){const b=sp(t-7.3,15,.6);g.save();g.translate(X,1176);g.scale(b,b);T('분위기 가라앉은 걸',0,0,'900 78px PL',YL);T('제일 먼저 알아채요',0,90,'900 78px PL',YL);g.restore()}
+  if(t>7.3){const b=sp(t-7.3,15,.6);g.save();g.translate(X,1176);g.scale(b,b);T('분위기 가라앉은 걸',0,0,'900 78px PL',YL);T('제일 먼저 알아채요',0,97,'900 78px PL',YL);g.restore()}
   g.restore()}
  // 4 1·2 고르기 — 두 장이 번갈아 커짐
  if(t>=10.3&&t<13.2){const a=fade(t,10.3,13.2),A=F.area(),w=390,h=450,gx=(A.x1-A.x0-2*w)/3;g.save();g.globalAlpha=a;
   T('나는 어느 쪽?',X,508,'900 100px PL',IV);
   const on=t>11.4?Math.floor((t-11.4)/.5)%2:-1;
   // 11/12 대표 '또 붙어있네… 각각의 간격': 두 장을 위아래로, 사이 60px. 고른 쪽은 커지지 않고 테두리로 표시(옆 카드와 닿지 않게)
-  [['1','듣는 쪽',AQ],['2','말하는 쪽',IV]].forEach(([n,s,c],i)=>{const s0=sp(t-10.5-i*.15,15,.55);if(s0<=0)return;const cw=720,ch=260,cy_=757+i*316;
+  [['1','듣는 쪽',AQ],['2','말하는 쪽',IV]].forEach(([n,s,c],i)=>{const s0=sp(t-10.5-i*.15,15,.55);if(s0<=0)return;const cw=720,ch=260,cy_=771+i*330;
    g.save();g.translate(X,cy_);g.scale(s0,s0);g.fillStyle=c;g.beginPath();g.roundRect(-cw/2,-ch/2,cw,ch,44);g.fill();
    if(on==i){g.strokeStyle=YL;g.lineWidth=10;g.stroke()}
    T(n,-cw/2+120,6,'900 140px PL','#0E2A47');T(s,-cw/2+240,4,'900 88px PL','#0E2A47','left');g.restore()});
-  if(t>11.2){const b=sp(t-11.2,15,.6);g.save();g.translate(X,1314);g.scale(b,b);T('댓글에 숫자 하나만!',0,0,'900 82px PL',YL);g.restore()}g.restore()}
+  if(t>11.2){const b=sp(t-11.2,15,.6);g.save();g.translate(X,1336);g.scale(b,b);T('댓글에 숫자 하나만!',0,0,'900 82px PL',YL);g.restore()}g.restore()}
  // 5 정월 + 행동
  if(t>=13){const a5=sp(t-13.2,14,.6);g.save();g.translate(X,F.cy-176);g.scale(a5,a5);T('나는 1번!',0,0,'900 120px PL',IV);T('너는 몇 번?',0,150,'900 120px PL',AQ);g.restore();
   const b=sp(t-14.1,14,.6);g.save();g.translate(X,F.cy+174);g.scale(b,b);g.fillStyle=YL;g.beginPath();g.roundRect(-410,-66,820,132,66);g.fill();T('내 첫 글자는 프로필 링크에서',0,-2,'900 60px PL','#111');g.restore()}

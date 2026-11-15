@@ -11,15 +11,15 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#004D40
 #s{position:absolute;inset:0;overflow:hidden}canvas{position:absolute;inset:0}
 .t{position:absolute;left:50px;right:180px;text-align:center;white-space:nowrap}
 </style></head><body><div id="s"><canvas id="cv" width="1080" height="1920"></canvas>
-<div id="a1" class="t" style="top:545px;font:900 120px/1.1 PL;color:#fff;letter-spacing:-4px">싫다는 말 대신</div>
+<div id="a1" class="t" style="top:515px;font:900 120px/1.1 PL;color:#fff;letter-spacing:-4px">싫다는 말 대신</div>
 <div id="a2" class="t" style="top:700px;font:900 150px/1.1 PL;color:#fff;letter-spacing:-4px">다른 길로</div>
-<div id="a3" class="t" style="top:870px;font:900 150px/1.1 PL;color:#EFE5FD;letter-spacing:-4px">돌아가요</div>
-<div id="a4" class="t" style="top:1090px;font:800 60px/1.3 PR;color:#CFE8E0">부딪히기보다<br>결국 해내는 쪽이에요</div>
-<div id="c1" class="t" style="top:470px;font:900 104px/1.15 PL;color:#fff">어디든 뻗어 가는<br><span style="color:#EFE5FD">덩굴 기운</span>이에요</div>
-<div id="d1" class="t" style="top:560px;font:900 100px/1.18 PL;color:#fff">맞춰 주다가<br><span style="color:#EFE5FD">내 뜻을 놓칠 때</span>가<br>있어요</div>
-<div id="d2" class="t" style="top:1250px;font:800 60px PR;color:#CFE8E0">결국 못 보내고 지워요</div>
-<div id="e1" class="t" style="top:520px;font:900 108px/1.18 PL;color:#fff">원하는 것<br><span style="color:#EFE5FD">하나를 먼저</span><br>말해 보세요</div>
-<div id="f1" class="t" style="top:521px;font:900 120px/1.18 PL;color:#004D40">내 첫 글자도<br>을일까?</div>
+<div id="a3" class="t" style="top:919px;font:900 150px/1.1 PL;color:#EFE5FD;letter-spacing:-4px">돌아가요</div>
+<div id="a4" class="t" style="top:1135px;font:800 60px/1.48 PR;color:#CFE8E0">부딪히기보다<br>결국 해내는 쪽이에요</div>
+<div id="c1" class="t" style="top:470px;font:900 104px/1.48 PL;color:#fff">어디든 뻗어 가는<br><span style="color:#EFE5FD">덩굴 기운</span>이에요</div>
+<div id="d1" class="t" style="top:440px;font:900 100px/1.8 PL;color:#fff">맞춰 주다가<br><span style="color:#EFE5FD">내 뜻을 놓칠 때</span>가<br>있어요</div>
+<div id="d2" class="t" style="top:1290px;font:800 60px PR;color:#CFE8E0">결국 못 보내고 지워요</div>
+<div id="e1" class="t" style="top:440px;font:900 108px/1.48 PL;color:#fff">원하는 것<br><span style="color:#EFE5FD">하나를 먼저</span><br>말해 보세요</div>
+<div id="f1" class="t" style="top:521px;font:900 120px/1.45 PL;color:#004D40">내 첫 글자도<br>을일까?</div>
 <div id="f2" class="t" style="top:935px;font:800 64px PR;color:#004D40">생일만 넣으면 무료 판정</div>
 <div id="f3" class="t" style="top:1142px;left:140px;right:270px;height:150px;border-radius:999px;background:#004D40;color:#EFE5FD;font:900 66px/150px PL">프로필 링크 ↗</div>
 </div>
@@ -40,7 +40,7 @@ function bub(text,side,y,a,{fs=60,bg,fg='#111'}={}){if(a<=0)return;const lines=S
  g.fillStyle=fg;g.textBaseline='top';g.textAlign='left';lines.forEach((l,i)=>g.fillText(l,44,28+i*lh));g.restore()}
 // 속마음 쾅: 큰 글자가 기울며 떨어져 앉음
 function inner(text,y,a,t,t0){if(a<=0)return;const lines=text.split('\n');g.save();g.translate(FXK.cx,y+136);const s=mix(1.7,1,a);g.rotate(mix(-.16,-.05,a));g.scale(s,s);
- if(t-t0<.25){g.translate(Math.sin((t-t0)*70)*8,0)}g.font='900 84px PL';g.textAlign='center';g.textBaseline='middle';g.fillStyle=LI;lines.forEach((l,i)=>g.fillText(l,0,(i-.5*(lines.length-1))*98));g.restore()}
+ if(t-t0<.25){g.translate(Math.sin((t-t0)*70)*8,0)}g.font='900 84px PL';g.textAlign='center';g.textBaseline='middle';g.fillStyle=LI;lines.forEach((l,i)=>g.fillText(l,0,(i-.5*(lines.length-1))*124));g.restore()}
 // 보이는 것끼리 쌓아 칸 세로 가운데(FXK.cy)에 앉힘
 function stack(t,items,cy=907,gap=48){const vis_=items.map(it=>({...it,a:sp(t-it.t0,15,.62)})).filter(it=>t>=it.t0);
  const hs=vis_.map(it=>it.h*Math.min(1,eio(cl((t-it.t0)/.28))));const H=hs.reduce((s,h)=>s+h,0)+gap*Math.max(0,vis_.length-1);let y=cy-H/2;
@@ -50,17 +50,17 @@ function rise(id,t0,t){const a=sp(t-t0,14,.7);$(id).style.transform=`translateY(
 function wipe(t,t0,col,y=907){if(t>=t0&&t<t0+.42){g.fillStyle=col;g.beginPath();g.arc(FXK.cx,y,eio((t-t0)/.42)*1500,0,7);g.fill()}}
 // 덩굴: 가운데 바위를 돌아 위로 뻗음(덮개그리기). 잎은 지나간 자리에 톡톡
 const VINE=(()=>{const P=[];for(let i=0;i<=60;i++){const u=i/60;const y=mix(1330,840,u);const bend=Math.sin(u*Math.PI)*300;P.push([FXK.cx-300+u*120+bend*(u<.5?1:1)*1.15,y])}return P})();
-function vine(t,t0){const p=eio(cl((t-t0)/1.3));
+function vine(t,t0){const p=eio(cl((t-t0)/.8));
  // 바위
  const r=sp(t-t0+.1,14,.7);g.save();g.fillStyle='rgba(0,0,0,.25)';g.beginPath();g.roundRect(FXK.cx-150,1010,230*r,200*r,46);g.fill();g.restore();
  if(p<=0)return;const n=Math.max(2,Math.floor(p*VINE.length));g.save();g.lineCap='round';g.lineJoin='round';g.strokeStyle='#7FD6A8';g.lineWidth=22;g.beginPath();
  for(let i=0;i<n;i++){const q=VINE[i];i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1])}g.stroke();
- for(let i=6;i<n;i+=7){const q=VINE[i],s=sp(t-t0-(i/60)*1.3-.05,15,.55),d=(i/7)%2?1:-1;if(s<=0)continue;g.save();g.translate(q[0],q[1]);g.rotate(d*.7);g.scale(s,s);
+ for(let i=6;i<n;i+=7){const q=VINE[i],s=sp(t-t0-(i/60)*.8-.05,15,.55),d=(i/7)%2?1:-1;if(s<=0)continue;g.save();g.translate(q[0],q[1]);g.rotate(d*.7);g.scale(s,s);
   g.fillStyle=(i/7)%2?'#3FD483':LI;g.beginPath();g.ellipse(d*38,0,40,22,0,0,7);g.fill();g.restore()}
  const e=VINE[n-1];g.fillStyle=LI;g.beginPath();g.arc(e[0],e[1],18,0,7);g.fill();g.restore()}
 // 입력창: 치다가 지움(타자기)
 const TYPED='나 사실 매운 거 별로…';
-function input(t){const y=1040,h=160,x0=80,x1=880;g.save();g.fillStyle='rgba(255,255,255,.12)';g.beginPath();g.roundRect(x0,y,x1-x0,h,40);g.fill();
+function input(t){const y=1075,h=160,x0=80,x1=880;g.save();g.fillStyle='rgba(255,255,255,.12)';g.beginPath();g.roundRect(x0,y,x1-x0,h,40);g.fill();
  let k=0;if(t<9.0)k=0;else if(t<10.0)k=Math.floor((t-9.0)/1.0*TYPED.length);else if(t<10.3)k=TYPED.length;else k=Math.max(0,TYPED.length-Math.floor((t-10.3)/.45*TYPED.length));
  const s=TYPED.slice(0,k);g.font='800 60px PR';g.textBaseline='middle';g.textAlign='left';g.fillStyle=W;g.fillText(s,x0+44,y+h/2+2);
  if(Math.floor(t*3)%2==0){const cw=g.measureText(s).width;g.fillStyle=LI;g.fillRect(x0+48+cw,y+h/2-36,6,72)}
@@ -78,14 +78,14 @@ function draw0(t){
  if(s2){g.fillStyle=EM2;g.fillRect(0,0,1080,1920);
   stack(t,[{t0:2.55,h:bubH('주말에 마라탕 ㄱㄱ?'),draw:(y,a)=>bub('주말에 마라탕 ㄱㄱ?','l',y,a)},
    {t0:3.15,h:bubH('좋아ㅎㅎ'),draw:(y,a)=>bub('좋아ㅎㅎ','r',y,a)},
-   {t0:3.75,h:272,draw:(y,a)=>inner('(사실 매운 거\n못 먹음)',y,a,t,3.75)},
+   {t0:3.75,h:268,draw:(y,a)=>inner('(사실 매운 거\n못 먹음)',y,a,t,3.75)},
    {t0:4.45,h:bubH('근데 옆집 파스타도\n맛있대!'),draw:(y,a)=>bub('근데 옆집 파스타도\n맛있대!','r',y,a)}])}
  // 3 덩굴 기운: 바위를 돌아 뻗는 덩굴
  wipe(t,6.2,EM);const s3=t>=6.4&&t<8.6;vis('c1',s3);
- if(s3){rise('c1',6.45,t);vine(t,6.8)}
+ if(s3){rise('c1',6.45,t);vine(t,6.45)}
  // 4 까닭: 쳤다가 지움
  wipe(t,8.4,EM2);const s4=t>=8.6&&t<11.0;['d1','d2'].forEach(i=>vis(i,s4));
- if(s4){g.fillStyle=EM2;g.fillRect(0,0,1080,1920);rise('d1',8.65,t);input(t);$('d2').style.opacity=cl((t-10.4)/.2)}
+ if(s4){g.fillStyle=EM2;g.fillRect(0,0,1080,1920);rise('d1',8.65,t);input(t);$('d2').style.opacity=cl((t-8.9)/.2)}
  // 5 해 볼 것: 이번엔 먼저 보냄 → 답이 옴
  wipe(t,10.8,EM);const s5=t>=11.0&&t<13.2;vis('e1',s5);
  if(s5){rise('e1',11.05,t);bub('나 이번엔 파스타!','r',990,sp(t-11.3,15,.6));bub('좋아, 거기로 가자!','l',1173,sp(t-11.85,15,.6))}

@@ -31,9 +31,9 @@ function dial(t,t0,cx,cy,R,hour,lit){const a=sp(t-t0,13,.7);if(a<=0)return;g.sav
  SI.forEach((s,i)=>{const h0=23+i*2,a0=ang(h0),a1=ang(h0+2),on=lit===i;
   if(on){const p=eio(cl((t-lit_t[i])/.35)),am1=mix(a0,a1,p);g.fillStyle=OR;g.beginPath();g.arc(0,0,R-6,a0,am1);g.arc(0,0,R*.9,am1,a0,true);g.closePath();g.fill()}
   g.strokeStyle='#D9E1F2';g.lineWidth=4;g.beginPath();g.moveTo(0,0);g.lineTo(Math.cos(a0)*R,Math.sin(a0)*R);g.stroke();
-  const am=(a0+a1)/2,rr=R*.68;T(s,Math.cos(am)*rr,Math.sin(am)*rr+3,'900 64px PL',on?OR:INK)});
+  const am=(a0+a1)/2,rr=R*.63;T(s,Math.cos(am)*rr,Math.sin(am)*rr+3,'900 64px PL',on?OR:INK)});
  // 바늘
- const ah=ang(hour);g.strokeStyle=INK;g.lineWidth=14;g.lineCap='round';g.beginPath();g.moveTo(0,0);g.lineTo(Math.cos(ah)*R*.5,Math.sin(ah)*R*.5);g.stroke();
+ const ah=ang(hour);g.strokeStyle=INK;g.lineWidth=14;g.lineCap='round';g.beginPath();g.moveTo(0,0);g.lineTo(Math.cos(ah)*R*.31,Math.sin(ah)*R*.31);g.stroke();
  g.fillStyle=INK;g.beginPath();g.arc(0,0,22,0,7);g.fill();g.restore()}
 const lit_t={7:6.35,8:8.3};
 // 고르기카드: 1·2 카드가 번갈아 커짐(안전 영역 x60~900 안에 두 장)

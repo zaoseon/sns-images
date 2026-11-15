@@ -22,8 +22,8 @@ function draw(t){const X=F.cx;g.fillStyle=BG;g.fillRect(0,0,1080,1920);
  // 1 훅 — 글자 늘이기 + 도장
  if(t<2.9){land(t,cam,1760);const a=cl((2.9-t)/.25);g.save();g.globalAlpha=a;
   const s1=sp(t+.3,14,.6);g.save();g.translate(X,F.cy-230);g.scale(s1,s1);T('역마살 있으면',0,0,'900 104px PL',IV);g.restore();
-  if(t>.1){const p=ease(cl((t-.1)/.35));g.save();g.translate(X,F.cy-92);g.scale(mix(1.6,1,p),1);g.globalAlpha*=p;T('떠돌이 팔자?',0,0,'900 128px PL',OR);g.restore()}
-  if(t>.4){const b=sp(t-.4,16,.5);g.save();g.translate(X,F.cy+132);g.rotate(0);g.scale(b,b);g.strokeStyle=IV;g.lineWidth=12;g.beginPath();g.roundRect(-320,-125,640,250,32);g.stroke();T('아니에요',0,4,'900 110px PL',IV);g.restore()}
+  if(t>.1){const p=ease(cl((t-.1)/.35));g.save();g.translate(X,F.cy-92);g.scale(mix(1.6,1,p),1);g.globalAlpha*=p;T('떠돌이 팔자?',0,18,'900 128px PL',OR);g.restore()}
+  if(t>.4){const b=sp(t-.4,16,.5);g.save();g.translate(X,F.cy+215);g.rotate(0);g.scale(b,b);g.strokeStyle=IV;g.lineWidth=12;g.beginPath();g.roundRect(-320,-110,640,220,32);g.stroke();T('아니에요',0,4,'900 110px PL',IV);g.restore()}
   g.restore()}
  // 2 가방이 길을 굴러감(공 튀기기) + 한 줄
  if(t>=2.8&&t<5.7){const a=fade(t,2.8,5.7);g.save();g.globalAlpha=a;
@@ -45,7 +45,7 @@ function draw(t){const X=F.cx;g.fillStyle=BG;g.fillRect(0,0,1080,1920);
    g.restore()});
   g.restore()}
  // 4 뜻 — 낱말 블록 교체
- if(t>=10.9&&t<13.2){const a=fade(t,10.9,13.2);g.save();g.globalAlpha=a;land(t,cam,1560);
+ if(t>=10.9&&t<13.2){const a=fade(t,10.9,13.2);g.save();g.globalAlpha=a;land(t,cam,1660);
   T('이동·출장·이사·여행',X,592,'900 84px PL',IV);
   const W=['?','충전'],k=t>11.9?1:0,b=sp(t-(k?11.9:11.2),15,.55);g.save();g.translate(X,914);g.scale(b,b);g.fillStyle=k?OR:H2;g.beginPath();g.roundRect(-280,-120,560,240,48);g.fill();T(W[k],0,4,'900 120px PL',k?BG:IV);g.restore();
   if(t>12.2)T('떠나는 건 내 방식의 충전',X,1229,'900 72px PL',IV);

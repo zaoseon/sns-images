@@ -16,12 +16,12 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#171717
 <div id="a3" class="t" style="top:1110px;font:800 84px/1.1 PR;color:#fff">꼭 그렇진 않아요</div>
 <div id="w1" class="t" style="top:545px;font:900 200px/1.1 PL;color:#FF4F9A;letter-spacing:-6px">도화</div>
 <div id="w2" class="t" style="top:835px;font:800 64px/1.1 PR;color:#555">복숭아꽃이라는 뜻</div>
-<div id="w3" class="t" style="top:990px;font:900 92px/1.2 PL;color:#171717"></div>
+<div id="w3" class="t" style="top:930px;font:900 84px/1.46 PL;color:#171717"></div>
 <div id="h1" class="t" style="top:480px;font:900 76px/1.1 PL;color:#fff">내 띠로 찾는 도화 글자</div>
-<div id="m1" class="t" style="top:495px;font:900 96px/1.15 PL;color:#171717">2027년엔<br><span style="color:#FF4F9A">달로</span> 들어와요</div>
+<div id="m1" class="t" style="top:462px;font:900 96px/1.48 PL;color:#171717">2027년엔<br><span style="color:#FF4F9A">달로</span> 들어와요</div>
 <div id="m2" class="t" style="top:1095px;font:900 84px/1.1 PL;color:#171717"></div>
 <div id="m3" class="t" style="top:1225px;font:800 64px/1.1 PR;color:#555">도화 달이에요</div>
-<div id="f1" class="t" style="top:521px;font:900 120px/1.18 PL;color:#171717">내 도화 달은<br>몇 월?</div>
+<div id="f1" class="t" style="top:521px;font:900 120px/1.45 PL;color:#171717">내 도화 달은<br>몇 월?</div>
 <div id="f2" class="t" style="top:935px;font:800 64px PR;color:#171717">생일만 넣으면 무료 판정</div>
 <div id="f3" class="t" style="top:1142px;left:140px;right:270px;height:150px;border-radius:999px;background:#171717;color:#FF4F9A;font:900 66px/150px PL">프로필 링크 ↗</div>
 </div>
@@ -45,7 +45,7 @@ function petal(x,y,r,rot,a){g.save();g.translate(x,y);g.rotate(rot);g.globalAlph
 function burst(t){if(t<.35||t>1.25)return;const u=(t-.35)/.9;const P=[[-1,-.7],[.9,-.8],[-1.05,.45],[1.1,.35],[0,-1.15],[-.4,1.05],[.5,1.0]];
  P.forEach(([dx,dy],i)=>{const d=mix(80,330,eio(cl(u*1.4)));petal(FXK.cx+dx*d*1.25,853+dy*d*.62,mix(10,34,sp(t-.35-i*.03,12,.6)),u*2+i,1-cl((u-.6)/.4))})}
 function chip(x,y,w,h,txt,a){g.save();g.globalAlpha=cl(a);g.fillStyle=BK2;g.beginPath();g.roundRect(x,y,w,h,h/2);g.fill();g.fillStyle=W;g.font='800 60px PR';g.textAlign='center';g.textBaseline='middle';g.fillText(txt,x+w/2,y+h/2+3);g.restore()}
-function tree(t,t0){const X0=60,W0=460,H=120,ys=[690,860,1030,1200],CX2=790,R=80;
+function tree(t,t0){const X0=60,W0=460,H=120,ys=[660,850,1040,1230],CX2=790,R=70;
  ROWS.forEach(([grp,ch],i)=>{const y=ys[i],a=sp(t-t0-i*.1,14,.7);if(a<=0)return;g.save();g.translate((1-cl(a))*-80,0);chip(X0,y,W0,H,grp,a);g.restore();
   const s0=t0+.8+i*.9,p=eio(cl((t-s0)/.35));if(p>0){g.save();g.strokeStyle=PK;g.lineWidth=10;g.lineCap='round';g.beginPath();g.moveTo(X0+W0+28,y+H/2);g.lineTo(mix(X0+W0+28,CX2-R-24,p),y+H/2);g.stroke();g.restore()}
   const c=sp(t-s0-.3,15,.55);if(c>0){const lit=t>=s0+.3&&t<s0+.9;g.save();g.translate(CX2,y+H/2);g.scale(c,c);g.fillStyle=lit?PK:'#C93C7B';g.beginPath();g.arc(0,0,R,0,7);g.fill();
