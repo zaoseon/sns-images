@@ -31,7 +31,7 @@ function dial(t,t0,cx,cy,R,hour,lit){const a=sp(t-t0,13,.7);if(a<=0)return;g.sav
  SI.forEach((s,i)=>{const h0=23+i*2,a0=ang(h0),a1=ang(h0+2),on=lit===i;
   if(on){const p=eio(cl((t-lit_t[i])/.35)),am1=mix(a0,a1,p);g.fillStyle=OR;g.beginPath();g.arc(0,0,R-6,a0,am1);g.arc(0,0,R*.9,am1,a0,true);g.closePath();g.fill()}
   g.strokeStyle='#D9E1F2';g.lineWidth=4;g.beginPath();g.moveTo(0,0);g.lineTo(Math.cos(a0)*R,Math.sin(a0)*R);g.stroke();
-  const am=(a0+a1)/2,rr=R*.66;T(s,Math.cos(am)*rr,Math.sin(am)*rr+3,'900 64px PL',on?OR:INK)});
+  const am=(a0+a1)/2,rr=R*.68;T(s,Math.cos(am)*rr,Math.sin(am)*rr+3,'900 64px PL',on?OR:INK)});
  // 바늘
  const ah=ang(hour);g.strokeStyle=INK;g.lineWidth=14;g.lineCap='round';g.beginPath();g.moveTo(0,0);g.lineTo(Math.cos(ah)*R*.5,Math.sin(ah)*R*.5);g.stroke();
  g.fillStyle=INK;g.beginPath();g.arc(0,0,22,0,7);g.fill();g.restore()}
@@ -59,11 +59,11 @@ function draw(t){const X=F.cx,Y=F.cy;
  if(t>=5.4&&t<10.3){const hour=t<6.3?mix(12,14.98,eio(cl((t-5.6)/.7))):t<8.2?14.98:mix(14.98,15.0,cl((t-8.2)/.1));
   const lit=t>=8.3?8:(t>=6.35?7:null);
   const hd=sp(t-5.45,15,.6);g.save();g.translate(X,500);g.scale(hd,hd);T(t<8.3?'2시 59분 = 미시(양)':'3시 정각 = 신시(원숭이)',0,0,'900 74px PL',INK);g.restore();
-  dial(t,5.5,X,900,310,hour,lit);
-  if(t<6.9){const s=sp(t-5.5,15,.6);g.save();g.translate(X,1300);g.scale(s,s);T('두 시간씩 열두 칸',0,0,'800 66px PR',INK);g.restore()}
-  if(t>=6.9&&t<8.2){const s=sp(t-6.9,15,.6);g.save();g.translate(X,1300);g.scale(s,s);T('오후 1시 ~ 3시 전',0,0,'800 66px PR',INK);g.restore()}
-  if(t>=8.3&&t<9.3){const s=sp(t-8.3,15,.6);g.save();g.translate(X,1300);g.scale(s,s);T('오후 3시 ~ 5시 전',0,0,'800 66px PR',INK);g.restore()}
-  if(t>=9.3){const s=sp(t-9.3,16,.5);g.save();g.translate(X,1300);g.scale(s,s);pill(0,0,600,130,OR,'정답은 1번 미시','900 72px PL',W);g.restore()}}
+  dial(t,5.5,X,890,300,hour,lit);   // 11/15 대표 '또 이래??': 원판과 아래 알약이 8~17px로 붙어 있었다 → 원판 줄이고 아래 요소를 올려 64px 띄움
+  if(t<6.9){const s=sp(t-5.5,15,.6);g.save();g.translate(X,1286);g.scale(s,s);T('두 시간씩 열두 칸',0,0,'800 66px PR',INK);g.restore()}
+  if(t>=6.9&&t<8.2){const s=sp(t-6.9,15,.6);g.save();g.translate(X,1286);g.scale(s,s);T('오후 1시 ~ 3시 전',0,0,'800 66px PR',INK);g.restore()}
+  if(t>=8.3&&t<9.3){const s=sp(t-8.3,15,.6);g.save();g.translate(X,1286);g.scale(s,s);T('오후 3시 ~ 5시 전',0,0,'800 66px PR',INK);g.restore()}
+  if(t>=9.3){const s=sp(t-9.3,16,.5);g.save();g.translate(X,1308);g.scale(s,s);pill(0,0,600,110,OR,'정답은 1번 미시','900 72px PL',W);g.restore()}}
  wipe(t,10.05,BL);
  // 4 한 가지 더(10.3~12.6): 서머타임 때 태어났어도 시계 시각 그대로
  if(t>=10.3&&t<12.6){const a=sp(t-10.35,15,.6);g.save();g.translate(X,560);g.scale(a,a);pill(0,0,520,120,OR,'하나 더','900 68px PL',INK);g.restore();

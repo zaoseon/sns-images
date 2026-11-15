@@ -308,6 +308,18 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
             if yy - p_ - 1 >= B["rhythm_band"]: 블록.append((s_, p_)); s_ = yy
             p_ = yy
         블록.append((s_, p_))
+        # 11/15 14:58 대표 "요소별 간격, 여백 규칙 적용했는데 또 이래??"(11/22 시간 퀴즈: 원판과 '정답은 1번 미시' 알약 17px):
+        # 큰 그림(원판·카드 묶음, graphic_h 이상)과 이웃 줄 사이는 rhythm_band 미만이라 한 블록으로 묶여 아무 검사도 안 받았다.
+        # 픽셀 줄 띠를 나눠, 큰 그림 띠와 바로 옆 띠 사이가 box_gap 미만이면 막는다(글 줄 사이는 둘 다 작아서 안 걸림).
+        띠 = []; s2 = ys_[0]; p2 = ys_[0]
+        for yy in ys_[1:]:
+            if yy - p2 - 1 >= 6: 띠.append((s2, p2)); s2 = yy
+            p2 = yy
+        띠.append((s2, p2))
+        for k_ in range(len(띠) - 1):
+            g2 = 띠[k_ + 1][0] - 띠[k_][1] - 1
+            if g2 < B["box_gap"] and max(띠[k_][1] - 띠[k_][0], 띠[k_ + 1][1] - 띠[k_ + 1][0]) >= B["graphic_h"]:
+                keys.setdefault("간격 · 그림 옆", []).append((t, f"큰 그림과 이웃 요소 사이 {g2}px (y{띠[k_][1]}→y{띠[k_ + 1][0]}) — {B['box_gap']}px 이상 띄우세요"))
         g_top, g_bot = 블록[0][0] - top, bot - 블록[-1][1]
         안 = [블록[i + 1][0] - 블록[i][1] for i in range(len(블록) - 1)]
         if g_bot < B["gap_bottom"] - 4: keys["아래 간격"].append((t, f"내용 아래 끝 y{블록[-1][1]} (하단 고정 줄 위 {g_bot}px, {B['gap_bottom']}px 이상)"))
@@ -326,7 +338,8 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
             if ts[j] - ts[j - 1] <= 간격 + 1e-6: run += 1
             else: run = 1; s0 = j
             if run > best[0]: best = (run, s0)
-        if best[0] * 간격 > (B["hold"] * .75 if k.startswith(("붙음", "간격")) else B["hold"]):
+        # 11/15: 정답 알약처럼 1초 안쪽으로 보이는 장면도 멈춰 보면 붙어 보인다 → '그림 옆' 간격은 0.5초(2컷)만 이어져도 막는다
+        if best[0] * 간격 > (0.4 if k.startswith("간격 · 그림") else B["hold"] * .75 if k.startswith(("붙음", "간격")) else B["hold"]):
             x = v[best[1]]; 문제.append(f"[{k}] {x[0]:.2f}초부터 {best[0] * 간격:.1f}초 동안 — {x[1]}")
     return 문제
 
