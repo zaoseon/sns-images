@@ -1,0 +1,93 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- 11/26(목) 17:00 인스타 릴스 실험 칸 · 형식 D(설명 애니메이션) · 일간 경(庚)
+     글: 2026-ilgan3/build.py REELS gyeong 문장 그대로(훅·둘째 줄·기운·까닭·해 볼 것). 새 문장은 예시 말(칭찬 낱말 슬롯·말풍선 두 쌍)·끝 장면뿐. 숫자·통계 없음.
+     정월 없음(K-197). 화면에 한자 없음. 판 w_ink(딥 인디고 #27306B + 아이보리 #F7F4EC, 3회차 경 판 그대로).
+     글 칸 x 50~900(가운데 FXK.cx), 보이는 것끼리 묶어 칸 세로 가운데(K-203). -->
+<style>
+@font-face{font-family:PL;src:url(../../pipeline/fonts/Paperlogy-9Black.ttf)}
+@font-face{font-family:PR;src:url(../../pipeline/fonts/PRETENDARD-EXTRABOLD.OTF)}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#27306B}
+#s{position:absolute;inset:0;overflow:hidden}canvas{position:absolute;inset:0}
+.t{position:absolute;left:50px;right:180px;text-align:center;white-space:nowrap}
+</style></head><body><div id="s"><canvas id="cv" width="1080" height="1920"></canvas>
+<div id="a1" class="t" style="top:600px;font:900 130px/1.1 PL;color:#F7F4EC;letter-spacing:-4px">칭찬도</div>
+<div id="a2" class="t" style="top:810px;font:900 150px/1.1 PL;color:#F7F4EC;letter-spacing:-5px">빈말로는</div>
+<div id="a3" class="t" style="top:1050px;font:900 150px/1.1 PL;color:#F7F4EC;letter-spacing:-5px">못 해요</div>
+<div id="b1" class="t" style="top:504px;font:900 88px/1.48 PL;color:#1E2550">진짜일 때만<br>말하는 쪽이에요</div>
+<div id="c1" class="t" style="top:495px;font:900 100px/1.48 PL;color:#F7F4EC">단단한 바위와<br><span style="color:#C9CCE8">쇠 기운</span>이에요</div>
+<div id="d1" class="t" style="top:460px;font:900 76px/1.48 PL;color:#1E2550">정직한 말이<br>차갑게 닿을 때가 있어요</div>
+<div id="e1" class="t" style="top:558px;font:900 86px/1.48 PL;color:#F7F4EC">말하기 전에<br><span style="color:#C9CCE8">좋은 점 하나</span> 먼저요</div>
+<div id="f1" class="t" style="top:521px;font:900 120px/1.52 PL;color:#27306B">내 첫 글자도<br>경일까?</div>
+<div id="f2" class="t" style="top:935px;font:800 64px PR;color:#27306B">생일만 넣으면 무료 판정</div>
+<div id="f3" class="t" style="top:1142px;left:140px;right:270px;height:150px;border-radius:999px;background:#27306B;color:#F7F4EC;font:900 66px/150px PL">프로필 링크 ↗</div>
+</div>
+<script src="../../pipeline/motion_fx.js"></script>
+<script>
+window.FX=['글자스태거','타일뒤집기','슬롯롤링','덮개그리기','위아래비교','박스낳기'];
+const {cl,mix,ease,eio,sp}=FXK,IN='#27306B',IN2='#1E2550',IV='#F7F4EC',LN='#E4DFD2',SUB='#5A5F80',PALE='#C9CCE8',ICE='#DCE6F2';
+const $=id=>document.getElementById(id),g=$('cv').getContext('2d'),vis=(id,on)=>$(id).style.display=on?'':'none';
+window.SFX=[{t:.05,k:'press'},{t:.5,k:'tick'},{t:.9,k:'press'},{t:2.25,k:'swoosh'},{t:2.9,k:'tick'},{t:3.2,k:'tick'},{t:3.5,k:'tick'},{t:3.8,k:'tick'},{t:4.4,k:'chime'},
+ {t:5.45,k:'swoosh'},{t:6.0,k:'tick'},{t:7.2,k:'chime'},{t:8.25,k:'swoosh'},{t:8.45,k:'press'},{t:9.4,k:'tick'},{t:11.05,k:'swoosh'},{t:11.6,k:'press'},{t:12.2,k:'press'},{t:13.0,k:'swoosh'},{t:13.6,k:'chime'},{t:14.3,k:'press'}];
+function tiles(t,t0,col){if(t<t0||t>t0+.45)return;const cw=180,ch=192;g.save();g.fillStyle=col;
+ for(let j=0;j<10;j++)for(let i=0;i<6;i++){const k=eio(cl((t-t0-(i+j)*.02)/.16));if(k<=0)continue;const x=i*cw,y=j*ch,h=ch*k;g.fillRect(x,y+(ch-h)/2,cw+1,h+1)}g.restore()}
+function rise(id,t0,t){const a=sp(t-t0,14,.7);$(id).style.transform=`translateY(${(1-a)*80}px)`;$(id).style.opacity=cl((t-t0)/.12)}
+// 2 슬롯: 칭찬 낱말이 굴러가다 '진짜 잘했다'에서 멈추고 체크
+const WORDS=['예쁘다','대박','최고야','천재네','진짜 잘했다'];
+function slotBox(t,t0){const a=sp(t-t0,15,.65);if(a<=0)return;const y=953,h=230;g.save();g.globalAlpha=cl(a);
+ g.fillStyle='#FFFFFF';g.strokeStyle=IN;g.lineWidth=8;g.beginPath();g.roundRect(110,y-h/2,770,h,40);g.fill();g.stroke();g.restore();
+ g.save();g.beginPath();g.roundRect(118,y-h/2+8,754,h-16,34);g.clip();if(t<2.9){g.font='900 104px PL';g.textAlign='center';g.textBaseline='middle';g.fillStyle=IN;g.fillText(WORDS[0],FXK.cx,y)}else if(t<4.3)FXK.slot(g,t,t0+.3,4.3,{words:WORDS,target:'진짜 잘했다',x:FXK.cx,y:y,h:h,font:'900 104px PL',color:IN,loops:2});else{g.font='900 104px PL';g.textAlign='center';g.textBaseline='middle';g.fillStyle=IN;g.fillText('진짜 잘했다',FXK.cx,y-Math.sin((t-4.3)*18)*Math.exp(-(t-4.3)*7)*30)}g.restore();
+ g.save();g.globalAlpha=cl(a);g.strokeStyle=IN;g.lineWidth=8;g.beginPath();g.arc(FXK.cx,y+h/2+160,62,0,7);g.stroke();g.restore();const c=eio(cl((t-4.35)/.3));if(c>0){g.save();g.fillStyle=IN;g.beginPath();g.arc(FXK.cx,y+h/2+160,62*sp(t-4.35,15,.6),0,7);g.fill();
+  g.strokeStyle=IV;g.lineWidth=13;g.lineCap='round';g.lineJoin='round';g.beginPath();const X=FXK.cx-28,Y=y+h/2+162;g.moveTo(X,Y);
+  g.lineTo(mix(X,X+20,cl(c*2)),mix(Y,Y+22,cl(c*2)));if(c>.5)g.lineTo(mix(X+20,X+58,(c-.5)*2),mix(Y+22,Y-26,(c-.5)*2));g.stroke();g.restore()}}
+// 3 바위: 선으로 그려지고(덮개그리기) 쇠빛 줄이 훑고 지나감
+const ROCK=[[230,1280],[300,1070],[420,940],[560,915],[690,980],[790,1110],[840,1280]];
+function rock(t,t0){const p=eio(cl((t-t0)/.45));if(p<=0)return;g.save();g.lineJoin='round';g.lineCap='round';
+ const n=ROCK.length,seg=p*(n);g.beginPath();g.moveTo(...ROCK[0]);for(let i=1;i<n;i++){if(i>seg)break;const k=cl(seg-i+1);const [x0,y0]=ROCK[i-1],[x1,y1]=ROCK[i];g.lineTo(mix(x0,x1,k),mix(y0,y1,k))}
+ if(p>=1){g.closePath();g.fillStyle='#55609F';g.fill()}g.strokeStyle=PALE;g.lineWidth=12;g.stroke();
+ const f=eio(cl((t-t0-.7)/.5));if(f>0){g.strokeStyle='rgba(201,204,232,.6)';g.lineWidth=7;[[420,940,470,1170],[560,915,590,1110],[690,980,640,1190]].forEach(([a,b,c,d])=>{g.beginPath();g.moveTo(a,b);g.lineTo(mix(a,c,f),mix(b,d,f));g.stroke()})}
+ const s=cl((t-t0-1.3)/.8);if(s>0&&s<1){g.save();g.beginPath();g.moveTo(...ROCK[0]);ROCK.slice(1).forEach(q=>g.lineTo(...q));g.closePath();g.clip();
+  const x=mix(150,920,eio(s));const gr=g.createLinearGradient(x-90,0,x+90,0);gr.addColorStop(0,'rgba(255,255,255,0)');gr.addColorStop(.5,'rgba(255,255,255,.75)');gr.addColorStop(1,'rgba(255,255,255,0)');
+  g.fillStyle=gr;g.save();g.translate(x,1090);g.rotate(.35);g.fillRect(-90,-300,180,600);g.restore();g.restore()}
+ g.restore()}
+// 4 위아래 비교: 내가 한 말 / 상대에게 닿은 말(서리 낀 말풍선)
+function bubble(text,y,a,{ice=0,label}){if(a<=0)return;g.save();g.globalAlpha=cl(a);g.translate(FXK.cx,y);g.scale(mix(.85,1,cl(a)),mix(.85,1,cl(a)));
+ g.fillStyle=SUB;g.font='800 60px PR';g.textAlign='center';g.textBaseline='middle';g.fillText(label,0,-168);
+ const w=780,h=168;g.fillStyle=ice>0?mixc('#FFFFFF',ICE,ice):'#FFFFFF';g.strokeStyle=ice>0?mixc(IN,'#8FA7C6',ice):IN;g.lineWidth=7;g.beginPath();g.roundRect(-w/2,-h/2,w,h,48);g.fill();g.stroke();
+ g.fillStyle=IN2;g.font='800 62px PR';g.fillText(text,0,4);
+ if(ice>0){g.strokeStyle=`rgba(143,167,198,${ice})`;g.lineWidth=5;g.lineCap='round';[[-w/2+32,-h/2+32],[w/2-32,h/2-32],[w/2-32,-h/2+32]].forEach(([x,y2],i)=>{const r=16*ice;for(let k=0;k<3;k++){const an=k*Math.PI/3;g.beginPath();g.moveTo(x-Math.cos(an)*r,y2-Math.sin(an)*r);g.lineTo(x+Math.cos(an)*r,y2+Math.sin(an)*r);g.stroke()}})}
+ g.restore()}
+function mixc(a,b,k){const p=s=>[1,3,5].map(i=>parseInt(s.slice(i,i+2),16));const A=p(a),B=p(b);return `rgb(${A.map((v,i)=>Math.round(v+(B[i]-v)*k)).join(',')})`}
+// 5 박스낳기: 좋은 점 상자가 아쉬운 점 상자를 낳음
+function box(n,text,y,a){if(a<=0)return;g.save();g.globalAlpha=cl(a);g.translate(FXK.cx,y);g.scale(a,a);
+ g.fillStyle=n==1?IV:'#3A4385';g.beginPath();g.roundRect(-390,-75,780,150,40);g.fill();
+ g.fillStyle=n==1?IN2:IV;g.font='800 62px PR';g.textAlign='center';g.textBaseline='middle';g.fillText(text,0,3);g.restore()}
+function draw0(t){
+ let bg=IN;if(t>=2.45)bg=IV;if(t>=5.65)bg=IN;if(t>=8.45)bg=IV;if(t>=11.25)bg=IN;if(t>=13.25)bg=IV;g.fillStyle=bg;g.fillRect(0,0,1080,1920);
+ // 1 훅: 0초부터 글자 다 보임(K-139), 한 줄씩 기울며 자리 잡음
+ const s1=t<2.45;['a1','a2','a3'].forEach(i=>vis(i,s1));
+ if(s1){[['a1',.3],['a2',.15],['a3',0]].forEach(([id,o],i)=>{const a=sp(t+o-i*.0,16,.55);$(id).style.transform=`scale(${mix(.86,1,a)}) rotate(${mix(i%2?3:-3,0,a)}deg)`});
+  const k=eio(cl((t-.9)/.25));$('a3').style.color=k>0?mixc('#F7F4EC','#C9CCE8',k):IV;
+}
+ tiles(t,2.2,IV);
+ // 2 슬롯
+ const s2=t>=2.45&&t<5.65;vis('b1',s2);if(s2){rise('b1',2.5,t);slotBox(t,2.6)}
+ tiles(t,5.4,IN);
+ // 3 바위·쇠
+ const s3=t>=5.65&&t<8.45;vis('c1',s3);if(s3){rise('c1',5.5,t);rock(t,5.3)}
+ tiles(t,8.2,IV);
+ // 4 위아래 비교
+ const s4=t>=8.45&&t<11.25;vis('d1',s4);
+ if(s4){rise('d1',8.3,t);
+  bubble('이 부분은 다시 해 보자',937,sp(t-8.25,15,.6),{label:'내가 한 말'});
+  bubble('이 부분은 다시 해 보자',1275,sp(t-8.35,15,.6),{label:'상대에게 닿은 말',ice:eio(cl((t-9.3)/.7))})}
+ tiles(t,11.0,IN);
+ // 5 해 볼 것: 좋은 점 → 아쉬운 점 순서
+ const s5=t>=11.25&&t<13.25;vis('e1',s5);
+ if(s5){rise('e1',11.3,t);const b2=sp(t-12.2,14,.62);box(1,'색 고른 거 진짜 좋다',mix(1063,958,cl(b2)),sp(t-11.6,15,.6));if(t>=12.2)box(2,'글자만 조금 키워 볼까?',mix(958,1168,eio(cl((t-12.2)/.35))),b2)}
+ tiles(t,13.0,IV);
+ // 6 끝
+ const s6=t>=13.25;['f1','f2','f3'].forEach(i=>vis(i,s6));
+ if(s6){const a=sp(t-13.3,15,.62);$('f1').style.transform=`scale(${mix(1.3,1,a)})`;$('f2').style.opacity=cl((t-13.6)/.2);const b=sp(t-13.9,15,.6);$('f3').style.opacity=t>=13.9?1:0;$('f3').style.transform=`scale(${t>=14.3&&t<14.45?.94:b})`}
+}
+(async()=>{await document.fonts.load('900 100px PL');await document.fonts.load('800 40px PR');window.seek=t=>{draw0(t);const p=g.getImageData(4,4,1,1).data;document.body.style.background=`rgb(${p[0]},${p[1]},${p[2]})`;const fr=document.getElementById('zsfr').getContext('2d');fr.clearRect(0,0,1080,1920);FXK.frame(fr,{ai:'AI가 계산·작성한 콘텐츠예요'})};seek(0)})();
+</script><canvas id="zsfr" width="1080" height="1920" style="position:absolute;left:0;top:0;z-index:99;pointer-events:none"></canvas></body></html>

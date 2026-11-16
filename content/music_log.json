@@ -254,5 +254,13 @@
   "mode": "up",
   "bpm": 120,
   "key": "E"
+ },
+ {
+  "name": "reel_1126_gyeong",
+  "kind": "fun",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 124,
+  "key": "F"
  }
 ]
