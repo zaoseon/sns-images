@@ -52,6 +52,28 @@ def audit(s):
     for g in 장면:
         for x in g.get("화면글", []):
             if re.search(r"\d{2}·\d{2}", str(x)) and not str(x).rstrip().endswith("년생"): bad.append(f"[{g.get('id')}] '{x}' — 연도 뒤에 '년생'(K-222)")
+    # 대장 미반영 기준을 대본 단계 검사로(대표 11/17 22:06 "제발 규칙 적용 좀", 23:24 "진행해")
+    _all = " ".join([str(s.get("표지", {}).get(k, "")) for k in ("훅", "보조")] + [str(s.get("CTA", {}).get(k, "")) for k in ("큰말", "이유", "단추")]
+                    + [str(x) for g in 장면 for x in g.get("화면글", []) + (g["풀이"] if isinstance(g.get("풀이"), list) else [g.get("풀이", "")])])
+    for pat, why in ((r"세 지도", "K-086 '세 지도' 대신 사주·별자리·숫자(또는 여섯 운명학 교차)"), (r"힘 쓸 달|아낄 달", "K-193 '좋은 달·조심할 달'처럼 실제 쓰는 말로"),
+                     (r"결제 없이|좋은 달만 말하는 운세", "K-195 판매 안내·어색한 대비 문장 금지")):
+        if re.search(pat, _all): bad.append(f"[표현] {why}")
+    # K-064·K-220: 표지 훅 유형을 적고 목록(열두 가지) 안이어야
+    try:
+        sys.path.insert(0, os.path.join(ROOT, "cards")); sys.path.insert(0, os.path.join(ROOT, "pipeline")); import copy_rules as _CR
+        bad += [f"[표지 훅] {x.splitlines()[0]}" for x in _CR.훅검사(s.get("표지", {}).get("훅유형"))]
+    except ImportError: pass
+    # K-092 강조색은 튀게(바탕과 밝기 비 3 이상), K-138 글자 대비 4.5 이상(글·바탕 짝마다)
+    def _L(h):
+        h = h.lstrip("#"); c = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]; c = [x / 12.92 if x <= .03928 else ((x + .055) / 1.055) ** 2.4 for x in c]
+        return .2126 * c[0] + .7152 * c[1] + .0722 * c[2]
+    def _cr(a, b): la, lb = _L(a), _L(b); return (max(la, lb) + .05) / (min(la, lb) + .05)
+    P_ = s.get("판") or {}
+    try:
+        if P_.get("acc") and P_.get("bg") and _cr(P_["acc"], P_["bg"]) < 3: bad.append(f"[색] 강조색 {P_['acc']} 이 바탕과 밝기 비 {_cr(P_['acc'], P_['bg']):.1f} — 3 이상으로 튀게(K-092)")
+        for fg, bgk in (("ink", "bg"), ("sub", "bg"), ("accInk", "acc"), ("offInk", "off"), ("panInk", "pan")):
+            if P_.get(fg) and P_.get(bgk) and _cr(P_[fg], P_[bgk]) < 4.5: bad.append(f"[색] 글 {fg} {P_[fg]} ↔ {bgk} {P_[bgk]} 대비 {_cr(P_[fg], P_[bgk]):.1f} — 4.5 이상(K-138)")
+    except Exception as e: bad.append(f"[색] 판 색 값을 못 읽음: {e}")
     hk = str(s.get("표지", {}).get("훅", "")).strip()
     try:
         tgt = json.load(open(os.path.join(ROOT, "pipeline", "brands", (s.get("brand") or "zaoseon") + ".json"), encoding="utf-8")).get("hook_target")

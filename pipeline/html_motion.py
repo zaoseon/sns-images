@@ -346,6 +346,23 @@ def 대본_검사(pg, 초, ch="reel"):
     _bgc = _np.asarray(_Im.open(_io.BytesIO(pg.screenshot())).convert("RGB"))[_y0 + 5, 5] / 255.0
     _allow = 2 if (max(_bgc) - min(_bgc)) / max(max(_bgc), 1e-6) > .35 else 1
     if len(_grp) > _allow: bad.append(f"[색] 강조 색상 무리 {len(_grp)}개({[[int(b) * 30 for b in g_] for g_ in _grp]}°) — 강조색 하나와 같은 계열 누른 톤만, 면·선은 무채색(K-043·K-237)")
+    # 대장 미반영 기준을 영상 검사로(대표 11/17 22:06 "제발 규칙 적용 좀", 23:24 "진행해")
+    _shot = lambda t_: _np.asarray(_Im.open(_io.BytesIO((pg.evaluate("t => window.seek(t)", t_), pg.screenshot())[1])).convert("RGB")).astype(int)
+    # K-073 첫 1초 변화: 0초와 1초 화면이 충분히 달라야(글 칸 안 화소 8% 이상)
+    _a0 = _shot(0.0)[_y0:_y1]; _chg = max((_np.abs(_a0 - _shot(min(tt_, 초 - 0.01))[_y0:_y1]).max(2) > 40).mean() for tt_ in (0.5, 1.0))
+    if _chg < .02: bad.append("[첫 1초] 0초와 0.5·1초 화면이 거의 같아요 — 첫 1초에 변화(K-073)")
+    # K-041 바탕 전체 그라데이션·빛 방울 금지: 장면마다 글 칸 양옆 가장자리 바탕이 한 색이어야
+    for _t in [g["초"][1] - 0.2 for g in S["장면"]]:
+        _e = _shot(_t)[_y0:_y1]; _ed = _np.concatenate([_e[:, :40].reshape(-1, 3), _e[:, -40:].reshape(-1, 3)])
+        if _ed.std(0).max() > 10: bad.append(f"[바탕] {_t:.1f}초 바탕 가장자리 색이 고르지 않아요(표준편차 {_ed.std(0).max():.0f}) — 바탕 그라데이션·빛 방울 금지(K-041)"); break
+    # K-061 표지: 정월·배지 없이 글자만(표지 장면에 상자·그림 없음)
+    pg.evaluate("t => {window.__zsBox=[];window.__zsImg=[];window.seek(t)}", max(0.0, float(S["장면"][0]["초"][0]) - 0.15))
+    if pg.evaluate("() => (window.__zsBox||[]).length + (window.__zsImg||[]).length"): bad.append("[표지] 표지 장면에 배지·상자·그림이 있어요 — 표지는 글자만 크게(K-061)")
+    # K-042 장식 아이콘 금지: 페이지가 아이콘 파일을 쓰지 않아야
+    if pg.evaluate(r"() => /icons\/|lucide|phosphor/i.test(document.documentElement.outerHTML)"): bad.append("[아이콘] 아이콘 파일을 써요 — 장식 아이콘 금지(K-042)")
+    # K-192 효과음은 움직임마다: 장면 수 + 표지 + CTA 이상
+    _sfx = pg.evaluate("() => (window.SFX||[]).length")
+    if _sfx < len(S["장면"]) + 2: bad.append(f"[효과음] 효과음 {_sfx}개 — 장면마다·표지·CTA에 하나 이상({len(S['장면']) + 2}개↑, K-192)")
     v = pg.evaluate("window.CTAT||null"); c = S["CTA"]
     if v:   # 11/17 22:16 대표 "또 CTA페이지 제대로 안하고"(K-236): CTA 장면엔 대본 CTA 글만(화면에서 글을 지어 넣지 않음, K-227 규칙 1), 큰 말은 두 줄까지
         pg.evaluate("t => {window.__zsTxt=[];window.seek(t)}", 초 - 0.05)
@@ -899,6 +916,7 @@ def main():
     if opt("소리", 브랜드().get("music", "fun")) != "없음":
         mi = 소리붙이기(p, d, a[0], opt("소리", 브랜드().get("music", "fun")), a[1]); print(f"  음악: {mi['style']} {mi['bpm']}bpm {mi['key']} + 효과음")
     else:
+        if "window.SCRIPT" in open(a[0], encoding="utf-8").read(): raise SystemExit("[막음] 대본 릴스는 소리 없이 만들지 않아요(K-070)")
         print("  [주의] 소리 없음 — 릴스·클립·광고로 내보내지 않는다(K-070)")
     print(f"  {p} · {d:.1f}초 · {fps}fps · {CH['w']}x{CH['h']}")
     return 0
