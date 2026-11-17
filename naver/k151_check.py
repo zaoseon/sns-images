@@ -21,6 +21,11 @@ def core_kw(title):
     return [w for w in head.split() if len(w) >= 2][:2]
 
 HOOK = re.compile(r"(법|이유|뜻|정리|날짜|언제|한눈에|가지|차이|순서|찾기|계산|까|표|기준|총정리|핵심|추천|BEST|TOP|꼭 알아야|후회 없는|모르면|진짜|\\?)")   # 11/2 대표 "낚시성 기준 너무 엄격": 클릭 부르는 말도 찾는 말로 인정
+K233_BASE = set(json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "k233_baseline.json"), encoding="utf-8"))["ids"]) if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "k233_baseline.json")) else set()
+LONG_Q = re.compile(r"\?|나요|일까|까요|ㄹ까|을까|ㅂ니까|언제|왜 ")
+LONG_W = re.compile(r"특징|공통점|이유|원리|차이|오해|진실|뜻|까닭")
+LONG_S = re.compile(r"법|찾기|단계|한눈에|날짜|나이표")   # 네이버 검색형(K-161 찾는 말)은 그대로 통과 — 검색 의도가 먼저
+LONG_BAN = re.compile(r"99|무조건|반드시 .*터|미친듯이|평생 돈|대박 나는|소름|충격")
 def title_check(title, body):
     """제목 다섯 기준(K-161). 처방 문장으로 돌려준다."""
     out = []; kw = core_kw(title); t = plain(body)
@@ -44,6 +49,12 @@ def check(pid, v):
     kw = core_kw(title)
     if kw and not any(k in t[:200] for k in kw): bad.append(f"첫 200자에 핵심어({'·'.join(kw)}) 직답 없음(K-143)")
     bad += title_check(title, v.get("body", ""))
+    if pid not in K233_BASE:   # 11/17 지금까지 있던 원고(발행·예약·승인)는 그대로, 새 원고부터(naver/k233_baseline.json)
+    # K-233(대표 11/17 21:51 "그러자"): 유튜브 롱폼 제목 944편(zaoseon-site docs/유튜브_제목패턴_운세_v2.md 6절) — 긴 글 제목은
+    # 독자의 질문 하나로 열거나, 특징·공통점·이유·원리·차이·오해를 약속한다(목록형 '대상+숫자+시기'만으로는 중앙 조회가 낮았다). 보장·과장 말은 막는다.
+        if not (LONG_Q.search(title) or LONG_W.search(title) or LONG_S.search(title)): bad.append("긴 글 제목은 질문(…나요?·…일까·언제…?), 특징·공통점·이유·원리·차이·오해, 또는 검색형(보는 법·단계·한눈에·날짜) 중 하나로 — '총정리'·'좋은 띠' 목록만으로 끝내지 않기(K-233, 유튜브 롱폼 제목 분석)")
+        if LONG_BAN.search(title): bad.append(f"제목 보장·과장 말 '{LONG_BAN.search(title).group(0)}' → 빼기(K-233·R20)")
+
     d = [x for x in DEMEAN if x in title]
     if d: bad.append(f"제목 비하 표현 '{d[0]}'(R24)")
     if kw and not re.search(re.escape(kw[0]) + r"[^.?!]{0,60}?(이에요|예요|에요|입니다|이다|합니다|해요)[.!]", t[:220]):
