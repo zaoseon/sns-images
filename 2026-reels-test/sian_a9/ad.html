@@ -3,9 +3,9 @@
 <body><canvas id="cv" width="1080" height="1920"></canvas>
 <script src="../../pipeline/motion_fx.js"></script>
 <script>
-window.SCRIPT='reel_A_자월띠';window.FX=["카드뒤집기", "곡선화살표", "삼각형그리기", "순환", "글자스태거"];window.COMP='띠삼각변신';window.PAL='k_neon';
-const D={"brand": "zaoseon", "status": "approved", "작성": "CT 11/17 (크빵이 E05·E15·유튜브 터진 4편 제목 분석 반영, 입말) · 11/17 19:4x CTA 다시 씀(질문→한 줄→할 일), 약속 칸 뺌(K-228)", "id": "reel_A_자월띠", "의도": {"시청자": "12월에 내 띠에 뭐가 달라지는지 궁금한 사람", "유형": "내 상황이 맞나"}, "표지": {"훅": "12월 7일부터 힘 받는 띠 4가지", "보조": "11시 52분부터, 내 출생연도를 찾아보세요"}, "장면": [{"id": "쥐", "공개": true, "화면글": ["쥐띠", "84·96·08·20년생"], "풀이": "12월은 쥐의 달이에요. 쥐띠는 내 달이라 힘이 세게 실려요.", "초": [0.9, 3.3], "모션": "子 칩이 뒤집히며 켜짐(카드뒤집기)"}, {"id": "소", "공개": true, "화면글": ["소띠", "85·97·09·21년생"], "풀이": "소띠는 쥐랑 제일 잘 맞는 띠(육합)예요. 쥐의 달에 같이 끌려 올라가요.", "초": [3.3, 5.7], "모션": "子→丑·丑→子 곡선 화살표 두 개"}, {"id": "용", "공개": true, "화면글": ["용띠", "88·00·12·24년생"], "풀이": "용띠는 쥐의 달에 원숭이랑 셋이 뭉치는 삼합이에요. 혼자일 때보다 힘이 커져요.", "초": [5.7, 8.1], "모션": "子·辰·申 이 삼각형으로 모이고 선이 이어짐"}, {"id": "원숭이", "공개": true, "화면글": ["원숭이띠", "80·92·04·16년생"], "풀이": "원숭이띠도 같은 삼합이에요. 쥐·용이랑 한 팀이 돼요.", "초": [8.1, 10.5], "모션": "삼각형 둘레를 곡선 화살표가 돈다(순환)"}], "CTA": {"유형": "저장", "큰말": "내 띠, 이 넷 중에 있었나요?", "이유": "쥐·소·용·원숭이띠면 12월 7일부터예요", "단추": "잊지 않게 저장해 두세요"}, "근거": ["대설 2026-12-07 11:52 자월 시작(만세력 엔진)", "육합 子丑, 삼합 申子辰", "년생은 달력 기준(입춘 전 출생은 앞 띠)", "표지 훅: docs/research/유튜브쇼츠_제목패턴_운세_v1.md 4절(대상+명사로 끝남+우리만의 정확한 값)"], "확인필요": [], "구도": "띠삼각변신", "판": {"id": "k_neon", "bg": "#111111", "ink": "#FFFFFF", "sub": "#A6A6AD", "acc": "#B9FF38", "accInk": "#111111", "off": "#6A6A78", "offInk": "#FFFFFF", "pan": "#44444C", "panInk": "#FFFFFF", "hl": "#B9FF38"}, "승인": "대표 11/17 19:57 \"확정\"(CTA 4편). C는 글자마다 한 장면으로 나눔(글은 그대로)"},P=D['판'],F=window.FXK,{cl,mix,ease,eio,sp}=F;
-const g=document.getElementById('cv').getContext('2d');
+window.SCRIPT='reel_A_자월띠';window.FX=["원와이프", "글자스태거", "글자늘이기", "카드뒤집기", "곡선화살표", "삼각형그리기", "순환", "노드불켜기", "칩줄세우기", "버튼에서체크"];window.COMP='띠삼각변신';window.PAL='k_neon';
+const D={"brand": "zaoseon", "status": "approved", "작성": "CT 11/17 (크빵이 E05·E15·유튜브 터진 4편 제목 분석 반영, 입말) · 11/17 19:4x CTA 다시 씀(질문→한 줄→할 일), 약속 칸 뺌(K-228)", "id": "reel_A_자월띠", "의도": {"시청자": "12월에 내 띠에 뭐가 달라지는지 궁금한 사람", "유형": "내 상황이 맞나"}, "표지": {"훅": "12월 7일부터 힘 받는 띠 4가지", "보조": "11시 52분부터, 내 출생연도를 찾아보세요"}, "장면": [{"id": "쥐", "공개": true, "화면글": ["쥐띠", "84·96·08·20년생"], "풀이": "12월은 쥐의 달이에요. 쥐띠는 내 달이라 힘이 세게 실려요.", "초": [0.9, 3.3], "모션": "子 칩이 뒤집히며 켜짐(카드뒤집기)"}, {"id": "소", "공개": true, "화면글": ["소띠", "85·97·09·21년생"], "풀이": "소띠는 쥐랑 제일 잘 맞는 띠(육합)예요. 쥐의 달에 같이 끌려 올라가요.", "초": [3.3, 5.7], "모션": "子→丑·丑→子 곡선 화살표 두 개"}, {"id": "용", "공개": true, "화면글": ["용띠", "88·00·12·24년생"], "풀이": "용띠는 쥐의 달에 원숭이랑 셋이 뭉치는 삼합이에요. 혼자일 때보다 힘이 커져요.", "초": [5.7, 8.1], "모션": "子·辰·申 이 삼각형으로 모이고 선이 이어짐"}, {"id": "원숭이", "공개": true, "화면글": ["원숭이띠", "80·92·04·16년생"], "풀이": "원숭이띠도 같은 삼합이에요. 쥐·용이랑 한 팀이 돼요.", "초": [8.1, 10.5], "모션": "삼각형 둘레를 곡선 화살표가 돈다(순환)"}], "CTA": {"유형": "저장", "큰말": "내 띠, 이 넷 중에 있었나요?", "이유": "쥐·소·용·원숭이띠면 12월 7일부터예요", "단추": "잊지 않게 저장해 두세요", "칩": ["쥐", "소", "용", "원숭이"]}, "근거": ["대설 2026-12-07 11:52 자월 시작(만세력 엔진)", "육합 子丑, 삼합 申子辰", "년생은 달력 기준(입춘 전 출생은 앞 띠)", "표지 훅: docs/research/유튜브쇼츠_제목패턴_운세_v1.md 4절(대상+명사로 끝남+우리만의 정확한 값)"], "확인필요": [], "구도": "띠삼각변신", "판": {"id": "k_neon", "bg": "#111111", "ink": "#FFFFFF", "sub": "#A6A6AD", "acc": "#B9FF38", "accInk": "#111111", "off": "#6A6A78", "offInk": "#FFFFFF", "pan": "#44444C", "panInk": "#FFFFFF", "hl": "#B9FF38"}, "승인": "대표 11/17 19:57 \"확정\"(CTA 4편). C는 글자마다 한 장면으로 나눔(글은 그대로)", "표지모션": true, "단추체크": true, "늘이기": true},P=D['판'],F=window.FXK,{cl,mix,ease,eio,sp}=F;
+const g=document.getElementById('cv').getContext('2d'),M=n=>F.mark&&F.mark(n);   // M('기법 이름'): 그 기법을 실제로 그린 순간 적는다(K-235)
 const SC=D['장면'],CT=D['CTA'],COV=D['표지'];
 const T_COV=SC[0]['초'][0],T_CTA=SC[SC.length-1]['초'][1],DUR=T_CTA+2.8;
 window.CTAT=[T_CTA,CT['큰말']];window.COVT=[COV['훅'],COV['보조']].filter(Boolean);window.COVE=T_COV;
@@ -35,7 +35,7 @@ function line(txt,font,color,ytop,{x=CX(),al='center',alpha=1,scale=1}={}){const
  if(scale!==1){g.translate(x,ytop+m.a);g.scale(scale,scale);g.fillText(txt,0,0)}else g.fillText(txt,x,ytop+m.a);g.restore();return m.a+m.d}
 // 어절 단위로 들어오는 줄(글자스태거) — 어절마다 따로 그린다
 function wordsLine(txt,font,color,ytop,t,t0,step){const ws=txt.split(' '),m=ink(txt,font),sw=ink(' ',font).w;let x=CX()-m.w/2;
- ws.forEach((w,i)=>{const a=sp(t-t0-i*step,16,.6),mw=ink(w,font).w;if(a>0){g.save();g.globalAlpha=cl(a*1.6);g.font=font;g.fillStyle=color;g.textAlign='left';g.textBaseline='alphabetic';
+ ws.forEach((w,i)=>{const a=sp(t-t0-i*step,16,.6),mw=ink(w,font).w;if(a>0){if(a<.95)M('글자스태거');g.save();g.globalAlpha=cl(a*1.6);g.font=font;g.fillStyle=color;g.textAlign='left';g.textBaseline='alphabetic';
   g.translate(x,ytop+m.a+(1-cl(a))*28);g.fillText(w,0,0);g.restore()}x+=mw+sw});return ws.length}
 // ── 장면 배치: [그림] [화면글 묶음] [풀이 상자] 를 위·아래·사이 같은 간격으로
 const BODY='60px PR',PADX=44,PADY=40,PANW=800;
@@ -74,19 +74,20 @@ const GRAPH={
  // A: 띠 칩 한 줄 → 子 뒤집혀 켜짐 → 子⇄丑 곡선 화살표 둘 → 子·辰·申 이 삼각형으로 모여 선이 이어짐 → 삼각형 둘레를 화살표가 돈다
  '띠삼각변신':{fit:s=>['소','용','원숭이'].includes(s.id),h:s=>({'쥐':160,'소':160+2*AH}[s.id]||2*RT+TH),draw(i,t,L){
   const s=SC[i],t0=s['초'][0],r=80,ids=['쥐','소','용','원숭이'],ws=ids.map(d=>CW(r,HJ[d])),TW=ws.reduce((a,b)=>a+b,0)+52*3,X=k=>CX()-TW/2+ws.slice(0,k).reduce((a,b)=>a+b,0)+52*k+ws[k]/2;
-  if(s.id==='쥐'){const cy=L.gy+r;ids.forEach((d,k)=>{const on=d==='쥐',u=on?cl((t-t0)/.3):1;chip(X(k),cy,r,HJ[d],{on:on&&u>.5?1:0,a:sp(t+.5-k*.06,14,.6),sx:on?Math.abs(Math.cos(u*Math.PI)):1})});return}
+  if(s.id==='쥐'){const cy=L.gy+r;if(t-t0<.3)M('카드뒤집기');ids.forEach((d,k)=>{const on=d==='쥐',u=on?cl((t-t0)/.3):1;chip(X(k),cy,r,HJ[d],{on:on&&u>.5?1:0,a:sp(t+.5-k*.06,14,.6),sx:on?Math.abs(Math.cos(u*Math.PI)):1})});return}
   if(s.id==='소'){const AH=Math.max(34,(L.gH-2*r)/2),cy=L.gy+AH+r,p=eio((t-t0-.02)/.3);ids.forEach((d,k)=>chip(X(k),cy,r,HJ[d],{on:d==='소'?1:0}));   // 화살표가 칩 위·아래 가장자리에 붙는다(띠가 끊기지 않게)
-   ARW(X(0)+20,cy-r,X(1)-20,cy-r,p,{bend:-AH*1.9});ARW(X(1)-20,cy+r,X(0)+20,cy+r,p,{bend:-AH*1.9,color:P.ink});return}
+   if(p>0&&p<1)M('곡선화살표');ARW(X(0)+20,cy-r,X(1)-20,cy-r,p,{bend:-AH*1.9});ARW(X(1)-20,cy+r,X(0)+20,cy+r,p,{bend:-AH*1.9,color:P.ink});return}
   // 삼각형: 子 위 꼭짓점, 辰 왼쪽 아래, 申 오른쪽 아래
   const r2=RT,top=[CX(),L.gy+r2],lb=[CX()-250,L.gy+L.gH-r2],rb=[CX()+250,L.gy+L.gH-r2],u=s.id==='용'?eio((t-t0)/.3):1;   // 삼각형 높이는 칸에 맞춘다(fit)
   const from={'쥐':[X(0),lb[1]],'용':[X(2),lb[1]],'원숭이':[X(3),lb[1]]},to={'쥐':top,'용':lb,'원숭이':rb};
   const P_={};['쥐','용','원숭이'].forEach(d=>P_[d]=[mix(from[d][0],to[d][0],u),mix(from[d][1],to[d][1],u)]);
   const e=s.id==='용'?eio((t-t0-.25)/.3):1,ed=(A,B,q)=>{const dx=B[0]-A[0],dy=B[1]-A[1],Ln=Math.hypot(dx,dy),o=r2+GA+6;seg(A[0]+dx/Ln*o,A[1]+dy/Ln*o,B[0]-dx/Ln*o,B[1]-dy/Ln*o,q,P.ink,8)};
-  if(s.id==='용'){ed(P_['쥐'],P_['용'],e);ed(P_['용'],P_['원숭이'],e);ed(P_['원숭이'],P_['쥐'],e)}
+  if(s.id==='용'){if(e>0&&e<1)M('삼각형그리기');ed(P_['쥐'],P_['용'],e);ed(P_['용'],P_['원숭이'],e);ed(P_['원숭이'],P_['쥐'],e)}
   else{const q=k=>eio((t-t0-.02-k*.08)/.22),o=r2+GA+6,arw=(A,B,k)=>{const dx=B[0]-A[0],dy=B[1]-A[1],Ln=Math.hypot(dx,dy);ARW(A[0]+dx/Ln*o,A[1]+dy/Ln*o,B[0]-dx/Ln*o,B[1]-dy/Ln*o,q(k),{bend:-34})};
-   arw(P_['쥐'],P_['원숭이'],0);arw(P_['원숭이'],P_['용'],1);arw(P_['용'],P_['쥐'],2)}
+   if(q(2)<1&&q(0)>0)M('순환');arw(P_['쥐'],P_['원숭이'],0);arw(P_['원숭이'],P_['용'],1);arw(P_['용'],P_['쥐'],2)}
   if(s.id==='용'&&u<1)chip(X(1),lb[1],mix(r,r2,u),HJ['소'],{a:1-u});
-  ['쥐','용','원숭이'].forEach(d=>chip(P_[d][0],P_[d][1],mix(r,r2,u),HJ[d],{on:d===s.id?1:0}))}},
+  const lit=s.id==='원숭이'?{'쥐':t-t0>=.02,'원숭이':t-t0>=.2,'용':t-t0>=.38}:null;if(lit&&t-t0<.45)M('노드불켜기');   // 노드불켜기: 화살표가 닿는 차례로 켜짐
+  ['쥐','용','원숭이'].forEach(d=>chip(P_[d][0],P_[d][1],mix(r,r2,u),HJ[d],{on:lit?(lit[d]?1:0):(d===s.id?1:0)}))}},
  // B: 이번 두 띠가 양쪽에서 들어와(짝수 편은 옆에서, 홀수 편은 위에서 떨어짐) 서로 곡선 화살표를 주고받는다
  '좌우만남':{h:s=>2*85+64,draw(i,t,L){
   const s=SC[i],t0=s['초'][0],ids=s.id.match(/쥐|소|호랑이|돼지|토끼|개|용|닭|뱀|원숭이|말|양/g),r=85,cy=L.gy+r,dx=270,xa=CX()-dx,xb=CX()+dx;
@@ -134,23 +135,30 @@ function draw(t){g.setTransform(1,0,0,1,0,0);g.fillStyle=P.bg;g.fillRect(0,0,108
   let HF=112;while(HF>88&&wrap(COV['훅'],`900 ${HF}px PL`,840).length>2)HF-=4;const HFN=`900 ${HF}px PL`;
   const hk=wrap(COV['훅'],HFN,840),sub=COV['보조']||'';const SF=HF*.7>=64?64:60,SFN=`800 ${SF}px PR`;const hs=hk.map(x=>{const m=ink(x,HFN);return m.a+m.d}),sbl=sub?wrap(sub,SFN,840):[],ms=sbl.length?{a:sbl.map(x=>{const m=ink(x,SFN);return m.a+m.d}).reduce((a,b)=>a+b,0)+Math.round(.42*SF)*(sbl.length-1),d:0}:{a:0,d:0};
   const lg=Math.round(.42*HF),pg_=56,tot=hs.reduce((a,b)=>a+b,0)+lg*(hk.length-1)+(sub?pg_+ms.a+ms.d:0);let y=(Y0()+Y1())/2-tot/2;
-  hk.forEach((x,k)=>{line(x,HFN,k===hk.length-1?P.hl:P.ink,y);y+=hs[k]+lg});y+=pg_-lg;sbl.forEach(x=>{const m=ink(x,SFN);line(x,SFN,P.sub,y);y+=m.a+m.d+Math.round(.42*SF)});
+  if(D.표지모션){if(t<.35){g.fillStyle=P.acc;g.fillRect(0,0,1080,1920);F.circleWipe(g,t,0,{color:P.bg,dur:.35});M('원와이프')}
+   let ci=0;hk.forEach((x,k)=>{const m=ink(x,HFN);let cx=CX()-m.w/2;[...x].forEach(ch=>{const w=ink(ch,HFN).w,a=sp(t-.12-ci*.03,16,.6);ci++;if(a>0){if(a<.95)M('글자스태거');g.save();g.globalAlpha=cl(a*1.5);g.font=HFN;g.fillStyle=k===hk.length-1?P.hl:P.ink;g.textAlign='left';g.textBaseline='alphabetic';g.translate(cx+w/2,y+m.a);g.rotate((1-cl(a))*-.35);g.translate(-w/2,0);g.fillText(ch,0,0);g.restore()}cx+=w});y+=hs[k]+lg})}
+  else hk.forEach((x,k)=>{line(x,HFN,k===hk.length-1?P.hl:P.ink,y);y+=hs[k]+lg});y+=pg_-lg;sbl.forEach(x=>{const m=ink(x,SFN);line(x,SFN,P.sub,y);y+=m.a+m.d+Math.round(.42*SF)});
  } else if(t<T_CTA){const i=SC.findIndex(s=>t>=s['초'][0]&&t<s['초'][1]);const s=SC[i],L=LY(i),t0=s['초'][0];
   {const GG=GRAPH[D['구도']],W=GG.fit&&GG.fit(s)?L.gH:GG.h(s),k=Math.min(1,L.gH/W);g.save();g.translate(CX(),L.gy);g.scale(k,k);g.translate(-CX(),-L.gy);GRAPH[D['구도']].draw(i,t,{...L,gH:W});g.restore()}   // 칸이 좁으면 그림 전체를 줄인다(배치와 화소가 같게)
   if(D['구도']==='카드뒤집기'&&t-t0<.45){} // 카드 글자는 그림 안
-  L.gl.forEach((r,k)=>{const a=sp(t-t0+.05-k*.05,15,.6);line(r.t,r.f,r.c,r.y,{alpha:cl(a*1.5)})});
+  L.gl.forEach((r,k)=>{if(k===0&&D.늘이기){const u=eio(cl((t-t0)/.28));g.save();g.letterSpacing=`${Math.round((1-u)*46)}px`;line(r.t,r.f,r.c,r.y,{alpha:cl(u*1.6)});g.restore();if(u<1)M('글자늘이기');return}   // 글자늘이기: 벌어진 자간이 모이며 들어옴
+   if(k===0&&D.마스크){const u=eio(cl((t-t0)/.22)),m=ink(r.t,r.f);g.save();g.beginPath();g.rect(0,r.y-20,1080,m.a+m.d+24);g.clip();line(r.t,r.f,r.c,r.y+(1-u)*(m.a+m.d+24));g.restore();if(u<1)M('마스크올라오기');return}   // 마스크올라오기: 보이지 않는 선 아래에서 올라옴
+   const a=sp(t-t0+.05-k*.05,15,.6);line(r.t,r.f,r.c,r.y,{alpha:cl(a*1.5)})});
   const pa=t-t0>=0?1:0;if(pa>0){g.save();g.globalAlpha=cl(pa*1.5);g.fillStyle=P.pan;g.beginPath();g.roundRect(CX()-PANW/2,L.py,PANW,L.ph,30);g.fill();g.restore();
    let y=L.py+PADY;let n0=0;L.pl.forEach((x,k)=>{wordsLine(x,BODY,P.panInk,y,t,t0+.08+n0*.045,.045);n0+=x.split(' ').length;y+=L.lh[k]+L.lg})}
  } else { // CTA: 큰말 · 이유 · 단추
   const t0=T_CTA,bw=wrap(CT['큰말'],'900 96px PL',800),bh=bw.map(x=>{const m=ink(x,'900 96px PL');return m.a+m.d}),lg=Math.round(.42*96);
   const why=CT['이유']?wrap(CT['이유'],'800 62px PR',800):[],wh=why.map(x=>{const m=ink(x,'800 62px PR');return m.a+m.d});
-  const bt=CT['단추'],BTF='900 62px PL',btl=ink(bt,BTF).w>720?(bt.includes('→')?bt.split(/(?<=→) /):wrap(bt,BTF,700)):[bt],bms=btl.map(x=>ink(x,BTF)),bLG=24,bH=bms.reduce((a,m)=>a+m.a+m.d,0)+bLG*(btl.length-1)+64,bW=Math.min(840,Math.max(...bms.map(m=>m.w))+110),bm=bms[0];
+  const bt=CT['단추'],BTF='900 62px PL',btl=ink(bt,BTF).w>720?(bt.includes('→')?bt.split(/(?<=→) /):wrap(bt,BTF,700)):[bt],bms=btl.map(x=>ink(x,BTF)),bLG=24,bH=bms.reduce((a,m)=>a+m.a+m.d,0)+bLG*(btl.length-1)+64,CKP=D.단추체크?56:0,bW=Math.min(840,Math.max(...bms.map(m=>m.w))+110+CKP),bm=bms[0];   // 체크 자리만큼 단추를 넓힘
   const H1=bh.reduce((a,b)=>a+b,0)+lg*(bw.length-1),H2=wh.reduce((a,b)=>a+b,0)+Math.round(.42*62)*Math.max(0,why.length-1);
-  const nb=why.length?3:2,gap=(Y1()-Y0()-H1-H2-bH)/(nb+1);let y=Y0()+gap;
+  const chs=CT["칩"]||[],chR=60,chH=chs.length?2*chR:0,nb=(why.length?3:2)+(chs.length?1:0),gap=(Y1()-Y0()-H1-H2-bH-chH)/(nb+1);let y=Y0()+gap;
   bw.forEach((x,k)=>{const a=sp(t-t0-k*.1,15,.6);line(x,'900 96px PL',k===bw.length-1?P.hl:P.ink,y,{alpha:cl(a*1.5)});y+=bh[k]+lg});y+=gap-lg;
   if(why.length){why.forEach((x,k)=>{const a=sp(t-t0-.1-k*.05,15,.6);line(x,'800 62px PR',P.sub,y,{alpha:cl(a*1.5)});y+=wh[k]+Math.round(.42*62)});y+=gap-Math.round(.42*62)}
-  const a=sp(t-t0-.18,13,.6);if(a>0){g.save();g.translate(CX(),y+bH/2);g.scale(a,a);const pr=t-t0>1.6&&t-t0<1.75?.95:1;g.scale(pr,pr);g.fillStyle=P.acc;g.beginPath();g.roundRect(-bW/2,-bH/2,bW,bH,Math.min(bH/2,60));g.fill();
-   g.fillStyle=P.accInk;g.font=BTF;g.textAlign='center';g.textBaseline='alphabetic';let by_=-bH/2+32;btl.forEach((x,k)=>{g.fillText(x,0,by_+bms[k].a);by_+=bms[k].a+bms[k].d+bLG});g.restore()}
+  if(chs.length){const ws=chs.map(c=>CW(chR,HJ[c]||c)),TW=ws.reduce((a,b)=>a+b,0)+48*(chs.length-1);let x=CX()-TW/2;chs.forEach((c,k)=>{const a=sp(t-t0-.05-k*.05,15,.6);if(a>0&&a<.95)M('칩줄세우기');chip(x+ws[k]/2,y+chR,chR,HJ[c]||c,{on:1,a});x+=ws[k]+48});y+=chH+gap}   // 칩줄세우기
+  const a=sp(t-t0-.18,13,.6);if(a>0){g.save();g.translate(CX(),y+bH/2);g.scale(a,a);const pr=t-t0>1.2&&t-t0<1.32?.94:1;g.scale(pr,pr);g.fillStyle=P.acc;g.beginPath();g.roundRect(-bW/2,-bH/2,bW,bH,Math.min(bH/2,60));g.fill();
+   g.fillStyle=P.accInk;g.font=BTF;g.textAlign='center';g.textBaseline='alphabetic';let by_=-bH/2+32;btl.forEach((x,k)=>{g.fillText(x,CKP/2,by_+bms[k].a);by_+=bms[k].a+bms[k].d+bLG});
+   if(D.단추체크&&t-t0>1.2){const q=eio(cl((t-t0-1.2)/.3));if(q<1)M('버튼에서체크');g.strokeStyle=P.accInk;g.lineWidth=9;g.lineCap='round';g.lineJoin='round';const cx_=-bW/2+50,cy_=0;g.beginPath();g.moveTo(cx_-14,cy_);g.lineTo(cx_-14+10*cl(q*2),cy_+10*cl(q*2));if(q>.5)g.lineTo(cx_-4+18*cl(q*2-1),cy_+10-22*cl(q*2-1));g.stroke()}   // 버튼에서체크: 단추가 눌리고 체크가 그려짐
+   g.restore()}
  }
  F.frame(g)}
 window.SFX=[{t:0,k:'swoosh'},...SC.map(s=>({t:s['초'][0],k:'whoosh'})),...SC.map(s=>({t:s['초'][0]+.35,k:'tick'})),{t:T_CTA,k:'swoosh'},{t:T_CTA+.6,k:'pop'},{t:T_CTA+1.6,k:'press'}];

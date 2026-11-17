@@ -277,6 +277,8 @@ FX.curveArrow=(g,x0,y0,x1,y1,p,{bend=120,color='#fff',w=10,head=30,both=false,da
  if(pp>.15)tip(pp,Math.max(0,pp-.05));if(both&&pp>=1)tip(0,.05);g.restore()};
 FX.LIST['곡선화살표']='두 점 사이를 휘어진 화살표가 그려지며 이어짐(서로 주고받음은 both·두 개)';
 FX.USE['관계·궁합'].push('곡선화살표');FX.USE['개념 설명'].push('곡선화살표');
+// 11/17 22:06 대표 "제발 규칙 적용 좀"(K-235): 기법을 실제로 그린 순간 이름을 적는다. 관문이 window.FX(적은 이름)와 실제로 그린 이름을 맞춰 본다.
+FX.mark=n=>{if(typeof window!=='undefined'&&!window.__zsFrame)(window.__zsFxUsed=window.__zsFxUsed||{})[n]=1};
 window.FXK=FX;})();
 
 // 프롬프트 100 기법(motion_fx100.js)을 같이 불러온다 — 페이지는 motion_fx.js 하나만 넣으면 된다

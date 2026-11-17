@@ -318,6 +318,13 @@ def 대본_검사(pg, 초, ch="reel"):
         사이 = max(위아래)
         if 안 > B["group_in_max"] * fs_ + 0.5: bad.append(f"[묶음 위계] 장면 '{g['id']}' 화면글 줄 사이 {안:.0f}px — 한 묶음은 작은 글자 {fs_:.0f}px × {B['group_in_max']} = {B['group_in_max'] * fs_:.0f}px 이하로 붙여요(K-230)")
         if 사이 < max(B["group_ratio"] * 안, B["box_gap"]) - 0.5: bad.append(f"[묶음 위계] 장면 '{g['id']}' 화면글↔풀이 {사이:.0f}px — 묶음 안 간격 {안:.0f}px × {B['group_ratio']} 이상, {B['box_gap']}px 이상 떨어뜨려요(K-230)")
+    # K-235(대표 11/17 22:06 "100개 넘는 효과 목록이 있는데 저렇게만 적용하는게 최선이야?", "제발 규칙 적용 좀"): 적어 둔 기법(window.FX)이
+    # 실제로 그려졌는지(FX.mark) 0.25초마다 모아 보고, 안 그린 이름이 있거나 그린 기법이 fx_min_used 개보다 적으면 막는다.
+    pg.evaluate("() => {window.__zsFxUsed={}}"); t_ = 0.0
+    while t_ < 초: pg.evaluate("t => window.seek(t)", t_); t_ += 0.25
+    used = set(pg.evaluate("() => Object.keys(window.__zsFxUsed||{})")); decl = set(pg.evaluate("() => window.FX||[]"))
+    if decl - used: bad.append(f"[기법] 적어 놓고 그리지 않은 기법: {'·'.join(sorted(decl - used))}(K-235)")
+    if len(used) < CS.BALANCE.get("fx_min_used", 8): bad.append(f"[기법] 실제로 그린 기법 {len(used)}개({'·'.join(sorted(used))}) — {CS.BALANCE.get('fx_min_used', 8)}개 이상, 표지·장면 전환·관계·풀이·CTA 층마다(K-235)")
     v = pg.evaluate("window.CTAT||null"); c = S["CTA"]
     if v:
         빠짐 = 나옴([x for x in (c.get("큰말"), c.get("이유"), c.get("단추")) if x], float(v[0]) + 0.8, 초 - 0.05)  # K-228: 이유 줄은 있을 때만
@@ -685,6 +692,12 @@ def 기법_검사(html, 이름, 기록=False):
     # 11/17 20:38 대표 "왜 다 같은 색이고… 너 정리한거 못찾냐?"(K-231): window.PAL='색 판 id' 가 앞 3편과 같으면 막고, 기법은 목록(FX.LIST)에 있는 이름으로 4개 이상
     mp = re.search(r"window\.PAL\s*=\s*['\"]([^'\"]+)['\"]", open(html, encoding="utf-8").read()); pal = mp.group(1) if mp else None
     if pal:
+        # K-223(대표 11/17 16:17 "이 색조합 별로, 앞으로 안 씀"): color_combos.json 에 '쓰지 않음'이 적힌 판은 막는다
+        try:
+            _cc = json.load(open(os.path.join(ROOT, "assets", "palettes", "color_combos.json"), encoding="utf-8")).get("palettes", [])
+            _no = {x["id"]: x["쓰지 않음"] for x in _cc if x.get("쓰지 않음")}
+        except Exception: _no = {}
+        if pal in _no: raise SystemExit(f"[막음] 색 판 '{pal}' 은 쓰지 않기로 했어요 — {_no[pal]}(K-223)")
         for x in 앞:
             if x.get("pal") == pal and os.environ.get("ZS_FX_OK") != "1":
                 raise SystemExit(f"[막음] 색 판 '{pal}' 이 '{x['name']}' 와 같아요(K-231). 앞 3편과 다른 판으로(assets/palettes/color_combos.json).")

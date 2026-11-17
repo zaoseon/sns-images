@@ -48,6 +48,10 @@ def audit(s):
     for g in 장면:
         for x in g.get("화면글", []):
             if str(x).strip() in _ls.get("words", []): bad.append(f"[{g.get('id')}] 화면글 '{x}' — '{x}{_ls.get('suffix', '')}' 로(K-234)")
+    # K-222(대표 11/17 15:27 "저게 생년인 줄 어떻게 아냐"): 화면글의 연도 목록(84·96·08)은 '년생'을 붙인다
+    for g in 장면:
+        for x in g.get("화면글", []):
+            if re.search(r"\d{2}·\d{2}", str(x)) and not str(x).rstrip().endswith("년생"): bad.append(f"[{g.get('id')}] '{x}' — 연도 뒤에 '년생'(K-222)")
     hk = str(s.get("표지", {}).get("훅", "")).strip()
     try:
         tgt = json.load(open(os.path.join(ROOT, "pipeline", "brands", (s.get("brand") or "zaoseon") + ".json"), encoding="utf-8")).get("hook_target")
