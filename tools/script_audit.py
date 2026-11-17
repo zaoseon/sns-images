@@ -41,6 +41,13 @@ def audit(s):
     if len(장면) >= 4 and len(set(ms)) < 3: bad.append("[모션] 모션이 3가지 미만이에요 — 한 편에 3가지 이상(K-231)")
     if not (s.get("판") or {}).get("id"): bad.append("[판] 대본 '판'(색 판 id)을 적어요(K-231)")
     # 11/17 21:06 대표 "진행해"(유튜브 쇼츠 제목 773편 분석, docs/research/유튜브쇼츠_제목패턴_운세_v1.md): 표지 훅 = 대상(브랜드 hook_target) + 물음표로 끝내지 않음(K-107·K-232)
+    # 11/17 22:00 대표 "쥐 용 이렇게만 있는걸 쥐띠 용띠 이렇게"(K-234): 화면글 이름표는 브랜드 label_suffix 를 붙여 쓴다(쥐 → 쥐띠)
+    try: _B = json.load(open(os.path.join(ROOT, "pipeline", "brands", (s.get("brand") or "zaoseon") + ".json"), encoding="utf-8"))
+    except Exception: _B = {}
+    _ls = _B.get("label_suffix") or {}
+    for g in 장면:
+        for x in g.get("화면글", []):
+            if str(x).strip() in _ls.get("words", []): bad.append(f"[{g.get('id')}] 화면글 '{x}' — '{x}{_ls.get('suffix', '')}' 로(K-234)")
     hk = str(s.get("표지", {}).get("훅", "")).strip()
     try:
         tgt = json.load(open(os.path.join(ROOT, "pipeline", "brands", (s.get("brand") or "zaoseon") + ".json"), encoding="utf-8")).get("hook_target")

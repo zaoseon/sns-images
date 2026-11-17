@@ -286,5 +286,13 @@
   "mode": "up",
   "bpm": 114,
   "key": "G"
+ },
+ {
+  "name": "sian_a9",
+  "kind": "fun",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 124,
+  "key": "D"
  }
 ]
