@@ -2827,5 +2827,27 @@
    "new": "naver_z92_m4f.jpg",
    "src": "K-193 11/12"
   }
+ ],
+ "n94": [
+  {
+   "pos": 1,
+   "old": "naver_z94_k3.jpg",
+   "new": "naver_z94_k3f.jpg"
+  },
+  {
+   "pos": 2,
+   "old": "naver_z94_g3.jpg",
+   "new": "naver_z94_g3f.jpg"
+  },
+  {
+   "pos": 3,
+   "old": "naver_z94_c3.jpg",
+   "new": "naver_z94_c3f.jpg"
+  },
+  {
+   "pos": 4,
+   "old": "naver_z94_v3.jpg",
+   "new": "naver_z94_v3f.jpg"
+  }
  ]
 }
