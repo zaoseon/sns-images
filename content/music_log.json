@@ -278,5 +278,13 @@
   "mode": "up",
   "bpm": 118,
   "key": "A"
+ },
+ {
+  "name": "sian_a_dec",
+  "kind": "data",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 114,
+  "key": "G"
  }
 ]
