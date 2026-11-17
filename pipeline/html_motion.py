@@ -228,6 +228,94 @@ def 표지_검사(pg, ch="reel"):
     return []
 
 
+def CTA_검사(pg, 초, ch="reel"):
+    """11/17 15:27 대표(K-221): 'CTA로 해 달라는 걸 마지막에 조그맣게 넣어놨다 — 표지·본문·CTA 기본 규칙도 무시하냐'.
+    영상은 표지(제목) → 본문 → CTA 장면으로 나눈다. 페이지가 window.CTAT=[시작초, '문장'] 으로 CTA 장면을 밝히면,
+    그 문장이 시작 뒤 0.8초와 끝 직전에 cta_min_px 이상 큰 글로 보이고, 시작부터 끝까지 cta_min_sec 이상 이어지는지 잰다.
+    밝히지 않은 옛 영상은 건드리지 않는다(새 영상은 밝혀야 한다 — 규칙 문서 2절)."""
+    B = CS.BALANCE; v = pg.evaluate("window.CTAT||null")
+    if not v: return []
+    t0, tx = float(v[0]), str(v[1]); need_px = B.get("cta_min_px", 84); need_sec = B.get("cta_min_sec", 2.0); bad = []
+    if 초 - t0 < need_sec - 1e-6: bad.append(f"[CTA] CTA 장면이 {초 - t0:.1f}초뿐이에요 — {need_sec:.1f}초 이상 보여야 해요(K-221)")
+    for t in (t0 + 0.8, 초 - 0.05):
+        pg.evaluate("t => {window.__zsTxt=[];window.seek(t)}", t)
+        _tx = tx.replace(" ", ""); rows = [r for r in pg.evaluate("() => window.__zsTxt") if not r[7] and len(str(r[0]).replace(" ", "")) >= 2 and _tx.startswith(str(r[0]).replace(" ", "")[:4])]   # 큰 말이 두 줄로 나뉘어도 첫 줄로 잰다
+        px = max([r[5] for r in rows], default=0)
+        if px < need_px - 0.5: bad.append(f"[CTA] '{tx}' {t:.1f}초에 {px:.0f}px — CTA 는 {need_px}px 이상 큰 글로, 마지막에 조그맣게 넣지 않아요(K-221)"); break
+    # 11/17 18:14 대표(K-226): '표지 문구를 본문 상단에 계속 써놓고, CTA 문구는 화면에 우겨넣고, CTA 화면은 허전하게 — 대본을 어떻게 쓰길래'.
+    # ① 표지 문구(window.COVT 조각)가 본문 프레임에 다시 나오면 막는다 ② CTA 말(cta_words)은 CTA 장면 전에 나오면 막는다
+    # ③ CTA 장면은 글 줄 3개 이상(큰 말 + 이유 + 단추)이고 위아래로 cta_min_span 이상 차 있어야 한다(허전한 CTA 막음).
+    covt = pg.evaluate("window.COVT||[]"); cove = float(pg.evaluate("window.COVE||0")); words = B.get("cta_words", [])
+    tt = cove + 0.4
+    while tt < t0 - 0.3:
+        pg.evaluate("t => {window.__zsTxt=[];window.seek(t)}", tt)
+        rows = [r for r in pg.evaluate("() => window.__zsTxt") if not r[7]]; 글 = " ".join(str(r[0]) for r in rows)
+        for c in covt:
+            if c and c in 글: bad.append(f"[표지 반복] {tt:.1f}초 본문에 표지 문구 '{c}' 가 또 나와요 — 표지 문구를 본문 상단에 고정해 두지 않아요(K-226)"); break
+        else:
+            for w in words:
+                if w in 글: bad.append(f"[CTA 말 앞당김] {tt:.1f}초 본문에 CTA 말 '{w}' — CTA 말은 CTA 장면에서만, 본문에 우겨넣지 않아요(K-226)"); break
+            else: tt += 0.5; continue
+        break
+    pg.evaluate("t => {window.__zsTxt=[];window.seek(t)}", t0 + 1.0)
+    rows = [r for r in pg.evaluate("() => window.__zsTxt") if not r[7] and r[5] >= 56]
+    if len({str(r[0]) for r in rows}) < B.get("cta_min_lines", 3): bad.append(f"[CTA 허전] CTA 장면 글 줄이 {len({str(r[0]) for r in rows})}개 — 큰 말 + 이유 한 줄 + 단추, 셋 이상(K-226)")
+    elif rows and max(r[4] for r in rows) - min(r[2] for r in rows) < B.get("cta_min_span", 420): bad.append(f"[CTA 허전] CTA 장면 글이 세로 {max(r[4] for r in rows) - min(r[2] for r in rows):.0f}px 만 차지 — {B.get('cta_min_span', 420)}px 이상(K-226)")
+    return bad
+
+
+def 대본_검사(pg, 초, ch="reel"):
+    """11/17 18:23 대표(K-227): '블로그 원고처럼 릴스 대본 작성 규칙 안만드냐'. window.SCRIPT='대본 id' 를 밝히면
+    specs/scripts/<id>.json 을 읽어 ① 대본 카드 검사(tools/script_audit) ② 장면마다 화면글·풀이가 그 시간대에 화면에 나오는지
+    ③ CTA 큰말·이유·단추가 CTA 장면에 나오는지 잰다. 대본이 draft 면 막는다(대표 확인 뒤 approved). 밝히지 않은 옛 영상은 건드리지 않는다."""
+    sid = pg.evaluate("window.SCRIPT||null")
+    if not sid: return []
+    import json, sys as _s
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); f = os.path.join(root, "specs", "scripts", f"{sid}.json")
+    if not os.path.exists(f): return [f"[대본] specs/scripts/{sid}.json 이 없어요(K-227)"]
+    _s.path.insert(0, os.path.join(root, "tools"))
+    import script_audit as SA
+    S = json.load(open(f, encoding="utf-8")); bad = [f"[대본] {x}" for x in SA.audit(S)]
+    if S.get("status") != "approved" and os.environ.get("ZS_SCRIPT_DRAFT_OK") != "1": bad.append("[대본] 대본이 아직 draft 예요 — 대표 확인 뒤 status 를 approved 로(K-227)")
+    def 글(t):
+        pg.evaluate("t => {window.__zsTxt=[];window.seek(t)}", t)
+        return " ".join(str(r[0]) for r in pg.evaluate("() => window.__zsTxt") if not r[7]).replace(" ", "")
+    def 나옴(조각들, a, b):
+        t = a; 보임 = ""
+        while t <= b: 보임 += 글(min(t, 초 - 0.01)); t += 0.25
+        return [x for x in 조각들 if x.replace(" ", "") not in 보임]
+    for g in S["장면"]:
+        a, b = g["초"]; 빠짐 = 나옴(g["화면글"] + (g["풀이"] if isinstance(g.get("풀이"), list) else [g["풀이"]] if g.get("풀이") else []), a - 0.3, b + 0.3)
+        if 빠짐: bad.append(f"[대본≠화면] 장면 '{g['id']}' {a}~{b}초에 대본 글이 화면에 안 나와요: {빠짐[0][:20]}…(K-227)")
+    # 11/17 19:08 대표 "띠 글자와 생년은 멀고 생년과 풀이는 붙음"(K-230): 공개 장면은 화면글(띠·생년)이 한 묶음, 풀이가 다른 묶음.
+    # 묶음 안 간격 ≤ 작은 글자 × group_in_max, 묶음 사이 간격 ≥ 묶음 안 간격 × group_ratio 이고 ≥ box_gap. 장면 끝 0.3초 전에 잰다.
+    B = CS.BALANCE
+    for g in S["장면"]:
+        if not g.get("공개") or not g.get("풀이"): continue
+        a, b = g["초"]; pg.evaluate("t => {window.__zsTxt=[];window.seek(t)}", min(b - 0.3, 초 - 0.01))
+        rows = [r for r in pg.evaluate("() => window.__zsTxt") if not r[7]]
+        풀 = "".join(g["풀이"] if isinstance(g["풀이"], list) else [g["풀이"]]).replace(" ", "")
+        A_ = sorted([r for r in rows if str(r[0]).strip() in [x[:20] for x in g["화면글"]]], key=lambda r: r[2])
+        P_ = sorted([r for r in rows if r not in A_ and str(r[0]).replace(" ", "") and str(r[0]).replace(" ", "") in 풀], key=lambda r: r[2])
+        if P_:   # 풀이 글이 그림 안 글(달력 '1월' 등)과 섞이지 않게: 세로로 이어진 덩어리 중 글자가 가장 많은 것
+            덩 = [[P_[0]]]
+            for r in P_[1:]:
+                (덩[-1].append(r) if r[2] - max(x[4] for x in 덩[-1]) <= 1.2 * (r[5] or 60) else 덩.append([r]))
+            P_ = max(덩, key=lambda d_: sum(len(str(x[0])) for x in d_))
+        if not A_ or not P_: continue
+        안 = max([A_[i + 1][2] - A_[i][4] for i in range(len(A_) - 1) if A_[i + 1][2] > A_[i][4] - 4] or [0])
+        fs_ = min(r[5] for r in A_)
+        위아래 = [P_[0][2] - max(r[4] for r in A_), min(r[2] for r in A_) - P_[-1][4]]
+        사이 = max(위아래)
+        if 안 > B["group_in_max"] * fs_ + 0.5: bad.append(f"[묶음 위계] 장면 '{g['id']}' 화면글 줄 사이 {안:.0f}px — 한 묶음은 작은 글자 {fs_:.0f}px × {B['group_in_max']} = {B['group_in_max'] * fs_:.0f}px 이하로 붙여요(K-230)")
+        if 사이 < max(B["group_ratio"] * 안, B["box_gap"]) - 0.5: bad.append(f"[묶음 위계] 장면 '{g['id']}' 화면글↔풀이 {사이:.0f}px — 묶음 안 간격 {안:.0f}px × {B['group_ratio']} 이상, {B['box_gap']}px 이상 떨어뜨려요(K-230)")
+    v = pg.evaluate("window.CTAT||null"); c = S["CTA"]
+    if v:
+        빠짐 = 나옴([x for x in (c.get("큰말"), c.get("이유"), c.get("단추")) if x], float(v[0]) + 0.8, 초 - 0.05)  # K-228: 이유 줄은 있을 때만
+        if 빠짐: bad.append(f"[대본≠화면] CTA 장면에 대본 글이 안 나와요: {빠짐[0][:20]}…(K-227)")
+    return bad
+
+
 def 균형_검사(pg, 초, ch="reel", 간격=0.25):
     """화면 픽셀로 장면 균형을 잰다(11/11 대표 13:27). 글 칸 안에서 배경과 다른 픽셀의 묶음 상자를 구해
     ① 위 간격(상단 고정 줄 + gap_top) ② 세로·가로 가운데 ③ 채움(작은 글만 위에 떠 있는 장면) 을 본다.
@@ -237,7 +325,7 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
     B = CS.BALANCE; C = CS.CH[ch]; z = {r[0]: r[1:5] for r in C["zones"]}
     sx0, sx1 = C["safe"][0], C["safe"][2]; top = z["상단 고정"][3]; bot = z["하단 고정"][1]
     ay0, ay1 = top + 10, bot - 10; acx = (sx0 + sx1) / 2; acy = (top + bot) / 2   # 11/13 K-203: 핸들~핸들 가운데(옛 값은 위만 60 띄우고 아래는 10 이라 아래로 쏠려도 통과)
-    keys = {"위 간격": [], "아래 간격": [], "상하 균형": [], "균형 리듬": [], "가운데": [], "채움": []}
+    keys = {"위 간격": [], "아래 간격": [], "상하 균형": [], "균형 리듬": [], "상자 색": [], "가운데": [], "채움": []}
     n = int(초 / 간격)
     for i in range(n + 1):
         t = min(i * 간격, 초 - 0.01)
@@ -247,7 +335,7 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
         # 다른 것(선·그림·다른 글자·뱃지 가장자리)이 들어와 있으면 '붙음'. 뱃지 안 글자는 뱃지 여백이 모자랄 때 걸린다.
         rows_ = pg.evaluate("() => window.__zsTxt.concat(window.__zsDom())")
         # 상자 간격(대표 11/12 16:51): 상자끼리, 상자와 그 밖의 글 사이가 BALANCE['box_gap'] 보다 좁으면 '간격'
-        bx_ = []
+        bx_ = []; bx_모두 = [q for q in pg.evaluate("() => window.__zsBox||[]") if q[2] - q[0] >= 40 and q[3] - q[1] >= 30]   # 11/17: 같은 줄에 나란한 카드도 '글이 상자 안에 든 것'을 알아야 해서 거르지 않은 목록을 따로 둔다
         for q in pg.evaluate("() => window.__zsBox||[]"):
             w_, h_ = q[2] - q[0], q[3] - q[1]
             if w_ < 40 or h_ < 30 or w_ > a.shape[1] * .95 or q[1] < top or q[3] > bot: continue
@@ -294,6 +382,20 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
                 g_l = r[2] - q[4]
                 if 0 <= g_l < fs_ * .6 and g_l < B["line_gap"] * fs_:
                     keys.setdefault("간격 · 줄 사이 · " + str(q[0])[:8], []).append((t, f"'{q[0]}'↔'{r[0]}' 줄 사이 {g_l:.0f}px — 글자 {fs_:.0f}px × {B['line_gap']} = {B['line_gap'] * fs_:.0f}px 이상"))
+        # 11/17 13:58 대표: 같은 속성 줄(같은 크기 ±30%, 가로로 겹쳐 쌓임, 상자 밖)은 한 요소 — 줄 사이는 CTA 수준(글자 × line_gap_max) 이하.
+        # 더 벌리려면 줄마다 크기·모양·모션을 달리해 서로 다른 요소로 만든다.
+        for ii in range(len(rows_)):
+            for jj in range(len(rows_)):
+                q, r = rows_[ii], rows_[jj]
+                if ii == jj or (len(q) > 7 and q[7]) or (len(r) > 7 and r[7]): continue
+                if any(_안(q[1:5], b_) or _안(r[1:5], b_) for b_ in bx_모두): continue
+                fs_ = max(q[5] or 40, r[5] or 40)
+                if abs((q[5] or 0) - (r[5] or 0)) > .3 * fs_ or min(q[3], r[3]) <= max(q[1], r[1]): continue
+                if min(q[3], r[3]) - max(q[1], r[1]) < .5 * min(q[3] - q[1], r[3] - r[1]): continue
+                g_l = r[2] - q[4]
+                if any(w[2] >= q[4] - 1 and w[4] <= r[2] + 1 and w is not q and w is not r and min(w[3], q[3]) > max(w[1], q[1]) for w in rows_): continue   # 사이에 다른 줄이 끼면 이웃 줄이 아니다
+                if B["line_gap_max"] * fs_ < g_l < 3 * fs_:
+                    keys.setdefault("줄 간격 넓음 · " + str(q[0])[:8], []).append((t, f"'{q[0]}'↔'{r[0]}' 같은 요소 줄 사이 {g_l:.0f}px — 글자 {fs_:.0f}px × {B['line_gap_max']} = {B['line_gap_max'] * fs_:.0f}px 이하(CTA 수준). 벌리려면 줄마다 다른 요소로(크기·모양·모션)"))
         # ④ 다른 종류 글(크기·색이 다른 글) 사이 세로 간격 — 같은 글 줄 사이(line_gap)와 따로 정한다(11/15 17:51 대표 '다른 종류의 글과 글 사이 간격')
         for ii in range(len(rows_)):
             for jj in range(ii + 1, len(rows_)):
@@ -359,6 +461,16 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
         edge = np.concatenate([A[:, :24].reshape(-1, 3), A[:, -24:].reshape(-1, 3)])
         bg = np.median(edge, 0)
         m = np.abs(A - bg).max(2) > 48
+        if 0 < len(bx_모두) < 6:   # 11/17 K-224: 알약·배지 하나가 바탕과 거의 같은 색이면 여백이 안 맞아 보인다(격자 칸 6개 이상은 제외)
+            _L = lambda c_: .2126 * ((c_[0] / 255) ** 2.2) + .7152 * ((c_[1] / 255) ** 2.2) + .0722 * ((c_[2] / 255) ** 2.2)
+            for q_ in bx_모두:
+                if q_[2] - q_[0] > .95 * a.shape[1]: continue
+                px_ = a[int((q_[1] + q_[3]) / 2), int(q_[0]) + 12]; l1, l2 = _L(px_) + .05, _L(bg) + .05
+                if max(l1, l2) / min(l1, l2) < B["box_min_contrast"]: keys["상자 색"].append((t, f"상자(y{int(q_[1])}~{int(q_[3])})가 바탕과 거의 같은 색(밝기 비 {max(l1, l2) / min(l1, l2):.2f}, {B['box_min_contrast']} 이상) — 알약·배지는 바탕과 눈에 띄게 다른 색으로"))
+        for q_ in bx_모두:   # 11/17 대표: 옅은 카드(안 켜진 띠 칸)도 눈에는 '박스' — 색 차이가 작아 빠지던 것을 상자 위치로 채운다
+            if q_[2] - q_[0] > .95 * a.shape[1] or q_[3] - q_[1] > .6 * (ay1 - ay0): continue
+            ya_, yb_ = max(int(q_[1]) - ay0, 0), min(int(q_[3]) - ay0, A.shape[0]); xa_, xb_ = max(int(q_[0]), 0), min(int(q_[2]), A.shape[1])
+            if yb_ > ya_ and xb_ > xa_: m[ya_:yb_, xa_:xb_] = True
         rows = np.where(m.sum(1) > 14)[0]
         if len(rows) == 0: continue
         cols = np.where(m[rows.min():rows.max() + 1].sum(0) > 14)[0]
@@ -396,7 +508,8 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
         if g_bot < B["gap_bottom"] - 4: keys["아래 간격"].append((t, f"내용 아래 끝 y{블록[-1][1]} (하단 고정 줄 위 {g_bot}px, {B['gap_bottom']}px 이상)"))
         if abs(g_top - g_bot) > B["edge_tol"]: keys["상하 균형"].append((t, f"상단 핸들↔내용 {g_top}px · 내용↔하단 핸들 {g_bot}px (차이 {abs(g_top - g_bot)}px, {B['edge_tol']}px 이하)"))
         전부 = [g_top, g_bot] + 안
-        if 안 and max(전부) > B["rhythm_ratio"] * max(min(전부), 1): keys["균형 리듬"].append((t, f"간격 [위,아래,사이…]={[int(v) for v in 전부]} 블록 y={[(int(a_), int(b_)) for a_, b_ in 블록]} — 가장 넓은 것이 가장 좁은 것의 {max(전부) / max(min(전부), 1):.1f}배({B['rhythm_ratio']}배 이하로)"))
+        if os.environ.get("ZS_DBG"): print(f"  [dbg t={t:.2f}] 간격 {[int(v) for v in 전부]} 블록 {[(int(a_), int(b_)) for a_, b_ in 블록]} 상자 {len(bx_모두)}")
+        if 안 and max(전부) > B["rhythm_ratio"] * max(min(전부), 1) and max(전부) - min(전부) > B["rhythm_slack"]: keys["균형 리듬"].append((t, f"간격 [위,아래,사이…]={[int(v) for v in 전부]} 블록 y={[(int(a_), int(b_)) for a_, b_ in 블록]} — 가장 넓은 것이 가장 좁은 것의 {max(전부) / max(min(전부), 1):.1f}배({B['rhythm_ratio']}배 이하로)"))
         if abs((y0 + y1) / 2 - acy) > B["center_tol_y"] or abs((x0 + x1) / 2 - acx) > B["center_tol_x"]:
             keys["가운데"].append((t, f"내용 묶음 가운데 ({(x0 + x1) / 2:.0f},{(y0 + y1) / 2:.0f}) — 칸 가운데 ({acx:.0f},{acy:.0f})"))
         if h < B["min_fill_h"] * (bot - top - B["gap_top"]) and w < B["min_fill_w"] * (sx1 - sx0):
@@ -410,7 +523,7 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
             else: run = 1; s0 = j
             if run > best[0]: best = (run, s0)
         # 11/15: 정답 알약처럼 1초 안쪽으로 보이는 장면도 멈춰 보면 붙어 보인다 → '그림 옆' 간격은 0.5초(2컷)만 이어져도 막는다
-        if best[0] * 간격 > (0.4 if k.startswith(("간격 · 그림", "간격 · 글과 그림", "간격 · 줄 사이", "간격 · 다른 글")) else B["hold"] * .75 if k.startswith(("붙음", "간격")) else B["hold"]):
+        if best[0] * 간격 > (B["hold_balance"] if k in ("위 간격", "아래 간격", "상하 균형", "균형 리듬") else 0.4 if k.startswith(("간격 · 그림", "간격 · 글과 그림", "간격 · 줄 사이", "간격 · 다른 글", "줄 간격 넓음")) else B["hold"] * .75 if k.startswith(("붙음", "간격")) else B["hold"]):
             x = v[best[1]]; 문제.append(f"[{k}] {x[0]:.2f}초부터 {best[0] * 간격:.1f}초 동안 — {x[1]}")
     return 문제
 
@@ -553,8 +666,15 @@ def 기법_검사(html, 이름, 기록=False):
         겹 = sorted(set(fx) & set(x.get("fx", [])))
         if len(겹) > 3 and os.environ.get("ZS_FX_OK") != "1":
             raise SystemExit(f"[막음] 기법이 '{x['name']}' 와 {len(겹)}개 겹쳐요({'·'.join(겹)}). 3개까지만. motion_fx.js LIST 에서 다른 기법을 고르세요.")
+    # 11/17 17:19 대표 '모조리 다 이렇게 같은 식으로 만들면 어떡해'(K-225): 같은 기법 이름만 바꾼 복제를 막는다. window.COMP='구도 이름' 을 적고,
+    # 앞 3편과 같은 구도면 막는다(색 판만 바꾼 복제도 같은 구도). 구도 = 화면 구성·움직임의 뼈대(슬롯격자·원형짝선·달력넘김·카드뽑기 …).
+    mc = re.search(r"window\.COMP\s*=\s*['\"]([^'\"]+)['\"]", open(html, encoding="utf-8").read()); comp = mc.group(1) if mc else None
+    if comp:
+        for x in 앞:
+            if x.get("comp") == comp and os.environ.get("ZS_FX_OK") != "1":
+                raise SystemExit(f"[막음] 구도 '{comp}' 가 '{x['name']}' 와 같아요(K-225). 앞 3편과 다른 구도로 — 색·글만 바꾼 복제는 같은 구도예요.")
     if 기록:
-        log = [x for x in log if 판(x.get("name")) != 이름] + [{"name": 이름, "fx": fx}]
+        log = [x for x in log if 판(x.get("name")) != 이름] + [{"name": 이름, "fx": fx, "comp": comp}]
         json.dump(log, open(_fxlog(), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 
@@ -608,7 +728,7 @@ def 안전영역_막기(html, 초, ch="reel", 표지채널=None):
         pg.goto("file://" + os.path.abspath(html)); pg.wait_for_function("typeof window.seek === 'function'", timeout=15000)
         pg.evaluate("document.fonts.ready")
         src = open(html, encoding="utf-8").read(); frame = ".frame(" in src
-        문제, 칸 = 안전영역_검사(pg, 초, ch); 문제 += 균형_검사(pg, 초, ch); 문제 += 표지_검사(pg, 표지채널 or ch); 문제 += 광고모션_검사(pg, 초, ch); b.close()
+        문제, 칸 = 안전영역_검사(pg, 초, ch); 문제 += 균형_검사(pg, 초, ch); 문제 += 표지_검사(pg, 표지채널 or ch); 문제 += CTA_검사(pg, 초, ch); 문제 += 대본_검사(pg, 초, ch); 문제 += 광고모션_검사(pg, 초, ch); b.close()
     canvas = "<canvas" in src
     # 11/12 16:45 대표 "정월이 나오는거 너무 어색하고 별로" → 릴스·광고 영상에 실사 정월 누끼(characters/cut/)를 넣지 않는다(K-197)
     _src = open(html, encoding="utf-8").read() if os.path.exists(html) else ""

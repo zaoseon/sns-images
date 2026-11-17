@@ -68,7 +68,7 @@ def video(path, ch="reel", step=0.25):
         if g_bot < B["gap_bottom"] - 4: hit("아래 간격", t, f"내용 아래 끝이 하단 고정 줄 위 {g_bot}px (60↑)")
         if abs(g_top - g_bot) > B["edge_tol"]: hit("상하 균형", t, f"위 {g_top} · 아래 {g_bot} (차이 80↓)")
         전부 = [g_top, g_bot] + 안
-        if 안 and max(전부) > B["rhythm_ratio"] * max(min(전부), 1): hit("균형 리듬", t, f"간격 {전부} — 가장 넓은 것이 가장 좁은 것의 {max(전부) / max(min(전부), 1):.1f}배(2.5↓)")
+        if 안 and max(전부) > B["rhythm_ratio"] * max(min(전부), 1) and max(전부) - min(전부) > B.get("rhythm_slack", 0): hit("균형 리듬", t, f"간격 {전부} — 가장 넓은 것이 가장 좁은 것의 {max(전부) / max(min(전부), 1):.1f}배({B['rhythm_ratio']}↓)")
         if abs((b["x0"] + b["x1"]) / 2 - acx) > B["center_tol_x"]: hit("가로 가운데", t, f"내용 가운데 x {(b['x0'] + b['x1']) / 2:.0f} (칸 {acx:.0f}±50)")
         if b["x0"] < sx0 - 4 or b["x1"] > sx1 + 4: hit("안전 영역 밖(경고: 배경·전환 효과일 수 있음)", t, f"내용 x {b['x0']}~{b['x1']} (안전 {sx0}~{sx1})")
     for k, v_ in keys.items():
@@ -85,19 +85,24 @@ def _faint(path):
         return [f"y {y} 근처 글자가 배경에 묻힘(대비 {r}:1)" for y, n, r in (FG.hits(path) or [])[:3]]
     except Exception: return []
 
-def carousel(path):
+def carousel(path, toon=False):
     막음, 경고 = [], []; C = CS.CH["insta_carousel"]; im = Image.open(path).convert("RGB"); W, H = im.size
     if (W, H) != (C["w"], C["h"]): 막음.append(f"크기 {W}x{H} — {C['w']}x{C['h']} 이어야 함")
     a = np.asarray(im).astype(int); z = _z("insta_carousel"); sx0, sy0, sx1, sy1 = C["safe"]
     위 = min(v[1] for k, v in z.items() if "고정" not in k); 아래 = max(v[3] for k, v in z.items() if "고정" not in k)
+    if toon: 위, 아래 = sy0, sy1  # 툰 방식(11/16): 장마다 레이아웃이 달라 자오선 카드 구역이 아니라 채널 안전 영역을 기준으로 잰다
     b = _bbox(a, 위, 아래)
     if b:
         l, r = b["x0"] - sx0, sx1 - b["x1"]
         if abs(l - r) > (sx1 - sx0) * 0.07: 경고.append(f"좌우 여백 {l} 대 {r} — 치우침")
         g_top, g_bot = b["y0"] - 위, 아래 - b["y1"]
-        if abs(g_top - g_bot) > B["edge_tol"]: 막음.append(f"위아래 여백 {g_top} 대 {g_bot} — 한쪽으로 쏠림(차이 80↓)")
+        if not toon and abs(g_top - g_bot) > B["edge_tol"]: 막음.append(f"위아래 여백 {g_top} 대 {g_bot} — 한쪽으로 쏠림(차이 80↓)")
         if b["y1"] > 아래 + 8: 막음.append(f"내용 맨 아래 y{b['y1']} 가 구역 끝 {아래} 을 넘음")
     else: 막음.append("내용이 비었음")
+    if toon:   # 툰 방식: 장면 여백·균형은 합성 스크립트와 같은 함수·값(channel_specs BALANCE_TOON, 11/16 공통 통합)
+        sys.path.insert(0, os.path.dirname(HERE)); from motion.doodle_compose import balance_check
+        try: balance_check(path)
+        except ValueError as e: 막음.append("장면 균형: " + str(e).split(" runs=")[0] + " " + str(e).split(" runs=")[-1][:90])
     막음 += _faint(path); return 막음, 경고
 
 def thumb(path):
@@ -130,7 +135,12 @@ def main():
     else: files = a[1:]
     paths = []
     for f in files: paths += sorted(glob.glob(os.path.join(f, "*.jp*g")) + glob.glob(os.path.join(f, "*.png"))) if os.path.isdir(f) else [f]
-    fn = {"video": lambda p: video(p, ch), "carousel": carousel, "thumb": thumb, "body": body}[kind]
+    toon_ = False
+    if "--brand" in sys.argv:
+        try:
+            sys.path.insert(0, os.path.dirname(HERE)); from specs.brand_layout import brand_json; toon_ = bool(brand_json(sys.argv[sys.argv.index("--brand") + 1]).get("toon_fonts"))
+        except Exception: toon_ = False
+    fn = {"video": lambda p: video(p, ch), "carousel": (lambda p: carousel(p, toon_)), "thumb": thumb, "body": body}[kind]
     경고도 = "--경고도" in sys.argv; 막힘 = 0
     brand = sys.argv[sys.argv.index("--brand") + 1] if "--brand" in sys.argv else None
     if brand:
