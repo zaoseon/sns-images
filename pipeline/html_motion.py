@@ -325,6 +325,27 @@ def 대본_검사(pg, 초, ch="reel"):
     used = set(pg.evaluate("() => Object.keys(window.__zsFxUsed||{})")); decl = set(pg.evaluate("() => window.FX||[]"))
     if decl - used: bad.append(f"[기법] 적어 놓고 그리지 않은 기법: {'·'.join(sorted(decl - used))}(K-235)")
     if len(used) < CS.BALANCE.get("fx_min_used", 8): bad.append(f"[기법] 실제로 그린 기법 {len(used)}개({'·'.join(sorted(used))}) — {CS.BALANCE.get('fx_min_used', 8)}개 이상, 표지·장면 전환·관계·풀이·CTA 층마다(K-235)")
+    # 11/17 22:28 대표 "저렇게 색배치하는게 맞냐??"(K-237, K-043 "강조색 하나 + 같은 계열 누른 톤 + 흰색, 면·선 무채색"): 고정 줄을 뺀 화면에서
+    # 채도 있는 색의 색상 무리를 센다. 바탕이 색 판이면 바탕 무리 하나를 더 허용(K-060). 무리가 넘치면 막는다.
+    import numpy as _np, io as _io, colorsys as _cs
+    from PIL import Image as _Im
+    _C = CS.CH[ch]; _z = {r[0]: r[1:5] for r in _C["zones"]}; _y0 = _z["상단 고정"][3] + 10; _y1 = _z["하단 고정"][1] - 10
+    _bins = {}
+    for _t in [g["초"][1] - 0.2 for g in S["장면"]] + [초 - 0.05]:
+        pg.evaluate("t => window.seek(t)", min(_t, 초 - 0.01)); _a = _np.asarray(_Im.open(_io.BytesIO(pg.screenshot())).convert("RGB"))[_y0:_y1:4, ::4] / 255.0
+        _mx = _a.max(2); _mn = _a.min(2); _sat = (_mx - _mn) / _np.maximum(_mx, 1e-6); _m = (_sat > .35) & (_mx > .3)
+        if _m.sum() == 0: continue
+        _px = _a[_m]; _h = _np.array([_cs.rgb_to_hsv(*p_)[0] * 360 for p_ in _px[:: max(1, len(_px) // 4000)]])
+        for _b in (_h // 30).astype(int): _bins[_b] = _bins.get(_b, 0) + 1
+    _tot = sum(_bins.values()) or 1; _fam = sorted(b for b, n in _bins.items() if n / _tot > .03)
+    _grp = []
+    for b in _fam:
+        if _grp and (b - _grp[-1][-1] <= 1): _grp[-1].append(b)
+        else: _grp.append([b])
+    if len(_grp) > 1 and _grp[0][0] == 0 and _grp[-1][-1] == 11: _grp[0] = _grp.pop() + _grp[0]
+    _bgc = _np.asarray(_Im.open(_io.BytesIO(pg.screenshot())).convert("RGB"))[_y0 + 5, 5] / 255.0
+    _allow = 2 if (max(_bgc) - min(_bgc)) / max(max(_bgc), 1e-6) > .35 else 1
+    if len(_grp) > _allow: bad.append(f"[색] 강조 색상 무리 {len(_grp)}개({[[int(b) * 30 for b in g_] for g_ in _grp]}°) — 강조색 하나와 같은 계열 누른 톤만, 면·선은 무채색(K-043·K-237)")
     v = pg.evaluate("window.CTAT||null"); c = S["CTA"]
     if v:   # 11/17 22:16 대표 "또 CTA페이지 제대로 안하고"(K-236): CTA 장면엔 대본 CTA 글만(화면에서 글을 지어 넣지 않음, K-227 규칙 1), 큰 말은 두 줄까지
         pg.evaluate("t => {window.__zsTxt=[];window.seek(t)}", 초 - 0.05)
