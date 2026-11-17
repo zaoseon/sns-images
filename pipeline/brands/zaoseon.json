@@ -104,5 +104,7 @@
       "무료 판정 클릭"
     ],
     "plan_owner": "자오선 CT·①"
-  }
+  },
+  "hanja_text": false,
+  "hook_target": "띠|출생|년생|생일|글자|일간|이름|태어난"
 }

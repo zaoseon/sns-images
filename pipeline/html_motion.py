@@ -33,7 +33,7 @@ HTML 쪽 약속 하나
   ④ render_html(html, 나갈경로, 초): motion_kinetic·motion_litho 등이 부르던 이름이 없어서 깨져 있었다. 되살렸다.
   만드는 법 정리: zaoseon-site:docs/제작_가이드라인_최종_2026-10-16.md 16절.
 """
-import os, sys, json, shutil, asyncio, subprocess, tempfile
+import os, sys, json, re, shutil, asyncio, subprocess, tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, ".."))
@@ -176,6 +176,8 @@ def 안전영역_검사(pg, 초, ch="reel", 간격=0.1):
                 if min(c, fx1) - max(a, fx0) > 4 and min(d, fy1) - max(b, fy0) > 4: 얼굴겹침.setdefault(s, []).append(round(t, 2))
             # 11/12 16:18 대표 '폰트도 다른거랑 안맞고': 영상 글자는 PL·PR 만. 손글씨 글꼴은 장면이 window.__zsHandOK=1 로 까닭을 밝힐 때만
             if fam in 이름 and not 손글씨됨: 손글씨.setdefault(s, []).append(round(t, 2))
+            # 11/17 21:09 대표 "띠를 한자가 아닌 한글로 써야 딱 알아보지"(K-232): 브랜드가 hanja_text=false 면 화면 글에 한자를 쓰지 않는다
+            if 브랜드().get("hanja_text") is False and re.search(r"[\u4e00-\u9fff]", str(s)): 손글씨.setdefault("__한자__" + str(s), []).append(round(t, 2))
             넘 = max(x0 - a, c - x1, y0 - b, d - y1)
             if 넘 > 2: 밖.setdefault(s, []).append((round(t, 2), round(넘)))
             # 11/11 대표 13:09 "가독성 잘 생각해줘": 글자가 너무 작으면 막는다(손글씨는 더 크게)
@@ -200,6 +202,9 @@ def 안전영역_검사(pg, 초, ch="reel", 간격=0.1):
     for s, v in 얼굴겹침.items():
         if len(v) >= 3: 문제.append(f"'{s}' {v[0]}초부터 캐릭터 얼굴과 겹침 — 글·뱃지를 얼굴 밖(위·옆)으로 옮기거나 캐릭터를 줄이세요(대표 11/12)")
     for s, v in 손글씨.items():
+        if s.startswith("__한자__"):
+            if len(v) >= 3: 문제.append(f"'{s[6:]}' 한자 — 띠·글자는 한글로 써요(K-232)")
+            continue
         if len(v) >= 3: 문제.append(f"'{s}' 손글씨 글꼴 — 다른 콘텐츠와 안 맞아요. PL(제목)·PR(본문)로 쓰세요(대표 11/12)"); break
     for s, v in 작음.items():
         if len(v) >= 3: 문제.append(f"'{s}' 글자 {v[0][1]}px — {v[0][3] or '글꼴'}는 {v[0][2]}px 이상(가독성)")
@@ -270,7 +275,7 @@ def 대본_검사(pg, 초, ch="reel"):
     ③ CTA 큰말·이유·단추가 CTA 장면에 나오는지 잰다. 대본이 draft 면 막는다(대표 확인 뒤 approved). 밝히지 않은 옛 영상은 건드리지 않는다."""
     sid = pg.evaluate("window.SCRIPT||null")
     if not sid: return []
-    import json, sys as _s
+    import json, re, sys as _s
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); f = os.path.join(root, "specs", "scripts", f"{sid}.json")
     if not os.path.exists(f): return [f"[대본] specs/scripts/{sid}.json 이 없어요(K-227)"]
     _s.path.insert(0, os.path.join(root, "tools"))
@@ -295,7 +300,11 @@ def 대본_검사(pg, 초, ch="reel"):
         a, b = g["초"]; pg.evaluate("t => {window.__zsTxt=[];window.seek(t)}", min(b - 0.3, 초 - 0.01))
         rows = [r for r in pg.evaluate("() => window.__zsTxt") if not r[7]]
         풀 = "".join(g["풀이"] if isinstance(g["풀이"], list) else [g["풀이"]]).replace(" ", "")
-        A_ = sorted([r for r in rows if str(r[0]).strip() in [x[:20] for x in g["화면글"]]], key=lambda r: r[2])
+        A_ = []
+        for x_ in g["화면글"]:   # 같은 글이 그림(칩) 안에도 있으면 가장 큰 글을 화면글로 본다
+            c_ = [r for r in rows if str(r[0]).strip() == x_[:20]]
+            if c_: A_.append(max(c_, key=lambda r: r[5] or 0))
+        A_.sort(key=lambda r: r[2])
         P_ = sorted([r for r in rows if r not in A_ and str(r[0]).replace(" ", "") and str(r[0]).replace(" ", "") in 풀], key=lambda r: r[2])
         if P_:   # 풀이 글이 그림 안 글(달력 '1월' 등)과 섞이지 않게: 세로로 이어진 덩어리 중 글자가 가장 많은 것
             덩 = [[P_[0]]]
@@ -673,8 +682,19 @@ def 기법_검사(html, 이름, 기록=False):
         for x in 앞:
             if x.get("comp") == comp and os.environ.get("ZS_FX_OK") != "1":
                 raise SystemExit(f"[막음] 구도 '{comp}' 가 '{x['name']}' 와 같아요(K-225). 앞 3편과 다른 구도로 — 색·글만 바꾼 복제는 같은 구도예요.")
+    # 11/17 20:38 대표 "왜 다 같은 색이고… 너 정리한거 못찾냐?"(K-231): window.PAL='색 판 id' 가 앞 3편과 같으면 막고, 기법은 목록(FX.LIST)에 있는 이름으로 4개 이상
+    mp = re.search(r"window\.PAL\s*=\s*['\"]([^'\"]+)['\"]", open(html, encoding="utf-8").read()); pal = mp.group(1) if mp else None
+    if pal:
+        for x in 앞:
+            if x.get("pal") == pal and os.environ.get("ZS_FX_OK") != "1":
+                raise SystemExit(f"[막음] 색 판 '{pal}' 이 '{x['name']}' 와 같아요(K-231). 앞 3편과 다른 판으로(assets/palettes/color_combos.json).")
+        js = os.path.join(HERE, "motion_fx.js")
+        out = subprocess.run(["node", "-e", f"global.window={{}};require({json.dumps(js)});require({json.dumps(js.replace('motion_fx.js','motion_fx100.js'))});console.log(JSON.stringify(Object.keys(window.FXK.LIST)))"], capture_output=True, text=True).stdout
+        이름들 = set(json.loads(out or "[]")); 모름 = [f for f in fx if 이름들 and f not in 이름들]
+        if 모름: raise SystemExit(f"[막음] 기법 목록에 없는 이름 {모름} — motion_fx.js FX.LIST 이름으로(K-231)")
+        if len(fx) < 4: raise SystemExit(f"[막음] 기법이 {len(fx)}개 — 한 편에 4개 이상(K-231, 모션 기법 목록에서 상황별로)")
     if 기록:
-        log = [x for x in log if 판(x.get("name")) != 이름] + [{"name": 이름, "fx": fx, "comp": comp}]
+        log = [x for x in log if 판(x.get("name")) != 이름] + [{"name": 이름, "fx": fx, "comp": comp, "pal": pal}]
         json.dump(log, open(_fxlog(), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 

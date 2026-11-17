@@ -267,6 +267,16 @@ FX.frame=(g,{ai=FX.BRAND.ai,gold=FX.BRAND.accent,ink=FX.BRAND.ink,pill=FX.BRAND.
  if(B.url){g.font='900 40px '+TF;const u=g.measureText(B.url).width;g.fillStyle=pill;g.beginPath();g.roundRect(bx1-u-18,by0-4,u+36,by1-by0+8,24);g.fill();g.fillStyle=gold;g.textAlign='right';g.fillText(B.url,bx1,by)}
  if(ai){g.font='800 28px '+BF;const w=g.measureText(ai).width;g.fillStyle=pill;g.beginPath();g.roundRect(bx0,by0,w+32,by1-by0,20);g.fill();g.fillStyle='rgba(255,255,255,.7)';g.textAlign='left';g.fillText(ai,bx0+16,by)}
  g.restore();window.__zsFrame=0};
+// 11/17 20:38 대표 "선은 곡선 화살표 같은것도 좀 쓰고": 곡선화살표 — 두 점 사이를 휘어진 선이 그려지며 끝에 화살촉이 붙는다.
+// bend: 가운데가 휘는 정도(px, +면 진행 방향 왼쪽으로). p: 0~1 그려진 정도. both: 양쪽 화살촉. 끝이 상자에 닿지 않게 gap 만큼 띄운다.
+FX.curveArrow=(g,x0,y0,x1,y1,p,{bend=120,color='#fff',w=10,head=30,both=false,dash=null}={})=>{if(p<=0)return;const mx=(x0+x1)/2,my=(y0+y1)/2,dx=x1-x0,dy=y1-y0,L=Math.hypot(dx,dy)||1,
+ cx=mx-dy/L*bend,cy=my+dx/L*bend,Q=u=>[(1-u)*(1-u)*x0+2*(1-u)*u*cx+u*u*x1,(1-u)*(1-u)*y0+2*(1-u)*u*cy+u*u*y1],N=40,pp=cl(p);
+ g.save();g.strokeStyle=color;g.fillStyle=color;g.lineWidth=w;g.lineCap='round';g.lineJoin='round';if(dash)g.setLineDash(dash);g.beginPath();
+ for(let k=0;k<=N*pp;k++){const [x,y]=Q(k/N);k?g.lineTo(x,y):g.moveTo(x,y)}g.stroke();g.setLineDash([]);
+ const tip=(u,v)=>{const [ax,ay]=Q(u),[bx,by]=Q(v),an=Math.atan2(ay-by,ax-bx);g.save();g.translate(ax,ay);g.rotate(an);g.beginPath();g.moveTo(w*.6,0);g.lineTo(-head,-head*.62);g.lineTo(-head*.72,0);g.lineTo(-head,head*.62);g.closePath();g.fill();g.restore()};
+ if(pp>.15)tip(pp,Math.max(0,pp-.05));if(both&&pp>=1)tip(0,.05);g.restore()};
+FX.LIST['곡선화살표']='두 점 사이를 휘어진 화살표가 그려지며 이어짐(서로 주고받음은 both·두 개)';
+FX.USE['관계·궁합'].push('곡선화살표');FX.USE['개념 설명'].push('곡선화살표');
 window.FXK=FX;})();
 
 // 프롬프트 100 기법(motion_fx100.js)을 같이 불러온다 — 페이지는 motion_fx.js 하나만 넣으면 된다
