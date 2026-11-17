@@ -262,5 +262,21 @@
   "mode": "up",
   "bpm": 124,
   "key": "F"
+ },
+ {
+  "name": "ad_dapjang_c1_1x1_v1",
+  "kind": "fun",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 114,
+  "key": "G"
+ },
+ {
+  "name": "ad_dapjang_c5_1x1_v1",
+  "kind": "fun",
+  "style": "통통 마림바",
+  "mode": "up",
+  "bpm": 118,
+  "key": "A"
  }
 ]
