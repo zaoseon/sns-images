@@ -326,7 +326,14 @@ def 대본_검사(pg, 초, ch="reel"):
     if decl - used: bad.append(f"[기법] 적어 놓고 그리지 않은 기법: {'·'.join(sorted(decl - used))}(K-235)")
     if len(used) < CS.BALANCE.get("fx_min_used", 8): bad.append(f"[기법] 실제로 그린 기법 {len(used)}개({'·'.join(sorted(used))}) — {CS.BALANCE.get('fx_min_used', 8)}개 이상, 표지·장면 전환·관계·풀이·CTA 층마다(K-235)")
     v = pg.evaluate("window.CTAT||null"); c = S["CTA"]
-    if v:
+    if v:   # 11/17 22:16 대표 "또 CTA페이지 제대로 안하고"(K-236): CTA 장면엔 대본 CTA 글만(화면에서 글을 지어 넣지 않음, K-227 규칙 1), 큰 말은 두 줄까지
+        pg.evaluate("t => {window.__zsTxt=[];window.seek(t)}", 초 - 0.05)
+        _rows = [r for r in pg.evaluate("() => window.__zsTxt") if not r[7] and str(r[0]).strip()]
+        _cta = "".join(str(c.get(k, "")) for k in ("큰말", "이유", "단추")).replace(" ", "")
+        _fr = [str(r[0]) for r in _rows if str(r[0]).replace(" ", "") not in _cta]
+        if _fr: bad.append(f"[CTA] 대본에 없는 글이 CTA 장면에: {', '.join(_fr[:4])} — 대본 CTA(큰말·이유·단추)만(K-236)")
+        _big = sorted({round(r[2]) for r in _rows if r[5] >= B.get("cta_min_px", 84) - 0.5})
+        if len(_big) > 2: bad.append(f"[CTA] 큰 말이 {len(_big)}줄 — 두 줄까지(K-236)")
         빠짐 = 나옴([x for x in (c.get("큰말"), c.get("이유"), c.get("단추")) if x], float(v[0]) + 0.8, 초 - 0.05)  # K-228: 이유 줄은 있을 때만
         if 빠짐: bad.append(f"[대본≠화면] CTA 장면에 대본 글이 안 나와요: {빠짐[0][:20]}…(K-227)")
     return bad
