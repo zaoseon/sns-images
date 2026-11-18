@@ -106,7 +106,7 @@
   "plan_owner": "자오선 CT·①"
  },
  "hanja_text": false,
- "hook_target": "띠|출생|년생|생일|글자|일간|이름|태어난",
+ "hook_target": "띠|출생|년생|생일|글자|일간|이름|태어난|월생",
  "label_suffix": {
   "words": [
    "쥐",
