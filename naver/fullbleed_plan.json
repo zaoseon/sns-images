@@ -2888,5 +2888,22 @@
    "old": "naver_z95_v3.jpg",
    "new": "naver_z95_v3f.jpg"
   }
+ ],
+ "n96": [
+  {
+   "pos": 1,
+   "old": "naver_z96_n3.jpg",
+   "new": "naver_z96_n3f.jpg"
+  },
+  {
+   "pos": 2,
+   "old": "naver_z96_k3.jpg",
+   "new": "naver_z96_k3f.jpg"
+  },
+  {
+   "pos": 3,
+   "old": "naver_z96_h3.jpg",
+   "new": "naver_z96_h3f.jpg"
+  }
  ]
 }
