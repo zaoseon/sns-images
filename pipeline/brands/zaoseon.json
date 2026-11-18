@@ -1,350 +1,356 @@
 {
- "_설명": "모션 엔진(motion_fx*.js·html_motion.py) 브랜드 설정. 다른 브랜드는 이 파일을 복사해 값만 바꾼다. html_motion.py --브랜드=<이름> 또는 ZS_BRAND=<이름>.",
- "id": "zaoseon",
- "name": "자오선",
- "tag": "동서양 6개 운명학 교차분석",
- "url": "zaoseon.com",
- "ai": "정월은 가상의 AI 캐릭터입니다",
- "accent": "#E7C88D",
- "ink": "#FFFFFF",
- "pill": "rgba(0,0,0,.38)",
- "palette": [
-  "#FF5A1F",
-  "#2F6BFF",
-  "#2EBD6B",
-  "#FFC21A",
-  "#FFD400"
- ],
- "fonts": {
-  "title": "PL",
-  "body": "PR",
-  "hand": "BZ"
- },
- "fx_log": "ads/fx_log.json",
- "music": "fun",
- "benchmark": {
-  "_설명": "터진 영상 찾기(tools/ref/discover.py)가 읽는다. 출처: zaoseon-site docs/프로젝트문서/경쟁릴스분석_결과_2026-10-15.md(인스타 10계정, 제외 46saju·mong_tarotcard·saju_expert), docs/체험단_이벤트_벤치마크_2026-10-17.md(스레드 사주 계정), 운세서비스 가이드라인 10/07(포스텔러·일상사주). 인스타는 비즈니스·크리에이터 계정만 공식 조회됨.",
-  "youtube_keywords": [
-   "사주",
-   "운세",
-   "띠별 운세",
-   "궁합"
+  "_설명": "모션 엔진(motion_fx*.js·html_motion.py) 브랜드 설정. 다른 브랜드는 이 파일을 복사해 값만 바꾼다. html_motion.py --브랜드=<이름> 또는 ZS_BRAND=<이름>.",
+  "id": "zaoseon",
+  "name": "자오선",
+  "tag": "동서양 6개 운명학 교차분석",
+  "url": "zaoseon.com",
+  "ai": "정월은 가상의 AI 캐릭터입니다",
+  "accent": "#E7C88D",
+  "ink": "#FFFFFF",
+  "pill": "rgba(0,0,0,.38)",
+  "palette": [
+    "#FF5A1F",
+    "#2F6BFF",
+    "#2EBD6B",
+    "#FFC21A",
+    "#FFD400"
   ],
-  "youtube_channels": [],
-  "ig_accounts": [
-   "zendi_tarot",
-   "forceteller_official",
-   "_dohwa.tarot_",
-   "kkebi_saju",
-   "yeonmind.27",
-   "__sometips",
-   "mindwhisper_here",
-   "hayou.dev",
-   "bombom.3206",
-   "deep_mind_note"
-  ],
-  "threads_accounts": [
-   "forceteller_official",
-   "ilsang_saju",
-   "taesa_saju",
-   "daeunsaju",
-   "saju.gyeol",
-   "luckyloveme_saju",
-   "saju.pharmacy"
-  ],
-  "threads_keywords": [
-   "사주",
-   "운세",
-   "띠별 운세",
-   "궁합"
-  ]
- },
- "ops": {
-  "_설명": "KCOS 콘텐츠 운영 흐름 v1(docs/rules/KCOS_콘텐츠_운영흐름_v2.md)의 브랜드 칸. 11/15 CT가 지금 운영 그대로 적음.",
-  "audience": "사주·운세에 관심 있는 2030~40대, 나를 알아보는 테스트를 좋아하는 사람",
-  "channels": {
-   "instagram_reel": {
-    "per_week": 7,
-    "time": "17:00"
-   },
-   "threads": {
-    "per_week": 7,
-    "time": "08:00·20:30"
-   },
-   "naver_blog": {
-    "per_week": 7,
-    "time": "08:00 또는 18:00"
-   },
-   "naver_clip": {
-    "per_week": 3,
-    "time": "글과 같이"
-   }
+  "fonts": {
+    "title": "PL",
+    "body": "PR",
+    "hand": "BZ"
   },
-  "publish": {
-   "mode": "auto",
-   "metricool_brand": "7114921",
-   "note": "네이버는 서브 노트북 키트 예약"
-  },
-  "sources_extra": [
-   {
-    "kind": "season",
-    "where": "자오선 엔진 절기·손없는날·띠",
-    "how": "앞으로 4주 절기 시각·띠 관련 검색어"
-   },
-   {
-    "kind": "qna",
-    "where": "운영앱 답글·DM 질문",
-    "how": "자주 묻는 질문 유형"
-   }
-  ],
-  "kpi": [
-   "save",
-   "share",
-   "follow",
-   "무료 판정 클릭"
-  ],
-  "plan_owner": "자오선 CT·①"
- },
- "hanja_text": false,
- "hook_target": "띠|출생|년생|생일|글자|일간|이름|태어난|월생",
- "label_suffix": {
-  "words": [
-   "쥐",
-   "소",
-   "호랑이",
-   "토끼",
-   "용",
-   "뱀",
-   "말",
-   "양",
-   "원숭이",
-   "닭",
-   "개",
-   "돼지"
-  ],
-  "suffix": "띠"
- },
- "workflow": {
-  "_설명": "자오선 워크플로 증거(tools/workflow_check.py 가 읽는다). 대표 11/18 17:49. 기한일은 그 자료가 도는 주기 + 하루.",
-  "collect": [
-   {
-    "label": "네이버 검색량",
-    "repo": "zaoseon-site",
-    "glob": "data/keywords/kw_volume.json",
-    "max_days": 8,
-    "next": "kw-volume 작업(GitHub Actions) 실행 확인",
-    "who": "③"
-   },
-   {
-    "label": "유튜브 상위 제목(쇼츠·롱폼)",
-    "repo": "kcos-motion",
-    "glob": "ref/titles/*.json",
-    "max_days": 8,
-    "next": "ref_titles 작업(월 06:37) 확인",
-    "who": "CT"
-   },
-   {
-    "label": "구글 트렌드",
-    "repo": "kcos-motion",
-    "glob": "data/trends/google_kr/*.json",
-    "max_days": 2,
-    "next": "trends_daily 작업(매일 06:03) 확인",
-    "who": "CT"
-   },
-   {
-    "label": "시즌 캘린더(아이보스)",
-    "repo": "zaoseon-site",
-    "glob": "docs/끌리는_콘텐츠_조사_*.md",
-    "max_days": 31,
-    "next": "아이보스 마케팅 캘린더로 다음 달 시즌 정리(월 1회)",
-    "who": "CT"
-   },
-   {
-    "label": "카페글·지식iN 질문",
-    "repo": "zaoseon-site",
-    "glob": "data/kcos_community/zaoseon/*.json",
-    "max_days": 8,
-    "next": "kcos-community 작업(월 06:41) 확인",
-    "who": "③"
-   },
-   {
-    "label": "우리 계정 반응",
-    "repo": "zaoseon-site",
-    "glob": "data/analytics/sns_daily.json",
-    "max_days": 2,
-    "next": "아침 브리핑(08:52)이 Metricool 숫자를 적는지 확인",
-    "who": "아침 브리핑"
-   }
-  ],
-  "topic": [
-   {
-    "label": "주제 은행",
-    "repo": "zaoseon-site",
-    "glob": "data/topics/topic_bank.md",
-    "max_days": 8,
-    "next": "수집 결과로 주제 은행 점수 다시 매기기(이유·근거 칸)",
-    "who": "①"
-   },
-   {
-    "label": "콘텐츠 계획",
-    "repo": "zaoseon-site",
-    "glob": "docs/콘텐츠_계획_*.md",
-    "max_days": 8,
-    "next": "다음 3주 계획 고치기",
-    "who": "CT"
-   }
-  ],
-  "plan": [
-   {
-    "label": "릴스·캐러셀 대본 카드",
-    "repo": "kcos-motion",
-    "glob": "specs/scripts/*.json",
-    "max_days": 7,
-    "next": "다음 주 릴스·캐러셀 대본 카드 쓰기",
-    "who": "①",
-    "brand_field": [
-     "zaoseon",
-     "brand"
+  "fx_log": "ads/fx_log.json",
+  "music": "fun",
+  "benchmark": {
+    "_설명": "터진 영상 찾기(tools/ref/discover.py)가 읽는다. 출처: zaoseon-site docs/프로젝트문서/경쟁릴스분석_결과_2026-10-15.md(인스타 10계정, 제외 46saju·mong_tarotcard·saju_expert), docs/체험단_이벤트_벤치마크_2026-10-17.md(스레드 사주 계정), 운세서비스 가이드라인 10/07(포스텔러·일상사주). 인스타는 비즈니스·크리에이터 계정만 공식 조회됨.",
+    "youtube_keywords": [
+      "사주",
+      "운세",
+      "띠별 운세",
+      "궁합"
+    ],
+    "youtube_channels": [],
+    "ig_accounts": [
+      "zendi_tarot",
+      "forceteller_official",
+      "_dohwa.tarot_",
+      "kkebi_saju",
+      "yeonmind.27",
+      "__sometips",
+      "mindwhisper_here",
+      "hayou.dev",
+      "bombom.3206",
+      "deep_mind_note"
+    ],
+    "threads_accounts": [
+      "forceteller_official",
+      "ilsang_saju",
+      "taesa_saju",
+      "daeunsaju",
+      "saju.gyeol",
+      "luckyloveme_saju",
+      "saju.pharmacy"
+    ],
+    "threads_keywords": [
+      "사주",
+      "운세",
+      "띠별 운세",
+      "궁합"
     ]
-   },
-   {
-    "label": "네이버 원고(의도 카드 포함)",
-    "repo": "zaoseon-site",
-    "glob": "public/naver/n*.html",
-    "max_days": 4,
-    "next": "다음 원고 의도 카드(K-143)부터 쓰기",
-    "who": "①"
-   }
-  ],
-  "make": [
-   {
-    "label": "릴스·카드 제작물(예약일 기준)",
-    "repo": "sns-images",
-    "glob": "content/reel_swaps.json",
-    "max_days": 3,
-    "next": "승인된 대본으로 릴스·카드 만들기",
-    "who": "①"
-   }
-  ],
-  "gate": [
-   {
-    "label": "대본 검사",
-    "check": "script_audit",
-    "next": "막힌 대본 카드 고치기",
-    "who": "①"
-   }
-  ],
-  "approve": [
-   {
-    "label": "승인 기다리는 릴스·카드",
-    "repo": "sns-images",
-    "glob": "content/reel_swaps.json",
-    "max_days": 3,
-    "next": "운영앱 '승인·확인할 것'에서 누르기",
-    "who": "대표",
-    "count": "status=new",
-    "future": true
-   }
-  ],
-  "publish": [
-   {
-    "label": "네이버 앞으로 예약",
-    "repo": "zaoseon-site",
-    "glob": "public/naver/queue.json",
-    "max_days": 3,
-    "next": "앞으로 예약이 비었으면 다음 원고 예약 올리기",
-    "who": "서브 노트북",
-    "future_key": "at"
-   },
-   {
-    "label": "SNS 앞으로 예약",
-    "repo": "zaoseon-site",
-    "glob": "data/sns_live.json",
-    "max_days": 3,
-    "next": "Metricool 앞으로 예약 채우기",
-    "who": "①",
-    "future_key": "t"
-   }
-  ],
-  "measure": [
-   {
-    "label": "주간 효과분석",
-    "repo": "zaoseon-site",
-    "glob": "docs/주간_효과분석_*.md",
-    "max_days": 8,
-    "next": "주간 효과분석(일 20:07) 실행 확인",
-    "who": "주간 분석"
-   },
-   {
-    "label": "매일 성과",
-    "repo": "zaoseon-site",
-    "glob": "data/analytics/sns_daily.json",
-    "max_days": 2,
-    "next": "아침 브리핑 성과 기록 확인",
-    "who": "아침 브리핑"
-   }
-  ],
-  "feedback_rule": {
-   "after": {
-    "label": "주간 효과분석",
-    "repo": "zaoseon-site",
-    "glob": "docs/주간_효과분석_*.md",
-    "max_days": 8
-   },
-   "plan": {
-    "label": "주제 은행",
-    "repo": "zaoseon-site",
-    "glob": "data/topics/topic_bank.md",
-    "max_days": 8
-   },
-   "next": "주간 효과분석의 '바꿀 것'을 주제 은행·계획에 넣기",
-   "who": "①"
+  },
+  "ops": {
+    "_설명": "KCOS 콘텐츠 운영 흐름 v1(docs/rules/KCOS_콘텐츠_운영흐름_v2.md)의 브랜드 칸. 11/15 CT가 지금 운영 그대로 적음.",
+    "audience": "사주·운세에 관심 있는 2030~40대, 나를 알아보는 테스트를 좋아하는 사람",
+    "channels": {
+      "instagram_reel": {
+        "per_week": 7,
+        "time": "17:00"
+      },
+      "threads": {
+        "per_week": 7,
+        "time": "08:00·20:30"
+      },
+      "naver_blog": {
+        "per_week": 7,
+        "time": "08:00 또는 18:00"
+      },
+      "naver_clip": {
+        "per_week": 3,
+        "time": "글과 같이"
+      }
+    },
+    "publish": {
+      "mode": "auto",
+      "metricool_brand": "7114921",
+      "note": "네이버는 서브 노트북 키트 예약"
+    },
+    "sources_extra": [
+      {
+        "kind": "season",
+        "where": "자오선 엔진 절기·손없는날·띠",
+        "how": "앞으로 4주 절기 시각·띠 관련 검색어"
+      },
+      {
+        "kind": "qna",
+        "where": "운영앱 답글·DM 질문",
+        "how": "자주 묻는 질문 유형"
+      }
+    ],
+    "kpi": [
+      "save",
+      "share",
+      "follow",
+      "무료 판정 클릭"
+    ],
+    "plan_owner": "자오선 CT·①"
+  },
+  "hanja_text": false,
+  "hook_target": "띠|출생|년생|생일|글자|일간|이름|태어난|월생",
+  "label_suffix": {
+    "words": [
+      "쥐",
+      "소",
+      "호랑이",
+      "토끼",
+      "용",
+      "뱀",
+      "말",
+      "양",
+      "원숭이",
+      "닭",
+      "개",
+      "돼지"
+    ],
+    "suffix": "띠"
+  },
+  "workflow": {
+    "_설명": "자오선 워크플로 증거(tools/workflow_check.py 가 읽는다). 대표 11/18 17:49. 기한일은 그 자료가 도는 주기 + 하루.",
+    "collect": [
+      {
+        "label": "네이버 검색량",
+        "repo": "zaoseon-site",
+        "glob": "data/keywords/kw_volume.json",
+        "max_days": 8,
+        "next": "kw-volume 작업(GitHub Actions) 실행 확인",
+        "who": "③"
+      },
+      {
+        "label": "유튜브 상위 제목(쇼츠·롱폼)",
+        "repo": "kcos-motion",
+        "glob": "ref/titles/*.json",
+        "max_days": 8,
+        "next": "ref_titles 작업(월 06:37) 확인",
+        "who": "CT"
+      },
+      {
+        "label": "구글 트렌드",
+        "repo": "kcos-motion",
+        "glob": "data/trends/google_kr/*.json",
+        "max_days": 2,
+        "next": "trends_daily 작업(매일 06:03) 확인",
+        "who": "CT"
+      },
+      {
+        "label": "시즌 캘린더(아이보스)",
+        "repo": "zaoseon-site",
+        "glob": "docs/끌리는_콘텐츠_조사_*.md",
+        "max_days": 31,
+        "next": "아이보스 마케팅 캘린더로 다음 달 시즌 정리(월 1회)",
+        "who": "CT"
+      },
+      {
+        "label": "카페글·지식iN 질문",
+        "repo": "zaoseon-site",
+        "glob": "data/kcos_community/zaoseon/*.json",
+        "max_days": 8,
+        "next": "kcos-community 작업(월 06:41) 확인",
+        "who": "③"
+      },
+      {
+        "label": "우리 계정 반응",
+        "repo": "zaoseon-site",
+        "glob": "data/analytics/sns_daily.json",
+        "max_days": 2,
+        "next": "아침 브리핑(08:52)이 Metricool 숫자를 적는지 확인",
+        "who": "아침 브리핑"
+      }
+    ],
+    "topic": [
+      {
+        "label": "주제 은행",
+        "repo": "zaoseon-site",
+        "glob": "data/topics/topic_bank.md",
+        "max_days": 8,
+        "next": "수집 결과로 주제 은행 점수 다시 매기기(이유·근거 칸)",
+        "who": "①"
+      },
+      {
+        "label": "콘텐츠 계획",
+        "repo": "zaoseon-site",
+        "glob": "docs/콘텐츠_계획_*.md",
+        "max_days": 8,
+        "next": "다음 3주 계획 고치기",
+        "who": "CT"
+      }
+    ],
+    "plan": [
+      {
+        "label": "릴스·캐러셀 대본 카드",
+        "repo": "kcos-motion",
+        "glob": "specs/scripts/*.json",
+        "max_days": 7,
+        "next": "다음 주 릴스·캐러셀 대본 카드 쓰기",
+        "who": "①",
+        "brand_field": [
+          "zaoseon",
+          "brand"
+        ]
+      },
+      {
+        "label": "네이버 원고(의도 카드 포함)",
+        "repo": "zaoseon-site",
+        "glob": "public/naver/n*.html",
+        "max_days": 4,
+        "next": "다음 원고 의도 카드(K-143)부터 쓰기",
+        "who": "①"
+      }
+    ],
+    "make": [
+      {
+        "label": "릴스·카드 제작물(예약일 기준)",
+        "repo": "sns-images",
+        "glob": "content/reel_swaps.json",
+        "max_days": 3,
+        "next": "승인된 대본으로 릴스·카드 만들기",
+        "who": "①"
+      }
+    ],
+    "gate": [
+      {
+        "label": "대본 검사",
+        "check": "script_audit",
+        "next": "막힌 대본 카드 고치기",
+        "who": "①"
+      }
+    ],
+    "approve": [
+      {
+        "label": "승인 기다리는 릴스·카드",
+        "repo": "sns-images",
+        "glob": "content/reel_swaps.json",
+        "max_days": 3,
+        "next": "운영앱 '승인·확인할 것'에서 누르기",
+        "who": "대표",
+        "count": "status=new",
+        "future": true
+      }
+    ],
+    "publish": [
+      {
+        "label": "네이버 앞으로 예약",
+        "repo": "zaoseon-site",
+        "glob": "public/naver/queue.json",
+        "max_days": 3,
+        "next": "앞으로 예약이 비었으면 다음 원고 예약 올리기",
+        "who": "서브 노트북",
+        "future_key": "at"
+      },
+      {
+        "label": "SNS 앞으로 예약",
+        "repo": "zaoseon-site",
+        "glob": "data/sns_live.json",
+        "max_days": 3,
+        "next": "Metricool 앞으로 예약 채우기",
+        "who": "①",
+        "future_key": "t"
+      }
+    ],
+    "measure": [
+      {
+        "label": "주간 효과분석",
+        "repo": "zaoseon-site",
+        "glob": "docs/주간_효과분석_*.md",
+        "max_days": 8,
+        "next": "주간 효과분석(일 20:07) 실행 확인",
+        "who": "주간 분석"
+      },
+      {
+        "label": "매일 성과",
+        "repo": "zaoseon-site",
+        "glob": "data/analytics/sns_daily.json",
+        "max_days": 2,
+        "next": "아침 브리핑 성과 기록 확인",
+        "who": "아침 브리핑"
+      }
+    ],
+    "feedback_rule": {
+      "after": {
+        "label": "주간 효과분석",
+        "repo": "zaoseon-site",
+        "glob": "docs/주간_효과분석_*.md",
+        "max_days": 8
+      },
+      "plan": {
+        "label": "주제 은행",
+        "repo": "zaoseon-site",
+        "glob": "data/topics/topic_bank.md",
+        "max_days": 8
+      },
+      "next": "주간 효과분석의 '바꿀 것'을 주제 은행·계획에 넣기",
+      "who": "①"
+    }
+  },
+  "hook_situation": "이사|개업|계약|입주|결혼|혼례|상견례|이직|퇴사|취업|면접|시험|수능|합격|연애|고백|소개팅|재회|이별|헤어|날 잡|날짜|집|여행|출산|돌잔치|창업|투자|첫 출근|새해 계획",
+  "speech_ban": {
+    "_설명": "대본·화면 글 표현 금지(대표 지적 모음, tools/script_audit.py 가 표지·화면글·풀이·CTA에 적용). 정본 자오선 말투 검사는 sns-images natural_audit.py — 여기는 대본 단계에서 먼저 막는 것만. 11/18 K-257: 대본·화면 글은 센 구역이라 '~예요?'·'~었어요?' 막음은 뺐다(정중 구역 감정서·주문서는 zaoseon-site 검사가 맡음).",
+    "목록": [
+      [
+        "내게",
+        "'내게'는 안 쓰는 말 → '나한테'(대표 10/18)"
+      ],
+      [
+        "(?<![가-힣])짝(?!수)",
+        "띠 궁합 '짝'은 어색 → '잘 맞는 띠'(대표 11/17)"
+      ],
+      [
+        "세 지도|두 지도|여섯 지도",
+        "'지도' 비유 금지(K-086)"
+      ],
+      [
+        "재미로",
+        "면책 문장 금지(K-128)"
+      ],
+      [
+        "상담",
+        "'상담' 금지 → 코칭(K-012)"
+      ],
+      [
+        "힘 ?쓸 ?달|아낄 ?달",
+        "→ 좋은 달·조심할 달(K-193)"
+      ],
+      [
+        "반드시|무조건|적중|확실합니다",
+        "확신어 금지(R20)"
+      ],
+      [
+        "결과 ?보장|효과 ?보장",
+        "효과 보장 금지(R20)"
+      ]
+    ]
+  },
+  "voice": {
+    "구역": {
+      "센": "릴스·스레드 첫 줄, 화면 글, 광고 첫 줄, 프로필: 반말·팩폭·유행어·단정형·놀리듯 찌르기 허용. 첫 줄은 보는 사람이 찔리는 장면",
+      "정중": "감정서·주문서·결제·고객 메일·답글: 높임말",
+      "센_구역에서도_금지": [
+        "돈·건강·사망·이혼 확약",
+        "가짜 숫자·가짜 마감",
+        "특정 띠 겁주기",
+        "효과 보장",
+        "메타 광고에서 보는 사람 개인 특성 단정(정책 위반)"
+      ],
+      "근거": "대표 11/18 21:27·21:34(K-257)"
+    }
   }
- },
- "hook_situation": "이사|개업|계약|입주|결혼|혼례|상견례|이직|퇴사|취업|면접|시험|수능|합격|연애|고백|소개팅|재회|이별|헤어|날 잡|날짜|집|여행|출산|돌잔치|창업|투자|첫 출근|새해 계획",
- "speech_ban": {
-  "_설명": "대본·화면 글 표현 금지(대표 지적 모음, tools/script_audit.py 가 표지·화면글·풀이·CTA에 적용). 정본 자오선 말투 검사는 sns-images natural_audit.py — 여기는 대본 단계에서 먼저 막는 것만.",
-  "목록": [
-   [
-    "(예요|이에요)\\s?\\?",
-    "~예요?는 어색 → ~인가요?(R26)"
-   ],
-   [
-    "었어요\\?|았어요\\?",
-    "~었어요? → ~었나요?(K-229)"
-   ],
-   [
-    "내게",
-    "'내게'는 안 쓰는 말 → '나한테'(대표 10/18)"
-   ],
-   [
-    "(?<![가-힣])짝(?!수)",
-    "띠 궁합 '짝'은 어색 → '잘 맞는 띠'(대표 11/17)"
-   ],
-   [
-    "세 지도|두 지도|여섯 지도",
-    "'지도' 비유 금지(K-086)"
-   ],
-   [
-    "재미로",
-    "면책 문장 금지(K-128)"
-   ],
-   [
-    "상담",
-    "'상담' 금지 → 코칭(K-012)"
-   ],
-   [
-    "힘 ?쓸 ?달|아낄 ?달",
-    "→ 좋은 달·조심할 달(K-193)"
-   ],
-   [
-    "반드시|무조건|적중|확실합니다",
-    "확신어 금지(R20)"
-   ],
-   [
-    "결과 ?보장|효과 ?보장",
-    "효과 보장 금지(R20)"
-   ]
-  ]
- }
 }

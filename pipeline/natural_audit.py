@@ -42,6 +42,10 @@ PAT = [  # (이름, 정규식, 이유·바꿀 말)
  # K-029(대표 10/15, zaoseon-site data/어색한_표현.json): 고객에게 하는 감사 인사는 감사드려요·감사합니다. 내용 속 대사("고마워" 한마디)는 두고, 고객에게 건네는 인사 꼴만 잡는다
  ("고객 감사 '고마워요'(K-029)", r"(?:주셔서|주신|해 줘서|해줘서|여러분|모두|덕분에)[^.!?\n]{0,12}(?:고마워|고맙)", "→ 감사드려요 / 감사합니다"),
 ]
+# K-257(대표 11/18 21:34 "제발 … 이렇게 안 하면 사람들 잡을 수가 없어", "규칙 자체를 너무 고상하게 잡았어"):
+# 말투는 두 구역. 센 구역(SNS 화면 글·훅·캡션·스레드·클립)은 반말·팩폭·유행어·단정형 허용, 아래 묻는 말 규칙을 적용하지 않는다.
+# 정중 구역(감정서·주문서·결제·고객 메일·블로그 본문)은 그대로. 번역투·AI 말투·글말 검사는 두 구역 모두 그대로.
+LOUD_FREE = {"의문형 ~예요?/~이에요?", "의문형 ~어요?/~해요?", "반말 질문 '~까?'", "어색한 '~같죠?'", "고객 감사 '고마워요'(K-029)"}
 OK_LINES = ("정월은 가상의 AI 캐릭터입니다", "본 콘텐츠는", "이용약관")
 def corpus():
     out = []
@@ -84,6 +88,7 @@ def scan(texts=None):
         if any(o in t for o in OK_LINES) and not re.search(r"(예요|이에요)\s?\?", t): continue
         for name, pat, why in PAT:
             if where.startswith("스레드") and ("K-029" in name or name.startswith("반말")): continue   # 스레드 말투(K-136)는 반말 기본, 인사에 '고마워'를 쓴다
+            if not where.startswith("블로그") and name in LOUD_FREE: continue   # K-257 센 구역(릴스·캡션·스레드·클립·화면 글): 반말·~어요?·~까? 허용
             if pat is None:
                 m = EMO.search(t)
                 if m: hits.append((name, where, t[:70], m.group(0)))
