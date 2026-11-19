@@ -84,6 +84,14 @@ def check(t):
     if any(len(l) > 60 for l in body): bad.append("L")
     if any(len(l) > 70 for l in t.split("\n")): bad.append("G")
     bad += 앞부분(t)
+    # O·P: 기계 흔적(대표 11/19 16:17, instagram-agent-skill /ig-human) — O 보이지 않는 글자·줄표가 남음(흔적지우기로 자동 정리) · P 대비 틀·미끼 말 같은 구조 흔적(사람이 고침)
+    try:
+        import copy_rules as _CR
+        _h = _CR.흔적검사(t)
+        if any(k == "지울 것" for k, _ in _h): bad.append("O")
+        if any(k == "사람이 고칠 것" for k, _ in _h): bad.append("P")
+    except ImportError:
+        pass
     return bad
 
 

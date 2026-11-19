@@ -278,6 +278,16 @@ FX.curveArrow=(g,x0,y0,x1,y1,p,{bend=120,color='#fff',w=10,head=30,both=false,da
 FX.LIST['곡선화살표']='두 점 사이를 휘어진 화살표가 그려지며 이어짐(서로 주고받음은 both·두 개)';
 FX.USE['관계·궁합'].push('곡선화살표');FX.USE['개념 설명'].push('곡선화살표');
 // 11/17 22:06 대표 "제발 규칙 적용 좀"(K-235): 기법을 실제로 그린 순간 이름을 적는다. 관문이 window.FX(적은 이름)와 실제로 그린 이름을 맞춰 본다.
+// 11/19 대표 16:17 "분석하고 검토해서 빠져있는 것들 추가해"(milesahead.ai '클로드 인스타 스킬 13개' 릴스): 목록형 영상의 위 진행 칸 · 핵심어 강조 자막
+// 진행칸: n칸 중 i번째까지 차고, 지금 칸은 p(0~1)만큼 찬다. 목록·단계 영상(13가지·5단계)에서 '지금 몇 번째'를 보여 준다
+FX.segBar=(g,{n=13,i=0,p=1,x=null,y=null,w=null,h=26,gap=8,on='#E8613C',off='rgba(0,0,0,.12)',r=6}={})=>{const A=FX.area(),X=x==null?A.x0+20:x,W=w==null?(A.x1-A.x0-40):w,Y=y==null?A.y0+20:y,cw=(W-gap*(n-1))/n;
+ g.save();for(let k=0;k<n;k++){const xx=X+k*(cw+gap);g.fillStyle=off;g.beginPath();g.roundRect(xx,Y,cw,h,r);g.fill();const f=k<i?1:k==i?cl(p):0;if(f>0){g.fillStyle=on;g.beginPath();g.roundRect(xx,Y,cw*f,h,r);g.fill()}}g.restore()};
+// 핵심어강조자막: 낱말이 박자대로 나타나고 keys 에 든 낱말만 강조색. 한 줄 자막(내레이션과 같은 시각)
+FX.keyCaption=(g,t,t0,{text,keys=[],x=FX.cx,y=1300,font='900 72px PL',col='#16161A',keyCol='#E8613C',step=.12}={})=>{const ws=String(text).split(' ');g.save();g.font=font;g.textBaseline='middle';
+ const sp_=g.measureText(' ').width,W=ws.reduce((s,w)=>s+g.measureText(w).width,0)+sp_*(ws.length-1);let xx=x-W/2;
+ ws.forEach((w,k)=>{const a=sp(t-t0-k*step,18,.7);const ww=g.measureText(w).width;if(a>0){g.save();g.globalAlpha=cl(a*2);g.translate(xx+ww/2,y+(1-cl(a))*24);g.fillStyle=keys.some(q=>w.includes(q))?keyCol:col;g.textAlign='center';g.fillText(w,0,0);g.restore()}xx+=ww+sp_});g.restore()};
+FX.LIST['진행칸']='목록·단계 영상 위에 n칸 진행 막대(지금 몇 번째)(milesahead 11/19)';FX.LIST['핵심어강조자막']='낱말이 차례로 뜨고 핵심어만 강조색(milesahead 11/19)';
+FX.USE['개념 설명'].push('진행칸','핵심어강조자막');FX.USE['상품·앱 소개'].push('진행칸');
 FX.mark=n=>{if(typeof window!=='undefined'&&!window.__zsFrame)(window.__zsFxUsed=window.__zsFxUsed||{})[n]=1};
 window.FXK=FX;})();
 

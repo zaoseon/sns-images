@@ -53,6 +53,8 @@ const D=1.6;const S=[
  ['태양그리기','#5B3FD6',(t)=>F.sun(g,t,0,{})],
  ['별자리선긋기','#172554',(t)=>F.constellation(g,t,.1,{pts:[[300,700],[450,640],[600,720],[680,860],[560,980]],label:'사자'})],
  ['원형배치·삼각형','#F5F0E6',(t)=>{for(let i=0;i<12;i++){const q=F.ringPos(i,12);g.fillStyle='#fff';g.beginPath();g.arc(q[0],q[1],60,0,7);g.fill()}F.polyDraw(g,[0,4,8].map(i=>F.ringPos(i,12)),F.cl(t/1),{fill:1})}],
+ ['진행칸','#EDE6D5',(t)=>{F.segBar(g,{n:13,i:Math.floor(t*4)%13,p:(t*4)%1});F.keyCaption(g,t,.1,{text:'13개 스킬 중 첫 번째',keys:['첫'],y:960})}],
+ ['핵심어강조자막','#EDE6D5',(t)=>F.keyCaption(g,t,0,{text:'훅 점수까지 매겨 줍니다',keys:['점수'],y:960,font:'900 84px PL'})],
  ['영상벽','#EDE8DD',(t)=>F.videoWall(g,t,{cards:[['#FF4A3D','3월'],['#111','61%'],['#2F2FE0','궁합'],['#C6FF3D','9월','#111'],['#FF7A1A','재회'],['#222','2027']]})],
 ];
 window.N=S.length;
