@@ -278,6 +278,10 @@ FX.curveArrow=(g,x0,y0,x1,y1,p,{bend=120,color='#fff',w=10,head=30,both=false,da
 FX.LIST['곡선화살표']='두 점 사이를 휘어진 화살표가 그려지며 이어짐(서로 주고받음은 both·두 개)';
 FX.USE['관계·궁합'].push('곡선화살표');FX.USE['개념 설명'].push('곡선화살표');
 // 11/17 22:06 대표 "제발 규칙 적용 좀"(K-235): 기법을 실제로 그린 순간 이름을 적는다. 관문이 window.FX(적은 이름)와 실제로 그린 이름을 맞춰 본다.
+// 배경 층(11/19 대표 승인 "배경 무늬/모션 레이어는 간격 검사에서 제외"): 판 전체에 깔리는 무늬·흐르는 글자 띠·격자·터널·모서리 라벨 같은 장식은 F.layerBG(g,()=>{…}) 안에서 그린다.
+// 관문(html_motion 안전영역·균형·표지·CTA 검사)은 window.__zsNoBG=1 로 페이지를 열어 이 층을 건너뛰고, 글자·상자·로고·칩·버튼 사이만 잰다. 실제 영상에는 그대로 그려진다.
+// 지킬 것: 대본의 정보(훅·본문·CTA)는 배경 층에 넣지 않는다. 배경 층 글은 기록(__zsTxt·__zsBox·__zsImg)에도 안 남는다.
+FX.layerBG=(g,fn)=>{if(typeof window!=='undefined'&&window.__zsNoBG)return;const w=typeof window!=='undefined';if(w)window.__zsBG=1;try{g.save();fn();g.restore()}finally{if(w)window.__zsBG=0}};
 // 11/19 대표 16:17 "분석하고 검토해서 빠져있는 것들 추가해"(milesahead.ai '클로드 인스타 스킬 13개' 릴스): 목록형 영상의 위 진행 칸 · 핵심어 강조 자막
 // 진행칸: n칸 중 i번째까지 차고, 지금 칸은 p(0~1)만큼 찬다. 목록·단계 영상(13가지·5단계)에서 '지금 몇 번째'를 보여 준다
 FX.segBar=(g,{n=13,i=0,p=1,x=null,y=null,w=null,h=26,gap=8,on='#E8613C',off='rgba(0,0,0,.12)',r=6}={})=>{const A=FX.area(),X=x==null?A.x0+20:x,W=w==null?(A.x1-A.x0-40):w,Y=y==null?A.y0+20:y,cw=(W-gap*(n-1))/n;

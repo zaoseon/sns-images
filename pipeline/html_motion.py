@@ -115,7 +115,7 @@ def _spec_js(ch="reel"):
     spec = dict(safe=list(C["safe"]), top=z["상단 고정"], bottom=z["하단 고정"])
     return ("window.ZS_BRAND=" + json.dumps(브랜드(), ensure_ascii=False) + ";window.ZS_SPEC=" + json.dumps(spec) + ";window.__zsTxt=[];window.__zsFrame=0;"
             "(function(){const P=CanvasRenderingContext2D.prototype;['fillText','strokeText'].forEach(k=>{const o=P[k];P[k]=function(s,x,y,...r){"
-            "try{if(!window.__zsFrame&&this.globalAlpha>0.15&&String(s).trim()){const m=this.measureText(s),T=this.getTransform(),"
+            "try{if(!(window.__zsFrame||window.__zsBG)&&this.canvas&&this.canvas.isConnected&&this.globalAlpha>0.15&&String(s).trim()){const m=this.measureText(s),T=this.getTransform(),"
             "w=m.width,al=this.textAlign,x0=al==='center'?x-w/2:(al==='right'||al==='end')?x-w:x,a=m.actualBoundingBoxAscent,d=m.actualBoundingBoxDescent,"
             "bx=[[x0,y-a],[x0+w,y-a],[x0,y+d],[x0+w,y+d]].map(([px,py])=>[T.a*px+T.c*py+T.e,T.b*px+T.d*py+T.f]),"
             "xs=bx.map(p=>p[0]),ys=bx.map(p=>p[1]),sc=Math.hypot(T.a,T.b);"
@@ -128,10 +128,10 @@ def _spec_js(ch="reel"):
             "P.roundRect=function(x,y,w,h,...r){try{const T=this.getTransform(),sc=Math.hypot(T.a,T.b),cr=this.canvas.getBoundingClientRect(),kx=cr.width/this.canvas.width,"
             "q=[[x,y],[x+w,y],[x,y+h],[x+w,y+h]].map(([px,py])=>[T.a*px+T.c*py+T.e,T.b*px+T.d*py+T.f]),xs=q.map(v=>v[0]),ys=q.map(v=>v[1]);"
             "this.__zsRR=[cr.left+kx*Math.min(...xs),cr.top+kx*Math.min(...ys),cr.left+kx*Math.max(...xs),cr.top+kx*Math.max(...ys),sc]}catch(e){}return rr.call(this,x,y,w,h,...r)};"
-            "['fill','stroke'].forEach(k=>{const o=P[k];P[k]=function(...a){try{const b=this.__zsRR;if(b&&!window.__zsFrame&&!window.__zsLoose&&this.globalAlpha>0.5&&b[4]>0.9)window.__zsBox.push(b.slice(0,4))}catch(e){}return o.apply(this,a)}});"
+            "['fill','stroke'].forEach(k=>{const o=P[k];P[k]=function(...a){try{const b=this.__zsRR;if(b&&!(window.__zsFrame||window.__zsBG)&&this.canvas&&this.canvas.isConnected&&!window.__zsLoose&&this.globalAlpha>0.5&&b[4]>0.9)window.__zsBox.push(b.slice(0,4))}catch(e){}return o.apply(this,a)}});"
             "const bp=P.beginPath;P.beginPath=function(){this.__zsRR=null;return bp.call(this)}})();"
             # 11/12 18:56 대표 '화면 안의 내용이 확대된다거나': drawImage 를 감싸 그림마다 확대 배율을 적는다(K-198 광고모션_검사)
-            "(function(){const P=CanvasRenderingContext2D.prototype,di=P.drawImage;window.__zsImg=[];P.drawImage=function(im,...r){try{if(!window.__zsFrame&&im&&im.src&&this.globalAlpha>0.3){"
+            "(function(){const P=CanvasRenderingContext2D.prototype,di=P.drawImage;window.__zsImg=[];P.drawImage=function(im,...r){try{if(!(window.__zsFrame||window.__zsBG)&&this.canvas&&this.canvas.isConnected&&im&&im.src&&this.globalAlpha>0.3){"
             "const T=this.getTransform(),sc=Math.hypot(T.a,T.b),sw=r.length>=8?r[2]:(im.naturalWidth||im.width),dw=r.length>=8?r[6]:r.length>=4?r[2]:(im.naturalWidth||im.width);"
             "window.__zsImg.push([String(im.src).split('/').pop(),sc*dw/Math.max(1,sw)]);"
             # 11/15 17:51 대표(K-213) '이미지와 이미지·이미지와 글 사이 간격': 그림도 상자로 적어 box_gap(상자끼리·상자↔글)을 받게 한다
@@ -139,7 +139,7 @@ def _spec_js(ch="reel"):
             "q=[[dx,dy],[dx+ddw,dy],[dx,dy+ddh],[dx+ddw,dy+ddh]].map(([px,py])=>[T.a*px+T.c*py+T.e,T.b*px+T.d*py+T.f]),xs=q.map(v=>v[0]),ys=q.map(v=>v[1]),"
             "cr=this.canvas.getBoundingClientRect(),kx=cr.width/this.canvas.width;window.__zsBox.push([cr.left+kx*Math.min(...xs),cr.top+kx*Math.min(...ys),cr.left+kx*Math.max(...xs),cr.top+kx*Math.max(...ys)])}}}catch(e){}return di.call(this,im,...r)}})();"
             # 글 조각마다 변환 배율·기울기를 적는다(움직이며 들어오는 글 세기)
-            "(function(){const P=CanvasRenderingContext2D.prototype,ft=P.fillText;window.__zsKin=[];P.fillText=function(s,x,y,...r){try{if(!window.__zsFrame&&this.globalAlpha>0.15){const T=this.getTransform();"
+            "(function(){const P=CanvasRenderingContext2D.prototype,ft=P.fillText;window.__zsKin=[];P.fillText=function(s,x,y,...r){try{if(!(window.__zsFrame||window.__zsBG)&&this.canvas&&this.canvas.isConnected&&this.globalAlpha>0.15){const T=this.getTransform();"
             "window.__zsKin.push([String(s),Math.hypot(T.a,T.b),Math.atan2(T.b,T.a),window.__zsLoose?1:0,this.__zsInBox?1:0])}}catch(e){}return ft.call(this,s,x,y,...r)}})();"
 
             # DOM 글자도 잰다(캔버스+DOM 섞어 쓴 페이지가 있다). 고정 요소(.bf)는 뺀다.
@@ -802,7 +802,10 @@ def 안전영역_막기(html, 초, ch="reel", 표지채널=None):
     from playwright.sync_api import sync_playwright
     C = CS.CH[ch]
     with sync_playwright() as pw:
-        b = pw.chromium.launch(); pg = b.new_page(viewport={"width": C["w"], "height": C["h"]}); pg.add_init_script(_spec_js(ch))
+        b = pw.chromium.launch(); pg = b.new_page(viewport={"width": C["w"], "height": C["h"]})
+        # 11/19 대표 승인 "배경 무늬/모션 레이어는 간격 검사에서 제외하고, 앞의 글자·상자·로고·칩·버튼 사이 간격만": 관문 페이지는 배경 층(F.layerBG 로 그린 것)을 빼고 그린다.
+        # 모션 렌더(html_motion)에만 있는 예외다 — 카드·표지(card_gate)·툰 관문은 이 깃발을 모른다. 실제 영상(_shoot)은 배경 층을 그린다.
+        pg.add_init_script(_spec_js(ch) + "window.__zsNoBG=1;")
         pg.goto("file://" + os.path.abspath(html)); pg.wait_for_function("typeof window.seek === 'function'", timeout=15000)
         pg.evaluate("document.fonts.ready")
         src = open(html, encoding="utf-8").read(); frame = ".frame(" in src

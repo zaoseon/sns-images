@@ -1,0 +1,16 @@
+{
+ "_설명": "이룸에이트(EROOM8) 방탈출 카페 브랜드 설정(대표 11/19 수능 이벤트 릴스). 로고 레드 #C71E25 는 큰 판 색으로만 쓰고(흰 글자 대비 5.9), 글 강조는 노랑(어두운 판 대비 13↑). AI 캐릭터를 안 쓰므로 ai 고지 없음.",
+ "id": "eroom8",
+ "name": "이룸에이트",
+ "tag": "방탈출 카페",
+ "url": "eroom8.co.kr",
+ "ai": "",
+ "accent": "#FFD400",
+ "ink": "#FFFFFF",
+ "pill": "rgba(0,0,0,.38)",
+ "palette": ["#C71E25", "#FFD400", "#121214", "#FFFFFF", "#FF5A1F"],
+ "fonts": {"title": "PL", "body": "PR", "hand": "BZ"},
+ "fx_log": "ads/fx_log_eroom8.json",
+ "music": "fun",
+ "hanja_text": false
+}
