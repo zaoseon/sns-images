@@ -64,12 +64,12 @@ def _H(top, *parts): return int(top + sum(parts))
 
 
 # (다) 1. 실험 카드 --------------------------------------------------------------------
-def exp(name, c, head, who, steps, finding, src):
+def exp(name, c, head, who, steps, finding, src, tag="실험"):
     """who = '웨그너 연구진 · 1987', steps = [(꼬리표, 글)] 실험 순서(위→아래), finding = 결과 한두 줄."""
     top = 150; tw = W - 210
     hs = [max(100, _ph(t, SB, 44, tw) + 36) for _, t in steps]; fh = _ph(finding, XB, 46, W - 100) + 70
     H = _H(top, 90, sum(hs), 46 * (len(steps) - 1), 60, fh, 50 + _sh(src)); cv = Cv(H, c.bg); B._head(cv, c, head)
-    w = _pill(cv, c, X0, top + 40, "실험", fill=c.fg, fg=c.bg); cv.text(X0 + w + 24, top + 40, who, XB, cv.fit(who, XB, 46, W - w - 30, 42), c.fg, "lm")
+    w = _pill(cv, c, X0, top + 40, tag, fill=c.fg, fg=c.bg); cv.text(X0 + w + 24, top + 40, who, XB, cv.fit(who, XB, 46, W - w - 30, 42), c.fg, "lm")
     y = top + 100
     for k, ((tag, t), h) in enumerate(zip(steps, hs)):
         cv.rr([X0, y, RT - 10, y + h], 28, fill=_soft(c))

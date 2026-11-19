@@ -341,6 +341,18 @@
  "naver_z96_k3f.jpg": "fork",
  "naver_z96_n3.jpg": "bignum",
  "naver_z96_n3f.jpg": "bignum",
+ "naver_z97_n3.jpg": "bignum",
+ "naver_z97_n3f.jpg": "bignum",
+ "naver_z97_s4.jpg": "ladder",
+ "naver_z97_s4f.jpg": "ladder",
+ "naver_z97_v4.jpg": "compare",
+ "naver_z97_v4f.jpg": "compare",
+ "naver_z98_c3.jpg": "counter",
+ "naver_z98_c3f.jpg": "counter",
+ "naver_z98_e5.jpg": "exp",
+ "naver_z98_e5f.jpg": "exp",
+ "naver_z98_h3.jpg": "checklist",
+ "naver_z98_h3f.jpg": "checklist",
  "naver_zs10_g5.jpg": "compass",
  "naver_zs10_k5.jpg": "calendar"
 }

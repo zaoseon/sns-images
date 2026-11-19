@@ -2905,5 +2905,39 @@
    "old": "naver_z96_h3.jpg",
    "new": "naver_z96_h3f.jpg"
   }
+ ],
+ "n97": [
+  {
+   "pos": 1,
+   "old": "naver_z97_n3.jpg",
+   "new": "naver_z97_n3f.jpg"
+  },
+  {
+   "pos": 2,
+   "old": "naver_z97_v4.jpg",
+   "new": "naver_z97_v4f.jpg"
+  },
+  {
+   "pos": 3,
+   "old": "naver_z97_s4.jpg",
+   "new": "naver_z97_s4f.jpg"
+  }
+ ],
+ "n98": [
+  {
+   "pos": 1,
+   "old": "naver_z98_e5.jpg",
+   "new": "naver_z98_e5f.jpg"
+  },
+  {
+   "pos": 2,
+   "old": "naver_z98_c3.jpg",
+   "new": "naver_z98_c3f.jpg"
+  },
+  {
+   "pos": 3,
+   "old": "naver_z98_h3.jpg",
+   "new": "naver_z98_h3f.jpg"
+  }
  ]
 }
