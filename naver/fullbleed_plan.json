@@ -2973,5 +2973,39 @@
    "old": "naver_z100_h3.jpg",
    "new": "naver_z100_h3f.jpg"
   }
+ ],
+ "n101": [
+  {
+   "pos": 1,
+   "old": "naver_z101_y3.jpg",
+   "new": "naver_z101_y3f.jpg"
+  },
+  {
+   "pos": 2,
+   "old": "naver_z101_s3.jpg",
+   "new": "naver_z101_s3f.jpg"
+  },
+  {
+   "pos": 3,
+   "old": "naver_z101_n3.jpg",
+   "new": "naver_z101_n3f.jpg"
+  }
+ ],
+ "n102": [
+  {
+   "pos": 1,
+   "old": "naver_z102_l3.jpg",
+   "new": "naver_z102_l3f.jpg"
+  },
+  {
+   "pos": 2,
+   "old": "naver_z102_v3.jpg",
+   "new": "naver_z102_v3f.jpg"
+  },
+  {
+   "pos": 3,
+   "old": "naver_z102_c3.jpg",
+   "new": "naver_z102_c3f.jpg"
+  }
  ]
 }
