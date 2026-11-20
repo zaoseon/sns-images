@@ -3007,5 +3007,39 @@
    "old": "naver_z102_c3.jpg",
    "new": "naver_z102_c3f.jpg"
   }
+ ],
+ "n103": [
+  {
+   "pos": 1,
+   "old": "naver_z103_r3.jpg",
+   "new": "naver_z103_r3f.jpg"
+  },
+  {
+   "pos": 2,
+   "old": "naver_z103_g3.jpg",
+   "new": "naver_z103_g3f.jpg"
+  },
+  {
+   "pos": 3,
+   "old": "naver_z103_t3.jpg",
+   "new": "naver_z103_t3f.jpg"
+  }
+ ],
+ "n104": [
+  {
+   "pos": 1,
+   "old": "naver_z104_c3.jpg",
+   "new": "naver_z104_c3f.jpg"
+  },
+  {
+   "pos": 2,
+   "old": "naver_z104_r3.jpg",
+   "new": "naver_z104_r3f.jpg"
+  },
+  {
+   "pos": 3,
+   "old": "naver_z104_k3.jpg",
+   "new": "naver_z104_k3f.jpg"
+  }
  ]
 }
