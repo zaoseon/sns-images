@@ -3041,5 +3041,22 @@
    "old": "naver_z104_k3.jpg",
    "new": "naver_z104_k3f.jpg"
   }
+ ],
+ "n105": [
+  {
+   "pos": 1,
+   "old": "naver_z105_r3.jpg",
+   "new": "naver_z105_r3f.jpg"
+  },
+  {
+   "pos": 2,
+   "old": "naver_z105_c3.jpg",
+   "new": "naver_z105_c3f.jpg"
+  },
+  {
+   "pos": 3,
+   "old": "naver_z105_k3.jpg",
+   "new": "naver_z105_k3f.jpg"
+  }
  ]
 }
