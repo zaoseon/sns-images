@@ -69,6 +69,7 @@ def clip_box_html(pid, title, clips):
 SITE = os.environ.get("SITE", "/home/claude/zaoseon-site")
 CTA_BASE = "https://zaoseon.com/?utm_source=naver&utm_medium=cta"
 CTA_LINK = CTA_BASE + "#free"
+CTA_DAPJANG = "https://zaoseon.com/dapjang/?utm_source=naver&utm_medium=cta&utm_campaign="   # 끝 배너(cta) 도착점. 글 중간 입력칸(mid)은 #free 그대로
 CAT_LIST = ["2027 신년운세", "띠별 운세", "주간 기운", "절기 이야기", "태어난 날(일주) 이야기", "운명학 입문", "자오선 소식"]
 CATS = {"n01": "2027 신년운세", "n02": "띠별 운세", "n03": "띠별 운세", "n04": "띠별 운세", "n05": "띠별 운세", "n06": "띠별 운세", "n07": "태어난 날(일주) 이야기",
         "n08": "띠별 운세", "n09": "띠별 운세", "n10": "띠별 운세", "n11": "자오선 소식", "n12": "절기 이야기", "n13": "운명학 입문", "n14": "2027 신년운세", "n15": "운명학 입문",
@@ -275,10 +276,11 @@ def write_page(pid, dt, title, tags, body, nxt=None, cover=None, related=None, c
         import shutil; dst = f"{SITE}/public/naver/img/{cover}"; src = os.path.join(IMG_DIR, cover)
         if os.path.exists(src) and not os.path.exists(dst): os.makedirs(os.path.dirname(dst), exist_ok=True); shutil.copy(src, dst)
     global CTA_LINK
-    CTA_LINK = CTA_BASE + "&utm_campaign=" + pid + "#free"   # 10/18 대표: 글별 사이트 방문 재기(GoatCounter). 보이는 글은 그대로
+    CTA_LINK = CTA_DAPJANG + pid   # 11/19 20:03 대표 확정: 끝 배너 도착점은 /dapjang/(utm_campaign 글번호, #free 없음). 11/20 e099be5 재생성 때 옛 값으로 돌아가 11/21 CT가 고침
     body = re.sub(r"utm_medium=mid(?:&amp;utm_campaign=\w+)?#free", "utm_medium=mid&amp;utm_campaign=" + pid + "#free", body)   # 글 중간 입력칸 링크도 글별로(K-142·CT 10/18 17:00) — 전에는 사이트 페이지만 손으로 고쳐 다시 만들면 빠졌다
     tags = tags[:10]  # 9/30: 태그 10개까지(예약 시간 줄이기)
     body = re.sub(r"(utm_source=naver(?:&amp;|&)utm_medium=(?:cta|mid))#free", lambda m: m.group(1) + ("&amp;" if "&amp;" in m.group(1) else "&") + "utm_campaign=" + pid + "#free", body)   # 10/18 대표: 본문에 이미 박힌 CTA·중간 링크에도 글번호(원본 pages.json 은 그대로 둔다)
+    body = re.sub(r"https://zaoseon\.com/\?utm_source=naver(&amp;|&)utm_medium=cta\1utm_campaign=(\w+)#free", r"https://zaoseon.com/dapjang/?utm_source=naver\1utm_medium=cta\1utm_campaign=\2", body)   # 11/21 끝 배너 링크를 /dapjang/ 으로(대표 11/19 20:03)
     body = re.sub(r"naver_cta[2-8]_[^\"'<>\s]+?\.jpg", cta_pick(pid, cover, body), body)   # 10/17 15:05 대표: 색 5세트 중 본문 이미지 톤에 맞는 배너(cta_pick). 옛 파일은 발행 글이 쓰므로 그대로 둔다   # 10/17 14:58 대표 "배너가 그냥 봐도 크다" → 6판 1280x240(글줄 옆 단추, naver/cta_banner6.py). 옛 파일은 발행 글이 쓰므로 그대로 둔다
     body = re.sub(r"<p>\s*(?:&nbsp;\s*)?이 글은 재미로[^<]*</p>", "", body)   # 10/17 K-128 대표: '재미로' 면책 문장은 넣지 않는다. 발행글은 다른 이유로 고칠 때 같이 뺀다(지금 서브 노트북 수정 발행 중)   # 10/17 대표: 1280x400 배너(naver/cta_banner.py, 제목 57px·부제 50px 이상). 옛 cta4(10/4 2/3 크기)는 폰에서 글자 8px라 바꿈. 옛 파일은 발행 글이 쓰므로 그대로 둔다
     _mids = []   # 10/16 K-017 글 중간 입력칸 모양 상자(<table>): 서식 단계들이 <p>만 다루므로 자리표로 비켜 두었다가 끝에 되돌린다
