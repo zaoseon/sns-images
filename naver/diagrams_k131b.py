@@ -239,7 +239,7 @@ def ruler(name, c, head, mine, theirs, concept, exit_text, verb="이렇게 맞�
     _done(cv, c, name, "ruler")
 
 # 12. 오행 상생·상극 ---------------------------------------------------------------------------------
-def cycle5(name, c, head, note=""):
+def cycle5(name, c, head, note="", press="누르는 관계(조율이 필요한 사이)"):   # press: 11/21 ① n101 문체 규격 v1(ABS-05 누르) — 기본값은 옛 그림 그대로
     """나무→불→흙→쇠→물→나무(키워 줌, 바깥 실선) · 나무→흙→물→불→쇠→나무(누름, 안쪽 점선). 그 글 2절의 표 그대로."""
     E = [("나무", "갑·을"), ("불", "병·정"), ("흙", "무·기"), ("쇠", "경·신"), ("물", "임·계")]
     top = 160; R = 300; r = 92; cx = (L + RT) / 2; cy = top + 40 + R + r
@@ -257,7 +257,7 @@ def cycle5(name, c, head, note=""):
         _dot(cv, x, y, r, fill=c.acc); cv.text(x, y - 20, t, XB, 48, c.pillfg, "mm"); cv.text(x, y + 30, s, SB, 42, c.pillfg, "mm")
     y = cy + R + r + 70
     DG._legend(cv, c, y, [(lambda x, y: _arrow(cv, c, (x - 34, y), (x + 22, y), c.acc if c.dark else c.fg, LW + 2), "키워 줘요(편안한 사이)")])
-    DG._legend(cv, c, y + 80, [(lambda x, y: _dash(cv, x - 34, y, x + 22, y, c.gray, LW2, 22, 16), "누르는 관계(조율이 필요한 사이)")])
+    DG._legend(cv, c, y + 80, [(lambda x, y: _dash(cv, x - 34, y, x + 22, y, c.gray, LW2, 22, 16), press)])
     if note: cv.text(X0, y + 160, note, SB, cv.fit(note, SB, 42, W, 42), c.gray, "lm")
     _done(cv, c, name, "cycle5")
 
