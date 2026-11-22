@@ -255,11 +255,13 @@ FX.cx=(FX.SPEC.safe[0]+FX.SPEC.safe[2])/2;          // 글·그림 가운데 = �
 FX.aw=()=>FX.SPEC.safe[2]-FX.SPEC.safe[0]-40;FX.cy=(FX.SPEC.top[3]+FX.SPEC.bottom[1])/2;
 FX.area=()=>({x0:FX.SPEC.safe[0],x1:FX.SPEC.safe[2],y0:FX.SPEC.top[3]+10,y1:FX.SPEC.bottom[1]-10});  // 글이 들어갈 수 있는 칸
 // 고정 요소(brand_frame.py 와 같은 자리): 위 가운데 한 줄(K-166) · 아래 왼쪽 AI 고지 · 아래 오른쪽 주소 — 글자는 브랜드 설정에서
+// AI 고지는 **그리지 않는 것이 기본값**이다(ai=''). 정월 캐릭터가 화면에 실제로 나오는 편에서만 페이지가 {ai:FX.BRAND.ai} 로 넘긴다
+// (대표 2026-11-22 13:4x "정월 캐릭터가 나올 때만 AI 캐릭터 고지", K-265). 캐릭터 없이 글자·도형만 나오는 릴스·카드에는 넣지 않는다.
 // 브랜드 값은 html_motion.py 가 brands/<id>.json 을 읽어 window.ZS_BRAND 로 넣는다(아래는 주입이 없을 때 대체값).
 FX.BRAND=Object.assign({name:'자오선',tag:'동서양 6개 운명학 교차분석',url:'zaoseon.com',ai:'정월은 가상의 AI 캐릭터입니다',accent:'#E7C88D',ink:'#FFFFFF',pill:'rgba(0,0,0,.38)',
  palette:['#FF5A1F','#2F6BFF','#2EBD6B','#FFC21A','#FFD400'],fonts:{title:'PL',body:'PR',hand:'BZ'}},(typeof window!=='undefined'&&window.ZS_BRAND)||{});
 FX.C=FX.BRAND.palette.concat(['#FF5A1F','#2F6BFF','#2EBD6B','#FFC21A','#FFD400'].slice(FX.BRAND.palette.length));
-FX.frame=(g,{ai=FX.BRAND.ai,gold=FX.BRAND.accent,ink=FX.BRAND.ink,pill=FX.BRAND.pill}={})=>{if(window.__zsNoFrame){window.__zsFrameOpt={ai};return}window.__zsFrame=1;g.save();g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;
+FX.frame=(g,{ai='',gold=FX.BRAND.accent,ink=FX.BRAND.ink,pill=FX.BRAND.pill}={})=>{if(window.__zsNoFrame){window.__zsFrameOpt={ai};return}window.__zsFrame=1;g.save();g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;
  const B=FX.BRAND,TF=B.fonts.title,BF=B.fonts.body,[tx0,ty0,tx1,ty1]=FX.SPEC.top,[bx0,by0,bx1,by1]=FX.SPEC.bottom,cy=(ty0+ty1)/2,by=(by0+by1)/2;g.textBaseline='middle';
  if(B.name||B.tag){const sep=B.name&&B.tag?'  ·  ':'';g.font='900 42px '+TF;const a=g.measureText(B.name||'').width;g.font='800 34px '+BF;const d=g.measureText(sep).width,b=g.measureText(B.tag||'').width;let x=(tx0+tx1)/2-(a+d+b)/2;
  g.fillStyle=pill;g.beginPath();g.roundRect(x-22,ty0-6,a+d+b+44,ty1-ty0+12,28);g.fill();
