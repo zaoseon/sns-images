@@ -245,6 +245,14 @@
         "who": "대표",
         "count": "status=new",
         "future": true
+      },
+      {
+        "label": "노션 검수 판정 기록(통합 검수함 → 저장소 사본)",
+        "repo": "kcos-motion",
+        "glob": "docs/status/검수_기록.json",
+        "max_days": 8,
+        "next": "검수함 체크를 읽어 검수_기록.json 에 옮긴다(K-278)",
+        "who": "실키 PM"
       }
     ],
     "publish": [
@@ -265,6 +273,16 @@
         "next": "Metricool 앞으로 예약 채우기",
         "who": "①",
         "future_key": "t"
+      },
+      {
+        "label": "네이버 클립 앞으로 예정",
+        "repo": "sns-images",
+        "glob": "content/post_clips.json",
+        "max_days": 3,
+        "future_key": "rec",
+        "next": "다음 클립 묶음 대본(K-227) → 대표 승인 → html_motion --채널=naver_clip 렌더 → post_clips.json·clip_hold.json 등록",
+        "who": "①",
+        "_설명": "11/23 실키 조사: 마지막 클립 rec 11/17, 그 뒤 제작 0건인데 감시가 없어 아무도 몰랐다(대표 11/23 '네이버 클립 제작이 언제부턴가 안되고 있거든')"
       }
     ],
     "measure": [
