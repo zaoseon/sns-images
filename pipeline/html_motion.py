@@ -130,6 +130,12 @@ def _spec_js(ch="reel"):
             "this.__zsRR=[cr.left+kx*Math.min(...xs),cr.top+kx*Math.min(...ys),cr.left+kx*Math.max(...xs),cr.top+kx*Math.max(...ys),sc]}catch(e){}return rr.call(this,x,y,w,h,...r)};"
             "['fill','stroke'].forEach(k=>{const o=P[k];P[k]=function(...a){try{const b=this.__zsRR;if(b&&!(window.__zsFrame||window.__zsBG)&&this.canvas&&this.canvas.isConnected&&!window.__zsLoose&&this.globalAlpha>0.5&&b[4]>0.9)window.__zsBox.push(b.slice(0,4))}catch(e){}return o.apply(this,a)}});"
             "const bp=P.beginPath;P.beginPath=function(){this.__zsRR=null;return bp.call(this)}})();"
+            # 11/23 대표 노션 검수 ③-② '카드와 카드 사이 원형 요소들 간격 조절하기 - 현재 일간 카드와 붙어있음'(K-266): 작은 동그라미(진행 점·표시 점)도 적어 두고, 관문이 한 줄로 늘어선 점들을 한 상자로 묶어 box_gap 을 잰다
+            "(function(){const P=CanvasRenderingContext2D.prototype,ar=P.arc;window.__zsDot=[];"
+            "P.arc=function(x,y,r,...a){try{const T=this.getTransform(),sc=Math.hypot(T.a,T.b),cr=this.canvas.getBoundingClientRect(),kx=cr.width/this.canvas.width,cx=T.a*x+T.c*y+T.e,cy=T.b*x+T.d*y+T.f,R=r*sc;"
+            "(this.__zsAR=this.__zsAR||[]).push([cr.left+kx*(cx-R),cr.top+kx*(cy-R),cr.left+kx*(cx+R),cr.top+kx*(cy+R),R*kx])}catch(e){}return ar.call(this,x,y,r,...a)};"
+            "const fl=P.fill;P.fill=function(...a){try{const L=this.__zsAR;if(L&&!(window.__zsFrame||window.__zsBG)&&this.canvas&&this.canvas.isConnected&&!window.__zsLoose&&this.globalAlpha>0.5)L.forEach(b=>{if(b[4]>=4&&b[4]<=24)window.__zsDot.push(b.slice(0,4))})}catch(e){}return fl.apply(this,a)};"
+            "const bp=P.beginPath;P.beginPath=function(){this.__zsAR=null;return bp.call(this)}})();"
             # 11/12 18:56 대표 '화면 안의 내용이 확대된다거나': drawImage 를 감싸 그림마다 확대 배율을 적는다(K-198 광고모션_검사)
             "(function(){const P=CanvasRenderingContext2D.prototype,di=P.drawImage;window.__zsImg=[];P.drawImage=function(im,...r){try{if(!(window.__zsFrame||window.__zsBG)&&this.canvas&&this.canvas.isConnected&&im&&im.src&&this.globalAlpha>0.3){"
             "const T=this.getTransform(),sc=Math.hypot(T.a,T.b),sw=r.length>=8?r[2]:(im.naturalWidth||im.width),dw=r.length>=8?r[6]:r.length>=4?r[2]:(im.naturalWidth||im.width);"
@@ -390,7 +396,7 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
     n = int(초 / 간격)
     for i in range(n + 1):
         t = min(i * 간격, 초 - 0.01)
-        pg.evaluate("t => {window.__zsTxt=[];window.__zsBox=[];window.seek(t)}", t)
+        pg.evaluate("t => {window.__zsTxt=[];window.__zsBox=[];window.__zsDot=[];window.seek(t)}", t)
         a = np.asarray(Image.open(io.BytesIO(pg.screenshot())).convert("RGB")).astype(int)
         # 11/11 대표 13:38 "뱃지나 텍스트, 그래픽 구성 요소들 간 간격이 붙지 않게": 글자 상자 둘레(글자 크기의 1/4, 최소 14px)에
         # 다른 것(선·그림·다른 글자·뱃지 가장자리)이 들어와 있으면 '붙음'. 뱃지 안 글자는 뱃지 여백이 모자랄 때 걸린다.
@@ -401,6 +407,16 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
             w_, h_ = q[2] - q[0], q[3] - q[1]
             if w_ < 40 or h_ < 30 or w_ > a.shape[1] * .95 or q[1] < top or q[3] > bot: continue
             if not any(abs(q[i] - r[i]) < 3 for r in bx_ for i in range(4)) or not bx_: bx_.append(q)
+        # 점 줄(K-266, 11/23 검수 ③-②): 같은 높이(±16px, 튀어 오르는 점 포함)에 60px 안쪽으로 이어진 작은 동그라미 3개 이상 = 한 상자
+        _줄 = []
+        for q in sorted(pg.evaluate("() => window.__zsDot||[]"), key=lambda q: q[0]):
+            cy_ = (q[1] + q[3]) / 2
+            for R_ in _줄:
+                if abs(R_[4] - cy_) <= 16 and q[0] - R_[2] < 60:
+                    R_[0] = min(R_[0], q[0]); R_[1] = min(R_[1], q[1]); R_[2] = max(R_[2], q[2]); R_[3] = max(R_[3], q[3]); R_[5] += 1; break
+            else: _줄.append([q[0], q[1], q[2], q[3], cy_, 1])
+        for R_ in _줄:
+            if R_[5] >= 3 and R_[1] >= top and R_[3] <= bot: bx_.append(R_[:4])
         def _gap(p_, q_):
             dx = max(q_[0] - p_[2], p_[0] - q_[2]); dy = max(q_[1] - p_[3], p_[1] - q_[3]); return max(dx, dy)
         def _안(p_, q_): return p_[0] >= q_[0] - 2 and p_[1] >= q_[1] - 2 and p_[2] <= q_[2] + 2 and p_[3] <= q_[3] + 2
