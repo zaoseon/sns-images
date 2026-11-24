@@ -836,6 +836,42 @@ def 광고모션_검사(pg, 초, ch, 간격=0.1):
     return 문제
 
 
+def 자오선_판_검사(pg, 초, 간격=0.5):
+    """11/24 대표 '자오선 릴스 디자인·폰트 긴급 수정'(K-291): 브랜드 reel_rules 가 있는 브랜드만 잰다(지금은 자오선).
+    ① 글꼴: 캔버스에 쓴 글의 글꼴이 reel_rules.글꼴만(PL) 인지, 그 굵기가 실제로 읽혔는지(document.fonts.check) · motion_fx 가 못 읽은 글꼴(__zsFontFail)
+    ② 배경: 화면 왼쪽·오른쪽 가장자리 24px 띠의 위쪽·아래쪽 색이 배경만(네이비·크림) ±10 안인지, 위아래 차가 8 넘으면 그라데이션"""
+    import io, re as _re
+    import numpy as np
+    from PIL import Image
+    R = 브랜드().get("reel_rules")
+    if not R: return []
+    hx = lambda c: np.array([int(c.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4)])
+    okbg = {k: hx(v) for k, v in R.get("배경만", {}).items()}; fams = set(R.get("글꼴만", []))
+    bad = {}; fail = pg.evaluate("window.__zsFontFail||[]")
+    if fail: bad.setdefault("글꼴 못 읽음", []).append((0, f"motion_fx 가 글꼴 파일을 못 읽었어요(기본 글꼴로 바뀜): {fail[:3]} — motion_fx.js 옆 fonts/ 폴더 경로를 확인"))
+    n = int(초 / 간격)
+    for i in range(n + 1):
+        t = min(i * 간격, 초 - 0.01)
+        pg.evaluate("t => {window.__zsFontUsed=[];window.seek(t)}", t)
+        for f in set(pg.evaluate("() => window.__zsFontUsed||[]")):
+            m = _re.search(r"(\d+(?:\.\d+)?)px\s+(.+)$", f); fam = (m.group(2) if m else f).strip().strip("'\"")
+            if fams and fam not in fams: bad.setdefault("글꼴 " + fam, []).append((t, f"'{f}' — 자오선 릴스는 {'/'.join(sorted(fams))}(페이퍼로지)만"))
+            elif not pg.evaluate("f => document.fonts.check(f)", f): bad.setdefault("글꼴 안 읽힘 " + f, []).append((t, f"'{f}' 굵기 파일이 안 읽혀 기본 글꼴로 그려짐"))
+        if not okbg: continue
+        a = np.asarray(Image.open(io.BytesIO(pg.screenshot())).convert("RGB")).astype(int); H = a.shape[0]
+        top_ = np.median(np.concatenate([a[H // 8:H * 3 // 8, :24].reshape(-1, 3), a[H // 8:H * 3 // 8, -24:].reshape(-1, 3)]), 0)
+        bot_ = np.median(np.concatenate([a[H * 5 // 8:H * 7 // 8, :24].reshape(-1, 3), a[H * 5 // 8:H * 7 // 8, -24:].reshape(-1, 3)]), 0)
+        near = min(okbg.items(), key=lambda kv: np.abs(kv[1] - top_).max())
+        if np.abs(near[1] - top_).max() > 10:
+            bad.setdefault("배경색", []).append((t, f"배경 #{''.join('%02X' % int(v) for v in top_)} — 자오선 릴스 배경은 " + " · ".join(f"{k} {v}" for k, v in R["배경만"].items()) + " 단색만"))
+        elif np.abs(top_ - bot_).max() > 8:
+            bad.setdefault("배경 그라데이션", []).append((t, f"배경 위 #{''.join('%02X' % int(v) for v in top_)} ↔ 아래 #{''.join('%02X' % int(v) for v in bot_)} — 그라데이션 금지, 단색 컷"))
+    out = []
+    for k, v in bad.items():
+        out.append(f"[자오선 판 · {k}] {v[0][0]:.2f}초 등 {len(v)}곳 — {v[0][1]} (K-291)")
+    return out
+
+
 def 안전영역_막기(html, 초, ch="reel", 표지채널=None):
     from playwright.sync_api import sync_playwright
     C = CS.CH[ch]
@@ -843,11 +879,13 @@ def 안전영역_막기(html, 초, ch="reel", 표지채널=None):
         b = pw.chromium.launch(); pg = b.new_page(viewport={"width": C["w"], "height": C["h"]})
         # 11/19 대표 승인 "배경 무늬/모션 레이어는 간격 검사에서 제외하고, 앞의 글자·상자·로고·칩·버튼 사이 간격만": 관문 페이지는 배경 층(F.layerBG 로 그린 것)을 빼고 그린다.
         # 모션 렌더(html_motion)에만 있는 예외다 — 카드·표지(card_gate)·툰 관문은 이 깃발을 모른다. 실제 영상(_shoot)은 배경 층을 그린다.
-        pg.add_init_script(_spec_js(ch) + "window.__zsNoBG=1;")
+        pg.add_init_script(_spec_js(ch) + "window.__zsNoBG=1;"
+                          # K-291: 쓴 글꼴을 모두 적는다(고정 요소 포함)
+                          "(function(){const P=CanvasRenderingContext2D.prototype;['fillText','strokeText'].forEach(k=>{const o=P[k];P[k]=function(...a){try{(window.__zsFontUsed=window.__zsFontUsed||[]).push(this.font)}catch(e){}return o.apply(this,a)}})})();")
         pg.goto("file://" + os.path.abspath(html)); pg.wait_for_function("typeof window.seek === 'function'", timeout=15000)
-        pg.evaluate("document.fonts.ready")
+        pg.evaluate("async () => { await (window.__zsFonts||Promise.resolve()); await document.fonts.ready }")
         src = open(html, encoding="utf-8").read(); frame = ".frame(" in src
-        문제, 칸 = 안전영역_검사(pg, 초, ch); 문제 += 균형_검사(pg, 초, ch); 문제 += 표지_검사(pg, 표지채널 or ch); 문제 += CTA_검사(pg, 초, ch); 문제 += 대본_검사(pg, 초, ch); 문제 += 광고모션_검사(pg, 초, ch); b.close()
+        문제, 칸 = 안전영역_검사(pg, 초, ch); 문제 += 균형_검사(pg, 초, ch); 문제 += 표지_검사(pg, 표지채널 or ch); 문제 += CTA_검사(pg, 초, ch); 문제 += 대본_검사(pg, 초, ch); 문제 += 광고모션_검사(pg, 초, ch); 문제 += 자오선_판_검사(pg, 초); b.close()
     canvas = "<canvas" in src
     # 11/12 16:45 대표 "정월이 나오는거 너무 어색하고 별로" → 릴스·광고 영상에 실사 정월 누끼(characters/cut/)를 넣지 않는다(K-197)
     _src = open(html, encoding="utf-8").read() if os.path.exists(html) else ""
