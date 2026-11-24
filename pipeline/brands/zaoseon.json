@@ -413,35 +413,54 @@
       "_설명": "소품·효과선·감정요소 색 규칙(K-277). 공통 원칙은 docs/rules/KCOS_공통_제작규칙_v1.md 2절 '브랜드별 소품·효과선·감정요소 색'",
       "근거": "대표 2026-11-23 15:4x \"송이의 경우 소품(베개랑 이불)이 가시랑 같은 색이라 묻히거든. 브랜드 별 소품 색상 규칙도 만들자. 브랜드별 소품, 효과선, 감정표현 등 색상 규칙 작성해줘\" + 같은 날 검수 ⑩ SW-A04 \"반짝이 위치가 캐릭터와 멀리 있어. 그리고 색상도 검정색이 아닌 다른 색 적용\"",
       "공통": [
-        "소품은 캐릭터 몸의 주색(채움·가시·털·깃)·외곽선과 같은 색 계열을 쓰지 않는다(묻힘). 값은 브랜드 표 '소품'에서만 고른다",
-        "감정요소(반짝이·하트·땀·눈물·빠직)는 색으로 그린다. 검정 단색 금지. 색은 toon_rules classic 기본값 + 브랜드 덮어쓰기(fx_style.colors)",
-        "효과선(강조·놀람·속도·떨림선)은 브랜드 외곽선 색",
-        "효과·감정요소는 캐릭터 실루엣 가까이 둔다 — 머리(또는 해당 부위) 바깥선에서 머리 폭의 0.5배 안",
-        "생성 사양의 소품 색 문장은 브랜드 표 '생성_문장'을 그대로 쓴다(사양마다 따로 쓰지 않는다)",
-        "소품 외곽선은 그 소품 채움색의 진한 톤으로, 검정을 쓰지 않는다(대표 검수 ⑪)"
+        "소품 채움: 브랜드 캐릭터 화풍과 어울리는 차분한 파스텔·뮤트 톤 + 사물 고유의 자연색(나무=부드러운 우드, 과일·채소=그 색). 생뚱맞은 원색·형광색·과하게 탁한 회색톤 금지",
+        "'소품' 표의 색은 검수 ⑫ 시안 수정 때 쓴 **예시값이지 고정값이 아니다** — 모든 소품을 그 색으로 맞추지 않는다(대표 11/24)",
+        "소품 외곽선 = 딥 톤온톤: 소품 본체 색과 같은 계열 안에서 명도를 확실히 낮춘 색(블루·하늘→딥 네이비, 민트·그린→딥 틸·포레스트, 웜베이지·우드·노랑→딥 브라운, 핑크·코랄→딥 로즈·플럼). 검정(#000000) 금지, 명도만 1단계 살짝 내린 흐린 색(예: 하늘→중간 파랑) 금지. 기준: 채움과 외곽선 명도 대비 2.5:1 이상(tools/color_rules_check.py)",
+        "소품은 캐릭터 몸의 주색·외곽선과 같은 색 계열로 칠해 묻히지 않게 한다 — 특히 캐릭터와 맞닿거나 겹치는 소품(침구·이불·옷·가방). 브랜드 '소품_금지' 참고",
+        "효과선(외침·놀람·속도·떨림선) = 그 캐릭터의 외곽선 색 또는 딥 톤온톤 색으로 통일",
+        "얼굴 안쪽 밀착 기호(빠직·땀방울·눈물·눈물길) = 볼터치처럼 외곽선 없는 단색 면(K-287 v4, 렌더러 face_marks_no_outline)",
+        "띄움 감정요소(반짝이·하트·물음표)는 색으로 그린다. 검정 단색 금지. 효과·감정요소는 캐릭터 실루엣 가까이(머리 폭 0.5배 안)",
+        "생성 사양의 소품 색 문장은 브랜드 '생성_문장'을 그대로 쓴다"
       ],
       "몸_주색": {
         "판": "어두운 단색판(assets/palettes/color_combos.json)",
         "글자": "#FFFFFF"
       },
-      "소품": {
-        "포인트": "#E7C88D"
-      },
       "소품_금지": [
         "판 색과 대비 4.5 미만"
       ],
-      "효과선": "#FFFFFF",
+      "효과선": {
+        "색": "#FFFFFF",
+        "규칙": "캐릭터 외곽선 색 또는 딥 톤온톤 색으로 통일"
+      },
       "감정요소": {
         "sparkle": "#E7C88D"
       },
       "적용": "정월 그림 사용 범위 확정(보류 중) 뒤 정월 컷에만. 카드·릴스 판 색은 color_combos.json 그대로",
       "소품_외곽선": {
-        "규칙": "소품 외곽선 = 그 소품 채움색의 진한 톤. 검정·캐릭터 외곽선 색 금지(캐릭터와 소품이 분리돼 보이게)",
-        "값": {
-          "포인트": "#B8975C"
+        "규칙": "딥 톤온톤 — 소품 본체 색과 같은 계열 안에서 명도를 확실히 낮춘 색(대비 2.5:1 이상). 검정·1단계만 낮춘 흐린 색·캐릭터 외곽선 색 금지",
+        "계열_예": {
+          "블루·하늘": "딥 네이비 #1F2F5C",
+          "민트·그린": "딥 틸 #0F4C4A 또는 포레스트 #1E4D2B",
+          "웜베이지·우드·노랑": "딥 브라운 #5A3A1E",
+          "핑크·코랄": "딥 로즈 #8A2E4A 또는 플럼 #5E2A4A"
         },
-        "근거": "대표 2026-11-23 16:0x 검수 ⑪ SG-C08 \"소품 외곽선 규칙 정할 것. 소품색에 검정색이 안어울림\" · A절 \"브랜드 별 값 반영된 시안 제시 요망\""
-      }
+        "예시값": {
+          "포인트": "#5A3A1E"
+        },
+        "근거": "대표 2026-11-24 \"검수 ⑫의 청록·남색·연파랑은 당시 시안 수정용이었으므로 모든 소품을 그 색으로 고정하지 말 것\" · 1) 소품 채움 = 차분한 파스텔·뮤트 + 사물 고유 자연색, 원색·형광·탁한 회색 금지 2) 소품 외곽선 = 딥 톤온톤(같은 계열 안에서 명도를 확실히 낮춤, 검정·1단계만 낮춘 흐린 색 금지) 3) 효과선 = 캐릭터 외곽선 색 또는 딥 톤온톤 4) 얼굴 밀착 기호 = 외곽선 없는 단색 면",
+        "이전_확정": "",
+        "이전_값": {
+          "포인트": "#B8975C"
+        }
+      },
+      "근거_v2": "대표 2026-11-24 \"검수 ⑫의 청록·남색·연파랑은 당시 시안 수정용이었으므로 모든 소품을 그 색으로 고정하지 말 것\" · 1) 소품 채움 = 차분한 파스텔·뮤트 + 사물 고유 자연색, 원색·형광·탁한 회색 금지 2) 소품 외곽선 = 딥 톤온톤(같은 계열 안에서 명도를 확실히 낮춤, 검정·1단계만 낮춘 흐린 색 금지) 3) 효과선 = 캐릭터 외곽선 색 또는 딥 톤온톤 4) 얼굴 밀착 기호 = 외곽선 없는 단색 면",
+      "소품_예시": {
+        "_설명": "검수 ⑫ 시안 수정 때 쓴 색(예시, 고정 아님). 이 계열만 쓰라는 뜻이 아니다",
+        "포인트": "#E7C88D"
+      },
+      "얼굴_밀착_기호": "빠직·땀방울·눈물·눈물길 = 외곽선 없는 단색 면(볼터치처럼). 렌더러는 specs/toon_rules.json face_marks_no_outline, 생성은 specs/stamp_rules.json(K-287 v4)",
+      "생성_문장": "PROP COLOR: calm pastel or muted tones that suit the Zaoseon character style, or the object's own natural color (wood = soft natural wood, fruit and vegetables = their real colors). Never neon, never harsh pure primary colors, never dull muddy gray. Props keep strong contrast with the dark background board. PROP OUTLINE (deep tone-on-tone): outline each prop with a DEEP, CLEARLY DARKER shade from the SAME color family as its own fill — blue/sky props → deep navy, mint/green → deep teal or forest green, warm beige/wood/yellow → deep brown, pink/coral → deep rose or plum. Never black (#000000), never just a slightly darker mid-tone of the fill, never the character's own outline color. EFFECT LINES (shout, surprise, speed lines): the character's outline color (#FFFFFF on dark boards). FACE-ATTACHED MARKS (anger vein, sweat drops, tears): flat solid color shapes with NO outline, like the blush on the cheeks."
     },
     "fx_style": {
       "preset": "classic",
