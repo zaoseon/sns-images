@@ -665,6 +665,32 @@ def 확인컷(html, 시각, ch="reel", 설계="reel"):
     out = os.path.splitext(os.path.abspath(html))[0] + (f"_확인_{ch}.png" if ch != "reel" else "_확인.png"); c.save(out); return out
 
 
+def _sfx_root():
+    """효과음 파일 자리: 정본 kcos-motion/assets/sfx(사본 엔진은 옆 저장소 kcos-motion 을 찾는다). KCOS_SFX 로 바꿀 수 있다."""
+    for r in (os.environ.get("KCOS_SFX"), os.path.join(os.path.dirname(HERE), "assets", "sfx"), os.path.join(os.path.dirname(os.path.dirname(HERE)), "kcos-motion", "assets", "sfx")):
+        if r and os.path.isdir(r): return r
+    return None
+
+
+def _재질표():
+    r = _sfx_root()
+    if not r: return {}
+    for p in (os.path.join(os.path.dirname(r), "..", "specs", "sfx_materials.json"),):
+        if os.path.exists(p):
+            d = json.load(open(p, encoding="utf-8"))["재질"]
+            return {k: ([os.path.join(r, "kenney", f) for f in v["files"]], float(v.get("gain", 1))) for k, v in d.items()}
+    return {}
+
+
+_소리캐시 = {}
+def _파일소리(path, sr):
+    import numpy as np
+    if path not in _소리캐시:
+        raw = subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-i", path, "-ac", "1", "-ar", str(sr), "-f", "f32le", "-"], capture_output=True, check=True).stdout
+        _소리캐시[path] = np.frombuffer(raw, dtype=np.float32).astype(float)
+    return _소리캐시[path]
+
+
 def _효과음(path, 초, cues, sr=48000):
     import numpy as np, wave
     n = int(sr * 초); a = np.zeros(n); tt = lambda d: np.arange(int(sr * d)) / sr
@@ -682,8 +708,16 @@ def _효과음(path, 초, cues, sr=48000):
     def sparkle(): t = tt(.7); return .14 * sum(np.sin(2*np.pi*f*t) * np.exp(-((t - k*.08) ** 2) / .0006) for k, f in enumerate([2637, 3136, 3520, 4186]))
     def thud(): t = tt(.3); return .6 * np.sin(2*np.pi*(90 - 40*t)*t) * np.exp(-t * 14)
     ci = 0
+    mat = _재질표(); mi = {}
     for c in cues:
-        k = c.get("k"); s_ = {"swoosh": sw, "tick": tick, "press": press, "pop": pop, "ding": ding, "whoosh": whoosh, "boing": boing, "cash": cash, "sparkle": sparkle, "thud": thud}.get(k, lambda: None)()
+        k = c.get("k")
+        if k in mat:   # K-294 B+: 재질 이름이면 Kenney CC0 실제 파일(specs/sfx_materials.json). 같은 이름은 목록을 차례로 돌림
+            fs_, gn = mat[k]; j = mi.get(k, 0); mi[k] = j + 1
+            s_ = _파일소리(fs_[j % len(fs_)], sr) * gn * float(c.get("v", 1.0))
+            i = int(float(c["t"]) * sr); jj = min(n, i + len(s_))
+            if i < n: a[i:jj] += s_[:jj - i]
+            continue
+        s_ = {"swoosh": sw, "tick": tick, "press": press, "pop": pop, "ding": ding, "whoosh": whoosh, "boing": boing, "cash": cash, "sparkle": sparkle, "thud": thud}.get(k, lambda: None)()
         if k == "chime": s_ = chime([880, 1174.7, 1318.5][ci % 3]); ci += 1
         if s_ is None: continue
         i = int(float(c["t"]) * sr); j = min(n, i + len(s_))
