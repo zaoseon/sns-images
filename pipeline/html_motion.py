@@ -678,8 +678,75 @@ def _재질표():
     for p in (os.path.join(os.path.dirname(r), "..", "specs", "sfx_materials.json"),):
         if os.path.exists(p):
             d = json.load(open(p, encoding="utf-8"))["재질"]
-            return {k: ([os.path.join(r, "kenney", f) for f in v["files"]], float(v.get("gain", 1))) for k, v in d.items()}
+            return {k: ([os.path.join(r, "kenney", f) for f in v["files"]], float(v.get("gain", 1)), v.get("자름_초")) for k, v in d.items()}
     return {}
+
+
+# 오디오 4층(대표 11/24 "오디오 4층 싱크 + 덕킹 + 마스터링(알렉스 B)") — 값 정본 specs/audio_layers.json, 아래는 파일이 없을 때 기본값
+_층기본 = {
+    "층": {"음악": {"db": 0.0, "기준_LUFS": -16.0},
+          "이동": {"db": -6.0, "선행_초": 0.06, "k": ["whoosh", "swoosh", "라이저", "글리치"]},
+          "타격": {"db": -5.0, "k": []},
+          "저음": {"db": -3.0, "k": ["subdrop", "thud", "저음임팩트"]}},
+    "효과음_리미터": {"한계": 0.5},
+    "컷_클릭": {"k": "click", "겹침_초": 0.03},
+    "덕킹": {"db": -12.0, "어택_초": 0.12, "릴리스_초": 0.3},
+    "마스터": {"I": -14.0, "TP": -1.0, "LRA": 11.0, "허용_LUFS": 1.0, "리미터_release_ms": 250, "리미터_attack_ms": 5},
+}
+효과음층 = ("이동", "타격", "저음")
+
+
+def 층표():
+    """specs/audio_layers.json(없으면 _층기본). 정본 저장소의 specs 를 _sfx_root 옆에서 찾는다(사본 엔진도 같은 표)."""
+    r = _sfx_root()
+    p = os.path.join(os.path.dirname(r), "..", "specs", "audio_layers.json") if r else os.path.join(ROOT, "specs", "audio_layers.json")
+    if os.path.exists(p):
+        return json.load(open(p, encoding="utf-8"))
+    return _층기본
+
+
+def 소리층(k, 표=None):
+    """window.SFX 의 k → '이동'|'타격'|'저음'. 표에 없으면 '타격'."""
+    표 = 표 or 층표()
+    for 층 in ("이동", "저음", "타격"):
+        if k in 표["층"][층].get("k", []): return 층
+    return "타격"
+
+
+def 큐정리(cues, cuts=(), lead=None, 표=None):
+    """페이지 큐 → [{t(섞을 시각), t0(화면 시각), k, v, 층}…].
+    ① 층을 정한다 ② 이동 층은 선행(기본 0.06초, 큐 lead 가 있으면 그 값 — lead:0 이면 끔, 페이지 window.SFX_LEAD 는 lead 인자로)
+    ③ window.CUTS 의 컷마다 click(±겹침_초 안에 타격 큐가 이미 있으면 건너뜀). 시각은 0 아래로 내려가지 않는다."""
+    표 = 표 or 층표(); 기본선행 = float(표["층"]["이동"].get("선행_초", 0.06) if lead is None else lead)
+    out = []
+    for c in cues:
+        k = c.get("k"); 층 = 소리층(k, 표); t0 = float(c["t"])
+        앞 = float(c["lead"]) if c.get("lead") is not None else (기본선행 if 층 == "이동" else 0.0)
+        out.append({**c, "t": max(0.0, t0 - 앞), "t0": t0, "층": 층})
+    cc = 표.get("컷_클릭", {}); ck = cc.get("k", "click"); 겹 = float(cc.get("겹침_초", 0.03))
+    for x in cuts or ():
+        x = x if isinstance(x, dict) else {"t": x}
+        t0 = float(x["t"]); k = x.get("k", ck)
+        if any(o["층"] == "타격" and abs(o["t"] - t0) <= 겹 for o in out): continue
+        out.append({"t": t0, "t0": t0, "k": k, "v": float(x.get("v", 1.0)), "층": 소리층(k, 표), "컷": True})
+    return sorted(out, key=lambda o: o["t"])
+
+
+def 서브드롭(sr=48000, 길이=0.6, f0=80.0, f1=40.0):
+    """반전·폭발용 Sub Drop: f0→f1Hz 지수 스윕 사인 + 5ms 어택 + 지수 감쇠(대표 11/24 '40~80Hz'). 돌려줌 numpy 배열."""
+    import numpy as np
+    t = np.arange(int(sr * 길이)) / sr
+    f = f0 * (f1 / f0) ** (t / 길이)                       # 순간 주파수
+    ph = 2 * np.pi * np.cumsum(f) / sr
+    env = np.minimum(1, t / 0.005) * np.exp(-t * 4.5) * np.minimum(1, (길이 - t) / 0.02)   # 끝 20ms 페이드(딸깍 소리 방지)
+    return 0.9 * np.sin(ph) * env
+
+
+def 짧은클릭(sr=48000, 길이=0.03):
+    """0.03초 클릭(합성): 2.4kHz 사인 + 잡음 한 번, 빠른 감쇠. Kenney click 파일이 없을 때."""
+    import numpy as np
+    t = np.arange(int(sr * 길이)) / sr; g = np.random.default_rng(11)
+    return (.45 * np.sin(2 * np.pi * 2400 * t) + .25 * g.standard_normal(len(t))) * np.exp(-t * 160) * np.minimum(1, (길이 - t) / 0.004)
 
 
 _소리캐시 = {}
@@ -692,8 +759,19 @@ def _파일소리(path, sr):
 
 
 def _효과음(path, 초, cues, sr=48000):
+    """옛 이름(make_motiontoon·시험 스크립트가 부름): 층을 나누지 않고 다 더해 wav 로. 시각은 큐 그대로(선행 없음)."""
     import numpy as np, wave
-    n = int(sr * 초); a = np.zeros(n); tt = lambda d: np.arange(int(sr * d)) / sr
+    a = sum(_효과음층(초, cues, sr).values())
+    s = (np.tanh(a * 1.2) * .85 * 32767).astype("int16")
+    w = wave.open(path, "wb"); w.setnchannels(2); w.setsampwidth(2); w.setframerate(sr)
+    w.writeframes(np.stack([s, s], 1).tobytes()); w.close()
+
+
+def _효과음층(초, cues, sr=48000, 표=None):
+    """큐 → {'이동': 배열, '타격': 배열, '저음': 배열}(층 크기를 곱하기 전, mono). 큐에 '층'이 없으면 k 로 정한다."""
+    import numpy as np
+    표 = 표 or 층표()
+    n = int(sr * 초); 층들 = {L: np.zeros(n) for L in 효과음층}; tt = lambda d: np.arange(int(sr * d)) / sr
     g = np.random.default_rng(7)   # 씨앗 고정 — 같은 영상엔 같은 소리
     def sw():  t = tt(.4);  return .10 * g.standard_normal(len(t)) * np.sin(np.pi * t / .4)
     def tick(): t = tt(.04); return .12 * g.standard_normal(len(t)) * np.exp(-t * 120)
@@ -710,21 +788,98 @@ def _효과음(path, 초, cues, sr=48000):
     ci = 0
     mat = _재질표(); mi = {}
     for c in cues:
-        k = c.get("k")
+        k = c.get("k"); L = c.get("층") or 소리층(k, 표); a = 층들[L]
         if k in mat:   # K-294 B+: 재질 이름이면 Kenney CC0 실제 파일(specs/sfx_materials.json). 같은 이름은 목록을 차례로 돌림
-            fs_, gn = mat[k]; j = mi.get(k, 0); mi[k] = j + 1
+            fs_, gn, cut = mat[k]; j = mi.get(k, 0); mi[k] = j + 1
             s_ = _파일소리(fs_[j % len(fs_)], sr) * gn * float(c.get("v", 1.0))
-            i = int(float(c["t"]) * sr); jj = min(n, i + len(s_))
-            if i < n: a[i:jj] += s_[:jj - i]
-            continue
-        s_ = {"swoosh": sw, "tick": tick, "press": press, "pop": pop, "ding": ding, "whoosh": whoosh, "boing": boing, "cash": cash, "sparkle": sparkle, "thud": thud}.get(k, lambda: None)()
-        if k == "chime": s_ = chime([880, 1174.7, 1318.5][ci % 3]); ci += 1
-        if s_ is None: continue
+            if cut:   # 자름_초(click 0.03초): 앞 무음을 건너뛰고 잘라 끝 4ms 페이드
+                nz = np.flatnonzero(np.abs(s_) > 1e-3 * (np.abs(s_).max() + 1e-12)); s_ = s_[(nz[0] if len(nz) else 0):][:int(sr * float(cut))].copy()
+                f4 = min(len(s_), int(sr * .004)); s_[len(s_) - f4:] *= np.linspace(1, 0, f4)
+        else:
+            s_ = {"swoosh": sw, "tick": tick, "press": press, "pop": pop, "ding": ding, "whoosh": whoosh, "boing": boing, "cash": cash, "sparkle": sparkle, "thud": thud,
+                  "subdrop": lambda: 서브드롭(sr), "click": lambda: 짧은클릭(sr)}.get(k, lambda: None)()
+            if k == "chime": s_ = chime([880, 1174.7, 1318.5][ci % 3]); ci += 1
+            if s_ is None: continue
+            s_ = s_ * float(c.get("v", 1.0)) if k in ("subdrop", "click") else s_   # 옛 합성음은 v 를 안 썼다 — 옛 영상 소리를 바꾸지 않게 새 둘만
         i = int(float(c["t"]) * sr); j = min(n, i + len(s_))
         if i < n: a[i:j] += s_[:j - i]
-    s = (np.tanh(a * 1.2) * .85 * 32767).astype("int16")
-    w = wave.open(path, "wb"); w.setnchannels(2); w.setsampwidth(2); w.setframerate(sr)
-    w.writeframes(np.stack([s, s], 1).tobytes()); w.close()
+    return 층들
+
+
+def 덕킹곡선(n, sr, ducks, 표=None):
+    """window.DUCK=[{t,d,db,a,r}] → 음악 층에 곱할 이득(길이 n). t 부터 a 초 동안 코사인으로 내려가 t+d 까지 유지, r 초 동안 올라옴.
+    겹치면 더 깊은 쪽(최소 이득). 계단 없음(K-295)."""
+    import numpy as np
+    표 = 표 or 층표(); D = 표.get("덕킹", {}); g = np.ones(n); t = np.arange(n) / sr
+    for x in ducks or ():
+        t0 = float(x["t"]); d = float(x.get("d", 0.5)); a = float(x.get("a", D.get("어택_초", .12))); r = float(x.get("r", D.get("릴리스_초", .3)))
+        깊 = 10 ** (float(x.get("db", D.get("db", -12))) / 20)
+        u = np.ones(n)
+        dn = (t >= t0) & (t < t0 + a); u[dn] = .5 + .5 * np.cos(np.pi * (t[dn] - t0) / a)
+        u[(t >= t0 + a) & (t < t0 + d)] = 0
+        up = (t >= t0 + max(d, a)) & (t < t0 + max(d, a) + r); u[up] = .5 - .5 * np.cos(np.pi * (t[up] - t0 - max(d, a)) / r)
+        g = np.minimum(g, 깊 + (1 - 깊) * u)
+    return g
+
+
+def 덕킹구간(ducks, 표=None):
+    """음악빠짐_검사에서 뺄 (시작, 끝) — 램프까지 포함."""
+    D = (표 or 층표()).get("덕킹", {})
+    return [(float(x["t"]), float(x["t"]) + max(float(x.get("d", .5)), float(x.get("a", D.get("어택_초", .12)))) + float(x.get("r", D.get("릴리스_초", .3)))) for x in ducks or ()]
+
+
+def _라우드(path, af=""):
+    """ffmpeg loudnorm 측정(json). af 는 앞에 붙일 필터(끝에 ',' 포함)."""
+    M = 층표()["마스터"]
+    o = subprocess.run(["ffmpeg", "-hide_banner", "-i", path, "-af", f"{af}loudnorm=I={M['I']}:TP={M['TP']}:LRA={M['LRA']}:print_format=json", "-f", "null", "-"],
+                       capture_output=True, text=True, encoding="utf-8", errors="replace").stderr
+    return json.loads(o[o.rindex("{"):o.rindex("}") + 1])
+
+
+def 안전리미터(x, sr, 한계_dBFS=-1.5, attack_ms=5, release_ms=250):
+    """느린 안전 리미터(numpy, 미리보기 attack·지수 release). 피크가 한계를 넘는 곳만 부드럽게 낮춘다 — 넘지 않으면 이득 1(음악을 건드리지 않음).
+    ffmpeg alimiter 는 같은 값에서도 효과음 피크마다 50ms 칸 하나를 6dB 눌렀다(⑱ v8 재합성 2.3초 측정) → 직접 계산."""
+    import numpy as np
+    from numpy.lib.stride_tricks import sliding_window_view as swv
+    lim = 10 ** (한계_dBFS / 20); pk = np.abs(x).max(1) if x.ndim == 2 else np.abs(x)
+    need = np.minimum(1.0, lim / np.maximum(pk, 1e-12))
+    if need.min() >= 1.0: return x
+    A = max(1, int(sr * attack_ms / 1000))
+    g = swv(np.pad(need, (A, A), constant_values=1.0), 2 * A + 1).min(1)          # 피크 앞뒤 attack 만큼 미리 낮춤
+    k = 1 - np.exp(-1 / (sr * release_ms / 1000)); idx = np.flatnonzero(g < 1.0)
+    out = g.copy(); i = idx[0]; n = len(g)
+    while i < n:                                                                    # release: 1 쪽으로 천천히(지수). 다 돌아오면 다음 낮춤 자리로 건너뜀
+        prev = out[i - 1] if i else 1.0
+        out[i] = min(g[i], prev + (1 - prev) * k)
+        if out[i] > 0.99999 and g[i] >= 1.0:
+            nx = idx[np.searchsorted(idx, i)] if np.searchsorted(idx, i) < len(idx) else n
+            out[i:nx] = 1.0; i = nx; continue
+        i += 1
+    out = np.minimum(out, np.convolve(out, np.ones(A) / A, "same"))               # attack 모서리를 둥글게(계단 없음, 피크 자리 이득은 그대로 이하)
+    return x * (out[:, None] if x.ndim == 2 else out)
+
+
+def 마스터링(mp4, 표=None):
+    """대표 11/24 '마스터 -14 LUFS / -1 dBTP': 목표까지 선형 이득 → 느린 안전 리미터(release ≥200ms, 음악을 툭툭 누르지 않게 K-295) → loudnorm 2패스 linear.
+    완성본(aac)을 다시 재서 TP 가 넘으면 리미터 한계를 내려 다시(최대 3번). 돌려줌 {LUFS, TP, LRA, 리미터_dBFS, 방식, 통과}."""
+    M = (표 or 층표())["마스터"]; sr = 48000; x0 = _pcm(mp4, None, sr); I0 = float(_라우드(mp4)["input_i"])
+    한계 = M["TP"] - 0.5; wav = mp4 + ".mst.wav"; tmp = mp4 + ".mst.mp4"; r = {}
+    for _ in range(3):
+        _wav쓰기(wav, 안전리미터(x0 * 10 ** ((M["I"] - I0) / 20), sr, 한계, M["리미터_attack_ms"], M["리미터_release_ms"]), sr)
+        m = _라우드(wav)
+        ln = (f"loudnorm=I={M['I']}:TP={M['TP']}:LRA={M['LRA']}:measured_I={m['input_i']}:measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}"
+              f":measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true:print_format=json")
+        o = subprocess.run(["ffmpeg", "-y", "-hide_banner", "-i", mp4, "-i", wav, "-map", "0:v", "-map", "1:a", "-af", ln + ",aresample=48000", "-c:v", "copy",
+                            "-c:a", "aac", "-ar", "48000", "-b:a", "256k", "-movflags", "+faststart", tmp], capture_output=True, text=True, encoding="utf-8", errors="replace")
+        if o.returncode: raise SystemExit("[막음] 마스터링 ffmpeg 실패: " + o.stderr[-400:])
+        방식 = json.loads(o.stderr[o.stderr.rindex("{"):o.stderr.rindex("}") + 1]).get("normalization_type", "?")
+        f = _라우드(tmp); r = {"LUFS": float(f["input_i"]), "TP": float(f["input_tp"]), "LRA": float(f["input_lra"]), "리미터_dBFS": round(한계, 2), "방식": 방식}
+        if r["TP"] <= M["TP"]: break
+        한계 -= (r["TP"] - M["TP"]) + 0.2
+    os.replace(tmp, mp4); os.remove(wav)
+    r["통과"] = abs(r["LUFS"] - M["I"]) <= M.get("허용_LUFS", 1.0) and r["TP"] <= M["TP"]
+    if not r["통과"]: print(f"  [경고] 마스터 실측 {r['LUFS']} LUFS · TP {r['TP']} dBTP — 목표 {M['I']}±{M.get('허용_LUFS', 1.0)} LUFS · TP ≤ {M['TP']}")
+    return r
 
 
 DROP_DB = -14.0   # K-288 무음 드롭 깊이: 사양서 측정 '평균보다 8~16dB 낮춤'의 가운데 쪽(specs/reel_motion_sound_map.json 무음드롭)
@@ -748,7 +903,7 @@ def 무음드롭(mp4, drops, db=DROP_DB):
 def 음악빠짐_검사(ref, mp4, 제외=(), 창=0.05):
     """K-295(대표 11/24 ⑱ "음악이 툭툭 끊기는 느낌" 4회 → v8 승인·규칙 변경 2): 섞은 뒤 음악이 순간적으로 빠지는 곳을 잰다.
     음악만 소리(ref)와 완성본의 킥·베이스 대역(40~150Hz, 효과음이 거의 없는 대역) 50ms 음량 차이를 보고, 음악이 들리는 칸만 센다.
-    돌려줌 {'3dB': [초…], '6dB': [초…], '흔들림': dB}. 6dB 넘게 빠진 칸이 있으면 소리붙이기가 막는다(무음 드롭 구간은 뺀다)."""
+    돌려줌 {'3dB': [초…], '6dB': [초…], '흔들림': dB}. 6dB 넘게 빠진 칸이 있으면 소리붙이기가 막는다(무음 드롭 구간과 window.DUCK 으로 선언한 덕킹 구간(램프 포함)은 제외 로 뺀다 — 선언 없는 빠짐은 그대로 막음)."""
     import numpy as np
     SR = 22050; W = int(SR * 창)
     def pcm(p):
@@ -764,43 +919,79 @@ def 음악빠짐_검사(ref, mp4, 제외=(), 창=0.05):
     return {"3dB": [round(float(x), 2) for x in tt[d < -3]], "6dB": [round(float(x), 2) for x in tt[d < -6]], "흔들림": round(float(d.std()), 2)}
 
 
-def 소리붙이기(mp4, 초, html, 분위기="fun", 이름=None):
-    """music_plan 음악 + HTML 의 window.SFX 효과음 → 48kHz aac. 영상은 다시 인코딩하지 않는다."""
-    import music_plan as MP
+def _pcm(path, 초, sr=48000):
+    """음원 → (n,2) float 배열, 길이 초에 맞춰 자르거나 0 으로 채움."""
+    import numpy as np
+    raw = subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-i", path, "-vn", "-ac", "2", "-ar", str(sr), "-f", "f32le", "-"], capture_output=True, check=True).stdout
+    x = np.frombuffer(raw, dtype=np.float32).astype(float).reshape(-1, 2); n = len(x) if 초 is None else int(sr * 초)
+    return np.vstack([x[:n], np.zeros((max(0, n - len(x)), 2))])
+
+
+def _wav쓰기(path, x, sr=48000):
+    import numpy as np, wave
+    x = np.atleast_2d(x.T).T if x.ndim == 1 else x
+    if x.shape[1] == 1: x = np.repeat(x, 2, 1)
+    w = wave.open(path, "wb"); w.setnchannels(2); w.setsampwidth(2); w.setframerate(sr)
+    w.writeframes((np.clip(x, -1, 1) * 32767).astype("int16").tobytes()); w.close()
+
+
+def 소리붙이기(mp4, 초, html, 분위기="fun", 이름=None, 음악파일=None):
+    """음악 + HTML 의 window.SFX 효과음 → 4층 섞기·덕킹·마스터(-14 LUFS / -1 dBTP) → 48kHz aac. 영상은 다시 인코딩하지 않는다.
+    대표 11/24 "오디오 4층 싱크 + 덕킹 + 마스터링(알렉스 B)". 층 표 specs/audio_layers.json.
+    페이지 API: window.SFX=[{t,k,v,lead}] (k 로 층: 이동·타격·저음, 이동 층은 0.06초 선행, lead:0 이면 끔)
+               window.SFX_LEAD=초(이동 층 기본 선행을 바꿈) · window.CUTS=[초 | {t,k,v}…](컷마다 0.03초 click)
+               window.DUCK=[{t,d,db:-12,a,r}](음악 층만 램프로 낮춤 — 음악빠짐_검사에서 뺌) · window.DROP/DROP_OK(K-295) · window.VO
+    음악파일: 주면 그 파일(0초부터)을 쓰고(main --음악), 없으면 music_plan 합성곡."""
+    import numpy as np
     from playwright.sync_api import sync_playwright
     with sync_playwright() as pw:
         b = pw.chromium.launch(); pg = b.new_page()
         if BEAT: pg.add_init_script("window.ZS_BEAT=" + json.dumps({"bpm": BEAT["bpm"], "offset": BEAT["offset"]}))   # K-294: 렌더 때와 같은 박자로 효과음 시각을 읽는다
-        pg.goto("file://" + os.path.abspath(html))
+        pg.goto(__import__("pathlib").Path(os.path.abspath(html)).as_uri())   # 윈도 경로도 되게(file:///C:/…)
         cues = pg.evaluate("() => window.SFX || []"); vo = pg.evaluate("() => window.VO || []")
-        drops = pg.evaluate("() => window.DROP || []"); drop_ok = pg.evaluate("() => window.DROP_OK === true"); b.close()
+        drops = pg.evaluate("() => window.DROP || []"); drop_ok = pg.evaluate("() => window.DROP_OK === true")
+        ducks = pg.evaluate("() => window.DUCK || []"); cuts = pg.evaluate("() => window.CUTS || []")
+        lead = pg.evaluate("() => (typeof window.SFX_LEAD === 'number') ? window.SFX_LEAD : null"); b.close()
     if drops and not drop_ok:   # K-295(대표 11/24 ⑱ v7 "무음 드롭을 빼는게 낫지 않겠냐?" → v8 승인·규칙 변경 1): 무음 드롭은 기본 끔. 대표가 그 편에서 확인한 때만 window.DROP_OK=true
         print(f"  [알림] 무음 드롭 {len(drops)}곳은 적용하지 않았어요 — 기본 끔(K-295). 꼭 필요하면 대표 확인 뒤 페이지에 window.DROP_OK=true"); drops = []
-    info = MP.choose(분위기, 이름 or os.path.splitext(os.path.basename(mp4))[0])
-    MP.mux(mp4, [초], info, 91)                      # 음악(박자 맞춤)은 기존 도구 그대로
-    ref = mp4 + ".ref.wav"; subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mp4, "-vn", "-ac", "1", "-ar", "22050", ref], check=True)   # K-295 음악 빠짐 검사용 음악만 소리
-    if cues:
-        wav = mp4 + ".sfx.wav"; _효과음(wav, 초, cues); tmp = mp4 + ".s.mp4"
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mp4, "-i", wav, "-filter_complex",
-                        # K-295 규칙 변경 2: 리미터는 효과음 줄에만(섞은 뒤에 걸면 효과음 피크마다 음악까지 눌려 '툭툭' 끊김 — ⑱ v7-B 측정). 음악 음량 계단도 쓰지 않는다
-                        "[1:a]alimiter=limit=0.5:attack=1:release=40:level=false[s];[0:a]volume=0.7[m];[m][s]amix=inputs=2:duration=first:normalize=0[a]",
-                        "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-ar", "48000", "-b:a", "160k",
-                        "-movflags", "+faststart", tmp], check=True)
-        os.replace(tmp, mp4); os.remove(wav)
+    표 = 층표(); SR = 48000; 층db = {L: float(표["층"][L].get("db", 0)) for L in 표["층"]}
+    # ① 음악 층: 파일 또는 music_plan → 기준 LUFS(-16)로 선형 맞춤 → 층 크기
+    if 음악파일:
+        info = {"style": os.path.basename(음악파일), "bpm": (BEAT or {}).get("bpm", "?"), "key": "-", "음악파일": 음악파일}
+        music = _pcm(음악파일, 초, SR); f = int(SR * 0.4); music[-f:] *= np.linspace(1, 0, f)[:, None]   # 끝 0.4초 페이드
     else:
-        tmp = mp4 + ".r.mp4"
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mp4, "-c:v", "copy", "-c:a", "aac", "-ar", "48000",
-                        "-b:a", "160k", "-movflags", "+faststart", tmp], check=True); os.replace(tmp, mp4)
-    if drops:   # K-288 무음 드롭(K-295 뒤로는 대표 확인한 편만): 음악+효과음을 그 구간만 낮춘다(목소리는 뒤에 얹으므로 낮아지지 않음)
-        무음드롭(mp4, drops); info["무음드롭"] = drops
-    빠짐 = 음악빠짐_검사(ref, mp4, 제외=[(float(x["t"]), float(x["t"]) + float(x.get("d", 1))) for x in drops]); os.remove(ref); info["음악빠짐"] = 빠짐
-    if 빠짐["6dB"]:
-        raise SystemExit(f"[막음] 음악이 6dB 넘게 빠지는 순간 {len(빠짐['6dB'])}곳(K-295): {빠짐['6dB'][:6]}초 — 효과음 크기·리미터·음량 계단을 확인하세요")
-    if vo:   # 11/12: window.VO=[{t,text,who,slot}] 가 있으면 목소리를 얹고, 말하는 동안 음악·효과음을 낮춘다(사이드체인), -14 LUFS
-        import narration as NR, tempfile as _tf
+        import music_plan as MP
+        info = MP.choose(분위기, 이름 or os.path.splitext(os.path.basename(mp4))[0])
+        MP.mux(mp4, [초], info, 91); music = _pcm(mp4, 초, SR)   # 음악(박자 맞춤)은 기존 도구 그대로
+    ref = mp4 + ".ref.wav"; _wav쓰기(ref, music, SR)   # K-295 음악 빠짐 검사용 음악만 소리(덕킹 전)
+    I = float(_라우드(ref)["input_i"]); I = I if np.isfinite(I) else -16.0
+    music *= 10 ** ((float(표["층"]["음악"].get("기준_LUFS", -16)) - I + 층db["음악"]) / 20)
+    music *= 덕킹곡선(len(music), SR, ducks, 표)[:, None]   # ⑤ 덕킹: 음악 층만, 램프(K-295 계단 금지)
+    # ②~④ 효과음 3층: 선행·컷 클릭·층 크기 → 효과음 줄에만 부드러운 한계(K-295)
+    q = 큐정리(cues, cuts, lead, 표); 층들 = _효과음층(초, q, SR, 표)
+    s = sum(층들[L] * 10 ** (층db[L] / 20) for L in 효과음층); Lm = float(표.get("효과음_리미터", {}).get("한계", .5)); s = Lm * np.tanh(s / Lm)
+    mix = music + s[:, None]
+    if drops:   # K-288 무음 드롭(K-295 뒤로는 대표 확인한 편만): 음악+효과음을 그 구간만 낮춘다(10ms 램프, 목소리는 뒤에 얹으므로 낮아지지 않음)
+        mix *= 덕킹곡선(len(mix), SR, [{"t": x["t"], "d": x.get("d", 1.0), "db": DROP_DB, "a": .01, "r": .01} for x in drops], 표)[:, None]; info["무음드롭"] = drops
+    wav = mp4 + ".mix.wav"; _wav쓰기(wav, mix / max(1.0, np.abs(mix).max()), SR); tmp = mp4 + ".s.mp4"   # 여기선 넘치지만 않게 — 크기는 마스터에서
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mp4, "-i", wav, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-ar", "48000",
+                    "-b:a", "320k", "-t", f"{초:.3f}", "-movflags", "+faststart", tmp], check=True)
+    os.replace(tmp, mp4); os.remove(wav)
+    제외 = [(float(x["t"]), float(x["t"]) + float(x.get("d", 1))) for x in drops] + 덕킹구간(ducks, 표)
+    if vo:   # 목소리 사이드체인은 일부러 음악을 낮추므로 빠짐 검사는 목소리 전에
+        빠짐 = 음악빠짐_검사(ref, mp4, 제외=제외)
+        import narration as NR, tempfile as _tf   # 11/12: window.VO=[{t,text,who,slot}] — 말하는 동안 음악·효과음을 낮춘다(사이드체인)
         parts, log = NR.목소리들(vo, _tf.mkdtemp(prefix="vo_")); tmp = mp4 + ".v.mp4"
-        NR.섞기(mp4, parts, tmp, music_vol=0.55); os.replace(tmp, mp4)
-        info["목소리"] = log
+        NR.섞기(mp4, parts, tmp, music_vol=0.55); os.replace(tmp, mp4); info["목소리"] = log
+        info["마스터"] = 마스터링(mp4, 표)   # ⑥ 목소리 뒤에 마스터
+    else:
+        info["마스터"] = 마스터링(mp4, 표); 빠짐 = 음악빠짐_검사(ref, mp4, 제외=제외)   # 마스터 리미터까지 포함해서 잰다
+    os.remove(ref); info["음악빠짐"] = 빠짐
+    info["층"] = {L: {"db": 층db[L], "큐": sum(1 for c in q if c["층"] == L)} for L in 효과음층} | {"음악": {"db": 층db["음악"], "원래_LUFS": round(I, 2)}}
+    info["선행_초"] = float(표["층"]["이동"].get("선행_초", .06) if lead is None else lead); info["컷클릭"] = sum(1 for c in q if c.get("컷"))
+    if ducks: info["덕킹"] = ducks
+    if 빠짐["6dB"]:
+        raise SystemExit(f"[막음] 음악이 6dB 넘게 빠지는 순간 {len(빠짐['6dB'])}곳(K-295): {빠짐['6dB'][:6]}초 — 효과음 크기·리미터·음량 계단을 확인하세요(덕킹은 window.DUCK 으로 선언)")
     return info
 
 
@@ -1080,7 +1271,7 @@ def main():
     if len(chs) > 1:     # 채널 여럿: 이름 뒤에 _채널 을 붙여 하나씩 렌더하고 소리까지 붙인다
         for c in chs:
             p, d = render(a[0], f"{a[1]}_{c}", 초, fps, c, 블러=int(opt("블러", "2")), 설계=설계)
-            if opt("소리", 브랜드().get("music", "fun")) != "없음": 소리붙이기(p, d, a[0], opt("소리", 브랜드().get("music", "fun")), a[1])
+            if opt("소리", 브랜드().get("music", "fun")) != "없음": 소리붙이기(p, d, a[0], opt("소리", 브랜드().get("music", "fun")), a[1], 음악파일=opt("음악"))
             print(f"[{c}] {p}")
         기법_검사(a[0], a[1], 기록=True); return 0
     p, d = render(a[0], a[1], 초, fps, chs[0], 블러=int(opt("블러", "2")), 설계=설계)
@@ -1088,7 +1279,7 @@ def main():
     if opt("출력"):
         os.makedirs(os.path.dirname(os.path.abspath(opt("출력"))), exist_ok=True); shutil.move(p, opt("출력")); p = opt("출력")
     if opt("소리", 브랜드().get("music", "fun")) != "없음":
-        mi = 소리붙이기(p, d, a[0], opt("소리", 브랜드().get("music", "fun")), a[1]); print(f"  음악: {mi['style']} {mi['bpm']}bpm {mi['key']} + 효과음")
+        mi = 소리붙이기(p, d, a[0], opt("소리", 브랜드().get("music", "fun")), a[1], 음악파일=opt("음악")); print(f"  음악: {mi['style']} {mi['bpm']}bpm {mi['key']} + 효과음 · 마스터 {mi['마스터']['LUFS']} LUFS / TP {mi['마스터']['TP']}")
     else:
         if "window.SCRIPT" in open(a[0], encoding="utf-8").read(): raise SystemExit("[막음] 대본 릴스는 소리 없이 만들지 않아요(K-070)")
         print("  [주의] 소리 없음 — 릴스·클립·광고로 내보내지 않는다(K-070)")

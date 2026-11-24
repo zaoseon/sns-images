@@ -428,5 +428,112 @@ FX.USE['훅(첫 1초)'].push('태그수렴','글자셔터');FX.USE['개념 설�
 FX.USE['모든 장면(기본)']=['카메라층'];
 })();
 
+// ───────── 참고영상 5대 스펙 ①②③ 화면 효과(대표 11/24 노션 작업 요청함 [kcos-motion 릴스 엔진] — K-294 위에 쌓음) ─────────
+// ① 스냅드리프트(컷 진입 0.1~0.15초 급확대 → 남은 시간 1~2%/초 전진) ② 히트스톱(2~3프레임 정지 → 감쇠 셰이크)·1프레임 반전 스트로브·글자 관통(100%→3500%)·템포 브레이커(1.5초 미만 이질 컷)
+// ③ 타이포 크기 대비·오버슈트 팝(0.7→1.08→1.0)+자간 드리프트(-2px→+6px).
+// 모두 시간 t 만으로 그린다(seek 규칙). 색·글꼴은 인자(기본값은 FX.BRAND). 화면 밖으로 커지는 그림(관통 3500%)은 연결 안 된 오프스크린 판에 그려 관문 기록에 남기지 않고, 전환 0.5~0.7초 안에서만 쓴다.
+(function(){const FX=typeof window!=='undefined'&&window.FXK;if(!FX)return;const {cl,mix,ease}=FX,PI=Math.PI,DEG=PI/180;
+const hx=c=>{c=String(c).replace('#','');if(c.length===3)c=c.split('').map(s=>s+s).join('');return [0,2,4].map(i=>parseInt(c.slice(i,i+2),16))};
+// 확인 등급 메모(관문이 막지 않음): 페이지·렌더러가 window.__zsNote 를 읽어 보고에 붙인다
+FX.note=(code,msg)=>{if(typeof window==='undefined')return;const L=window.__zsNote=window.__zsNote||[];if(!L.some(r=>r[0]===code&&r[1]===msg))L.push([code,msg])};
+
+// cubic-bezier(x1,y1,x2,y2) 를 t(0~1) → 값 함수로 푼다(CSS 와 같은 곡선). y 는 1 을 넘을 수 있다(오버슈트)
+FX.bezier=(x1,y1,x2,y2)=>{const cx=3*x1,bx=3*(x2-x1)-cx,ax=1-cx-bx,cy=3*y1,by=3*(y2-y1)-cy,ay=1-cy-by;
+ const X=s=>((ax*s+bx)*s+cx)*s,Y=s=>((ay*s+by)*s+cy)*s,dX=s=>(3*ax*s+2*bx)*s+cx;
+ return x=>{if(!(x>0))return 0;if(x>=1)return 1;let s=x;for(let i=0;i<8;i++){const e=X(s)-x;if(Math.abs(e)<1e-6)return Y(s);const d=dX(s);if(Math.abs(d)<1e-6)break;s=cl(s-e/d)}
+  let a=0,b=1;s=x;for(let i=0;i<50;i++){const v=X(s);if(Math.abs(v-x)<1e-6)break;if(v<x)a=s;else b=s;s=(a+b)/2}return Y(s)}};
+FX.EZ.snap=FX.bezier(.05,.9,.1,1);      // 급확대(대표 지정 곡선)
+FX.EZ.pop=FX.bezier(.34,1.56,.64,1);     // 오버슈트 팝(대표 지정 곡선)
+FX._popPk=(()=>{let m=1;for(let i=1;i<200;i++)m=Math.max(m,FX.EZ.pop(i/200));return m})();
+
+// ① 스냅드리프트: 컷 시작 a 에서 d 초 동안 from→s 로 급확대(EZ.snap), 그 뒤 rate(초당 비율)로 멈추지 않고 전진. 배율만 돌려준다
+FX.snapDrift=(t,a,{d=.12,s=1.08,rate=.015,from=1}={})=>{const u=t-a;if(u<0)return from;return mix(from,s,FX.EZ.snap(u/d))*(1+rate*Math.max(0,u-d))};
+// 단독으로 쓸 때: 장면마다 g.save();F.camSnapDrift(g,t,컷시작,{x,y,…});…;g.restore()
+FX.camSnapDrift=(g,t,a,{x=FX.cx,y=FX.cy,...o}={})=>{const d=o.d||.12,s=FX.snapDrift(t,a,o);if(t>=a)FX.fast(a,a+d);g.translate(x,y);g.scale(s,s);g.translate(-x,-y);if(t>=a)FX.mark('스냅드리프트');return s};
+
+// ② 히트스톱: 화면용 시간. stops=[{t,frames=3,fps=30}] 의 t 부터 frames 프레임 동안 같은 시각(같은 그림)을 돌려준다.
+//  mode 'skip'(기본) = 정지 뒤 실제 시각으로 돌아감(박자·소리와 어긋나지 않음) · 'shift' = 정지한 만큼 뒤로 밀림
+FX.timewarp=(t,stops=[],{mode='skip'}={})=>{let off=0;for(const s of [...stops].sort((p,q)=>p.t-q.t)){const len=(s.frames||3)/(s.fps||30);
+ if(t>=s.t&&t<s.t+len)return s.t-(mode==='shift'?off:0);if(t>=s.t+len&&mode==='shift')off+=len}return t-off};
+// 정지가 끝난 뒤 감쇠 셰이크: 배율 1→scale, 회전 ±rot도, 프레임마다 decay 배(0.8)로 줄며 좌우 번갈아
+FX.hitAt=(t,stops=[],{scale=1.08,rot=1.5,decay=.8}={})=>{let s=1,r=0;for(const h of stops){const fps=h.fps||30,e=h.t+(h.frames||3)/fps,n=(t-e)*fps;if(n<0)continue;const k=Math.pow(h.decay||decay,n);if(k<.02)continue;
+ s*=1+((h.scale||scale)-1)*k;r+=(h.rot||rot)*DEG*k*Math.cos(PI*n)}return {s,r}};
+FX.hitShake=(g,t,stops=[],{x=FX.cx,y=FX.cy,...o}={})=>{const c=FX.hitAt(t,stops,o);if(c.s===1&&c.r===0)return c;g.translate(x,y);g.rotate(c.r);g.scale(c.s,c.s);g.translate(-x,-y);FX.mark('히트스톱');return c};
+FX._stopFast=stops=>stops.forEach(h=>{const e=h.t+(h.frames||3)/(h.fps||30);FX.fast(e,e+.3)});
+
+// 카메라 층에 모드로 넣기: F.camSetup({scenes,hits,…, snap:{d,s,rate}|true, stops:[{t,frames,fps}]})
+//  snap 을 켜면 장면 안 선형 드리프트(drift) 대신 장면마다 스냅드리프트. stops 를 주면 장면 그림은 F.timewarp 시각으로 그리고(페이지 몫) 카메라도 그 시각으로 멈췄다가 셰이크
+const _cs=FX.camSetup,_ca=FX.camAt;
+FX.camSetup=(o={})=>{_cs(o.snap?Object.assign({},o,{drift:0}):o);const C=FX._cam;C.snap=o.snap?Object.assign({d:.12,s:1.08,rate:.015},o.snap===true?{}:o.snap):null;C.stops=o.stops||[];C.shakeOpt=o.shakeOpt||{};
+ if(C.snap)C.scenes.forEach(([a])=>FX.fast(a,a+C.snap.d));FX._stopFast(C.stops)};
+FX.camAt=t=>{const C=FX._cam;if(!C||(!C.snap&&!(C.stops&&C.stops.length)))return _ca(t);const T=FX.timewarp(t,C.stops),c=_ca(T);
+ if(C.drops.some(([a,b])=>T>=a&&T<b))return c;
+ if(C.snap){const sc=C.scenes.find(([a,b])=>T>=a&&T<b);if(sc){c.s*=FX.snapDrift(T,sc[0],C.snap);FX.mark('스냅드리프트')}}
+ if(C.stops.length){const h=FX.hitAt(t,C.stops,C.shakeOpt);if(h.s!==1||h.r!==0){c.s*=h.s;c.r+=h.r;FX.mark('히트스톱')}if(T!==t)FX.mark('히트스톱')}
+ return c};
+
+// ② 1프레임 반전 스트로브: tc 부터 frames 프레임 동안 지금까지 그린 화면을 반전. 장면을 다 그린 뒤 부른다
+//  swap=[A,B] 이면 A↔B 두 색 축으로만 뒤집는다(자오선: ['#0D1424','#FAF8F3'] → 네이비↔크림, K-291 색만 남음). 축에서 먼 색(골드 등)은 그대로. swap 없으면 RGB 전체 반전
+FX.strobe=(g,t,tc,{fps=30,frames=1,swap=null,keep=60,remap=null}={})=>{if(t<tc||t>=tc+frames/fps)return false;const c=g.canvas,w=c.width,h=c.height;g.save();g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;
+ if(!swap){g.globalCompositeOperation='difference';g.fillStyle='#fff';g.fillRect(0,0,w,h)}
+ else{const id=g.getImageData(0,0,w,h),d=id.data,A=hx(swap[0]),B=hx(swap[1]),V=[B[0]-A[0],B[1]-A[1],B[2]-A[2]],L2=V[0]*V[0]+V[1]*V[1]+V[2]*V[2]||1,K2=keep*keep;
+  for(let i=0;i<d.length;i+=4){const r=d[i]-A[0],q=d[i+1]-A[1],b=d[i+2]-A[2],p=cl((r*V[0]+q*V[1]+b*V[2])/L2),ex=r-p*V[0],ey=q-p*V[1],ez=b-p*V[2];if(ex*ex+ey*ey+ez*ez>K2)continue;
+   const m=1-p;d[i]=A[0]+m*V[0]+ex;d[i+1]=A[1]+m*V[1]+ey;d[i+2]=A[2]+m*V[2]+ez}
+  // remap=[[from,to,tol]]: 반전 뒤 남은 색을 바꾼다. 자오선은 골드→네이비(반전 프레임에서 '크림 위 골드' K-291 위반을 막음, 11/25 ⑱ v9)
+  if(remap)for(const [f0,t0,tol=70] of remap){const F0=hx(f0),T0=hx(t0),Q=tol*tol;for(let i=0;i<d.length;i+=4){const r=d[i]-F0[0],q=d[i+1]-F0[1],b=d[i+2]-F0[2],e=r*r+q*q+b*b;if(e>Q)continue;const k=1-Math.sqrt(e)/tol;d[i]=d[i]+(T0[0]-d[i])*k;d[i+1]=d[i+1]+(T0[1]-d[i+1])*k;d[i+2]=d[i+2]+(T0[2]-d[i+2])*k}}
+  g.putImageData(id,0,0)}
+ g.restore();FX.mark('반전스트로브');return true};
+
+// ② 글자 관통: 글자 속 빈 곳(ㅇ·ㅁ·ㅂ 같은 속 빈 획 사이)을 중심으로 100%→zmax(3500%) 확대하며 그 빈 곳으로 다음 장면이 보이고, 빈 곳이 화면이 됨
+//  F.textWindow(g,t,t0,{text,font,hole:'auto'|번호|{x,y},drawNext,…}) — hole 을 주면 관통 모드. 'auto' = 가장 왼쪽 빈 곳(번호 n = 왼쪽부터 n번째)
+//  지금 장면(배경)은 먼저 그리고 부른다. 글자·확대 그림은 오프스크린 판에서 그려 붙인다(관문 기록 밖 — 전환 순간에만)
+FX._holes=(text,font,x,y,k=4)=>{const key=[text,font,x,y].join('|');FX.__holes=FX.__holes||{};if(FX.__holes[key])return FX.__holes[key];
+ const w=Math.ceil(1080/k),h=Math.ceil(1920/k),c=document.createElement('canvas');c.width=w;c.height=h;const x2=c.getContext('2d');x2.scale(1/k,1/k);x2.font=font;x2.textAlign='center';x2.textBaseline='middle';x2.fillStyle='#000';x2.fillText(text,x,y);
+ const a=x2.getImageData(0,0,w,h).data,lab=new Int32Array(w*h),solid=i=>a[i*4+3]>=128,out=[];const flood=(s,id)=>{const st=[s];lab[s]=id;let n=0,sx=0,sy=0,edge=0;while(st.length){const i=st.pop(),px=i%w,py=(i/w)|0;n++;sx+=px;sy+=py;if(px===0||py===0||px===w-1||py===h-1)edge=1;
+  for(const j of [px>0?i-1:-1,px<w-1?i+1:-1,py>0?i-w:-1,py<h-1?i+w:-1])if(j>=0&&!lab[j]&&!solid(j)){lab[j]=id;st.push(j)}}return {n,x:sx/n*k,y:sy/n*k,edge}};
+ let id=0;for(let i=0;i<w*h;i++)if(!lab[i]&&!solid(i)){const r=flood(i,++id);if(!r.edge&&r.n>=6)out.push(r)}
+ out.sort((p,q)=>p.x-q.x);return FX.__holes[key]=out};
+FX._mask=(()=>{let c=null,x2=null;return (w,h)=>{if(!c||c.width!==w||c.height!==h){c=document.createElement('canvas');c.width=w;c.height=h;x2=c.getContext('2d')}x2.setTransform(1,0,0,1,0,0);x2.globalCompositeOperation='source-over';x2.clearRect(0,0,w,h);return [c,x2]}})();
+FX.pierce=(g,t,t0,{text,font=null,x=FX.cx,y=FX.cy,ink=FX.BRAND.ink,hole='auto',dur=.7,hold=.25,zmax=35,drawNext}={})=>{const u=t-t0;if(u<0)return;const F_=font||`900 360px ${FX.BRAND.fonts.title}`;
+ let hp=hole;if(hole==='auto'||typeof hole==='number'){const hs=FX._holes(text,F_,x,y);hp=hs.length?hs[Math.min(hs.length-1,hole==='auto'?0:hole)]:null;if(!hp){FX.note('관통','"'+text+'" 에 속 빈 곳이 없어 글자 가운데로 확대해요');hp={x,y}}}
+ const p=cl((u-hold)/Math.max(.01,dur-hold)),z=Math.pow(zmax,FX.EZ.out(p));if(p>=1){drawNext(g);FX.mark('글자관통');return}if(p>0)FX.fast(t0+hold,t0+dur);
+ const W=g.canvas.width,Hh=g.canvas.height,k=4,mw=Math.ceil(W/k),mh=Math.ceil(Hh/k),[mc,mx]=FX._mask(mw,mh);
+ const glyph=(c2,sc)=>{c2.save();c2.scale(sc,sc);c2.translate(hp.x,hp.y);c2.scale(z,z);c2.translate(-hp.x,-hp.y);c2.font=F_;c2.textAlign='center';c2.textBaseline='middle';c2.fillText(text,x,y);c2.restore()};
+ mx.fillStyle='#000';glyph(mx,1/k);const id=mx.getImageData(0,0,mw,mh),d=id.data,seen=new Uint8Array(mw*mh),sx=cl(Math.round(hp.x/k),0,mw-1),sy=cl(Math.round(hp.y/k),0,mh-1),s0=sy*mw+sx;
+ if(d[s0*4+3]<128){const st=[s0];seen[s0]=1;while(st.length){const i=st.pop(),px=i%mw,py=(i/mw)|0;for(const j of [px>0?i-1:-1,px<mw-1?i+1:-1,py>0?i-mw:-1,py<mh-1?i+mw:-1])if(j>=0&&!seen[j]&&d[j*4+3]<128){seen[j]=1;st.push(j)}}}
+ for(let i=0;i<mw*mh;i++){const px=i%mw,py=(i/mw)|0,on=seen[i]||(px>0&&seen[i-1])||(px<mw-1&&seen[i+1])||(py>0&&seen[i-mw])||(py<mh-1&&seen[i+mw]);d[i*4]=d[i*4+1]=d[i*4+2]=0;d[i*4+3]=on?255:0}   // 한 칸 넓혀 획 밑까지
+ mx.putImageData(id,0,0);const [c,x2]=FX._off(g,'pc');drawNext(x2);x2.setTransform(1,0,0,1,0,0);x2.globalCompositeOperation='destination-in';x2.imageSmoothingEnabled=true;x2.drawImage(mc,0,0,W,Hh);
+ x2.globalCompositeOperation='source-over';x2.fillStyle=ink;glyph(x2,1);g.save();g.setTransform(1,0,0,1,0,0);g.drawImage(c,0,0);g.restore();FX.mark('글자관통')};
+const _tw=FX.textWindow;FX.textWindow=(g,t,t0,o={})=>o&&o.hole!=null?FX.pierce(g,t,t0,o):_tw(g,t,t0,o);
+
+// ② 템포 브레이커: 박자 격자 위 컷 시각. 보통 컷은 len 박(기본 ≈1.5초에 가장 가까운 반 박 단위), short 에 적은 번호(0부터)만 shortLen 박(기본 len/2, 1.5초 미만이 되게)으로 끊는다
+//  돌려줌 {cuts:[{i,a,b,beats,short}], scenes:[[a,b]…](camSetup 에 바로), end, warn}
+FX.tempoCuts=({k0=0,n=8,len=null,short=[],shortLen=null,beat=FX.BEAT,max=1.5}={})=>{const B=beat.B,L=len||Math.max(1,Math.round(max/B*2)/2),SL=shortLen||Math.max(.5,Math.floor(Math.min(L/2,(max-1e-3)/B)*2)/2);
+ const cuts=[],warn=[];let k=k0;for(let i=0;i<n;i++){const s=short.includes(i),l=s?SL:L,a=beat.T(k),b=beat.T(k+l);if(s&&b-a>=max)warn.push(`${i}번 컷 ${(b-a).toFixed(2)}초 — 1.5초 미만이 아니에요(BPM ${beat.bpm})`);cuts.push({i,a,b,beats:l,short:s});k+=l}
+ warn.forEach(m=>FX.note('템포',m));if(short.length)FX.mark('템포브레이커');return {cuts,scenes:cuts.map(c=>[c.a,c.b]),end:beat.T(k),warn}};
+
+// ③ 타이포 크기 대비 + 오버슈트 팝: 핵심어(key)는 글 칸(안전 영역) 폭의 keyW(0.70~0.92), 조사·보조어(aux)는 핵심어 글자 크기의 auxR(0.25~0.35)
+//  팝 = EZ.pop 곡선으로 0.7→1.08→1.0, 자간 track[0]→track[1]px 로 trackDur 초 동안 벌어짐. 1화면 글자(빈칸 뺀) maxChars 넘으면 확인 메모(FX.note)
+//  폭 기준은 화면 1080 이 아니라 글 칸(F.area) — 1080×0.92=994px 는 안전 영역(840px)을 넘어 관문이 막는다
+FX.typePop=(g,t,t0,{key,aux='',auxPos='below',family=FX.BRAND.fonts.title,weight=900,auxWeight=800,keyW=.8,auxR=.3,keyInk=FX.BRAND.ink,auxInk=null,x=FX.cx,y=FX.cy,dur=.45,auxDelay=.08,track=[-2,6],trackDur=1.2,area=null,maxChars=12,peak=1.08,gap='even'}={})=>{
+ const u=t-t0;if(u<0||!key)return;const A=area||FX.area(),AW=A.x1-A.x0,n=[...key].length,LS='letterSpacing' in g;g.save();g.textAlign='center';g.textBaseline='middle';
+ g.font=`${weight} 100px ${family}`;if(LS)g.letterSpacing='0px';const w100=g.measureText(key).width||100;let fs=AW*cl(keyW,.7,.92)*100/w100;
+ const pk=(fs*w100/100+track[1]*(n-1))*peak;if(pk>AW*.98)fs*=AW*.98/pk;   // 오버슈트·자간 최대에서도 글 칸 안
+ const ar=cl(auxR,.25,.35),afs=fs*ar,ink_=(s,f)=>{g.font=f;const m=g.measureText(s);return [m.actualBoundingBoxAscent||f_(f)*.5,m.actualBoundingBoxDescent||f_(f)*.5]},f_=f=>parseFloat(/([\d.]+)px/.exec(f)[1]);
+ // 글자 잉크(실제 획) 기준으로 세로 배치. gap='even' = 위 여백·사이·아래 여백을 같게(관문 '균형 리듬' 1.35배 안), 숫자면 px
+ const [kA,kD]=ink_(key,`${weight} ${fs}px ${family}`),[aA,aD]=aux?ink_(aux,`${auxWeight} ${afs}px ${family}`):[0,0],hk=kA+kD,ha=aA+aD,AH=A.y1-A.y0;
+ const gp=!aux?0:gap==='even'?Math.max(fs*.12,(AH-hk-ha)/3):gap,tot=hk+(aux?gp+ha:0),top=y-tot/2,above=aux&&auxPos==='above';
+ const ky=above?top+ha+gp+kA:top+kA,ay=above?top+aA:top+hk+gp+aA;
+ const sc=v=>{const q=FX.EZ.pop(v);return q<=1?mix(.7,1,q):1+(peak-1)*(q-1)/Math.max(1e-6,FX._popPk-1)},ls=mix(track[0],track[1],ease(cl(u/trackDur)));
+ const one=(s,f,yy,col,u_)=>{if(u_<0)return;const k=sc(cl(u_/dur));g.save();g.font=f;if(LS)g.letterSpacing=ls.toFixed(2)+'px';g.translate(x,yy);g.scale(k,k);g.fillStyle=col;g.fillText(s,0,0);g.restore()};
+ one(key,`${weight} ${fs.toFixed(1)}px ${family}`,ky,keyInk,u);if(aux)one(aux,`${auxWeight} ${afs.toFixed(1)}px ${family}`,ay,auxInk||keyInk,u-auxDelay);g.restore();
+ if(u<dur)FX.fast(t0,t0+Math.min(dur,.25));const nc=(key+aux).replace(/\s/g,'').length;if(nc>maxChars)FX.note('글자수',`1화면 ${nc}자(${key} ${aux}) — ${maxChars}자 넘음, 확인`);FX.mark('타이포팝')};
+
+FX.LIST=Object.assign(FX.LIST,{'스냅드리프트':'컷 진입 0.1~0.15초 급확대 뒤 초당 1~2% 계속 전진(참고영상 ①)','히트스톱':'임팩트 2~3프레임 정지 뒤 감쇠 셰이크(1.08배·±1.5도·0.8)(참고영상 ②)',
+ '반전스트로브':'전환 경계 1프레임 색 반전(자오선은 네이비↔크림)(참고영상 ②)','글자관통':'글자 속 빈 곳으로 100%→3500% 날아 들어가 다음 장면(참고영상 ②)','템포브레이커':'박자 격자에서 지정한 컷만 1.5초 미만으로 끊음(참고영상 ②)',
+ '타이포팝':'핵심어 글 칸 폭 70~92% 울트라 볼드 + 조사 25~35% · 0.7→1.08→1.0 팝 · 자간 -2→+6px(참고영상 ③)'});
+FX.USE['전환'].push('반전스트로브','글자관통');FX.USE['훅(첫 1초)'].push('타이포팝','히트스톱');FX.USE['개념 설명'].push('타이포팝','템포브레이커');FX.USE['모든 장면(기본)'].push('스냅드리프트');
+})();
+
 // 프롬프트 100 기법(motion_fx100.js)을 같이 불러온다 — 페이지는 motion_fx.js 하나만 넣으면 된다
 (function(){if(typeof document!=='undefined'&&document.currentScript&&document.readyState==='loading'){document.write('<script src="'+document.currentScript.src.replace(/[^/]*$/,'')+'motion_fx100.js"><\/script>')}})();
