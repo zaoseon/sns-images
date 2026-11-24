@@ -1,500 +1,514 @@
 {
-  "_설명": "모션 엔진(motion_fx*.js·html_motion.py) 브랜드 설정. 다른 브랜드는 이 파일을 복사해 값만 바꾼다. html_motion.py --브랜드=<이름> 또는 ZS_BRAND=<이름>.",
-  "id": "zaoseon",
-  "name": "자오선",
-  "tag": "동서양 6개 운명학 교차분석",
-  "url": "zaoseon.com",
-  "ai": "정월은 가상의 AI 캐릭터입니다",
-  "_ai_설명": "AI 캐릭터 고지 문구. **정월 캐릭터가 화면·컷에 실제로 나오는 편에만** 그린다(대표 2026-11-22 13:4x \"릴스에 정월 캐릭터가 나올 때만 AI 캐릭터 고지 해달라 했는데 무조건 고정인듯\", K-265). 엔진(FX.frame) 기본값은 ai='' 이고, tools/script_reel.py 가 대본 카드 '정월': true 인 편에만 이 문구를 넘긴다. 캐릭터 없이 글자·도형만 나오는 릴스·카드에는 넣지 않는다. 카드(brand_frame.html ai=False), 릴스 PIL(tools/ads/reels.py portrait·meridian)는 이미 캐릭터와 함께일 때만 그린다.",
-  "accent": "#F4CE62",
-  "ink": "#FFFFFF",
-  "pill": "#0D1424",
-  "palette": [
-    "#FF5A1F",
-    "#2F6BFF",
-    "#2EBD6B",
-    "#FFC21A",
-    "#FFD400"
+ "_설명": "모션 엔진(motion_fx*.js·html_motion.py) 브랜드 설정. 다른 브랜드는 이 파일을 복사해 값만 바꾼다. html_motion.py --브랜드=<이름> 또는 ZS_BRAND=<이름>.",
+ "id": "zaoseon",
+ "name": "자오선",
+ "tag": "동서양 6개 운명학 교차분석",
+ "url": "zaoseon.com",
+ "ai": "정월은 가상의 AI 캐릭터입니다",
+ "_ai_설명": "AI 캐릭터 고지 문구. **정월 캐릭터가 화면·컷에 실제로 나오는 편에만** 그린다(대표 2026-11-22 13:4x \"릴스에 정월 캐릭터가 나올 때만 AI 캐릭터 고지 해달라 했는데 무조건 고정인듯\", K-265). 엔진(FX.frame) 기본값은 ai='' 이고, tools/script_reel.py 가 대본 카드 '정월': true 인 편에만 이 문구를 넘긴다. 캐릭터 없이 글자·도형만 나오는 릴스·카드에는 넣지 않는다. 카드(brand_frame.html ai=False), 릴스 PIL(tools/ads/reels.py portrait·meridian)는 이미 캐릭터와 함께일 때만 그린다.",
+ "accent": "#F4CE62",
+ "ink": "#FFFFFF",
+ "pill": "#0D1424",
+ "palette": [
+  "#FF5A1F",
+  "#2F6BFF",
+  "#2EBD6B",
+  "#FFC21A",
+  "#FFD400"
+ ],
+ "fonts": {
+  "title": "PL",
+  "body": "PL",
+  "hand": "PL"
+ },
+ "reel_rules": {
+  "_근거": "대표 2026-11-24 '자오선 릴스 디자인·폰트 긴급 수정' — 지정 폰트 페이퍼로지 실제 적용·다른 기본 폰트 금지 / 탁한 황토·살색·회색·보라빛 그라데이션 배경 금지 → 딥 미드나잇 네이비·크림 화이트 단색 컷 교차, 강조는 맑은 골드 1색 / 알약형 배지 나열·글자 위를 가리는 방사형 선 금지(폭발선은 글자 뒤 층·투명도 25%) (K-291)",
+  "글꼴만": [
+   "PL"
   ],
-  "fonts": {"title": "PL", "body": "PL", "hand": "PL"},
-  "reel_rules": {
-    "_근거": "대표 2026-11-24 '자오선 릴스 디자인·폰트 긴급 수정' — 지정 폰트 페이퍼로지 실제 적용·다른 기본 폰트 금지 / 탁한 황토·살색·회색·보라빛 그라데이션 배경 금지 → 딥 미드나잇 네이비·크림 화이트 단색 컷 교차, 강조는 맑은 골드 1색 / 알약형 배지 나열·글자 위를 가리는 방사형 선 금지(폭발선은 글자 뒤 층·투명도 25%) (K-291)",
-    "글꼴만": [
-      "PL"
-    ],
-    "글꼴_굵기": {
-      "큰 낱말·제목": "800 (Paperlogy ExtraBold)",
-      "보조 글": "700 (Paperlogy Bold)",
-      "Regular": "파일 없음 — 받기 전까지 쓰지 않는다"
-    },
-    "배경만": {
-      "네이비": "#0D1424",
-      "크림": "#FAF8F3"
-    },
-    "배경_교차": "장면(컷)마다 네이비·크림 단색을 번갈아. 그라데이션·질감·사진 배경 금지",
-    "강조만": "#F4CE62",
-    "글자색": {
-      "네이비 위": "#FAF8F3",
-      "크림 위": "#0D1424",
-      "강조": "#F4CE62 (네이비 위에서만 글자색으로. 크림 위에서는 면·선으로만)"
-    },
-    "금지": [
-      "탁한 황토색·살색(#E7C88D 등)",
-      "회색 면·회색 글자",
-      "보라빛·그라데이션 배경",
-      "알약형 배지(둥근 칩) 여러 개 나열",
-      "글자 위를 지나가는 방사형·폭발선"
-    ],
-    "폭발선": "F.layerBG 안(글자 뒤 층)에서 globalAlpha 0.25 이하",
-    "검사": "motion/html_motion.py 자오선_판_검사 — 글꼴(PL 만·실제 로드)·배경색(네이비/크림 ±10)·그라데이션(배경 위아래 차 8 이하)"
+  "글꼴_굵기": {
+   "큰 낱말·제목": "800 (Paperlogy ExtraBold)",
+   "보조 글": "700 (Paperlogy Bold)",
+   "Regular": "파일 없음 — 받기 전까지 쓰지 않는다"
   },
-  "fx_log": "ads/fx_log.json",
-  "music": "fun",
-  "benchmark": {
-    "_설명": "터진 영상 찾기(tools/ref/discover.py)가 읽는다. 출처: zaoseon-site docs/프로젝트문서/경쟁릴스분석_결과_2026-10-15.md(인스타 10계정, 제외 46saju·mong_tarotcard·saju_expert), docs/체험단_이벤트_벤치마크_2026-10-17.md(스레드 사주 계정), 운세서비스 가이드라인 10/07(포스텔러·일상사주). 인스타는 비즈니스·크리에이터 계정만 공식 조회됨.",
-    "youtube_keywords": [
-      "사주",
-      "운세",
-      "띠별 운세",
-      "궁합"
-    ],
-    "youtube_channels": [],
-    "ig_accounts": [
-      "zendi_tarot",
-      "forceteller_official",
-      "_dohwa.tarot_",
-      "kkebi_saju",
-      "yeonmind.27",
-      "__sometips",
-      "mindwhisper_here",
-      "hayou.dev",
-      "bombom.3206",
-      "deep_mind_note"
-    ],
-    "threads_accounts": [
-      "forceteller_official",
-      "ilsang_saju",
-      "taesa_saju",
-      "daeunsaju",
-      "saju.gyeol",
-      "luckyloveme_saju",
-      "saju.pharmacy"
-    ],
-    "threads_keywords": [
-      "사주",
-      "운세",
-      "띠별 운세",
-      "궁합"
+  "배경만": {
+   "네이비": "#0D1424",
+   "크림": "#FAF8F3"
+  },
+  "배경_교차": "장면(컷)마다 네이비·크림 단색을 번갈아. 그라데이션·질감·사진 배경 금지",
+  "강조만": "#F4CE62",
+  "글자색": {
+   "네이비 위": "#FAF8F3",
+   "크림 위": "#0D1424",
+   "강조": "#F4CE62 (네이비 위에서만 글자색으로. 크림 위에서는 면·선으로만)"
+  },
+  "금지": [
+   "탁한 황토색·살색(#E7C88D 등)",
+   "회색 면·회색 글자",
+   "보라빛·그라데이션 배경",
+   "알약형 배지(둥근 칩) 여러 개 나열",
+   "글자 위를 지나가는 방사형·폭발선"
+  ],
+  "폭발선": "F.layerBG 안(글자 뒤 층)에서 globalAlpha 0.25 이하",
+  "검사": "motion/html_motion.py 자오선_판_검사 — 글꼴(PL 만·실제 로드)·배경색(네이비/크림 ±10)·그라데이션(배경 위아래 차 8 이하)"
+ },
+ "fx_log": "ads/fx_log.json",
+ "music": "fun",
+ "benchmark": {
+  "_설명": "터진 영상 찾기(tools/ref/discover.py)가 읽는다. 출처: zaoseon-site docs/프로젝트문서/경쟁릴스분석_결과_2026-10-15.md(인스타 10계정, 제외 46saju·mong_tarotcard·saju_expert), docs/체험단_이벤트_벤치마크_2026-10-17.md(스레드 사주 계정), 운세서비스 가이드라인 10/07(포스텔러·일상사주). 인스타는 비즈니스·크리에이터 계정만 공식 조회됨.",
+  "youtube_keywords": [
+   "사주",
+   "운세",
+   "띠별 운세",
+   "궁합"
+  ],
+  "youtube_channels": [],
+  "ig_accounts": [
+   "zendi_tarot",
+   "forceteller_official",
+   "_dohwa.tarot_",
+   "kkebi_saju",
+   "yeonmind.27",
+   "__sometips",
+   "mindwhisper_here",
+   "hayou.dev",
+   "bombom.3206",
+   "deep_mind_note"
+  ],
+  "threads_accounts": [
+   "forceteller_official",
+   "ilsang_saju",
+   "taesa_saju",
+   "daeunsaju",
+   "saju.gyeol",
+   "luckyloveme_saju",
+   "saju.pharmacy"
+  ],
+  "threads_keywords": [
+   "사주",
+   "운세",
+   "띠별 운세",
+   "궁합"
+  ]
+ },
+ "ops": {
+  "_설명": "KCOS 콘텐츠 운영 흐름 v1(docs/rules/KCOS_콘텐츠_운영흐름_v2.md)의 브랜드 칸. 11/15 CT가 지금 운영 그대로 적음.",
+  "audience": "사주·운세에 관심 있는 2030~40대, 나를 알아보는 테스트를 좋아하는 사람",
+  "channels": {
+   "instagram_reel": {
+    "per_week": 7,
+    "time": "17:00"
+   },
+   "threads": {
+    "per_week": 7,
+    "time": "08:00·20:30"
+   },
+   "naver_blog": {
+    "per_week": 7,
+    "time": "08:00 또는 18:00"
+   },
+   "naver_clip": {
+    "per_week": 3,
+    "time": "글과 같이"
+   }
+  },
+  "publish": {
+   "mode": "auto",
+   "metricool_brand": "7114921",
+   "note": "네이버는 서브 노트북 키트 예약"
+  },
+  "sources_extra": [
+   {
+    "kind": "season",
+    "where": "자오선 엔진 절기·손없는날·띠",
+    "how": "앞으로 4주 절기 시각·띠 관련 검색어"
+   },
+   {
+    "kind": "qna",
+    "where": "운영앱 답글·DM 질문",
+    "how": "자주 묻는 질문 유형"
+   }
+  ],
+  "kpi": [
+   "save",
+   "share",
+   "follow",
+   "무료 판정 클릭"
+  ],
+  "plan_owner": "자오선 CT·①"
+ },
+ "hanja_text": false,
+ "hook_target": "띠|출생|년생|생일|글자|일간|이름|태어난|월생",
+ "label_suffix": {
+  "words": [
+   "쥐",
+   "소",
+   "호랑이",
+   "토끼",
+   "용",
+   "뱀",
+   "말",
+   "양",
+   "원숭이",
+   "닭",
+   "개",
+   "돼지"
+  ],
+  "suffix": "띠"
+ },
+ "workflow": {
+  "_설명": "자오선 워크플로 증거(tools/workflow_check.py 가 읽는다). 대표 11/18 17:49. 기한일은 그 자료가 도는 주기 + 하루.",
+  "collect": [
+   {
+    "label": "네이버 검색량",
+    "repo": "zaoseon-site",
+    "glob": "data/keywords/kw_volume.json",
+    "max_days": 8,
+    "next": "kw-volume 작업(GitHub Actions) 실행 확인",
+    "who": "③"
+   },
+   {
+    "label": "유튜브 상위 제목(쇼츠·롱폼)",
+    "repo": "kcos-motion",
+    "glob": "ref/titles/*.json",
+    "max_days": 8,
+    "next": "ref_titles 작업(월 06:37) 확인",
+    "who": "CT"
+   },
+   {
+    "label": "구글 트렌드",
+    "repo": "kcos-motion",
+    "glob": "data/trends/google_kr/*.json",
+    "max_days": 2,
+    "next": "trends_daily 작업(매일 06:03) 확인",
+    "who": "CT"
+   },
+   {
+    "label": "시즌 캘린더(아이보스)",
+    "repo": "zaoseon-site",
+    "glob": "docs/끌리는_콘텐츠_조사_*.md",
+    "max_days": 31,
+    "next": "아이보스 마케팅 캘린더로 다음 달 시즌 정리(월 1회)",
+    "who": "CT"
+   },
+   {
+    "label": "카페글·지식iN 질문",
+    "repo": "zaoseon-site",
+    "glob": "data/kcos_community/zaoseon/*.json",
+    "max_days": 8,
+    "next": "kcos-community 작업(월 06:41) 확인",
+    "who": "③"
+   },
+   {
+    "label": "우리 계정 반응",
+    "repo": "zaoseon-site",
+    "glob": "data/analytics/sns_daily.json",
+    "max_days": 2,
+    "next": "아침 브리핑(08:52)이 Metricool 숫자를 적는지 확인",
+    "who": "아침 브리핑"
+   }
+  ],
+  "topic": [
+   {
+    "label": "주제 은행",
+    "repo": "zaoseon-site",
+    "glob": "data/topics/topic_bank.md",
+    "max_days": 8,
+    "next": "수집 결과로 주제 은행 점수 다시 매기기(이유·근거 칸)",
+    "who": "①"
+   },
+   {
+    "label": "콘텐츠 계획",
+    "repo": "zaoseon-site",
+    "glob": "docs/콘텐츠_계획_*.md",
+    "max_days": 8,
+    "next": "다음 3주 계획 고치기",
+    "who": "CT"
+   }
+  ],
+  "plan": [
+   {
+    "label": "릴스·캐러셀 대본 카드",
+    "repo": "kcos-motion",
+    "glob": "specs/scripts/*.json",
+    "max_days": 7,
+    "next": "다음 주 릴스·캐러셀 대본 카드 쓰기",
+    "who": "①",
+    "brand_field": [
+     "zaoseon",
+     "brand"
     ]
-  },
-  "ops": {
-    "_설명": "KCOS 콘텐츠 운영 흐름 v1(docs/rules/KCOS_콘텐츠_운영흐름_v2.md)의 브랜드 칸. 11/15 CT가 지금 운영 그대로 적음.",
-    "audience": "사주·운세에 관심 있는 2030~40대, 나를 알아보는 테스트를 좋아하는 사람",
-    "channels": {
-      "instagram_reel": {
-        "per_week": 7,
-        "time": "17:00"
-      },
-      "threads": {
-        "per_week": 7,
-        "time": "08:00·20:30"
-      },
-      "naver_blog": {
-        "per_week": 7,
-        "time": "08:00 또는 18:00"
-      },
-      "naver_clip": {
-        "per_week": 3,
-        "time": "글과 같이"
-      }
-    },
-    "publish": {
-      "mode": "auto",
-      "metricool_brand": "7114921",
-      "note": "네이버는 서브 노트북 키트 예약"
-    },
-    "sources_extra": [
-      {
-        "kind": "season",
-        "where": "자오선 엔진 절기·손없는날·띠",
-        "how": "앞으로 4주 절기 시각·띠 관련 검색어"
-      },
-      {
-        "kind": "qna",
-        "where": "운영앱 답글·DM 질문",
-        "how": "자주 묻는 질문 유형"
-      }
-    ],
-    "kpi": [
-      "save",
-      "share",
-      "follow",
-      "무료 판정 클릭"
-    ],
-    "plan_owner": "자오선 CT·①"
-  },
-  "hanja_text": false,
-  "hook_target": "띠|출생|년생|생일|글자|일간|이름|태어난|월생",
-  "label_suffix": {
-    "words": [
-      "쥐",
-      "소",
-      "호랑이",
-      "토끼",
-      "용",
-      "뱀",
-      "말",
-      "양",
-      "원숭이",
-      "닭",
-      "개",
-      "돼지"
-    ],
-    "suffix": "띠"
-  },
-  "workflow": {
-    "_설명": "자오선 워크플로 증거(tools/workflow_check.py 가 읽는다). 대표 11/18 17:49. 기한일은 그 자료가 도는 주기 + 하루.",
-    "collect": [
-      {
-        "label": "네이버 검색량",
-        "repo": "zaoseon-site",
-        "glob": "data/keywords/kw_volume.json",
-        "max_days": 8,
-        "next": "kw-volume 작업(GitHub Actions) 실행 확인",
-        "who": "③"
-      },
-      {
-        "label": "유튜브 상위 제목(쇼츠·롱폼)",
-        "repo": "kcos-motion",
-        "glob": "ref/titles/*.json",
-        "max_days": 8,
-        "next": "ref_titles 작업(월 06:37) 확인",
-        "who": "CT"
-      },
-      {
-        "label": "구글 트렌드",
-        "repo": "kcos-motion",
-        "glob": "data/trends/google_kr/*.json",
-        "max_days": 2,
-        "next": "trends_daily 작업(매일 06:03) 확인",
-        "who": "CT"
-      },
-      {
-        "label": "시즌 캘린더(아이보스)",
-        "repo": "zaoseon-site",
-        "glob": "docs/끌리는_콘텐츠_조사_*.md",
-        "max_days": 31,
-        "next": "아이보스 마케팅 캘린더로 다음 달 시즌 정리(월 1회)",
-        "who": "CT"
-      },
-      {
-        "label": "카페글·지식iN 질문",
-        "repo": "zaoseon-site",
-        "glob": "data/kcos_community/zaoseon/*.json",
-        "max_days": 8,
-        "next": "kcos-community 작업(월 06:41) 확인",
-        "who": "③"
-      },
-      {
-        "label": "우리 계정 반응",
-        "repo": "zaoseon-site",
-        "glob": "data/analytics/sns_daily.json",
-        "max_days": 2,
-        "next": "아침 브리핑(08:52)이 Metricool 숫자를 적는지 확인",
-        "who": "아침 브리핑"
-      }
-    ],
-    "topic": [
-      {
-        "label": "주제 은행",
-        "repo": "zaoseon-site",
-        "glob": "data/topics/topic_bank.md",
-        "max_days": 8,
-        "next": "수집 결과로 주제 은행 점수 다시 매기기(이유·근거 칸)",
-        "who": "①"
-      },
-      {
-        "label": "콘텐츠 계획",
-        "repo": "zaoseon-site",
-        "glob": "docs/콘텐츠_계획_*.md",
-        "max_days": 8,
-        "next": "다음 3주 계획 고치기",
-        "who": "CT"
-      }
-    ],
-    "plan": [
-      {
-        "label": "릴스·캐러셀 대본 카드",
-        "repo": "kcos-motion",
-        "glob": "specs/scripts/*.json",
-        "max_days": 7,
-        "next": "다음 주 릴스·캐러셀 대본 카드 쓰기",
-        "who": "①",
-        "brand_field": [
-          "zaoseon",
-          "brand"
-        ]
-      },
-      {
-        "label": "네이버 원고(의도 카드 포함)",
-        "repo": "zaoseon-site",
-        "glob": "public/naver/n*.html",
-        "max_days": 4,
-        "next": "다음 원고 의도 카드(K-143)부터 쓰기",
-        "who": "①"
-      }
-    ],
-    "make": [
-      {
-        "label": "릴스·카드 제작물(예약일 기준)",
-        "repo": "sns-images",
-        "glob": "content/reel_swaps.json",
-        "max_days": 3,
-        "next": "승인된 대본으로 릴스·카드 만들기",
-        "who": "①"
-      }
-    ],
-    "gate": [
-      {
-        "label": "대본 검사",
-        "check": "script_audit",
-        "next": "막힌 대본 카드 고치기",
-        "who": "①"
-      }
-    ],
-    "approve": [
-      {
-        "label": "승인 기다리는 릴스·카드",
-        "repo": "sns-images",
-        "glob": "content/reel_swaps.json",
-        "max_days": 3,
-        "next": "운영앱 '승인·확인할 것'에서 누르기",
-        "who": "대표",
-        "count": "status=new",
-        "future": true
-      },
-      {
-        "label": "노션 검수 판정 기록(통합 검수함 → 저장소 사본)",
-        "repo": "kcos-motion",
-        "glob": "docs/status/검수_기록.json",
-        "max_days": 8,
-        "next": "검수함 체크를 읽어 검수_기록.json 에 옮긴다(K-278)",
-        "who": "실키 PM"
-      }
-    ],
-    "publish": [
-      {
-        "label": "네이버 앞으로 예약",
-        "repo": "zaoseon-site",
-        "glob": "public/naver/queue.json",
-        "max_days": 3,
-        "next": "앞으로 예약이 비었으면 다음 원고 예약 올리기",
-        "who": "서브 노트북",
-        "future_key": "at"
-      },
-      {
-        "label": "SNS 앞으로 예약",
-        "repo": "zaoseon-site",
-        "glob": "data/sns_live.json",
-        "max_days": 3,
-        "next": "Metricool 앞으로 예약 채우기",
-        "who": "①",
-        "future_key": "t"
-      },
-      {
-        "label": "네이버 클립 앞으로 예정",
-        "repo": "sns-images",
-        "glob": "content/post_clips.json",
-        "max_days": 3,
-        "future_key": "rec",
-        "next": "다음 클립 묶음 대본(K-227) → 대표 승인 → html_motion --채널=naver_clip 렌더 → post_clips.json·clip_hold.json 등록",
-        "who": "①",
-        "_설명": "11/23 실키 조사: 마지막 클립 rec 11/17, 그 뒤 제작 0건인데 감시가 없어 아무도 몰랐다(대표 11/23 '네이버 클립 제작이 언제부턴가 안되고 있거든')"
-      }
-    ],
-    "measure": [
-      {
-        "label": "주간 효과분석",
-        "repo": "zaoseon-site",
-        "glob": "docs/주간_효과분석_*.md",
-        "max_days": 8,
-        "next": "주간 효과분석(일 20:07) 실행 확인",
-        "who": "주간 분석"
-      },
-      {
-        "label": "매일 성과",
-        "repo": "zaoseon-site",
-        "glob": "data/analytics/sns_daily.json",
-        "max_days": 2,
-        "next": "아침 브리핑 성과 기록 확인",
-        "who": "아침 브리핑"
-      }
-    ],
-    "feedback_rule": {
-      "after": {
-        "label": "주간 효과분석",
-        "repo": "zaoseon-site",
-        "glob": "docs/주간_효과분석_*.md",
-        "max_days": 8
-      },
-      "plan": {
-        "label": "주제 은행",
-        "repo": "zaoseon-site",
-        "glob": "data/topics/topic_bank.md",
-        "max_days": 8
-      },
-      "next": "주간 효과분석의 '바꿀 것'을 주제 은행·계획에 넣기",
-      "who": "①"
-    }
-  },
-  "hook_situation": "이사|개업|계약|입주|결혼|혼례|상견례|이직|퇴사|취업|면접|시험|수능|합격|연애|고백|소개팅|재회|이별|헤어|날 잡|날짜|집|여행|출산|돌잔치|창업|투자|첫 출근|새해 계획",
-  "speech_ban": {
-    "_설명": "대본·화면 글 표현 금지(대표 지적 모음, tools/script_audit.py 가 표지·화면글·풀이·CTA에 적용). 정본 자오선 말투 검사는 sns-images natural_audit.py — 여기는 대본 단계에서 먼저 막는 것만. 11/18 K-257: 대본·화면 글은 센 구역이라 '~예요?'·'~었어요?' 막음은 뺐다(정중 구역 감정서·주문서는 zaoseon-site 검사가 맡음).",
-    "목록": [
-      [
-        "내게",
-        "'내게'는 안 쓰는 말 → '나한테'(대표 10/18)"
-      ],
-      [
-        "(?<![가-힣])짝(?!수)",
-        "띠 궁합 '짝'은 어색 → '잘 맞는 띠'(대표 11/17)"
-      ],
-      [
-        "세 지도|두 지도|여섯 지도",
-        "'지도' 비유 금지(K-086)"
-      ],
-      [
-        "재미로",
-        "면책 문장 금지(K-128)"
-      ],
-      [
-        "상담",
-        "'상담' 금지 → 코칭(K-012)"
-      ],
-      [
-        "힘 ?쓸 ?달|아낄 ?달",
-        "→ 좋은 달·조심할 달(K-193)"
-      ],
-      [
-        "반드시|무조건|적중|확실합니다",
-        "확신어 금지(R20)"
-      ],
-      [
-        "결과 ?보장|효과 ?보장",
-        "효과 보장 금지(R20)"
-      ]
-    ]
-  },
-  "voice": {
-    "구역": {
-      "센": "릴스·스레드 첫 줄, 화면 글, 광고 첫 줄, 프로필: 반말·팩폭·유행어·단정형·놀리듯 찌르기 허용. 첫 줄은 보는 사람이 찔리는 장면",
-      "정중": "감정서·주문서·결제·고객 메일·답글: 높임말",
-      "센_구역에서도_금지": [
-        "돈·건강·사망·이혼 확약",
-        "가짜 숫자·가짜 마감",
-        "특정 띠 겁주기",
-        "효과 보장",
-        "메타 광고에서 보는 사람 개인 특성 단정(정책 위반)"
-      ],
-      "근거": "대표 11/18 21:27·21:34(K-257)"
-    },
-    "첫줄_장치": {
-      "_설명": "크빵이 후킹 제목 3장치(docs/research/kubbang_transcript.md ⑦·⑨, 벤치마크 docs/benchmark_ai_creator_accounts_v1.md E05·E06). 센 구역 표지 훅은 셋 중 하나 이상이어야 한다(K-258, script_audit 막음).",
-      "채팅말투": "(ㅋ|ㅠ|ㄷㄷ|\\.\\.|아니 |진짜 |하\\.|헐|ㄹㅇ|실화|각$|각 |인 썰|이래\\?)",
-      "정확한숫자": "[0-9]",
-      "센발음": "(빠꾸|손절|쎄|떡상|떡락|뽕|쓸어 담|몰빵|찐|꿀팁|대방출|고농축|때려친|간땡이|개념 가출|팩폭|뼈 때|정 떨|미쳤|역대급|소름|퇴사각|존버|텅장|금사빠|자만추|박살|털리|날린|폭망|대박)",
-      "단어_튜닝": {
-        "무료": "공짜",
-        "정보": "꿀팁",
-        "좋은 달": "떡상 달",
-        "조심할 달": "털리는 달",
-        "알려 드립니다": "풉니다",
-        "모아 봤어요": "대방출",
-        "돈 많이 버는": "돈 쓸어 담는"
-      },
-      "단어_튜닝_정중구역_제외": "감정서·주문서·결제·고객 메일에는 튜닝 말을 쓰지 않는다(K-257 정중 구역)",
-      "그대로_금지": [
-        "돈 성과 숫자 훅(월천·N백만원 벌었다 — 우리는 그런 성과가 없음, 지어내기 금지)",
-        "'반응 없으면 삭제' 가짜 희소성",
-        "팔로우 조건 DM"
-      ]
-    },
-    "크빵이_구조": {
-      "_설명": "크빵이 @ku_bbang 11/16 캐러셀 '회사에서 몰래 SNS 키우던 MZ의 비밀'(10장, 좋아요 295·댓글 13·공유 54, 같은 주 다른 글보다 높음)과 11/8 자료집 재오픈 이벤트(578·161) 구조. 대표 11/18 21:42 반영 지시(K-259). 출처 docs/research/kubbang_transcript.md ⑩",
-      "표지": "상황+비밀 훅 큰 글 + 캐릭터 말풍선 '꼬리 한 줄'(그래서 이게 얼마나 쏠쏠하냐면,,) — 다음 장을 넘길 이유. 대본 표지.보조 칸이 꼬리",
-      "2~3장": "공감 장면(남들은 ~ 빠듯한데) → '찐친한테만 몰래 알려 준 것' 비밀 열기",
-      "본문": "번호 + 실제 화면(캡처) + 쉬운 설명 2~4줄",
-      "끝장": "정리 한 줄 + 친구 태그 CTA('관심 있는 친구 태그해서 보내 줘'). 팬 호칭을 부른다",
-      "캡션_첫줄": "채팅 말투 감탄('오늘 거 진짜 꿀팁이다 ㄷㄷ')"
-    },
-    "CTA_은행_센구역": [
-      "{띠}띠 친구 태그해서 보내 줘",
-      "이 날 잡는 친구한테 바로 보내 줘",
-      "저장해 두고 그날 꺼내 봐",
-      "궁금한 거 댓글에 하나만 남겨 줘, 다음 편으로 풀게"
-    ],
-    "판매_글_순서": "크빵이 E14: 내 경험 교훈 → '이걸 정리해서 만든 게 있다' → 상품 화면(목차·쪽) + 후기 → 댓글 이벤트('갖고 싶은 이유') → 오픈 예고. 지어낸 후기·가짜 마감 금지"
-  },
-  "toon": {
-    "color_rules": {
-      "_설명": "소품·효과선·감정요소 색 규칙(K-277). 공통 원칙은 docs/rules/KCOS_공통_제작규칙_v1.md 2절 '브랜드별 소품·효과선·감정요소 색'",
-      "근거": "대표 2026-11-23 15:4x \"송이의 경우 소품(베개랑 이불)이 가시랑 같은 색이라 묻히거든. 브랜드 별 소품 색상 규칙도 만들자. 브랜드별 소품, 효과선, 감정표현 등 색상 규칙 작성해줘\" + 같은 날 검수 ⑩ SW-A04 \"반짝이 위치가 캐릭터와 멀리 있어. 그리고 색상도 검정색이 아닌 다른 색 적용\"",
-      "공통": [
-        "소품 채움: 브랜드 캐릭터 화풍과 어울리는 차분한 파스텔·뮤트 톤 + 사물 고유의 자연색(나무=부드러운 우드, 과일·채소=그 색). 생뚱맞은 원색·형광색·과하게 탁한 회색톤 금지",
-        "'소품' 표의 색은 검수 ⑫ 시안 수정 때 쓴 **예시값이지 고정값이 아니다** — 모든 소품을 그 색으로 맞추지 않는다(대표 11/24)",
-        "소품 외곽선 = 딥 톤온톤: 소품 본체 색과 같은 계열 안에서 명도를 확실히 낮춘 색(블루·하늘→딥 네이비, 민트·그린→딥 틸·포레스트, 웜베이지·우드·노랑→딥 브라운, 핑크·코랄→딥 로즈·플럼). 검정(#000000) 금지, 명도만 1단계 살짝 내린 흐린 색(예: 하늘→중간 파랑) 금지. 기준: 채움과 외곽선 명도 대비 2.5:1 이상(tools/color_rules_check.py)",
-        "소품은 캐릭터 몸의 주색·외곽선과 같은 색 계열로 칠해 묻히지 않게 한다 — 특히 캐릭터와 맞닿거나 겹치는 소품(침구·이불·옷·가방). 브랜드 '소품_금지' 참고",
-        "효과선(외침·놀람·속도·떨림선) = 그 캐릭터의 외곽선 색 또는 딥 톤온톤 색으로 통일",
-        "얼굴 안쪽 밀착 기호(빠직·땀방울·눈물·눈물길) = 볼터치처럼 외곽선 없는 단색 면(K-287 v4, 렌더러 face_marks_no_outline)",
-        "띄움 감정요소(반짝이·하트·물음표)는 색으로 그린다. 검정 단색 금지. 효과·감정요소는 캐릭터 실루엣 가까이(머리 폭 0.5배 안)",
-        "생성 사양의 소품 색 문장은 브랜드 '생성_문장'을 그대로 쓴다"
-      ],
-      "몸_주색": {
-        "판": "어두운 단색판(assets/palettes/color_combos.json)",
-        "글자": "#FFFFFF"
-      },
-      "소품_금지": [
-        "판 색과 대비 4.5 미만"
-      ],
-      "효과선": {
-        "색": "#FFFFFF",
-        "규칙": "캐릭터 외곽선 색 또는 딥 톤온톤 색으로 통일"
-      },
-      "감정요소": {
-        "sparkle": "#E7C88D"
-      },
-      "적용": "정월 그림 사용 범위 확정(보류 중) 뒤 정월 컷에만. 카드·릴스 판 색은 color_combos.json 그대로",
-      "소품_외곽선": {
-        "규칙": "딥 톤온톤 — 소품 본체 색과 같은 계열 안에서 명도를 확실히 낮춘 색(대비 2.5:1 이상). 검정·1단계만 낮춘 흐린 색·캐릭터 외곽선 색 금지",
-        "계열_예": {
-          "블루·하늘": "딥 네이비 #1F2F5C",
-          "민트·그린": "딥 틸 #0F4C4A 또는 포레스트 #1E4D2B",
-          "웜베이지·우드·노랑": "딥 브라운 #5A3A1E",
-          "핑크·코랄": "딥 로즈 #8A2E4A 또는 플럼 #5E2A4A"
-        },
-        "예시값": {
-          "포인트": "#5A3A1E"
-        },
-        "근거": "대표 2026-11-24 \"검수 ⑫의 청록·남색·연파랑은 당시 시안 수정용이었으므로 모든 소품을 그 색으로 고정하지 말 것\" · 1) 소품 채움 = 차분한 파스텔·뮤트 + 사물 고유 자연색, 원색·형광·탁한 회색 금지 2) 소품 외곽선 = 딥 톤온톤(같은 계열 안에서 명도를 확실히 낮춤, 검정·1단계만 낮춘 흐린 색 금지) 3) 효과선 = 캐릭터 외곽선 색 또는 딥 톤온톤 4) 얼굴 밀착 기호 = 외곽선 없는 단색 면",
-        "이전_확정": "",
-        "이전_값": {
-          "포인트": "#B8975C"
-        }
-      },
-      "근거_v2": "대표 2026-11-24 \"검수 ⑫의 청록·남색·연파랑은 당시 시안 수정용이었으므로 모든 소품을 그 색으로 고정하지 말 것\" · 1) 소품 채움 = 차분한 파스텔·뮤트 + 사물 고유 자연색, 원색·형광·탁한 회색 금지 2) 소품 외곽선 = 딥 톤온톤(같은 계열 안에서 명도를 확실히 낮춤, 검정·1단계만 낮춘 흐린 색 금지) 3) 효과선 = 캐릭터 외곽선 색 또는 딥 톤온톤 4) 얼굴 밀착 기호 = 외곽선 없는 단색 면",
-      "소품_예시": {
-        "_설명": "검수 ⑫ 시안 수정 때 쓴 색(예시, 고정 아님). 이 계열만 쓰라는 뜻이 아니다",
-        "포인트": "#E7C88D"
-      },
-      "얼굴_밀착_기호": "빠직·땀방울·눈물·눈물길 = 외곽선 없는 단색 면(볼터치처럼). 렌더러는 specs/toon_rules.json face_marks_no_outline, 생성은 specs/stamp_rules.json(K-287 v4)",
-      "생성_문장": "PROP COLOR: calm pastel or muted tones that suit the Zaoseon character style, or the object's own natural color (wood = soft natural wood, fruit and vegetables = their real colors). Never neon, never harsh pure primary colors, never dull muddy gray. Props keep strong contrast with the dark background board. PROP COLOR MIX (K-292): never paint every prop in one slot. Each prop gets the slot of its own natural material, and a prop with several parts (cup body / lid / sleeve, desk top / legs, laptop body / keyboard, badge card / strap) uses 2–3 different slots by part. When a picture has several props, they use different slots — do not make them all blue (or all one color). PROP OUTLINE (deep tone-on-tone): outline each prop with a DEEP, CLEARLY DARKER shade from the SAME color family as its own fill — blue/sky props → deep navy, mint/green → deep teal or forest green, warm beige/wood/yellow → deep brown, pink/coral → deep rose or plum. Never black (#000000), never just a slightly darker mid-tone of the fill, never the character's own outline color. EFFECT LINES (shout, surprise, speed lines): the character's outline color (#FFFFFF on dark boards). FACE-ATTACHED MARKS (anger vein, sweat drops, tears): flat solid color shapes with NO outline, like the blush on the cheeks.",
-      "근거_K292": "대표 2026-11-24 채팅 \"소품을 일괄적으로 한가지 색으로만 쓰지 말 것\""
-    },
-    "fx_style": {
-      "preset": "classic",
-      "colors": {
-        "sparkle": "#E7C88D"
-      }
-    }
+   },
+   {
+    "label": "네이버 원고(의도 카드 포함)",
+    "repo": "zaoseon-site",
+    "glob": "public/naver/n*.html",
+    "max_days": 4,
+    "next": "다음 원고 의도 카드(K-143)부터 쓰기",
+    "who": "①"
+   }
+  ],
+  "make": [
+   {
+    "label": "릴스·카드 제작물(예약일 기준)",
+    "repo": "sns-images",
+    "glob": "content/reel_swaps.json",
+    "max_days": 3,
+    "next": "승인된 대본으로 릴스·카드 만들기",
+    "who": "①"
+   }
+  ],
+  "gate": [
+   {
+    "label": "대본 검사",
+    "check": "script_audit",
+    "next": "막힌 대본 카드 고치기",
+    "who": "①"
+   }
+  ],
+  "approve": [
+   {
+    "label": "승인 기다리는 릴스·카드",
+    "repo": "sns-images",
+    "glob": "content/reel_swaps.json",
+    "max_days": 3,
+    "next": "운영앱 '승인·확인할 것'에서 누르기",
+    "who": "대표",
+    "count": "status=new",
+    "future": true
+   },
+   {
+    "label": "노션 검수 판정 기록(통합 검수함 → 저장소 사본)",
+    "repo": "kcos-motion",
+    "glob": "docs/status/검수_기록.json",
+    "max_days": 8,
+    "next": "검수함 체크를 읽어 검수_기록.json 에 옮긴다(K-278)",
+    "who": "실키 PM"
+   }
+  ],
+  "publish": [
+   {
+    "label": "네이버 앞으로 예약",
+    "repo": "zaoseon-site",
+    "glob": "public/naver/queue.json",
+    "max_days": 3,
+    "next": "앞으로 예약이 비었으면 다음 원고 예약 올리기",
+    "who": "서브 노트북",
+    "future_key": "at"
+   },
+   {
+    "label": "SNS 앞으로 예약",
+    "repo": "zaoseon-site",
+    "glob": "data/sns_live.json",
+    "max_days": 3,
+    "next": "Metricool 앞으로 예약 채우기",
+    "who": "①",
+    "future_key": "t"
+   },
+   {
+    "label": "네이버 클립 앞으로 예정",
+    "repo": "sns-images",
+    "glob": "content/post_clips.json",
+    "max_days": 3,
+    "future_key": "rec",
+    "next": "다음 클립 묶음 대본(K-227) → 대표 승인 → html_motion --채널=naver_clip 렌더 → post_clips.json·clip_hold.json 등록",
+    "who": "①",
+    "_설명": "11/23 실키 조사: 마지막 클립 rec 11/17, 그 뒤 제작 0건인데 감시가 없어 아무도 몰랐다(대표 11/23 '네이버 클립 제작이 언제부턴가 안되고 있거든')"
+   }
+  ],
+  "measure": [
+   {
+    "label": "주간 효과분석",
+    "repo": "zaoseon-site",
+    "glob": "docs/주간_효과분석_*.md",
+    "max_days": 8,
+    "next": "주간 효과분석(일 20:07) 실행 확인",
+    "who": "주간 분석"
+   },
+   {
+    "label": "매일 성과",
+    "repo": "zaoseon-site",
+    "glob": "data/analytics/sns_daily.json",
+    "max_days": 2,
+    "next": "아침 브리핑 성과 기록 확인",
+    "who": "아침 브리핑"
+   }
+  ],
+  "feedback_rule": {
+   "after": {
+    "label": "주간 효과분석",
+    "repo": "zaoseon-site",
+    "glob": "docs/주간_효과분석_*.md",
+    "max_days": 8
+   },
+   "plan": {
+    "label": "주제 은행",
+    "repo": "zaoseon-site",
+    "glob": "data/topics/topic_bank.md",
+    "max_days": 8
+   },
+   "next": "주간 효과분석의 '바꿀 것'을 주제 은행·계획에 넣기",
+   "who": "①"
   }
+ },
+ "hook_situation": "이사|개업|계약|입주|결혼|혼례|상견례|이직|퇴사|취업|면접|시험|수능|합격|연애|고백|소개팅|재회|이별|헤어|날 잡|날짜|집|여행|출산|돌잔치|창업|투자|첫 출근|새해 계획",
+ "speech_ban": {
+  "_설명": "대본·화면 글 표현 금지(대표 지적 모음, tools/script_audit.py 가 표지·화면글·풀이·CTA에 적용). 정본 자오선 말투 검사는 sns-images natural_audit.py — 여기는 대본 단계에서 먼저 막는 것만. 11/18 K-257: 대본·화면 글은 센 구역이라 '~예요?'·'~었어요?' 막음은 뺐다(정중 구역 감정서·주문서는 zaoseon-site 검사가 맡음).",
+  "목록": [
+   [
+    "내게",
+    "'내게'는 안 쓰는 말 → '나한테'(대표 10/18)"
+   ],
+   [
+    "(?<![가-힣])짝(?!수)",
+    "띠 궁합 '짝'은 어색 → '잘 맞는 띠'(대표 11/17)"
+   ],
+   [
+    "세 지도|두 지도|여섯 지도",
+    "'지도' 비유 금지(K-086)"
+   ],
+   [
+    "재미로",
+    "면책 문장 금지(K-128)"
+   ],
+   [
+    "상담",
+    "'상담' 금지 → 코칭(K-012)"
+   ],
+   [
+    "힘 ?쓸 ?달|아낄 ?달",
+    "→ 좋은 달·조심할 달(K-193)"
+   ],
+   [
+    "반드시|무조건|적중|확실합니다",
+    "확신어 금지(R20)"
+   ],
+   [
+    "결과 ?보장|효과 ?보장",
+    "효과 보장 금지(R20)"
+   ]
+  ]
+ },
+ "voice": {
+  "구역": {
+   "센": "릴스·스레드 첫 줄, 화면 글, 광고 첫 줄, 프로필: 반말·팩폭·유행어·단정형·놀리듯 찌르기 허용. 첫 줄은 보는 사람이 찔리는 장면",
+   "정중": "감정서·주문서·결제·고객 메일·답글: 높임말",
+   "센_구역에서도_금지": [
+    "돈·건강·사망·이혼 확약",
+    "가짜 숫자·가짜 마감",
+    "특정 띠 겁주기",
+    "효과 보장",
+    "메타 광고에서 보는 사람 개인 특성 단정(정책 위반)"
+   ],
+   "근거": "대표 11/18 21:27·21:34(K-257)"
+  },
+  "첫줄_장치": {
+   "_설명": "크빵이 후킹 제목 3장치(docs/research/kubbang_transcript.md ⑦·⑨, 벤치마크 docs/benchmark_ai_creator_accounts_v1.md E05·E06). 센 구역 표지 훅은 셋 중 하나 이상이어야 한다(K-258, script_audit 막음).",
+   "채팅말투": "(ㅋ|ㅠ|ㄷㄷ|\\.\\.|아니 |진짜 |하\\.|헐|ㄹㅇ|실화|각$|각 |인 썰|이래\\?)",
+   "정확한숫자": "[0-9]",
+   "센발음": "(빠꾸|손절|쎄|떡상|떡락|뽕|쓸어 담|몰빵|찐|꿀팁|대방출|고농축|때려친|간땡이|개념 가출|팩폭|뼈 때|정 떨|미쳤|역대급|소름|퇴사각|존버|텅장|금사빠|자만추|박살|털리|날린|폭망|대박)",
+   "단어_튜닝": {
+    "무료": "공짜",
+    "정보": "꿀팁",
+    "좋은 달": "떡상 달",
+    "조심할 달": "털리는 달",
+    "알려 드립니다": "풉니다",
+    "모아 봤어요": "대방출",
+    "돈 많이 버는": "돈 쓸어 담는"
+   },
+   "단어_튜닝_정중구역_제외": "감정서·주문서·결제·고객 메일에는 튜닝 말을 쓰지 않는다(K-257 정중 구역)",
+   "그대로_금지": [
+    "돈 성과 숫자 훅(월천·N백만원 벌었다 — 우리는 그런 성과가 없음, 지어내기 금지)",
+    "'반응 없으면 삭제' 가짜 희소성",
+    "팔로우 조건 DM"
+   ]
+  },
+  "크빵이_구조": {
+   "_설명": "크빵이 @ku_bbang 11/16 캐러셀 '회사에서 몰래 SNS 키우던 MZ의 비밀'(10장, 좋아요 295·댓글 13·공유 54, 같은 주 다른 글보다 높음)과 11/8 자료집 재오픈 이벤트(578·161) 구조. 대표 11/18 21:42 반영 지시(K-259). 출처 docs/research/kubbang_transcript.md ⑩",
+   "표지": "상황+비밀 훅 큰 글 + 캐릭터 말풍선 '꼬리 한 줄'(그래서 이게 얼마나 쏠쏠하냐면,,) — 다음 장을 넘길 이유. 대본 표지.보조 칸이 꼬리",
+   "2~3장": "공감 장면(남들은 ~ 빠듯한데) → '찐친한테만 몰래 알려 준 것' 비밀 열기",
+   "본문": "번호 + 실제 화면(캡처) + 쉬운 설명 2~4줄",
+   "끝장": "정리 한 줄 + 친구 태그 CTA('관심 있는 친구 태그해서 보내 줘'). 팬 호칭을 부른다",
+   "캡션_첫줄": "채팅 말투 감탄('오늘 거 진짜 꿀팁이다 ㄷㄷ')"
+  },
+  "CTA_은행_센구역": [
+   "{띠}띠 친구 태그해서 보내 줘",
+   "이 날 잡는 친구한테 바로 보내 줘",
+   "저장해 두고 그날 꺼내 봐",
+   "궁금한 거 댓글에 하나만 남겨 줘, 다음 편으로 풀게"
+  ],
+  "판매_글_순서": "크빵이 E14: 내 경험 교훈 → '이걸 정리해서 만든 게 있다' → 상품 화면(목차·쪽) + 후기 → 댓글 이벤트('갖고 싶은 이유') → 오픈 예고. 지어낸 후기·가짜 마감 금지"
+ },
+ "toon": {
+  "color_rules": {
+   "_설명": "소품·효과선·감정요소 색 규칙(K-277). 공통 원칙은 docs/rules/KCOS_공통_제작규칙_v1.md 2절 '브랜드별 소품·효과선·감정요소 색'",
+   "근거": "대표 2026-11-23 15:4x \"송이의 경우 소품(베개랑 이불)이 가시랑 같은 색이라 묻히거든. 브랜드 별 소품 색상 규칙도 만들자. 브랜드별 소품, 효과선, 감정표현 등 색상 규칙 작성해줘\" + 같은 날 검수 ⑩ SW-A04 \"반짝이 위치가 캐릭터와 멀리 있어. 그리고 색상도 검정색이 아닌 다른 색 적용\"",
+   "공통": [
+    "소품 채움: 브랜드 캐릭터 화풍과 어울리는 차분한 파스텔·뮤트 톤 + 사물 고유의 자연색(나무=부드러운 우드, 과일·채소=그 색). 생뚱맞은 원색·형광색·과하게 탁한 회색톤 금지",
+    "'소품' 표의 색은 검수 ⑫ 시안 수정 때 쓴 **예시값이지 고정값이 아니다** — 모든 소품을 그 색으로 맞추지 않는다(대표 11/24)",
+    "소품 외곽선 = 딥 톤온톤: 소품 본체 색과 같은 계열 안에서 명도를 확실히 낮춘 색(블루·하늘→딥 네이비, 민트·그린→딥 틸·포레스트, 웜베이지·우드·노랑→딥 브라운, 핑크·코랄→딥 로즈·플럼). 검정(#000000) 금지, 명도만 1단계 살짝 내린 흐린 색(예: 하늘→중간 파랑) 금지. 기준: 채움과 외곽선 명도 대비 2.5:1 이상(tools/color_rules_check.py)",
+    "소품은 캐릭터 몸의 주색·외곽선과 같은 색 계열로 칠해 묻히지 않게 한다 — 특히 캐릭터와 맞닿거나 겹치는 소품(침구·이불·옷·가방). 브랜드 '소품_금지' 참고",
+    "효과선(외침·놀람·속도·떨림선) = 그 캐릭터의 외곽선 색 또는 딥 톤온톤 색으로 통일",
+    "얼굴 안쪽 밀착 기호(빠직·땀방울·눈물·눈물길) = 볼터치처럼 외곽선 없는 단색 면(K-287 v4, 렌더러 face_marks_no_outline)",
+    "띄움 감정요소(반짝이·하트·물음표)는 색으로 그린다. 검정 단색 금지. 효과·감정요소는 캐릭터 실루엣 가까이(머리 폭 0.5배 안)",
+    "생성 사양의 소품 색 문장은 브랜드 '생성_문장'을 그대로 쓴다"
+   ],
+   "몸_주색": {
+    "판": "어두운 단색판(assets/palettes/color_combos.json)",
+    "글자": "#FFFFFF"
+   },
+   "소품_금지": [
+    "판 색과 대비 4.5 미만"
+   ],
+   "효과선": {
+    "색": "#FFFFFF",
+    "규칙": "캐릭터 외곽선 색 또는 딥 톤온톤 색으로 통일"
+   },
+   "감정요소": {
+    "sparkle": "#E7C88D"
+   },
+   "적용": "정월 그림 사용 범위 확정(보류 중) 뒤 정월 컷에만. 카드·릴스 판 색은 color_combos.json 그대로",
+   "소품_외곽선": {
+    "규칙": "딥 톤온톤 — 소품 본체 색과 같은 계열 안에서 명도를 확실히 낮춘 색(대비 2.5:1 이상). 검정·1단계만 낮춘 흐린 색·캐릭터 외곽선 색 금지",
+    "계열_예": {
+     "블루·하늘": "딥 네이비 #1F2F5C",
+     "민트·그린": "딥 틸 #0F4C4A 또는 포레스트 #1E4D2B",
+     "웜베이지·우드·노랑": "딥 브라운 #5A3A1E",
+     "핑크·코랄": "딥 로즈 #8A2E4A 또는 플럼 #5E2A4A"
+    },
+    "예시값": {
+     "포인트": "#5A3A1E"
+    },
+    "근거": "대표 2026-11-24 \"검수 ⑫의 청록·남색·연파랑은 당시 시안 수정용이었으므로 모든 소품을 그 색으로 고정하지 말 것\" · 1) 소품 채움 = 차분한 파스텔·뮤트 + 사물 고유 자연색, 원색·형광·탁한 회색 금지 2) 소품 외곽선 = 딥 톤온톤(같은 계열 안에서 명도를 확실히 낮춤, 검정·1단계만 낮춘 흐린 색 금지) 3) 효과선 = 캐릭터 외곽선 색 또는 딥 톤온톤 4) 얼굴 밀착 기호 = 외곽선 없는 단색 면",
+    "이전_확정": "",
+    "이전_값": {
+     "포인트": "#B8975C"
+    }
+   },
+   "근거_v2": "대표 2026-11-24 \"검수 ⑫의 청록·남색·연파랑은 당시 시안 수정용이었으므로 모든 소품을 그 색으로 고정하지 말 것\" · 1) 소품 채움 = 차분한 파스텔·뮤트 + 사물 고유 자연색, 원색·형광·탁한 회색 금지 2) 소품 외곽선 = 딥 톤온톤(같은 계열 안에서 명도를 확실히 낮춤, 검정·1단계만 낮춘 흐린 색 금지) 3) 효과선 = 캐릭터 외곽선 색 또는 딥 톤온톤 4) 얼굴 밀착 기호 = 외곽선 없는 단색 면",
+   "소품_예시": {
+    "_설명": "검수 ⑫ 시안 수정 때 쓴 색(예시, 고정 아님). 이 계열만 쓰라는 뜻이 아니다",
+    "포인트": "#E7C88D"
+   },
+   "얼굴_밀착_기호": "빠직·땀방울·눈물·눈물길 = 외곽선 없는 단색 면(볼터치처럼). 렌더러는 specs/toon_rules.json face_marks_no_outline, 생성은 specs/stamp_rules.json(K-287 v4)",
+   "생성_문장": "PROP COLOR: calm pastel or muted tones that suit the Zaoseon character style, or the object's own natural color (wood = soft natural wood, fruit and vegetables = their real colors). Never neon, never harsh pure primary colors, never dull muddy gray. Props keep strong contrast with the dark background board. PROP COLOR MIX (K-292): never paint every prop in one slot. Each prop gets the slot of its own natural material, and a prop with several parts (cup body / lid / sleeve, desk top / legs, laptop body / keyboard, badge card / strap) uses 2–3 different slots by part. When a picture has several props, they use different slots — do not make them all blue (or all one color). PROP OUTLINE (deep tone-on-tone): outline each prop with a DEEP, CLEARLY DARKER shade from the SAME color family as its own fill — blue/sky props → deep navy, mint/green → deep teal or forest green, warm beige/wood/yellow → deep brown, pink/coral → deep rose or plum. Never black (#000000), never just a slightly darker mid-tone of the fill, never the character's own outline color. EFFECT LINES (shout, surprise, speed lines): the character's outline color (#FFFFFF on dark boards). FACE-ATTACHED MARKS (anger vein, sweat drops, tears): flat solid color shapes with NO outline, like the blush on the cheeks.",
+   "근거_K292": "대표 2026-11-24 채팅 \"소품을 일괄적으로 한가지 색으로만 쓰지 말 것\""
+  },
+  "fx_style": {
+   "preset": "classic",
+   "colors": {
+    "sparkle": "#E7C88D"
+   }
+  }
+ },
+ "bgm_meta": {
+  "_설명": "인스타·페이스북용 BGM(메타 사운드 컬렉션, K-296). 대표 11/24 배정 확정. 유튜브·네이버·스레드에는 쓰지 않는다(html_motion 음원권리_검사). 곡 정보 specs/bgm_sources.json",
+  "파일": [
+   "assets/bgm/meta/zaoseon_meta_sun_down.m4a",
+   "assets/bgm/meta/zaoseon_meta_spaces.m4a",
+   "assets/bgm/meta/zaoseon_meta_stone.m4a",
+   "assets/bgm/meta/zaoseon_meta_wavy.m4a",
+   "assets/bgm/meta/zaoseon_meta_you.m4a"
+  ]
+ }
 }
