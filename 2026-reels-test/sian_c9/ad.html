@@ -121,17 +121,17 @@ const GRAPH={
   const ed=(A,B)=>{const dx=B[0]-A[0],dy=B[1]-A[1],Ln=Math.hypot(dx,dy);seg(A[0]+dx/Ln*o,A[1]+dy/Ln*o,B[0]-dx/Ln*o,B[1]-dy/Ln*o,e,P.mute||P.ink,8)};
   if(e>0&&e<1)M('삼각형그리기');ed(top,lb);ed(lb,rb);ed(rb,top);chip(top[0],top[1],r2,HJ['소'],{on:0});chip(lb[0],lb[1],r2,HJ['뱀'],{on:1,a:sp(t-t0+.2,14,.6)});chip(rb[0],rb[1],r2,HJ['닭'],{on:1,a:sp(t-t0+.15,14,.6)})}},
  // C: 카드가 뒤집혀(짝수는 가로, 홀수는 세로 축) 글자가 아래에서 올라오고, 아래 점 10개가 하나씩 켜진다
- '카드열장':{h:s=>360+64,draw(i,t,L){
-  const s=SC[i],t0=s['초'][0],STEM=['갑','을','병','정','무','기','경','신','임','계'],w=300,h=L.gH-64,x=CX(),y=L.gy+h/2,p=eio(cl((t-t0)/.3)),ang=(1-p)*Math.PI,k=Math.abs(Math.cos(ang)),hor=i%2===0;
+ '카드열장':{h:s=>360+130,draw(i,t,L){
+  const s=SC[i],t0=s['초'][0],STEM=['갑','을','병','정','무','기','경','신','임','계'],w=300,h=L.gH-130,x=CX(),y=L.gy+h/2,p=eio(cl((t-t0)/.3)),ang=(1-p)*Math.PI,k=Math.abs(Math.cos(ang)),hor=i%2===0;
   g.save();g.translate(x,y);g.scale(hor?Math.max(.03,k):1,hor?1:Math.max(.03,k));
   if(t-t0<.3)M(i%3===2?'타일뒤집기':'카드뒤집기');
   if(i%3===2){g.restore();g.save();g.translate(x,y);const n=3,th=h/n;for(let q=0;q<n;q++){const pq=eio(cl((t-t0-q*.06)/.18)),kq=Math.abs(Math.cos((1-pq)*Math.PI));   // 타일뒤집기: 세 줄이 차례로 뒤집힘
     g.save();g.translate(0,-h/2+th*(q+.5));g.scale(1,Math.max(.03,kq));g.fillStyle=pq<.5?P.off:P.acc;g.beginPath();g.roundRect(-w/2,-th/2,w,th,q===0?[40,40,0,0]:q===n-1?[0,0,40,40]:0);g.fill();g.restore()}
-   if(t-t0>.32){g.fillStyle=P.accInk;g.font=`900 ${Math.round(h*.46)}px PL`;g.textAlign='center';g.textBaseline='middle';g.fillText(s['화면글'][0],0,8)}g.restore();dots(SC.length,i,L.gy+L.gH-14);return}
+   if(t-t0>.32){g.fillStyle=P.accInk;g.font=`900 ${Math.round(h*.46)}px PL`;g.textAlign='center';g.textBaseline='middle';g.fillText(s['화면글'][0],0,8)}g.restore();dots(SC.length,i,L.gy+L.gH-18);return}
   if(ang>Math.PI/2){g.fillStyle=P.off;g.beginPath();g.roundRect(-w/2,-h/2,w,h,40);g.fill()}
   else{g.fillStyle=P.acc;g.beginPath();g.roundRect(-w/2,-h/2,w,h,40);g.fill();if(k>.9){const m=eio(cl((t-t0-.28)/.2));g.save();g.beginPath();g.rect(-w/2,-h/2,w,h);g.clip();
    const sr=t-t0-.28,ch=sr<.25?STEM[(Math.floor(sr*40)+i)%10]:s['화면글'][0];if(sr<.25&&sr>0)M('슬롯롤링');g.fillStyle=P.accInk;g.font=`900 ${Math.round(h*.46)}px PL`;g.textAlign='center';g.textBaseline='middle';g.fillText(ch,0,8+(1-m)*h*.6);g.restore()}}   // 슬롯롤링: 열 글자가 굴러가다 내 글자에 멈춤
-  g.restore();{const bt=t-t0;if(bt<.4)M('공튀기기');const yd=L.gy+L.gH-14;dots(SC.length,i,yd-Math.max(0,Math.sin(cl(bt/.4)*Math.PI))*14);if(i>0&&bt<.3){M('궤적선');const X_=k=>CX()+(k-(SC.length-1)/2)*44;F.trail(g,t,t0,.3,u=>[mix(X_(i-1),X_(i),u),yd-Math.sin(u*Math.PI)*22],{color:P.acc,r:8,n:10})}}}}};
+  g.restore();{const bt=t-t0;if(bt<.4)M('공튀기기');const yd=L.gy+L.gH-18;dots(SC.length,i,yd-Math.max(0,Math.sin(cl(bt/.4)*Math.PI))*14);if(i>0&&bt<.3){M('궤적선');const X_=k=>CX()+(k-(SC.length-1)/2)*44;F.trail(g,t,t0,.3,u=>[mix(X_(i-1),X_(i),u),yd-Math.sin(u*Math.PI)*22],{color:P.acc,r:8,n:10})}}}}};
 
 // ── 그리기
 function draw(t){g.setTransform(1,0,0,1,0,0);g.fillStyle=P.bg;g.fillRect(0,0,1080,1920);

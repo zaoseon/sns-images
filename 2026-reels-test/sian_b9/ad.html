@@ -92,14 +92,14 @@ const GRAPH={
   const lit=s.id==='원숭이'?{'쥐':t-t0>=.02,'원숭이':t-t0>=.2,'용':t-t0>=.38}:null;if(lit&&t-t0<.45)M('노드불켜기');   // 노드불켜기: 화살표가 닿는 차례로 켜짐
   ['쥐','용','원숭이'].forEach(d=>chip(P_[d][0],P_[d][1],mix(r,r2,u),HJ[d],{on:lit?(lit[d]?1:0):(d===s.id?1:0)}))}},
  // B: 이번 두 띠가 양쪽에서 들어와(짝수 편은 옆에서, 홀수 편은 위에서 떨어짐) 서로 곡선 화살표를 주고받는다
- '좌우만남':{h:s=>2*80+64,draw(i,t,L){
+ '좌우만남':{h:s=>2*80+100,draw(i,t,L){   // 11/24 점 줄 간격(K-267): 칩↔점 줄 36→68px(검수 ③ ①편, ②편과 같은 원인)
   const s=SC[i],t0=s['초'][0],ids=s.id.match(/쥐|소|호랑이|돼지|토끼|개|용|닭|뱀|원숭이|말|양/g),r=80,cy=L.gy+r,ea0=CW(r,HJ[ids[0]])/2,eb0=CW(r,HJ[ids[1]])/2,xa=CX()-405+ea0,xb=CX()+405-eb0;
   const u=eio((t-t0)/(i%2===0?.28:.2)),side=i%2===0,oa=side?[(1-u)*-360,0]:[0,(1-u)*-90],ob=side?[(1-u)*360,0]:[0,(1-u)*-70];
   const bounce=side?0:Math.max(0,Math.sin(cl((t-t0-.2)/.2)*Math.PI))*-18;if(u<1)M(side?'좌우대결':'공튀기기');
   chip(xa+oa[0],cy+oa[1]+bounce,r,HJ[ids[0]],{on:1});chip(xb+ob[0],cy+ob[1]+bounce,r,HJ[ids[1]],{on:1});
   const p=eio((t-t0-.04)/.24),dash=i%3===2?[22,18]:null;
   const ea=ea0,eb=eb0;if(p>0&&p<1)M('곡선화살표');ARW(xa+ea+GA,cy-28,xb-eb-GA,cy-28,p,{bend:-50,dash});ARW(xb-eb-GA,cy+28,xa+ea+GA,cy+28,p,{bend:-50,dash});   // 두 칩 옆구리에서 나가 위·아래로 휘어 주고받음
-  dots(SC.length,i,L.gy+L.gH-14)}},
+  dots(SC.length,i,L.gy+L.gH-18)}},
  // G: 달력(숫자가 위아래로 갈라지며 1일→5일) → 丑이 子를 화살표로 끌어 줌 → 丑 둘레로 빛살 → 丑·巳·酉 삼각형
  '달력과절기':{fit:s=>['절기','뱀닭'].includes(s.id),h:s=>({'절기':300,'쥐':2*R0,'소':2*R0+2*44}[s.id]||2*RT+TH),draw(i,t,L){
   const s=SC[i],t0=s['초'][0],r=R0;

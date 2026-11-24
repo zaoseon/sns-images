@@ -517,6 +517,7 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
         for r in [q for q in rows_ if not (len(q) > 7 and q[7])] + [[None, *q] for q in bx_]:
             x0_, y0_, x1_, y1_ = [int(round(v)) for v in r[1:5]]
             if y0_ < top or y1_ > bot or x1_ <= x0_: continue
+            if r[0] is not None and any(_안(r[1:5], q) for q in bx_모두): continue   # 11/24 칩·카드 안의 글은 판 위의 글(②와 같은 기준). 굵은 글자가 상자 안을 70% 넘게 채우면 '글 자리 옅은 면 < .3' 예외를 못 받던 오탐(검수 ③ ③편 '용띠' 칩)
             G = B["glow_gap"]
             for 쪽, (ya, yb) in (("아래", (y1_ + 6, y1_ + 6 + G)), ("위", (y0_ - 6 - G, y0_ - 6))):
                 ya, yb = max(ya, top), min(yb, bot)
