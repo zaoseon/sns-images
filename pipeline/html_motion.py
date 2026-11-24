@@ -684,14 +684,14 @@ def _재질표():
 
 # 오디오 4층(대표 11/24 "오디오 4층 싱크 + 덕킹 + 마스터링(알렉스 B)") — 값 정본 specs/audio_layers.json, 아래는 파일이 없을 때 기본값
 _층기본 = {
-    "층": {"음악": {"db": 0.0, "기준_LUFS": -16.0},
-          "이동": {"db": -6.0, "선행_초": 0.06, "k": ["whoosh", "swoosh", "라이저", "글리치"]},
-          "타격": {"db": -5.0, "k": []},
+    "층": {"음악": {"db": -3.0, "기준_LUFS": -16.0},
+          "이동": {"db": 0.0, "선행_초": 0.06, "k": ["whoosh", "swoosh", "라이저", "글리치"]},
+          "타격": {"db": 0.0, "k": []},
           "저음": {"db": -3.0, "k": ["subdrop", "thud", "저음임팩트"]}},
-    "효과음_리미터": {"한계": 0.5},
+    "효과음_리미터": {"한계": 0.5, "attack_ms": 1, "release_ms": 40},
     "컷_클릭": {"k": "click", "겹침_초": 0.03},
     "덕킹": {"db": -12.0, "어택_초": 0.12, "릴리스_초": 0.3},
-    "마스터": {"I": -14.0, "TP": -1.0, "LRA": 11.0, "허용_LUFS": 1.0, "리미터_release_ms": 250, "리미터_attack_ms": 5},
+    "마스터": {"I": -16.0, "TP": -1.0, "LRA": 11.0, "허용_LUFS": 1.0, "리미터_release_ms": 250, "리미터_attack_ms": 5},
 }
 효과음층 = ("이동", "타격", "저음")
 
@@ -860,7 +860,7 @@ def 안전리미터(x, sr, 한계_dBFS=-1.5, attack_ms=5, release_ms=250):
 
 
 def 마스터링(mp4, 표=None):
-    """대표 11/24 '마스터 -14 LUFS / -1 dBTP': 목표까지 선형 이득 → 느린 안전 리미터(release ≥200ms, 음악을 툭툭 누르지 않게 K-295) → loudnorm 2패스 linear.
+    """대표 11/24 '마스터 -14 LUFS / -1 dBTP'(K-303 11/25 대표 '기존 릴스처럼' → 목표 -16, 표 specs/audio_layers.json): 목표까지 선형 이득 → 느린 안전 리미터(release ≥200ms, 음악을 툭툭 누르지 않게 K-295) → loudnorm 2패스 linear.
     완성본(aac)을 다시 재서 TP 가 넘으면 리미터 한계를 내려 다시(최대 3번). 돌려줌 {LUFS, TP, LRA, 리미터_dBFS, 방식, 통과}."""
     M = (표 or 층표())["마스터"]; sr = 48000; x0 = _pcm(mp4, None, sr); I0 = float(_라우드(mp4)["input_i"])
     한계 = M["TP"] - 0.5; wav = mp4 + ".mst.wav"; tmp = mp4 + ".mst.mp4"; r = {}
@@ -936,11 +936,11 @@ def _wav쓰기(path, x, sr=48000):
 
 
 def 소리붙이기(mp4, 초, html, 분위기="fun", 이름=None, 음악파일=None):
-    """음악 + HTML 의 window.SFX 효과음 → 4층 섞기·덕킹·마스터(-14 LUFS / -1 dBTP) → 48kHz aac. 영상은 다시 인코딩하지 않는다.
+    """음악 + HTML 의 window.SFX 효과음 → 4층 섞기·덕킹(기본 끔)·마스터(-16 LUFS / -1 dBTP, K-303) → 48kHz aac. 영상은 다시 인코딩하지 않는다.
     대표 11/24 "오디오 4층 싱크 + 덕킹 + 마스터링(알렉스 B)". 층 표 specs/audio_layers.json.
     페이지 API: window.SFX=[{t,k,v,lead}] (k 로 층: 이동·타격·저음, 이동 층은 0.06초 선행, lead:0 이면 끔)
                window.SFX_LEAD=초(이동 층 기본 선행을 바꿈) · window.CUTS=[초 | {t,k,v}…](컷마다 0.03초 click)
-               window.DUCK=[{t,d,db:-12,a,r}](음악 층만 램프로 낮춤 — 음악빠짐_검사에서 뺌) · window.DROP/DROP_OK(K-295) · window.VO
+               window.DUCK=[{t,d,db:-12,a,r}]+window.DUCK_OK=true(기본 끔 K-303. 켜면 음악 층만 램프로 낮춤 — 음악빠짐_검사에서 뺌) · window.DROP/DROP_OK(K-295) · window.VO
     음악파일: 주면 그 파일(0초부터)을 쓰고(main --음악), 없으면 music_plan 합성곡."""
     import numpy as np
     from playwright.sync_api import sync_playwright
@@ -950,10 +950,12 @@ def 소리붙이기(mp4, 초, html, 분위기="fun", 이름=None, 음악파일=N
         pg.goto(__import__("pathlib").Path(os.path.abspath(html)).as_uri())   # 윈도 경로도 되게(file:///C:/…)
         cues = pg.evaluate("() => window.SFX || []"); vo = pg.evaluate("() => window.VO || []")
         drops = pg.evaluate("() => window.DROP || []"); drop_ok = pg.evaluate("() => window.DROP_OK === true")
-        ducks = pg.evaluate("() => window.DUCK || []"); cuts = pg.evaluate("() => window.CUTS || []")
+        ducks = pg.evaluate("() => window.DUCK || []"); duck_ok = pg.evaluate("() => window.DUCK_OK === true"); cuts = pg.evaluate("() => window.CUTS || []")
         lead = pg.evaluate("() => (typeof window.SFX_LEAD === 'number') ? window.SFX_LEAD : null"); b.close()
     if drops and not drop_ok:   # K-295(대표 11/24 ⑱ v7 "무음 드롭을 빼는게 낫지 않겠냐?" → v8 승인·규칙 변경 1): 무음 드롭은 기본 끔. 대표가 그 편에서 확인한 때만 window.DROP_OK=true
         print(f"  [알림] 무음 드롭 {len(drops)}곳은 적용하지 않았어요 — 기본 끔(K-295). 꼭 필요하면 대표 확인 뒤 페이지에 window.DROP_OK=true"); drops = []
+    if ducks and not duck_ok:   # K-303(대표 11/25 "기존방식으로"): 덕킹도 무음 드롭처럼 기본 끔 — ⑱ v9 에서 음악이 0.55초 동안 원곡보다 6dB 넘게 빠짐(끊김). 대표가 그 편에서 확인한 때만 window.DUCK_OK=true
+        print(f"  [알림] 덕킹 {len(ducks)}곳은 적용하지 않았어요 — 기본 끔(K-303). 꼭 필요하면 대표 확인 뒤 페이지에 window.DUCK_OK=true"); ducks = []
     표 = 층표(); SR = 48000; 층db = {L: float(표["층"][L].get("db", 0)) for L in 표["층"]}
     # ① 음악 층: 파일 또는 music_plan → 기준 LUFS(-16)로 선형 맞춤 → 층 크기
     if 음악파일:
@@ -969,7 +971,8 @@ def 소리붙이기(mp4, 초, html, 분위기="fun", 이름=None, 음악파일=N
     music *= 덕킹곡선(len(music), SR, ducks, 표)[:, None]   # ⑤ 덕킹: 음악 층만, 램프(K-295 계단 금지)
     # ②~④ 효과음 3층: 선행·컷 클릭·층 크기 → 효과음 줄에만 부드러운 한계(K-295)
     q = 큐정리(cues, cuts, lead, 표); 층들 = _효과음층(초, q, SR, 표)
-    s = sum(층들[L] * 10 ** (층db[L] / 20) for L in 효과음층); Lm = float(표.get("효과음_리미터", {}).get("한계", .5)); s = Lm * np.tanh(s / Lm)
+    s = sum(층들[L] * 10 ** (층db[L] / 20) for L in 효과음층); EL = 표.get("효과음_리미터", {}); Lm = float(EL.get("한계", .5))
+    s = 안전리미터(s, SR, 20 * np.log10(Lm), float(EL.get("attack_ms", 1)), float(EL.get("release_ms", 40)))   # K-303: 예전 방식(alimiter limit=0.5·attack 1·release 40) — tanh 는 효과음 머리를 깎아 덜 또렷했음
     mix = music + s[:, None]
     if drops:   # K-288 무음 드롭(K-295 뒤로는 대표 확인한 편만): 음악+효과음을 그 구간만 낮춘다(10ms 램프, 목소리는 뒤에 얹으므로 낮아지지 않음)
         mix *= 덕킹곡선(len(mix), SR, [{"t": x["t"], "d": x.get("d", 1.0), "db": DROP_DB, "a": .01, "r": .01} for x in drops], 표)[:, None]; info["무음드롭"] = drops
