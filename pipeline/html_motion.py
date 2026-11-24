@@ -97,14 +97,22 @@ async def _shoot(html, 초, fps, w, h, tmp, 한계, 구역, 블러=1, ch="reel",
             _ct = (await pg.evaluate("typeof window.coverT==='number'?window.coverT:null")) if (i == 0 and (표지채널 or ch) in ("naver_clip", "reel", "youtube_shorts")) else None   # 11/14: 인스타 릴스·쇼츠도 첫 프레임이 표지(가이드 "인스타 릴스도 같은 첫 프레임")
             if _ct is not None:
                 await pg.evaluate("t => window.seek(t)", _ct); await pg.screenshot(path=os.path.join(tmp, f"f{i:05d}.png")); continue
-            for k in range(블러):
-                await pg.evaluate("t => window.seek(t)", (i + 0.5 * k / 블러) / fps)
+            # K-294 빠른 순간만 모션 블러: 페이지에 window.FAST(FX.fast 로 적은 구간)가 있으면 그 구간 프레임만 셔터 한 프레임 4장 평균, 나머지는 선명하게 1장
+            sel = await pg.evaluate("t=>{window.seek(t);return Array.isArray(window.FAST)?(window.FAST.some(r=>t>=r[0]-0.02&&t<=r[1]+0.02)?2:1):0}", i / fps)
+            if sel == 1:
+                await pg.screenshot(path=os.path.join(tmp, f"f{i:05d}.png")); continue
+            nb, sh = (max(4, 블러), 1.0) if sel == 2 else (블러, 0.5)
+            for k in range(nb):
+                await pg.evaluate("t => window.seek(t)", (i + sh * k / nb) / fps)
                 a = np.asarray(Image.open(io.BytesIO(await pg.screenshot())).convert("RGB"), dtype=np.float32)
                 acc = a if acc is None else acc + a
-            Image.fromarray((acc / 블러).round().astype("uint8")).save(os.path.join(tmp, f"f{i:05d}.png"))
+            Image.fromarray((acc / nb).round().astype("uint8")).save(os.path.join(tmp, f"f{i:05d}.png"))
         await b.close()
     if 고정없이: json.dump(opts, open(os.path.join(tmp, "frame_opts.json"), "w", encoding="utf-8"), ensure_ascii=False)
     return n
+
+
+BEAT = None   # K-294: tools/beat_grid.py 로 잰 {bpm, offset} — main 의 --음악=<파일> 이 채운다. 페이지는 F.BEAT.T(k)
 
 
 def _spec_js(ch="reel"):
@@ -113,7 +121,8 @@ def _spec_js(ch="reel"):
     DOM 검사(.safe/.mk)는 캔버스 글자를 못 잰다. 그래서 fillText 를 감싸 글자 상자를 직접 잰다."""
     C = CS.CH[ch]; z = {r[0]: list(r[1:5]) for r in C["zones"]}
     spec = dict(safe=list(C["safe"]), top=z["상단 고정"], bottom=z["하단 고정"])
-    return ("window.ZS_BRAND=" + json.dumps(브랜드(), ensure_ascii=False) + ";window.ZS_SPEC=" + json.dumps(spec) + ";window.__zsTxt=[];window.__zsFrame=0;"
+    return (("window.ZS_BEAT=" + json.dumps({"bpm": BEAT["bpm"], "offset": BEAT["offset"]}) + ";" if BEAT else "") +   # K-294 박자 격자(--음악)
+            "window.ZS_BRAND=" + json.dumps(브랜드(), ensure_ascii=False) + ";window.ZS_SPEC=" + json.dumps(spec) + ";window.__zsTxt=[];window.__zsFrame=0;"
             "(function(){const P=CanvasRenderingContext2D.prototype;['fillText','strokeText'].forEach(k=>{const o=P[k];P[k]=function(s,x,y,...r){"
             "try{if(!(window.__zsFrame||window.__zsBG)&&this.canvas&&this.canvas.isConnected&&this.globalAlpha>0.15&&String(s).trim()){const m=this.measureText(s),T=this.getTransform(),"
             "w=m.width,al=this.textAlign,x0=al==='center'?x-w/2:(al==='right'||al==='end')?x-w:x,a=m.actualBoundingBoxAscent,d=m.actualBoundingBoxDescent,"
@@ -575,6 +584,7 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
             h_a, h_b = 띠[k_][1] - 띠[k_][0], 띠[k_ + 1][1] - 띠[k_ + 1][0]
             if max(h_a, h_b) < B["graphic_h"]: continue
             if m[띠[k_][1] - ay0 + 1:띠[k_ + 1][0] - ay0].sum() > 0: continue   # 틈에 가는 선·점이 지나가면 한 그림의 부분(삼합 원판의 꼭짓점 원 등)
+            if any(r_[2] <= 띠[k_][1] and r_[4] >= 띠[k_ + 1][0] for r_ in rows_): continue   # 11/24 K-294: 한 글자 상자 안의 틈('?'·'!' 의 점, 'ㅎ' 꼭지)은 그림과 이웃 사이가 아니다 — ⑱ v7 '?' 360px 오탐
             gr_ = np.abs(A[띠[k_][1] - ay0 + 1:띠[k_ + 1][0] - ay0] - bg).max(2) > 20
             if len(gr_) and (gr_.sum(1) > 14).all(): continue   # 11/15 K-213: 틈이 배경과 비슷한 색 띠(촛대 줄무늬 등)로 꽉 차 있으면 한 그림의 부분
             # 11/15 15:23 대표 "선택 카드랑 위에 텍스트 문장 간격이 붙어서": 큰 그림 바로 위의 제목 줄은 그 줄 높이만큼 이상 띄운다(92px 제목에 77px 간격이 붙어 보임)
@@ -706,7 +716,9 @@ def 소리붙이기(mp4, 초, html, 분위기="fun", 이름=None):
     import music_plan as MP
     from playwright.sync_api import sync_playwright
     with sync_playwright() as pw:
-        b = pw.chromium.launch(); pg = b.new_page(); pg.goto("file://" + os.path.abspath(html))
+        b = pw.chromium.launch(); pg = b.new_page()
+        if BEAT: pg.add_init_script("window.ZS_BEAT=" + json.dumps({"bpm": BEAT["bpm"], "offset": BEAT["offset"]}))   # K-294: 렌더 때와 같은 박자로 효과음 시각을 읽는다
+        pg.goto("file://" + os.path.abspath(html))
         cues = pg.evaluate("() => window.SFX || []"); vo = pg.evaluate("() => window.VO || []")
         drops = pg.evaluate("() => window.DROP || []"); b.close()
     info = MP.choose(분위기, 이름 or os.path.splitext(os.path.basename(mp4))[0])
@@ -967,6 +979,10 @@ def main():
     for c in chs:
         if c not in CS.CH: raise SystemExit(f"[막음] 모르는 채널 {c} — channel_specs.VIDEO: {CS.VIDEO}")
     if any(x == "--가이드" for x in sys.argv): os.environ["ZS_GUIDE"] = "1"
+    if opt("음악"):   # K-294: 음악의 실제 BPM·첫 박을 재서 페이지에 넣는다(F.BEAT). 소리붙이기 음악과 같은 파일을 쓸 때만 의미가 있다
+        global BEAT
+        sys.path[:0] = [HERE, os.path.join(os.path.dirname(HERE), "tools")]; import beat_grid as BG   # 정본 tools/ · 사본 pipeline/
+        BEAT = BG.measure(opt("음악"), float(opt("초", "60")) + 1); print(f"  박자 격자: {BEAT['bpm']}bpm · 첫 박 {BEAT['offset']}초 ({BEAT['file']})")
     설계 = opt("설계", "reel")   # 11/12: 페이지를 어느 채널 규격으로 짰나(메타 스토리 광고 등). 다른 채널은 여기서 자동으로 옮긴다
     if 설계 not in CS.CH: raise SystemExit(f"[막음] 모르는 설계 채널 {설계}")
     if a and opt("확인"):

@@ -315,6 +315,118 @@ FX.checkCard=(g,t,t0,{x,y,w=520,title='',items=[],font=null,tfont=null,fg='#111'
  g.font=F_;g.textAlign='left';items.forEach((s,i)=>{const p=cl((t-t0-.25-i*step)/.2);if(p<=0)return;const yy=y+56+ts*1.5+(i+.5)*fs*lh;g.globalAlpha=p;g.fillStyle=A_;g.fillText('☑',x+36,yy);g.fillStyle=fg;g.fillText(s,x+36+fs*1.3,yy)});g.restore()};
 FX.mark=n=>{if(typeof window!=='undefined'&&!window.__zsFrame)(window.__zsFxUsed=window.__zsFxUsed||{})[n]=1};
 window.FXK=FX;})();
+// ───────── K-294 묶음 A(대표 11/24 "A부터 진행", 외부 자료 분석 커리어해커 알렉스 5종 → 노션 422435565da9811fb808c13eff992f2c) ─────────
+// ⑱ 지적 '루즈함·끊김' 대응: ① 화면 전체 카메라 층 ② 실제 박자 격자(첫 박 오프셋) ③ 전환 5 · 글자 4 · 장면 4 ④ 움직임 기본값 ⑤ 빠른 순간만 모션 블러.
+// 모두 시간 t 만으로 그린다(seek 규칙). 색·글꼴은 인자로 받는다(브랜드 값을 박지 않음). 자료의 프롬프트 문장·색은 옮기지 않고 움직임만 우리 코드로 다시 만들었다.
+(function(){const FX=typeof window!=='undefined'&&window.FXK;if(!FX)return;const {cl,mix,ease,eio,sp,H}=FX,W_=()=>1080,PI=Math.PI;
+const fs_=f=>parseFloat((/(\d+(?:\.\d+)?)px/.exec(f)||[0,80])[1]);
+// ④ 움직임 기본값(자료 용어 카드 21종에서 공통으로 쓰는 값): 예비동작 0.1~0.2초 · 오버랩 0.12초 · 스태거 0.06~0.12초 · 결과는 0.8~1초 멈춰 읽히기(그동안도 카메라 드리프트는 계속)
+FX.MOTION={anticip:.15,overlap:.12,stagger:.08,hold:.9,punch:.2,drift:.02};
+// 역할별 이징: 등장=expo.out · 빨려 들어감=ease-in · 카메라=inOut · 튐=spring
+FX.EZ={in:x=>{x=cl(x);return x>=1?1:1-Math.pow(2,-10*x)},out:x=>{x=cl(x);return x*x*x},cam:eio,spring:x=>sp(x,16,.6)};
+// 예비동작: t0 부터 d 초 동안 반대로 살짝(back) 물러났다가 dur 동안 1 로. 0~1 이 아닌 값(-back~1)을 돌려준다
+FX.anticip=(t,t0,{d=FX.MOTION.anticip,back=.12,dur=.45}={})=>{const u=t-t0;if(u<=0)return 0;if(u<d)return -back*Math.sin(u/d*PI/2);return mix(-back,1,FX.EZ.in((u-d)/dur))};
+
+// ⑤ 빠른 순간만 모션 블러: 페이지가 FX.fast(a,b) 로 구간을 적으면 html_motion 이 그 구간 프레임만 셔터 4장 평균, 나머지는 선명하게 1장.
+// (window.FAST 가 없는 옛 페이지는 지금처럼 전 프레임 2장 평균 그대로)
+FX.fast=(a,b)=>{if(typeof window==='undefined')return;window.FAST=window.FAST||[];if(!window.FAST.some(r=>Math.abs(r[0]-a)<1e-3&&Math.abs(r[1]-b)<1e-3))window.FAST.push([a,b])};
+
+// ② 박자 격자: html_motion --음악=<파일> 이 tools/beat_grid.py 로 잰 값을 window.ZS_BEAT={bpm,offset} 으로 넣는다.
+// T(k)=k번째 박 시각(첫 박 오프셋 포함) · snap(t,div)=가장 가까운 1/div 박 · build(k0,[2,2,4])=한 박→반 박→¼박으로 빨라지는 타격 시각 · breath(k)=큰 타격 k 직전 반 박 쉼 시작
+FX.beat=({bpm=120,offset=0}={})=>{const B=60/bpm,T=k=>offset+k*B;return {bpm,offset,B,T,
+ snap:(t,div=2)=>{const q=B/div;return offset+Math.round((t-offset)/q)*q},
+ build:(k0,counts=[2,2,4])=>{const r=[];let k=k0;counts.forEach((n,i)=>{const st=1/Math.pow(2,i);for(let j=0;j<n;j++){r.push(T(k));k+=st}});return r},
+ breath:k=>T(k)-B/2}};
+FX.BEAT=FX.beat((typeof window!=='undefined'&&window.ZS_BEAT)||{});
+
+// ① 카메라 층: FX.camSetup({scenes:[[a,b],…], hits:[초…], drops:[[a,b],…], zooms:[{t,d,s,x,y}]}) 를 한 번 부르고, 장면마다 g.save();FX.cam(g,t);…;g.restore().
+//  · 장면 안 드리프트: 1→1+drift(기본 2%) 확대 + 장면마다 방향을 바꾸는 미세 이동(멈춘 화면 없애기)
+//  · 타격 펀치: hits 시각마다 0.2초 안에 줌 펀치 + 짧은 흔들림(감쇠)
+//  · 상태 확대: zooms 로 한 점을 향해 확대(주인공이 화면을 채움)
+//  · 무음 드롭 구간에서는 끈다(멈춤 자체가 연출)
+FX.camSetup=(o={})=>{FX._cam=Object.assign({scenes:[],hits:[],drops:[],zooms:[],drift:FX.MOTION.drift,punch:.035,shake:12,dur:FX.MOTION.punch},o)};
+FX.camAt=t=>{const C=FX._cam;if(!C)return {s:1,dx:0,dy:0,r:0,fx:FX.cx,fy:FX.cy};let s=1,dx=0,dy=0,r=0,fx=FX.cx,fy=FX.cy;
+ if(C.drops.some(([a,b])=>t>=a&&t<b))return {s,dx,dy,r,fx,fy};
+ const i=C.scenes.findIndex(([a,b])=>t>=a&&t<b);if(i>=0){const [a,b]=C.scenes[i],u=cl((t-a)/Math.max(.01,b-a));s*=1+C.drift*u;const d=i%2?1:-1;dx+=d*C.drift*300*u}   // 세로로는 밀지 않는다(위·아래 여백 균형 관문 — ⑱ v7 시험)
+ for(const h of C.hits){const u=t-h;if(u<0||u>=C.dur)continue;const e=Math.pow(1-u/C.dur,2);s*=1+C.punch*e;dx+=C.shake*e*Math.sin(u*90+h*7);dy+=C.shake*.7*e*Math.cos(u*75+h*5);r+=.004*e*Math.sin(u*60)}
+ for(const z of C.zooms){const p=eio(cl((t-z.t)/(z.d||.5)));if(p<=0)continue;s*=mix(1,z.s||1.2,p);fx=mix(fx,z.x??FX.cx,p);fy=mix(fy,z.y??FX.cy,p)}
+ return {s,dx,dy,r,fx,fy}};
+FX.cam=(g,t)=>{const c=FX.camAt(t);g.translate(c.fx+c.dx,c.fy+c.dy);g.rotate(c.r);g.scale(c.s,c.s);g.translate(-c.fx,-c.fy);FX.mark('카메라층');return c};
+
+// 오프스크린 판(글자 창·셔터용). 연결 안 된 캔버스라 관문 기록에 안 남는다 — 전환 0.3~0.6초 동안만 쓴다
+FX._off=(g,k='a')=>{FX.__off=FX.__off||{};let c=FX.__off[k];const w=g.canvas.width,h=g.canvas.height;if(!c||c.width!==w||c.height!==h){c=document.createElement('canvas');c.width=w;c.height=h;FX.__off[k]=c}const x=c.getContext('2d');x.setTransform(1,0,0,1,0,0);x.globalAlpha=1;x.globalCompositeOperation='source-over';x.clearRect(0,0,w,h);return [c,x]};
+
+// ③-전환 5종
+// 대각선마커와이프: 굵은 사선 띠(color)가 왼→오로 지나가고, 지나간 자리에 다음 장면(drawNext(g)). 지금 장면을 먼저 그린 뒤 부른다
+FX.diagWipe=(g,t,t0,{dur=.35,color='#F4CE62',band=180,ang=-.32,drawNext=null}={})=>{const p=eio(cl((t-t0)/dur));if(p<=0)return;if(p>=1){drawNext&&drawNext(g);return}
+ const Hh=g.canvas.height,k=Math.tan(ang)*Hh,X=mix(-band-Math.abs(k),W_()+band+Math.abs(k),p);FX.fast(t0,t0+dur);
+ g.save();g.beginPath();g.moveTo(-10,-10);g.lineTo(X,-10);g.lineTo(X+k,Hh+10);g.lineTo(-10,Hh+10);g.closePath();g.clip();drawNext&&drawNext(g);g.restore();
+ g.save();g.fillStyle=color;g.beginPath();g.moveTo(X,-10);g.lineTo(X+band,-10);g.lineTo(X+band+k,Hh+10);g.lineTo(X+k,Hh+10);g.closePath();g.fill();g.restore();FX.mark('대각선와이프')};
+// 휩팬: 지금 장면이 dir 쪽으로 빠르게 밀려나고 다음 장면이 반대쪽에서 들어옴. 속도 곡선(가운데 가장 빠름) + 넘어가는 순간만 잔상 3겹
+FX.whip=(g,t,t0,{dur=.3,dir=1,drawA,drawB}={})=>{const u=cl((t-t0)/dur);if(t<t0){drawA(g);return}if(u>=1){drawB(g);return}FX.fast(t0,t0+dur);
+ const p=eio(u),v=Math.sin(u*PI),Wd=W_();const one=(off)=>{g.save();g.translate(-dir*Wd*p+off,0);drawA(g);g.restore();g.save();g.translate(dir*Wd*(1-p)+off,0);drawB(g);g.restore()};
+ one(0);if(v>.35){g.save();g.globalAlpha=.22*v;for(const k of [1,2,3]){one(dir*k*28*v)}g.restore()}FX.mark('휩팬')};
+// 글자창: 큰 글자 안에 다음 장면이 비치고, 글자가 확 커지며 화면 전체가 다음 장면이 됨
+FX.textWindow=(g,t,t0,{text,font='800 300px PL',x=FX.cx,y=FX.cy,dur=.6,hold=.25,drawNext}={})=>{const u=t-t0;if(u<0)return;const [c,x2]=FX._off(g,'tw');drawNext(x2);
+ const z=u<hold?1:Math.pow(40,FX.EZ.out(cl((u-hold)/(dur-hold))));if(z>30){g.drawImage(c,0,0);return}FX.fast(t0+hold,t0+dur);
+ x2.globalCompositeOperation='destination-in';x2.font=font;x2.textAlign='center';x2.textBaseline='middle';x2.fillStyle='#000';x2.save();x2.translate(x,y);x2.scale(z,z);x2.fillText(text,0,0);x2.restore();g.drawImage(c,0,0);FX.mark('글자창전환')};
+// 글자셔터: 큰 글자가 n개 세로 판으로 갈라져 위·아래 번갈아 열리며 다음 장면이 드러남(bg=지금 판 색)
+FX.textShutter=(g,t,t0,{text,font='800 260px PL',x=FX.cx,y=FX.cy,ink='#FAF8F3',bg='#0D1424',n=5,dur=.5,hold=.3,drawNext}={})=>{const u=t-t0;if(u<0)return;const p=FX.EZ.out(cl((u-hold)/(dur-hold)));
+ if(p>=1){drawNext(g);return}if(p>0){drawNext(g);FX.fast(t0+hold,t0+dur)}const Hh=g.canvas.height,Wd=W_(),sw=Wd/n;
+ for(let i=0;i<n;i++){g.save();g.beginPath();g.rect(i*sw-.5,0,sw+1,Hh);g.clip();g.translate(0,(i%2?1:-1)*Hh*p);g.fillStyle=bg;g.fillRect(0,0,Wd,Hh);g.font=font;g.textAlign='center';g.textBaseline='middle';g.fillStyle=ink;g.fillText(text,x,y);g.restore()}FX.mark('글자셔터')};
+// 점매치컷: 골드 점 하나가 앞 장면의 동그라미(from)에서 다음 장면의 동그라미(to)로 날아가며 크기가 바뀜(해→달→로고). 날아가는 동안 진행 방향으로 늘어남
+FX.dotMatch=(g,t,t0,{from,to,dur=.5,color='#F4CE62'}={})=>{const u=cl((t-t0)/dur);if(t<t0)return;const p=eio(u),x=mix(from.x,to.x,p),y=mix(from.y,to.y,p),r=mix(from.r,to.r,p),v=Math.sin(u*PI),an=Math.atan2(to.y-from.y,to.x-from.x);
+ if(u<1&&u>0)FX.fast(t0,t0+dur);g.save();g.translate(x,y);g.rotate(an);g.scale(1+.6*v,1-.25*v);g.fillStyle=color;g.beginPath();g.arc(0,0,r,0,7);g.fill();g.restore();FX.mark('점매치컷')};
+
+// ③-글자 4종
+// 형광반전: 글자 위로 띠가 지나가고, 띠가 덮은 부분만 글자색이 반전(inv). 강조 1색 규칙과 맞음(band=강조색)
+// 띠는 둥근 상자로 그려 관문이 '상자 안 글'로 잰다(여백 = 관문 둘레 기준 글자 크기의 0.4 이상: 가로 pad·세로 bh). 띠 위·아래 요소는 띠 끝에서 122px 넘게 띄운다
+FX.highlight=(g,t,t0,{text,font='800 140px PL',x=FX.cx,y=FX.cy,ink='#FAF8F3',inv='#0D1424',band='#F4CE62',dur=.4,pad=.42}={})=>{g.save();g.font=font;g.textAlign='center';g.textBaseline='middle';const w=g.measureText(text).width,fs=fs_(font),x0=x-w/2-fs*pad,bw=w+2*fs*pad,bh=fs*1.6;
+ g.fillStyle=ink;g.fillText(text,x,y);const p=FX.EZ.in(cl((t-t0)/dur));if(p>0){g.beginPath();g.roundRect(x0,y-bh/2,Math.max(1,bw*p),bh,Math.min(fs*.12,bw*p/2));g.fillStyle=band;g.fill();g.clip();g.fillStyle=inv;const w0=window.__zsBG;window.__zsBG=1;g.fillText(text,x,y);window.__zsBG=w0}g.restore();if(p>0)FX.mark('형광반전')};
+// 핵심어뽑기: 한 줄 문장이 보이다가 t0 부터 나머지 낱말은 작아지며 사라지고 key 낱말만 가운데로 와서 커짐(사주 풀이 문장 → 1~2단어)
+FX.keyword=(g,t,t0,{text,key,font='800 84px PL',x=FX.cx,y=FX.cy,ink='#FAF8F3',acc='#F4CE62',scale=2.2,dur=.55}={})=>{const ws=String(text).split(' ');g.save();g.font=font;g.textBaseline='middle';g.textAlign='center';
+ const spw=g.measureText(' ').width,wd=ws.map(w=>g.measureText(w).width),TW=wd.reduce((a,b)=>a+b,0)+spw*(ws.length-1);let xx=x-TW/2;const p=eio(cl((t-t0)/dur));
+ ws.forEach((w,i)=>{const cx_=xx+wd[i]/2;xx+=wd[i]+spw;const isK=w.includes(key);g.save();
+  if(isK){g.translate(mix(cx_,x,p),y);g.scale(mix(1,scale,p),mix(1,scale,p));g.fillStyle=p>.5?acc:ink;g.fillText(w,0,0)}
+  else{const a=1-cl(p*1.6);if(a>.02){g.globalAlpha=a;g.translate(cx_,y+p*30);g.scale(1-.4*p,1-.4*p);g.fillStyle=ink;g.fillText(w,0,0)}}g.restore()});g.restore();if(p>0)FX.mark('핵심어뽑기')};
+// 태그수렴: 흩어진 작은 낱말(tags)이 빨려 들어가듯(ease-in) 가운데로 모이며 사라지고, 그 자리에 큰 문장(text)이 쾅
+FX.tagConverge=(g,t,t0,{tags=[],text,font='800 150px PL',tfont='700 54px PL',x=FX.cx,y=FX.cy,ink='#FAF8F3',acc='#F4CE62',dur=.45,seed=3}={})=>{const u=t-t0;if(u<-.6)return;const A=FX.area();g.save();g.textAlign='center';g.textBaseline='middle';
+ if(u<dur){window.__zsLoose=1;g.font=tfont;tags.forEach((s,i)=>{const sx=mix(A.x0+80,A.x1-80,H(i*3+seed)),sy=mix(A.y0+60,A.y1-60,H(i*7+seed+1)),a0=cl((u+.6-i*.04)/.2),p=FX.EZ.out(cl(u/dur));
+  g.globalAlpha=a0*(1-p);g.fillStyle=i%3?ink:acc;g.fillText(s,mix(sx,x,p),mix(sy,y,p))});window.__zsLoose=0;if(u>0)FX.fast(t0,t0+dur)}
+ if(u>=dur*.85){const a=sp(u-dur*.85,18,.55);g.globalAlpha=1;g.font=font;g.fillStyle=ink;g.translate(x,y);g.scale(mix(1.4,1,cl(a)),mix(1.4,1,cl(a)));g.fillText(text,0,0)}g.restore();if(u>=0)FX.mark('태그수렴')};
+// 마스크상승: 줄마다 자기 줄 칸 안에서 아래→위로 올라오며 기울기가 바로 섬(stagger 로 줄 차례)
+FX.maskRise=(g,t,t0,{lines=[],font='800 120px PL',x=FX.cx,y=FX.cy,lh=1.25,ink='#FAF8F3',dur=.45,stagger=FX.MOTION.stagger,tilt=-.12,colors=null}={})=>{const fs=fs_(font),n=lines.length;g.save();g.font=font;g.textAlign='center';g.textBaseline='middle';
+ lines.forEach((s,i)=>{const p=FX.EZ.in(cl((t-t0-i*stagger)/dur));if(p<=0)return;const yy=y+(i-(n-1)/2)*fs*lh;g.save();g.beginPath();g.rect(0,yy-fs*.62,W_(),fs*1.24);g.clip();
+  g.translate(x,yy+(1-p)*fs*1.1);g.transform(1,0,tilt*(1-p),1,0,0);g.fillStyle=colors?colors[i]:ink;g.fillText(s,0,0);g.restore()});g.restore();FX.mark('마스크상승')};
+
+// ③-장면 4종
+// 스포트라이트: items(12띠 등)를 cols 칸 격자로 깔고, t0+lift 에 pick 하나만 떠오르고(크기·골드 원판) 나머지는 어두워짐
+FX.spotlight=(g,t,t0,{items=[],pick=0,cols=4,font='800 64px PL',ink='#FAF8F3',acc='#F4CE62',on='#0D1424',lift=.7,area=null,dim=.22}={})=>{const A=area||FX.area(),rows=Math.ceil(items.length/cols),cw=(A.x1-A.x0)/cols,ch=Math.min(200,(A.y1-A.y0)/rows),y0=(A.y0+A.y1)/2-rows*ch/2;
+ const L=sp(t-t0-lift,14,.6);g.save();g.font=font;g.textAlign='center';g.textBaseline='middle';
+ items.forEach((s,i)=>{const a=cl(sp(t-t0-i*.04,18,.7));if(a<=0)return;const cx_=A.x0+(i%cols+.5)*cw,cy_=y0+(Math.floor(i/cols)+.5)*ch,me=i===pick;g.save();
+  if(me&&L>0){g.translate(cx_,cy_-14*cl(L));const k=1+.3*L;g.scale(k,k);g.fillStyle=acc;g.beginPath();g.arc(0,0,Math.min(cw,ch)*.46,0,7);g.globalAlpha=cl(L);g.fill();g.globalAlpha=1;g.fillStyle=on;g.fillText(s,0,0)}
+  else{g.globalAlpha=a*(L>0?mix(1,dim,cl(L)):1);g.translate(cx_,cy_+(1-a)*30);g.fillStyle=ink;g.fillText(s,0,0)}g.restore()});g.restore();FX.mark('스포트라이트')};
+// 원형글자링: 낱말들이 원 둘레에 서서 천천히 돎. hi 에 든 번호만 강조색. bg=true 면 배경 층(간격 검사 제외 — 정보가 아닌 장식일 때만)
+FX.textRing=(g,t,t0,{items=[],x=FX.cx,y=FX.cy,r=330,font='800 58px PL',ink='#FAF8F3',acc='#F4CE62',spin=.25,hi=[],bg=false}={})=>{const a=cl(sp(t-t0,12,.7));if(a<=0)return;const draw=()=>{g.save();g.translate(x,y);g.rotate((t-t0)*spin);g.font=font;g.textAlign='center';g.textBaseline='middle';
+ items.forEach((s,i)=>{const an=i/items.length*2*PI-PI/2;g.save();g.rotate(an);g.translate(0,-r*mix(.6,1,a));g.globalAlpha=a;g.fillStyle=hi.includes(i)?acc:ink;g.fillText(s,0,0);g.restore()});g.restore()};bg?FX.layerBG(g,draw):draw();FX.mark('원형글자링')};
+// 링탈출: n겹 동심원 안의 공이 튀며 고리를 하나씩 깨고 밖으로(12달·한 해 은유). step 초마다 한 겹. 깨진 고리는 커지며 사라짐
+FX.ringEscape=(g,t,t0,{n=12,x=FX.cx,y=FX.cy,r0=60,dr=26,step=.25,color='#FAF8F3',ball='#F4CE62',br=18}={})=>{const u=t-t0;if(u<0)return;const k=Math.floor(u/step),f=(u%step)/step;g.save();g.lineCap='round';
+ for(let i=0;i<n;i++){const R=r0+i*dr;if(i<k){const q=u-(i+1)*step;if(q>.3)continue;g.globalAlpha=1-q/.3;g.strokeStyle=color;g.lineWidth=4;g.beginPath();g.arc(x,y,R+q*120,0,7);g.stroke();g.globalAlpha=1;continue}
+  const gap=.5,base=i*1.3+u*.6;g.strokeStyle=color;g.lineWidth=4;g.beginPath();g.arc(x,y,R,base+gap,base+2*PI-gap);g.stroke()}
+ const R=r0+Math.min(k,n)*dr-dr*.5,bounce=Math.abs(Math.sin(f*PI))*dr*.45,an=u*7;g.fillStyle=ball;g.beginPath();g.arc(x+Math.cos(an)*(R+bounce),y+Math.sin(an)*(R+bounce),br,0,7);g.fill();g.restore();FX.mark('링탈출')};
+// 질문답하기: pairs=[[질문,답],…] 를 step 초마다 하나씩. 질문이 마스크상승으로 서고, 답이 형광반전으로 붙음. 앞 쌍은 위로 밀리며 흐려짐
+FX.qa=(g,t,t0,{pairs=[],x=FX.cx,y=FX.cy,step=1.4,qfont='800 96px PL',afont='800 110px PL',ink='#FAF8F3',acc='#F4CE62',inv='#0D1424',gap=1.1}={})=>{const u=t-t0;if(u<0)return;const i=Math.min(pairs.length-1,Math.floor(u/step)),lu=u-i*step,qf=fs_(qfont);
+ if(i>0){const [pq,pa]=pairs[i-1],p=eio(cl(lu/.35));g.save();g.globalAlpha=1-p;g.translate(0,-p*160);g.font=qfont;g.textAlign='center';g.textBaseline='middle';g.fillStyle=ink;g.fillText(pq,x,y-qf*gap*.5);g.font=afont;g.fillStyle=acc;g.fillText(pa,x,y+qf*gap*.6);g.restore()}
+ const [q,a]=pairs[i];FX.maskRise(g,t,t0+i*step+.1,{lines:[q],font:qfont,x,y:y-qf*gap*.5,ink});if(lu>.55)FX.highlight(g,t,t0+i*step+.6,{text:a,font:afont,x,y:y+qf*gap*.6,ink,inv,band:acc});FX.mark('질문답하기')};
+
+FX.LIST=Object.assign(FX.LIST,{'카메라층':'장면 안 1~3% 드리프트·타격 줌 펀치·흔들림·상태 확대(K-294)','대각선와이프':'굵은 사선 띠가 지나간 자리에 다음 장면(K-294)','휩팬':'빠른 팬+넘어가는 순간만 잔상(K-294)',
+ '글자창전환':'큰 글자 안에 다음 장면이 비치고 글자가 커져 화면이 됨(K-294)','글자셔터':'큰 글자가 세로 판으로 갈라져 열림(K-294)','점매치컷':'골드 점 하나가 다음 장면의 동그라미로(K-294)',
+ '형광반전':'띠가 지나간 글자만 색 반전(K-294)','핵심어뽑기':'문장에서 핵심 낱말만 남아 커짐(K-294)','태그수렴':'흩어진 낱말이 빨려 들어가고 큰 문장 쾅(K-294)','마스크상승':'줄마다 칸 안에서 올라오며 기울기가 섬(K-294)',
+ '스포트라이트':'격자 중 하나만 떠오르고 나머지 어두워짐(K-294)','원형글자링':'낱말이 원 둘레에 서서 돎(K-294)','링탈출':'공이 동심원을 하나씩 깨고 밖으로(K-294)','질문답하기':'질문이 서고 답이 형광으로 붙음, 차례로(K-294)'});
+FX.USE['전환']=['원와이프','대각선와이프','휩팬','글자창전환','글자셔터','점매치컷'];
+FX.USE['훅(첫 1초)'].push('태그수렴','글자셔터');FX.USE['개념 설명'].push('형광반전','핵심어뽑기','마스크상승','질문답하기');FX.USE['관계·궁합'].push('스포트라이트','원형글자링');FX.USE['감성·신비'].push('링탈출','점매치컷');FX.USE['끝장면(행동)'].push('형광반전');
+FX.USE['모든 장면(기본)']=['카메라층'];
+})();
 
 // 프롬프트 100 기법(motion_fx100.js)을 같이 불러온다 — 페이지는 motion_fx.js 하나만 넣으면 된다
 (function(){if(typeof document!=='undefined'&&document.currentScript&&document.readyState==='loading'){document.write('<script src="'+document.currentScript.src.replace(/[^/]*$/,'')+'motion_fx100.js"><\/script>')}})();
