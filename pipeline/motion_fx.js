@@ -294,6 +294,23 @@ FX.keyCaption=(g,t,t0,{text,keys=[],x=FX.cx,y=1300,font='900 72px PL',col='#1616
  ws.forEach((w,k)=>{const a=sp(t-t0-k*step,18,.7);const ww=g.measureText(w).width;if(a>0){g.save();g.globalAlpha=cl(a*2);g.translate(xx+ww/2,y+(1-cl(a))*24);g.fillStyle=keys.some(q=>w.includes(q))?keyCol:col;g.textAlign='center';g.fillText(w,0,0);g.restore()}xx+=ww+sp_});g.restore()};
 FX.LIST['진행칸']='목록·단계 영상 위에 n칸 진행 막대(지금 몇 번째)(milesahead 11/19)';FX.LIST['핵심어강조자막']='낱말이 차례로 뜨고 핵심어만 강조색(milesahead 11/19)';
 FX.USE['개념 설명'].push('진행칸','핵심어강조자막');FX.USE['상품·앱 소개'].push('진행칸');
+// K-289(대표 11/24 TV 자막·연출 레퍼런스): 레이아웃 3종 — [2분할 대비]·[3·4분할 근거] = splitGrid, [원형 PIP 리액션] = pip, [체크리스트 요약 카드] = checkCard.
+// 선·카드는 레이아웃 틀(구분선·상자)이라 코드로 그린다. 칸 안 그림·PIP 얼굴은 draw 콜백에서 승인 에셋만 그린다(K-285). 글꼴은 고딕 1종(FX.BRAND.fonts.body).
+FX.LIST=Object.assign(FX.LIST,{'분할대비':'2·3·4분할 칸이 열리고 경계선 1줄(강조색) + 칸마다 괄호 라벨(K-289)','원형PIP':'원형 리액션 창이 튀어나오고 강조색 링(K-289)','체크리스트카드':'카드 제목 + ☑ 항목이 하나씩 켜짐(K-289)'});
+FX.USE['개념 설명'].push('분할대비','체크리스트카드');FX.USE['대화·사연'].push('원형PIP');
+FX.splitGrid=(g,t,t0,{n=2,area=null,line=null,lw=6,labels=[],font=null,fg='#fff',dur=.35,draw=null})=>{const T=t-t0;if(T<0)return;const A=area||FX.area(),acc=line||FX.BRAND.accent,F_=font||`800 48px ${FX.BRAND.fonts.body}`;
+ const W=A.x1-A.x0,H=A.y1-A.y0,cells=n===4?[[0,0,.5,.5],[.5,0,1,.5],[0,.5,.5,1],[.5,.5,1,1]]:[...Array(n)].map((_,i)=>[i/n,0,(i+1)/n,1]);
+ cells.forEach((c,i)=>{const p=eio(cl((T-i*.08)/dur));if(p<=0)return;const x0=A.x0+c[0]*W,y0=A.y0+c[1]*H,x1=A.x0+c[2]*W,y1=A.y0+c[3]*H;g.save();g.beginPath();g.rect(x0,y0+(y1-y0)*(1-p),x1-x0,(y1-y0)*p);g.clip();
+  if(draw)draw(i,{x0,y0,x1,y1});if(labels[i]){g.font=F_;g.fillStyle=fg;g.textAlign='center';g.textBaseline='alphabetic';g.lineWidth=3;g.strokeStyle='rgba(0,0,0,.55)';const s=`(${labels[i]})`;g.strokeText(s,(x0+x1)/2,y1-28);g.fillText(s,(x0+x1)/2,y1-28)}g.restore()});
+ const q=eio(cl((T-.15)/dur));g.save();g.strokeStyle=acc;g.lineWidth=lw;g.lineCap='butt';g.beginPath();
+ if(n===4){g.moveTo(A.x0+W/2,A.y0);g.lineTo(A.x0+W/2,A.y0+H*q);g.moveTo(A.x0,A.y0+H/2);g.lineTo(A.x0+W*q,A.y0+H/2)}else for(let i=1;i<n;i++){const x=A.x0+W*i/n;g.moveTo(x,A.y0);g.lineTo(x,A.y0+H*q)}g.stroke();g.restore()};
+FX.pip=(g,t,t0,{x,y,r=130,ring=null,ringW=8,draw=null,label='',font=null,fg='#fff'})=>{const a=sp(t-t0,16,.55);if(a<=0)return;g.save();g.translate(x,y);g.scale(a,a);g.save();g.beginPath();g.arc(0,0,r,0,7);g.clip();g.fillStyle='#fff';g.fillRect(-r,-r,2*r,2*r);if(draw)draw({r});g.restore();
+ g.strokeStyle=ring||FX.BRAND.accent;g.lineWidth=ringW;g.beginPath();g.arc(0,0,r,0,7);g.stroke();
+ if(label){g.font=font||`900 56px ${FX.BRAND.fonts.hand}`;g.fillStyle=fg;g.textBaseline='middle';const L_=x+r+16+g.measureText(label).width>FX.area().x1;g.textAlign=L_?'right':'left';g.fillText(label,L_?-r-16:r+16,-r*.55)}g.restore()};   // 라벨이 안전 영역 밖으로 나가면 왼쪽에
+FX.checkCard=(g,t,t0,{x,y,w=520,title='',items=[],font=null,tfont=null,fg='#111',bg='#fff',acc=null,step=.18,lh=1.55})=>{const a=sp(t-t0,14,.65);if(a<=0)return;const A_=acc||FX.BRAND.accent,F_=font||`800 46px ${FX.BRAND.fonts.body}`,TF=tfont||`900 58px ${FX.BRAND.fonts.body}`,fs=parseFloat(F_.match(/(\d+)px/)[1]),ts=parseFloat(TF.match(/(\d+)px/)[1]);
+ const h=56+ts*1.5+items.length*fs*lh+40;g.save();g.globalAlpha=cl(a*1.5);g.translate(0,(1-a)*60);g.fillStyle=bg;g.beginPath();g.roundRect(x,y,w,h,28);g.fill();
+ g.fillStyle=A_;g.beginPath();g.roundRect(x+28,y+36,w-56,ts*1.35,16);g.fill();g.font=TF;g.fillStyle='#111';g.textAlign='center';g.textBaseline='middle';g.fillText(title,x+w/2,y+36+ts*.68);
+ g.font=F_;g.textAlign='left';items.forEach((s,i)=>{const p=cl((t-t0-.25-i*step)/.2);if(p<=0)return;const yy=y+56+ts*1.5+(i+.5)*fs*lh;g.globalAlpha=p;g.fillStyle=A_;g.fillText('☑',x+36,yy);g.fillStyle=fg;g.fillText(s,x+36+fs*1.3,yy)});g.restore()};
 FX.mark=n=>{if(typeof window!=='undefined'&&!window.__zsFrame)(window.__zsFxUsed=window.__zsFxUsed||{})[n]=1};
 window.FXK=FX;})();
 
