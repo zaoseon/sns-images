@@ -1021,6 +1021,24 @@ def render(html, 이름, 초=15.0, fps=30, ch="reel", 블러=1, 설계="reel"):
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def 음원권리_검사(path, 채널들):
+    """K-296(대표 11/24 '메타 사운드컬렉션 … 사용 조건 확인해서 사용 가능하면 이것들 사용하자'): specs/bgm_sources.json 에 적힌 곡이면
+    그 곡의 허용 채널만 렌더한다. 메타 사운드 컬렉션 곡은 instagram·facebook(채널 이름 reel·instagram·facebook)만 — 유튜브 쇼츠·네이버 클립·스레드(확인 불가)는 막음."""
+    import hashlib
+    for p in (os.path.join(os.path.dirname(HERE), "specs", "bgm_sources.json"), os.path.join(os.path.dirname(os.path.dirname(HERE)), "kcos-motion", "specs", "bgm_sources.json")):
+        if os.path.exists(p): break
+    else:
+        return
+    led = json.load(open(p, encoding="utf-8")); sha = hashlib.sha256(open(path, "rb").read()).hexdigest()
+    곡 = next((x for x in led.get("곡", []) if x.get("sha256") == sha), None)
+    if not 곡: return
+    ok = {"reel", "instagram", "facebook", "feed", "insta_carousel", "meta_ad_feed", "meta_ad_story"}   # channel_specs 이름 중 메타 서비스 채널
+    bad = [c for c in 채널들 if c not in ok]
+    if bad:
+        raise SystemExit(f"[막음] '{곡['곡명']}' 은 메타 사운드 컬렉션 곡이라 인스타·페이스북에만 쓸 수 있어요 — 이 채널은 안 돼요: {bad} (K-296, specs/bgm_sources.json 조건)")
+    print(f"  음원 권리: '{곡['곡명']}' 메타 사운드 컬렉션 — 인스타·페이스북만. 완성 영상은 공개 저장소에 올리지 말고 Metricool 에 직접 올려요(K-296)")
+
+
 def main():
     a = [x for x in sys.argv[1:] if not x.startswith("--")]
     opt = lambda k, d=None: next((x.split("=", 1)[1] for x in sys.argv if x.startswith("--" + k + "=")), d)
@@ -1041,6 +1059,7 @@ def main():
     if any(x == "--가이드" for x in sys.argv): os.environ["ZS_GUIDE"] = "1"
     if opt("음악"):   # K-294: 음악의 실제 BPM·첫 박을 재서 페이지에 넣는다(F.BEAT). 소리붙이기 음악과 같은 파일을 쓸 때만 의미가 있다
         global BEAT
+        음원권리_검사(opt("음악"), chs)   # K-296: 메타 사운드 컬렉션 곡은 인스타·페이스북 채널만
         sys.path[:0] = [HERE, os.path.join(os.path.dirname(HERE), "tools")]; import beat_grid as BG   # 정본 tools/ · 사본 pipeline/
         BEAT = BG.measure(opt("음악"), float(opt("초", "60")) + 1); print(f"  박자 격자: {BEAT['bpm']}bpm · 첫 박 {BEAT['offset']}초 ({BEAT['file']})")
     설계 = opt("설계", "reel")   # 11/12: 페이지를 어느 채널 규격으로 짰나(메타 스토리 광고 등). 다른 채널은 여기서 자동으로 옮긴다
