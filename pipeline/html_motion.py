@@ -682,13 +682,32 @@ def _효과음(path, 초, cues, sr=48000):
     w.writeframes(np.stack([s, s], 1).tobytes()); w.close()
 
 
+DROP_DB = -14.0   # K-288 무음 드롭 깊이: 사양서 측정 '평균보다 8~16dB 낮춤'의 가운데 쪽(specs/reel_motion_sound_map.json 무음드롭)
+
+
+def 무음드롭(mp4, drops, db=DROP_DB):
+    """window.DROP=[{t:시작초, d:길이초(기본 1)}] 구간의 소리를 db 만큼 낮춘다(K-288). 영상은 다시 인코딩하지 않는다.
+    다시 터뜨리는 타격(thud)은 대본 쪽 SFX 가 다음 장면 첫 프레임에 넣는다(script_reel.py)."""
+    g = 10 ** (db / 20)
+    parts = []
+    for x in drops:
+        a = float(x["t"]); b = a + float(x.get("d", 1.0))
+        parts.append(f"volume=enable='between(t,{a:.3f},{b:.3f})':volume={g:.4f}")
+    if not parts: return
+    tmp = mp4 + ".d.mp4"
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mp4, "-af", ",".join(parts), "-c:v", "copy", "-c:a", "aac",
+                    "-ar", "48000", "-b:a", "160k", "-movflags", "+faststart", tmp], check=True)
+    os.replace(tmp, mp4)
+
+
 def 소리붙이기(mp4, 초, html, 분위기="fun", 이름=None):
     """music_plan 음악 + HTML 의 window.SFX 효과음 → 48kHz aac. 영상은 다시 인코딩하지 않는다."""
     import music_plan as MP
     from playwright.sync_api import sync_playwright
     with sync_playwright() as pw:
         b = pw.chromium.launch(); pg = b.new_page(); pg.goto("file://" + os.path.abspath(html))
-        cues = pg.evaluate("() => window.SFX || []"); vo = pg.evaluate("() => window.VO || []"); b.close()
+        cues = pg.evaluate("() => window.SFX || []"); vo = pg.evaluate("() => window.VO || []")
+        drops = pg.evaluate("() => window.DROP || []"); b.close()
     info = MP.choose(분위기, 이름 or os.path.splitext(os.path.basename(mp4))[0])
     MP.mux(mp4, [초], info, 91)                      # 음악(박자 맞춤)은 기존 도구 그대로
     if cues:
@@ -702,6 +721,8 @@ def 소리붙이기(mp4, 초, html, 분위기="fun", 이름=None):
         tmp = mp4 + ".r.mp4"
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mp4, "-c:v", "copy", "-c:a", "aac", "-ar", "48000",
                         "-b:a", "160k", "-movflags", "+faststart", tmp], check=True); os.replace(tmp, mp4)
+    if drops:   # K-288 무음 드롭: 음악+효과음을 그 구간만 낮춘다(목소리는 뒤에 얹으므로 낮아지지 않음)
+        무음드롭(mp4, drops); info["무음드롭"] = drops
     if vo:   # 11/12: window.VO=[{t,text,who,slot}] 가 있으면 목소리를 얹고, 말하는 동안 음악·효과음을 낮춘다(사이드체인), -14 LUFS
         import narration as NR, tempfile as _tf
         parts, log = NR.목소리들(vo, _tf.mkdtemp(prefix="vo_")); tmp = mp4 + ".v.mp4"
