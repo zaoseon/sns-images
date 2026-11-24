@@ -745,6 +745,25 @@ def 무음드롭(mp4, drops, db=DROP_DB):
     os.replace(tmp, mp4)
 
 
+def 음악빠짐_검사(ref, mp4, 제외=(), 창=0.05):
+    """K-295(대표 11/24 ⑱ "음악이 툭툭 끊기는 느낌" 4회 → v8 승인·규칙 변경 2): 섞은 뒤 음악이 순간적으로 빠지는 곳을 잰다.
+    음악만 소리(ref)와 완성본의 킥·베이스 대역(40~150Hz, 효과음이 거의 없는 대역) 50ms 음량 차이를 보고, 음악이 들리는 칸만 센다.
+    돌려줌 {'3dB': [초…], '6dB': [초…], '흔들림': dB}. 6dB 넘게 빠진 칸이 있으면 소리붙이기가 막는다(무음 드롭 구간은 뺀다)."""
+    import numpy as np
+    SR = 22050; W = int(SR * 창)
+    def pcm(p):
+        c = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-i", p, "-ac", "1", "-ar", str(SR), "-af", "highpass=f=40,lowpass=f=150", "-f", "f32le", "-"]
+        return np.frombuffer(subprocess.run(c, capture_output=True, check=True).stdout, dtype=np.float32)
+    def rms(x): n = len(x) // W; return np.sqrt((x[:n * W].reshape(n, W) ** 2).mean(1))
+    a, b = rms(pcm(ref)), rms(pcm(mp4)); n = min(len(a), len(b)) - int(0.5 / 창)   # 끝 0.5초(페이드)는 뺀다
+    if n <= 0: return {"3dB": [], "6dB": [], "흔들림": 0.0}
+    a, b = a[:n], b[:n]; t = np.arange(n) * 창
+    ok = (a > 0.05 * a.max()) & ~np.array([any(x0 - 창 <= tt < x1 + 창 for x0, x1 in 제외) for tt in t], dtype=bool)
+    if not ok.any(): return {"3dB": [], "6dB": [], "흔들림": 0.0}
+    d = 20 * np.log10((b[ok] + 1e-9) / (a[ok] + 1e-9)); d = d - np.median(d); tt = t[ok]
+    return {"3dB": [round(float(x), 2) for x in tt[d < -3]], "6dB": [round(float(x), 2) for x in tt[d < -6]], "흔들림": round(float(d.std()), 2)}
+
+
 def 소리붙이기(mp4, 초, html, 분위기="fun", 이름=None):
     """music_plan 음악 + HTML 의 window.SFX 효과음 → 48kHz aac. 영상은 다시 인코딩하지 않는다."""
     import music_plan as MP
@@ -754,13 +773,17 @@ def 소리붙이기(mp4, 초, html, 분위기="fun", 이름=None):
         if BEAT: pg.add_init_script("window.ZS_BEAT=" + json.dumps({"bpm": BEAT["bpm"], "offset": BEAT["offset"]}))   # K-294: 렌더 때와 같은 박자로 효과음 시각을 읽는다
         pg.goto("file://" + os.path.abspath(html))
         cues = pg.evaluate("() => window.SFX || []"); vo = pg.evaluate("() => window.VO || []")
-        drops = pg.evaluate("() => window.DROP || []"); b.close()
+        drops = pg.evaluate("() => window.DROP || []"); drop_ok = pg.evaluate("() => window.DROP_OK === true"); b.close()
+    if drops and not drop_ok:   # K-295(대표 11/24 ⑱ v7 "무음 드롭을 빼는게 낫지 않겠냐?" → v8 승인·규칙 변경 1): 무음 드롭은 기본 끔. 대표가 그 편에서 확인한 때만 window.DROP_OK=true
+        print(f"  [알림] 무음 드롭 {len(drops)}곳은 적용하지 않았어요 — 기본 끔(K-295). 꼭 필요하면 대표 확인 뒤 페이지에 window.DROP_OK=true"); drops = []
     info = MP.choose(분위기, 이름 or os.path.splitext(os.path.basename(mp4))[0])
     MP.mux(mp4, [초], info, 91)                      # 음악(박자 맞춤)은 기존 도구 그대로
+    ref = mp4 + ".ref.wav"; subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mp4, "-vn", "-ac", "1", "-ar", "22050", ref], check=True)   # K-295 음악 빠짐 검사용 음악만 소리
     if cues:
         wav = mp4 + ".sfx.wav"; _효과음(wav, 초, cues); tmp = mp4 + ".s.mp4"
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mp4, "-i", wav, "-filter_complex",
-                        "[0:a]volume=0.7[m];[m][1:a]amix=inputs=2:duration=first:normalize=0[a]",
+                        # K-295 규칙 변경 2: 리미터는 효과음 줄에만(섞은 뒤에 걸면 효과음 피크마다 음악까지 눌려 '툭툭' 끊김 — ⑱ v7-B 측정). 음악 음량 계단도 쓰지 않는다
+                        "[1:a]alimiter=limit=0.5:attack=1:release=40:level=false[s];[0:a]volume=0.7[m];[m][s]amix=inputs=2:duration=first:normalize=0[a]",
                         "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-ar", "48000", "-b:a", "160k",
                         "-movflags", "+faststart", tmp], check=True)
         os.replace(tmp, mp4); os.remove(wav)
@@ -768,8 +791,11 @@ def 소리붙이기(mp4, 초, html, 분위기="fun", 이름=None):
         tmp = mp4 + ".r.mp4"
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", mp4, "-c:v", "copy", "-c:a", "aac", "-ar", "48000",
                         "-b:a", "160k", "-movflags", "+faststart", tmp], check=True); os.replace(tmp, mp4)
-    if drops:   # K-288 무음 드롭: 음악+효과음을 그 구간만 낮춘다(목소리는 뒤에 얹으므로 낮아지지 않음)
+    if drops:   # K-288 무음 드롭(K-295 뒤로는 대표 확인한 편만): 음악+효과음을 그 구간만 낮춘다(목소리는 뒤에 얹으므로 낮아지지 않음)
         무음드롭(mp4, drops); info["무음드롭"] = drops
+    빠짐 = 음악빠짐_검사(ref, mp4, 제외=[(float(x["t"]), float(x["t"]) + float(x.get("d", 1))) for x in drops]); os.remove(ref); info["음악빠짐"] = 빠짐
+    if 빠짐["6dB"]:
+        raise SystemExit(f"[막음] 음악이 6dB 넘게 빠지는 순간 {len(빠짐['6dB'])}곳(K-295): {빠짐['6dB'][:6]}초 — 효과음 크기·리미터·음량 계단을 확인하세요")
     if vo:   # 11/12: window.VO=[{t,text,who,slot}] 가 있으면 목소리를 얹고, 말하는 동안 음악·효과음을 낮춘다(사이드체인), -14 LUFS
         import narration as NR, tempfile as _tf
         parts, log = NR.목소리들(vo, _tf.mkdtemp(prefix="vo_")); tmp = mp4 + ".v.mp4"
