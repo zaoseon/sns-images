@@ -549,5 +549,78 @@ FX.reelBase=({scenes=[],hits=[],stops=[],drops=[],zooms=[],snap={},shake=FX.REEL
  return {tt:t=>FX.timewarp(t,stops),scenes,stops}};
 FX.LIST=Object.assign(FX.LIST,{'릴스기본틀':'F.reelBase — 스냅드리프트·히트스톱·카메라층·컷 클릭·빠른 블러 기본 켜기(K-310)'});
 })();
+// ───────── 알렉스 묶음 A(중) 15종(대표 11/24 작업 요청함 "알렉스 미적용 묶음(A 중 …)" · 11/25 "나머지들도 누락없이 8개 모두", 감사 ㉗ 4번) ─────────
+// 모두 Canvas 2D · 비용 $0. 지금 장면을 먼저 그린 뒤 부르는 것(전환·후처리)과 그리기 함수를 받는 것(drawNext·draw)으로 나뉜다. 각 함수는 FX.mark 로 이름을 남긴다.
+(function(){const FX=typeof window!=='undefined'&&window.FXK;if(!FX)return;const {cl,mix,ease,eio}=FX,PI=Math.PI;
+const hx=c=>{c=String(c).replace('#','');if(c.length===3)c=c.split('').map(s=>s+s).join('');return [0,2,4].map(i=>parseInt(c.slice(i,i+2),16))};
+const seeded=k=>{let s=k*9301+49297;return ()=>{s=(s*9301+49297)%233280;return s/233280}};
+// 1 아이리스: 원이 커지며 다음 장면이 열림(가장자리 부드럽게 + 강조색 링). 옛 원와이프와 달리 링·부드러운 끝
+FX.iris=(g,t,t0,{x=FX.cx,y=FX.cy,dur=.45,ring=FX.BRAND.accent||'#F4CE62',ringW=10,drawNext}={})=>{const u=t-t0;if(u<0)return;const p=FX.EZ.in(cl(u/dur)),R=Math.hypot(1080,1920)*p;
+ if(p>=1){drawNext(g);FX.mark('아이리스');return}if(p>0)FX.fast(t0,t0+dur);const [c,x2]=FX._off(g,'ir');drawNext(x2);x2.setTransform(1,0,0,1,0,0);x2.globalCompositeOperation='destination-in';
+ const gr=x2.createRadialGradient(x,y,Math.max(0,R-18),x,y,R);gr.addColorStop(0,'#000');gr.addColorStop(1,'rgba(0,0,0,0)');x2.fillStyle=gr;x2.fillRect(0,0,1080,1920);x2.globalCompositeOperation='source-over';
+ g.save();g.setTransform(1,0,0,1,0,0);g.drawImage(c,0,0);g.strokeStyle=ring;g.lineWidth=ringW;g.beginPath();g.arc(x,y,R,0,2*PI);g.stroke();g.restore();FX.mark('아이리스')};
+// 2 풀백 리빌: 한 점을 크게(from 배) 보여 주다 카메라가 뒤로 빠지며 전체가 드러남. draw(g) 를 변환 안에서 부른다
+FX.pullback=(g,t,t0,{x=FX.cx,y=FX.cy,from=2.4,dur=.9,draw}={})=>{const p=eio(cl((t-t0)/dur)),s=mix(from,1,p);g.save();g.translate(x,y);g.scale(s,s);g.translate(-x,-y);draw(g);g.restore();if(p<1)FX.fast(t0,t0+dur*.6);FX.mark('풀백리빌');return s};
+// 3 색 블록 밀어내기: 색 판이 한쪽에서 밀고 들어와 지금 장면을 밀어내고, 판이 빠지며 다음 장면
+FX.blockPush=(g,t,t0,{dir='left',color=FX.BRAND.accent||'#F4CE62',dur=.5,drawNext}={})=>{const u=cl((t-t0)/dur);if(t<t0)return;const W=1080,H=1920,sx=dir==='left'?-1:1;
+ g.save();g.setTransform(1,0,0,1,0,0);if(u<.5){const p=FX.EZ.in(u*2),cur=g.getImageData(0,0,W,H);g.clearRect(0,0,W,H);g.putImageData(cur,Math.round(sx*W*p*.35),0);g.fillStyle=color;g.fillRect(sx<0?W*(1-p)-W*(1-p):0,0,W*p,H)}
+ else{const p=ease((u-.5)*2);drawNext(g);g.fillStyle=color;if(sx<0)g.fillRect(W*p,0,W*(1-p),H);else g.fillRect(0,0,W*(1-p),H)}g.restore();if(u<1)FX.fast(t0,t0+dur);FX.mark('색블록밀기')};
+// 4 문장 한 자리 슬롯 + 폭 맞춤: 문장 가운데 한 칸만 낱말이 굴러 바뀌고, 칸 폭이 새 낱말에 맞게 늘었다 줄어듦
+FX.slotFit=(g,t,t0,{pre='',words=[],post='',x=FX.cx,y=FX.cy,font=`800 96px ${FX.BRAND.fonts.title}`,ink=FX.BRAND.ink,key=FX.BRAND.accent||'#F4CE62',step=.45}={})=>{const u=t-t0;if(u<0||!words.length)return;
+ const i=Math.min(words.length-1,Math.floor(u/step)),f=cl((u-i*step)/.22),w0=words[Math.max(0,i-1)],w1=words[i];g.save();g.font=font;g.textBaseline='middle';
+ const W=s=>g.measureText(s).width,sw=mix(i?W(w0):W(w1),W(w1),ease(f)),tot=W(pre)+sw+W(post);let cx=x-tot/2;g.textAlign='left';g.fillStyle=ink;g.fillText(pre,cx,y);cx+=W(pre);
+ const fs=parseFloat(/(\d+)px/.exec(font)[1]);g.save();g.beginPath();g.rect(cx,y-fs*.7,sw,fs*1.4);g.clip();g.fillStyle=key;
+ if(i&&f<1){g.fillText(w0,cx+(sw-W(w0))/2,y-fs*1.2*ease(f));g.fillText(w1,cx+(sw-W(w1))/2,y+fs*1.2*(1-ease(f)))}else g.fillText(w1,cx+(sw-W(w1))/2,y);g.restore();
+ g.fillStyle=ink;g.fillText(post,cx+sw,y);g.restore();if(f<1)FX.fast(t0+i*step,t0+i*step+.22);FX.mark('슬롯폭맞춤')};
+// 5 문자 스크램블: 천간·지지 한자가 빠르게 바뀌다 왼쪽부터 제 글자로 멈춤
+FX.scramble=(g,t,t0,{text='',pool='甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥',x=FX.cx,y=FX.cy,font=`800 120px ${FX.BRAND.fonts.title}`,ink=FX.BRAND.ink,dur=.8,fps=24}={})=>{const u=t-t0;if(u<0)return;const ch=[...text],n=ch.length;
+ const fr=Math.floor(u*fps),out=ch.map((c,i)=>{const settle=dur*(i+1)/n;if(u>=settle||c===' ')return c;const r=seeded(fr*31+i)();return [...pool][Math.floor(r*[...pool].length)]}).join('');
+ g.save();g.font=font;g.textAlign='center';g.textBaseline='middle';g.fillStyle=ink;g.fillText(out,x,y);g.restore();if(u<dur)FX.fast(t0,t0+dur);FX.mark('문자스크램블')};
+// 6 패럴랙스 트럭: 층마다 깊이(depth 0~1)만큼 다른 속도로 옆으로 흐름. layers=[{draw(g,dx),depth}]
+FX.parallax=(g,t,t0,{layers=[],speed=220}={})=>{const u=Math.max(0,t-t0);for(const L of layers){const dx=-u*speed*(L.depth??.5);g.save();g.translate(dx,0);L.draw(g,dx);g.restore()}FX.mark('패럴랙스')};
+// 7 레이어 깊이 펼치기: 겹친 층(카드·컷)이 앞뒤로 벌어지며 깊이가 보임. layers=[draw(g)…] 뒤→앞
+FX.layerSpread=(g,t,t0,{layers=[],dur=.7,gap=90,tilt=.06,x=FX.cx,y=FX.cy}={})=>{const p=FX.EZ.in(cl((t-t0)/dur)),n=layers.length;layers.forEach((d,i)=>{const k=i-(n-1)/2,sc=1-.14*(n-1-i)*p;   // 뒤 층일수록 작고 위·왼쪽으로(깊이)
+ g.save();g.translate(x+k*gap*.7*p,y+k*gap*1.8*p);g.scale(sc,sc);g.translate(-x,-y);g.globalAlpha=mix(1,.55+.45*(i+1)/n,p);d(g);g.restore()});if(p<1)FX.fast(t0,t0+dur);FX.mark('레이어펼치기')};
+// 8 무한 줌 루프: 같은 그림이 안쪽에 작게 반복돼 계속 들어가는 느낌. draw(g,level) 를 ratio 배 간격으로 겹쳐 그림
+FX.infiniteZoom=(g,t,t0,{period=1.2,ratio=3,levels=4,x=FX.cx,y=FX.cy,draw}={})=>{const u=Math.max(0,t-t0),ph=(u/period)%1,base=Math.pow(ratio,ph);
+ for(let L=levels-1;L>=0;L--){const s=base/Math.pow(ratio,L);if(s<.02)continue;g.save();g.translate(x,y);g.scale(s,s);g.translate(-x,-y);draw(g,L);g.restore()}FX.mark('무한줌')};
+// 9 2도 판 맞춤: 지금 화면을 밝기로 나눠 두 색(네이비·골드 등)만 남김
+FX.duotone=(g,{dark=FX.BRAND.bg||'#0D1424',light=FX.BRAND.accent||'#F4CE62',mid=.5}={})=>{const c=g.canvas,id=g.getImageData(0,0,c.width,c.height),d=id.data,A=hx(dark),B=hx(light);
+ for(let i=0;i<d.length;i+=4){const L=(.299*d[i]+.587*d[i+1]+.114*d[i+2])/255,k=cl((L-mid)*6+.5);d[i]=mix(A[0],B[0],k);d[i+1]=mix(A[1],B[1],k);d[i+2]=mix(A[2],B[2],k)}g.save();g.setTransform(1,0,0,1,0,0);g.putImageData(id,0,0);g.restore();FX.mark('2도판')};
+// 10 오실로스코프 빔: 빛나는 사인 선이 화면을 가로지름(소리·리듬 시각화)
+FX.scope=(g,t,t0,{x=90,y=FX.cy,w=900,amp=90,freq=3,speed=4,color=FX.BRAND.accent||'#F4CE62',lw=6,glow=24}={})=>{const u=t-t0;if(u<0)return;const reveal=cl(u/.4);g.save();g.strokeStyle=color;g.lineWidth=lw;g.shadowColor=color;g.shadowBlur=glow;g.beginPath();
+ for(let i=0;i<=200*reveal;i++){const p=i/200,xx=x+w*p,yy=y+amp*Math.sin(2*PI*(freq*p-speed*u))*Math.sin(PI*p);i?g.lineTo(xx,yy):g.moveTo(xx,yy)}g.stroke();g.restore();FX.mark('오실로스코프')};
+// 11 히트스톱 + 흰 플래시: 멈춤 순간 frames 프레임 동안 흰 판(투명도 alpha)
+FX.flash=(g,t,tc,{frames=2,fps=30,alpha=.85,color='#FFFFFF'}={})=>{if(t<tc||t>=tc+frames/fps)return false;g.save();g.setTransform(1,0,0,1,0,0);g.globalAlpha=alpha*(1-(t-tc)*fps/frames*.5);g.fillStyle=color;g.fillRect(0,0,1080,1920);g.restore();FX.mark('흰플래시');return true};
+// 12 슬로 모션 램프: t0 부터 dur 동안 속도가 from(0.05)배 → 1배로. 돌려준 시각으로 장면을 그린다(그 뒤는 dur 만큼 늦게 따라감 → 박자 맞출 땐 다음 컷에서 F.BEAT 로 다시 맞춤)
+FX.ramp=(t,t0,{dur=.6,from=.05}={})=>{if(t<=t0)return t;const u=Math.min(t-t0,dur),k=u/dur,trav=dur*(from*k+(1-from)*k*k/2);if(typeof window!=='undefined')FX.mark('슬로램프');return t0+trav+Math.max(0,t-t0-dur)};
+// 13 임팩트 프레임: 2~3프레임 동안 흑백 고대비 반전(만화 임팩트). 장면을 다 그린 뒤
+FX.impactFrame=(g,t,tc,{frames=2,fps=30,th=.5}={})=>{if(t<tc||t>=tc+frames/fps)return false;const c=g.canvas,id=g.getImageData(0,0,c.width,c.height),d=id.data;
+ for(let i=0;i<d.length;i+=4){const L=(.299*d[i]+.587*d[i+1]+.114*d[i+2])/255,v=L>th?0:255;d[i]=d[i+1]=d[i+2]=v}g.save();g.setTransform(1,0,0,1,0,0);g.putImageData(id,0,0);g.restore();FX.mark('임팩트프레임');return true};
+// 14 스미어 프레임: 빠르게 움직이는 물체 뒤로 늘어진 잔상 copies 장(이동 방향 dx,dy). draw(g,ox,oy) 를 받는다
+FX.smear=(g,t,t0,{dur=.18,dx=-160,dy=0,copies=5,draw}={})=>{const u=t-t0;if(u<0)return draw(g,0,0);if(u<dur){const k=1-u/dur;for(let i=copies;i>=1;i--){g.save();g.globalAlpha=.12*k*(copies-i+1)/copies;draw(g,dx*i/copies*k,dy*i/copies*k);g.restore()}FX.fast(t0,t0+dur);FX.mark('스미어')}draw(g,0,0)};
+// 15 워프 전환: 점(별)들이 가운데에서 빛줄기로 늘어나며 다음 장면으로
+FX.warp=(g,t,t0,{n=140,dur=.6,color='#FFFFFF',x=FX.cx,y=FX.cy,drawNext}={})=>{const u=t-t0;if(u<0)return;const p=cl(u/dur);if(p>=1){drawNext&&drawNext(g);FX.mark('워프');return}const r=seeded(7);g.save();g.setTransform(1,0,0,1,0,0);
+ if(p>.75&&drawNext){g.globalAlpha=(p-.75)/.25;drawNext(g);g.globalAlpha=1}g.strokeStyle=color;g.lineCap='round';for(let i=0;i<n;i++){const a=r()*2*PI,d0=40+r()*500,sp=FX.EZ.in(p),d1=d0+sp*900*(.4+r()),L=sp*260*(.3+r());
+ g.globalAlpha=(1-p*.6)*(.4+.6*r());g.lineWidth=2+3*r();g.beginPath();g.moveTo(x+Math.cos(a)*d1,y+Math.sin(a)*d1);g.lineTo(x+Math.cos(a)*(d1-L-4),y+Math.sin(a)*(d1-L-4));g.stroke()}g.restore();FX.fast(t0,t0+dur);FX.mark('워프')};
+FX.LIST=Object.assign(FX.LIST,{'아이리스':'원이 커지며 다음 장면(부드러운 끝+강조색 링)','풀백리빌':'한 점 크게 → 뒤로 빠지며 전체','색블록밀기':'색 판이 밀고 들어와 장면을 밀어냄',
+ '슬롯폭맞춤':'문장 한 칸만 낱말이 굴러 바뀌고 폭이 맞춰짐','문자스크램블':'천간·지지 한자가 섞이다 제 글자로','패럴랙스':'층마다 다른 속도로 옆으로 흐름','레이어펼치기':'겹친 층이 앞뒤로 벌어짐',
+ '무한줌':'같은 그림이 안쪽으로 반복돼 계속 들어감','2도판':'화면을 두 색(네이비·골드)만 남김','오실로스코프':'빛나는 사인 빔','흰플래시':'멈춤 순간 흰 판 2프레임','슬로램프':'0.05배→1배 속도 램프',
+ '임팩트프레임':'흑백 고대비 반전 2~3프레임','스미어':'빠른 물체 뒤 잔상','워프':'점이 빛줄기로 늘어나며 다음 장면'});
+FX.USE['전환'].push('아이리스','색블록밀기','워프','풀백리빌');FX.USE['훅(첫 1초)'].push('흰플래시','임팩트프레임','문자스크램블','슬로램프');FX.USE['개념 설명'].push('슬롯폭맞춤','레이어펼치기','오실로스코프','2도판');
+FX.USE['모든 장면(기본)'].push('패럴랙스','무한줌','스미어');
+})();
+// ───────── 알렉스 묶음 B(중) — 장면 사건 → 효과음 자동(감사 ㉗ 5번) ─────────
+// 효과 함수가 불릴 때 '사건'(종류·시작 시각)을 window.__zsEv 에 적는다. html_motion 소리붙이기가 타임라인을 훑어 모은 뒤
+// specs/audio_layers.json '자동_효과음' 표로 효과음 큐를 만든다(손으로 적은 window.SFX 와 0.06초 안에 겹치면 넣지 않음).
+// 켜는 법: F.reelBase 를 쓰면 기본 켜짐(window.SFX_AUTO=true). 옛 페이지는 그대로(소리가 바뀌지 않게).
+(function(){const FX=typeof window!=='undefined'&&window.FXK;if(!FX)return;
+FX.ev=(k,t)=>{if(typeof window==='undefined'||!(t>=0))return;const E=window.__zsEv=window.__zsEv||{};E[k+'|'+t.toFixed(3)]=[k,+t.toFixed(3)]};
+const W=(name,kind,at=(t0,o)=>t0)=>{const f=FX[name];if(typeof f!=='function')return;FX[name]=function(g,t,t0,o={}){FX.ev(kind,at(t0,o||{}));return f.apply(this,arguments)}};
+W('strobe','반전');W('pierce','관통',(t0,o)=>t0+(o.hold??.25));W('iris','아이리스');W('blockPush','색블록');W('warp','워프');W('typePop','타이포팝');
+W('scramble','스크램블');W('flash','플래시');W('impactFrame','임팩트프레임');W('smear','스미어');W('diagWipe','와이프');W('whip','휩');W('textShutter','셔터');
+const sf=FX.slotFit;FX.slotFit=function(g,t,t0,o={}){(o.words||[]).forEach((w,i)=>{if(i)FX.ev('슬롯',t0+i*(o.step??.45))});return sf.apply(this,arguments)};
+const rb=FX.reelBase;FX.reelBase=function(o={}){(o.stops||[]).forEach(s=>FX.ev('히트스톱',s.t));if(typeof window!=='undefined'){window.__zsReelBase=1;if(window.SFX_AUTO===undefined)window.SFX_AUTO=true}return rb.apply(this,arguments)};
+})();
 // 프롬프트 100 기법(motion_fx100.js)을 같이 불러온다 — 페이지는 motion_fx.js 하나만 넣으면 된다
 (function(){if(typeof document!=='undefined'&&document.currentScript&&document.readyState==='loading'){document.write('<script src="'+document.currentScript.src.replace(/[^/]*$/,'')+'motion_fx100.js"><\/script>')}})();

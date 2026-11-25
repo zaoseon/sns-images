@@ -951,12 +951,26 @@ def 소리붙이기(mp4, 초, html, 분위기="fun", 이름=None, 음악파일=N
         cues = pg.evaluate("() => window.SFX || []"); vo = pg.evaluate("() => window.VO || []")
         drops = pg.evaluate("() => window.DROP || []"); drop_ok = pg.evaluate("() => window.DROP_OK === true")
         ducks = pg.evaluate("() => window.DUCK || []"); duck_ok = pg.evaluate("() => window.DUCK_OK === true"); cuts = pg.evaluate("() => window.CUTS || []")
-        lead = pg.evaluate("() => (typeof window.SFX_LEAD === 'number') ? window.SFX_LEAD : null"); b.close()
+        lead = pg.evaluate("() => (typeof window.SFX_LEAD === 'number') ? window.SFX_LEAD : null")
+        auto = pg.evaluate("() => window.SFX_AUTO === true"); end_tail = pg.evaluate("() => window.END_TAIL || null"); loop = pg.evaluate("() => window.LOOP === true")
+        evs = []
+        if auto:   # 알렉스 B(중) 사건→효과음: 타임라인을 1/30초로 훑어 효과 함수가 적은 사건을 모은다
+            pg.wait_for_function("typeof window.seek === 'function'", timeout=15000); pg.evaluate("() => {window.__zsEv={}}"); t_ = 0.0
+            while t_ < 초: pg.evaluate("t => window.seek(t)", t_); t_ += 1 / 30
+            evs = pg.evaluate("() => Object.values(window.__zsEv||{})")
+        b.close()
     if drops and not drop_ok:   # K-295(대표 11/24 ⑱ v7 "무음 드롭을 빼는게 낫지 않겠냐?" → v8 승인·규칙 변경 1): 무음 드롭은 기본 끔. 대표가 그 편에서 확인한 때만 window.DROP_OK=true
         print(f"  [알림] 무음 드롭 {len(drops)}곳은 적용하지 않았어요 — 기본 끔(K-295). 꼭 필요하면 대표 확인 뒤 페이지에 window.DROP_OK=true"); drops = []
     if ducks and not duck_ok:   # K-303(대표 11/25 "기존방식으로"): 덕킹도 무음 드롭처럼 기본 끔 — ⑱ v9 에서 음악이 0.55초 동안 원곡보다 6dB 넘게 빠짐(끊김). 대표가 그 편에서 확인한 때만 window.DUCK_OK=true
         print(f"  [알림] 덕킹 {len(ducks)}곳은 적용하지 않았어요 — 기본 끔(K-303). 꼭 필요하면 대표 확인 뒤 페이지에 window.DUCK_OK=true"); ducks = []
     표 = 층표(); SR = 48000; 층db = {L: float(표["층"][L].get("db", 0)) for L in 표["층"]}
+    if evs:
+        AM = 표.get("자동_효과음", {}); 겹 = float(AM.get("겹침_초", .06)); 늘 = []
+        for k, t in sorted(evs, key=lambda e: e[1]):
+            sk = AM.get("표", {}).get(k)
+            if not sk or t >= 초 or any(abs(float(c.get("t", -9)) - t) < 겹 for c in list(cues) + 늘): continue
+            늘.append({"t": t, "k": sk, "자동": k})
+        cues = list(cues) + 늘; print(f"  자동 효과음 {len(늘)}개(사건 {len(evs)}개 · 손 큐와 겹친 것 뺌): " + " ".join(f"{c['자동']}→{c['k']}@{c['t']:.2f}" for c in 늘[:10]))
     # ① 음악 층: 파일 또는 music_plan → 기준 LUFS(-16)로 선형 맞춤 → 층 크기
     if 음악파일:
         info = {"style": os.path.basename(음악파일), "bpm": (BEAT or {}).get("bpm", "?"), "key": "-", "음악파일": 음악파일}
@@ -965,6 +979,14 @@ def 소리붙이기(mp4, 초, html, 분위기="fun", 이름=None, 음악파일=N
         import music_plan as MP
         info = MP.choose(분위기, 이름 or os.path.splitext(os.path.basename(mp4))[0])
         MP.mux(mp4, [초], info, 91); music = _pcm(mp4, 초, SR)   # 음악(박자 맞춤)은 기존 도구 그대로
+    if end_tail:   # 알렉스 B(중): 마지막 컷에서 음악을 끊고 잔향만
+        ET = 표.get("끝_잔향", {}); te = int(SR * float(end_tail.get("t", 초 - 1))); L = int(SR * float(end_tail.get("len", ET.get("기본_len", 1.4))))
+        seg = music[max(0, te - int(SR * .25)):te].copy(); n_ = np.arange(L) / SR; ir = np.random.default_rng(7).standard_normal(L) * np.exp(-n_ / float(ET.get("감쇠_초", .55))) * .02
+        tail = np.stack([np.convolve(seg[:, c], ir)[:L] for c in range(seg.shape[1])], 1) * float(ET.get("gain", .6))
+        music[te:] = 0; m_ = min(L, len(music) - te); music[te:te + m_] += tail[:m_]; info["끝_잔향"] = {"t": te / SR, "len": L / SR}
+    if loop:       # 알렉스 B(중): 끝을 곡 첫머리로 이어 붙이기(크로스페이드)
+        xf = int(SR * float(표.get("루프", {}).get("xf", .35))); r_ = np.linspace(0, 1, xf)[:, None]
+        music[-xf:] = music[-xf:] * (1 - r_) + music[:xf] * r_; info["루프"] = xf / SR
     ref = mp4 + ".ref.wav"; _wav쓰기(ref, music, SR)   # K-295 음악 빠짐 검사용 음악만 소리(덕킹 전)
     I = float(_라우드(ref)["input_i"]); I = I if np.isfinite(I) else -16.0
     music *= 10 ** ((float(표["층"]["음악"].get("기준_LUFS", -16)) - I + 층db["음악"]) / 20)
@@ -1173,6 +1195,18 @@ def 엔진효과_검사(pg, 초, html):
         ok = bool(cuts) if v == "CUTS" else any(k in v.split(":", 1)[1].split("|") for k in sfx)
         판(x["이름"], ok, x.get("등급") == "확인")
     판(R["박자"]["이름"], bool(BEAT)); 판(R["빠른블러"]["이름"], fast > 0)
+    # 알렉스 A(상) '강조색 한 화면 한 곳'(확인 등급, 막지 않음): 0.5초마다 캔버스를 1/8로 줄여 브랜드 강조색 덩어리를 센다
+    many = pg.evaluate("""async (D) => { const out=[]; const c=document.querySelector('canvas'); if(!c||!window.FXK) return out;
+      const A=(window.FXK.BRAND.accent||'#F4CE62').replace('#',''), ar=parseInt(A.slice(0,2),16), ag=parseInt(A.slice(2,4),16), ab=parseInt(A.slice(4,6),16);
+      const k=8, w=Math.floor(c.width/k), h=Math.floor(c.height/k), o=document.createElement('canvas'); o.width=w; o.height=h; const x=o.getContext('2d');
+      for(let t=0.25;t<D;t+=0.5){ window.seek(t); x.clearRect(0,0,w,h); x.drawImage(c,0,0,w,h); const d=x.getImageData(0,0,w,h).data, m=new Uint8Array(w*h);
+        for(let i=0;i<w*h;i++){ const r=d[i*4]-ar,g=d[i*4+1]-ag,b=d[i*4+2]-ab; if(r*r+g*g+b*b<2500) m[i]=1 }
+        let n=0; const seen=new Uint8Array(w*h);
+        for(let i=0;i<w*h;i++){ if(!m[i]||seen[i]) continue; let st=[i],sz=0; seen[i]=1; while(st.length){ const j=st.pop(); sz++; const px=j%w,py=(j/w)|0;
+          for(const q of [px>0?j-1:-1,px<w-1?j+1:-1,py>0?j-w:-1,py<h-1?j+w:-1]) if(q>=0&&m[q]&&!seen[q]){seen[q]=1;st.push(q)} } if(sz>=40) n++ }
+        if(n>1) out.push([Math.round(t*100)/100,n]) } return out }""", 초)
+    if many:
+        print(f"  [확인] 강조색 한 화면 한 곳(알렉스 A): 강조색 덩어리가 2곳 이상인 순간 {len(many)}번 — " + ", ".join(f"{t}초 {n}곳" for t, n in many[:6]))
     for code, msg in notes:   # K-310 ③: 타이포 8~12자 등 엔진 메모를 확인 등급으로 보인다(숨기지 않음)
         print(f"  [확인] {code}: {msg}")
     print("  K-310 릴스 기본 효과 대조: " + " · ".join(f"{a} {b}" for a, b in 표))
