@@ -5350,7 +5350,7 @@
   "since": "2026-11-18",
   "kind": "릴스 시안(대표 확인용 · 발행·예약 안 함)",
   "title": "시안 A: 12월 7일부터 힘 받는 띠 4가지 (13.3초, 대표 지적 반영판)",
-  "status": "wait",
+  "status": "done",
   "channels": [
    "instagram"
   ],
@@ -5369,14 +5369,19 @@
   "note_caption": "11/22 CT 캡션 초안(capfix.check 통과·style_gate --brand zaoseon 캡션 막음 0) · 날짜안 대표 검수 대기 · 예약 안 함",
   "video_before_v3": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/sian_a9/sian_a9.mp4",
   "v3_approval": "대표 2026-11-24 16시대 노션 검수 ③ \"✅ 4편 v3 승인\" 체크 + 채팅 \"급한 순서 1~4까지 체크 완료\" · K-291 판(대본 글·장면 시간·소리·캡션은 11/18 승인본 그대로)",
-  "k286_approval": "대표 2026-11-24 노션 검수 ③ '✅ K-286 시안으로 4편 캡션 교체'(앞부분 ①훅·②약속·③불릿 3줄만, 본문 그대로)"
+  "k286_approval": "대표 2026-11-24 노션 검수 ③ '✅ K-286 시안으로 4편 캡션 교체'(앞부분 ①훅·②약속·③불릿 3줄만, 본문 그대로)",
+  "metricool_post_ids": {
+   "instagram": 441548977,
+   "threads": 441549049
+  },
+  "scheduled_note": "11/25 19:50 ① 자동 — Metricool 예약(인스타 릴스+스레드 17:00, v3·K-286 캡션)"
  },
  {
   "id": "sian-b9",
   "since": "2026-11-18",
   "kind": "릴스 시안(대표 확인용 · 발행·예약 안 함)",
   "title": "시안 B: 나랑 제일 편한 띠 6쌍 총정리 (16.3초, 대표 지적 반영판)",
-  "status": "wait",
+  "status": "done",
   "channels": [
    "instagram"
   ],
@@ -5395,14 +5400,19 @@
   "note_caption": "11/22 CT 캡션 초안(capfix.check 통과·style_gate --brand zaoseon 캡션 막음 0) · 날짜안 대표 검수 대기 · 예약 안 함",
   "video_before_v3": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/sian_b9/sian_b9.mp4",
   "v3_approval": "대표 2026-11-24 16시대 노션 검수 ③ \"✅ 4편 v3 승인\" 체크 + 채팅 \"급한 순서 1~4까지 체크 완료\" · K-291 판(대본 글·장면 시간·소리·캡션은 11/18 승인본 그대로)",
-  "k286_approval": "대표 2026-11-24 노션 검수 ③ '✅ K-286 시안으로 4편 캡션 교체'(앞부분 ①훅·②약속·③불릿 3줄만, 본문 그대로)"
+  "k286_approval": "대표 2026-11-24 노션 검수 ③ '✅ K-286 시안으로 4편 캡션 교체'(앞부분 ①훅·②약속·③불릿 3줄만, 본문 그대로)",
+  "metricool_post_ids": {
+   "instagram": 441548677,
+   "threads": 441548694
+  },
+  "scheduled_note": "11/25 19:50 ① 자동 — Metricool 예약(인스타 릴스+스레드 17:00, v3·K-286 캡션)"
  },
  {
   "id": "sian-g9",
   "since": "2026-11-18",
   "kind": "릴스 시안(대표 확인용 · 발행·예약 안 함)",
   "title": "시안 G: 1월 5일 밤부터 힘 받는 띠 4가지 (13.8초, 대표 지적 반영판)",
-  "status": "wait",
+  "status": "done",
   "channels": [
    "instagram"
   ],
@@ -5421,14 +5431,19 @@
   "note_caption": "11/22 CT 캡션 초안(capfix.check 통과·style_gate --brand zaoseon 캡션 막음 0) · 날짜안 대표 검수 대기 · 예약 안 함",
   "video_before_v3": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/sian_g9/sian_g9.mp4",
   "v3_approval": "대표 2026-11-24 16시대 노션 검수 ③ \"✅ 4편 v3 승인\" 체크 + 채팅 \"급한 순서 1~4까지 체크 완료\" · K-291 판(대본 글·장면 시간·소리·캡션은 11/18 승인본 그대로)",
-  "k286_approval": "대표 2026-11-24 노션 검수 ③ '✅ K-286 시안으로 4편 캡션 교체'(앞부분 ①훅·②약속·③불릿 3줄만, 본문 그대로)"
+  "k286_approval": "대표 2026-11-24 노션 검수 ③ '✅ K-286 시안으로 4편 캡션 교체'(앞부분 ①훅·②약속·③불릿 3줄만, 본문 그대로)",
+  "metricool_post_ids": {
+   "instagram": 441549168,
+   "threads": 441549239
+  },
+  "scheduled_note": "11/25 19:50 ① 자동 — Metricool 예약(인스타 릴스+스레드 17:00, v3·K-286 캡션)"
  },
  {
   "id": "sian-c9",
   "since": "2026-11-18",
   "kind": "릴스 시안(대표 확인용 · 발행·예약 안 함)",
   "title": "시안 C: 태어난 날 첫 글자 10가지 총정리 (21.7초, 대표 지적 반영판)",
-  "status": "wait",
+  "status": "done",
   "channels": [
    "instagram"
   ],
@@ -5447,6 +5462,11 @@
   "note_caption": "11/22 CT 캡션 초안(capfix.check 통과·style_gate --brand zaoseon 캡션 막음 0) · 날짜안 대표 검수 대기 · 예약 안 함",
   "video_before_v3": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/sian_c9/sian_c9.mp4",
   "v3_approval": "대표 2026-11-24 16시대 노션 검수 ③ \"✅ 4편 v3 승인\" 체크 + 채팅 \"급한 순서 1~4까지 체크 완료\" · K-291 판(대본 글·장면 시간·소리·캡션은 11/18 승인본 그대로)",
-  "k286_approval": "대표 2026-11-24 노션 검수 ③ '✅ K-286 시안으로 4편 캡션 교체'(앞부분 ①훅·②약속·③불릿 3줄만, 본문 그대로)"
+  "k286_approval": "대표 2026-11-24 노션 검수 ③ '✅ K-286 시안으로 4편 캡션 교체'(앞부분 ①훅·②약속·③불릿 3줄만, 본문 그대로)",
+  "metricool_post_ids": {
+   "instagram": 441548839,
+   "threads": 441548880
+  },
+  "scheduled_note": "11/25 19:50 ① 자동 — Metricool 예약(인스타 릴스+스레드 17:00, v3·K-286 캡션)"
  }
 ]
