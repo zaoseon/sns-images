@@ -502,5 +502,21 @@
   "time": "20:00",
   "note": "11/5 대표 '클립 다시 시작해'. 새 틀 목소리 릴스(인스타와 같은 영상). 폰 네이버 블로그 앱으로 올리고 블로그 스티커로 「화나면 말을 안 하는 사람의 공통점, 침묵하는 사람의 」(n20) 글을 걸어요. (11/5 13:20 소리 96kHz→48kHz 다시 만듦: 네이버 '편집할 수 없는 미디어')",
   "video_prev": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-exp/out_clip/b1104-imgye.mp4"
+ },
+ {
+  "id": "a9-1126-jawol",
+  "post": "n01",
+  "type": "클립(하루 1개)",
+  "hook": "12월 7일부터 힘 받는 띠 4가지",
+  "title": "네이버 클립 · 12월 7일부터 힘 받는 띠 4가지",
+  "desc": "12월 7일부터 힘 받는 띠 4가지\n쥐띠·소띠·용띠·원숭이띠라면 대설(12월 7일 11시 52분)부터예요. 내 띠, 이 넷 중에 있었나요?\n띠별 한 해 흐름은 아래 블로그 글에 정리해 두었어요.\n\n#사주 #운세 #띠별운세 #대설 #12월운세",
+  "short": "12월 7일부터 힘 받는 띠 4가지\n#사주 #운세 #띠별운세",
+  "images": [
+   "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/clip_cover/a9-1126-jawol.jpg"
+  ],
+  "video": "https://raw.githubusercontent.com/zaoseon/sns-images/main/2026-reels-test/sian_a9/sian_a9_v4_clip.mp4",
+  "rec": "2026-11-26",
+  "time": "20:00",
+  "note": "11/25 대표 노션 ㉕ '이대로 등록(11/26 20:00)' 체크. 네이버 클립 재개 첫 편(11/17 뒤 0편) · 대본 A 승인판을 자오선 판(K-291)으로 다시 렌더한 클립 v4(8a819d9) · 음악 = 저장소 합성기(music_log sian_a9_v4clip, 메타 곡 아님 K-296) · 소리 48kHz 확인. 폰 네이버 블로그 앱으로 올리고 블로그 스티커로 「2027년 띠별 운세 총정리, 정미년 12띠 중 기운 좋은 띠는?」(n01) 글을 걸어요."
  }
 ]
