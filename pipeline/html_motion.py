@@ -1138,6 +1138,47 @@ def 자오선_판_검사(pg, 초, 간격=0.5):
     return out
 
 
+def 엔진효과_검사(pg, 초, html):
+    """K-310(대표 11/25 "1→2→7 먼저", 릴스 누락 감사 ㉗ — 5대 스펙·알렉스 A(상)이 엔진에만 있고 발행 릴스가 안 씀): 대본 릴스(window.SCRIPT)가
+    specs/reel_core_fx.json 의 화면 효과를 실제로 그렸는지(FX.mark, 1/60초 간격)·컷 클릭·whoosh·박자 격자·빠른 블러를 재서, 빠지면 [미지원(BLOCKED)].
+    window.CORE_FX_SKIP={'이름':'이유'} 로 뺀 것은 막지 않고 확인 줄로 이유를 보인다. K-310 이전 승인 페이지는 예외 목록(확인 줄)."""
+    if not pg.evaluate("window.SCRIPT||null"): return []
+    import json as _j
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    _c = [os.path.join(root, "specs", "reel_core_fx.json"), os.path.join(os.path.dirname(root), "kcos-motion", "specs", "reel_core_fx.json")]   # 사본 엔진(sns-images)은 옆 정본 표
+    _f = next((x for x in _c if os.path.exists(x)), None)
+    if not _f: return ["[미지원(BLOCKED)] K-310 specs/reel_core_fx.json 을 찾지 못해 릴스 기본 효과를 잴 수 없어요 — kcos-motion 을 옆에 두세요"]
+    R = _j.load(open(_f, encoding="utf-8"))
+    norm = os.path.abspath(html).replace("\\", "/")
+    if any(norm.endswith(p) for p in R["기존_승인_예외"]["페이지"]):
+        print(f"  [확인] K-310 예외: K-310 이전 승인본({os.path.basename(html)}) — 5대 스펙 게이트를 건너뜀. 다시 만들 때 F.reelBase 로"); return []
+    skip = pg.evaluate("window.CORE_FX_SKIP||{}") or {}
+    used0 = set(pg.evaluate("() => Object.keys(window.__zsFxUsed||{})"))   # 불러올 때 표시된 것(F.tempoCuts 는 장면 표를 만들 때 한 번 표시)
+    notes0 = pg.evaluate("() => window.__zsNote || []")
+    pg.evaluate("() => {window.__zsFxUsed={};window.__zsNote=[]}"); t_ = 0.0
+    while t_ < 초: pg.evaluate("t => window.seek(t)", t_); t_ += 1 / 60
+    used = used0 | set(pg.evaluate("() => Object.keys(window.__zsFxUsed||{})"))
+    cuts = pg.evaluate("() => window.CUTS || []"); sfx = pg.evaluate("() => (window.SFX||[]).map(c => c.k)")
+    fast = pg.evaluate("() => (window.FAST||[]).length"); notes = notes0 + [n for n in pg.evaluate("() => window.__zsNote || []") if n not in notes0]
+    bad, 표 = [], []
+    def 판(이름, ok, 확인=False):
+        if ok: 표.append((이름, "있음")); return
+        if 이름 in skip: 표.append((이름, f"뺌 — {skip[이름]}")); print(f"  [확인] K-310 {이름} 뺌: {skip[이름]}"); return
+        if 확인: 표.append((이름, "없음(확인)")); print(f"  [확인] K-310 {이름} 없음"); return
+        표.append((이름, "없음")); bad.append(f"[미지원(BLOCKED)] K-310 {이름} — 대본 릴스 기본 효과를 그리지 않았어요(specs/reel_core_fx.json · F.reelBase). 빼야 하면 window.CORE_FX_SKIP 에 이유")
+    for x in R["화면"]:
+        판(x["이름"], any(m in used for m in x["마크"]) if x.get("하나면") else all(m in used for m in x["마크"]))
+    for x in R["소리"]:
+        v = x["값"]
+        ok = bool(cuts) if v == "CUTS" else any(k in v.split(":", 1)[1].split("|") for k in sfx)
+        판(x["이름"], ok, x.get("등급") == "확인")
+    판(R["박자"]["이름"], bool(BEAT)); 판(R["빠른블러"]["이름"], fast > 0)
+    for code, msg in notes:   # K-310 ③: 타이포 8~12자 등 엔진 메모를 확인 등급으로 보인다(숨기지 않음)
+        print(f"  [확인] {code}: {msg}")
+    print("  K-310 릴스 기본 효과 대조: " + " · ".join(f"{a} {b}" for a, b in 표))
+    return bad
+
+
 def 안전영역_막기(html, 초, ch="reel", 표지채널=None):
     from playwright.sync_api import sync_playwright
     C = CS.CH[ch]
@@ -1151,7 +1192,7 @@ def 안전영역_막기(html, 초, ch="reel", 표지채널=None):
         pg.goto("file://" + os.path.abspath(html)); pg.wait_for_function("typeof window.seek === 'function'", timeout=15000)
         pg.evaluate("async () => { await (window.__zsFonts||Promise.resolve()); await document.fonts.ready }")
         src = open(html, encoding="utf-8").read(); frame = ".frame(" in src
-        문제, 칸 = 안전영역_검사(pg, 초, ch); 문제 += 균형_검사(pg, 초, ch); 문제 += 표지_검사(pg, 표지채널 or ch); 문제 += CTA_검사(pg, 초, ch); 문제 += 대본_검사(pg, 초, ch); 문제 += 광고모션_검사(pg, 초, ch); 문제 += 자오선_판_검사(pg, 초); b.close()
+        문제, 칸 = 안전영역_검사(pg, 초, ch); 문제 += 균형_검사(pg, 초, ch); 문제 += 표지_검사(pg, 표지채널 or ch); 문제 += CTA_검사(pg, 초, ch); 문제 += 대본_검사(pg, 초, ch); 문제 += 엔진효과_검사(pg, 초, html); 문제 += 광고모션_검사(pg, 초, ch); 문제 += 자오선_판_검사(pg, 초); b.close()
     canvas = "<canvas" in src
     # 11/12 16:45 대표 "정월이 나오는거 너무 어색하고 별로" → 릴스·광고 영상에 실사 정월 누끼(characters/cut/)를 넣지 않는다(K-197)
     _src = open(html, encoding="utf-8").read() if os.path.exists(html) else ""

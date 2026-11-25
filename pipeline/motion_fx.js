@@ -515,7 +515,7 @@ FX.tempoCuts=({k0=0,n=8,len=null,short=[],shortLen=null,beat=FX.BEAT,max=1.5}={}
 // ③ 타이포 크기 대비 + 오버슈트 팝: 핵심어(key)는 글 칸(안전 영역) 폭의 keyW(0.70~0.92), 조사·보조어(aux)는 핵심어 글자 크기의 auxR(0.25~0.35)
 //  팝 = EZ.pop 곡선으로 0.7→1.08→1.0, 자간 track[0]→track[1]px 로 trackDur 초 동안 벌어짐. 1화면 글자(빈칸 뺀) maxChars 넘으면 확인 메모(FX.note)
 //  폭 기준은 화면 1080 이 아니라 글 칸(F.area) — 1080×0.92=994px 는 안전 영역(840px)을 넘어 관문이 막는다
-FX.typePop=(g,t,t0,{key,aux='',auxPos='below',family=FX.BRAND.fonts.title,weight=900,auxWeight=800,keyW=.8,auxR=.3,keyInk=FX.BRAND.ink,auxInk=null,x=FX.cx,y=FX.cy,dur=.45,auxDelay=.08,track=[-2,6],trackDur=1.2,area=null,maxChars=12,peak=1.08,gap='even'}={})=>{
+FX.typePop=(g,t,t0,{key,aux='',auxPos='below',family=FX.BRAND.fonts.title,weight=900,auxWeight=800,keyW=.8,auxR=.3,keyInk=FX.BRAND.ink,auxInk=null,x=FX.cx,y=FX.cy,dur=.45,auxDelay=.08,track=[-2,6],trackDur=1.2,area=null,maxChars=12,minChars=8,peak=1.08,gap='even'}={})=>{
  const u=t-t0;if(u<0||!key)return;const A=area||FX.area(),AW=A.x1-A.x0,n=[...key].length,LS='letterSpacing' in g;g.save();g.textAlign='center';g.textBaseline='middle';
  g.font=`${weight} 100px ${family}`;if(LS)g.letterSpacing='0px';const w100=g.measureText(key).width||100;let fs=AW*cl(keyW,.7,.92)*100/w100;
  const pk=(fs*w100/100+track[1]*(n-1))*peak;if(pk>AW*.98)fs*=AW*.98/pk;   // 오버슈트·자간 최대에서도 글 칸 안
@@ -527,7 +527,7 @@ FX.typePop=(g,t,t0,{key,aux='',auxPos='below',family=FX.BRAND.fonts.title,weight
  const sc=v=>{const q=FX.EZ.pop(v);return q<=1?mix(.7,1,q):1+(peak-1)*(q-1)/Math.max(1e-6,FX._popPk-1)},ls=mix(track[0],track[1],ease(cl(u/trackDur)));
  const one=(s,f,yy,col,u_)=>{if(u_<0)return;const k=sc(cl(u_/dur));g.save();g.font=f;if(LS)g.letterSpacing=ls.toFixed(2)+'px';g.translate(x,yy);g.scale(k,k);g.fillStyle=col;g.fillText(s,0,0);g.restore()};
  one(key,`${weight} ${fs.toFixed(1)}px ${family}`,ky,keyInk,u);if(aux)one(aux,`${auxWeight} ${afs.toFixed(1)}px ${family}`,ay,auxInk||keyInk,u-auxDelay);g.restore();
- if(u<dur)FX.fast(t0,t0+Math.min(dur,.25));const nc=(key+aux).replace(/\s/g,'').length;if(nc>maxChars)FX.note('글자수',`1화면 ${nc}자(${key} ${aux}) — ${maxChars}자 넘음, 확인`);FX.mark('타이포팝')};
+ if(u<dur)FX.fast(t0,t0+Math.min(dur,.25));const nc=(key+aux).replace(/\s/g,'').length;if(nc>maxChars)FX.note('글자수',`1화면 ${nc}자(${key} ${aux}) — ${maxChars}자 넘음, 확인`);else if(nc<minChars)FX.note('글자수',`1화면 ${nc}자(${key} ${aux}) — 참고영상 8~12자보다 적음, 확인(K-310)`);FX.mark('타이포팝')};
 
 FX.LIST=Object.assign(FX.LIST,{'스냅드리프트':'컷 진입 0.1~0.15초 급확대 뒤 초당 1~2% 계속 전진(참고영상 ①)','히트스톱':'임팩트 2~3프레임 정지 뒤 감쇠 셰이크(1.08배·±1.5도·0.8)(참고영상 ②)',
  '반전스트로브':'전환 경계 1프레임 색 반전(자오선은 네이비↔크림)(참고영상 ②)','글자관통':'글자 속 빈 곳으로 100%→3500% 날아 들어가 다음 장면(참고영상 ②)','템포브레이커':'박자 격자에서 지정한 컷만 1.5초 미만으로 끊음(참고영상 ②)',
@@ -535,5 +535,19 @@ FX.LIST=Object.assign(FX.LIST,{'스냅드리프트':'컷 진입 0.1~0.15초 급�
 FX.USE['전환'].push('반전스트로브','글자관통');FX.USE['훅(첫 1초)'].push('타이포팝','히트스톱');FX.USE['개념 설명'].push('타이포팝','템포브레이커');FX.USE['모든 장면(기본)'].push('스냅드리프트');
 })();
 
+// ───────── K-310 릴스 기본 틀(대표 11/25 "1→2→7 먼저" · 릴스 누락 감사 ㉗: 5대 스펙이 엔진에만 있고 발행 릴스가 안 씀) ─────────
+// 새 대본 릴스는 장면 표를 만든 뒤 F.reelBase 한 번만 부르면 스냅드리프트·히트스톱 셰이크·카메라 층·컷 클릭·빠른 순간 블러가 기본으로 켜진다.
+//  · 스냅 = 0.926→1.0(= 참고영상 1.08배 비율, 1.0배 화면이 안전 영역 안에 남음) 0.12초 · 그 뒤 초당 1% 전진(참고영상 1~2%의 아래 끝 — 관문 균형)
+//  · stops=[{t,frames:3,fps:30}] 히트스톱(셰이크 1.08배·±1.5도) · CUTS = 장면 시작마다 0.03초 클릭(타격 큐가 있으면 엔진이 건너뜀)
+//  · 페이지는 draw(t) 에서 const tt=R.tt(t) 로 장면 시각을 받고(히트스톱 동안 같은 그림), g.save();F.cam(g,t);…;g.restore()
+//  · 반전(F.strobe)·글자 관통(F.textWindow hole)·타이포 팝(F.typePop)·템포 브레이커(F.tempoCuts)는 내용에 따라 페이지가 부른다 — 안 부르면 html_motion 게이트(specs/reel_core_fx.json)가 막는다
+(function(){const FX=window.FXK;if(!FX)return;
+FX.REEL={snap:{d:.12,from:.926,s:1,rate:.01},shake:1.08};
+FX.reelBase=({scenes=[],hits=[],stops=[],drops=[],zooms=[],snap={},shake=FX.REEL.shake,cuts=true}={})=>{
+ FX.camSetup({scenes,hits,drops,zooms,snap:Object.assign({},FX.REEL.snap,snap),stops,shakeOpt:{scale:shake}});
+ if(cuts&&typeof window!=='undefined'&&!window.CUTS)window.CUTS=scenes.map(s=>s[0]).filter(a=>a>.05);
+ return {tt:t=>FX.timewarp(t,stops),scenes,stops}};
+FX.LIST=Object.assign(FX.LIST,{'릴스기본틀':'F.reelBase — 스냅드리프트·히트스톱·카메라층·컷 클릭·빠른 블러 기본 켜기(K-310)'});
+})();
 // 프롬프트 100 기법(motion_fx100.js)을 같이 불러온다 — 페이지는 motion_fx.js 하나만 넣으면 된다
 (function(){if(typeof document!=='undefined'&&document.currentScript&&document.readyState==='loading'){document.write('<script src="'+document.currentScript.src.replace(/[^/]*$/,'')+'motion_fx100.js"><\/script>')}})();
