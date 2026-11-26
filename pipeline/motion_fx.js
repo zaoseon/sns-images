@@ -529,6 +529,9 @@ FX.typePop=(g,t,t0,{key,aux='',auxPos='below',family=FX.BRAND.fonts.title,weight
  one(key,`${weight} ${fs.toFixed(1)}px ${family}`,ky,keyInk,u);if(aux)one(aux,`${auxWeight} ${afs.toFixed(1)}px ${family}`,ay,auxInk||keyInk,u-auxDelay);g.restore();
  if(u<dur)FX.fast(t0,t0+Math.min(dur,.25));const nc=(key+aux).replace(/\s/g,'').length;if(nc>maxChars)FX.note('글자수',`1화면 ${nc}자(${key} ${aux}) — ${maxChars}자 넘음, 확인`);else if(nc<minChars)FX.note('글자수',`1화면 ${nc}자(${key} ${aux}) — 참고영상 8~12자보다 적음, 확인(K-310)`);FX.mark('타이포팝')};
 
+// 박자 파괴(제미나이 D-11 ①, K-325): 장면 표 scenes 의 at 번째 컷 뒤에 len(0.4)초 연타 n(3)컷 + hold(1.8)초 정지 컷을 끼우고 뒤 컷은 그만큼 민다. 페이지가 연타 컷에 낱말 하나씩 그린다
+FX.tempoBurst=(scenes,{at=0,n=3,len=.4,hold=1.8}={})=>{const S=scenes.map(x=>x.slice());if(!S[at])return {scenes:S,burst:[]};let t=S[at][1];const burst=[];for(let i=0;i<n;i++){burst.push([t,t+len]);t+=len}burst.push([t,t+hold]);t+=hold;
+ const sh=t-S[at][1],out=[...S.slice(0,at+1),...burst,...S.slice(at+1).map(([a,b])=>[a+sh,b+sh])];FX.mark('템포브레이커');return {scenes:out,burst,shift:sh}};
 FX.LIST=Object.assign(FX.LIST,{'스냅드리프트':'컷 진입 0.1~0.15초 급확대 뒤 초당 1~2% 계속 전진(참고영상 ①)','히트스톱':'임팩트 2~3프레임 정지 뒤 감쇠 셰이크(1.08배·±1.5도·0.8)(참고영상 ②)',
  '반전스트로브':'전환 경계 1프레임 색 반전(자오선은 네이비↔크림)(참고영상 ②)','글자관통':'글자 속 빈 곳으로 100%→3500% 날아 들어가 다음 장면(참고영상 ②)','템포브레이커':'박자 격자에서 지정한 컷만 1.5초 미만으로 끊음(참고영상 ②)',
  '타이포팝':'핵심어 글 칸 폭 70~92% 울트라 볼드 + 조사 25~35% · 0.7→1.08→1.0 팝 · 자간 -2→+6px(참고영상 ③)'});
@@ -542,12 +545,54 @@ FX.USE['전환'].push('반전스트로브','글자관통');FX.USE['훅(첫 1초)
 //  · 페이지는 draw(t) 에서 const tt=R.tt(t) 로 장면 시각을 받고(히트스톱 동안 같은 그림), g.save();F.cam(g,t);…;g.restore()
 //  · 반전(F.strobe)·글자 관통(F.textWindow hole)·타이포 팝(F.typePop)·템포 브레이커(F.tempoCuts)는 내용에 따라 페이지가 부른다 — 안 부르면 html_motion 게이트(specs/reel_core_fx.json)가 막는다
 (function(){const FX=window.FXK;if(!FX)return;
-FX.REEL={snap:{d:.12,from:.926,s:1,rate:.01},shake:1.08};
-FX.reelBase=({scenes=[],hits=[],stops=[],drops=[],zooms=[],snap={},shake=FX.REEL.shake,cuts=true}={})=>{
+// K-325(대표 2026-11-26 "릴스 모션·템포 개편 ($0)" — "5대 모션 기본 ON"): 5대 모션(스냅드리프트·히트스톱·반전스트로브·템포브레이커·타이포팝)을 페이지가 따로 부르지 않아도 켠다.
+//  · stops 를 안 주면(null) 둘째 컷 시작(= 훅 → 본론 경계)에 히트스톱 3프레임. 끄려면 stops:[]
+//  · tempo(기본 켬): 장면 표에 1.5초 미만 컷이 있으면 템포브레이커로 표시, 없으면 확인 메모(막지 않음 — 직격 훅 0~1.5초가 그 컷)
+//  · strobe(기본 켬): 둘째 컷 시작 1프레임 반전. 페이지는 장면을 다 그린 뒤 R.post(g,t). 브랜드 판은 strobe:{swap,remap} 로 넘긴다(자오선 네이비↔크림·골드→네이비)
+//  · 타이포팝은 F.hookJump(직격 훅)·F.typePop 이 그린다
+FX.REEL={snap:{d:.12,from:.926,s:1,rate:.01},shake:1.08,tempoMax:1.5};
+FX.reelBase=({scenes=[],hits=[],stops=null,drops=[],zooms=[],snap={},shake=FX.REEL.shake,cuts=true,tempo=true,strobe=true}={})=>{
+ if(stops==null)stops=scenes.length>1?[{t:scenes[1][0],frames:3,fps:30}]:[];
  FX.camSetup({scenes,hits,drops,zooms,snap:Object.assign({},FX.REEL.snap,snap),stops,shakeOpt:{scale:shake}});
  if(cuts&&typeof window!=='undefined'&&!window.CUTS)window.CUTS=scenes.map(s=>s[0]).filter(a=>a>.05);
- return {tt:t=>FX.timewarp(t,stops),scenes,stops}};
-FX.LIST=Object.assign(FX.LIST,{'릴스기본틀':'F.reelBase — 스냅드리프트·히트스톱·카메라층·컷 클릭·빠른 블러 기본 켜기(K-310)'});
+ const brk=tempo?scenes.filter(([a,b])=>b-a<FX.REEL.tempoMax-1e-6):[];
+ if(tempo){if(brk.length)FX.mark('템포브레이커');else FX.note('템포','1.5초 미만 컷이 없어요 — 직격 훅(0~1.5초) 또는 F.tempoCuts short 로 한 컷을 끊으세요(K-325)')}
+ const sO=strobe===true?{}:(strobe||null),st=sO?(sO.t??(scenes[1]?scenes[1][0]:null)):null;
+ return {tt:t=>FX.timewarp(t,stops),scenes,stops,strobeT:st,breakers:brk,post:(g,t)=>{if(st!=null)FX.strobe(g,t,st,Object.assign({fps:30,frames:1},sO));if(brk.some(([a,b])=>t>=a&&t<b))FX.mark('템포브레이커')}}};   // 짧은 컷이 화면에 있는 동안도 표시(관문이 그린 기록을 지운 뒤에도 잡히게)
+FX.LIST=Object.assign(FX.LIST,{'릴스기본틀':'F.reelBase — 스냅드리프트·히트스톱·카메라층·컷 클릭·빠른 블러 + 템포브레이커·반전스트로브(R.post) 기본 켜기(K-310·K-325)'});
+
+// K-325 직격 훅(대표 2026-11-26 "0~7초 느린 인트로 삭제 → 0~1.5초 화면 가득 직격 훅 + 즉시 본론 진입"):
+//  훅 줄들이 from(48px)에서 글 칸을 가득 채우는 크기(최대 to=320px, 폭 fill·높이에 맞춤)로 jump(0.16)초 안에 튀어 커진다(EZ.pop 오버슈트, 오버슈트 때도 글 칸 안).
+//  보조 줄(sub)은 작게 뒤따라(크기 대비). 표지 첫 프레임부터 글이 보인다(48px 시작 — 빈 표지 아님). 타이포팝 계열이라 '타이포팝'도 표시
+FX.hookJump=(g,t,t0,{lines=[],font=`900 100px ${FX.BRAND.fonts.title}`,from=48,to=320,fill=.92,ink=FX.BRAND.ink,hl=null,sub=[],subFont=null,subInk=null,area=null,jump=.1,lg=.42,subDelay=.12,setup=[],setupFont=null,setupInk=null,hold=0}={})=>{
+ let u=t-t0;if(u<0||!lines.length)return null;const {cl}=FX,A=area||FX.area(),AW=A.x1-A.x0,AH=A.y1-A.y0,cx=(A.x0+A.x1)/2;
+ // 셋업 컷(제미나이 F-17 ①): 작은 셋업 문장을 hold 초 동안 고요하게 → 다음 프레임 0.1초 점프로 거대 단어. 페이지는 window.SETUP_CUT=[[t0,t0+hold]] 로 밝힌다(채움 관문 예외, 1~2회)
+ const SU=[].concat(setup).filter(Boolean);if(SU.length&&hold>0){if(u<hold){const sf=setupFont||`700 60px ${FX.BRAND.fonts.title}`,sfs=parseFloat(/([\d.]+)px/.exec(sf)[1]);g.save();g.textAlign='center';g.textBaseline='middle';g.font=sf;g.fillStyle=setupInk||ink;
+   const cy=(A.y0+A.y1)/2-(SU.length-1)*sfs*.71;SU.forEach((x,i)=>g.fillText(x,cx,cy+i*sfs*1.42));g.restore();FX.mark('훅직격');return {setup:true}}u-=hold;t0+=hold}
+ const m=/^(.*?)([\d.]+)px\s+(.+)$/.exec(font),pre=m[1],fam=m[3],F_=s=>`${pre}${s.toFixed(1)}px ${fam}`,subs=subFont?[].concat(sub).filter(Boolean):[];
+ g.save();g.textAlign='center';g.textBaseline='alphabetic';const met=(s,f)=>{g.font=f;const r=g.measureText(s);return {w:r.width,a:r.actualBoundingBoxAscent,d:r.actualBoundingBoxDescent}};
+ const w100=Math.max(...lines.map(s=>met(s,F_(100)).w))||100;
+ let fs=Math.min(to,AW*fill*100/w100,AW*.98*100/(w100*FX._popPk));                       // 폭: 오버슈트 최대에서도 글 칸 98% 안
+ const sfs=subs.length?parseFloat(/([\d.]+)px/.exec(subFont)[1]):0,SM=subs.map(s=>met(s,subFont)),sH=SM.reduce((a,r)=>a+r.a+r.d,0)+Math.round(lg*sfs)*Math.max(0,SM.length-1);
+ const hk=f=>{const M=lines.map(s=>met(s,F_(f)));return {M,h:M.reduce((a,r)=>a+r.a+r.d,0)+lg*f*(M.length-1)}},nb=subs.length?3:2;
+ let H=hk(fs);while(fs>60&&AH-H.h-sH<nb*fs*.5){fs*=.95;H=hk(fs)}                          // 높이: 위·사이·아래 여백이 글자×0.5 이상
+ const gap=(AH-H.h-sH)/nb,v=cl(u/jump),q=FX.EZ.pop(v),k0=Math.min(1,from/fs),k=v>=1?1:k0+(1-k0)*q;let y=A.y0+gap;   // 위·사이·아래 같은 간격(균형 리듬)
+ lines.forEach((s,i)=>{const r=H.M[i];g.save();g.font=F_(fs);g.fillStyle=(hl&&i===lines.length-1)?hl:ink;g.translate(cx,y+(r.a+r.d)/2);g.scale(k,k);g.fillText(s,0,(r.a-r.d)/2);g.restore();y+=r.a+r.d+lg*fs});   // 글자 잉크 가운데를 축으로 튐
+ y+=gap-lg*fs;
+ if(subs.length){const a=cl((u-subDelay)/.18);if(a>0){g.globalAlpha=a;g.font=subFont;g.fillStyle=subInk||ink;SM.forEach((r,i)=>{g.fillText(subs[i],cx,y+r.a);y+=r.a+r.d+Math.round(lg*sfs)})}}
+ g.restore();if(u<jump)FX.fast(t0,t0+jump);FX.mark('훅직격');FX.mark('타이포팝');return {fs,k}};
+FX.LIST=Object.assign(FX.LIST,{'훅직격':'0~1.5초 화면 가득 직격 훅 — 48px→최대 320px 크기 점프(오버슈트 팝) + 작은 보조 줄(K-325)'});
+FX.USE['훅(첫 1초)'].push('훅직격');
+// Full-Screen Text Wipe(제미나이 F-17 ②, K-325 — 글자확대전환을 중반 반전 직전으로): 핵심 단어 마지막 1글자를 dur(0.3)초에 100%→zmax(2500%)로 키워
+//  굵은 획(ink)이 화면을 채운 순간 다음 컷. 획 안쪽 한 점을 축으로 키우고, 끝 8%는 ink 로 화면을 다 덮는다. 오프스크린 판에 그려 붙인다(전환 순간만 — 관문 글 기록 밖)
+FX.textWipe=(g,t,t0,{ch='',font=null,ink=FX.BRAND.ink,x=FX.cx,y=FX.cy,dur=.3,zmax=25}={})=>{const u=t-t0;if(u<0||u>=dur||!ch)return false;const {cl}=FX,F_=font||`900 420px ${FX.BRAND.fonts.title}`,W=g.canvas.width,H=g.canvas.height,p=cl(u/dur);
+ FX.__tw=FX.__tw||{};const key=ch+'|'+F_+'|'+x+'|'+y;let pt=FX.__tw[key];if(!pt){const k=4,c=document.createElement('canvas');c.width=Math.ceil(W/k);c.height=Math.ceil(H/k);const x2=c.getContext('2d');x2.scale(1/k,1/k);x2.font=F_;x2.textAlign='center';x2.textBaseline='middle';x2.fillText(ch,x,y);
+  const d=x2.getImageData(0,0,c.width,c.height).data;let best=null,bd=1e18;for(let j=0;j<c.height;j++)for(let i=0;i<c.width;i++){if(d[(j*c.width+i)*4+3]<200)continue;const dd=(i*k-x)**2+(j*k-y)**2;if(dd<bd){bd=dd;best={x:i*k,y:j*k}}}pt=FX.__tw[key]=best||{x,y}}
+ const z=Math.pow(zmax,Math.pow(p,4));/* 처음엔 거의 제자리, 끝에 확(가속) */const [c,x2]=FX._off(g,'tw');x2.setTransform(1,0,0,1,0,0);x2.clearRect(0,0,W,H);
+ if(p>=.92){x2.fillStyle=ink;x2.fillRect(0,0,W,H)}else{x2.translate(pt.x,pt.y);x2.scale(z,z);x2.translate(-pt.x,-pt.y);x2.font=F_;x2.textAlign='center';x2.textBaseline='middle';x2.fillStyle=ink;x2.fillText(ch,x,y)}
+ g.save();g.setTransform(1,0,0,1,0,0);g.drawImage(c,0,0);g.restore();FX.fast(t0,t0+dur);FX.mark('글자와이프');return true};
+FX.LIST=Object.assign(FX.LIST,{'글자와이프':'Full-Screen Text Wipe — 마지막 핵심 글자 1자 0.3초 100%→2500%, 획이 화면을 채운 순간 다음 컷(whoosh→thud, K-325)'});
+FX.USE['전환'].push('글자와이프');
 })();
 // ───────── 알렉스 묶음 A(중) 15종(대표 11/24 작업 요청함 "알렉스 미적용 묶음(A 중 …)" · 11/25 "나머지들도 누락없이 8개 모두", 감사 ㉗ 4번) ─────────
 // 모두 Canvas 2D · 비용 $0. 지금 장면을 먼저 그린 뒤 부르는 것(전환·후처리)과 그리기 함수를 받는 것(drawNext·draw)으로 나뉜다. 각 함수는 FX.mark 로 이름을 남긴다.
@@ -620,7 +665,8 @@ const W=(name,kind,at=(t0,o)=>t0)=>{const f=FX[name];if(typeof f!=='function')re
 W('strobe','반전');W('pierce','관통',(t0,o)=>t0+(o.hold??.25));W('iris','아이리스');W('blockPush','색블록');W('warp','워프');W('typePop','타이포팝');
 W('scramble','스크램블');W('flash','플래시');W('impactFrame','임팩트프레임');W('smear','스미어');W('diagWipe','와이프');W('whip','휩');W('textShutter','셔터');
 const sf=FX.slotFit;FX.slotFit=function(g,t,t0,o={}){(o.words||[]).forEach((w,i)=>{if(i)FX.ev('슬롯',t0+i*(o.step??.45))});return sf.apply(this,arguments)};
-const rb=FX.reelBase;FX.reelBase=function(o={}){(o.stops||[]).forEach(s=>FX.ev('히트스톱',s.t));if(typeof window!=='undefined'){window.__zsReelBase=1;if(window.SFX_AUTO===undefined)window.SFX_AUTO=true}return rb.apply(this,arguments)};
+W('hookJump','타이포팝');W('textWipe','와이프');
+const rb=FX.reelBase;FX.reelBase=function(o={}){if(typeof window!=='undefined'){window.__zsReelBase=1;if(window.SFX_AUTO===undefined)window.SFX_AUTO=true}const r=rb.apply(this,arguments);(r.stops||[]).forEach(s=>FX.ev('히트스톱',s.t));if(r.strobeT!=null)FX.ev('반전',r.strobeT);return r};   // K-325: 기본으로 켠 히트스톱·반전도 사건으로(효과음 자동)
 })();
 // 프롬프트 100 기법(motion_fx100.js)을 같이 불러온다 — 페이지는 motion_fx.js 하나만 넣으면 된다
 (function(){if(typeof document!=='undefined'&&document.currentScript&&document.readyState==='loading'){document.write('<script src="'+document.currentScript.src.replace(/[^/]*$/,'')+'motion_fx100.js"><\/script>')}})();

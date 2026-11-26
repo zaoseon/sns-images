@@ -402,6 +402,9 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
     sx0, sx1 = C["safe"][0], C["safe"][2]; top = z["상단 고정"][3]; bot = z["하단 고정"][1]
     ay0, ay1 = top + 10, bot - 10; acx = (sx0 + sx1) / 2; acy = (top + bot) / 2   # 11/13 K-203: 핸들~핸들 가운데(옛 값은 위만 60 띄우고 아래는 10 이라 아래로 쏠려도 통과)
     keys = {"위 간격": [], "아래 간격": [], "상하 균형": [], "균형 리듬": [], "상자 색": [], "가운데": [], "채움": []}
+    # K-325(대표 2026-11-26 제미나이 네온 F-17 ① "현재 '채움 관문(폭 72%)'을 '작은 셋업 컷' 1~2회에 한해 예외"): 페이지가 window.SETUP_CUT=[[a,b],…] 로 밝힌
+    # 셋업 컷(작은 셋업 문장 → 다음 프레임 거대 단어)은 채움만 빼고 잰다. 3회 넘게 밝히면 앞 2회만 예외로 친다(나머지는 그대로 잰다)
+    _su = (pg.evaluate("window.SETUP_CUT||[]") or [])[:2]
     n = int(초 / 간격)
     for i in range(n + 1):
         t = min(i * 간격, 초 - 0.01)
@@ -600,7 +603,7 @@ def 균형_검사(pg, 초, ch="reel", 간격=0.25):
         if 안 and max(전부) > B["rhythm_ratio"] * max(min(전부), 1) and max(전부) - min(전부) > B["rhythm_slack"]: keys["균형 리듬"].append((t, f"간격 [위,아래,사이…]={[int(v) for v in 전부]} 블록 y={[(int(a_), int(b_)) for a_, b_ in 블록]} — 가장 넓은 것이 가장 좁은 것의 {max(전부) / max(min(전부), 1):.1f}배({B['rhythm_ratio']}배 이하로)"))
         if abs((y0 + y1) / 2 - acy) > B["center_tol_y"] or abs((x0 + x1) / 2 - acx) > B["center_tol_x"]:
             keys["가운데"].append((t, f"내용 묶음 가운데 ({(x0 + x1) / 2:.0f},{(y0 + y1) / 2:.0f}) — 칸 가운데 ({acx:.0f},{acy:.0f})"))
-        if h < B["min_fill_h"] * (bot - top - B["gap_top"]) and w < B["min_fill_w"] * (sx1 - sx0):
+        if h < B["min_fill_h"] * (bot - top - B["gap_top"]) and w < B["min_fill_w"] * (sx1 - sx0) and not any(a_ <= t < b_ for a_, b_ in _su):
             keys["채움"].append((t, f"내용 {w}x{h}px — 비어 보임(글자를 키우거나 그림을 더 크게)"))
     문제 = []
     for k, v in keys.items():
