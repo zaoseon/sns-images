@@ -1,0 +1,192 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#0D1424}canvas{position:absolute;left:0;top:0}</style></head>
+<body><canvas id="cv" width="1080" height="1920"></canvas>
+<script src="../../pipeline/motion_fx.js"></script>
+<script>window.coverT=0.8; /* 11/26 ① 클립 표지(K-205): 0.8초 훅 화면 */</script>
+<script>
+window.SCRIPT='reel_G_1월사주달';window.FX=["타자기", "마스크올라오기", "숫자갈라짐", "곡선화살표", "방사형", "카메라줌", "삼각형그리기", "글자스태거"];window.COMP='달력과절기';window.PAL='dg_gold';
+const D={"brand": "zaoseon", "status": "approved", "작성": "CT 11/17 (크빵이 E05·E15·유튜브 터진 4편 제목 분석 반영, 입말) · 11/17 19:4x CTA 다시 씀(질문→한 줄→할 일), 약속 칸 뺌(K-228)", "id": "reel_G_1월사주달", "의도": {"시청자": "1월 운세가 언제부터 바뀌는지, 내 띠가 어떤지 궁금한 사람", "유형": "알고 싶다"}, "표지": {"훅": "1월 5일 밤부터 힘 받는 띠 4가지", "보조": "1월 운은 1일이 아니라 소한부터", "훅유형": "흔한 오해 교정"}, "장면": [{"id": "절기", "공개": true, "화면글": ["소한 1월 5일 밤 11시 9분"], "풀이": "사주는 날짜 말고 절기로 달을 나눠요. 소한이 지나야 1월의 달이 시작돼요.", "초": [0.9, 3.6], "모션": "달력 숫자가 위아래로 갈라지며 1일→5일"}, {"id": "쥐", "공개": true, "화면글": ["쥐띠", "84·96·08·20년생"], "풀이": "1월 달은 소의 달이에요. 쥐띠는 소랑 제일 잘 맞는 띠(육합)라 일이 붙어 풀려요.", "초": [3.6, 6.0], "모션": "丑→子 곡선 화살표"}, {"id": "소", "공개": true, "화면글": ["소띠", "85·97·09·21년생"], "풀이": "소띠는 내 달이에요. 힘이 세게 실려요.", "초": [6.0, 8.2], "모션": "丑 둘레 빛살이 돌며 칩이 뒤집힘"}, {"id": "뱀닭", "공개": true, "화면글": ["뱀띠 89·01·13·25년생", "닭띠 81·93·05·17년생"], "풀이": "뱀·닭띠는 소의 달에 셋이 뭉치는 삼합이에요. 힘이 커져요.", "초": [8.2, 11.0], "모션": "丑·巳·酉 삼각형"}], "CTA": {"유형": "저장", "큰말": "1월, 어떤 것부터 풀리길 바라시나요?", "이유": "1월 운은 5일 밤 11시 9분부터예요", "단추": "잊지 않게 저장해 두세요"}, "근거": ["소한 2027-01-05 23:09 축월 시작(만세력 엔진)", "육합 子丑, 삼합 巳酉丑", "양력 1월의 월운 기준. 사주 해(歲)는 입춘 시작이라 '새해 첫 달'이라고 쓰지 않는다", "표지 훅: docs/research/유튜브쇼츠_제목패턴_운세_v1.md 4절(대상+명사로 끝남+우리만의 정확한 값)"], "확인필요": [], "구도": "달력과절기", "판": {"id": "dg_gold", "bg": "#163C32", "ink": "#F6F0E5", "sub": "#CDBB8A", "mute": "#CDBB8A", "acc": "#C7A34A", "accInk": "#163C32", "off": "#2B5A4B", "offInk": "#F6F0E5", "pan": "#2B5A4B", "panInk": "#F6F0E5", "hl": "#F6F0E5", "_역할": "K-237"}, "승인": "대표 11/17 19:57 \"확정\"(CTA 4편). C는 글자마다 한 장면으로 나눔(글은 그대로)", "표지모션": "타자기", "훅등장": "타자기", "마스크": true},P=Object.assign(D['판'],{"id": "zs_navy", "bg": "#0D1424", "ink": "#FAF8F3", "sub": "#F4CE62", "mute": "#FAF8F3", "acc": "#F4CE62", "accInk": "#0D1424", "off": "#FAF8F3", "offInk": "#0D1424", "pan": "#FAF8F3", "panInk": "#0D1424", "hl": "#FAF8F3"}),PN_={"id": "zs_navy", "bg": "#0D1424", "ink": "#FAF8F3", "sub": "#F4CE62", "mute": "#FAF8F3", "acc": "#F4CE62", "accInk": "#0D1424", "off": "#FAF8F3", "offInk": "#0D1424", "pan": "#FAF8F3", "panInk": "#0D1424", "hl": "#FAF8F3"},PC_={"id": "zs_cream", "bg": "#FAF8F3", "ink": "#0D1424", "sub": "#0D1424", "mute": "#0D1424", "acc": "#0D1424", "accInk": "#F4CE62", "off": "#0D1424", "offInk": "#FAF8F3", "pan": "#0D1424", "panInk": "#FAF8F3", "hl": "#0D1424"},F=window.FXK,{cl,mix,ease,eio,sp}=F;
+const g=document.getElementById('cv').getContext('2d'),M=n=>F.mark&&F.mark(n);   // M('기법 이름'): 그 기법을 실제로 그린 순간 적는다(K-235)
+const SC=D['장면'],CT=D['CTA'],COV=D['표지'];
+const T_COV=SC[0]['초'][0],T_CTA=SC[SC.length-1]['초'][1],DUR=T_CTA+2.8;
+window.CTAT=[T_CTA,CT['큰말']];window.COVT=[COV['훅'],COV['보조']].filter(Boolean);window.COVE=T_COV;
+window.DUR=DUR;
+// 띠 한자(칩 글자) — 그림 안 글자는 60px 이상
+// 칩 글자는 한글 띠 이름(대표 11/17 21:09 "띠를 한자가 아닌 한글로 써야 딱 알아보지", K-232)
+const HJ={'쥐':'쥐띠','소':'소띠','호랑이':'호랑이띠','토끼':'토끼띠','용':'용띠','뱀':'뱀띠','말':'말띠','양':'양띠','원숭이':'원숭이띠','닭':'닭띠','개':'개띠','돼지':'돼지띠'};   // K-234: 칩도 '띠'까지(대표 11/17 22:00·22:16)
+const Y0=()=>F.SPEC.top[3], Y1=()=>F.SPEC.bottom[1], CX=()=>F.cx, MING=70;   // 핸들~핸들을 위·아래·사이 같은 간격으로(균형 리듬), 간격은 64px 이상
+// 색은 대본 '판'(bg·ink·sub·acc·accInk·off·offInk·pan·panInk). 편마다 다른 판(K-231)
+function ink(txt,font){g.save();g.font=font;const m=g.measureText(txt);g.restore();return{w:m.width,a:m.actualBoundingBoxAscent,d:m.actualBoundingBoxDescent}}
+// 의미 단위 줄바꿈: ① 문장(. ? !)마다 한 줄에 들어가면 문장으로 끊는다 ② 아니면 줄 수를 최소로 하되 줄 길이를 고르게 ③ '12월 7일'처럼 숫자 단위는 붙여 둔다
+function toks(txt){const ws=String(txt).split(' '),o=[];ws.forEach(w=>{const L_=o[o.length-1];if(L_&&!L_.includes(' ')&&/\d+[월년일시]$/.test(L_)&&/^\d/.test(w))o[o.length-1]+=' '+w;else o.push(w)});return o}
+function bal(ws,font,maxw){for(let n=1;n<=ws.length;n++){const r=split(ws,n,font,maxw);if(r)return r}return[ws.join(' ')]}
+// 줄 수 n 으로 나누는 방법 중 가장 긴 줄이 가장 짧은 것. 한 글자 낱말(이·그·내·잘 …)로 줄을 끝내지 않는다
+function split(ws,n,font,maxw){let best=null,bw=1e9;const rec=(i,k,acc)=>{if(k===1){const l=ws.slice(i).join(' ');if(ink(l,font).w>maxw)return;const all=[...acc,l];
+  if(all.slice(0,-1).some(x=>x.split(' ').pop().length===1))return;const mw=Math.max(...all.map(x=>ink(x,font).w))+(all.some(x=>/, /.test(x))?5000:0);if(mw<bw){bw=mw;best=all}return}   // 줄 안에 쉼표가 끼면 뒤로 미룸
+ for(let j=i+1;j<=ws.length-k+1;j++){const l=ws.slice(i,j).join(' ');if(ink(l,font).w>maxw)break;rec(j,k-1,[...acc,l])}};rec(0,n,[]);return best}
+// 의미 단위 줄바꿈: 문장 → 쉼표 마디 순으로 끊고, 마디를 한 줄에 담을 수 있는 만큼 담는다. 마디가 너무 길 때만 마디 안을 고르게 나눈다.
+function wrap(txt,font,maxw){const out=[];const S=String(txt).match(/[^.?!]+[.?!]?/g).map(x=>x.trim()).filter(Boolean);
+ S.forEach(sn=>{if(ink(sn,font).w<=maxw){out.push(sn);return}const segs=sn.split(/(?<=,) /);let cur='';
+  segs.forEach(sg=>{const t=cur?cur+' '+sg:sg;if(ink(t,font).w<=maxw){cur=t;return}if(cur)out.push(cur);cur='';
+   if(ink(sg,font).w<=maxw)cur=sg;else{const L=bal(toks(sg),font,maxw);out.push(...L.slice(0,-1));cur=L[L.length-1]}});if(cur)out.push(cur)});
+ // 짧은 문장 둘이 한 줄에 들어가면 합치지 않는다(문장은 줄마다)
+ const B_=bal(toks(String(txt)),font,maxw);return B_.length<out.length?B_:out}   // 쉼표로 끊어 줄이 더 늘면 쉼표를 안고 고르게 나눈다
+// 글 한 줄: 위쪽 잉크 끝 y 에 맞춰 그린다
+function line(txt,font,color,ytop,{x=CX(),al='center',alpha=1,scale=1}={}){const m=ink(txt,font);g.save();g.globalAlpha=alpha;g.font=font;g.fillStyle=color;g.textAlign=al;g.textBaseline='alphabetic';
+ if(scale!==1){g.translate(x,ytop+m.a);g.scale(scale,scale);g.fillText(txt,0,0)}else g.fillText(txt,x,ytop+m.a);g.restore();return m.a+m.d}
+// 어절 단위로 들어오는 줄(글자스태거) — 어절마다 따로 그린다
+function wordsLine(txt,font,color,ytop,t,t0,step){const ws=txt.split(' '),m=ink(txt,font),sw=ink(' ',font).w;let x=CX()-m.w/2;
+ ws.forEach((w,i)=>{const a=sp(t-t0-i*step,16,.6),mw=ink(w,font).w;if(a>0){if(a<.95)M('글자스태거');g.save();g.globalAlpha=cl(a*1.6);g.font=font;g.fillStyle=color;g.textAlign='left';g.textBaseline='alphabetic';
+  g.translate(x,ytop+m.a+(1-cl(a))*28);g.fillText(w,0,0);g.restore()}x+=mw+sw});return ws.length}
+// ── 장면 배치: [그림] [화면글 묶음] [풀이 상자] 를 위·아래·사이 같은 간격으로
+const BODY='700 60px PL',PADX=44,PADY=40,PANW=800;
+function grp(s){ // 화면글 묶음 줄들
+ const it=s['화면글'];
+ if(D['구도']==='카드열장')return[];           // 글자는 카드 안에
+ if(it.length===1&&it[0].length>4)return[{t:it[0],f:'800 76px PL',c:P.ink}];
+ if(it.length===2&&it[0].length>4)return it.map(x=>({t:x,f:'800 66px PL',c:P.ink}));
+ return[{t:it[0],f:'800 110px PL',c:P.ink},...it.slice(1).map(x=>({t:x,f:'700 68px PL',c:P.sub}))]}
+// 묶음 안 간격: 다른 크기 줄 = max(36, 큰 글자×0.4+2, 작은 글자×0.5+1) (K-230 ≤ 작은 글자×0.7), 같은 크기 줄 = 글자×0.42
+const IG=(a,b)=>a.fs!==b.fs?Math.ceil(Math.max(37,.4*Math.max(a.fs,b.fs)+2,.5*Math.min(a.fs,b.fs)+1)):Math.round(.42*b.fs);
+function layout(s){
+ const G=grp(s);let gh=0;const gl=G.map((r,i)=>{const m=ink(r.t,r.f);const fs=parseFloat(r.f.match(/(\d+)px/)[1]);return{...r,h:m.a+m.d,fs}});
+ gl.forEach((r,i)=>{gh+=r.h;if(i)gh+=IG(gl[i-1],r)});
+ const pl=wrap(Array.isArray(s['풀이'])?s['풀이'].join(' '):s['풀이'],BODY,PANW-PADX*2);
+ const lh=pl.map(t=>{const m=ink(t,BODY);return m.a+m.d});const lg=Math.round(.42*60);
+ const ph=lh.reduce((a,b)=>a+b,0)+lg*(pl.length-1)+PADY*2;
+ const avail=Y1()-Y0();const want=GRAPH[D['구도']].h(s);
+ const nb=gl.length?3:2;let gH=Math.min(want,avail-gh-ph-MING*(nb+1));const gap=(avail-gh-ph-gH)/(nb+1);
+ let y=Y0()+gap;const L={gy:y,gH,gl:[],pl,lh,lg,ph};y+=gH+gap;
+ if(gl.length){gl.forEach((r,i)=>{if(i)y+=IG(gl[i-1],r);L.gl.push({...r,y});y+=r.h});y+=gap}
+ L.py=y;return L}
+const LC={};const LY=i=>LC[i]||(LC[i]=layout(SC[i]));
+// ── 구도별 그림 (gy~gy+gH 안에 그린다)
+function chip(x,y,r,txt,{on=0,a=1,sx=1}={}){if(a<=0)return;const F_=`800 ${r>=75?64:60}px PL`,tw=ink(txt,F_).w,w=Math.max(2*r,tw+48);g.save();g.translate(x,y);g.scale(a*Math.max(.03,sx),a);   // 칩 = 둥근 네모(상자), 글이 길면 옆으로 늘어남
+ g.fillStyle=on?P.acc:P.off;g.beginPath();g.roundRect(-w/2,-r,w,2*r,10);g.fill();
+ if(sx>.85){g.fillStyle=on?P.accInk:P.offInk;g.font=F_;g.textAlign='center';g.textBaseline='middle';g.fillText(txt,0,4)}g.restore()}
+const CW=(r,txt)=>Math.max(2*r,ink(txt,`800 ${r>=75?64:60}px PL`).w+48);
+function seg(ax,ay,bx,by,p,col,w=10){if(p<=0)return;g.save();g.strokeStyle=col;g.lineWidth=w;g.lineCap='round';g.beginPath();g.moveTo(ax,ay);g.lineTo(mix(ax,bx,cl(p)),mix(ay,by,cl(p)));g.stroke();g.restore()}
+const ARW=(x0,y0,x1,y1,p,o={})=>F.curveArrow(g,x0,y0,x1,y1,p,{color:P.mute||P.acc,w:10,head:30,...o});   // 선·화살표 = 누른 톤(K-237)
+// 칩 사이 화살표 끝점: 상자 가장자리에서 GA 만큼 띄운다
+const R0=75,GA=18,AH=64,RT=62,TH=150;   // RT·TH: 삼각형 장면 칩 크기·높이
+function dots(n,i,y){for(let k=0;k<n;k++){g.fillStyle=k<=i?P.acc:P.off;g.beginPath();g.arc(CX()+(k-(n-1)/2)*44,y,k===i?14:10,0,7);g.fill()}}
+const SCN=id=>SC.findIndex(s=>s.id===id);
+const GRAPH={
+ // A: 띠 칩 한 줄 → 子 뒤집혀 켜짐 → 子⇄丑 곡선 화살표 둘 → 子·辰·申 이 삼각형으로 모여 선이 이어짐 → 삼각형 둘레를 화살표가 돈다
+ '띠삼각변신':{fit:s=>['용','원숭이'].includes(s.id),h:s=>({'쥐':4*72+48,'소':4*72+48}[s.id]||2*RT+TH),draw(i,t,L){
+  const s=SC[i],t0=s['초'][0],r=72,ids=['쥐','소','용','원숭이'],ws=ids.map(d=>CW(r,HJ[d])),TW=ws.reduce((a,b)=>a+b,0)+48*3,X=k=>CX()-TW/2+ws.slice(0,k).reduce((a,b)=>a+b,0)+48*k+ws[k]/2;
+  // 쥐·소 장면: 네 띠를 2×2 칸으로(한 줄이면 안전 영역을 넘음). 위 줄 쥐띠·소띠, 아래 줄 용띠·원숭이띠
+  const cw=Math.max(...ids.map(d=>CW(r,HJ[d]))),gx=CX()-cw/2-30,gx2=CX()+cw/2+30,rg=s.id==='소'?Math.max(48,L.gH-4*r):Math.max(48,L.gH-4*r),
+   G={'쥐':[gx,L.gy+r],'소':[gx2,L.gy+r],'용':[gx,L.gy+3*r+rg],'원숭이':[gx2,L.gy+3*r+rg]};
+  if(s.id==='쥐'){if(t-t0<.3)M('카드뒤집기');ids.forEach((d,k)=>{const on=d==='쥐',u=on?cl((t-t0)/.3):1;chip(G[d][0],G[d][1],r,HJ[d],{on:on&&u>.5?1:0,a:sp(t+.5-k*.06,14,.6),sx:on?Math.abs(Math.cos(u*Math.PI)):1})});return}
+  if(s.id==='소'){const p=eio((t-t0-.02)/.3),ea=CW(r,HJ['쥐'])/2,eb=CW(r,HJ['소'])/2,y1=G['쥐'][1];ids.forEach(d=>chip(G[d][0],G[d][1],r,HJ[d],{on:d==='소'?1:0}));
+   if(p>0&&p<1)M('곡선화살표');ARW(G['쥐'][0]+ea+GA,y1-24,G['소'][0]-eb-GA,y1-24,p,{bend:-46});ARW(G['소'][0]-eb-GA,y1+24,G['쥐'][0]+ea+GA,y1+24,p,{bend:-46});return}
+  // 삼각형: 子 위 꼭짓점, 辰 왼쪽 아래, 申 오른쪽 아래
+  const r2=RT,top=[CX(),L.gy+r2],lb=[CX()-250,L.gy+L.gH-r2],rb=[CX()+250,L.gy+L.gH-r2],u=s.id==='용'?eio((t-t0)/.3):1;   // 삼각형 높이는 칸에 맞춘다(fit)
+  const cw2=Math.max(...ids.map(d=>CW(r,HJ[d]))),from={'쥐':[CX()-cw2/2-30,L.gy+r],'용':[CX()-cw2/2-30,L.gy+L.gH-r],'원숭이':[CX()+cw2/2+30,L.gy+L.gH-r]},to={'쥐':top,'용':lb,'원숭이':rb};
+  const P_={};['쥐','용','원숭이'].forEach(d=>P_[d]=[mix(from[d][0],to[d][0],u),mix(from[d][1],to[d][1],u)]);
+  const e=s.id==='용'?eio((t-t0-.25)/.3):1,ed=(A,B,q)=>{const dx=B[0]-A[0],dy=B[1]-A[1],Ln=Math.hypot(dx,dy),o=r2+GA+6;seg(A[0]+dx/Ln*o,A[1]+dy/Ln*o,B[0]-dx/Ln*o,B[1]-dy/Ln*o,q,P.mute||P.ink,8)};
+  if(s.id==='용'){if(e>0&&e<1)M('삼각형그리기');ed(P_['쥐'],P_['용'],e);ed(P_['용'],P_['원숭이'],e);ed(P_['원숭이'],P_['쥐'],e)}
+  else{const q=k=>eio((t-t0-.02-k*.08)/.22),o=r2+GA+6,arw=(A,B,k)=>{const dx=B[0]-A[0],dy=B[1]-A[1],Ln=Math.hypot(dx,dy);ARW(A[0]+dx/Ln*o,A[1]+dy/Ln*o,B[0]-dx/Ln*o,B[1]-dy/Ln*o,q(k),{bend:-34})};
+   if(q(2)<1&&q(0)>0)M('순환');arw(P_['쥐'],P_['원숭이'],0);arw(P_['원숭이'],P_['용'],1);arw(P_['용'],P_['쥐'],2)}
+  if(s.id==='용'&&u<1)chip(CX()+cw2/2+30,L.gy+r,mix(r,r2,u),HJ['소'],{a:1-u});
+  const lit=s.id==='원숭이'?{'쥐':t-t0>=.02,'원숭이':t-t0>=.2,'용':t-t0>=.38}:null;if(lit&&t-t0<.45)M('노드불켜기');   // 노드불켜기: 화살표가 닿는 차례로 켜짐
+  ['쥐','용','원숭이'].forEach(d=>chip(P_[d][0],P_[d][1],mix(r,r2,u),HJ[d],{on:lit?(lit[d]?1:0):(d===s.id?1:0)}))}},
+ // B: 이번 두 띠가 양쪽에서 들어와(짝수 편은 옆에서, 홀수 편은 위에서 떨어짐) 서로 곡선 화살표를 주고받는다
+ '좌우만남':{h:s=>2*80+100,draw(i,t,L){   // 11/24 점 줄 간격(K-267): 칩↔점 줄 36→68px(검수 ③ ①편, ②편과 같은 원인)
+  const s=SC[i],t0=s['초'][0],ids=s.id.match(/쥐|소|호랑이|돼지|토끼|개|용|닭|뱀|원숭이|말|양/g),r=80,cy=L.gy+r,ea0=CW(r,HJ[ids[0]])/2,eb0=CW(r,HJ[ids[1]])/2,xa=CX()-405+ea0,xb=CX()+405-eb0;
+  const u=eio((t-t0)/(i%2===0?.28:.2)),side=i%2===0,oa=side?[(1-u)*-360,0]:[0,(1-u)*-90],ob=side?[(1-u)*360,0]:[0,(1-u)*-70];
+  const bounce=side?0:Math.max(0,Math.sin(cl((t-t0-.2)/.2)*Math.PI))*-18;if(u<1)M(side?'좌우대결':'공튀기기');
+  chip(xa+oa[0],cy+oa[1]+bounce,r,HJ[ids[0]],{on:1});chip(xb+ob[0],cy+ob[1]+bounce,r,HJ[ids[1]],{on:1});
+  const p=eio((t-t0-.04)/.24),dash=i%3===2?[22,18]:null;
+  const ea=ea0,eb=eb0;if(p>0&&p<1)M('곡선화살표');ARW(xa+ea+GA,cy-28,xb-eb-GA,cy-28,p,{bend:-50,dash});ARW(xb-eb-GA,cy+28,xa+ea+GA,cy+28,p,{bend:-50,dash});   // 두 칩 옆구리에서 나가 위·아래로 휘어 주고받음
+  dots(SC.length,i,L.gy+L.gH-18)}},
+ // G: 달력(숫자가 위아래로 갈라지며 1일→5일) → 丑이 子를 화살표로 끌어 줌 → 丑 둘레로 빛살 → 丑·巳·酉 삼각형
+ '달력과절기':{fit:s=>['절기','뱀닭'].includes(s.id),h:s=>({'절기':300,'쥐':2*R0,'소':2*R0+2*44}[s.id]||2*RT+TH),draw(i,t,L){
+  const s=SC[i],t0=s['초'][0],r=R0;
+  if(s.id==='절기'){const w=440,h=L.gH,x=CX()-w/2,y=L.gy,band=124;g.save();g.fillStyle=P.off;g.beginPath();g.roundRect(x,y,w,h,36);g.fill();
+   g.fillStyle=P.acc;g.beginPath();g.roundRect(x,y,w,band,[36,36,0,0]);g.fill();g.restore();
+   g.save();g.fillStyle=P.accInk;g.font='800 64px PL';g.textAlign='center';g.textBaseline='middle';g.fillText('1월',CX(),y+band/2+4);g.restore();
+   const by=y+band+(h-band)/2,fs=Math.max(64,Math.min(116,Math.round((h-band)*.38))),k=Math.min(4,Math.floor(cl((t-t0)/.3)*5)),ph=(cl((t-t0)/.3)*5)%1;
+   const num=n=>{g.fillStyle=P.offInk;g.font=`800 ${fs}px PL`;g.textAlign='center';g.textBaseline='middle';g.fillText(n+'일',CX(),by+6)};
+   g.save();g.beginPath();g.rect(x,y+band,w,h-band);g.clip();
+   if(k<4&&t-t0<.3){M('숫자갈라짐');const sp_=eio(ph)*(h-band)*.5;g.save();g.beginPath();g.rect(x,y+band,w,(h-band)/2);g.clip();g.translate(0,-sp_);num(1+k);g.restore();
+    g.save();g.beginPath();g.rect(x,by,w,(h-band)/2);g.clip();g.translate(0,sp_);num(1+k);g.restore();g.globalAlpha=eio(ph);num(2+k)}else num(5);g.restore();return}
+  if(s.id==='쥐'){const cy=L.gy+r,xa=CX()-230,xb=CX()+230,p=eio((t-t0-.02)/.3);if(p>0&&p<1)M('곡선화살표');chip(xa,cy,r,HJ['소'],{on:1});chip(xb,cy,r,HJ['쥐'],{on:0,a:sp(t-t0+.3,14,.6)});
+   ARW(xa+CW(r,'소')/2+GA,cy-10,xb-CW(r,'쥐')/2-GA,cy-10,p,{bend:-70});return}
+  if(s.id==='소'){const cy=L.gy+44+r;if(t-t0<.3){M('방사형');M('카메라줌')}g.save();g.translate(CX(),cy);g.rotate((t-t0)*.6);g.strokeStyle=P.acc;g.lineWidth=10;g.lineCap='round';
+   for(let k=0;k<8;k++){const a=k*Math.PI/4,q=eio((t-t0-.02)/.3),r0=r+18,r1=r0+26*q;if(Math.abs(Math.sin(a))>.9)continue;g.beginPath();g.moveTo(Math.cos(a)*r0,Math.sin(a)*r0);g.lineTo(Math.cos(a)*r1,Math.sin(a)*r1);g.stroke()}g.restore();
+   g.save();g.strokeStyle=P.mute||P.acc;g.lineWidth=10;g.lineCap='round';[[0,-1],[0,1]].forEach(([_,d])=>{const q=eio((t-t0-.02)/.3);g.beginPath();g.moveTo(CX(),cy+d*(r+18));g.lineTo(CX(),cy+d*(r+18+26*q));g.stroke()});g.restore();
+   {const z=mix(1.35,1,eio(cl((t-t0)/.3)));g.save();g.translate(CX(),cy);g.scale(z,z);g.translate(-CX(),-cy);chip(CX(),cy,r,HJ['소'],{on:1});g.restore()}return}   // 카메라줌: 소띠 칩으로 당겼다 제자리
+  const r2=RT,top=[CX(),L.gy+r2],lb=[CX()-250,L.gy+L.gH-r2],rb=[CX()+250,L.gy+L.gH-r2],e=eio((t-t0-.02)/.3),o=r2+GA+6;
+  const ed=(A,B)=>{const dx=B[0]-A[0],dy=B[1]-A[1],Ln=Math.hypot(dx,dy);seg(A[0]+dx/Ln*o,A[1]+dy/Ln*o,B[0]-dx/Ln*o,B[1]-dy/Ln*o,e,P.mute||P.ink,8)};
+  if(e>0&&e<1)M('삼각형그리기');ed(top,lb);ed(lb,rb);ed(rb,top);chip(top[0],top[1],r2,HJ['소'],{on:0});chip(lb[0],lb[1],r2,HJ['뱀'],{on:1,a:sp(t-t0+.2,14,.6)});chip(rb[0],rb[1],r2,HJ['닭'],{on:1,a:sp(t-t0+.15,14,.6)})}},
+ // C: 카드가 뒤집혀(짝수는 가로, 홀수는 세로 축) 글자가 아래에서 올라오고, 아래 점 10개가 하나씩 켜진다
+ '카드열장':{h:s=>360+130,draw(i,t,L){   // 11/23 대표 검수 ③-② '원형 요소가 일간 카드와 붙어있음'(K-266): 카드 아래 점 줄 자리 64→130px, 점 줄은 바닥에서 18px
+  const s=SC[i],t0=s['초'][0],STEM=['갑','을','병','정','무','기','경','신','임','계'],w=300,h=L.gH-130,x=CX(),y=L.gy+h/2,p=eio(cl((t-t0)/.3)),ang=(1-p)*Math.PI,k=Math.abs(Math.cos(ang)),hor=i%2===0;
+  g.save();g.translate(x,y);g.scale(hor?Math.max(.03,k):1,hor?1:Math.max(.03,k));
+  if(t-t0<.3)M(i%3===2?'타일뒤집기':'카드뒤집기');
+  if(i%3===2){g.restore();g.save();g.translate(x,y);const n=3,th=h/n;for(let q=0;q<n;q++){const pq=eio(cl((t-t0-q*.06)/.18)),kq=Math.abs(Math.cos((1-pq)*Math.PI));   // 타일뒤집기: 세 줄이 차례로 뒤집힘
+    g.save();g.translate(0,-h/2+th*(q+.5));g.scale(1,Math.max(.03,kq));g.fillStyle=pq<.5?P.off:P.acc;g.beginPath();g.roundRect(-w/2,-th/2,w,th,q===0?[40,40,0,0]:q===n-1?[0,0,40,40]:0);g.fill();g.restore()}
+   if(t-t0>.32){g.fillStyle=P.accInk;g.font=`800 ${Math.round(h*.46)}px PL`;g.textAlign='center';g.textBaseline='middle';g.fillText(s['화면글'][0],0,8)}g.restore();dots(SC.length,i,L.gy+L.gH-18);return}
+  if(ang>Math.PI/2){g.fillStyle=P.off;g.beginPath();g.roundRect(-w/2,-h/2,w,h,40);g.fill()}
+  else{g.fillStyle=P.acc;g.beginPath();g.roundRect(-w/2,-h/2,w,h,40);g.fill();if(k>.9){const m=eio(cl((t-t0-.28)/.2));g.save();g.beginPath();g.rect(-w/2,-h/2,w,h);g.clip();
+   const sr=t-t0-.28,ch=sr<.25?STEM[(Math.floor(sr*40)+i)%10]:s['화면글'][0];if(sr<.25&&sr>0)M('슬롯롤링');g.fillStyle=P.accInk;g.font=`800 ${Math.round(h*.46)}px PL`;g.textAlign='center';g.textBaseline='middle';g.fillText(ch,0,8+(1-m)*h*.6);g.restore()}}   // 슬롯롤링: 열 글자가 굴러가다 내 글자에 멈춤
+  g.restore();{const bt=t-t0;if(bt<.4)M('공튀기기');const yd=L.gy+L.gH-18;dots(SC.length,i,yd-Math.max(0,Math.sin(cl(bt/.4)*Math.PI))*14);if(i>0&&bt<.3){M('궤적선');const X_=k=>CX()+(k-(SC.length-1)/2)*44;F.trail(g,t,t0,.3,u=>[mix(X_(i-1),X_(i),u),yd-Math.sin(u*Math.PI)*22],{color:P.acc,r:8,n:10})}}}}};
+
+// ── 그리기
+function draw(t){{const i_=SC.findIndex(s=>t>=s['초'][0]&&t<s['초'][1]);Object.assign(P,i_>=0&&i_%2===1?PC_:PN_)}   // K-291 장면마다 네이비·크림 교차
+ g.setTransform(1,0,0,1,0,0);g.fillStyle=P.bg;g.fillRect(0,0,1080,1920);
+ if(t<T_COV){ // 표지: 훅 두 줄 + 보조
+  let HF=112;while(HF>88&&wrap(COV['훅'],`800 ${HF}px PL`,840).length>2)HF-=4;const HFN=`800 ${HF}px PL`;
+  const hk=wrap(COV['훅'],HFN,840),sub=COV['보조']||'';const SF=HF*.7>=64?64:60,SFN=`700 ${SF}px PL`;const hs=hk.map(x=>{const m=ink(x,HFN);return m.a+m.d}),sbl=sub?wrap(sub,SFN,840):[],ms=sbl.length?{a:sbl.map(x=>{const m=ink(x,SFN);return m.a+m.d}).reduce((a,b)=>a+b,0)+Math.round(.42*SF)*(sbl.length-1),d:0}:{a:0,d:0};
+  const lg=Math.round(.42*HF),pg_=56,tot=hs.reduce((a,b)=>a+b,0)+lg*(hk.length-1)+(sub?pg_+ms.a+ms.d:0);let y=(Y0()+Y1())/2-tot/2;
+  const CV=D.표지모션===true?'원와이프':D.표지모션;
+  if(CV==='원와이프'&&t<.35){g.fillStyle=PC_.bg;g.fillRect(0,0,1080,1920);F.circleWipe(g,t,0,{color:P.bg,dur:.35});M('원와이프')}
+  if(CV==='배경뒤집기'&&t<.3){const u=eio(t/.3);g.fillStyle=PC_.bg;g.fillRect(1080*u,0,1080,1920);M('배경뒤집기')}   // 배경뒤집기: 강조색 판이 옆으로 걷히며 바탕이 됨
+  const HE=D.훅등장||'글자스태거';
+  if(D.표지모션&&HE!=='글자스태거'){let wi=0;hk.forEach((x,k)=>{const m=ink(x,HFN);const col=k===hk.length-1?P.hl:P.ink;
+    if(HE==='박자글자'){const ws=x.split(' '),sw=ink(' ',HFN).w;let cx=CX()-m.w/2;ws.forEach(w=>{const a=sp(t-.1-wi*.09,18,.55);wi++;const ww=ink(w,HFN).w;if(a>0){if(a<.95)M('박자글자');g.save();g.globalAlpha=cl(a*1.6);g.font=HFN;g.fillStyle=col;g.textBaseline='alphabetic';g.translate(cx+ww/2,y+m.a);g.scale(mix(1.25,1,cl(a)),mix(1.25,1,cl(a)));g.textAlign='center';g.fillText(w,0,0);g.restore()}cx+=ww+sw})}   // 박자글자: 낱말이 박자마다 하나씩 '탁'
+    else if(HE==='타자기'){const n=[...x].length,shown=Math.max(0,Math.min(n,Math.floor((t-.08)/.035)-wi));wi+=n;if(shown<n&&shown>0)M('타자기');let cx=CX()-m.w/2;[...x].slice(0,shown).forEach(ch=>{g.save();g.font=HFN;g.fillStyle=col;g.textAlign='left';g.textBaseline='alphabetic';g.fillText(ch,cx,y+m.a);g.restore();cx+=ink(ch,HFN).w})}   // 타자기: 한 글자씩 찍힘
+    y+=hs[k]+lg})}
+  else
+   if(D.표지모션){let ci=0;hk.forEach((x,k)=>{const m=ink(x,HFN);let cx=CX()-m.w/2;[...x].forEach(ch=>{const w=ink(ch,HFN).w,a=sp(t-.12-ci*.03,16,.6);ci++;if(a>0){if(a<.95)M('글자스태거');g.save();g.globalAlpha=cl(a*1.5);g.font=HFN;g.fillStyle=k===hk.length-1?P.hl:P.ink;g.textAlign='left';g.textBaseline='alphabetic';g.translate(cx+w/2,y+m.a);g.rotate((1-cl(a))*-.35);g.translate(-w/2,0);g.fillText(ch,0,0);g.restore()}cx+=w});y+=hs[k]+lg})}
+  else hk.forEach((x,k)=>{line(x,HFN,k===hk.length-1?P.hl:P.ink,y);y+=hs[k]+lg});y+=pg_-lg;sbl.forEach(x=>{const m=ink(x,SFN);line(x,SFN,P.sub,y);y+=m.a+m.d+Math.round(.42*SF)});
+ } else if(t<T_CTA){const i=SC.findIndex(s=>t>=s['초'][0]&&t<s['초'][1]);const s=SC[i],L=LY(i),t0=s['초'][0];
+  {const GG=GRAPH[D['구도']],W=GG.fit&&GG.fit(s)?L.gH:GG.h(s),k=Math.min(1,L.gH/W);g.save();g.translate(CX(),L.gy);g.scale(k,k);g.translate(-CX(),-L.gy);GRAPH[D['구도']].draw(i,t,{...L,gH:W});g.restore()}   // 칸이 좁으면 그림 전체를 줄인다(배치와 화소가 같게)
+  if(D['구도']==='카드뒤집기'&&t-t0<.45){} // 카드 글자는 그림 안
+  L.gl.forEach((r,k)=>{if(k===0&&D.늘이기){const u=eio(cl((t-t0)/.28));g.save();g.letterSpacing=`${Math.round((1-u)*46)}px`;line(r.t,r.f,r.c,r.y,{alpha:cl(u*1.6)});g.restore();if(u<1)M('글자늘이기');return}   // 글자늘이기: 벌어진 자간이 모이며 들어옴
+   if(k===0&&D.마스크){const u=eio(cl((t-t0)/.22)),m=ink(r.t,r.f);g.save();g.beginPath();g.rect(0,r.y-20,1080,m.a+m.d+24);g.clip();line(r.t,r.f,r.c,r.y+(1-u)*(m.a+m.d+24));g.restore();if(u<1)M('마스크올라오기');return}   // 마스크올라오기: 보이지 않는 선 아래에서 올라옴
+   const a=sp(t-t0+.05-k*.05,15,.6);line(r.t,r.f,r.c,r.y,{alpha:cl(a*1.5)})});
+  const pa=t-t0>=0?1:0;if(pa>0){g.save();g.globalAlpha=cl(pa*1.5);g.fillStyle=P.pan;g.beginPath();g.roundRect(CX()-PANW/2,L.py,PANW,L.ph,30);g.fill();g.restore();
+   let y=L.py+PADY;let n0=0;L.pl.forEach((x,k)=>{wordsLine(x,BODY,P.panInk,y,t,t0+.08+n0*.045,.045);n0+=x.split(' ').length;y+=L.lh[k]+L.lg})}
+ } else { // CTA: 큰말 · 이유 · 단추
+  let BF=96;while(BF>86&&wrap(CT['큰말'],`800 ${BF}px PL`,840).length>2)BF-=4;const BFN=`800 ${BF}px PL`;   // CTA 큰 말은 두 줄까지(K-236), 84px 아래로는 줄이지 않음(K-221)
+  const t0=T_CTA,bw=wrap(CT['큰말'],BFN,840),bh=bw.map(x=>{const m=ink(x,BFN);return m.a+m.d}),lg=Math.round(.42*BF);
+  const why=CT['이유']?wrap(CT['이유'],'700 60px PL',800):[],wh=why.map(x=>{const m=ink(x,'700 60px PL');return m.a+m.d});
+  const bt=CT['단추'],BTF='800 62px PL',btl=ink(bt,BTF).w>720?(bt.includes('→')?bt.split(/(?<=→) /):wrap(bt,BTF,700)):[bt],bms=btl.map(x=>ink(x,BTF)),bLG=24,bH=bms.reduce((a,m)=>a+m.a+m.d,0)+bLG*(btl.length-1)+64,CKP=0,bW=Math.min(840,Math.max(...bms.map(m=>m.w))+110+CKP),bm=bms[0];   // 체크 자리만큼 단추를 넓힘
+  const H1=bh.reduce((a,b)=>a+b,0)+lg*(bw.length-1),H2=wh.reduce((a,b)=>a+b,0)+Math.round(.42*60)*Math.max(0,why.length-1);
+  const chs=[],chR=60,chH=chs.length?2*chR:0,nb=(why.length?3:2)+(chs.length?1:0),gap=(Y1()-Y0()-H1-H2-bH-chH)/(nb+1);let y=Y0()+gap;
+  bw.forEach((x,k)=>{if(D.CTA등장==='마스크'){const u=eio(cl((t-t0-k*.06)/.24));g.save();g.beginPath();g.rect(0,y-20,1080,bh[k]+24);g.clip();line(x,BFN,k===bw.length-1?P.hl:P.ink,y+(1-u)*(bh[k]+24));g.restore();if(u<1)M('마스크올라오기')}else{const a=sp(t-t0-k*.1,15,.6);line(x,BFN,k===bw.length-1?P.hl:P.ink,y,{alpha:cl(a*1.5)})}y+=bh[k]+lg});y+=gap-lg;
+  if(why.length){why.forEach((x,k)=>{const a=sp(t-t0-.1-k*.05,15,.6);line(x,'700 60px PL',P.sub,y,{alpha:cl(a*1.5)});y+=wh[k]+Math.round(.42*60)});y+=gap-Math.round(.42*60)}
+  if(chs.length){const ws=chs.map(c=>CW(chR,HJ[c]||c)),TW=ws.reduce((a,b)=>a+b,0)+48*(chs.length-1);let x=CX()-TW/2;chs.forEach((c,k)=>{const a=sp(t-t0-.05-k*.05,15,.6);if(a>0&&a<.95)M('칩줄세우기');chip(x+ws[k]/2,y+chR,chR,HJ[c]||c,{on:1,a});x+=ws[k]+48});y+=chH+gap}   // 칩줄세우기
+  const a=sp(t-t0-.18,13,.6);if(a>0){g.save();g.translate(CX(),y+bH/2);g.scale(a,a);const pr=t-t0>1.2&&t-t0<1.32?.94:1;g.scale(pr,pr);g.fillStyle=P.acc;g.beginPath();g.roundRect(-bW/2,-bH/2,bW,bH,Math.min(bH/2,60));g.fill();
+   g.fillStyle=P.accInk;g.font=BTF;g.textAlign='center';g.textBaseline='alphabetic';let by_=-bH/2+32;btl.forEach((x,k)=>{g.fillText(x,CKP/2,by_+bms[k].a);by_+=bms[k].a+bms[k].d+bLG});
+   if(D.단추체크){const q=t-t0-1.2;if(q>0&&q<.5){M('버튼상태전환');g.globalAlpha=Math.sin(cl(q/.5)*Math.PI)*.35;g.fillStyle=P.accInk;g.beginPath();g.roundRect(-bW/2,-bH/2,bW,bH,Math.min(bH/2,60));g.fill()}}   // 버튼상태전환: 눌림(어두워졌다 돌아옴), 글은 그대로
+   g.restore()}
+ }
+ F.frame(g,{ai:''})}
+// 소리(K-288, specs/reel_motion_sound_map.json): 장면 칸 '드롭'이면 효과음 없이 window.DROP 에 넣고 다음 장면 첫 프레임에 thud(다시 터뜨림).
+// '역할'이 있으면 연결표의 소리 [진입, 안착], '박'=강이면 진입+안착, 약이면 진입만. 칸이 없으면 예전 그대로(whoosh + tick).
+const ROLE={"글자확대전환": ["whoosh", "thud"], "글자틀전환": ["swoosh", "pop"], "핵심낱말": ["tick", "pop"], "무음드롭": ["thud"], "드롭뒤터뜨림": ["thud", "sparkle"], "클라이맥스": ["thud", "sparkle"], "정보시연": ["press", "pop"], "마무리CTA": ["swoosh", "thud"]};window.DROP=[];
+window.SFX=[{t:0,k:'swoosh'},...SC.flatMap((s,i)=>{const t=s['초'][0],pv=SC[i-1];
+ if(s['드롭']){window.DROP.push({t,d:Math.min(1,Math.max(.6,s['초'][1]-t))});return []}
+ const out=pv&&pv['드롭']?[{t,k:'thud'}]:[];const r=ROLE[s['역할']];
+ if(r){if(!out.some(x=>x.k===r[0]))out.push({t,k:r[0]});if(r[1]&&s['박']!=='약')out.push({t:t+.35,k:r[1]});return out}
+ if(s['박']==='강')return [...out,{t,k:'whoosh'},{t:t+.35,k:'pop'}];
+ if(s['박']==='약')return [...out,{t,k:'whoosh'}];
+ return [...out,{t,k:'whoosh'},{t:t+.35,k:'tick'}]}),
+ ...(SC[SC.length-1]['드롭']?[{t:T_CTA,k:'thud'}]:[]),{t:T_CTA,k:'swoosh'},{t:T_CTA+.6,k:'pop'},{t:T_CTA+1.6,k:'press'}];
+(async()=>{await (window.__zsFonts||Promise.resolve());await document.fonts.load('800 100px PL');await document.fonts.load('700 60px PL');
+ window.seek=t=>{draw(Math.min(t,DUR-.001))};seek(0)})();
+</script></body></html>
