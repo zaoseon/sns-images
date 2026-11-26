@@ -374,5 +374,21 @@
   "mode": "up",
   "bpm": 118,
   "key": "E"
+ },
+ {
+  "name": "sian_c9_v4",
+  "kind": "fun",
+  "style": "발랄 우쿨렐레",
+  "mode": "up",
+  "bpm": 114,
+  "key": "F"
+ },
+ {
+  "name": "sian_b9_v4",
+  "kind": "fun",
+  "style": "상큼 팝",
+  "mode": "up",
+  "bpm": 124,
+  "key": "G"
  }
 ]
