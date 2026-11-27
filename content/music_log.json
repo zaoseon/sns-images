@@ -390,5 +390,13 @@
   "mode": "up",
   "bpm": 124,
   "key": "G"
+ },
+ {
+  "name": "sian_g9_v4",
+  "kind": "fun",
+  "style": "경쾌 신스팝",
+  "mode": "up",
+  "bpm": 120,
+  "key": "A"
  }
 ]
