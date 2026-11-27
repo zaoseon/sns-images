@@ -4157,5 +4157,38 @@
   },
   "k131": "n109 11/24(K-151 새 글, n18 다시 쓰기)",
   "source": "build_naver_109.py (n18 → n109 새 글)"
+ },
+ "n110": {
+  "dt": "2027-02-16T08:00:00",
+  "dt_tbd": "CT가 정함(재발행 일정 'n24 다시 쓰기' 11/30 08:00 자리, 진행표 11/18). 이 날짜는 자리값",
+  "title": "압박감에 강한 이유, 떨릴 때 한마디로 갈린 80% 대 53%",
+  "tags": [
+   "압박감",
+   "멘탈강한사람",
+   "스트레스에강한사람",
+   "위기에강한사람",
+   "발표긴장",
+   "면접긴장",
+   "편관",
+   "식신",
+   "십성",
+   "자오선"
+  ],
+  "body": "<p><b>발표 5분 전, 손끝은 차갑고 심장 소리가 귀까지 올라와요. 속으로 '진정하자, 진정하자'를 몇 번째 외우는 중이죠.</b></p><p>그런데 진정하려 할수록 더 떨려요. 압박감에 강한 사람은 덜 떨리는 사람이 아니에요. 똑같이 뛰는 심장을 '이제 시작이구나' 하는 신호로 읽는 사람이에요.</p><p>노래방 기계로 잰 실험에서는 부르기 직전 한마디만 바꿨는데, 정확도가 53%에서 80%로 갈렸어요.</p><p>&nbsp;</p><p><b>1. 압박감에 왜 몸부터 떨릴까요?</b></p><p><b>몸이 중요한 순간을 앞두고 힘을 끌어올리는 중이라서요.</b></p><p>심장이 빨라지고 손에 땀이 나는 건 고장이 아니에요. 피를 빨리 돌려서 바로 움직일 수 있게 준비하는 거예요.</p><p>재밌는 건 설렐 때도 몸은 거의 똑같이 반응한다는 거예요. 첫 데이트 직전에도 심장은 뛰잖아요. 다른 건 그걸 뭐라고 부르느냐예요.</p><p>&nbsp;</p><p><b>2. '진정하자'와 '설렌다', 어느 쪽이 나을까요?</b></p><p><b>'설렌다' 쪽이에요. 이미 뛰는 심장을 멈추게 하는 것보다, 뛰는 김에 쓰는 게 쉽거든요.</b></p><p>하버드 경영대학원의 브룩스 교수는 대학생 113명에게 노래방 게임으로 노래를 부르게 했어요. 부르기 직전 한 그룹은 '나 불안해', 한 그룹은 '<a href=\"https://www.apa.org/pubs/journals/releases/xge-a0035325.pdf\">나 설레</a>'라고 소리 내어 말하게 했고, 한 그룹은 아무 말도 안 했고요.</p><p>&nbsp;</p><p><img src=\"https://raw.githubusercontent.com/zaoseon/sns-images/main/naver/img/naver_z110_t1f.jpg\" alt=\"노래방 실험 비교 표. 부르기 전에 &#x27;나 불안해&#x27;라고 말한 쪽은 정확도 53%, &#x27;나 설레&#x27;라고 말한 쪽은 80%였어요\"></p><p>&nbsp;</p><p>게임 기계가 매긴 노래 정확도는 '설렌다'고 말한 쪽이 평균 80%, 아무 말 안 한 쪽이 69%, '불안하다'고 말한 쪽이 53%였어요. 한마디가 30점 가까운 차이를 만든 거예요.</p><p>같은 연구에서 140명에게 남 앞에서 발표를 시켰을 때도, '나 설레'라고 말하고 시작한 사람이 '나 침착해'라고 말한 사람보다 <a href=\"https://www.apa.org/news/press/releases/2013/12/performance-anxiety\">더 설득력 있고 자신 있게</a> 보였다는 평가를 받았어요.</p><p>&nbsp;</p><p><b>3. 순간마다 뭐라고 말하면 될까요?</b></p><p><b>몸 신호를 부정하지 말고, 이름만 바꿔 불러 주세요.</b></p><p>&nbsp;</p><table style=\"width:100%;border-collapse:collapse\"><tbody><tr><td style=\"padding:10px;border:1px solid #d0d0d0;text-align:center\"><b>순간</b></td><td style=\"padding:10px;border:1px solid #d0d0d0;text-align:center\"><b>몸이 보내는 신호</b></td><td style=\"padding:10px;border:1px solid #d0d0d0;text-align:center\"><b>이렇게 말해요</b></td></tr><tr><td style=\"padding:10px;border:1px solid #d0d0d0\">발표 직전</td><td style=\"padding:10px;border:1px solid #d0d0d0\">심장이 빨라져요</td><td style=\"padding:10px;border:1px solid #d0d0d0\">'설렌다, 이제 내 차례다'</td></tr><tr><td style=\"padding:10px;border:1px solid #d0d0d0\">면접 대기실</td><td style=\"padding:10px;border:1px solid #d0d0d0\">손에 땀이 나요</td><td style=\"padding:10px;border:1px solid #d0d0d0\">'몸이 준비하는 중이네'</td></tr><tr><td style=\"padding:10px;border:1px solid #d0d0d0\">마감 전날 밤</td><td style=\"padding:10px;border:1px solid #d0d0d0\">잠이 안 와요</td><td style=\"padding:10px;border:1px solid #d0d0d0\">'오늘 밤 한 장만 끝내자'</td></tr><tr><td style=\"padding:10px;border:1px solid #d0d0d0\">어려운 통화 전</td><td style=\"padding:10px;border:1px solid #d0d0d0\">목소리가 떨려요</td><td style=\"padding:10px;border:1px solid #d0d0d0\">'첫 문장만 말하면 된다'</td></tr></tbody></table><p>&nbsp;</p><p>속으로만 말고 작게라도 소리 내어 말해 주세요. 실험에서도 입 밖으로 말하게 했거든요.</p><p>'괜찮아, 안 떨려'처럼 몸과 반대되는 말은 잘 안 먹혀요. 몸은 이미 뛰고 있으니까요. 떨리는 건 인정하고, 그 떨림이 어디로 갈지만 정해 주는 거예요.</p><p>&nbsp;</p><p><b>4. 사주로 보면 압박에 강한 사람은 누구일까요?</b></p><p><b>사주에서는 나를 몰아붙이는 글자를 <a href=\"https://blog.naver.com/zaoseon/224468727235\">편관</a>이라고 하는데, 이걸 손으로 다듬는 식신이 같이 있으면 압박이 일이 돼요.</b></p><p>마감, 시험, 윗사람 눈치처럼 등을 떠미는 힘이 편관이에요. 식신은 손을 움직여 뭔가를 만들어 내는 글자고요. 둘이 같이 있으면 압박이 왔을 때 걱정보다 손이 먼저 나가요.</p><p>&nbsp;</p><p><img src=\"https://raw.githubusercontent.com/zaoseon/sns-images/main/naver/img/naver_z110_t2f.jpg\" alt=\"압박이 일이 되는 사주와 몸이 굳는 사주 비교 표. 1995년 3월 9일생은 편관과 식신이 같이 있고, 1995년 9월 15일생은 편관이 두 자리예요\"></p><p>&nbsp;</p><p>🔎 1995년 3월 9일 오후 2시생은 乙亥·己卯·己亥·辛未예요. 기(己) 일간 기준으로 해 자리엔 편관 乙, 시 자리엔 식신 辛이 보여요. 辛이 乙을 자르는 모양이라, 마감이 몰려도 '일단 하나 끝내자'로 바뀌기 쉬워요.</p><p>1995년 9월 15일 밤 8시생은 乙亥·乙酉·己酉·甲戌로, 같은 기(己) 일간인데 편관 乙이 두 자리, 정관 甲까지 겉으로 나와 있어요. 다듬어 줄 식신은 겉에 없고요. 압박이 한꺼번에 몰리면 손보다 몸이 먼저 굳기 쉬워요.</p><p>그래서 두 번째 사람일수록 위에서 말한 한마디가 더 쓸모 있어요. 다듬는 글자가 겉에 없으면, 말로 그 자리를 채워 주면 되니까요.</p><p>&nbsp;</p><table style=\"width:100%;max-width:440px;margin:0 auto;border-collapse:collapse\"><tbody><tr><td style=\"padding:12px 10px;text-align:center;border:1px solid #d0d0d0\"><b>내 여덟 글자에 편관과 식신이 있는지 궁금하다면</b></td></tr><tr><td style=\"padding:12px 10px;text-align:center;border:1px solid #d0d0d0\"><span style=\"color:#9a9a9a\">[ 1995 . 03 . 09 ]</span></td></tr><tr><td style=\"padding:12px 10px;text-align:center;border:1px solid #d0d0d0\"><b><a href=\"https://zaoseon.com/?utm_source=naver&amp;utm_medium=mid#free\">내 태어난 날 글자 보기 →</a></b></td></tr></tbody></table><p>&nbsp;</p><p><b>5. 다음 압박이 오면 무엇부터 할까요?</b></p><p><b>떨림이 오는 순간, 세 가지만 순서대로 해 보세요.</b></p><p>&nbsp;</p><p><img src=\"https://raw.githubusercontent.com/zaoseon/sns-images/main/naver/img/naver_z110_k1f.jpg\" alt=\"떨림이 올 때 할 세 가지 칸. 숨 길게 한 번, &#x27;나 설레&#x27; 소리 내기, 첫 동작 하나만이에요\"></p><p>&nbsp;</p><p>처음엔 어색해요. 그래도 '설렌다'로 시작한 날이 쌓이면, 다음엔 심장이 뛰는 순간 그 말이 먼저 떠올라요.</p><p>압박감에 강한 사람은 그렇게 만들어지는 거예요. 타고난 글자가 어떻든, 떨림에 붙이는 이름은 오늘부터 내가 고를 수 있어요.</p><p>&nbsp;</p><p><b>6. 자주 묻는 질문</b></p><p><b>Q. 떨림이 너무 심할 때도 효과가 있어요?</b></p><p>A. 말 한마디로 떨림이 없어지지는 않아요. 숨을 길게 내쉬며 어깨를 한 번 내리고, 그다음에 말해 보세요.</p><p>&nbsp;</p><p><b>Q. '진정해'라는 말은 왜 잘 안 통해요?</b></p><p>A. 이미 빨라진 심장한테 당장 멈추라는 말이라서요. 몸과 말이 엇갈리면 '나 왜 이렇게 떨지' 하는 생각만 커져요.</p><p>&nbsp;</p><p>여러분은 떨릴 때 속으로 뭐라고 말하는 편인가요? '진정하자' 쪽인가요, '해 보자' 쪽인가요?</p><p>댓글에 그 한마디만 남겨 주세요.</p><p>&nbsp;</p><p><b>👇 압박이 끝나고 나서 무기력이 몰려온다면, 무기력, 퇴근 후 아무것도 하기 싫은 이유와 방전 3가지</b></p><p><a href=\"https://zaoseon.com/?utm_source=naver&utm_medium=cta#free\"><img src=\"https://raw.githubusercontent.com/zaoseon/sns-images/main/naver/img/naver_cta5_1%EC%B4%88%EB%AC%B4%EB%A3%8C%ED%92%80%EC%9D%B4.jpg\" alt=\"자오선 무료 1초 풀이 안내 배너\"></a></p>",
+  "cover": "wide/naver_z110_a1.jpg",
+  "related": {
+   "id": "n45",
+   "title": "무기력, 퇴근 후 아무것도 하기 싫은 이유와 방전 3가지",
+   "phrase": "압박이 끝나고 나서 무기력이 몰려온다면, 무기력, 퇴근 후 아무것도 하기 싫은 이유와 방전 3가지",
+   "url": "https://blog.naver.com/zaoseon/224474813836"
+  },
+  "thumbs": null,
+  "cid": null,
+  "clips": null,
+  "category": "마음 읽기",
+  "done": false,
+  "kw_vol": {},
+  "k131": "n110 11/27(K-151 새 글, n24 다시 쓰기)",
+  "source": "build_naver_110.py (n24 → n110 새 글)"
  }
 }

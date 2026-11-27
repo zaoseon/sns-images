@@ -3126,5 +3126,22 @@
    "old": "naver_z109_k1.jpg",
    "new": "naver_z109_k1f.jpg"
   }
+ ],
+ "n110": [
+  {
+   "pos": 1,
+   "old": "naver_z110_t1.jpg",
+   "new": "naver_z110_t1f.jpg"
+  },
+  {
+   "pos": 2,
+   "old": "naver_z110_t2.jpg",
+   "new": "naver_z110_t2f.jpg"
+  },
+  {
+   "pos": 3,
+   "old": "naver_z110_k1.jpg",
+   "new": "naver_z110_k1f.jpg"
+  }
  ]
 }
