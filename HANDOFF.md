@@ -9,6 +9,8 @@
 
 > **① 자동 실행 11/26 11:45 — 시안 C v4·B·G 클립판 렌더 막힘:** C v4 는 `기법_검사`(sian_g9 와 4개 겹침, v4 가 '방사형'을 목록에 새로 적음), B·G 는 K-310 릴스 기본 효과 게이트(예외 목록 `kcos-motion:specs/reel_core_fx.json` 에 b9·g9 빠짐)로 막혀 영상 없음. B·G `ad_v4.html`(v3 + coverT 0.8)만 올림(b29d712). 관문 우회 안 함. 판단은 CT(zaoseon-site ops/to-dev.md 맨 위 [열림 11/26], to-content [막힘 11/26] 권장안). 채널 여럿 렌더(`--채널=reel,naver_clip`)는 이름에 _채널이 붙어 기법_검사가 자기 옛판과 비교해 막히니 채널마다 따로 `--출력=` 으로 돌린다.
 
+> **① 자동 실행 11/28 11:45 — n110 통과·n111:** n110 kw_vol 채움(kw-volume 11/27 21:02, 압박감 550) → queue --check 통과. 네이버 새 글 n111(←n29 혼자 일할 때, `naver/build_naver_111.py`, 7b2faa2, 판 y_olive_s) — 검색량만 대기(씨앗 11/28 요청). 주의: `copy_rules.내부말`에 '초안'이 있어 본문에 못 씀(정리·글로). compare 열 머리글은 9자 안팎으로(14자면 두 칸이 겹침). 👇 연결글 줄은 쉼표 앞 문구에 연결글 제목 첫 낱말(이번엔 '예민')이 있어야 queue 관문 통과. 다음: n111 kw_vol → --check, n31.
+>
 > **① 자동 실행 11/27 11:45 — 시안 G 클립·n110:** `ZS_FX_OK=1`(대표 11/26 승인, 커밋에 사유)로 `2026-reels-test/sian_g9/sian_g9_v4_clip.mp4` 렌더(13.8초·-16.09 LUFS, 217c8f0) → 시안 A·B·C·G v4 클립판 모두 있음, 게시 등록은 노션 ㉕ 뒤 실키. 네이버 새 글 n110(←n24 압박감, `naver/build_naver_110.py`, 37ee0cc) — 검색량만 대기. 주의: 표지 판 `y_gray_s` 는 compare 칠한 칸 글자·바탕이 같은 색(31,32,35)이라 글자가 안 보임 → 쓰지 않기. 다음: n110 kw_vol → --check, n29.
 >
 > **① 자동 실행 11/25 11:45 — 클립 재개 첫 편·n109 통과:** 시안 A를 지금 관문(K-291 판 검사 포함)으로 다시 렌더 → `2026-reels-test/sian_a9/sian_a9_v4.mp4`(릴스)·`sian_a9_v4_clip.mp4`(네이버 클립, `ad_v4.html` 에 `coverT=0.8` 만 더해 표지 관문 K-205 통과)·`sian_a9_v4_clip_cover.jpg`. 승인 전이라 post_clips.json·reel_swaps 는 안 건드림 — 노션 검수는 CT(허브 404). 렌더에는 `pip install ephem pyswisseph mido` + `apt-get install fluidsynth fluid-soundfont-gm` 가 필요했음(클라우드 새 컨테이너). n109 kw_vol 채움, 대기표 검사 통과. 다음: n24 새 글, 시안 B·G 클립판.
